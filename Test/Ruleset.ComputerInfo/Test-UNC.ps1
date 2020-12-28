@@ -71,7 +71,31 @@ Start-Test $TestString
 $Result = Test-UNC $TestString
 $Result
 
+$TestString = "\\-Server-01\Share"
+Start-Test "$TestString -Strict"
+Test-UNC $TestString -Strict
+
+$TestString = "\\-SERVER-01\Share"
+Start-Test "$TestString -Strict"
+Test-UNC $TestString -Strict
+
+$TestString = "\\site.domain.com\Share"
+Start-Test $TestString
+Test-UNC $TestString
+
+$TestString = "\\site.domain.com\Share"
+Start-Test "$TestString -Strict"
+Test-UNC $TestString -Strict
+
 $TestString = "\\SERVER"
+Start-Test $TestString
+Test-UNC $TestString
+
+$TestString = "\\*SERVER\Share$"
+Start-Test $TestString
+Test-UNC $TestString
+
+$TestString = "\\SERVER\Share$"
 Start-Test $TestString
 Test-UNC $TestString
 
@@ -90,6 +114,18 @@ Test-UNC $TestString
 $TestString = "\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE"
 Start-Test $TestString
 Test-UNC $TestString
+
+$TestString = ""
+Start-Test "Empty string"
+Test-UNC $TestString
+
+$TestString = $null
+Start-Test "null"
+Test-UNC $TestString
+
+New-Section "Test data to pipeline"
+$TestData = Get-Content -Path $ThisScript\..\TestData\UNC-Data.txt
+$TestData | Test-UNC -Quiet
 
 Test-Output $Result -Command Test-UNC
 

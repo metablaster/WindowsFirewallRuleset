@@ -28,15 +28,15 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Validate User Principal Name
+Validate User Principal Name syntax
 
 .DESCRIPTION
-Validate User Principal Name (UPN) has valid syntax
+Test if User Principal Name (UPN) has valid syntax.
+UPN consists of user account name, also known as the logon name and
+UPN suffix, also known as the domain name. (or an IP address)
 
 .PARAMETER Name
-User Principal Name in form of: someone@example.com
-User account name: Also known as the logon name.
-UPN suffix: Also known as the domain name. (or an IP address)
+User Principal Name in form of: user@domain.com
 If Prefix is specified, domain name can be omitted.
 If Suffix is specified, logon name can be omitted.
 
@@ -47,7 +47,7 @@ If specified, validate only the user name portion of a User Principal Name
 If specified, validate only the domain name portion of a User Principal Name
 
 .PARAMETER Quiet
-if specified errors are not shown, only true or false is returned.
+if specified UPN syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
 PS> Test-UPN Administrator@machine.lan
@@ -80,7 +80,7 @@ False
 [bool]
 
 .NOTES
-user principal name (UPN)
+User Principal Name (UPN)
 A user account name (sometimes referred to as the user logon name) and a domain name identifying the
 domain in which the user account is located.
 This is the standard usage for logging on to a Windows domain.
@@ -173,7 +173,6 @@ function Test-UPN
 				{
 					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
 						-Message "Count of separator '@' for user name only validation must be 0 or 1 but $SeparatorCount present: '$UPN'"
-
 					return $false
 				}
 
@@ -198,7 +197,6 @@ function Test-UPN
 				{
 					Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
 						-Message "Count of separator '@' for domain name only validation must be 0 or 1 but $SeparatorCount present: '$UPN'"
-
 					return $false
 				}
 
@@ -213,7 +211,6 @@ function Test-UPN
 			{
 				Write-Error -Category SyntaxError -TargetObject $UPN -ErrorAction $WriteError `
 					-Message "Count of separator '@' must be 1 but $SeparatorCount present: '$UPN'"
-
 				return $false
 			}
 			else
@@ -238,21 +235,18 @@ function Test-UPN
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
 						-Message "Logon name '$User' must not begin or end with: '.' or '-'"
-
 					return $false
 				}
 				elseif ($User -match "\.{2,}")
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
 						-Message "Logon name '$User' must not contain 2 or more subsequent dots '..'"
-
 					return $false
 				}
 				elseif ($NameRegex.Matches($User).Count -ne 0)
 				{
 					Write-Error -Category SyntaxError -TargetObject $User -ErrorAction $WriteError `
 						-Message "Invalid logon name syntax: '$User'"
-
 					return $false
 				}
 			}
@@ -266,7 +260,6 @@ function Test-UPN
 				{
 					Write-Error -Category SyntaxError -TargetObject $Domain -ErrorAction $WriteError `
 						-Message "Invalid domain name syntax: '$Domain'"
-
 					return $false
 				}
 			}

@@ -28,35 +28,39 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Verify UNC path is valid
+Validate UNC path syntax
 
 .DESCRIPTION
-Test if UNC (Universal Naming Convention) path is valid
+Test if UNC (Universal Naming Convention) path has correct path syntax
 
 .PARAMETER Name
 Universal Naming Convention path
 
+.PARAMETER Strict
+If specified, NETBIOS computer name must be all uppercase and must conform to IBM specifications.
+By default NETBIOS computer name verification conforms to Microsoft specifications and is case insensitive.
+
 .PARAMETER Quiet
-if specified errors are not shown, only true or false is returned.
+if specified path syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
 PS> Test-UNC \\SERVER\Share
-
 True
 
 .EXAMPLE
 PS> Test-UNC \\SERVER
-
 False
 
 .EXAMPLE
-PS> Test-UNC \\SERVER-01\Share\Directory DIR\file.exe
+PS> Test-UNC \\DESKTOP-PC\ShareName$
+True
 
+.EXAMPLE
+PS> Test-UNC \\SERVER-01\Share\Directory DIR\file.exe
 True
 
 .EXAMPLE
 PS> Test-UNC \SERVER-01\Share\Directory DIR
-
 False
 
 .INPUTS
@@ -90,7 +94,11 @@ function Test-UNC
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-UNC.md")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+		[AllowEmptyString()]
 		[string[]] $Name,
+
+		[Parameter()]
+		[switch] $Strict,
 
 		[Parameter()]
 		[switch] $Quiet
@@ -113,13 +121,15 @@ function Test-UNC
 
 		foreach ($UNC in $Name)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing UNC: '$UNC'"
+
 			if ($UNC.Length -gt 260)
 			{
 				# The maximum length for a path is 260 characters.
 				# NOTE: Windows 10 version 1607 and later versions of Windows require changing a registry
 				# key or using the Group Policy to remove the limit.
 				Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
-					-Message "The maximum length for UNC path is 260 characters"
+					-Message "The maximum length for an UNC path is 260 characters"
 				return $false
 			}
 
@@ -127,30 +137,51 @@ function Test-UNC
 			{
 				# The "\\.\" prefix will access the Win32 device namespace instead of the Win32 file namespace.
 				Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
-					-Message "Specified UNC path bellongs to Win32 device namespace: $UNC"
+					-Message "The specified UNC path bellongs to Win32 device namespace: $UNC"
 
 				return $false
 			}
 
-			# TODO: This regex needs to be verified, ex. space and dot might not need to be present
-			# "^\\\\[a-zA-Z0-9\.\-_]{1,}(\\[a-zA-Z0-9\-_\s\.]{1,}){1,}[\$]{0,1}"
-			# [regex] $Regex = "^\\\\[A-Z0-9\-]+(\\[a-zA-Z0-9\-_\s\.]+)+[\$]?"
-			if ($UNC -notmatch "^\\\\[\w\-_]+(\\[\w\-_]+)+[\$]?")
+			if (!$UNC.StartsWith("\\"))
 			{
-				switch ($ErrorLevel)
+				if ([string]::IsNullOrEmpty($UNC))
 				{
-					0
-					{
-						Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
-							-Message "UNC path syntax verification failed for: $UNC"
-					}
-					default {}
+					Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
+						-Message "The UNC path syntax verification failed for '$UNC' because it's an empty string"
+					return $false
 				}
 
+				Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
+					-Message "The UNC path syntax verification failed for '$UNC', the path must begin with 2 backslash characters"
 				return $false
 			}
 
-			return $true
+			$PathSplit = $UNC.TrimStart("\").Split("\")
+
+			if ($PathSplit.Count -lt 2)
+			{
+				Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
+					-Message "The UNC path syntax verification failed for '$UNC', the path must be minimum in the form of \\SERVER\Share"
+				return $false
+			}
+
+			# Test-NetBiosName will report errors otherwise
+			if (Test-NetBiosName $PathSplit[0] -Strict:$Strict -Quiet:$Quiet)
+			{
+				# ex: \ShareName\Directory Name\FileName.exe
+				$RemainingPath = "\" + [string]::Join("\", $PathSplit, 1, $PathSplit.Length - 1)
+
+				if ($RemainingPath -notmatch '(\\[\w\-_\.\s]+)+\$?$')
+				{
+					Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
+						-Message "The UNC path syntax verification failed for '$UNC'"
+					return $false
+				}
+
+				return $true
+			}
+
+			return $false
 		}
 	}
 }

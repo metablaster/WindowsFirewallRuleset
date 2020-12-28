@@ -130,6 +130,8 @@ Todo's in this file are categorized into following sections:
     - Unit tests for private functions in `Ruleset.Firewall` module are missing
     - Unit tests for `Ruleset.Logging` include scripts are missing (no longer clear what this means)
     - Program search test cases should test for either always installed program or certain failure
+    - Unit test should have `TestData` which can be used to test pipeline support or to reduce the
+    size of unit tests, another benefit is that tests will be easier to update to work on updated data.
 
 5. Code style
 

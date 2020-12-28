@@ -28,24 +28,32 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Verify NETBIOS name is valid
+Validate NETBIOS name syntax
 
 .DESCRIPTION
 Test if NETBIOS computer name has correct syntax
 
 .PARAMETER Name
-NETBIOS computer name which to check
+Computer NETBIOS name which is to be checked
 
 .PARAMETER Strict
 If specified, name must be all uppercase and must conform to IBM specifications.
-By default verification conforms to Microsoft specifications is case insensitive.
+By default verification conforms to Microsoft specifications and is case insensitive.
 
 .PARAMETER Quiet
-if specified errors are not shown, only true or false is returned.
+if specified name syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
-PS> Test-NetBiosName
+PS> Test-NetBiosName "*SERVER"
+False
+
+.EXAMPLE
+PS> Test-NetBiosName "-SERVER-01"
 True
+
+.EXAMPLE
+PS> Test-NetBiosName "-Server-01" -Strict
+False
 
 .INPUTS
 [string]
@@ -115,6 +123,8 @@ function Test-NetBiosName
 
 		foreach ($ComputerName in $Name)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing NETBIOS name: '$ComputerName'"
+
 			if (!$NameRegex.Match($ComputerName).Success)
 			{
 				Write-Error -Category SyntaxError -TargetObject $ComputerName -ErrorAction $WriteError `

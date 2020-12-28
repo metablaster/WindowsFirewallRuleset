@@ -1,0 +1,14 @@
+\\SERVER\Share
+\\-Server-01\Share
+\\-SERVER-01\Share
+\\site.domain.com\Share
+\\site.domain.com\Share
+\\SERVER
+
+\\*SERVER\Share$
+\\SERVER\Share$
+""
+\\SERVER-01\Share\Directory DIR\file.exe
+\\SERVER-01\Share Name\Directory Name
+\SERVER-01\Share\Directory DIR
+\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE

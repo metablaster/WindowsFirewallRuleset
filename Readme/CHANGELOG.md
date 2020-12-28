@@ -43,7 +43,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Resolve-Host` function used to resolve host to IP or an IP to host.
   - `Test-UPN` function used to validate syntax of UPN (Universal Principal Name)
   - `Convert-FromSDDL` function to resolve SDDL strings into principal, user name, SID and domain
-  - `NetBiosName` function to validate syntax of NETBIOS name
+  - `Test-NetBiosName` function to validate syntax of NETBIOS name
   - `TEST-UNC` function to validate syntax of UNC (Universal Naming Convention) name
 
 - Tests
