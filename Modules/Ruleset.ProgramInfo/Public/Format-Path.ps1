@@ -112,7 +112,7 @@ function Format-Path
 				return $LiteralPath
 			}
 			# NOTE: else if it contains bad environment variable, Test-Environment should be used
-			# to show warning or error message, we'll expand bad variables anyway.
+			# to show warning or error message, we'll expand what can be expanded anyway.
 		}
 
 		# NOTE: The path may contain invalid or multiple environment variables, ex. those previously excluded
@@ -141,37 +141,54 @@ function Format-Path
 		}
 
 		# The path has been reduced to root drive so get that
-		$SearchString = Split-Path -Path $LiteralPath -Qualifier
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
+		$SearchString = Split-Path -Path $LiteralPath -Qualifier -ErrorAction SilentlyContinue
 
-		# Find candidate replacements for the qualifier
-		$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
+		if ([string]::IsNullOrEmpty($SearchString))
+		{
+			# If there is no qualifier nothing to do, the path is either UNC path or relative path
+			# NOTE: We're not checking this at the beginning because the purpose is to format what can be formatted
+			if ($LiteralPath.StartsWith("\"))
+			{
+				# This is UNC path and we need to put back back slash that was previously removed
+				return $LiteralPath.Insert(0, "\")
+			}
 
-		if ([string]::IsNullOrEmpty($Variables))
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
-			# There are no environment variables for this drive, just trim trailing slash
-			# NOTE: TrimEnd, this is here for drive root paths, drive root environment variables as
-			# well as all other paths returned from this function don't have ending slash either.
-			return $LiteralPath.TrimEnd("\")
-		}
-		elseif (($Variables | Measure-Object).Count -gt 1)
-		{
-			# Since there may be duplicate entries, we grab first one
-			$Replacement = $Variables.Name[0]
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
+			# Otherwise it's either relative path or single directory or file name
+			return $LiteralPath
 		}
 		else
 		{
-			# If there is single match, selecting [0] would result in selecting first letter instead of env. variable!
-			$Replacement = $Variables.Name
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
+
+			# Find candidate replacements for the qualifier
+			$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
+
+			if ([string]::IsNullOrEmpty($Variables))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
+				# There are no environment variables for this drive, just trim trailing slash
+				# NOTE: TrimEnd, this is here for drive root paths, drive root environment variables as
+				# well as all other paths returned from this function don't have ending slash either.
+				return $LiteralPath.TrimEnd("\")
+			}
+			elseif (($Variables | Measure-Object).Count -gt 1)
+			{
+				# Since there may be duplicate entries, we grab first one
+				$Replacement = $Variables.Name[0]
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
+			}
+			else
+			{
+				# If there is single match, selecting [0] would result in selecting first letter instead of env. variable!
+				$Replacement = $Variables.Name
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
+			}
+
+			# Only root drive is converted, just trim away trailing slash if this is qualifier
+			$LiteralPath = $LiteralPath.Replace($SearchString, $Replacement).TrimEnd("\")
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $LiteralPath"
+			return $LiteralPath
 		}
-
-		# Only root drive is converted, just trim away trailing slash if this is qualifier
-		$LiteralPath = $LiteralPath.Replace($SearchString, $Replacement).TrimEnd("\")
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $LiteralPath"
-		return $LiteralPath
 	}
 }

@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Test-Environment
 
 .DESCRIPTION
-Unit test for Test-Environment
+Test correctness of Test-Environment function
 
 .EXAMPLE
 PS> .\Test-Environment.ps1
@@ -63,172 +63,278 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
+#
+# Root drives
+#
+
 New-Section "Root drive"
 
-$Result = "C:"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "C:"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath -PathType Directory
 
-$Result = "C:\\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "C:\\"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-$Result = "D:\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "D:\"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-New-Section "Default test"
+$TestPath = "Z:\"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-$Result = "C:\\Windows\System32"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+#
+# Expanded paths
+#
 
-$Result = "C:/Windows/explorer.exe"
-Start-Test "Test-Environment -PathType Leaf: $Result"
-Test-Environment $Result -PathType Leaf
+New-Section "Expanded paths"
 
-$Result = "D:\\NoSuchFolder"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "C:\\Windows\System32"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-New-Section "Invalid syntax"
+$TestPath = "C:/Windows/explorer.exe"
+Start-Test "Test-Environment -PathType Leaf: $TestPath"
+Test-Environment $TestPath -PathType File
 
-$Result = '"C:\ProgramData\ssh"'
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "C:\\NoSuchFolder"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-$Result = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
-
-New-Section "Users folder"
-
-$Result = "C:\Users"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\Users\\"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\\UsersA\"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\\Users\3"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\Users\Public\Downloads" # "\Public Downloads"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\Users\\"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "C:\\UsersA\"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "C:\\Users\3"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-New-Section "UserProfile"
-
-$Result = "%LOCALAPPDATA%\MicrosoftEdge"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
-
-$Result = "%HOME%\AppData\Local\MicrosoftEdge"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
-
-$Result = "C:\Users\$TestUser\AppData"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
-
-$Result = "F:\Users\$TestUser"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
-
-$Result = "%LOCALAPPDATA%\MicrosoftEdge"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "%HOME%\AppData\Local\MicrosoftEdge"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "C:\Users\$TestUser\AppData"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-$Result = "F:\Users\$TestUser"
-Start-Test "Test-Environment -UserProfile: $Result"
-Test-Environment -UserProfile $Result
-
-New-Section "Test firewall"
-
-$Result = "C:\\Windows\System32"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "%LOCALAPPDATA%\MicrosoftEdge"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "%HOME%\AppData\Local\MicrosoftEdge"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "C:\Users\$TestUser\AppData"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
-
-$Result = "C:\Users\Public\Downloads" # "\Public Downloads"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall $Result
+#
+# Environment variables
+#
 
 New-Section "Environment variables"
 
-$Result = "%SystemDrive%"
-Start-Test "Test-Environment: $Result"
-$Status = Test-Environment $Result
+$TestPath = "%SystemDrive%"
+Start-Test "Test-Environment: $TestPath"
+$Status = Test-Environment $TestPath
 $Status
 
-$Result = "C:\Program Files (x86)\Windows Defender\"
-Start-Test "Test-Environment: $Result"
-Test-Environment $Result
+$TestPath = "C:\Program Files (x86)\Windows Defender\"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
-$Result = "%Path%"
-Start-Test "Test-Environment: %Path%"
-Test-Environment $Result
+$TestPath = "%Path%"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "%SystemDrive%\Windows\%ProgramFiles%"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+#
+# Bad syntax
+#
+
+New-Section "Invalid syntax"
+
+$TestPath = '"C:\ProgramData\ssh"'
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "C:\Unk[n]own\*tory"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "C:\Bad\<Path>\Loca'tion"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+#
+# Users folder
+#
+
+New-Section "Users folder"
+
+$TestPath = "C:\Users"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+# TODO: 3 or more of \
+$TestPath = "C:\Users\\"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "C:\\UsersA\"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "C:\\Users\3"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "C:\Users\Public\Downloads" # "\Public Downloads"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "C:\Users\\"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "C:\\UsersA\"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "C:\\Users\3"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+#
+# User profile
+#
+
+New-Section "UserProfile"
+
+$TestPath = "%LOCALAPPDATA%\Temp"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "%LOCALAPPDATA%\Temp"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "%HOMEPATH%\AppData\Local\Temp"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "%HOMEPATH%\AppData\Local\Temp"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "C:\Users\$TestUser\AppData"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "C:\Users\$TestUser\AppData"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+$TestPath = "F:\Users\$TestUser"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "F:\Users\$TestUser"
+Start-Test "Test-Environment -UserProfile: $TestPath"
+Test-Environment -UserProfile $TestPath
+
+#
+# Firewall switch
+#
+
+New-Section "Test firewall"
+
+$TestPath = "C:\\Windows\System32"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "%LOCALAPPDATA%\Temp"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "%HOMEPATH%\AppData\Local\Temp"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "C:\Users\$TestUser\AppData"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "C:\Users\Public\Downloads" # "\Public Downloads"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+$TestPath = "F:\Users\$TestUser"
+Start-Test "Test-Environment -Firewall: $TestPath"
+Test-Environment -Firewall $TestPath
+
+#
+# Firewall and UserProfile switch
+#
 
 New-Section "-Firewall + -UserProfile"
 
-$Result = "%HOME%\AppData\Local\MicrosoftEdge"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result
+$TestPath = "%HOME%\AppData\Local\MicrosoftEdge"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
 
-$Result = "C:\Users\$TestUser\AppData"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result
+$TestPath = "C:\Users\$TestUser\AppData"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
 
-$Result = "C:\Program Files (x86)\Windows Defender"
-Start-Test "Test-Environment -Firewall: $Result"
-Test-Environment -Firewall -UserProfile $Result
+$TestPath = "C:\Program Files (x86)\Windows Defender"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
+
+$TestPath = "%HOMEPATH%\AppData\Local\Temp"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
+
+$TestPath = "C:\Users\\"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
+
+$TestPath = "C:\Users\Public"
+Start-Test "Test-Environment -Firewall -UserProfile: $TestPath"
+Test-Environment -Firewall -UserProfile $TestPath
+
+#
+# Null or empty string
+#
 
 New-Section "Null test"
 
-$Result = ""
-Start-Test "Test-Environment: '$Result'"
-Test-Environment $Result
+$TestPath = ""
+Start-Test "Test-Environment: '$TestPath'"
+Test-Environment $TestPath
 
-$Result = $null
+$TestPath = $null
 Start-Test "Test-Environment: null"
-Test-Environment $Result
+$Status = Test-Environment $TestPath
+$Status
+
+Test-Output $Status -Command Test-Environment
+
+#
+# Relative paths
+#
+
+New-Section "Relative paths"
+
+$TestPath = ".\.."
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "."
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "\"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "C:\Windows\System32\..\regedit.exe"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+#
+# Not file system
+#
+
+$TestPath = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
+
+$TestPath = "\\COMPUTERNAME\Directory\file.exe"
+Start-Test "Test-Environment: $TestPath"
+Test-Environment $TestPath
 
 Test-Output $Status -Command Test-Environment
 

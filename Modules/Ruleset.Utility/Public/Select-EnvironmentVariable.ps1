@@ -91,7 +91,7 @@ function Select-EnvironmentVariable
 			"%TMP%"
 			"%USERPROFILE%"
 			"%OneDriveConsumer%"
-			# NOTE: These are in BlackList group
+			# TODO: These are in BlackList group
 			# "%USERNAME%"
 			# "%HOMEPATH%"
 		)
@@ -131,6 +131,7 @@ function Select-EnvironmentVariable
 		New-Variable -Name BlackListEnvironment -Scope Script -Option Constant -Value $BlackListLocal
 	}
 
+	# TODO: no need for wildcard?
 	switch -Wildcard ($Scope)
 	{
 		"UserProfile"

@@ -28,17 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test if given installation directory is valid
+Verify or set program installation directory
 
 .DESCRIPTION
-Test if given installation directory is valid and if not this method will search the
-system for valid path and return it via reference parameter
+Test if given installation directory exists and is valid for firewall, and if not this method will
+search system for valid path and return it trough reference parameter.
+If the installation directory can't be determined reference variable remains unchanged.
 
 .PARAMETER Program
 Predefined program name for which to search
 
 .PARAMETER Directory
-Reference to variable which will hold a path to program (excluding executable)
+Reference to variable which should be updated with the path to program installation directory
+excluding executable file name.
 
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
@@ -48,8 +50,7 @@ PS> Test-Installation "Office" ([ref] $MyProgram)
 None. You cannot pipe objects to Test-Installation
 
 .OUTPUTS
-[bool] true if path is ok or found false otherwise,
-via reference, if test OK same path, if not try to update path, else given path back is not modified
+[bool] True if the reference variable contains valid path or was updated, false otherwise.
 
 .NOTES
 TODO: temporarily using ComputerName parameter

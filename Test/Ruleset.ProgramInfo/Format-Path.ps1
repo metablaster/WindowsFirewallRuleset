@@ -171,6 +171,42 @@ $Result = Format-Path $TestPath
 $Result
 Test-Environment $Result
 
+$TestPath = ".\.."
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
+$TestPath = "C:\Windows\System32\..\regedit.exe"
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
+$TestPath = "\\COMPUTERNAME\Directory\file.exe"
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
+$TestPath = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
+$TestPath = "C:\Unk[n]own\*tory"
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
+$TestPath = "C:\Bad\<Path>\Loca'tion"
+Start-Test $TestPath
+$Result = Format-Path $TestPath
+$Result
+Test-Environment $Result
+
 Test-Output $Result2 -Command Format-Path
 
 Update-Log

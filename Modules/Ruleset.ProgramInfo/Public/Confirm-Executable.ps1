@@ -28,23 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Check if executable file exists and is valid.
+Check if executable file exists and is trusted.
 
 .DESCRIPTION
 Confirm-Executable verifies the path to executable file is valid and that executable itself exists.
 File extension is then verified to confirm it is on the allowed list, ex. such as an *.exe
-The file is then verified to ensure it's digitaly signed, that is digital signature is present.
+The executable is then verified to ensure it's digitaly signed and that signature is valid.
 If the file can't be found or verified, an error is genrated possibly with informational message,
 to explain if there is any problem with the path or file name syntax, otherwise information is
 present to the user to explain how to resolve the problem including a stack trace to script that
-is having this issue.
+is producing this issue.
 
 .PARAMETER LiteralPath
 Fully qualified path to executable file
 
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
-instead of an error.
+instead of an error resulting is passed test.
 
 .EXAMPLE
 PS> Confirm-Executable "C:\Windows\UnsignedFile.exe"

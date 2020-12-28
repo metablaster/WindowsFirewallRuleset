@@ -69,7 +69,7 @@ function Edit-Table
 	{
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
-		# will not work if a path is inconsistent with bach or forward slashes
+		# will not work if a path is inconsistent with back or forward slashes
 		$Principal = Get-GroupPrincipal "Users" | Where-Object {
 			$Path -match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
 		}
