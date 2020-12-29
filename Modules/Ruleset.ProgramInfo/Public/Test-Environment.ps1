@@ -174,7 +174,7 @@ function Test-Environment
 
 			# TODO: We need target computer system drive instead of localmachine systemdrive
 			# NOTE: Public folder and it's subdirectories are fine for firewall
-			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -match "^$env:SystemDrive\\+Users\\+(?=Public\\*)"))
+			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -match "^($env:SystemDrive\\?|\\)Users(?!\\+Public\\*)"))
 			{
 				# Not showing anything
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] The path does not lead to user profile"

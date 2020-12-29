@@ -9,10 +9,7 @@ A list of regex expressions which are used to:
 For example once your regex hits, you would use `CTRL + SHIFT + L` to enter [Multi cursor][multicursor]\
 mode and manipulate all regex matches however you like.
 
-Note:
-
-- firewall rule examples here are shortened.
-- each regex includes an optional space at the end
+Reserved regex characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
 
 ## Table of contents
 
@@ -38,12 +35,16 @@ Note:
     - [Get owner and package for store app](#get-owner-and-package-for-store-app)
     - [Get enabled or action flag](#get-enabled-or-action-flag)
   - [Random regexes](#random-regexes)
-    - [Match username in path](#match-username-in-path)
-    - [Path validation](#path-validation)
+    - [File system path validation](#file-system-path-validation)
     - [URL validation](#url-validation)
     - [DACL validation](#dacl-validation)
     - [UNC validation](#unc-validation)
     - [UPN validation](#upn-validation)
+    - [User profile validation](#user-profile-validation)
+    - [File extension](#file-extension)
+    - [File name](#file-name)
+    - [NETBIOS name](#netbios-name)
+    - [System environment variable](#system-environment-variable)
 
 ## Filterline
 
@@ -74,6 +75,11 @@ Filterline regexes are to be used in `.vscode\filterline.json` to filter out fir
 ```
 
 ## Firewall rules
+
+Note:
+
+- Firewall rule examples here are shortened.
+- Each regex includes an optional space at the end
 
 ### Get -DisplayName parameter and it's value
 
@@ -235,13 +241,7 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 
 ## Random regexes
 
-### Match username in path
-
-```regex
-C:\\Users\USERNAME\\AppData\\Roaming\\ (?<=C:\\+Users\\+)\w+
-```
-
-### Path validation
+### File system path validation
 
 Here file extention must be either `*.lnk` or `*.url`
 
@@ -273,12 +273,58 @@ Universal Name Convention
 
 ### UPN validation
 
-Universal Principal Name
+Universal Principal Name\
+UPN name invalid characters: ~ ! # $ % ^ & * ( ) + = [ ] { } \ / | ; : " < > ? ,
 
 Domain name portion:
 
 ```powershell
 "(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]))$"
 ```
+
+### User profile validation
+
+```powershell
+"^($env:SystemDrive\\?|\\)Users(?!\\+Public\\*)"
+```
+
+### File extension
+
+Invalid characters to name a directory: / \ : < > ? * | "
+
+```powershell
+'\.[^./\\:<>?*|"]+$'
+```
+
+### File name
+
+Invalid characters to name a file: / \ : < > ? * | "
+
+```powershell
+'[^/\\:<>?*|"]+$'
+```
+
+### NETBIOS name
+
+The first character of the name must not be asterisk `*`\
+Any character less than a space (0x20) is invalid.\
+Microsoft allows the dot and space character may work too.\
+NETBIOS invalid characters: " / \ [ ] : | < > + = ; ,
+
+```powershell
+"^([A-Z0-9\-_]\*?)+$"
+```
+
+Relaxed version for Windows:
+
+```powershell
+"^([A-Z0-9a-z\-_\.\s]\*?)+$"
+```
+
+### System environment variable
+
+The first character of the name must not be numeric.
+A variable name may include any of the following characters:\
+A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection
