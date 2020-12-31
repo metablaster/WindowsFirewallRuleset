@@ -50,22 +50,28 @@ A named group of system environment variables to get as follows:
 - All: All system environment variables
 
 .PARAMETER Name
-Specify specific variable to get
+Specify specific environment variable which to expand to value.
+If there is no such environment variable the result is null.
+
+.PARAMETER Value
+Get environment variable name for specified value if there is one.
+This is equivalent to serching environment variables that expand to specified value,
+the result may include multiple environment variables.
 
 .PARAMETER Exact
-If specified environment variable names are exact meaning not surrounded with percentage '%' sign,
-ex: HOMEDRIVE instead of %HOMEDRIVE%
+If specified, retrieved environment variable names are exact meaning not surrounded with
+percentage '%' sign, ex: HOMEDRIVE instead of %HOMEDRIVE%
 If previous function call was not run with same "Exact" parameter value, then the script scope cache
-is updated but by formatting variable names, but the cache is not recreated.
+is updated by reformatting variable names, but the internal cache is not recreated.
 
 .PARAMETER IncludeFile
-If specified, environment variables that represent files are included into Scope groups,
+If specified, algorithm will include variables or their values that represent files,
 by default only directories are grouped.
 
 .PARAMETER Force
 If specified, discards script scope cache and queries system for environment variables a new.
-By default variables are queried only once per session, each subsequent function call returns cached
-result.
+By default variables are queried only once per session, each subsequent function call returns
+cached result.
 
 .EXAMPLE
 PS> Select-EnvironmentVariable -Scope UserProfile
@@ -78,9 +84,14 @@ Name              Value
 %USERNAME%        SomeUser
 
 .EXAMPLE
-PS> Select-EnvironmentVariable -Scope All -Force
+PS> Select-EnvironmentVariable -Name "LOGONSERVER" -Force
 
-Performs fresh query and returns all environment variables on target system
+\\SERVERNAME
+
+.EXAMPLE
+PS> Select-EnvironmentVariable -Value "C:\Program Files"
+
+%ProgramFiles%
 
 .EXAMPLE
 PS> Select-EnvironmentVariable -Scope FullyQualified -Exact
@@ -120,6 +131,8 @@ Path+Filename limit is 260 characters.
 TODO: Need to see if UNC, single backslash and relative paths without a qualifier are valid for firewall,
 a new group 'Firewall' is needed since whitelist excludes some valid variables
 TODO: Implement -AsCustomObject that will give consistent output
+TODO: Implement -Unique switch since some variable Values may be duplicates (with different name)
+TODO: Query by name or value should support wildcards
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md
@@ -130,17 +143,23 @@ https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
 function Select-EnvironmentVariable
 {
 	[OutputType([System.Collections.DictionaryEntry])]
-	[CmdletBinding(DefaultParameterSetName = "Name", PositionalBinding = $false,
+	[CmdletBinding(DefaultParameterSetName = "Scope", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md")]
 	param (
 		[Parameter(Mandatory = $true, ParameterSetName = "Scope")]
 		[ValidateSet("UserProfile", "Whitelist", "FullyQualified", "Rooted", "FileSystem", "Relative", "BlackList", "All")]
 		[string] $Scope,
 
-		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Name")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
+		[AllowEmptyString()]
 		[string] $Name,
 
-		[Parameter()]
+		[Parameter(Mandatory = $true, ParameterSetName = "Value")]
+		[AllowEmptyString()]
+		[string] $Value,
+
+		[Parameter(ParameterSetName = "Scope")]
+		[Parameter(ParameterSetName = "Value")]
 		[switch] $Exact,
 
 		[Parameter()]
@@ -151,6 +170,29 @@ function Select-EnvironmentVariable
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	# Make sure null or empty Name or Value arguments don't cause any overhead
+	switch ($PsCmdlet.ParameterSetName)
+	{
+		"Name"
+		{
+			if ([string]::IsNullOrEmpty($Name))
+			{
+				Write-Debug "[$($MyInvocation.InvocationName)] Value parameter is null or empty"
+				return $null
+			}
+
+			break
+		}
+		"Value"
+		{
+			if ([string]::IsNullOrEmpty($Value))
+			{
+				Write-Debug "[$($MyInvocation.InvocationName)] Name parameter is null or empty"
+				return $null
+			}
+		}
+	}
 
 	# Check if cache needs to be updated
 	$LastState = Get-Variable -Name LastExactState -Scope Script -ErrorAction Ignore
@@ -416,69 +458,89 @@ function Select-EnvironmentVariable
 
 	Set-Variable -Name LastExactState -Scope Script -Value $Exact
 
-	if ($Name)
+	switch ($PsCmdlet.ParameterSetName)
 	{
-		$Result = $script:AllVariables | Where-Object -Property Name -Match $Name.Trim("%")
-
-		if (!$Result)
+		"Name"
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $Name `
-				-Message "Environment variable '$Name' was not found"
-			return
-		}
+			$Result = $script:AllVariables | Where-Object -Property Name -Match $Name.Trim("%") |
+			Select-Object -ExpandProperty Value
 
-		return $Result
+			if (!$Result)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $Name `
+					-Message "Environment variable '$Name' was not found"
+				return
+			}
+
+			return $Result
+		}
+		"Value"
+		{
+			$Result = $script:AllVariables | Where-Object -Property Value -EQ $Value |
+			Select-Object -ExpandProperty Name
+
+			if (!$Result)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $Value `
+					-Message "Environment variable was not found for: '$Value'"
+				return
+			}
+
+			return $Result
+		}
+		default
+		{
+			$Result = switch ($Scope)
+			{
+				"UserProfile"
+				{
+					$script:UserProfile
+					break
+				}
+				"WhiteList"
+				{
+					$script:WhiteList
+					break
+				}
+				"FullyQualified"
+				{
+					$script:FullyQualified
+					break
+				}
+				"Rooted"
+				{
+					$script:Rooted
+					break
+				}
+				"FileSystem"
+				{
+					$script:FileSystem
+					break
+				}
+				"Relative"
+				{
+					$script:Relative
+					break
+				}
+				"BlackList"
+				{
+					$script:BlackList
+					break
+				}
+				default # All
+				{
+					$script:AllVariables
+				}
+			}
+
+			if (!$Result)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $Scope `
+					-Message "Environment variable group '$Scope' contains no entries"
+				return
+			}
+
+			return $Result
+		}
 	}
-
-	$Result = switch ($Scope)
-	{
-		"UserProfile"
-		{
-			$script:UserProfile
-			break
-		}
-		"WhiteList"
-		{
-			$script:WhiteList
-			break
-		}
-		"FullyQualified"
-		{
-			$script:FullyQualified
-			break
-		}
-		"Rooted"
-		{
-			$script:Rooted
-			break
-		}
-		"FileSystem"
-		{
-			$script:FileSystem
-			break
-		}
-		"Relative"
-		{
-			$script:Relative
-			break
-		}
-		"BlackList"
-		{
-			$script:BlackList
-			break
-		}
-		default # All
-		{
-			$script:AllVariables
-		}
-	}
-
-	if (!$Result)
-	{
-		Write-Error -Category ObjectNotFound -TargetObject $Scope `
-			-Message "Environment variable group '$Scope' contains no entries"
-		return
-	}
-
-	return $Result
 }

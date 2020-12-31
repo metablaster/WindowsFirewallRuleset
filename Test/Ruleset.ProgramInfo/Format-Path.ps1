@@ -63,151 +63,249 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
+#
+# Root drive
+#
+New-Section "Root drive"
+
 $TestPath = "C:\"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
+$Result = Start-Test $TestPath
 $Result
-Test-Environment $Result
-
-$TestPath = "C:\\Windows\System32"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "C:\\Windows\"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "C:\Program Files (x86)\Windows Defender\"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "C:\Program Files\WindowsPowerShell"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = '"C:\ProgramData\Git"'
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "C:\PerfLogs"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "C:\Windows\Microsoft.NET\Framework64\v3.5\\"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
-
-$TestPath = "D:\\microsoft\\windows"
-Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
 $TestPath = "C:\\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-$TestPath = "D:\"
+$TestPath = "D:///\"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-$TestPath = "C:\Users\$TestUser\AppData\Local\OneDrive"
+$TestPath = "C:"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-$TestPath = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$TestPath = "Z:"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
+
+#
+# Expanded path
+#
+New-Section "Expanded path"
+
+$TestPath = "C:\\Windows\System32"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:Windows\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:\Program Files\WindowsPowerShell"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "D:\\microsoft///windows"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:\Windows\Microsoft.NET/Framework64\v3.5\\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+#
+# Environment variables
+#
+New-Section "Environment variables"
 
 $TestPath = "%SystemDrive%"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
+
+$TestPath = "%SystemDrive%\Windows\System32"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+Start-Test $TestPath
+Format-Path $TestPath
+
+#
+# User profile
+#
+New-Section "User profile"
 
 $TestPath = "C:\Users\Public\Public Downloads"
 Start-Test $TestPath
-$Result2 = Format-Path $TestPath
-$Result2
-Test-Environment $Result2
+Format-Path $TestPath
 
-$TestPath = ""
-Start-Test '""'
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+$TestPath = "C:\Users\$TestUser\AppData//Local\OneDrive"
+Start-Test $TestPath
+Format-Path $TestPath
 
-$TestPath = $null
-Start-Test '$null'
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+$TestPath = "C:\Users\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:/Users"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:Users\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+#
+# Relative paths
+#
+New-Section "Relative paths"
 
 $TestPath = ".\.."
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
+
+$TestPath = "."
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "..\dir//.\.."
+Start-Test $TestPath
+Format-Path $TestPath
 
 $TestPath = "C:\Windows\System32\..\regedit.exe"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-$TestPath = "\\COMPUTERNAME\Directory\file.exe"
+$TestPath = "~"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-$TestPath = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+$TestPath = "~/\Direcotry//file.exe"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
+
+#
+# UNC and rooted path
+#
+New-Section "UNC and rooted path"
+
+$TestPath = "\\/COMPUTERNAME\Directory\file.exe/"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "/user//\/dir"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "\Windows"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "\\\COMPUTERNAME//"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "///"
+Start-Test $TestPath
+Format-Path $TestPath
+
+#
+# Bad format
+#
+New-Section "Bad format"
+
+$TestPath = '"C:\ProgramData\Git"'
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "'C:\PerfLogs'"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "`'`"C:\ProgramData\Git`"`'"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "`"`'C:\ProgramData\Git`'`""
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "'C:\PerfLogs"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "$("'C:\PerfLogs;'")"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "%SystemDrive%\%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "C:PerfLogs\.../"
+Start-Test $TestPath
+Format-Path $TestPath
 
 $TestPath = "C:\Unk[n]own\*tory"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
 $TestPath = "C:\Bad\<Path>\Loca'tion"
 Start-Test $TestPath
-$Result = Format-Path $TestPath
-$Result
-Test-Environment $Result
+Format-Path $TestPath
 
-Test-Output $Result2 -Command Format-Path
+#
+# Not file system
+#
+New-Section "Not file system"
+
+$TestPath = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "\\.\pipe\vscode-git-475e6cdf67-sock"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "\\?\"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = $env:path
+Start-Test "env:PATH"
+Format-Path $TestPath
+
+$TestPath = "C:\Windows;;D:Dir1\..\dir2;F:/Data"
+Start-Test "C:\Windows;;D:Dir1\..\dir2;"
+Format-Path $TestPath
+
+$TestPath = "Intel64 Family 6 Model 158 Stepping 11, GenuineIntel"
+Start-Test $TestPath
+Format-Path $TestPath
+
+$TestPath = "1.52.1"
+Start-Test $TestPath
+Format-Path $TestPath
+
+#
+# null or empty
+#
+New-Section "null or empty"
+
+$TestPath = ""
+Start-Test '""'
+Format-Path $TestPath
+
+$TestPath = $null
+Start-Test '$null'
+Format-Path $TestPath
+
+Test-Output $Result -Command Format-Path
 
 Update-Log
 Exit-Test

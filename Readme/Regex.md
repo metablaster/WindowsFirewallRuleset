@@ -36,6 +36,7 @@ Reserved regex characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
     - [Get enabled or action flag](#get-enabled-or-action-flag)
   - [Random regexes](#random-regexes)
     - [File system path validation](#file-system-path-validation)
+    - [File path selection](#file-path-selection)
     - [URL validation](#url-validation)
     - [DACL validation](#dacl-validation)
     - [UNC validation](#unc-validation)
@@ -247,6 +248,16 @@ Here file extention must be either `*.lnk` or `*.url`
 
 ```powershell
 '^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*(\.(lnk|url))*$'
+```
+
+### File path selection
+
+Select path up to last directory, up to 3rd directory and last item respectively
+
+```powershell
+".+?(?=\\.*)"
+".+?(?=(\\.*\\*){3})"
+"\\+(?:.(?!\\))+$"
 ```
 
 ### URL validation

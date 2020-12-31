@@ -28,18 +28,41 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Format path into firewall compatible path
+Format file system path and fix syntax errors
 
 .DESCRIPTION
-Various paths drilled out of registry, and those specified by the user must be
-checked and properly formatted.
+Most path syntax errors are fixed however the path is never resolved or tested for existence.
+For example, relative path will stay relative and if the path location does not exist it is not created.
+
+Various paths drilled out of registry can be invalid and those specified manuallay may contain typos,
+this algorithm will attempt to correct these problems, in addition to providing consistent path output.
+
+If possible portion of the path is converted into system environment variable to shorten the length of a path.
 Formatted paths will also help sorting rules in firewall GUI based on path.
+Only file system paths are supported.
 
 .PARAMETER LiteralPath
-File path to format, can have environment variables, or it may contain redundant or invalid characters.
+File system path to format, can have environment variables, or it may contain redundant or invalid characters.
 
 .EXAMPLE
-PS> Format-Path "C:\Program Files\\Dir\"
+PS> Format-Path "C:\Program Files\WindowsPowerShell"
+%ProgramFiles%\WindowsPowerShell
+
+.EXAMPLE
+PS> Format-Path "%SystemDrive%\Windows\System32"
+%SystemRoot%\System32
+
+.EXAMPLE
+PS> Format-Path ..\dir//.\...
+..\dir\.\..
+
+.EXAMPLE
+PS> Format-Path ~/\Direcotry//file.exe
+~\Direcotry\file.exe
+
+.EXAMPLE
+PS> Format-Path '"C:\ProgramData\Git"'
+%ALLUSERSPROFILE%\Git
 
 .INPUTS
 [string] File path to format
@@ -58,137 +81,170 @@ function Format-Path
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Format-Path.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(ValueFromPipeline = $true)]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string] $LiteralPath
 	)
 
+	begin
+	{
+		# $DebugPreference = "Continue"
+		# $VerbosePreference = "Continue"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing path: '$LiteralPath'"
 
 		# Impossible to know what the input may be
 		if ([string]::IsNullOrEmpty($LiteralPath))
 		{
 			# TODO: why allowing empty path?
 			# NOTE: Avoid spamming
-			# Write-Debug -Message "[$($MyInvocation.InvocationName)] Returning false, file path is null or empty"
+			# Write-Debug -Message "[$($MyInvocation.InvocationName)] The path is null or empty"
 			return $LiteralPath
 		}
 
+		# TODO: Trim only if both ends match same quotation character
 		# Strip away quotations from path
-		$LiteralPath = $LiteralPath.Trim('"')
-		$LiteralPath = $LiteralPath.Trim("'")
+		$NewPath = $LiteralPath.Trim("'")
+		$NewPath = $NewPath.Trim('"')
 
-		# Some paths may have semicolon (ie. command paths)
-		$LiteralPath = $LiteralPath.TrimEnd(";")
+		# TODO: Semicolon is valid character to name a path
+		# Some paths drilled out of registry may have semicolon (ie. command paths)
+		$NewPath = $NewPath.TrimEnd(";")
 
-		# Replace double slashes with single ones
-		$LiteralPath = $LiteralPath.Replace("\\", "\")
+		# NOTE: Forward slashes while possibly valid for firewall rule are not desired or valid to
+		# format starting portion of the path into environment variable.
+		$NewPath = $NewPath.Replace("/", "\")
 
-		# NOTE: forward slashes while valid for firewall rule are not valid to format path into
-		# environment variable.
-		$LiteralPath = $LiteralPath.Replace("//", "\")
+		# Environment variables such as PATH or PSModulePath should not be formatted any further
+		[regex] $Regex = ";+[A-Za-z]:"
 
-		# Replace forward slashes with backward ones
-		$LiteralPath = $LiteralPath.Replace("/", "\")
-
-		# If input path is root drive, removing a slash would produce bad path
-		# Otherwise remove trailing slash for cases where entry path is convertible to variable
-		if ($LiteralPath.Length -gt 3)
+		if ($Regex.Match($NewPath).Success)
 		{
-			$LiteralPath = $LiteralPath.TrimEnd("\")
-		}
-
-		# TODO: sorted result will have multiple same variables,
-		# Sorting from longest paths which should be checked first
-		$Variables = Select-EnvironmentVariable WhiteList | Sort-Object -Descending { $_.Value.Length }
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$LiteralPath' already contains valid environment variable"
-		foreach ($Variable in $Variables)
-		{
-			if ($LiteralPath -like "$($Variable.Name)*")
+			[regex] $Regex = ";+"
+			if ($Regex.Match($NewPath).Success)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input path already formatted: $LiteralPath"
-				return $LiteralPath
+				# Remove empty entries
+				$NewPath = $Regex.Replace($NewPath, ";").TrimEnd(";")
 			}
-			# NOTE: else if it contains bad environment variable, Test-Environment should be used
-			# to show warning or error message, we'll expand what can be expanded anyway.
+
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified path is multi directory, likely environment variable"
+			return $NewPath
 		}
 
-		# NOTE: The path may contain invalid or multiple environment variables, ex. those previously excluded
-		$LiteralPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
-
-		# Make a copy of file path because modification can be wrong
-		$SearchString = $LiteralPath
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
-		while (![string]::IsNullOrEmpty($SearchString))
+		[regex] $Regex = "\.{3,}"
+		if ($Regex.Match($NewPath).Success)
 		{
-			foreach ($Entry in $Variables)
+			$NewPath = $Regex.Replace($NewPath, "..")
+		}
+
+		# NOTE: The path may contain invalid or multiple environment variables,
+		# we'll expand any known variables to maximize the length of a path formatted into environment variable
+		$NewPath = [System.Environment]::ExpandEnvironmentVariables($NewPath)
+
+		# See if expansion resulted in multiple pats
+		# Note that % is valid character to name a file or directory
+		$BadData = [regex]::Match($NewPath, "([A-Za-z]:\\?){2,}?")
+
+		if ($BadData.Success)
+		{
+			# Formatting such path makes no sense, it must be fixed instead
+			Write-Warning -Message "Result of variable expansion resulted in multiple paths, formatting aborted"
+			return $LiteralPath
+		}
+
+		# File system qualifier must be single letter
+		$BadData = [regex]::Match($NewPath, "([A-Za-z]{2,}:\\?)+?")
+
+		if ($BadData.Success)
+		{
+			Write-Warning -Message "Path qualifier '$($BadData.Groups[1].Value)' not supported, formatting aborted"
+			return $LiteralPath
+		}
+
+		# Qualifier ex. "C:\" "D:", "\" or "\\"
+		# Unqualified: Anything except qualifier
+		$PathGroups = [regex]::Match($NewPath, "(?<Qualifier>^[A-Za-z]:\\?|^\\{1,2})?(?<Unqualified>.*)")
+		$Qualifier = $PathGroups.Groups["Qualifier"]
+		$Unqualified = $PathGroups.Groups["Unqualified"]
+
+		if ($Unqualified.Success)
+		{
+			# Remove surplus backslashes, also trims last backslash
+			$SplitOptions = [System.StringSplitOptions]::RemoveEmptyEntries
+			$PathSplit = $Unqualified.Value.Split("\", $SplitOptions)
+			$NewPath = [string]::Join("\", $PathSplit)
+
+			# Put correct(ed) qualifier back if the path isn't relative
+			if ($Qualifier.Success)
 			{
-				if ($Entry.Value -like $SearchString)
+				if ($NewPath.Length)
 				{
-					# Environment variable found, if this is first hit, trailing slash is already removed
-					$LiteralPath = $LiteralPath.Replace($SearchString, $Entry.Name)
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting input path to: $LiteralPath"
-					return $LiteralPath
+					$NewPath = $NewPath.Insert(0, $Qualifier.Value)
+				}
+				# TODO: Duplicate code
+				elseif ($Qualifier.Value.StartsWith("\"))
+				{
+					$NewPath = $Qualifier.Value
+				}
+				else
+				{
+					$NewPath = $Qualifier.Value.TrimEnd("\")
 				}
 			}
-
-			# Strip away file or last folder in path then try again (also trims trailing slash)
-			$SearchString = Split-Path -Path $SearchString -Parent
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$SearchString' is convertible to environment variable"
 		}
-
-		# The path has been reduced to root drive so get that
-		$SearchString = Split-Path -Path $LiteralPath -Qualifier -ErrorAction SilentlyContinue
-
-		if ([string]::IsNullOrEmpty($SearchString))
+		elseif ($Qualifier.Success)
 		{
-			# If there is no qualifier nothing to do, the path is either UNC path or relative path
-			# NOTE: We're not checking this at the beginning because the purpose is to format what can be formatted
-			if ($LiteralPath.StartsWith("\"))
+			if ($Qualifier.Value.StartsWith("\"))
 			{
-				# This is UNC path and we need to put back back slash that was previously removed
-				return $LiteralPath.Insert(0, "\")
-			}
-
-			# Otherwise it's either relative path or single directory or file name
-			return $LiteralPath
-		}
-		else
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] path has been reduced to root drive, now searching for: $SearchString"
-
-			# Find candidate replacements for the qualifier
-			$Variables = $Variables | Where-Object { $_.Value -eq $SearchString }
-
-			if ([string]::IsNullOrEmpty($Variables))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Environment variables for input path don't exist"
-				# There are no environment variables for this drive, just trim trailing slash
-				# NOTE: TrimEnd, this is here for drive root paths, drive root environment variables as
-				# well as all other paths returned from this function don't have ending slash either.
-				return $LiteralPath.TrimEnd("\")
-			}
-			elseif (($Variables | Measure-Object).Count -gt 1)
-			{
-				# Since there may be duplicate entries, we grab first one
-				$Replacement = $Variables.Name[0]
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Multiple matches exist for '$SearchString', selecting first one: $Replacement"
+				$NewPath = $Qualifier.Value
 			}
 			else
 			{
-				# If there is single match, selecting [0] would result in selecting first letter instead of env. variable!
-				$Replacement = $Variables.Name
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Found exact match for '$SearchString' -> $Replacement"
+				$NewPath = $Qualifier.Value.TrimEnd("\")
+			}
+		}
+		else
+		{
+			Write-Error -Category InvalidResult -TargetObject $NewPath -Message "Unable to format path: '$NewPath'"
+			return $NewPath
+		}
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The path was formatted to: '$NewPath'"
+
+		# TODO: Sorted result will have multiple same variable values, with different name though,
+		# Sorting such that longest path values start first to be able to replace maximum amount of a path into environment variable
+		$WhiteList = Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value.Length }
+
+		# Make a starting Match object equal to full path
+		$SearchString = [regex]::Match($NewPath, ".+")
+
+		:environment while ($SearchString.Success)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$($SearchString.Value)' is convertible to environment variable"
+
+			foreach ($Entry in $WhiteList)
+			{
+				if ($Entry.Value -like $SearchString.Value)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Inserting $($Entry.Name) in place of: '$($SearchString.Value)'"
+
+					# Environment variable found
+					$NewPath = $NewPath.Replace($SearchString.Value, $Entry.Name)
+					break environment
+				}
 			}
 
-			# Only root drive is converted, just trim away trailing slash if this is qualifier
-			$LiteralPath = $LiteralPath.Replace($SearchString, $Replacement).TrimEnd("\")
-
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Only root drive is formatted: $LiteralPath"
-			return $LiteralPath
+			# else strip off path leaf (file or last directory) then try again
+			$SearchString = [regex]::Match($SearchString.Value, ".+(?=\\.*\\*)")
 		}
+
+		if (!$SearchString.Success)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unable to find environment variable for: '$NewPath'"
+		}
+
+		return $NewPath
 	}
 }

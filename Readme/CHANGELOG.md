@@ -22,11 +22,11 @@ If you would like to see fresh changes done since last release you can do so on 
 
 ## v0.9.1 (develop branch)
 
-**NOTE:** Changes for unreleased version (develop branch) may change or be upfront
+**NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
 
 - Modules
 
-  - All module functions significantly improved
+  - All module functions significantly improved (In progress...)
   - Several functions were renamed to be more descriptive of their purpose
 
 - Rules
@@ -35,11 +35,11 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - New features
 
-  - `Get-ParameterAlias` script to help harvest parameter aliases for naming convention
+  - `Get-ParameterAlias` script to help harvest function parameter aliases for all installed modules
   - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
   - `Test-MarkdownLinks` function to find dead links in markdown files
   - `Resolve-FileSystem` function to resolve path wildcard pattern or relative paths to `System.IO.*Info`
-  - `Reset-TestDrive` function to safely clear test drive directory for cleaner and smoother unit testing.
+  - `Reset-TestDrive` function to safely clear test drive directory for cleaner and smoother unit testing
   - `Resolve-Host` function used to resolve host to IP or an IP to host.
   - `Test-UPN` function used to validate syntax of UPN (Universal Principal Name)
   - `Convert-FromSDDL` function to resolve SDDL strings into principal, user name, SID and domain
@@ -50,10 +50,16 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Unit tests have consistent test drive defined
 
+- Documentation
+
+  - `NamingConvention.md` new document to explain naming convention used by the project code
+
 - Design
 
   - Pramenter names and aliases follow naming convention according to community development
   guidelines (In progress...)
+  - 3rd party scripts from `External` directories merged into the rest of project code, there is no
+  no point to separate code based on contributors involved. (In progress...)
 
 - Bugfix
 

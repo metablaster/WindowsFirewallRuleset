@@ -162,7 +162,7 @@ function Test-Environment
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable UserProfile | Select-Object -ExpandProperty Name
+			$UserVariables = Select-EnvironmentVariable -Scope UserProfile | Select-Object -ExpandProperty Name
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall -and $IsUserProfile)
@@ -220,7 +220,7 @@ function Test-Environment
 		}
 		elseif ($RegMatch.Count -eq 2)
 		{
-			$BlackList = Select-EnvironmentVariable BlackList | Select-Object -ExpandProperty Name
+			$BlackList = Select-EnvironmentVariable -Scope BlackList | Select-Object -ExpandProperty Name
 
 			if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" }))
 			{
