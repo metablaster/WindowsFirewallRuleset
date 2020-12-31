@@ -52,11 +52,18 @@ A named group of system environment variables to get as follows:
 .PARAMETER Name
 Specify specific environment variable which to expand to value.
 If there is no such environment variable the result is null.
+Wildcard characters are supported.
 
 .PARAMETER Value
 Get environment variable name for specified value if there is one.
 This is equivalent to serching environment variables that expand to specified value,
 the result may include multiple environment variables.
+Wildcard characters are supported.
+
+.PARAMETER From
+Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for
+environment variables that match -Name wildcard patter, to instead get variable names specify -From Name.
+Same applies to -Value parameter which gets variables for matches values.
 
 .PARAMETER Exact
 If specified, retrieved environment variable names are exact meaning not surrounded with
@@ -84,6 +91,11 @@ Name              Value
 %USERNAME%        SomeUser
 
 .EXAMPLE
+PS> Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList
+
+%ALLUSERSPROFILE%
+
+.EXAMPLE
 PS> Select-EnvironmentVariable -Name "LOGONSERVER" -Force
 
 \\SERVERNAME
@@ -92,6 +104,18 @@ PS> Select-EnvironmentVariable -Name "LOGONSERVER" -Force
 PS> Select-EnvironmentVariable -Value "C:\Program Files"
 
 %ProgramFiles%
+
+.EXAMPLE
+PS> Select-EnvironmentVariable -Scope UserProfile -From Name
+
+%APPDATA%
+%HOME%
+%HOMEPATH%
+%LOCALAPPDATA%
+%OneDrive%
+%TEMP%
+%TMP%
+%USERPROFILE%
 
 .EXAMPLE
 PS> Select-EnvironmentVariable -Scope FullyQualified -Exact
@@ -130,9 +154,8 @@ Path+Filename limit is 260 characters.
 
 TODO: Need to see if UNC, single backslash and relative paths without a qualifier are valid for firewall,
 a new group 'Firewall' is needed since whitelist excludes some valid variables
-TODO: Implement -AsCustomObject that will give consistent output
+TODO: Implement -AsCustomObject that will give consistent output for formatting purposes
 TODO: Implement -Unique switch since some variable Values may be duplicates (with different name)
-TODO: Query by name or value should support wildcards
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md
@@ -146,17 +169,25 @@ function Select-EnvironmentVariable
 	[CmdletBinding(DefaultParameterSetName = "Scope", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md")]
 	param (
-		[Parameter(Mandatory = $true, ParameterSetName = "Scope")]
+		[Parameter(ParameterSetName = "Scope")]
+		[Parameter(ParameterSetName = "Name")]
+		[Parameter(ParameterSetName = "Value")]
 		[ValidateSet("UserProfile", "Whitelist", "FullyQualified", "Rooted", "FileSystem", "Relative", "BlackList", "All")]
-		[string] $Scope,
+		[string] $Scope = "All",
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
 		[AllowEmptyString()]
+		[SupportsWildcards()]
 		[string] $Name,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Value")]
 		[AllowEmptyString()]
+		[SupportsWildcards()]
 		[string] $Value,
+
+		[Parameter()]
+		[ValidateSet("Name", "Value")]
+		[string] $From,
 
 		[Parameter(ParameterSetName = "Scope")]
 		[Parameter(ParameterSetName = "Value")]
@@ -182,6 +213,7 @@ function Select-EnvironmentVariable
 				return $null
 			}
 
+			if (!$From) { $From = "Value" }
 			break
 		}
 		"Value"
@@ -191,6 +223,8 @@ function Select-EnvironmentVariable
 				Write-Debug "[$($MyInvocation.InvocationName)] Name parameter is null or empty"
 				return $null
 			}
+
+			if (!$From) { $From = "Name" }
 		}
 	}
 
@@ -458,17 +492,70 @@ function Select-EnvironmentVariable
 
 	Set-Variable -Name LastExactState -Scope Script -Value $Exact
 
+	$TargetScope = switch ($Scope)
+	{
+		"UserProfile"
+		{
+			$script:UserProfile
+			break
+		}
+		"WhiteList"
+		{
+			$script:WhiteList
+			break
+		}
+		"FullyQualified"
+		{
+			$script:FullyQualified
+			break
+		}
+		"Rooted"
+		{
+			$script:Rooted
+			break
+		}
+		"FileSystem"
+		{
+			$script:FileSystem
+			break
+		}
+		"Relative"
+		{
+			$script:Relative
+			break
+		}
+		"BlackList"
+		{
+			$script:BlackList
+			break
+		}
+		default # All
+		{
+			$script:AllVariables
+		}
+	}
+
+	if (!$TargetScope)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $Scope `
+			-Message "Environment variable group '$Scope' contains no entries"
+		return
+	}
+
 	switch ($PsCmdlet.ParameterSetName)
 	{
 		"Name"
 		{
-			$Result = $script:AllVariables | Where-Object -Property Name -Match $Name.Trim("%") |
-			Select-Object -ExpandProperty Value
+			[regex] $Regex = ConvertFrom-Wildcard $Name.Replace("%", "") -Options "IgnoreCase" -AsRegex
+
+			$Result = $TargetScope | Where-Object {
+				$Regex.Match($_.Name.Trim("%")).Success
+			} | Select-Object -ExpandProperty $From
 
 			if (!$Result)
 			{
 				Write-Error -Category ObjectNotFound -TargetObject $Name `
-					-Message "Environment variable '$Name' was not found"
+					-Message "Environment variable name search for '$Name' did not match anything"
 				return
 			}
 
@@ -476,13 +563,13 @@ function Select-EnvironmentVariable
 		}
 		"Value"
 		{
-			$Result = $script:AllVariables | Where-Object -Property Value -EQ $Value |
-			Select-Object -ExpandProperty Name
+			$Result = $TargetScope | Where-Object -Property Value -Like $Value |
+			Select-Object -ExpandProperty $From
 
 			if (!$Result)
 			{
 				Write-Error -Category ObjectNotFound -TargetObject $Value `
-					-Message "Environment variable was not found for: '$Value'"
+					-Message "Environment variable value search for '$Value' did not match anything"
 				return
 			}
 
@@ -490,57 +577,12 @@ function Select-EnvironmentVariable
 		}
 		default
 		{
-			$Result = switch ($Scope)
+			if ($From)
 			{
-				"UserProfile"
-				{
-					$script:UserProfile
-					break
-				}
-				"WhiteList"
-				{
-					$script:WhiteList
-					break
-				}
-				"FullyQualified"
-				{
-					$script:FullyQualified
-					break
-				}
-				"Rooted"
-				{
-					$script:Rooted
-					break
-				}
-				"FileSystem"
-				{
-					$script:FileSystem
-					break
-				}
-				"Relative"
-				{
-					$script:Relative
-					break
-				}
-				"BlackList"
-				{
-					$script:BlackList
-					break
-				}
-				default # All
-				{
-					$script:AllVariables
-				}
+				return $TargetScope | Select-Object -ExpandProperty $From
 			}
 
-			if (!$Result)
-			{
-				Write-Error -Category ObjectNotFound -TargetObject $Scope `
-					-Message "Environment variable group '$Scope' contains no entries"
-				return
-			}
-
-			return $Result
+			return $TargetScope
 		}
 	}
 }

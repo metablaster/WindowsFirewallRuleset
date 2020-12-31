@@ -51,6 +51,7 @@ $PublicScripts = @(
 	"Approve-Execute"
 	"Compare-Path"
 	"Confirm-FileEncoding"
+	"ConvertFrom-Wildcard"
 	"Select-EnvironmentVariable"
 	"Get-FileEncoding"
 	"Find-NetworkService"

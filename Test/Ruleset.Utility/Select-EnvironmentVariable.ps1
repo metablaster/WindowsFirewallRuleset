@@ -67,6 +67,11 @@ Enter-Test
 
 # $private:PSDefaultParameterValues.Add("Select-EnvironmentVariable:IncludeFile", $true)
 
+#
+# Scope test
+#
+New-Section "Scope test"
+
 Start-Test "Select-EnvironmentVariable UserProfile -Force"
 # Only one -Force is needed
 Select-EnvironmentVariable -Scope UserProfile -Force
@@ -96,6 +101,7 @@ Select-EnvironmentVariable -Scope All
 #
 # By value
 #
+New-Section "By value"
 
 Start-Test "Select-EnvironmentVariable for C:"
 Select-EnvironmentVariable -Value "C:"
@@ -104,7 +110,7 @@ Start-Test "Select-EnvironmentVariable for C:\Program Files -Exact"
 Select-EnvironmentVariable -Value "C:\Program Files" -Exact
 
 # Try again name select with Exact names
-Start-Test "Select-EnvironmentVariable All -Force -Exact"
+Start-Test "Select-EnvironmentVariable All -Force -Exact | Out-Null"
 Select-EnvironmentVariable -Scope All -Force -Exact | Out-Null
 
 # Make sure input works for both cases with and without: %%
@@ -117,14 +123,15 @@ Select-EnvironmentVariable -Value "C:\Program Files"
 #
 # By name
 #
+New-Section "By name"
 
-Start-Test "Select-EnvironmentVariable DOESNOTEXIST"
+Start-Test "Select-EnvironmentVariable DOESNOTEXIST is FAIL"
 Select-EnvironmentVariable -Name "DOESNOTEXIST"
 
 Start-Test "Select-EnvironmentVariable LOGONSERVER"
 Select-EnvironmentVariable -Name "LOGONSERVER"
 
-Start-Test "Select-EnvironmentVariable %HOMEPATH% -Exact"
+Start-Test "Select-EnvironmentVariable %HOMEPATH% -Exact FAIL"
 Select-EnvironmentVariable -Name "%HOMEPATH%" -Exact
 
 Test-Output $Result -Command Select-EnvironmentVariable
@@ -132,6 +139,7 @@ Test-Output $Result -Command Select-EnvironmentVariable
 #
 # Select and sort example
 #
+New-Section "Select and sort example"
 
 Start-Test "Select Name (WhiteList)"
 $Result | Select-Object -ExpandProperty Name
@@ -145,6 +153,7 @@ Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value
 #
 # null or empty
 #
+New-Section "null or empty"
 
 Start-Test "Select Name null"
 Select-EnvironmentVariable -Name $null
@@ -157,6 +166,46 @@ Select-EnvironmentVariable -Value $null
 
 Start-Test "Select Value empty"
 Select-EnvironmentVariable -Value ""
+
+#
+# Wildcard pattern
+#
+New-Section "Wildcard pattern"
+
+Start-Test "Select-EnvironmentVariable -Name *"
+Select-EnvironmentVariable -Name *
+
+Start-Test "Select-EnvironmentVariable *proces[so]o?*"
+Select-EnvironmentVariable -Name "*proces[so]o?*"
+
+Start-Test "Select-EnvironmentVariable -Value *Program* -Exact"
+Select-EnvironmentVariable -Value "*Program*" -Exact
+
+Start-Test "Select-EnvironmentVariable C:\uSe[er]?*"
+Select-EnvironmentVariable -Value "C:\uSe[er]?*"
+
+#
+# Selection
+#
+New-Section "Selection"
+
+Start-Test "Select-EnvironmentVariable -Name *user* -From Name"
+Select-EnvironmentVariable -Name *user* -From Name
+
+Start-Test "Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList"
+Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList
+
+Start-Test "Select-EnvironmentVariable -Name *user* -From Value"
+Select-EnvironmentVariable -Name *user* -From Value
+
+Start-Test "Select-EnvironmentVariable -Name *user* -From Value -Scope WhiteList"
+Select-EnvironmentVariable -Name *user* -From Value -Scope WhiteList
+
+Start-Test "Select-EnvironmentVariable -Name AND -Value should FAIL"
+Select-EnvironmentVariable -Name *user* -From Value -Value *DESKTOP* -Scope All
+
+Start-Test "Select-EnvironmentVariable -Scope UserProfile -From Name"
+Select-EnvironmentVariable -Scope UserProfile -From Name
 
 Update-Log
 Exit-Test

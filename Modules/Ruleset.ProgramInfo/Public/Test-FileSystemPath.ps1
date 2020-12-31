@@ -28,12 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test if a path is valid with additional checks
+Test if file system path syntax and existence
 
 .DESCRIPTION
-Validates only file system paths and expands environment variables in doing so.
-Optionally checks if the path is compatible for firewall rules or if the path leads to
-user profile.
+Test-FileSystemPath checks if file system path points to valid location and if not path syntax is
+checked by verifying environment variables and reporting unresolved wildcard pattern and bad characters.
+
+Optionally checks if the path is compatible for firewall rules or if the path leads to user profile.
 Both of which can be limited to either container or leaf path type.
 
 .PARAMETER LiteralPath
@@ -47,13 +48,13 @@ The type of path to test, can be one of the following:
 3. Any - The path is either path to file or directory, this is default
 
 .PARAMETER Firewall
-Ensures the path is valid for firewall rule
+Ensures path is valid for firewall rule
 
 .PARAMETER UserProfile
 Checks if the path leads to user profile
 
 .PARAMETER Strict
-If specified this function produces errors instead of warnings.
+If specified, this function produces errors instead of warnings.
 
 .PARAMETER Quiet
 If specified does not write any warnings or errors, only true or false is returned.
@@ -71,7 +72,7 @@ False, Invalid path syntax
 .EXAMPLE
 PS> Test-FileSystemPath "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 
-False, the path leads to userprofile and will not work for firewall
+False, the path contains environment variable that leads to userprofile and will not work for firewall
 
 .EXAMPLE
 PS> Test-FileSystemPath "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
@@ -137,7 +138,7 @@ function Test-FileSystemPath
 
 		if ($Quiet)
 		{
-			# Make sure -Quiet switch does not make fun of us
+			# Make sure -Quiet switch does not make troubleshooting hard
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Message"
 		}
 		elseif ($Strict)
@@ -162,7 +163,7 @@ function Test-FileSystemPath
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable -Scope UserProfile | Select-Object -ExpandProperty Name
+			$UserVariables = Select-EnvironmentVariable -Scope UserProfile -From Name
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall -and $IsUserProfile)
