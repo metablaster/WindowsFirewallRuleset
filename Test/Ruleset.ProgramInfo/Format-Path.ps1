@@ -307,5 +307,13 @@ Format-Path $TestPath
 
 Test-Output $Result -Command Format-Path
 
+New-Section "Test data to pipeline"
+$TestData = Get-Content -Path $ThisScript\..\TestData\Format-Path.txt
+# TODO: Need pipeline support for Start-Test
+$TestData | Format-Path
+
+New-Section "Test array input"
+Format-Path $TestData
+
 Update-Log
 Exit-Test

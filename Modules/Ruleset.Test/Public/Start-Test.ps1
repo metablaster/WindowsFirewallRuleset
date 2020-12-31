@@ -61,16 +61,16 @@ function Start-Test
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Start-Test.md")]
 	[OutputType([void])]
 	param (
-		[AllowEmptyString()]
 		[Parameter(Mandatory = $true)]
+		[AllowEmptyString()]
 		[string] $Message
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
+	# TODO: This regex won't cover everything
 	# "Start-Test -Param input"
 	# Let Stop-Test know test case name
-	Set-Variable -Name TestCase -Scope Script -Value ([regex]::new("^\w+-\w+(?=\s)").Match($Message))
+	Set-Variable -Name TestCase -Scope Script -Value ([regex]::Match($Message, "^\w+-\w+(?=\s)"))
 
 	if ($PSCmdlet.ShouldProcess("Start test case", $Message))
 	{

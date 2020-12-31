@@ -71,9 +71,7 @@ PS> Format-Path '"C:\ProgramData\Git"'
 [string] formatted path, includes environment variables, stripped off of junk
 
 .NOTES
-TODO: This should proably be inside utility module,
-it's here since only this module uses this function.
-TODO: Reference to path variable as second parameter set
+TODO: This should proably be in utility module, it's here since only this module uses this function.
 #>
 function Format-Path
 {
@@ -82,109 +80,124 @@ function Format-Path
 	[OutputType([string])]
 	param (
 		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string] $LiteralPath
+		[string[]] $LiteralPath
 	)
 
 	begin
 	{
-		# $DebugPreference = "Continue"
-		# $VerbosePreference = "Continue"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+		# NOTE: Not used
+		# Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing path: '$LiteralPath'"
-
-		# Impossible to know what the input may be
-		if ([string]::IsNullOrEmpty($LiteralPath))
+		foreach ($PathEntry in $LiteralPath)
 		{
-			# TODO: why allowing empty path?
-			# NOTE: Avoid spamming
-			# Write-Debug -Message "[$($MyInvocation.InvocationName)] The path is null or empty"
-			return $LiteralPath
-		}
-
-		# TODO: Trim only if both ends match same quotation character
-		# Strip away quotations from path
-		$NewPath = $LiteralPath.Trim("'")
-		$NewPath = $NewPath.Trim('"')
-
-		# TODO: Semicolon is valid character to name a path
-		# Some paths drilled out of registry may have semicolon (ie. command paths)
-		$NewPath = $NewPath.TrimEnd(";")
-
-		# NOTE: Forward slashes while possibly valid for firewall rule are not desired or valid to
-		# format starting portion of the path into environment variable.
-		$NewPath = $NewPath.Replace("/", "\")
-
-		# Environment variables such as PATH or PSModulePath should not be formatted any further
-		[regex] $Regex = ";+[A-Za-z]:"
-
-		if ($Regex.Match($NewPath).Success)
-		{
-			[regex] $Regex = ";+"
-			if ($Regex.Match($NewPath).Success)
+			# Impossible to know what the input may be while drilling registry, for same reason
+			# we can't implement reference to parameter
+			if ([string]::IsNullOrEmpty($PathEntry))
 			{
-				# Remove empty entries
-				$NewPath = $Regex.Replace($NewPath, ";").TrimEnd(";")
+				# NOTE: Not used
+				# Write-Debug -Message "[$($MyInvocation.InvocationName)] The path is null or empty"
+				continue
 			}
 
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified path is multi directory, likely environment variable"
-			return $NewPath
-		}
+			# TODO: Trim only if both ends match same quotation character
+			# Strip away quotations from path
+			$NewPath = $PathEntry.Trim("'")
+			$NewPath = $NewPath.Trim('"')
 
-		[regex] $Regex = "\.{3,}"
-		if ($Regex.Match($NewPath).Success)
-		{
-			$NewPath = $Regex.Replace($NewPath, "..")
-		}
+			# TODO: Semicolon is valid character to name a path
+			# Some paths drilled out of registry may have semicolon (ie. command paths)
+			$NewPath = $NewPath.TrimEnd(";")
 
-		# NOTE: The path may contain invalid or multiple environment variables,
-		# we'll expand any known variables to maximize the length of a path formatted into environment variable
-		$NewPath = [System.Environment]::ExpandEnvironmentVariables($NewPath)
+			# NOTE: Forward slashes while possibly valid for firewall rule are not desired or valid
+			# to format starting portion of the path into environment variable.
+			$NewPath = $NewPath.Replace("/", "\")
 
-		# See if expansion resulted in multiple pats
-		# Note that % is valid character to name a file or directory
-		$BadData = [regex]::Match($NewPath, "([A-Za-z]:\\?){2,}?")
+			# Environment variables such as PATH or PSModulePath should not be formatted any further
+			[regex] $Regex = ";+[A-Za-z]:"
 
-		if ($BadData.Success)
-		{
-			# Formatting such path makes no sense, it must be fixed instead
-			Write-Warning -Message "Result of variable expansion resulted in multiple paths, formatting aborted"
-			return $LiteralPath
-		}
-
-		# File system qualifier must be single letter
-		$BadData = [regex]::Match($NewPath, "([A-Za-z]{2,}:\\?)+?")
-
-		if ($BadData.Success)
-		{
-			Write-Warning -Message "Path qualifier '$($BadData.Groups[1].Value)' not supported, formatting aborted"
-			return $LiteralPath
-		}
-
-		# Qualifier ex. "C:\" "D:", "\" or "\\"
-		# Unqualified: Anything except qualifier
-		$PathGroups = [regex]::Match($NewPath, "(?<Qualifier>^[A-Za-z]:\\?|^\\{1,2})?(?<Unqualified>.*)")
-		$Qualifier = $PathGroups.Groups["Qualifier"]
-		$Unqualified = $PathGroups.Groups["Unqualified"]
-
-		if ($Unqualified.Success)
-		{
-			# Remove surplus backslashes, also trims last backslash
-			$SplitOptions = [System.StringSplitOptions]::RemoveEmptyEntries
-			$PathSplit = $Unqualified.Value.Split("\", $SplitOptions)
-			$NewPath = [string]::Join("\", $PathSplit)
-
-			# Put correct(ed) qualifier back if the path isn't relative
-			if ($Qualifier.Success)
+			if ($Regex.Match($NewPath).Success)
 			{
-				if ($NewPath.Length)
+				[regex] $Regex = ";+"
+				if ($Regex.Match($NewPath).Success)
 				{
-					$NewPath = $NewPath.Insert(0, $Qualifier.Value)
+					# Remove empty entries
+					$NewPath = $Regex.Replace($NewPath, ";").TrimEnd(";")
 				}
-				# TODO: Duplicate code
-				elseif ($Qualifier.Value.StartsWith("\"))
+
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified path is multi directory, likely environment variable"
+				Write-Output $NewPath
+				continue
+			}
+
+			[regex] $Regex = "\.{3,}"
+			if ($Regex.Match($NewPath).Success)
+			{
+				$NewPath = $Regex.Replace($NewPath, "..")
+			}
+
+			# NOTE: The path may contain invalid or multiple environment variables,
+			# we'll expand any known variables to maximize the length of a path formatted into environment variable
+			$NewPath = [System.Environment]::ExpandEnvironmentVariables($NewPath)
+
+			# See if expansion resulted in multiple pats
+			# Note that % is valid character to name a file or directory
+			$BadData = [regex]::Match($NewPath, "([A-Za-z]:\\?){2,}?")
+
+			if ($BadData.Success)
+			{
+				# Formatting such path makes no sense, it must be fixed instead
+				Write-Warning -Message "Result of variable expansion resulted in multiple paths, formatting aborted"
+
+				Write-Output $PathEntry
+				continue
+			}
+
+			# File system qualifier must be single letter
+			$BadData = [regex]::Match($NewPath, "([A-Za-z]{2,}:\\?)+?")
+
+			if ($BadData.Success)
+			{
+				Write-Warning -Message "Path qualifier '$($BadData.Groups[1].Value)' not supported, formatting aborted"
+				Write-Output $PathEntry
+				continue
+			}
+
+			# Qualifier ex. "C:\" "D:", "\" or "\\"
+			# Unqualified: Anything except qualifier
+			$PathGroups = [regex]::Match($NewPath, "(?<Qualifier>^[A-Za-z]:\\?|^\\{1,2})?(?<Unqualified>.*)")
+			$Qualifier = $PathGroups.Groups["Qualifier"]
+			$Unqualified = $PathGroups.Groups["Unqualified"]
+
+			if ($Unqualified.Success)
+			{
+				# Remove surplus backslashes, also trims last backslash
+				$SplitOptions = [System.StringSplitOptions]::RemoveEmptyEntries
+				$PathSplit = $Unqualified.Value.Split("\", $SplitOptions)
+				$NewPath = [string]::Join("\", $PathSplit)
+
+				# Put correct(ed) qualifier back if the path isn't relative
+				if ($Qualifier.Success)
+				{
+					if ($NewPath.Length)
+					{
+						$NewPath = $NewPath.Insert(0, $Qualifier.Value)
+					}
+					# TODO: Duplicate code
+					elseif ($Qualifier.Value.StartsWith("\"))
+					{
+						$NewPath = $Qualifier.Value
+					}
+					else
+					{
+						$NewPath = $Qualifier.Value.TrimEnd("\")
+					}
+				}
+			}
+			elseif ($Qualifier.Success)
+			{
+				if ($Qualifier.Value.StartsWith("\"))
 				{
 					$NewPath = $Qualifier.Value
 				}
@@ -193,58 +206,48 @@ function Format-Path
 					$NewPath = $Qualifier.Value.TrimEnd("\")
 				}
 			}
-		}
-		elseif ($Qualifier.Success)
-		{
-			if ($Qualifier.Value.StartsWith("\"))
-			{
-				$NewPath = $Qualifier.Value
-			}
 			else
 			{
-				$NewPath = $Qualifier.Value.TrimEnd("\")
+				Write-Error -Category InvalidResult -TargetObject $NewPath -Message "Unable to format path: '$NewPath'"
+				Write-Output $NewPath
+				continue
 			}
-		}
-		else
-		{
-			Write-Error -Category InvalidResult -TargetObject $NewPath -Message "Unable to format path: '$NewPath'"
-			return $NewPath
-		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The path was formatted to: '$NewPath'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] The path was formatted to: '$NewPath'"
 
-		# TODO: Sorted result will have multiple same variable values, with different name though,
-		# Sorting such that longest path values start first to be able to replace maximum amount of a path into environment variable
-		$WhiteList = Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value.Length }
+			# TODO: Sorted result will have multiple same variable values, with different name though,
+			# Sorting such that longest path values start first to be able to replace maximum amount of a path into environment variable
+			$WhiteList = Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value.Length }
 
-		# Make a starting Match object equal to full path
-		$SearchString = [regex]::Match($NewPath, ".+")
+			# Make a starting Match object equal to full path
+			$SearchString = [regex]::Match($NewPath, ".+")
 
-		:environment while ($SearchString.Success)
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$($SearchString.Value)' is convertible to environment variable"
-
-			foreach ($Entry in $WhiteList)
+			:environment while ($SearchString.Success)
 			{
-				if ($Entry.Value -like $SearchString.Value)
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Inserting $($Entry.Name) in place of: '$($SearchString.Value)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$($SearchString.Value)' is convertible to environment variable"
 
-					# Environment variable found
-					$NewPath = $NewPath.Replace($SearchString.Value, $Entry.Name)
-					break environment
+				foreach ($Entry in $WhiteList)
+				{
+					if ($Entry.Value -like $SearchString.Value)
+					{
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Inserting $($Entry.Name) in place of: '$($SearchString.Value)'"
+
+						# Environment variable found
+						$NewPath = $NewPath.Replace($SearchString.Value, $Entry.Name)
+						break environment
+					}
 				}
+
+				# else strip off path leaf (file or last directory) then try again
+				$SearchString = [regex]::Match($SearchString.Value, ".+(?=\\.*\\*)")
 			}
 
-			# else strip off path leaf (file or last directory) then try again
-			$SearchString = [regex]::Match($SearchString.Value, ".+(?=\\.*\\*)")
-		}
+			if (!$SearchString.Success)
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unable to find environment variable for: '$NewPath'"
+			}
 
-		if (!$SearchString.Success)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unable to find environment variable for: '$NewPath'"
+			Write-Output $NewPath
 		}
-
-		return $NewPath
 	}
 }
