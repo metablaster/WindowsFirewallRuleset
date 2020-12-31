@@ -44,10 +44,10 @@ excluding executable file name.
 
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-PS> Test-Installation "Office" ([ref] $MyProgram)
+PS> Confirm-Installation "Office" ([ref] $MyProgram)
 
 .INPUTS
-None. You cannot pipe objects to Test-Installation
+None. You cannot pipe objects to Confirm-Installation
 
 .OUTPUTS
 [bool] True if the reference variable contains valid path or was updated, false otherwise.
@@ -55,10 +55,10 @@ None. You cannot pipe objects to Test-Installation
 .NOTES
 TODO: temporarily using ComputerName parameter
 #>
-function Test-Installation
+function Confirm-Installation
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Installation.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Installation.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -73,7 +73,7 @@ function Test-Installation
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-Environment $Directory.Value -Firewall))
+	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value
@@ -81,7 +81,7 @@ function Test-Installation
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Program well known"
 		return $true # input path is correct
 	}
-	elseif (Find-Installation $Program)
+	elseif (Search-Installation $Program)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallLocation = "unknown install location"

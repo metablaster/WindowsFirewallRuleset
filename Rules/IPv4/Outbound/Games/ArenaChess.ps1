@@ -80,10 +80,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "ArenaChess" ([ref] $ArenaChessRoot)) -or $ForceLoad)
+if ((Confirm-Installation "ArenaChess" ([ref] $ArenaChessRoot)) -or $ForceLoad)
 {
 	$Program = "$ArenaChessRoot\Timeseal.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Arena Chess" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

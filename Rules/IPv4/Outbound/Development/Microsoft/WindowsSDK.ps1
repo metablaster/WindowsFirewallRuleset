@@ -80,10 +80,10 @@ $SDKDebuggers = "Unknown Directory"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
+if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -92,7 +92,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 		-Description "WinDbg access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -101,7 +101,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 		-Description "WinDbg access to Symbols Server" | Format-Output
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -110,7 +110,7 @@ if ((Test-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 		-Description "WinDbg Symchk access to Symbols Server." | Format-Output
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

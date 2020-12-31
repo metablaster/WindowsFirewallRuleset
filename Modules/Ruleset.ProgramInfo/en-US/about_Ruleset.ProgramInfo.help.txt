@@ -12,7 +12,7 @@ LONG DESCRIPTION
 	Querying remote computers is currently only partially supported.
 
 EXAMPLES
-	Find-Installation
+	Search-Installation
 	Find installation directory for given predefined program name
 
 	Format-Path
@@ -60,13 +60,13 @@ EXAMPLES
 	Get-WindowsSDK
 	Get installed Windows SDK
 
-	Test-Environment
+	Test-FileSystemPath
 	Test if a path is valid with additional checks
 
-	Confirm-Executable
+	Test-ExecutableFile
 	Check if file such as an *.exe exists
 
-	Test-Installation
+	Confirm-Installation
 	Test if given installation directory is valid
 
 	Test-Service

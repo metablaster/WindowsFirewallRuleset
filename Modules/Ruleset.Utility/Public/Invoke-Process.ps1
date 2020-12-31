@@ -98,7 +98,7 @@ function Invoke-Process
 
 	if (!$Command)
 	{
-		[System.IO.FileInfo] $FilePath = Resolve-FileSystem $Path -File
+		[System.IO.FileInfo] $FilePath = Resolve-FileSystemPath $Path -File
 
 		if ($FilePath -and $FilePath.Exists)
 		{

@@ -88,10 +88,10 @@ $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-	Confirm-Executable $ChromeApp
+	Test-ExecutableFile $ChromeApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $ChromeApp `

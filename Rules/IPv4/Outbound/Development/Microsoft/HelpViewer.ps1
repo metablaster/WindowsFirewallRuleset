@@ -83,10 +83,10 @@ $HelpViewerRoot = "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
+if ((Confirm-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 {
 	$Program = "$HelpViewerRoot\HlpCtntMgr.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -95,7 +95,7 @@ if ((Test-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$HelpViewerRoot\HlpViewer.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Help Viewer" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

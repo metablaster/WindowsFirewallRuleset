@@ -80,10 +80,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $ForceLoad)
 {
 	$Program = "$IncredibuildRoot\XLicProc.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Incredibuild License" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

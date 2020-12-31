@@ -31,7 +31,7 @@ SOFTWARE.
 Find installation directory for given predefined program name
 
 .DESCRIPTION
-Find-Installation is called by Test-Installation, ie. only if test for existing path
+Search-Installation is called by Confirm-Installation, ie. only if test for existing path
 fails then this method kicks in
 
 .PARAMETER Application
@@ -41,10 +41,10 @@ Predefined program name
 Computer name on which to look for program installation
 
 .EXAMPLE
-PS> Find-Installation "Office"
+PS> Search-Installation "Office"
 
 .INPUTS
-None. You cannot pipe objects to Find-Installation
+None. You cannot pipe objects to Search-Installation
 
 .OUTPUTS
 [bool] true or false if installation directory if found, installation table is updated
@@ -52,10 +52,10 @@ None. You cannot pipe objects to Find-Installation
 .NOTES
 None.
 #>
-function Find-Installation
+function Search-Installation
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Find-Installation.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Search-Installation.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -445,7 +445,7 @@ function Find-Installation
 		}
 		"GeForceExperience"
 		{
-			# TODO: this is temporary measure, it should be handled with Confirm-Executable function
+			# TODO: this is temporary measure, it should be handled with Test-ExecutableFile function
 			# see also related todo in Nvidia.ps1
 			# NOTE: calling script must not use this path, it is used only to check if installation
 			# exists, the real path is obtained with "Nvidia" switch case
@@ -542,7 +542,7 @@ function Find-Installation
 		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 		$Script = (Get-PSCallStack)[2].Command
 
-		# TODO: these loops seem to be skipped, probably missing Confirm-Executable, need to check
+		# TODO: these loops seem to be skipped, probably missing Test-ExecutableFile, need to check
 		Write-Information -Tags "User" -MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
 		Write-Information -Tags "User" -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 

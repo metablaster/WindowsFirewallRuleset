@@ -81,10 +81,10 @@ $CMakeRoot = "%ProgramFiles%\CMakeFakePath"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
+if ((Confirm-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 {
 	$Program = "$CMakeRoot\bin\cmake.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -DisplayName "CMake" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

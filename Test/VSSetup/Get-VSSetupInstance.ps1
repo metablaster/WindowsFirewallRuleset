@@ -77,11 +77,11 @@ Get-VSSetupInstance |
 Select-VSSetupInstance -Latest |
 Select-Object -ExpandProperty InstallationPath
 
-Start-Test "Test-Installation 'NullVariable' $NullVariable"
-Test-Installation "MicrosoftOffice" ([ref] $NullVariable)
+Start-Test "Confirm-Installation 'NullVariable' $NullVariable"
+Confirm-Installation "MicrosoftOffice" ([ref] $NullVariable)
 
-Start-Test "Test-Installation 'EmptyVariable' $EmptyVariable"
-Test-Installation "MicrosoftOffice" ([ref] $EmptyVariable)
+Start-Test "Confirm-Installation 'EmptyVariable' $EmptyVariable"
+Confirm-Installation "MicrosoftOffice" ([ref] $EmptyVariable)
 
 Update-Log
 Exit-Test

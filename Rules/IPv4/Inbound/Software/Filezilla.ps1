@@ -80,10 +80,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
+if ((Confirm-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 {
 	$Program = "$FileZillaRoot\filezilla.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

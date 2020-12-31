@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Confirm-Executable
+Unit test for Test-ExecutableFile
 
 .DESCRIPTION
-Test correctness of Confirm-Executable function
+Test correctness of Test-ExecutableFile function
 
 .EXAMPLE
-PS> .\Confirm-Executable.ps1
+PS> .\Test-ExecutableFile.ps1
 
 .INPUTS
-None. You cannot pipe objects to Confirm-Executable.ps1
+None. You cannot pipe objects to Test-ExecutableFile.ps1
 
 .OUTPUTS
-None. Confirm-Executable.ps1 does not generate any output
+None. Test-ExecutableFile.ps1 does not generate any output
 
 .NOTES
 None.
@@ -72,65 +72,65 @@ $UnsignedFile = New-Item -ItemType File -Path $DefaultTestDrive\unsigned.exe -Fo
 $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
 
 Start-Test "Valid executable"
-$Result = Confirm-Executable $ValidFile
+$Result = Test-ExecutableFile $ValidFile
 $Result
 
 Start-Test "Directory"
-Confirm-Executable $Directory
+Test-ExecutableFile $Directory
 
 Start-Test "Blacklisted extension"
-Confirm-Executable $BlacklistedExtension.FullName
+Test-ExecutableFile $BlacklistedExtension.FullName
 
 Start-Test "Unknown extension"
-Confirm-Executable $UnknownExtension.FullName
+Test-ExecutableFile $UnknownExtension.FullName
 
 Start-Test "No extension"
-Confirm-Executable $NoExtension.FullName
+Test-ExecutableFile $NoExtension.FullName
 
 Start-Test "Unsigned file"
-Confirm-Executable $UnsignedFile.FullName
+Test-ExecutableFile $UnsignedFile.FullName
 
 Start-Test "Force unsigned file"
-Confirm-Executable $UnsignedFile.FullName -Force
+Test-ExecutableFile $UnsignedFile.FullName -Force
 
 Start-Test "Non existent directory"
-Confirm-Executable "C:\Unknown\Directory\"
+Test-ExecutableFile "C:\Unknown\Directory\"
 
 Start-Test "Non existent file"
-Confirm-Executable "C:\Unknown\Directory\file.exe"
+Test-ExecutableFile "C:\Unknown\Directory\file.exe"
 
 Start-Test "Unresolved path"
-Confirm-Executable "C:\Unk[n]own\*tory"
+Test-ExecutableFile "C:\Unk[n]own\*tory"
 
 Start-Test "Relative path to directory"
-Confirm-Executable ".\.."
+Test-ExecutableFile ".\.."
 
 Start-Test "Relative path to this directory: ."
-Confirm-Executable "."
+Test-ExecutableFile "."
 
 Start-Test "Relative path to root drive: \"
-Confirm-Executable "\"
+Test-ExecutableFile "\"
 
 Start-Test "Relative path to valid file 1"
 Copy-Item -Path ([System.Environment]::ExpandEnvironmentVariables($ValidFile)) -Destination $DefaultTestDrive
-Confirm-Executable "..\TestDrive\regedit.exe"
+Test-ExecutableFile "..\TestDrive\regedit.exe"
 
 Start-Test "Relative path to valid file 2"
-Confirm-Executable "C:\Windows\System32\..\regedit.exe"
+Test-ExecutableFile "C:\Windows\System32\..\regedit.exe"
 
 Start-Test "Relative path to unsigned file"
-Confirm-Executable "..\TestDrive\$($UnsignedFile.Name)"
+Test-ExecutableFile "..\TestDrive\$($UnsignedFile.Name)"
 
 Start-Test "Bad path syntax"
-Confirm-Executable "C:\Bad\<Path>\Loca'tion"
+Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
 
 Start-Test "Path to registry"
-Confirm-Executable "HKLM:\SOFTWARE\Microsoft\Clipboard"
+Test-ExecutableFile "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
 Start-Test "UNC path"
-Confirm-Executable $UNCPath
+Test-ExecutableFile $UNCPath
 
-Test-Output $Result -Command Confirm-Executable
+Test-Output $Result -Command Test-ExecutableFile
 
 Update-Log
 Exit-Test

@@ -81,10 +81,10 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $ForceLoad)
+if ((Confirm-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $ForceLoad)
 {
 	$Program = "$OpenSSHRoot\ssh.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "OpenSSH" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

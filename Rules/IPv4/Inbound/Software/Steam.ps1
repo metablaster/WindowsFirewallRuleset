@@ -80,10 +80,10 @@ $SteamRoot = "%ProgramFiles(x86)%\Steam"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

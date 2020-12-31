@@ -92,18 +92,18 @@ Merge-SDDL ([ref] $ContainerAccounts) -From $UsersGroupSDDL
 # Test if installation exists on system
 if ([System.Environment]::Is64BitOperatingSystem)
 {
-	if ((Test-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
+	if ((Confirm-Installation "Nvidia64" ([ref] $NvidiaRoot64)) -or $ForceLoad)
 	{
-		# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
+		# Dummy variable, needs to be known because Confirm-Installation will return same path as nvidia root
 		$GeForceRoot = "$NvidiaRoot64\NVIDIA GeForce Experience"
-		Set-Variable -Name GeForce -Scope Script -Value (Test-Installation "GeForceExperience" ([ref] $GeForceRoot))
+		Set-Variable -Name GeForce -Scope Script -Value (Confirm-Installation "GeForceExperience" ([ref] $GeForceRoot))
 
 		# Test if GeForce experience exists on system, the path is same
-		# TODO: this is temporary measure, it should be checked with Confirm-Executable function
+		# TODO: this is temporary measure, it should be checked with Test-ExecutableFile function
 		if ($script:GeForce -or $ForceLoad)
 		{
 			$Program = "$NvidiaRoot64\NvContainer\nvcontainer.exe"
-			Confirm-Executable $Program
+			Test-ExecutableFile $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Container x64" -Service Any -Program $Program `
@@ -113,7 +113,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 				-Description "" | Format-Output
 
 			$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-			Confirm-Executable $Program
+			Test-ExecutableFile $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x64" -Service Any -Program $Program `
@@ -124,7 +124,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 
 			# TODO: this rule is not implemented for x86 system
 			$Program = "$NvidiaRoot64\Update Core\NvProfileUpdater64.exe"
-			Confirm-Executable $Program
+			Test-ExecutableFile $Program
 
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia Profile Updater" -Service Any -Program $Program `
@@ -153,7 +153,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 
 		if ([string]::IsNullOrEmpty($Driver))
 		{
-			# TODO: This is from Confirm-Executable, Confirm-Executable should handle this, see also todo in Confirm-Executable
+			# TODO: This is from Test-ExecutableFile, Test-ExecutableFile should handle this, see also todo in Test-ExecutableFile
 			$NVDisplayExe = "NVDisplay.Container.exe"
 			Write-Warning -Message "Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
 
@@ -165,7 +165,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 			$Program = Split-Path -Path $Driver -Parent | Format-Path
 			$Program += "\Display.NvContainer\NVDisplay.Container.exe"
 
-			Confirm-Executable $Program
+			Test-ExecutableFile $Program
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia NVDisplay Container x64" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -181,23 +181,23 @@ if ([System.Environment]::Is64BitOperatingSystem)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
+if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 {
-	# Dummy variable, needs to be known because Test-Installation will return same path as nvidia root
+	# Dummy variable, needs to be known because Confirm-Installation will return same path as nvidia root
 	$GeForceXPRoot = "$NvidiaRoot86\NVIDIA GeForce Experience"
 
 	# Test if GeForce experience exists on system, the path is same
 	# NOTE: This check is needed for current x64 bit setup to avoid double prompt
 	if ($null -eq $script:GeForce)
 	{
-		$script:GeForce = (Test-Installation "GeForceExperience" ([ref] $GeForceXPRoot))
+		$script:GeForce = (Confirm-Installation "GeForceExperience" ([ref] $GeForceXPRoot))
 	}
 
-	# TODO: this is temporary measure, it should be checked with Confirm-Executable function
+	# TODO: this is temporary measure, it should be checked with Test-ExecutableFile function
 	if ($script:GeForce -or $ForceLoad)
 	{
 		$Program = "$NvidiaRoot86\NvContainer\nvcontainer.exe"
-		Confirm-Executable $Program
+		Test-ExecutableFile $Program
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia Container x86" -Service Any -Program $Program `
@@ -210,7 +210,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 		if (![System.Environment]::Is64BitOperatingSystem)
 		{
 			$Program = "$NvidiaRoot86\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
-			Confirm-Executable $Program
+			Test-ExecutableFile $Program
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Nvidia GeForce Experience x86" -Service Any -Program $Program `
 				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -221,7 +221,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 
 		# NOTE: this program no longer exists in recent installations, most likely changed!
 		# $Program = "$NvidiaRoot86\NvTelemetry\NvTelemetryContainer.exe"
-		# Confirm-Executable $Program
+		# Test-ExecutableFile $Program
 		# New-NetFirewallRule -Platform $Platform `
 		# 	-DisplayName "Nvidia Telemetry Container" -Service Any -Program $Program `
 		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -230,7 +230,7 @@ if ((Test-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 		# 	-Description "" | Format-Output
 
 		$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
-		Confirm-Executable $Program
+		Test-ExecutableFile $Program
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nvidia WebHelper TCP" -Service Any -Program $Program `

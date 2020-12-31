@@ -91,7 +91,7 @@ Set-Variable -Name WarningStatus -Scope Global -Value $false
 Set-ScreenBuffer 4000
 
 # Check all rules that apply to windows services
-Confirm-Executable $ServiceHost
+Test-ExecutableFile $ServiceHost
 Find-NetworkService $ProjectRoot\Rules
 Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |

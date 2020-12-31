@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-Installation
+Unit test for Confirm-Installation
 
 .DESCRIPTION
-Unit test for Test-Installation
+Unit test for Confirm-Installation
 
 .EXAMPLE
-PS> .\Test-Installation.ps1
+PS> .\Confirm-Installation.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-Installation.ps1
+None. You cannot pipe objects to Confirm-Installation.ps1
 
 .OUTPUTS
-None. Test-Installation.ps1 does not generate any output
+None. Confirm-Installation.ps1 does not generate any output
 
 .NOTES
 None.
@@ -70,23 +70,23 @@ $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
-Start-Test "Test-Installation 'VSCode' $VSCodeRoot"
-$Result = Test-Installation "VSCode" ([ref] $VSCodeRoot)
+Start-Test "Confirm-Installation 'VSCode' $VSCodeRoot"
+$Result = Confirm-Installation "VSCode" ([ref] $VSCodeRoot)
 $Result
 
-Start-Test "Test-Installation 'OneDrive' $OneDrive"
-Test-Installation "OneDrive" ([ref] $OneDrive)
+Start-Test "Confirm-Installation 'OneDrive' $OneDrive"
+Confirm-Installation "OneDrive" ([ref] $OneDrive)
 
-Start-Test "Test-Installation 'MicrosoftOffice' $OfficeRoot"
-Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
+Start-Test "Confirm-Installation 'MicrosoftOffice' $OfficeRoot"
+Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
 
-Start-Test "Test-Installation 'VisualStudio' $TestBadVariable"
-Test-Installation "VisualStudio" ([ref] $TestBadVariable)
+Start-Test "Confirm-Installation 'VisualStudio' $TestBadVariable"
+Confirm-Installation "VisualStudio" ([ref] $TestBadVariable)
 
-Start-Test "Test-Installation 'FailureTest' $TestBadVariable2"
-Test-Installation "FailureTest" ([ref] $TestBadVariable2)
+Start-Test "Confirm-Installation 'FailureTest' $TestBadVariable2"
+Confirm-Installation "FailureTest" ([ref] $TestBadVariable2)
 
-Test-Output $Result -Command Test-Installation
+Test-Output $Result -Command Confirm-Installation
 
 Update-Log
 Exit-Test

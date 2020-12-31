@@ -87,10 +87,10 @@ $EngineRoot = "%SystemDrive%\Users\$DefaultUser\source\repos\UnrealEngine\Engine
 # this does not suit our interests so removed
 
 # Test if installation exists on system
-if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
+if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 {
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
@@ -106,7 +106,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
@@ -122,7 +122,7 @@ if ((Test-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 		-Description "Swarm agent is used for build farm." | Format-Output
 
 	$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `

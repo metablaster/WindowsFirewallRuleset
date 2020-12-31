@@ -81,10 +81,10 @@ $SysInternalsRoot = "Unknown path" #"%SystemDrive%\tools"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
+if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals Autoruns" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -98,7 +98,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 	# TODO: It also uses port 80 but not known for what, not setting here.
 	# Most likely to fetch symbols
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals ProcessExplorer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -110,7 +110,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 		-Description "Access to VirusTotal" | Format-Output
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals ProcessMonitor" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -122,7 +122,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 		-Description "Access to symbols server" | Format-Output
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals TcpView" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -134,7 +134,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 		-Description "WhoIs access" | Format-Output
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals WhoIs" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -147,7 +147,7 @@ if ((Test-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 that you specify" | Format-Output
 
 	$Program = "$SysInternalsRoot\PSTools\psping.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals PSPing client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
@@ -161,7 +161,7 @@ Due to wide range of address and port options these should be set to Any.
 This rule serves to allow PSPing.exe to act as a client." | Format-Output
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "Sysinternals PSPing64 client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

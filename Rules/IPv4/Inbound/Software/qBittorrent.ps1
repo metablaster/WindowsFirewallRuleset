@@ -81,10 +81,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
+if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	# TODO: requires uTP protocol?
 	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `

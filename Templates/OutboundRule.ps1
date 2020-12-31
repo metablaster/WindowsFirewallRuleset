@@ -83,10 +83,10 @@ $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
+if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
 	$Program = "$TargetProgramRoot\TargetProgram.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	# Following lines/options are not used:
 	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)

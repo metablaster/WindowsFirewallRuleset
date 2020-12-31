@@ -81,11 +81,11 @@ $EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
+if ((Confirm-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 {
 	# TODO: no FTP rule
 	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
-	Confirm-Executable $EdgeChromiumApp
+	Test-ExecutableFile $EdgeChromiumApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
@@ -138,7 +138,7 @@ if ((Test-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 	# TODO: we should probably have a function for this and similar cases?
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
 	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
-	Confirm-Executable $EdgeChromiumUpdate
+	Test-ExecutableFile $EdgeChromiumUpdate
 
 	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 	Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL

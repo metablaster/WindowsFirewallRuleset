@@ -93,10 +93,10 @@ $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$ChromeApp = "$ChromeRoot\Chrome\Application\chrome.exe"
-	Confirm-Executable $ChromeApp
+	Test-ExecutableFile $ChromeApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chrome HTTP" -Service Any -Program $ChromeApp `
@@ -180,7 +180,7 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 
 	$ChromeUpdate = "$ChromeRoot\Update\GoogleUpdate.exe"
 
-	Confirm-Executable $ChromeUpdate
+	Test-ExecutableFile $ChromeUpdate
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Chrome Update" -Service Any -Program $ChromeUpdate `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -194,10 +194,10 @@ if ((Test-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 {
 	$FirefoxApp = "$FirefoxRoot\firefox.exe"
-	Confirm-Executable $FirefoxApp
+	Test-ExecutableFile $FirefoxApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox HTTP" -Service Any -Program $FirefoxApp `
@@ -221,7 +221,7 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 		-Description "File transfer protocol." | Format-Output
 
 	$PingSender = "$FirefoxRoot\pingsender.exe"
-	Confirm-Executable $PingSender
+	Test-ExecutableFile $PingSender
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Firefox Telemetry" -Service Any -Program $PingSender `
 		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -236,10 +236,10 @@ if ((Test-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 {
 	$YandexApp = "$YandexRoot\YandexBrowser\Application\browser.exe"
-	Confirm-Executable $YandexApp
+	Test-ExecutableFile $YandexApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Yandex HTTP" -Service Any -Program $YandexApp `
@@ -269,10 +269,10 @@ if ((Test-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 
 # Test if installation exists on system
 # TODO: this will be true even if $false for both!
-if ((Test-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 {
 	$TorApp = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
-	Confirm-Executable $TorApp
+	Test-ExecutableFile $TorApp
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Tor HTTP" -Service Any -Program $TorApp `

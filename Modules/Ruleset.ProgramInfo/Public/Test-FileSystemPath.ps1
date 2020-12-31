@@ -59,32 +59,32 @@ If specified this function produces errors instead of warnings.
 If specified does not write any warnings or errors, only true or false is returned.
 
 .EXAMPLE
-PS> Test-Environment "%Windir%"
+PS> Test-FileSystemPath "%Windir%"
 
 True, The path is valid, and it exists
 
 .EXAMPLE
-PS> Test-Environment "'%Windir%\System32'"
+PS> Test-FileSystemPath "'%Windir%\System32'"
 
 False, Invalid path syntax
 
 .EXAMPLE
-PS> Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+PS> Test-FileSystemPath "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 
 False, the path leads to userprofile and will not work for firewall
 
 .EXAMPLE
-PS> Test-Environment "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+PS> Test-FileSystemPath "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 
 True, the path leads to userprofile, is good for firewall rule and it exists
 
 .EXAMPLE
-Test-Environment "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile
+Test-FileSystemPath "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile
 
 True, the path lead to user profile, and it exists
 
 .INPUTS
-None. You cannot pipe objects to Test-Environment
+None. You cannot pipe objects to Test-FileSystemPath
 
 .OUTPUTS
 [bool] true if path exists, false otherwise
@@ -96,10 +96,10 @@ This function is needed in cases where the path may be a modified version of an 
 verified path such as in rule scripts or to verify manually edited installation table.
 TODO: This should proably be part of utility module, it's here since only this module uses this function.
 #>
-function Test-Environment
+function Test-FileSystemPath
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Environment.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-FileSystemPath.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Position = 0, Mandatory = $true)]

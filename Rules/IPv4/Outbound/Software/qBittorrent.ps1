@@ -81,14 +81,14 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
+if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	# TODO: some apps such as this one let user to configure ports, in all cases where this is true
 	# we should either use default port or let user specify port.
 	# TODO: the client also listens on IPv6, not all rules are hybrid, ie. local peer discovery
 	# is known to search peers on local IPv6
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -DisplayName "qBittorrent - HTTP/S" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `

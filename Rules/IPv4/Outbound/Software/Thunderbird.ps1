@@ -80,10 +80,10 @@ $ThunderbirdRoot = "%ProgramFiles%\Mozilla Thunderbird"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Thuderbird" ([ref] $ThunderbirdRoot)) -or $ForceLoad)
 {
 	$Program = "$ThunderbirdRoot\thunderbird.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Mozilla thunderbird - HTTP/HTTPS" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

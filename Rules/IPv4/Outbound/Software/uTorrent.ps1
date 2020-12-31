@@ -80,10 +80,10 @@ $uTorrentRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\uTorrent"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
+if ((Confirm-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$uTorrentRoot\uTorrent.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 	New-NetFirewallRule -Platform $Platform `

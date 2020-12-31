@@ -31,7 +31,7 @@ SOFTWARE.
 Check if executable file exists and is trusted.
 
 .DESCRIPTION
-Confirm-Executable verifies the path to executable file is valid and that executable itself exists.
+Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists.
 File extension is then verified to confirm it is on the allowed list, ex. such as an *.exe
 The executable is then verified to ensure it's digitaly signed and that signature is valid.
 If the file can't be found or verified, an error is genrated possibly with informational message,
@@ -47,37 +47,37 @@ If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting is passed test.
 
 .EXAMPLE
-PS> Confirm-Executable "C:\Windows\UnsignedFile.exe"
+PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
 
 ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe
 
 .EXAMPLE
-PS> Confirm-Executable "C:\Users\USERNAME\AppData\Application\chrome.exe"
+PS> Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\chrome.exe"
 
 WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded
 INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe
-INFO: To fix this problem find 'chrome.exe' and update installation directory in Confirm-Executable.ps1 script
+INFO: To fix this problem find 'chrome.exe' and update installation directory in Test-ExecutableFile.ps1 script
 
 .EXAMPLE
-PS> Confirm-Executable "\\COMPUTERNAME\Directory\file.exe"
+PS> Test-ExecutableFile "\\COMPUTERNAME\Directory\file.exe"
 
 ERROR: Specified file path is missing a file system qualifier: \\COMPUTERNAME\Directory\file.exe
 
 .EXAMPLE
-PS> Confirm-Executable ".\..\file.exe"
+PS> Test-ExecutableFile ".\..\file.exe"
 
 ERROR: Specified file path is relative: .\..\file.exe
 
 .EXAMPLE
-PS> Confirm-Executable "C:\Bad\<Path>\Loca'tion"
+PS> Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
 
 ERROR: Specified file path contains invalid characters: C:\Bad\<Path>\Loca'tion
 
 .INPUTS
-None. You cannot pipe objects to Confirm-Executable
+None. You cannot pipe objects to Test-ExecutableFile
 
 .OUTPUTS
-None. Confirm-Executable does not generate any output
+None. Test-ExecutableFile does not generate any output
 
 .NOTES
 Unlike Format-Path function which modifies path syntax, this function does not modify the path in any way.
@@ -89,10 +89,10 @@ TODO: We should return true or false and conditionally load rule
 TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
 TODO: Verify file is executable file (and path formatted?)
 #>
-function Confirm-Executable
+function Test-ExecutableFile
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Executable.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true)]

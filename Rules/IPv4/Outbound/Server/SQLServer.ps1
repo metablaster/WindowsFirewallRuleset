@@ -84,12 +84,12 @@ $SQLDTSRoot = ""
 #
 
 # Test if installation exists on system
-if ((Test-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -or $ForceLoad)
+if ((Confirm-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -or $ForceLoad)
 {
 	# TODO: old directory, our Get-SqlManagementStudio may not work as expected for older versions
 	# $Program = "$SQLServerRoot\Tools\Binn\ManagementStudio\Ssms.exe"
 	$Program = "$SqlManagementStudioRoot\Common7\IDE\Ssms.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -99,10 +99,10 @@ if ((Test-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)) -
 }
 
 # Test if installation exists on system
-if ((Test-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
+if ((Confirm-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
 {
 	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

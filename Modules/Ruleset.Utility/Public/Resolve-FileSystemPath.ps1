@@ -49,17 +49,17 @@ If specified [System.IO.FileInfo] object is created instead of [System.IO.Direct
 If specified, target directory or file is created if it doesn't exist
 
 .EXAMPLE
-PS> Resolve-FileSystem "C:\Win\Sys?em3*"
+PS> Resolve-FileSystemPath "C:\Win\Sys?em3*"
 
 Resolves to "C:\Windows\System32" and returns System.IO.DirectoryInfo object
 
 .EXAMPLE
-PS> Resolve-FileSystem "..\..\MyFile" -File -Create
+PS> Resolve-FileSystemPath "..\..\MyFile" -File -Create
 
 Creates file "MyFile" 2 directories back if it doesn't exist and returns System.IO.FileInfo object
 
 .INPUTS
-None. You cannot pipe objects to Resolve-FileSystem
+None. You cannot pipe objects to Resolve-FileSystemPath
 
 .OUTPUTS
 [System.IO.DirectoryInfo]
@@ -68,11 +68,11 @@ None. You cannot pipe objects to Resolve-FileSystem
 .NOTES
 TODO: Implement -Relative parameter, see Resolve-Path
 #>
-function Resolve-FileSystem
+function Resolve-FileSystemPath
 {
 	[OutputType([System.IO.DirectoryInfo], [System.IO.FileInfo])]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Resolve-FileSystem.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Resolve-FileSystemPath.md")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]

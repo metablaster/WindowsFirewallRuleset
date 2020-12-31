@@ -66,7 +66,7 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"External\Get-SqlServerInstance"
-	"Find-Installation"
+	"Search-Installation"
 	"Format-Path"
 	"Get-AllUserSoftware"
 	"Get-AppCapability"
@@ -82,9 +82,9 @@ $PublicScripts = @(
 	"Get-WindowsDefender"
 	"Get-WindowsKit"
 	"Get-WindowsSDK"
-	"Test-Environment"
-	"Confirm-Executable"
-	"Test-Installation"
+	"Test-FileSystemPath"
+	"Test-ExecutableFile"
+	"Confirm-Installation"
 	"Test-Service"
 )
 

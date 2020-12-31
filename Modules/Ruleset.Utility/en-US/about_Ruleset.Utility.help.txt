@@ -41,7 +41,7 @@ EXAMPLES
 	Get-TypeName
 	Get .NET outputs of a commandlet or convert to/from type accelerator
 
-	Resolve-FileSystem
+	Resolve-FileSystemPath
 	Resolves path wildcard pattern and/or relative path to single file system path
 
 	Set-NetworkProfile

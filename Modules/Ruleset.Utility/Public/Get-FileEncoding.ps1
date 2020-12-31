@@ -79,7 +79,7 @@ function Get-FileEncoding
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	[System.IO.FileInfo] $File = Resolve-FileSystem $Path -File
+	[System.IO.FileInfo] $File = Resolve-FileSystemPath $Path -File
 
 	if (!($File -and $File.Exists))
 	{

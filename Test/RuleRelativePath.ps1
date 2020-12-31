@@ -76,7 +76,7 @@ Start-Test "Relative path"
 
 # Test if installation exists on system
 $Program = "$TargetProgramRoot\PokerStars.exe"
-Confirm-Executable $Program
+Test-ExecutableFile $Program
 
 New-NetFirewallRule -DisplayName "TargetProgram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `

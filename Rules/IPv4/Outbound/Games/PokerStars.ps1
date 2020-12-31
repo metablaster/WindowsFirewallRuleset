@@ -80,10 +80,10 @@ $PokerStarsRoot = "%ProgramFiles(x86)%\PokerStars.EU"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
+if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 {
 	$Program = "$PokerStarsRoot\PokerStars.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Client" -Service Any -Program $Program `
@@ -94,7 +94,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 
 	# NOTE: It looks like browser no longer needs any interface and any remote address
 	$Program = "$PokerStarsRoot\br\PokerStarsBr.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Browser" -Service Any -Program $Program `
@@ -104,7 +104,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 		-Description "In game HTML browser" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Online update" -Service Any -Program $Program `
@@ -114,7 +114,7 @@ if ((Test-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 		-Description "" | Format-Output
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "PokerStars - Update" -Service Any -Program $Program `

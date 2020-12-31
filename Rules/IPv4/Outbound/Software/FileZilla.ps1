@@ -81,10 +81,10 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 # Test if installation exists on system
-if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
+if ((Confirm-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 {
 	$Program = "$FileZillaRoot\filezilla.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (FTP)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
@@ -93,7 +93,7 @@ if ((Test-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 		-Description "FileZilla FTP protocol" | Format-Output
 
 	$Program = "$FileZillaRoot\fzsftp.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "FileZilla client (SFTP)" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

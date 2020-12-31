@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Find-Installation
+Unit test for Search-Installation
 
 .DESCRIPTION
-Unit test for Find-Installation
+Unit test for Search-Installation
 
 .EXAMPLE
-PS> .\Find-Installation.ps1
+PS> .\Search-Installation.ps1
 
 .INPUTS
-None. You cannot pipe objects to Find-Installation.ps1
+None. You cannot pipe objects to Search-Installation.ps1
 
 .OUTPUTS
-None. Find-Installation.ps1 does not generate any output
+None. Search-Installation.ps1 does not generate any output
 
 .NOTES
 None.
@@ -77,37 +77,37 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Find-Installation 'EdgeChromium'"
-Find-Installation "EdgeChromium"
+Start-Test "Search-Installation 'EdgeChromium'"
+Search-Installation "EdgeChromium"
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Root EdgeChromium"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Find-Installation 'FailureTest'"
-Find-Installation "FailureTest"
+Start-Test "Search-Installation 'FailureTest'"
+Search-Installation "FailureTest"
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Find-Installation 'VisualStudio'"
-Find-Installation "VisualStudio"
+Start-Test "Search-Installation 'VisualStudio'"
+Search-Installation "VisualStudio"
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Find-Installation 'Greenshot'"
-Find-Installation "Greenshot"
+Start-Test "Search-Installation 'Greenshot'"
+Search-Installation "Greenshot"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Install Root Greenshot"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Find-Installation 'OneDrive'"
-$Result = Find-Installation "OneDrive"
+Start-Test "Search-Installation 'OneDrive'"
+$Result = Search-Installation "OneDrive"
 $Result
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Install Root OneDrive"
 $global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Test-Output $Result -Command Find-Installation
+Test-Output $Result -Command Search-Installation
 
 Update-Log
 Exit-Test

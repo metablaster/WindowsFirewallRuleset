@@ -80,10 +80,10 @@ $OfficeRoot = "%ProgramFiles%\Microsoft Office\root\Office16"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
+if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Outlook" -Service Any -Program $Program `
@@ -96,7 +96,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	# https://docs.pexip.com/sfb/ports.htm
 	# https://docs.microsoft.com/en-us/skypeforbusiness/plan-your-deployment/network-requirements/ports-and-protocols
 	$Program = "$OfficeRoot\lync.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "Skype for business" -Service Any -Program $Program `
@@ -113,7 +113,7 @@ if ((Test-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 		-Description "Skype for business, previously lync." | Format-Output
 
 	$Program = "$OfficeRoot\UcMapi.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 	New-NetFirewallRule -Platform $Platform `
 		-DisplayName "UcMapi" -Service Any -Program $Program `
 		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `

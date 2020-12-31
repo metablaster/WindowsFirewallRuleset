@@ -74,7 +74,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # League of Legends installation directories
 #
 # NOTE: The path should be ""%ProgramFiles(x86)%\Riot Games" but root to game is added,
-# for consistency with Find-Installation, see todo below for info
+# for consistency with Search-Installation, see todo below for info
 $LoLRoot = "%ProgramFiles(x86)%\Riot Games\League of Legends"
 
 #
@@ -84,16 +84,16 @@ $LoLRoot = "%ProgramFiles(x86)%\Riot Games\League of Legends"
 #
 
 # Test if installation exists on system
-if ((Test-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
+if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 {
 	# TODO: trimming such as the one below is present in multiple rule scripts, we should do
-	# this job universally inside "Test-Installation" function instead
+	# this job universally inside "Confirm-Installation" function instead
 
 	# Returned path is root to game, instead of installation root
 	$LoLRoot = Split-Path $LoLRoot -Parent
 
 	$Program = "$LoLRoot\Riot Client\RiotClientServices.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher services" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -119,7 +119,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	Format-Output
 
 	$Program = "$LoLRoot\Riot Client\UX\RiotClientUx.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	# TODO: rule not used or not tested
 	New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
@@ -134,7 +134,7 @@ if ((Test-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	Format-Output
 
 	$Program = "$LolRoot\League of Legends\LeagueClient.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -164,7 +164,7 @@ be used separately." |
 	Format-Output
 
 	$Program = "$LolRoot\League of Legends\LeagueClientUx.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -178,7 +178,7 @@ be used separately." |
 	Format-Output
 
 	$Program = "$LolRoot\League of Legends\Game\League of Legends.exe"
-	Confirm-Executable $Program
+	Test-ExecutableFile $Program
 
 	New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
