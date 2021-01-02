@@ -151,7 +151,7 @@ function Test-FileSystemPath
 				Write-Warning -Message $Message
 			}
 
-			Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $LiteralPath"
+			Write-Information -Tags "Project" -MessageData "INFO: Tested path was '$LiteralPath'"
 		}
 	}
 

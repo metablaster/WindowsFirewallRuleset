@@ -85,6 +85,10 @@ $TestPath = "Z:\"
 Start-Test "Test-FileSystemPath: $TestPath"
 Test-FileSystemPath $TestPath
 
+$TestPath = "\"
+Start-Test "Test-FileSystemPath: $TestPath"
+Test-FileSystemPath $TestPath
+
 #
 # Expanded paths
 #
@@ -100,6 +104,10 @@ Start-Test "Test-FileSystemPath -PathType Leaf: $TestPath"
 Test-FileSystemPath $TestPath -PathType File
 
 $TestPath = "C:\\NoSuchFolder"
+Start-Test "Test-FileSystemPath: $TestPath"
+Test-FileSystemPath $TestPath
+
+$TestPath = "\Windows"
 Start-Test "Test-FileSystemPath: $TestPath"
 Test-FileSystemPath $TestPath
 
@@ -296,6 +304,10 @@ $TestPath = "C:\"
 Start-Test "Test-FileSystemPath -Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
+$TestPath = "\Windows"
+Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Test-FileSystemPath $TestPath -Firewall
+
 #
 # Firewall and UserProfile switch
 #
@@ -357,16 +369,16 @@ $TestPath = "."
 Start-Test "Test-FileSystemPath: $TestPath"
 Test-FileSystemPath $TestPath
 
-$TestPath = "\"
-Start-Test "Test-FileSystemPath: $TestPath"
-Test-FileSystemPath $TestPath
-
 $TestPath = "C:\Windows\System32\..\regedit.exe"
 Start-Test "Test-FileSystemPath: $TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:Windows"
 Start-Test "Test-FileSystemPath: $TestPath"
+Test-FileSystemPath $TestPath
+
+$TestPath = "~\Direcotry\file.exe"
+Start-Test "Test-FileSystemPath -Firewall: $TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = ".\.."
@@ -377,15 +389,15 @@ $TestPath = "."
 Start-Test "Test-FileSystemPath -Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
-$TestPath = "\"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
-Test-FileSystemPath $TestPath -Firewall
-
 $TestPath = "C:\Windows\System32\..\regedit.exe"
 Start-Test "Test-FileSystemPath -Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "C:Windows"
+Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Test-FileSystemPath $TestPath -Firewall
+
+$TestPath = "~\Direcotry\file.exe"
 Start-Test "Test-FileSystemPath -Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 

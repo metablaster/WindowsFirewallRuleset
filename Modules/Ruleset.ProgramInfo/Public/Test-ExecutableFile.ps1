@@ -32,7 +32,7 @@ Check if executable file exists and is trusted.
 
 .DESCRIPTION
 Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists.
-File extension is then verified to confirm it is on the allowed list, ex. such as an *.exe
+File extension is then verified to confirm it is whitelisted, ex. such as an *.exe
 The executable is then verified to ensure it's digitaly signed and that signature is valid.
 If the file can't be found or verified, an error is genrated possibly with informational message,
 to explain if there is any problem with the path or file name syntax, otherwise information is
@@ -80,13 +80,8 @@ None. You cannot pipe objects to Test-ExecutableFile
 None. Test-ExecutableFile does not generate any output
 
 .NOTES
-Unlike Format-Path function which modifies path syntax, this function does not modify the path in any way.
-On another side Format-Path function does not verify path or file validity that it formats.
-Even though small portion of code does the same thing as Format-Path this is desired because formatted
-path may be modified or replaced by the user withing individual rule scripts.
-TODO: We should attempt to fix the path if invalid here!
+TODO: We should attempt to fix the path if invalid here
 TODO: We should return true or false and conditionally load rule
-TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module
 TODO: Verify file is executable file (and path formatted?)
 #>
 function Test-ExecutableFile
@@ -107,39 +102,17 @@ function Test-ExecutableFile
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path: $ExpandedPath"
 
-	# NOTE: We are testing fully qualified and valid file system path local to target machine, for
-	# This reason it's much simplier to use System.IO classes
 	$Executable = Split-Path -Path $ExpandedPath -Leaf
-	$HasParentNotation = $ExpandedPath -match "(\\\.\.\\)+"
-	$IsRooted = [System.IO.Path]::IsPathRooted($ExpandedPath)
-	$Qualifier = Split-Path -Path $ExpandedPath -Qualifier -EA Ignore
 
-	if (!($Qualifier -and $IsRooted))
+	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall)
 	{
-		# !$IsRooted here means we exclude UNC path notation
-		if (!$IsRooted -and (!$Qualifier -or $HasParentNotation))
+		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "Specified file path is relative: $ExpandedPath"
-		}
-		else
-		{
-			# This test eliminates any path that is not file system path with a valid drive letter syntax
-			# NOTE: IsPathRooted will give True for UNC path, and Split-Path will give True for non filesystem provider
-			# Both of which will give False for opposite tests respectively
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "Specified file path is missing a file system qualifier: $ExpandedPath"
-		}
-	}
-	elseif ([System.IO.File]::Exists($ExpandedPath))
-	{
-		if ($HasParentNotation)
-		{
-			# TODO: While valid for fiewall, we want to resolve it in Format-Path
+			# TODO: While valid for fiewall, we want to resolve/format in Format-Path and Resolve-FileSystemPath
 			Write-Warning -Message "Specified file path contains parent directory notation: $ExpandedPath"
 		}
 
-		[string] $Extension = Split-Path -Path $ExpandedPath -Extension
+		[string] $Extension = Split-Path -Path $Executable -Extension
 
 		if ([string]::IsNullOrEmpty($Extension))
 		{
@@ -197,44 +170,12 @@ function Test-ExecutableFile
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Executable file '$Executable' $($Signature.StatusMessage)"
 		return $true
 	}
-	elseif ([System.IO.Directory]::Exists($ExpandedPath))
-	{
-		Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-			-Message "Specified file path is directory: $ExpandedPath"
-	}
-	elseif (Test-Path -Path $ExpandedPath -IsValid)
-	{
-		if ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($ExpandedPath))
-		{
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "Specified path contains unresolved wildcard pattern: $ExpandedPath"
-		}
-		elseif ((Split-Path -Path $ExpandedPath -NoQualifier) -match '[\<\>\:\"\|]')
-		{
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "Specified file path contains invalid characters: $ExpandedPath"
-		}
-		elseif ($Executable -match "\\")
-		{
-			# TODO: This is also bad character for any of the individual directories
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "Specified file contains invalid characters: $ExpandedPath"
-		}
-		else
-		{
-			# NOTE: Index 0 is this function
-			$Caller = (Get-PSCallStack)[1].Command
 
-			Write-Warning -Message "Executable '$Executable' was not found, firewall rule not loaded"
-			Write-Information -Tags "User" -MessageData "INFO: Searched path was: $(Split-Path -Path $ExpandedPath -Parent)"
-			Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$Executable' and update installation directory in $Caller script"
-		}
-	}
-	else
-	{
-		Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-			-Message "Specified path is not a valid path: $ExpandedPath"
-	}
+	# NOTE: Index 0 is this function
+	$Caller = (Get-PSCallStack)[1].Command
+
+	Write-Warning -Message "Executable '$Executable' was not found, firewall rule not loaded"
+	Write-Information -Tags "User" -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller script"
 
 	return $false
 }
