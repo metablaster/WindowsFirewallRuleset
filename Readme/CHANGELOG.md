@@ -26,12 +26,13 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - All module functions significantly improved (In progress...)
+  - Most module functions significantly improved (In progress...)
   - Several functions were renamed to be more descriptive of their purpose
 
 - Rules
 
   - Updated rule script for git and GitHub Desktop
+  - Rules load into firewall only if target executable exists and only if it's digitally signed (In progress...)
 
 - New features
 
@@ -51,9 +52,12 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Unit tests have consistent test drive defined
 
+- Scripts
+
 - Documentation
 
   - `NamingConvention.md` new document to explain naming convention used by the project code
+  - Added PSScriptInfo comment to scripts that are not part of modules
 
 - Design
 
@@ -66,6 +70,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent
   output (In progress...)
+  - Running individual functions with `-Debug` or `-Verbose` switch did not respect the switch (In progress...)
 
 ## v0.9.0 (current release)
 
