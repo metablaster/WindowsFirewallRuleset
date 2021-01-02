@@ -43,7 +43,7 @@ None. You cannot pipe objects to ConvertFrom-Wildcard.ps1
 None. ConvertFrom-Wildcard.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Detailed testing is needed, reorganize/update existing cases.
 #>
 
 #region Initialization
@@ -128,6 +128,20 @@ $Regex.Match("MatchThis44Whatever")
 Start-Test "ConvertFrom-Wildcard a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 [WildcardPattern] $Wildcard = "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 ConvertFrom-Wildcard -Wildcard $Wildcard
+
+#
+# null or empty
+#
+New-Section "null or empty"
+
+Start-Test "ConvertFrom-Wildcard null"
+ConvertFrom-Wildcard
+
+Start-Test "ConvertFrom-Wildcard empty"
+ConvertFrom-Wildcard ""
+
+Start-Test "ConvertFrom-Wildcard implicitly AsRegex"
+ConvertFrom-Wildcard -AsRegex
 
 Update-Log
 Exit-Test

@@ -64,8 +64,7 @@ function Edit-Table
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Check if input path leads to user profile and is compatible with firewall
-	# TODO: Making 2 calls to Test-FileSystemPath here will show warning for bad path twice
-	if (Test-FileSystemPath $Path -UserProfile -Firewall)
+	if (Test-FileSystemPath $Path -UserProfile -Firewall -Quiet -PathType Directory)
 	{
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
@@ -93,7 +92,7 @@ function Edit-Table
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
 	}
-	elseif (Test-FileSystemPath $Path -Firewall)
+	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory)
 	{
 		$Path = Format-Path $Path
 

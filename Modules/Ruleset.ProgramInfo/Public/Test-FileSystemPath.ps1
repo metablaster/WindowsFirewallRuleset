@@ -28,14 +28,15 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test if file system path syntax and existence
+Test file system path syntax and existence
 
 .DESCRIPTION
-Test-FileSystemPath checks if file system path points to valid location and if not path syntax is
-checked by verifying environment variables and reporting unresolved wildcard pattern and bad characters.
+Test-FileSystemPath checks file system path syntax by verifying environment variables and reporting
+unresolved wildcard pattern or bad characters.
+The path is then tested to confirm it points to an existing and valid location.
 
-Optionally checks if the path is compatible for firewall rules or if the path leads to user profile.
-Both of which can be limited to either container or leaf path type.
+Optionally you can check if the path is compatible for firewall rules or if the path leads to user profile.
+All of which can be limited to either container or leaf path type.
 
 .PARAMETER LiteralPath
 Path to directory or file which to test.
@@ -95,7 +96,7 @@ The result of this function should be used only to verify paths for external usa
 commandles which don't recognize system environment variables.
 This function is needed in cases where the path may be a modified version of an already formatted or
 verified path such as in rule scripts or to verify manually edited installation table.
-TODO: This should proably be part of utility module, it's here since only this module uses this function.
+TODO: This should proably be part of Utility or ComputerInfo module, it's here since only this module uses this function.
 #>
 function Test-FileSystemPath
 {
@@ -132,22 +133,25 @@ function Test-FileSystemPath
 	{
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 			"PSProvideCommentHelp", "", Scope = "Function", Justification = "Inner function needs no help")]
-		param(
-			[string] $Message
-		)
+		param([string] $Message)
 
 		if ($Quiet)
 		{
 			# Make sure -Quiet switch does not make troubleshooting hard
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Message"
 		}
-		elseif ($Strict)
-		{
-			Write-Error -Category InvalidArgument -TargetObject $LiteralPath -Message $Message
-		}
 		else
 		{
-			Write-Warning -Message $Message
+			if ($Strict)
+			{
+				Write-Error -Category InvalidArgument -TargetObject $LiteralPath -Message $Message
+			}
+			else
+			{
+				Write-Warning -Message $Message
+			}
+
+			Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $LiteralPath"
 		}
 	}
 
@@ -160,89 +164,129 @@ function Test-FileSystemPath
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
 
-	if (Test-Path -Path $LiteralPath -IsValid)
+	[string] $Status = ""
+
+	# Qualifier ex. "C:\" "D:", "\" or "\\"
+	# Unqualified: Anything except qualifier
+	$PathGroups = [regex]::Match($ExpandedPath, "(?<Qualifier>^[A-Za-z]+:\\?|^\\{1,2})?(?<Unqualified>.*)")
+	$Qualifier = $PathGroups.Groups["Qualifier"]
+	$Unqualified = $PathGroups.Groups["Unqualified"]
+
+	# See if expansion resulted in multiple pats
+	# Note that % is valid character to name a file or directory
+	if ($ExpandedPath -match "([A-Za-z]:\\?.*){2,}")
+	{
+		$Status = "Result of environment variable expansion resulted in multiple paths"
+	}
+	# File system qualifier must be single letter
+	elseif ($Qualifier.Success -and ($Qualifier.Value -match "^([A-Za-z]{2,}:\\?)"))
+	{
+		$Status = "Path qualifier '$Qualifier' is not a file system qualifier"
+	}
+	# Invalid characters to name a file or directory: / \ : < > ? * | "
+	elseif ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($ExpandedPath))
+	{
+		# Handles: ? * [ ]
+		$Status = "Specified path contains unresolved wildcard pattern"
+	}
+	elseif ($Unqualified.Success -and ($Unqualified.Value -match '[<>:"|]'))
+	{
+		# NOTE: backslash and forward slash is illegal too, however it will be interpreted as path separator
+		# If the path is surrounded by quotes it won't be split
+		$Status = "Specified path contains invalid characters"
+	}
+	else
+	{
+		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name
+		if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "*$($args[0])*" }))
+		{
+			$Status = "Specified environment variable was blacklisted"
+		}
+	}
+
+	if ([string]::IsNullOrEmpty($Status))
 	{
 		if ($UserProfile -or $Firewall)
 		{
 			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
-			if ($Firewall -and $IsUserProfile)
+			if ($Firewall)
 			{
-				Write-Conditional "A Path with environment variable which leads to user profile is not valid for firewall"
-				Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $LiteralPath"
+				if ($IsUserProfile)
+				{
+					Write-Conditional "A Path with environment variable which leads to user profile is not valid for firewall"
+					return $false
+				}
+
+				# Verify path environment variables are whitelisted
+				# NOTE: This check must be before qualifier check to get precise error description
+				$RegexVariable = [regex]::Match($LiteralPath, "(?<=%)[^%\\]+(?=%)")
+				$WhiteList = Select-EnvironmentVariable -From BlackList -Property Name -Exact
+
+				while ($RegexVariable.Success)
+				{
+					if ($RegexVariable.Value -notin $WhiteList)
+					{
+						Write-Conditional "Specified environment variable was not whitelisted for firewall"
+						return $false
+					}
+
+					$RegexVariable = $RegexVariable.NextMatch()
+				}
+
+				if ($Qualifier.Success)
+				{
+					if ($Qualifier -notmatch "^[A-Za-z]:\\")
+					{
+						Write-Conditional "The path qualifier '$Qualifier' is not valid for firewall rules"
+						return $false
+					}
+				}
+				else
+				{
+					Write-Conditional "File system qualifier is required for firewall rules"
+					return $false
+				}
+			}
+
+			# NOTE: Public folder and it's subdirectories are not user profile
+			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -notmatch "^(($env:SystemDrive\\?)|\\)Users(?!\\+(Public$|Public\\+))\\"))
+			{
+				Write-Conditional "The path does not lead to user profile"
 				return $false
 			}
-
-			# TODO: We need target computer system drive instead of localmachine systemdrive
-			# NOTE: Public folder and it's subdirectories are fine for firewall
-			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -match "^($env:SystemDrive\\?|\\)Users(?!\\+Public\\*)"))
-			{
-				# Not showing anything
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] The path does not lead to user profile"
-				return $false
-			}
 		}
 
-		if (($PathType -eq "Any") -and !([System.IO.Directory]::Exists($ExpandedPath) -or [System.IO.File]::Exists($ExpandedPath)))
+		if ($PathType -eq "Any")
 		{
-			$NotFoundMessage = "Specified file or directory does not exist"
-		}
-		elseif (($PathType -eq "Directory") -and ![System.IO.Directory]::Exists($ExpandedPath))
-		{
-			$NotFoundMessage = "Specified directory does not exist"
-		}
-		elseif (($PathType -eq "File") -and ![System.IO.File]::Exists($ExpandedPath))
-		{
-			$NotFoundMessage = "Specified file does not exist"
-		}
-		else
-		{
-			return $true
-		}
+			if ([System.IO.Directory]::Exists($ExpandedPath) -or [System.IO.File]::Exists($ExpandedPath))
+			{
+				return $true
+			}
 
-		# Determine the source of a failure ...
-		$RegMatch = [regex]::Matches($LiteralPath, "%+")
-
-		if ($RegMatch.Count -eq 0)
-		{
-			if ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($LiteralPath))
-			{
-				Write-Conditional "Specified path contains unresolved wildcard pattern"
-			}
-			elseif ((Split-Path -Path $ExpandedPath -NoQualifier) -match '[\<\>\:\"\|]')
-			{
-				# NOTE: back slash and forward slash is illegal too, however it will be interpreted as path separator
-				Write-Conditional "Specified path contains invalid characters"
-			}
-			else
-			{
-				Write-Conditional $NotFoundMessage
-			}
+			$Status = "Specified file or directory does not exist"
 		}
-		elseif ($RegMatch.Count -eq 2)
+		elseif ($PathType -eq "Directory")
 		{
-			$BlackList = Select-EnvironmentVariable -From BlackList -Property Name
+			if ([System.IO.Directory]::Exists($ExpandedPath))
+			{
+				return $true
+			}
 
-			if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" }))
-			{
-				Write-Conditional "Specified environment variable is not valid for paths"
-			}
-			else
-			{
-				Write-Conditional $NotFoundMessage
-			}
+			$Status = "Specified directory does not exist"
 		}
-		else
+		elseif ($PathType -eq "File")
 		{
-			Write-Conditional "Specified path contains invalid amount of (%) percentage characters"
+			if ([System.IO.File]::Exists($ExpandedPath))
+			{
+				return $true
+			}
+
+			$Status = "Specified file does not exist"
 		}
 	}
-	else # -IsValid
-	{
-		Write-Conditional "Specified path is not a valid path"
-	}
 
-	Write-Information -Tags "Project" -MessageData "INFO: Invalid path is: $LiteralPath"
+	Write-Conditional $Status
 	return $false
 }

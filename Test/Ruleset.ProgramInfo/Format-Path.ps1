@@ -243,7 +243,7 @@ $TestPath = "$("'C:\PerfLogs;'")"
 Start-Test $TestPath
 Format-Path $TestPath
 
-$TestPath = "%SystemDrive%\%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
+$TestPath = "%SystemRoot%\%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 Start-Test $TestPath
 Format-Path $TestPath
 

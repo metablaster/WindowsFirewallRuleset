@@ -125,13 +125,13 @@ Select-EnvironmentVariable -Value "C:\Program Files"
 #
 New-Section "By name"
 
-Start-Test "Select-EnvironmentVariable DOESNOTEXIST is FAIL"
+Start-Test "Select-EnvironmentVariable -Name DOESNOTEXIST is FAIL"
 Select-EnvironmentVariable -Name "DOESNOTEXIST"
 
-Start-Test "Select-EnvironmentVariable LOGONSERVER"
+Start-Test "Select-EnvironmentVariable -Name LOGONSERVER"
 Select-EnvironmentVariable -Name "LOGONSERVER"
 
-Start-Test "Select-EnvironmentVariable %HOMEPATH% -Exact FAIL"
+Start-Test "Select-EnvironmentVariable -Name %HOMEPATH% -Exact FAIL"
 Select-EnvironmentVariable -Name "%HOMEPATH%" -Exact
 
 Test-Output $Result -Command Select-EnvironmentVariable
@@ -181,7 +181,7 @@ Select-EnvironmentVariable -Name "*proces[so]o?*"
 Start-Test "Select-EnvironmentVariable -Value *Program* -Exact"
 Select-EnvironmentVariable -Value "*Program*" -Exact
 
-Start-Test "Select-EnvironmentVariable C:\uSe[er]?*"
+Start-Test "Select-EnvironmentVariable -Value C:\uSe[er]?*"
 Select-EnvironmentVariable -Value "C:\uSe[er]?*"
 
 #

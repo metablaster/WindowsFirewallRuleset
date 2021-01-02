@@ -134,6 +134,7 @@ function Format-Path
 			[regex] $Regex = "\.{3,}"
 			if ($Regex.Match($NewPath).Success)
 			{
+				# TODO: this is only first match
 				$NewPath = $Regex.Replace($NewPath, "..")
 			}
 
@@ -143,7 +144,7 @@ function Format-Path
 
 			# See if expansion resulted in multiple pats
 			# Note that % is valid character to name a file or directory
-			$BadData = [regex]::Match($NewPath, "([A-Za-z]:\\?){2,}?")
+			$BadData = [regex]::Match($NewPath, "([A-Za-z]:\\?.*){2,}")
 
 			if ($BadData.Success)
 			{
@@ -155,7 +156,7 @@ function Format-Path
 			}
 
 			# File system qualifier must be single letter
-			$BadData = [regex]::Match($NewPath, "([A-Za-z]{2,}:\\?)+?")
+			$BadData = [regex]::Match($NewPath, "([A-Za-z]{2,}:\\?)")
 
 			if ($BadData.Success)
 			{

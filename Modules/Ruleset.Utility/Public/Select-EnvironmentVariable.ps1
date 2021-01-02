@@ -546,7 +546,7 @@ function Select-EnvironmentVariable
 	{
 		"Name"
 		{
-			[regex] $Regex = ConvertFrom-Wildcard $Name.Replace("%", "") -Options "IgnoreCase" -AsRegex
+			[regex] $Regex = ConvertFrom-Wildcard $Name.Trim("%") -Options "IgnoreCase" -AsRegex
 
 			$Result = $TargetScope | Where-Object {
 				$Regex.Match($_.Name.Trim("%")).Success
