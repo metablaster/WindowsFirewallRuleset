@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ SOFTWARE.
 
 .AUTHOR metablaster zebal@protonmail.com
 
-.COPYRIGHT Copyright (C) 2019, 2020 metablaster zebal@protonmail.ch
+.COPYRIGHT Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
 
 .TAGS Firewall Security
 
