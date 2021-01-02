@@ -38,7 +38,7 @@ For example, firewall rule for an applications will include the path to to said 
 the path may contain system environment variable and we must ensure environment variable resolves
 to existing file system location that is fully qualified and does not lead to userprofile.
 
-.PARAMETER Scope
+.PARAMETER From
 A named group of system environment variables to get as follows:
 - UserProfile: Any variables that lead to or mentions user profile
 - Whitelist: Variables that are allowed to be part of firewall rules
@@ -60,20 +60,20 @@ This is equivalent to serching environment variables that expand to specified va
 the result may include multiple environment variables.
 Wildcard characters are supported.
 
-.PARAMETER From
+.PARAMETER Property
 Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for
-environment variables that match -Name wildcard patter, to instead get variable names specify -From Name.
+environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name.
 Same applies to -Value parameter which gets variables for matches values.
 
 .PARAMETER Exact
-If specified, retrieved environment variable names are exact meaning not surrounded with
+If specified, retrieved environment variable names are exact, meaning not surrounded with
 percentage '%' sign, ex: HOMEDRIVE instead of %HOMEDRIVE%
 If previous function call was not run with same "Exact" parameter value, then the script scope cache
 is updated by reformatting variable names, but the internal cache is not recreated.
 
 .PARAMETER IncludeFile
-If specified, algorithm will include variables or their values that represent files,
-by default only directories are grouped.
+If specified, algorithm will include variables and/or their values that represent files,
+by default only directories are grouped and the rest is put into "blacklist" and "All" group.
 
 .PARAMETER Force
 If specified, discards script scope cache and queries system for environment variables a new.
@@ -81,7 +81,7 @@ By default variables are queried only once per session, each subsequent function
 cached result.
 
 .EXAMPLE
-PS> Select-EnvironmentVariable -Scope UserProfile
+PS> Select-EnvironmentVariable -From UserProfile
 
 Name              Value
 ----              -----
@@ -91,7 +91,7 @@ Name              Value
 %USERNAME%        SomeUser
 
 .EXAMPLE
-PS> Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList
+PS> Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList
 
 %ALLUSERSPROFILE%
 
@@ -106,7 +106,7 @@ PS> Select-EnvironmentVariable -Value "C:\Program Files"
 %ProgramFiles%
 
 .EXAMPLE
-PS> Select-EnvironmentVariable -Scope UserProfile -From Name
+PS> Select-EnvironmentVariable -From UserProfile -Property Name
 
 %APPDATA%
 %HOME%
@@ -118,7 +118,7 @@ PS> Select-EnvironmentVariable -Scope UserProfile -From Name
 %USERPROFILE%
 
 .EXAMPLE
-PS> Select-EnvironmentVariable -Scope FullyQualified -Exact
+PS> Select-EnvironmentVariable -From FullyQualified -Exact
 
 Name                       Value
 ----                       -----
@@ -173,7 +173,7 @@ function Select-EnvironmentVariable
 		[Parameter(ParameterSetName = "Name")]
 		[Parameter(ParameterSetName = "Value")]
 		[ValidateSet("UserProfile", "Whitelist", "FullyQualified", "Rooted", "FileSystem", "Relative", "BlackList", "All")]
-		[string] $Scope = "All",
+		[string] $From = "All",
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
 		[AllowEmptyString()]
@@ -187,7 +187,7 @@ function Select-EnvironmentVariable
 
 		[Parameter()]
 		[ValidateSet("Name", "Value")]
-		[string] $From,
+		[string] $Property,
 
 		[Parameter(ParameterSetName = "Scope")]
 		[Parameter(ParameterSetName = "Value")]
@@ -213,7 +213,7 @@ function Select-EnvironmentVariable
 				return $null
 			}
 
-			if (!$From) { $From = "Value" }
+			if (!$Property) { $Property = "Value" }
 			break
 		}
 		"Value"
@@ -224,7 +224,7 @@ function Select-EnvironmentVariable
 				return $null
 			}
 
-			if (!$From) { $From = "Name" }
+			if (!$Property) { $Property = "Name" }
 		}
 	}
 
@@ -492,7 +492,7 @@ function Select-EnvironmentVariable
 
 	Set-Variable -Name LastExactState -Scope Script -Value $Exact
 
-	$TargetScope = switch ($Scope)
+	$TargetScope = switch ($From)
 	{
 		"UserProfile"
 		{
@@ -537,8 +537,8 @@ function Select-EnvironmentVariable
 
 	if (!$TargetScope)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $Scope `
-			-Message "Environment variable group '$Scope' contains no entries"
+		Write-Error -Category ObjectNotFound -TargetObject $From `
+			-Message "Environment variable group '$From' contains no entries"
 		return
 	}
 
@@ -550,7 +550,7 @@ function Select-EnvironmentVariable
 
 			$Result = $TargetScope | Where-Object {
 				$Regex.Match($_.Name.Trim("%")).Success
-			} | Select-Object -ExpandProperty $From
+			} | Select-Object -ExpandProperty $Property
 
 			if (!$Result)
 			{
@@ -564,7 +564,7 @@ function Select-EnvironmentVariable
 		"Value"
 		{
 			$Result = $TargetScope | Where-Object -Property Value -Like $Value |
-			Select-Object -ExpandProperty $From
+			Select-Object -ExpandProperty $Property
 
 			if (!$Result)
 			{
@@ -577,9 +577,9 @@ function Select-EnvironmentVariable
 		}
 		default
 		{
-			if ($From)
+			if ($Property)
 			{
-				return $TargetScope | Select-Object -ExpandProperty $From
+				return $TargetScope | Select-Object -ExpandProperty $Property
 			}
 
 			return $TargetScope

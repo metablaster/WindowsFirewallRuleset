@@ -217,7 +217,7 @@ function Format-Path
 
 			# TODO: Sorted result will have multiple same variable values, with different name though,
 			# Sorting such that longest path values start first to be able to replace maximum amount of a path into environment variable
-			$WhiteList = Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value.Length }
+			$WhiteList = Select-EnvironmentVariable -From WhiteList | Sort-Object -Descending { $_.Value.Length }
 
 			# Make a starting Match object equal to full path
 			$SearchString = [regex]::Match($NewPath, ".+")

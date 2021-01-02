@@ -89,7 +89,7 @@ $Regex = $Pattern
 $Regex.Match("PowerzShell")
 
 Start-Test "ConvertFrom-Wildcard ^ha*ha$"
-$Pattern = ConvertFrom-Wildcard "^ha*ha$"
+$Pattern = ConvertFrom-Wildcard "^ha*ha$" -Options ([System.Text.RegularExpressions.RegexOptions]::RightToLeft)
 $Pattern
 $Regex = $Pattern
 $Regex.Match("^ha*ha$")
@@ -111,6 +111,23 @@ $Regex = $Pattern
 $Regex.Match("wildcard")
 
 Test-Output $Regex -Command ConvertFrom-Wildcard
+
+Start-Test "ConvertFrom-Wildcard *[0-9][[]Po?er[A-Z]he*l?"
+ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"
+# .*[0-9][[]Po.er[A-Z]he.*l.$
+
+Start-Test "ConvertFrom-Wildcard a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+ConvertFrom-Wildcard "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+# ^a_b.*c%d[e\.\.f]\.\..g_%%_.*\?. { 2 }\*\\i[[]. { 2, }[%%]\\Z\\w\+$
+
+Start-Test "ConvertFrom-Wildcard MatchThis* -AsRegex IgnoreCase"
+$Regex = ConvertFrom-Wildcard "MatchThis*" -AsRegex -Options "IgnoreCase"
+$Regex.Match("MatchThis44Whatever")
+# ^MatchThis.*
+
+Start-Test "ConvertFrom-Wildcard a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+[WildcardPattern] $Wildcard = "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+ConvertFrom-Wildcard -Wildcard $Wildcard
 
 Update-Log
 Exit-Test

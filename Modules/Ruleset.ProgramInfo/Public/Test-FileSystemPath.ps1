@@ -151,19 +151,20 @@ function Test-FileSystemPath
 		}
 	}
 
-	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
-
 	if ([string]::IsNullOrEmpty($LiteralPath))
 	{
 		Write-Conditional "The path name is null or empty"
 		return $false
 	}
-	elseif (Test-Path -Path $LiteralPath -IsValid)
+
+	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
+
+	if (Test-Path -Path $LiteralPath -IsValid)
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable -Scope UserProfile -From Name
+			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall -and $IsUserProfile)
@@ -221,7 +222,7 @@ function Test-FileSystemPath
 		}
 		elseif ($RegMatch.Count -eq 2)
 		{
-			$BlackList = Select-EnvironmentVariable -Scope BlackList | Select-Object -ExpandProperty Name
+			$BlackList = Select-EnvironmentVariable -From BlackList -Property Name
 
 			if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" }))
 			{

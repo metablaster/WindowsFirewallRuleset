@@ -74,29 +74,29 @@ New-Section "Scope test"
 
 Start-Test "Select-EnvironmentVariable UserProfile -Force"
 # Only one -Force is needed
-Select-EnvironmentVariable -Scope UserProfile -Force
+Select-EnvironmentVariable -From UserProfile -Force
 
 Start-Test "Select-EnvironmentVariable WhiteList"
-$Result = Select-EnvironmentVariable -Scope WhiteList
+$Result = Select-EnvironmentVariable -From WhiteList
 $Result
 
 Start-Test "Select-EnvironmentVariable FullyQualified"
-Select-EnvironmentVariable -Scope FullyQualified
+Select-EnvironmentVariable -From FullyQualified
 
 Start-Test "Select-EnvironmentVariable Rooted"
-Select-EnvironmentVariable -Scope Rooted
+Select-EnvironmentVariable -From Rooted
 
 Start-Test "Select-EnvironmentVariable FileSystem -Exact"
-Select-EnvironmentVariable -Scope FileSystem -Exact
+Select-EnvironmentVariable -From FileSystem -Exact
 
 Start-Test "Select-EnvironmentVariable Relative"
-Select-EnvironmentVariable -Scope Relative
+Select-EnvironmentVariable -From Relative
 
 Start-Test "Select-EnvironmentVariable BlackList"
-Select-EnvironmentVariable -Scope BlackList
+Select-EnvironmentVariable -From BlackList
 
 Start-Test "Select-EnvironmentVariable All"
-Select-EnvironmentVariable -Scope All
+Select-EnvironmentVariable -From All
 
 #
 # By value
@@ -111,7 +111,7 @@ Select-EnvironmentVariable -Value "C:\Program Files" -Exact
 
 # Try again name select with Exact names
 Start-Test "Select-EnvironmentVariable All -Force -Exact | Out-Null"
-Select-EnvironmentVariable -Scope All -Force -Exact | Out-Null
+Select-EnvironmentVariable -From All -Force -Exact | Out-Null
 
 # Make sure input works for both cases with and without: %%
 Start-Test "Select-EnvironmentVariable for C: -Exact"
@@ -148,7 +148,7 @@ Start-Test "Select Value (WhiteList)"
 $Result | Select-Object -ExpandProperty Value
 
 Start-Test "Select-EnvironmentVariable WhiteList | Sort"
-Select-EnvironmentVariable -Scope WhiteList | Sort-Object -Descending { $_.Value.Length }
+Select-EnvironmentVariable -From WhiteList | Sort-Object -Descending { $_.Value.Length }
 
 #
 # null or empty
@@ -189,23 +189,23 @@ Select-EnvironmentVariable -Value "C:\uSe[er]?*"
 #
 New-Section "Selection"
 
-Start-Test "Select-EnvironmentVariable -Name *user* -From Name"
-Select-EnvironmentVariable -Name *user* -From Name
+Start-Test "Select-EnvironmentVariable -Name *user* -Property Name"
+Select-EnvironmentVariable -Name *user* -Property Name
 
-Start-Test "Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList"
-Select-EnvironmentVariable -Name *user* -From Name -Scope WhiteList
+Start-Test "Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList"
+Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList
 
-Start-Test "Select-EnvironmentVariable -Name *user* -From Value"
-Select-EnvironmentVariable -Name *user* -From Value
+Start-Test "Select-EnvironmentVariable -Name *user* -Property Value"
+Select-EnvironmentVariable -Name *user* -Property Value
 
-Start-Test "Select-EnvironmentVariable -Name *user* -From Value -Scope WhiteList"
-Select-EnvironmentVariable -Name *user* -From Value -Scope WhiteList
+Start-Test "Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList"
+Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList
 
 Start-Test "Select-EnvironmentVariable -Name AND -Value should FAIL"
-Select-EnvironmentVariable -Name *user* -From Value -Value *DESKTOP* -Scope All
+Select-EnvironmentVariable -Name *user* -Property Value -Value *DESKTOP* -From All
 
-Start-Test "Select-EnvironmentVariable -Scope UserProfile -From Name"
-Select-EnvironmentVariable -Scope UserProfile -From Name
+Start-Test "Select-EnvironmentVariable -From UserProfile -Property Name"
+Select-EnvironmentVariable -From UserProfile -Property Name
 
 Update-Log
 Exit-Test
