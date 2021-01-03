@@ -79,21 +79,21 @@ function Get-SDDL
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md")]
 	[OutputType([string])]
 	param (
-		[Alias("UserName")]
 		[Parameter(Mandatory = $true, ParameterSetName = "User")]
-		[Parameter(Mandatory = $false, ParameterSetName = "Group")]
+		[Parameter(ParameterSetName = "Group")]
+		[Alias("UserName")]
 		[string[]] $User,
 
-		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
+		[Alias("UserGroup")]
 		[SupportsWildcards()]
 		[string[]] $Group,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Path")]
 		[string] $Path,
 
+		[Parameter()]
 		[Alias("ComputerName", "CN")]
-		[Parameter(Mandatory = $false)]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]

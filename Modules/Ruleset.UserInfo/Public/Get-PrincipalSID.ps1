@@ -63,13 +63,12 @@ function Get-PrincipalSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PrincipalSID.md")]
 	[OutputType([string])]
 	param (
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserName")]
-		[Parameter(Mandatory = $true, Position = 0,
-			ValueFromPipeline = $true)]
 		[string[]] $User,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]

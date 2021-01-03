@@ -34,7 +34,7 @@ Print new unit test section
 New-Section prints new section to group multiple test cases.
 Useful for unit test with a lof of test cases, for readability.
 
-.PARAMETER Section
+.PARAMETER Message
 Section title
 
 .EXAMPLE

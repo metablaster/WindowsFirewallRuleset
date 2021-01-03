@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Test-Service
 
 .DESCRIPTION
-Unit test for Test-Service
+Test correctness of Test-Service function
 
 .EXAMPLE
 PS> .\Test-Service.ps1
@@ -63,12 +63,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Test-Service FailureTest"
-Test-Service "FailureTest"
-
 Start-Test "Test-Service dnscache"
 $Result = Test-Service dnscache
 $Result
+
+Start-Test "Test-Service array to pipeline"
+@("msiserver", "DOESNOTEXIST", "Spooler", "WSearch") | Test-Service
+
+Start-Test "Get-Service *xbox*"
+Test-Service (Get-Service -Name *xbox*)
+
+Start-Test "Get-Service *xbox* to pipeline"
+Get-Service -Name *xbox* | Test-Service
+
+Start-Test "Test-Service *xbox*"
+Test-Service "*xbox*"
+
+Start-Test "Test-Service *xbox* pipeline"
+"*xbox*" | Test-Service
+
+Start-Test "Test-Service FailureTest"
+Test-Service "FailureTest"
 
 Test-Output $Result -Command Test-Service
 

@@ -63,12 +63,12 @@ function Get-GroupSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md")]
 	[OutputType([string])]
 	param (
-		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+		[Alias("UserGroup")]
 		[string[]] $Group,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]

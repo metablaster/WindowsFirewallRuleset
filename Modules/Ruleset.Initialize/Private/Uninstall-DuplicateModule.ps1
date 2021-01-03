@@ -89,8 +89,7 @@ function Uninstall-DuplicateModule
 		DefaultParameterSetName = "Name", PositionalBinding = $false)]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true,
-			ValueFromPipeline = $true, ParameterSetName = "Module")]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "Module")]
 		[PSModuleInfo[]] $Module,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Name")]

@@ -99,23 +99,19 @@ function Get-NetworkRange
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkRange.md")]
 	[OutputType([ipaddress])]
 	param (
-		[Parameter(Mandatory = $true, Position = 0,
-			ValueFromPipeline = $true, ParameterSetName = "FromIPAndMask")]
+		[Parameter(Mandatory = $true, Position = 0,	ValueFromPipeline = $true, ParameterSetName = "FromIPAndMask")]
 		[string] $IPAddress,
 
-		[Parameter(Position = 1,
-			ParameterSetName = "FromIPAndMask")]
+		[Parameter(Position = 1, ParameterSetName = "FromIPAndMask")]
 		[string] $SubnetMask,
 
 		[Parameter(ParameterSetName = "FromIPAndMask")]
 		[switch] $IncludeNetworkAndBroadcast,
 
-		[Parameter(Mandatory = $true,
-			ParameterSetName = "FromStartAndEnd")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
 		[ipaddress] $Start,
 
-		[Parameter(Mandatory = $true,
-			ParameterSetName = "FromStartAndEnd")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
 		[ipaddress] $End
 	)
 

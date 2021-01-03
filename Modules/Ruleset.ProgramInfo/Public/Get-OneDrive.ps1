@@ -60,8 +60,8 @@ function Get-OneDrive
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-OneDrive.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
+		[Alias("UserName")]
 		[string] $User,
 
 		[Parameter()]

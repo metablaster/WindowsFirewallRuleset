@@ -44,7 +44,7 @@ Fully qualified path to executable file
 
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
-instead of an error resulting is passed test.
+instead of an error resulting in passed test.
 
 .EXAMPLE
 PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
@@ -80,7 +80,7 @@ None. You cannot pipe objects to Test-ExecutableFile
 None. Test-ExecutableFile does not generate any output
 
 .NOTES
-TODO: We should attempt to fix the path if invalid here
+TODO: We should attempt to fix the path if invalid here, ex. Get-Command
 TODO: We should return true or false and conditionally load rule
 TODO: Verify file is executable file (and path formatted?)
 #>
@@ -158,7 +158,7 @@ function Test-ExecutableFile
 			}
 			else
 			{
-				Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
+				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for: $ExpandedPath"
 
 				Write-Information -Tags "User" -MessageData "INFO: To load rules for unsigned executables run '$($MyInvocation.MyCommand)' with -Force switch"

@@ -57,8 +57,8 @@ function Get-UserSoftware
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
+		[Alias("UserName")]
 		[string] $User,
 
 		[Parameter()]

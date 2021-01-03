@@ -64,12 +64,12 @@ function Get-GroupPrincipal
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("UserGroup")]
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+		[Alias("UserGroup")]
 		[string[]] $Group,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]

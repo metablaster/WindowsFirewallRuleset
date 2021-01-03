@@ -59,7 +59,7 @@ SID conversion for well known SIDs and display names from following links:
 2. https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
 3. https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To avoid confusion pseudo accounts ("Local Service" in the example below) can be represented as:
+To avoid confusion, pseudo accounts ("Local Service" in the example below) can be represented as:
 1. SID (S-1-5-19)
 2. Name (NT AUTHORITY)
 3. Reference Name (NT AUTHORITY\Local Service)
@@ -99,8 +99,8 @@ function ConvertFrom-SID
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]
 		[string[]] $SID,
 
-		[Alias("Computer", "CN")]
 		[Parameter()]
+		[Alias("Computer", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName
 	)
 

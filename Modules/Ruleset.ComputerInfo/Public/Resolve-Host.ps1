@@ -83,9 +83,9 @@ function Resolve-Host
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Resolve-Host.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("ComputerName", "CN")]
 		[Parameter(ParameterSetName = "Host", Mandatory = $true, HelpMessage = "Enter target domain name",
 			ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+		[Alias("ComputerName", "CN")]
 		[string[]] $Domain,
 
 		[Parameter(ParameterSetName = "IP", Mandatory = $true, HelpMessage = "Enter target IP address",

@@ -65,8 +65,8 @@ function Get-SystemApps
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
-		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
+		[Alias("UserName")]
 		[string] $User,
 
 		[Parameter()]

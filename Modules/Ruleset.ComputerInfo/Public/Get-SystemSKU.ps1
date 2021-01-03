@@ -71,8 +71,8 @@ function Get-SystemSKU
 		[ValidatePattern("^[0-9]{1,3}$")]
 		[int32] $SKU,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Computer")]
+		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName
 	)
 

@@ -97,8 +97,8 @@ Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
 Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |
 ForEach-Object {
 	Test-Service $_
-	Update-Log
 }
+Update-Log
 #endregion
 
 #

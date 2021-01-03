@@ -96,8 +96,8 @@ function Add-WinFunction
 		[Parameter(Mandatory = $true, Position = 1)]
 		[scriptblock] $ScriptBlock,
 
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain,
 
 		[Parameter()]

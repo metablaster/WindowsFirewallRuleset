@@ -38,7 +38,8 @@ Must be called before first test case in single unit test and in pair with Exit-
 If specified temporarily exports private module functions into global scope
 
 .PARAMETER Pester
-Should be specified to enter pester tests for private functions
+Should be specified to enter pester tests for private functions,
+this parameter implies -Private switch.
 
 .EXAMPLE
 PS> Enter-Test "Get-Something.ps1"
@@ -62,7 +63,6 @@ function Enter-Test
 		[switch] $Private,
 
 		[Parameter()]
-		[ValidateScript( { $Private } )]
 		[switch] $Pester
 	)
 
@@ -71,6 +71,7 @@ function Enter-Test
 	# Let Exit-Test know file name
 	if ($Pester)
 	{
+		$Private = $true
 		$UnitTest = (Get-PSCallStack)[1].Command -replace ".{4}$"
 	}
 	else

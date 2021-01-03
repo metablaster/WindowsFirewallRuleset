@@ -28,25 +28,26 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get capabilities of Windows store app
+Get Windows store app capabilities
 
 .DESCRIPTION
 Get-AppCapability returns a list of capabilities for an app in one of the following formats:
-2. Account display name
-3. Account full reference name
+1. Principal display name
+2. Principal full reference name
 
 .PARAMETER InputObject
 One or more Windows store apps for which to retrieve capabilities
 
 .PARAMETER User
 Specify user name for which to query app capabilities, this parameter
-is required only if input app is not obtained from main store
+is required only if input app is not obtained from the main store
 
 .PARAMETER Authority
-If specified outputs full reference name
+If specified, outputs full reference name.
+By default only capability display name is returned.
 
 .PARAMETER Networking
-If specified the result includes only networking capabilities
+If specified, the result includes only networking capabilities
 
 .EXAMPLE
 PS> Get-AppxPackage -Name "*ZuneMusic*" | Get-AppCapability
@@ -71,6 +72,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 
 .NOTES
 TODO: According to unit test there are some capabilities not implemented here
+TODO: Need better descriptive parameter name for -Authority switch
 
 .LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
@@ -84,8 +86,8 @@ function Get-AppCapability
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md")]
 	[OutputType([string])]
 	param (
-		[Alias("App", "StoreApp")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+		[Alias("App", "StoreApp")]
 		[object[]] $InputObject,
 
 		[Parameter()]
@@ -164,9 +166,7 @@ function Get-AppCapability
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing capability: '$Capability'"
 
-				[string] $Name = ""
-
-				$Name = switch ($Capability)
+				[string] $Name = switch ($Capability)
 				{
 					"internetClient" { "Your Internet connection"; break }
 					"internetClientServer" { "Your Internet connection, including incoming connections from the Internet"; break }
@@ -207,15 +207,15 @@ function Get-AppCapability
 				else
 				{
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' resolved to: $Name"
-				}
 
-				if ($Authority)
-				{
-					$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $Name)
-				}
-				else
-				{
-					$OutputObject += $Name
+					if ($Authority)
+					{
+						$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $Name)
+					}
+					else
+					{
+						$OutputObject += $Name
+					}
 				}
 			} # foreach capability
 

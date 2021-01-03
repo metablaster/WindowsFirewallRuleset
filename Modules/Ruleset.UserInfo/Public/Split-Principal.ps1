@@ -60,8 +60,8 @@ function Split-Principal
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Split-Principal.md")]
 	[OutputType([string])]
 	param(
-		[Alias("Account")]
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+		[Alias("Account")]
 		[string[]] $Principal,
 
 		[Parameter()]

@@ -175,32 +175,32 @@ function Set-Permission
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md")]
 	[OutputType([bool])]
 	param (
-		[Alias("Directory", "File", "Key", "Item")]
 		[Parameter(Mandatory = $true, Position = 0)]
+		[Alias("Directory", "File", "Key", "Item")]
 		[string] $Path,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Ownership")]
 		[string] $Owner,
 
-		[Alias("User")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Registry")]
 		[Parameter(Mandatory = $true, ParameterSetName = "FileSystem")]
+		[Alias("User")]
 		[string] $Principal,
 
-		[Alias("Computer", "Server", "Host", "Machine")]
 		[Parameter()]
+		[Alias("Computer", "Server", "Host", "Machine")]
 		[string] $Domain,
 
 		[Parameter(ParameterSetName = "Registry")]
 		[Parameter(ParameterSetName = "FileSystem")]
 		[AccessControl.AccessControlType] $Type = "Allow",
 
-		[Alias("Permission", "Grant")]
 		[Parameter(Mandatory = $true, ParameterSetName = "FileSystem")]
+		[Alias("Permission", "Grant")]
 		[AccessControl.FileSystemRights] $Rights, # = "ReadAndExecute, ListDirectory, Traverse",
 
-		[Alias("RegPermission", "RegGrant")]
 		[Parameter(Mandatory = $true, ParameterSetName = "Registry")]
+		[Alias("RegPermission", "RegGrant")]
 		[AccessControl.RegistryRights] $RegistryRights, # = "ReadKey",
 
 		[Parameter(ParameterSetName = "Registry")]

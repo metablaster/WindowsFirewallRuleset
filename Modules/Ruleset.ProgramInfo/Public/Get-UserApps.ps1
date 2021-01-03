@@ -56,7 +56,7 @@ None. You cannot pipe objects to Get-UserApps
 
 .NOTES
 TODO: query remote computer not implemented
-TODO: multiple computers
+TODO: multiple domains
 TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
 TODO: see also -AllUsers and other parameters
 https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps
@@ -67,8 +67,8 @@ function Get-UserApps
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
-		[Alias("UserName")]
 		[Parameter(Mandatory = $true)]
+		[Alias("UserName")]
 		[string] $User,
 
 		[Parameter()]
@@ -81,9 +81,10 @@ function Get-UserApps
 
 	if (Test-TargetComputer $Domain)
 	{
+		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
 		Get-AppxPackage -User $User -PackageTypeFilter Bundle | Where-Object {
-			# NOTE: This path will be missing for default apps Windows server
+			# NOTE: This path will be missing for default apps on Windows server
 			# It may also be missing in fresh installed OS before connecting to internet
 			# TODO: See if "$_.Status" property can be used to determine if app is valid
 			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$User\AppData\Local\Packages\$($_.PackageFamilyName)\AC")

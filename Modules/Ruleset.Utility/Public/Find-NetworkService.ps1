@@ -64,6 +64,7 @@ function Find-NetworkService
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
 	[System.IO.DirectoryInfo] $Directory = Resolve-FileSystemPath $Path
+	# get-service | Where-Object -property BinaryPathName -NotLike "C:\WINDOWS\System32\svchost.exe *" | Select-Object -ExpandProperty BinaryPathName
 
 	if (!($Directory -and $Directory.Exists))
 	{
@@ -84,7 +85,7 @@ function Find-NetworkService
 	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
 		Confirm-FileEncoding $_.FullName
-		Get-Content $_.FullName -Encoding $DefaultEncoding | Where-Object {
+		Get-Content $_.FullName -Encoding $DefaultEncoding | ForEach-Object {
 			if ($_ -match "(?<=-Service )(.*)(?= -Program)")
 			{
 				$Content += $Matches[0]
@@ -100,7 +101,7 @@ function Find-NetworkService
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rid of duplicate matches and known bad values"
 	$Content = $Content | Select-Object -Unique
-	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' }
+	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' } | Sort-Object
 
 	if (!$Content)
 	{

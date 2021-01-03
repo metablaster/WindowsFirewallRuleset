@@ -28,22 +28,31 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Check if service exists on system
+Check if system service exists and is trusted
 
 .DESCRIPTION
-Check if service exists on system, if not show warning message
+Test-Service verifies specified Windows services exists.
+The service is then verified to confirm it's digitaly signed and that signature is valid.
+If the service can't be found or verified, an error is genrated.
 
-.PARAMETER Service
-Service name (not display name)
+.PARAMETER Name
+Service short name (not display name)
+
+.PARAMETER Force
+If specified, lack of digital signature or signature mismatch produces a warning
+instead of an error resulting in passed test.
 
 .EXAMPLE
 PS> Test-Service dnscache
 
+.EXAMPLE
+PS> @("msiserver", "Spooler", "WSearch") | Test-Service
+
 .INPUTS
-None. You cannot pipe objects to Test-Service
+[string]
 
 .OUTPUTS
-None. Test-Service does not generate any output
+[bool]
 
 .NOTES
 None.
@@ -52,18 +61,75 @@ function Test-Service
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md")]
-	[OutputType([void])]
+	[OutputType([bool])]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $Service
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[Alias("ServiceName")]
+		[SupportsWildcards()]
+		[ValidateScript( { $_ -ne "System.ServiceProcess.ServiceController" } )]
+		[string[]] $Name,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rules point to valid system services"
-
-	if (!(Get-Service -Name $Service -ErrorAction Ignore))
+	process
 	{
-		Write-Warning -Message "Service '$Service' not found, rule won't have any effect"
-		Write-Information -Tags "User" -MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Service' service"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+		$Services = Get-Service -Name $Name -ErrorAction Ignore
+
+		if (!$Services)
+		{
+			Write-Warning -Message "Service '$Name' was not found, rules for '$Name' service won't have any effect"
+			Write-Information -Tags "User" -MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Name' service"
+			return $false
+		}
+
+		foreach ($Service in $Services)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Testing service '$($Service.DisplayName)'"
+
+			# regex out ex. "C:\WINDOWS\system32\svchost.exe -k netsvcs -p"
+			$Executable = [regex]::Match($Service.BinaryPathName.TrimStart('"'), ".+(?=\.exe)")
+
+			if ($Executable.Success)
+			{
+				$BinaryPath = $Executable.Value + ".exe"
+
+				# [System.Management.Automation.Signature]
+				$Signature = Get-AuthenticodeSignature -LiteralPath $BinaryPath
+
+				if ($Signature -and (($Signature.Status -eq "Valid") -or $Force))
+				{
+					if ($Signature.Status -ne "Valid")
+					{
+						Write-Warning -Message "Digital signature verification failed for service '$($Service.Name)'"
+						Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+					}
+					else
+					{
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Service '$($Service.Name)' $($Signature.StatusMessage)"
+					}
+
+					Write-Output $true
+					continue
+				}
+				else
+				{
+					Write-Error -Category SecurityError -TargetObject $LiteralPath `
+						-Message "Digital signature verification failed for service '$($Service.Name)'"
+					Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+				}
+			}
+			elseif ($Signature) # else Get-AuthenticodeSignature should show the error (ex. file not found)
+			{
+				Write-Error -Category InvalidResult -TargetObject $Service `
+					-Message "Unable to determine binary path for '$($Service.Name)' service"
+			}
+
+			Write-Output $false
+			continue
+		} # foreach
 	}
 }

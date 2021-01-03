@@ -60,8 +60,8 @@ function Get-UserGroup
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Alias("ComputerName", "CN")]
 		[Parameter(Position = 0)]
+		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]

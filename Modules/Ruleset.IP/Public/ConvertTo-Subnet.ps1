@@ -96,20 +96,16 @@ function ConvertTo-Subnet
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Subnet.md")]
 	[OutputType("Ruleset.IP.Subnet")]
 	param (
-		[Parameter(Mandatory = $true, Position = 0,
-			ParameterSetName = "FromIPAndMask")]
+		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "FromIPAndMask")]
 		[string] $IPAddress,
 
-		[Parameter(Position = 1,
-			ParameterSetName = "FromIPAndMask")]
+		[Parameter(Position = 1, ParameterSetName = "FromIPAndMask")]
 		[string] $SubnetMask,
 
-		[Parameter(Mandatory = $true,
-			ParameterSetName = "FromStartAndEnd")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
 		[ipaddress] $Start,
 
-		[Parameter(Mandatory = $true,
-			ParameterSetName = "FromStartAndEnd")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
 		[ipaddress] $End
 	)
 

@@ -148,8 +148,8 @@ function Export-FirewallRules
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md")]
 	[OutputType([void])]
 	param(
-		[Alias("ComputerName", "CN")]
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter(Mandatory = $true)]

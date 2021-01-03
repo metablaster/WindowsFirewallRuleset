@@ -55,8 +55,8 @@ function Get-AppSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	[OutputType([string])]
 	param (
-		[Alias("FamilyName")]
 		[Parameter(Mandatory = $true)]
+		[Alias("FamilyName")]
 		[string] $PackageFamilyName
 	)
 

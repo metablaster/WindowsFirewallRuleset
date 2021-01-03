@@ -107,7 +107,7 @@ function Invoke-WinCommand
 		[Parameter()]
 		[PSCredential] $Credential,
 
-		[Parameter(ValueFromRemainingArguments)]
+		[Parameter(ValueFromRemainingArguments = $true)]
 		[object[]] $ArgumentList
 	)
 
