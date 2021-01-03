@@ -173,9 +173,7 @@ function Test-ExecutableFile
 
 	# NOTE: Index 0 is this function
 	$Caller = (Get-PSCallStack)[1].Command
-
-	Write-Warning -Message "Executable '$Executable' was not found, firewall rule not loaded"
-	Write-Information -Tags "User" -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller script"
+	Write-Information -Tags "User" -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
 
 	return $false
 }

@@ -54,7 +54,7 @@ None. Merge-SDDL does not generate any output
 .NOTES
 TODO: Validate input using regex
 TODO: Process an array of SDDL's
-TODO: Pipeline input
+TODO: Pipeline input and -From parameter should accept an array.
 #>
 function Merge-SDDL
 {

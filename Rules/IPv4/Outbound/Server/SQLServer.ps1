@@ -60,7 +60,7 @@ Import-Module -Name Ruleset.UserInfo
 # Setup local variables
 $Group = "Server - SQL"
 # TODO: this is most likely wrong
-$SQLUsers = Get-SDDL -Group "Users", "Administrators"
+$SQLUsers = Get-SDDL -Group "Users", "Administrators" -Merge
 $Accept = "Outbound rules for Microsoft SQL Server software will be loaded, recommended if Microsoft SQL Server software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft SQL Server software will not be loaded into firewall"
 

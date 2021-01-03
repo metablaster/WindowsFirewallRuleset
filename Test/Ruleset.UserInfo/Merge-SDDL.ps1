@@ -69,11 +69,11 @@ Enter-Test
 [string[]] $Groups = @("Users", "Administrators")
 
 Start-Test "Get-SDDL -User $Users -Group $Groups -Domain $Domain"
-$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain
+$TestUsersSDDL = Get-SDDL -User $Users -Group $Groups -Domain $Domain -Merge
 $TestUsersSDDL
 
 Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS"
+$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" -Merge
 $NewSDDL
 
 Start-Test "Merge-SDDL"

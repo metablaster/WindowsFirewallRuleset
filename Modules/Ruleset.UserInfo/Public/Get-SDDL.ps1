@@ -248,7 +248,8 @@ function Get-SDDL
 				# "GR"	GENERIC_READ		The caller can perform normal read operations on the object.
 				# "GW"	GENERIC_WRITE		The caller can perform normal write operations on the object.
 				# "GX"	GENERIC_EXECUTE		The caller can execute the object.
-				$ACE = "(A;;GA;;;$SID)"
+				# TODO: generic access rights wont work, ex. GA
+				$ACE = "(A;;CC;;;$SID)"
 
 				if ($Merge)
 				{
@@ -268,7 +269,7 @@ function Get-SDDL
 
 			if ($SID)
 			{
-				$ACE = "(A;;GA;;;$SID)"
+				$ACE = "(A;;CC;;;$SID)"
 
 				if ($Merge)
 				{

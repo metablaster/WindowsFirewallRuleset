@@ -64,7 +64,7 @@ $Accept = "Outbound rules for system services will be loaded, required for prope
 $Deny = "Skip operation, outbound rules for system services will not be loaded into firewall"
 
 # Extension rules are special rules for problematic services, see "ProblematicTraffic.md" for more info
-$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" -Merge
 Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 
 # User prompt

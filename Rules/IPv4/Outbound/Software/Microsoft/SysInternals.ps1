@@ -59,7 +59,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Microsoft - SysInternals"
-$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators"
+$SysInternalsUsers = Get-SDDL -Group "Users", "Administrators" -Merge
 $Accept = "Outbound rules for SysInternals software will be loaded, recommended if SysInternals software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for SysInternals software will not be loaded into firewall"
 

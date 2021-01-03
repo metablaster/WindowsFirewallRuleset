@@ -59,7 +59,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Chocolatey"
-$ChocolateyAccounts = Get-SDDL -Group "Users", "Administrators"
+$ChocolateyAccounts = Get-SDDL -Group "Users", "Administrators" -Merge
 $Accept = "Outbound rules for Chocolatey software will be loaded, recommended if Chocolatey software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Chocolatey software will not be loaded into firewall"
 

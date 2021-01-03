@@ -130,9 +130,9 @@ Format-Output
 # NOTE: This applies to users only, for administrators there is a block rule which must be enabled,
 # if the blocking rule for administrators is not enabled this rule will also allow administrators
 # there is another todo about possible design in VisualStudio script
-$UsersStoreAppsSDDL = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection, including incoming connections from the Internet"
-Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your Internet connection")
-Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -UserNames "Your home or work networks")
+$UsersStoreAppsSDDL = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection, including incoming connections from the Internet"
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection")
+Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From (Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your home or work networks")
 Merge-SDDL ([ref] $UsersStoreAppsSDDL) -From $UsersGroupSDDL
 
 New-NetFirewallRule -DisplayName "Store Apps" `
@@ -220,7 +220,7 @@ if ($Develop)
 	Format-Output
 
 	# Moved from WindowsServices.ps1, used for extension rule below
-	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" -Merge
 	Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 
 	# HACK: Temporary using network service account

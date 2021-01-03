@@ -83,7 +83,7 @@ $PowerShellCore64Root = "%PROGRAMFILES%\PowerShell\7"
 
 # TODO: add rule for Core x86
 # NOTE: administrators may need powershell, let them add them self temporary? currently adding them for PS x64
-$PowerShellUsers = Get-SDDL -Group "Users", "Administrators"
+$PowerShellUsers = Get-SDDL -Group "Users", "Administrators" -Merge
 
 # Test if installation exists on system
 if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)

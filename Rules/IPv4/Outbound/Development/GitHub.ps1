@@ -84,7 +84,7 @@ $GitHubRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Apps\GitHubDesktop
 if ((Confirm-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 {
 	# Administrators are needed for git auto update scheduled task
-	$CurlUsers = Get-SDDL -Group "Administrators", "Users"
+	$CurlUsers = Get-SDDL -Group "Administrators", "Users" -Merge
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
 	Test-ExecutableFile $Program
 
