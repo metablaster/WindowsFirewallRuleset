@@ -64,7 +64,7 @@ PS> ConvertTo-BinaryIP 1.2.3.4
 Convert an IP address to a binary format.
 
 .INPUTS
-[ipaddress] Decimal IP address
+[IPAddress] Decimal IP address
 
 .OUTPUTS
 [string] Dotted binary IP address
@@ -82,7 +82,7 @@ function ConvertTo-BinaryIP
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[ipaddress] $IPAddress
+		[IPAddress] $IPAddress
 	)
 
 	process

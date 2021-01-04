@@ -274,6 +274,8 @@
 			# <os-name>_<os-arch>_<os-version>_<ps-version>_<ps-arch>_<dotnet-version>_<dotnet-edition>
 			# default = @()
 			TargetProfiles = @(
+				# TODO: No need to limit code to such old systems, see link to compile own list:
+				# https://github.com/PowerShell/PSScriptAnalyzer/blob/master/RuleDocumentation/UseCompatibleTypes.md
 				# Windows 10 1903 (PowerShell 7.0)
 				'win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core'
 				# Windows 10 1809 (PowerShell 5.1)

@@ -71,7 +71,7 @@ Convert the decimal form back to dotted decimal, resulting in 192.168.0.1.
 [string] IP address
 
 .OUTPUTS
-[ipaddress] IP address
+[IPAddress] IP address
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -83,7 +83,7 @@ function ConvertTo-DottedDecimalIP
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-DottedDecimalIP.md")]
-	[OutputType([ipaddress])]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress
@@ -97,11 +97,11 @@ function ConvertTo-DottedDecimalIP
 
 			if ([int64]::TryParse($IPAddress, [ref] $Value))
 			{
-				return [ipaddress]([ipaddress]::NetworkToHostOrder([int64] $Value) -shr 32 -band [uint32]::MaxValue)
+				return [IPAddress]([IPAddress]::NetworkToHostOrder([int64] $Value) -shr 32 -band [uint32]::MaxValue)
 			}
 			else
 			{
-				[ipaddress][uint64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
+				[IPAddress][uint64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
 			}
 		}
 		catch

@@ -68,7 +68,7 @@ Returns the dotted-decimal form of the mask, 255.255.255.0
 [byte] A mask length ranging between 0 and 32
 
 .OUTPUTS
-[ipaddress] A dotted-decimal subnet mask
+[IPAddress] A dotted-decimal subnet mask
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -80,7 +80,7 @@ function ConvertTo-Mask
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Mask.md")]
-	[OutputType([ipaddress])]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("Length")]
@@ -90,6 +90,6 @@ function ConvertTo-Mask
 
 	process
 	{
-		[ipaddress][uint64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
+		[IPAddress][uint64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
 	}
 }

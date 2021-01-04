@@ -44,25 +44,25 @@ If specified, include only virtual adapters
 If specified, only hidden interfaces are included
 
 .EXAMPLE
-PS> Get-Broadcast -Physical
+PS> Get-InterfaceBroadcast -Physical
 
 .EXAMPLE
-PS> Get-Broadcast -Virtual -Hidden
+PS> Get-InterfaceBroadcast -Virtual -Hidden
 
 .INPUTS
-None. You cannot pipe objects to Get-Broadcast
+None. You cannot pipe objects to Get-InterfaceBroadcast
 
 .OUTPUTS
-[ipaddress] Broadcast addresses
+[IPAddress] Broadcast addresses
 
 .NOTES
 None.
 #>
-function Get-Broadcast
+function Get-InterfaceBroadcast
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-Broadcast.md")]
-	[OutputType([ipaddress])]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceBroadcast.md")]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(ParameterSetName = "Physical")]
 		[switch] $Physical,
@@ -92,10 +92,10 @@ function Get-Broadcast
 
 	if ($Count -gt 0)
 	{
-		[ipaddress[]] $BroadcastAddress = @()
+		[IPAddress[]] $BroadcastAddress = @()
 		foreach ($Adapter in $ConfiguredAdapters)
 		{
-			[ipaddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
+			[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
 			$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
 
 			$BroadcastAddress += Get-NetworkSummary $IPAddress $SubnetMask |

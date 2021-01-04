@@ -107,7 +107,7 @@ SOFTWARE.
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"ConvertFrom-OSBuild"
-		"Get-Broadcast"
+		"Get-InterfaceBroadcast"
 		"Get-ComputerName"
 		"Get-InterfaceAlias"
 		"Get-SystemSKU"
@@ -141,7 +141,7 @@ SOFTWARE.
 		"en-US\Ruleset.ComputerInfo-help.xml"
 		"Help\en-US\about_Ruleset.ComputerInfo.md"
 		"Help\en-US\ConvertFrom-OSBuild.md"
-		"Help\en-US\Get-Broadcast.md"
+		"Help\en-US\Get-InterfaceBroadcast.md"
 		"Help\en-US\Get-ComputerName.md"
 		"Help\en-US\Get-InterfaceAlias.md"
 		"Help\en-US\Get-SystemSKU.md"
@@ -153,7 +153,7 @@ SOFTWARE.
 		"Help\en-US\Test-UNC.md"
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
-		"Public\Get-Broadcast.ps1"
+		"Public\Get-InterfaceBroadcast.ps1"
 		"Public\Get-ComputerName.ps1"
 		"Public\Get-InterfaceAlias.ps1"
 		"Public\Get-SystemSKU.ps1"

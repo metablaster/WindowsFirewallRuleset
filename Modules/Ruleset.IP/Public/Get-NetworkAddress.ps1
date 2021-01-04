@@ -81,7 +81,7 @@ Input values are automatically split into IP address and subnet mask. Returns th
 [string]
 
 .OUTPUTS
-[ipaddress]
+[IPAddress]
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -93,7 +93,7 @@ function Get-NetworkAddress
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkAddress.md")]
-	[OutputType([ipaddress])]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress,
@@ -107,7 +107,7 @@ function Get-NetworkAddress
 		try
 		{
 			$Network = ConvertTo-Network @PSBoundParameters
-			return [ipaddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
+			return [IPAddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
 		}
 		catch
 		{

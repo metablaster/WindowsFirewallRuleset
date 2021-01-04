@@ -146,7 +146,7 @@ function Resolve-IPAddress
 		{
 			Get-Permutation $Groups -BaseAddress $IPAddress
 		}
-		elseif (-not [ipaddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
+		elseif (-not [IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
 		{
 			Write-Warning -Message "The IPAddress argument is not a valid IP address and cannot be resolved"
 		}

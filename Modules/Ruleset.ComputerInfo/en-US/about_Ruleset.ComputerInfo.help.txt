@@ -13,7 +13,7 @@ EXAMPLES
 	ConvertFrom-OSBuild
 	Convert from OS build number to OS version
 
-	Get-Broadcast
+	Get-InterfaceBroadcast
 	Get broadcast addresses on the local machine
 
 	Get-ComputerName

@@ -42,7 +42,7 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 
 $PublicScripts = @(
 	"ConvertFrom-OSBuild"
-	"Get-Broadcast"
+	"Get-InterfaceBroadcast"
 	"Get-ComputerName"
 	"Get-InterfaceAlias"
 	"Get-SystemSKU"

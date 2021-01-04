@@ -61,6 +61,7 @@ or an IP address and subnet mask in a string.
 
 .PARAMETER SubnetMask
 A subnet mask as an IP address.
+
 .EXAMPLE
 Get-BroadcastAddress 192.168.0.243 255.255.255.0
 
@@ -85,7 +86,7 @@ Input values are automatically split into IP address and subnet mask. Returns th
 [string]
 
 .OUTPUTS
-[ipaddress] The broadcast address
+[IPAddress] The broadcast address
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -97,7 +98,7 @@ function Get-BroadcastAddress
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md")]
-	[OutputType([ipaddress])]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress,
@@ -112,9 +113,9 @@ function Get-BroadcastAddress
 		{
 			$Network = ConvertTo-Network @PSBoundParameters
 
-			$NetworkAddress = [ipaddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
+			$NetworkAddress = [IPAddress]($Network.IPAddress.Address -band $Network.SubnetMask.Address)
 
-			return [ipaddress](
+			return [IPAddress](
 				$NetworkAddress.Address -bor
 				-bnot $Network.SubnetMask.Address -band
 				-bnot ([int64][uint32]::MaxValue -shl 32)

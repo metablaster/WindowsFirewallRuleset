@@ -71,7 +71,7 @@ if (-not $UseExisting)
 InModuleScope Ruleset.IP {
 	Describe 'ConvertTo-Mask' {
 		It 'Returns an IPAddress' {
-			ConvertTo-Mask 1 | Should -BeOfType [ipaddress]
+			ConvertTo-Mask 1 | Should -BeOfType [IPAddress]
 		}
 
 		It 'Converts 0 to 0.0.0.0' {

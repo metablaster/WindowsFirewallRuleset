@@ -63,7 +63,7 @@ PS> ConvertTo-MaskLength 255.255.255.0
 Returns 24, the length of the mask in bits.
 
 .INPUTS
-[ipaddress] A dotted-decimal subnet mask
+[IPAddress] A dotted-decimal subnet mask
 
 .OUTPUTS
 [string] Subnet mask length
@@ -82,11 +82,11 @@ function ConvertTo-MaskLength
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[Alias("Mask")]
-		[ipaddress] $SubnetMask
+		[IPAddress] $SubnetMask
 	)
 
 	process
 	{
-		[convert]::ToString([ipaddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
+		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
 	}
 }

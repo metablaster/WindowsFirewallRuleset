@@ -63,7 +63,7 @@ PS> ConvertTo-HexIP 192.168.0.1
 Returns the hexadecimal string c0a80001.
 
 .INPUTS
-[ipaddress]
+[IPAddress]
 
 .OUTPUTS
 [string] A hexadecimal string
@@ -81,7 +81,7 @@ function ConvertTo-HexIP
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[ipaddress] $IPAddress
+		[IPAddress] $IPAddress
 	)
 
 	process

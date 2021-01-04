@@ -64,7 +64,7 @@ PS> ConvertTo-DecimalIP 1.2.3.4
 Converts an IP address to an unsigned 32-bit integer value.
 
 .INPUTS
-[ipaddress] A decimal IP address
+[IPAddress] A decimal IP address
 
 .OUTPUTS
 [uint32] 32-bit unsigned integer value
@@ -82,11 +82,11 @@ function ConvertTo-DecimalIP
 	[OutputType([uint32])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-		[ipaddress] $IPAddress
+		[IPAddress] $IPAddress
 	)
 
 	process
 	{
-		[uint32]([ipaddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [uint32]::MaxValue)
+		[uint32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [uint32]::MaxValue)
 	}
 }

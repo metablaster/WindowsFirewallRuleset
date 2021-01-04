@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-Broadcast
+Unit test for Get-InterfaceBroadcast
 
 .DESCRIPTION
-Unit test for Get-Broadcast
+Unit test for Get-InterfaceBroadcast
 
 .EXAMPLE
-PS> .\Get-Broadcast.ps1
+PS> .\Get-InterfaceBroadcast.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-Broadcast.ps1
+None. You cannot pipe objects to Get-InterfaceBroadcast.ps1
 
 .OUTPUTS
-None. Get-Broadcast.ps1 does not generate any output
+None. Get-InterfaceBroadcast.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,20 +63,20 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-Broadcast"
-$Result = Get-Broadcast
+Start-Test "Get-InterfaceBroadcast"
+$Result = Get-InterfaceBroadcast
 $Result
 
-Start-Test "Get-Broadcast -Virtual"
-Get-Broadcast -Virtual
+Start-Test "Get-InterfaceBroadcast -Virtual"
+Get-InterfaceBroadcast -Virtual
 
-Start-Test "Get-Broadcast -Physical"
-Get-Broadcast -Physical
+Start-Test "Get-InterfaceBroadcast -Physical"
+Get-InterfaceBroadcast -Physical
 
-Start-Test "Get-Broadcast -Hidden"
-Get-Broadcast -Hidden
+Start-Test "Get-InterfaceBroadcast -Hidden"
+Get-InterfaceBroadcast -Hidden
 
-Test-Output $Result -Command Get-Broadcast
+Test-Output $Result -Command Get-InterfaceBroadcast
 
 Update-Log
 Exit-Test

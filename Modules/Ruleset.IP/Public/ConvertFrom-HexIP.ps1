@@ -67,7 +67,7 @@ Returns the IP address 192.168.0.1.
 [string] Hexadecimal IP address
 
 .OUTPUTS
-[ipaddress] A dotted decimal IP address
+[IPAddress] A dotted decimal IP address
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -79,7 +79,7 @@ function ConvertFrom-HexIP
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertFrom-HexIP.md")]
-	[OutputType([ipaddress])]
+	[OutputType([IPAddress])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^(0x)?[0-9a-f]{8}$')]
@@ -88,6 +88,6 @@ function ConvertFrom-HexIP
 
 	process
 	{
-		[ipaddress][uint64][convert]::ToUInt32($IPAddress, 16)
+		[IPAddress][uint64][convert]::ToUInt32($IPAddress, 16)
 	}
 }

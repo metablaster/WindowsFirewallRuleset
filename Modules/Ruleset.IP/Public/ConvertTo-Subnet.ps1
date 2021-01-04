@@ -103,10 +103,10 @@ function ConvertTo-Subnet
 		[string] $SubnetMask,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
-		[ipaddress] $Start,
+		[IPAddress] $Start,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "FromStartAndEnd")]
-		[ipaddress] $End
+		[IPAddress] $End
 	)
 
 	if ($PSCmdlet.ParameterSetName -eq "FromIPAndMask")

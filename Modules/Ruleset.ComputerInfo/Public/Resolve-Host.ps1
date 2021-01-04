@@ -68,7 +68,7 @@ PS> Resolve-Host -FlushDNS -Domain "microsoft.com"
 PS> Resolve-Host -LocalHost -AddressFamily IPv4 -Connected
 
 .INPUTS
-[ipaddress]
+[IPAddress]
 [string]
 
 .OUTPUTS
@@ -90,7 +90,7 @@ function Resolve-Host
 
 		[Parameter(ParameterSetName = "IP", Mandatory = $true, HelpMessage = "Enter target IP address",
 			ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[ipaddress[]] $IPAddress,
+		[IPAddress[]] $IPAddress,
 
 		[Parameter(ParameterSetName = "Host")]
 		[Parameter(ParameterSetName = "IP")]
@@ -186,7 +186,7 @@ function Resolve-Host
 					$NetIPAddress = $ConfiguredInterfaces | Select-Object -ExpandProperty ($AddressFamily + "Address")
 				}
 
-				[ipaddress] $IPAddress = $NetIPAddress | Select-Object -ExpandProperty IPAddress -Last 1
+				[IPAddress] $IPAddress = $NetIPAddress | Select-Object -ExpandProperty IPAddress -Last 1
 
 				[PSCustomObject] @{
 					Domain = [System.Environment]::MachineName
@@ -200,7 +200,7 @@ function Resolve-Host
 		{
 			foreach ($HostName in $Domain)
 			{
-				[ipaddress] $IPAddress = $null
+				[IPAddress] $IPAddress = $null
 
 				# For localhost with multiple interfaces fine tune selection
 				try

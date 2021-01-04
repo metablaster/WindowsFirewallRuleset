@@ -68,7 +68,7 @@ Start-Test "Get google IP"
 $NSLookup = Invoke-Process nslookup.exe -ArgumentList "google.com" -EA Ignore
 if ($NSLookup -and $NSLookup -match "(?<!\s)([0-9]{1,3}\.){3}[0-9]{1,3}")
 {
-	[ipaddress] $GoogleIP = $Matches[0]
+	[IPAddress] $GoogleIP = $Matches[0]
 	$GoogleIP.IPAddressToString
 }
 

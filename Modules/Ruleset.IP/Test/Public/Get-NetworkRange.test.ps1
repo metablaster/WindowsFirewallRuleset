@@ -75,7 +75,7 @@ if (-not $UseExisting)
 InModuleScope Ruleset.IP {
 	Describe 'Get-NetworkRange' {
 		It 'Returns an array of IPAddress' {
-			Get-NetworkRange 1.2.3.4/32 -IncludeNetworkAndBroadcast | Should -BeOfType [ipaddress]
+			Get-NetworkRange 1.2.3.4/32 -IncludeNetworkAndBroadcast | Should -BeOfType [IPAddress]
 		}
 
 		It 'Returns 255.255.255.255 when passed 255.255.255.255/32' {
@@ -101,8 +101,8 @@ InModuleScope Ruleset.IP {
 		}
 
 		It 'Returns correct values when used with Start and End parameters' {
-			$StartIP = [ipaddress] '192.168.1.1'
-			$EndIP = [ipaddress] '192.168.2.10'
+			$StartIP = [IPAddress] '192.168.1.1'
+			$EndIP = [IPAddress] '192.168.2.10'
 			$Assertion = Get-NetworkRange -Start $StartIP -End $EndIP
 
 			$Assertion.Count | Should -BeExactly 266

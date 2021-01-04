@@ -70,7 +70,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-$BroadcastAddress = Get-Broadcast
+$BroadcastAddress = Get-InterfaceBroadcast
 
 #
 # Steam installation directories

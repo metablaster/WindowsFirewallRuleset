@@ -75,7 +75,7 @@ if (-not $UseExisting)
 InModuleScope Ruleset.IP {
 	Describe 'Get-BroadcastAddress' {
 		It 'Returns an IPAddress' {
-			Get-BroadcastAddress 1.2.3.4/24 | Should -BeOfType [ipaddress]
+			Get-BroadcastAddress 1.2.3.4/24 | Should -BeOfType [IPAddress]
 		}
 
 		It 'Returns 0.0.0.0 when passed 0.0.0.0/32' {
