@@ -42,7 +42,7 @@ to be copied name, it will not be copied.
 
 .PARAMETER Name
 Specifies names or name patterns of modules that will be copied.
-Wildcard characters are permitted.
+Wildcard characters are supported.
 
 .PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
@@ -89,9 +89,9 @@ function Copy-WinModule
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md")]
 	[OutputType([void])]
-	Param
-	(
+	Param (
 		[Parameter(Position = 0)]
+		[SupportsWildcards()]
 		[string[]] $Name = "*",
 
 		[Parameter()]

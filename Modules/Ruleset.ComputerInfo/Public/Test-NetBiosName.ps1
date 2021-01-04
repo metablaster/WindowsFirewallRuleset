@@ -82,9 +82,9 @@ https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1d
 #>
 function Test-NetBiosName
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-NetBiosName.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string[]] $Name,

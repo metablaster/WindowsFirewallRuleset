@@ -95,9 +95,9 @@ https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
 #>
 function Test-UPN
 {
-	[OutputType([bool])]
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[AllowEmptyString()]

@@ -85,7 +85,6 @@ function Initialize-WinSession
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md")]
 	[OutputType([System.Management.Automation.Runspaces.PSSession])]
 	Param (
-
 		[Parameter(Position = 0)]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain,

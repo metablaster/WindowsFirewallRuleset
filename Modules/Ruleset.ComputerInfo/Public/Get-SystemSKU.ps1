@@ -32,28 +32,48 @@ Get operating system SKU information
 
 .DESCRIPTION
 Get the SKU (Stock Keeping Unit) information for one or multiple target computers,
-or translate SKU number to SKU
+or translate SKU number to SKU string
 
 .PARAMETER SKU
-Operating system SKU number, can't be used with ComputerName parameter
+Operating system SKU number
 
-.PARAMETER ComputerName
-One or more computer names, can't be used with SKU parameter
+.PARAMETER Domain
+One or more computer names
 
 .EXAMPLE
 PS> Get-SystemSKU
 
-Home Premium N
+Domain      SystemSKU    SKU
+------      ---------    ---
+MY-DESKTOP	Professional  48
+
+.EXAMPLE
+PS> @(Server1, Server2, Server3) | Get-SystemSKU
+
+Domain		SystemSKU					SKU
+------		---------   				---
+Server1		Professional				48
+Server2		Home Premium N				26
+Server3		Microsoft Hyper-V Server	42
+
+.EXAMPLE
+PS> Get-SystemSKU 7
+
+Domain      SystemSKU    	SKU
+------      ---------    	---
+			Server Standard  7
 
 .INPUTS
-[int32]
+[string]
 
 .OUTPUTS
-[PSCustomObject] Computer/SKU value pair
+[PSCustomObject]
 
 .NOTES
 TODO: Accept UPN and NETBIOS computer names
-TODO: ComputerName default value is just a placeholder, need better design
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0
@@ -66,61 +86,22 @@ function Get-SystemSKU
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
-	param(
-		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Number")]
+	param (
+		[Parameter(Mandatory = $true, ParameterSetName = "Number")]
 		[ValidatePattern("^[0-9]{1,3}$")]
 		[int32] $SKU,
 
-		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Computer")]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = "Computer")]
 		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
-	process
+	begin
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values)) $($PSBoundParameters.Values | Get-TypeName)"
+		[scriptblock] $GetStringSKU = {
+			param([int32] $SKU)
 
-		# Unknown if input is SKU number
-		[string] $TargetComputer = ""
-		[PSCustomObject[]] $Result = @()
-
-		foreach ($Computer in $Domain)
-		{
-			if ($SKU)
-			{
-				$CimSKU = $SKU
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing SKU: $SKU"
-			}
-			else
-			{
-				$CimSKU = $null
-				$TargetComputer = $Computer
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
-
-				if (Test-TargetComputer $Computer)
-				{
-					$CimSKU = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $Computer `
-						-OperationTimeoutSec $ConnectionTimeout -Namespace "root\cimv2" |
-					Select-Object -ExpandProperty OperatingSystemSku
-				}
-
-				if (!$CimSKU)
-				{
-					# TODO: error should be shown by Get-CimInstance
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Failed getting SKU info from CIM server"
-
-					# Include just computer
-					$Result += [PSCustomObject] @{
-						Computer = $Computer
-						SystemSKU = ""
-						SKU = ""
-					}
-
-					continue
-				}
-			}
-
-			[string] $StringSKU = switch ($CimSKU)
+			switch ($SKU)
 			{
 				0 { "An unknown product"; break; }
 				1 { "Ultimate"; break; }
@@ -209,25 +190,57 @@ function Get-SystemSKU
 				164 { "Windows 10 Pro Education"; break }
 				default
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input SKU not recognized"
-					"" # SKU unknown
+					Write-Error -Category ObjectNotFound -TargetObject $CimSKU `
+						-Message "Unknown SKU: $($CimSKU.ToString())"
 				}
 			} # switch SKU
+		}
+	}
+	process
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values)) $($PSBoundParameters.Values | Get-TypeName)"
 
-			if ([string]::IsNullOrEmpty($StringSKU))
+		if ($PSCmdlet.ParameterSetName -eq "Number")
+		{
+			[PSCustomObject] @{
+				Domain = $null
+				SystemSKU = & $GetStringSKU $SKU
+				SKU = $SKU
+			}
+		}
+		else
+		{
+			foreach ($Computer in $Domain)
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $CimSKU `
-					-Message "Unknown SKU: $($CimSKU.ToString())"
-				continue
-			}
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
 
-			$Result += [PSCustomObject] @{
-				Computer = $TargetComputer
-				SystemSKU = $StringSKU
-				SKU = $CimSKU
-			}
-		} # foreach computer
+				if (Test-TargetComputer $Computer)
+				{
+					try
+					{
+						$CimSKU = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $Computer `
+							-OperationTimeoutSec $ConnectionTimeout -Namespace "root\cimv2" |
+						Select-Object -ExpandProperty OperatingSystemSku
 
-		Write-Output $Result
+						[PSCustomObject] @{
+							Domain = $Computer
+							SystemSKU = & $GetStringSKU $CimSKU
+							SKU = $CimSKU
+						}
+					}
+					catch
+					{
+						Write-Error -ErrorRecord $_
+
+						# Include just computer
+						[PSCustomObject] @{
+							Computer = $Computer
+							SystemSKU = $null
+							SKU = $null
+						}
+					}
+				}
+			} # foreach computer
+		}
 	} # process
 }

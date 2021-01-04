@@ -76,10 +76,11 @@ TODO: Implement parameters for Get-ChildItem
 #>
 function Test-MarkdownLinks
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLinks.md")]
 	[OutputType([void])]
 	param (
-		[Parameter()]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
 
 		[Parameter()]

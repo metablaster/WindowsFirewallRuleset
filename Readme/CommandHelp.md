@@ -48,6 +48,7 @@ In addition to the table below, see:
     - [Get approved verbs](#get-approved-verbs)
     - [Invoke PSScriptAnalyzer](#invoke-psscriptanalyzer)
     - [Add or use types from .NET assembly in PowerShell](#add-or-use-types-from-net-assembly-in-powershell)
+    - [Get function definition](#get-function-definition)
   - [Firewall and rule management](#firewall-and-rule-management)
     - [Get a list of predefined rule groups](#get-a-list-of-predefined-rule-groups)
     - [Apply predefined rules to GPO](#apply-predefined-rules-to-gpo)
@@ -327,6 +328,16 @@ Add-Type -AssemblyName "System.Management.Automation"
 
 ```powershell
 using namespace System.Management.Automation
+```
+
+### Get function definition
+
+Quickly see definition of some function to learn it's implementation
+
+`Get-ChildItem function:`
+
+```powershell
+(Get-ChildItem function:Get-GitStatus).Definition
 ```
 
 ## Firewall and rule management

@@ -89,9 +89,9 @@ https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dfsc/149a3039-98
 #>
 function Test-UNC
 {
-	[OutputType([bool])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-UNC.md")]
+	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[AllowEmptyString()]

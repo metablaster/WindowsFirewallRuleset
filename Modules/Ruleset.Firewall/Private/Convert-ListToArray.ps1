@@ -68,7 +68,7 @@ function Convert-ListToArray
 {
 	[CmdletBinding()]
 	[OutputType([string])]
-	param(
+	param (
 		[Parameter()]
 		[Alias("List")]
 		[string] $Value,

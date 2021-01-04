@@ -58,7 +58,7 @@ function Convert-MultiLineToList
 {
 	[CmdletBinding()]
 	[OutputType([string])]
-	param(
+	param (
 		[Parameter()]
 		[Alias("Multiline")]
 		[string] $Value,

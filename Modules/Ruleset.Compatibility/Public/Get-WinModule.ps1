@@ -39,7 +39,7 @@ a new default session will be created.
 This behavior can be overridden using the additional parameters on this command.
 
 .PARAMETER Name
-Pattern to filter module names by
+Wildcard pattern to filter module names by
 
 .PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
@@ -85,9 +85,9 @@ function Get-WinModule
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md")]
 	[OutputType([PSObject])]
-	Param
-	(
+	Param (
 		[Parameter(Position = 0)]
+		[SupportsWildcards()]
 		[string[]] $Name = "*",
 
 		[Parameter()]

@@ -32,7 +32,7 @@ Resolve host or IP
 
 .DESCRIPTION
 Resolve host to IP or an IP to host.
-For local host select virtual, hidden or connected adapters.
+For localhost select virtual, hidden or connected adapters.
 
 .PARAMETER Domain
 Target host name which to resolve to an IP address.

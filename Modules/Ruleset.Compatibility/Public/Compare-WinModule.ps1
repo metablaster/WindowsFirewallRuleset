@@ -35,7 +35,7 @@ Compare the set of modules for this version of PowerShell against those availabl
 
 .PARAMETER Name
 Specifies the names or name patterns of for the modules to compare.
-Wildcard characters are permitted.
+Wildcard characters are supported.
 
 .PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
@@ -79,9 +79,9 @@ function Compare-WinModule
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md")]
 	[OutputType([PSObject])]
-	Param
-	(
+	Param (
 		[Parameter(Position = 0)]
+		[SupportsWildcards()]
 		[string[]] $Name = "*",
 
 		[Parameter()]

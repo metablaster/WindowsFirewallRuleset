@@ -70,7 +70,7 @@ Start-Test "ConvertFrom-OSBuild 19041.450 = 2004"
 ConvertFrom-OSBuild 19041.450
 
 # TODO: -ErrorAction Ignore doesn't work in Windows PowerShell (all tests)
-Start-Test "ConvertFrom-OSBuild 11111.1 = unknown"
+Start-Test "ConvertFrom-OSBuild 11111.133 = unknown"
 ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue
 
 # NOTE: This value must be updated once that build become RTM for test case to be success

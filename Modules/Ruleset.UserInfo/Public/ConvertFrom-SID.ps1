@@ -87,14 +87,14 @@ https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
 TODO: need to have consistent output ex. domain name, principal and username, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
 TODO: need to implement CIM switch
+TODO: test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
 #>
 function ConvertFrom-SID
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md")]
-	# TODO: test pipeline with multiple computers and SID's
 	[OutputType([System.Management.Automation.PSCustomObject])]
-	param(
+	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern('^S-1-\d[\d+-]+\d$')]
 		[string[]] $SID,

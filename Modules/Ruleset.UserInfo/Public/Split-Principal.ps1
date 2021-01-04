@@ -59,7 +59,7 @@ function Split-Principal
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Split-Principal.md")]
 	[OutputType([string])]
-	param(
+	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
 		[Alias("Account")]
 		[string[]] $Principal,

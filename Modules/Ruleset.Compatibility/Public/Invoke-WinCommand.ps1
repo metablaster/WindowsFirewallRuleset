@@ -92,8 +92,7 @@ function Invoke-WinCommand
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md")]
 	[OutputType([PSObject])]
-	Param
-	(
+	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[scriptblock] $ScriptBlock,
 

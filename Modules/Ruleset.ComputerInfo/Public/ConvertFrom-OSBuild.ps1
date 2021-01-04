@@ -49,7 +49,8 @@ None. You cannot pipe objects to ConvertFrom-OSBuild
 [string]
 
 .NOTES
-None.
+The ValidatePattern attribute matches decimal part as (,\d{2,5})? instead of (\.\d{3,5})? because
+ex. 19041.450 will convert to 19041,45, last zeroes will be dropped and dot is converted to coma.
 #>
 function ConvertFrom-OSBuild
 {
@@ -58,14 +59,14 @@ function ConvertFrom-OSBuild
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[ValidatePattern("^\d{5}(\.\d{3}\d{0,2})?$")]
-		[string] $Build
+		[ValidatePattern("^\d{5}(,\d{2,5})?$")]
+		[decimal] $Build
 	)
 
 	# Drop decimal part, not used
 	$WholePart = [decimal]::ToUInt32($Build)
 
-	foreach ($Info in $Script:OSBuildInfo)
+	foreach ($Info in $script:OSBuildInfo)
 	{
 		if ($Info.Build -eq $WholePart)
 		{
@@ -73,14 +74,14 @@ function ConvertFrom-OSBuild
 		}
 	}
 
-	if ($Build -gt $OSBuildInfo[0].Build)
+	if ($Build -gt $script:OSBuildInfo[0].Build)
 	{
 		# TODO: OS Version is still present and may be older than latest RTM version
 		return "Insider"
 	}
 
 	Write-Error -Category ObjectNotFound -TargetObject $Build `
-		-Message "OS build number $Build unsupported or not recognized"
+		-Message "OS build number $Build is unsupported or not recognized"
 }
 
 <#
@@ -143,4 +144,4 @@ Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomO
 			Build = 10240
 		}
 	)
-) -Description "OS Build\Version map"
+) -Description "OS Version\Build map"

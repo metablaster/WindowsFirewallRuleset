@@ -85,7 +85,7 @@ function Set-Privilege
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([bool])]
-	param(
+	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet(
 			"SeAssignPrimaryTokenPrivilege", "AssignPrimaryToken",

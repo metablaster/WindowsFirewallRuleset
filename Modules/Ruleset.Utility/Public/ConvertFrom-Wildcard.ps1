@@ -95,9 +95,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex
 #>
 function ConvertFrom-Wildcard
 {
-	[OutputType([regex], [string])]
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "String",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/ConvertFrom-Wildcard.md")]
+	[OutputType([regex], [string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "String")]
 		[ValidateScript( { $_ -ne "System.Management.Automation.WildcardPattern" })]

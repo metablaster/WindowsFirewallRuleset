@@ -71,7 +71,7 @@ function Convert-ValueToBoolean
 {
 	[CmdletBinding()]
 	[OutputType([bool])]
-	param(
+	param (
 		[Parameter()]
 		[string] $Value,
 

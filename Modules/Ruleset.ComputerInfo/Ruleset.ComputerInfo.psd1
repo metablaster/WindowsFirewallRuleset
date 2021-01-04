@@ -108,7 +108,6 @@ SOFTWARE.
 	FunctionsToExport = @(
 		"ConvertFrom-OSBuild"
 		"Get-InterfaceBroadcast"
-		"Get-ComputerName"
 		"Get-InterfaceAlias"
 		"Get-SystemSKU"
 		"Resolve-Host"
@@ -142,7 +141,6 @@ SOFTWARE.
 		"Help\en-US\about_Ruleset.ComputerInfo.md"
 		"Help\en-US\ConvertFrom-OSBuild.md"
 		"Help\en-US\Get-InterfaceBroadcast.md"
-		"Help\en-US\Get-ComputerName.md"
 		"Help\en-US\Get-InterfaceAlias.md"
 		"Help\en-US\Get-SystemSKU.md"
 		"Help\en-US\Ruleset.ComputerInfo.md"
@@ -154,7 +152,6 @@ SOFTWARE.
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
 		"Public\Get-InterfaceBroadcast.ps1"
-		"Public\Get-ComputerName.ps1"
 		"Public\Get-InterfaceAlias.ps1"
 		"Public\Get-SystemSKU.ps1"
 		"Public\README.md"

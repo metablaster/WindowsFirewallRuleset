@@ -56,7 +56,7 @@ Parameter names and aliases
   - `RemoteAddress`
 - [uri] `URL`
   - `URI`
-- [ValidateSet()] `Encoding`
+- [string] `Encoding` (ValidateSet())
 - [enum] `Application` (specify an application)
   - `Program`
 - [object] `InputObject` (when the cmdlet takes input from other cmdlets, ValueFromPipeline)
@@ -93,7 +93,7 @@ Parameter names and aliases
 - [switch] `CIM` (Contact CIM server)
 - [switch] `Disabled` (Disabled user accounts)
 - [switch] `DomainName` (see: Test-UPN)
-- [ValidateSet()] `AddressFamily`
+- [string] `AddressFamily` (ValidateSet())
   - `IPVersion`
 - [switch] Physical
 - [switch] Virtual
@@ -103,6 +103,7 @@ Parameter names and aliases
 - [string] Message
 - `Reference*`
 - `Difference*`
+- [uint32] Seconds, Minutes, Hours...
 
 ## Registry keys
 

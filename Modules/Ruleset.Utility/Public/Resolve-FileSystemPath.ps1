@@ -72,9 +72,9 @@ TODO: This function needs improvements according to the rest of *FileSystem* fun
 #>
 function Resolve-FileSystemPath
 {
-	[OutputType([System.IO.DirectoryInfo], [System.IO.FileInfo])]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Resolve-FileSystemPath.md")]
+	[OutputType([System.IO.DirectoryInfo], [System.IO.FileInfo])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]

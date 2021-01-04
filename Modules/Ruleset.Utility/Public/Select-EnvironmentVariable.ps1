@@ -165,9 +165,9 @@ https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
 #>
 function Select-EnvironmentVariable
 {
-	[OutputType([System.Collections.DictionaryEntry])]
 	[CmdletBinding(DefaultParameterSetName = "Scope", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md")]
+	[OutputType([System.Collections.DictionaryEntry])]
 	param (
 		[Parameter(ParameterSetName = "Scope")]
 		[Parameter(ParameterSetName = "Name")]

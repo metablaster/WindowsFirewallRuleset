@@ -104,9 +104,9 @@ None.
 #>
 function Set-Shortcut
 {
-	[OutputType([void])]
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Shortcut.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidatePattern("^\w+(\.[lnk|url])?")]

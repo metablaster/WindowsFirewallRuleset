@@ -45,7 +45,7 @@ The name of the function to define
 .PARAMETER ScriptBlock
 Scriptblock to use as the body of the function
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
 
@@ -87,8 +87,7 @@ function Add-WinFunction
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md")]
 	[OutputType([void])]
-	Param
-	(
+	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("FunctionName")]
 		[string] $Name,

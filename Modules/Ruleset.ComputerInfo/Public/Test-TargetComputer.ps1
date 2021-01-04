@@ -86,7 +86,7 @@ function Test-TargetComputer
 	# Be quiet for localhost
 	if ($Domain -ne [System.Environment]::MachineName)
 	{
-		Write-Information -Tags "Project" -MessageData "Contacting computer $Domain"
+		Write-Information -Tags "Project" -MessageData "INFO: Contacting computer $Domain"
 	}
 
 	# Test parameters depend on PowerShell edition

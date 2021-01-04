@@ -49,7 +49,8 @@ or, in the case where there is no existing session, a new default session will b
 This behavior can be overridden using the additional parameters on the command.
 
 .PARAMETER Name
-Specifies the name of the module to be imported. Wildcards can be used.
+Specifies the name of the module to be imported.
+Wildcard characters are supported.
 
 .PARAMETER Exclude
 A list of wildcard patterns matching the names of modules that should not be imported.
@@ -119,9 +120,9 @@ function Import-WinModule
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md")]
 	[OutputType([PSObject])]
-	Param
-	(
+	Param (
 		[Parameter(Position = 0)]
+		[SupportsWildcards()]
 		[string[]] $Name = "*",
 
 		[Parameter()]

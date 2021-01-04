@@ -64,9 +64,9 @@ function New-Function
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSReviewUnusedParameter", "", Justification = "This is template function")]
-	[OutputType([void])]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string] $ParameterName

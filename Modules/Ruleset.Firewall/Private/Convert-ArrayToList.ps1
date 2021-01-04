@@ -65,7 +65,7 @@ function Convert-ArrayToList
 {
 	[CmdletBinding()]
 	[OutputType([string])]
-	param(
+	param (
 		[Parameter(ValueFromPipeline = $true)]
 		[Alias("Array")]
 		[string[]] $InputObject

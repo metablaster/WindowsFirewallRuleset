@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Get-SystemSKU
 
 .DESCRIPTION
-Unit test for Get-SystemSKU
+Test correctness of Get-SystemSKU function
 
 .EXAMPLE
 PS> .\Get-SystemSKU.ps1
@@ -63,24 +63,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SystemSKU -Domain $([System.Environment]::MachineName)"
-Get-SystemSKU -Domain $([System.Environment]::MachineName) | Format-Table
+Start-Test "Get-SystemSKU"
+Get-SystemSKU
 
 Start-Test "Get-SystemSKU -SKU 4"
 $Result = Get-SystemSKU -SKU 48
-$Result | Format-Table
+$Result
 
-Start-Test "34 | Get-SystemSKU"
-34 | Get-SystemSKU | Format-Table
+try
+{
+	Start-Test "34 | Get-SystemSKU"
+	34 | Get-SystemSKU -EA Stop
+}
+catch
+{
+	Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
+}
 
-Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue | Format-Table
+Start-Test 'multiple computers | Get-SystemSKU FAILURE TEST'
+@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
 
-Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue | Format-Table
-
-Start-Test 'Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
-Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue | Format-Table
+Start-Test "Get-SystemSKU -Domain multiple computers"
+Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue
 
 try
 {
@@ -89,7 +93,7 @@ try
 }
 catch
 {
-	Write-Information -Tags "Test" -MessageData "Failure test success"
+	Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
 }
 
 Test-Output $Result -Command Get-SystemSKU

@@ -104,7 +104,7 @@ function Find-UpdatableModule
 {
 	[CmdletBinding(DefaultParameterSetName = "Name")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
-	param(
+	param (
 		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
 		[string[]] $Module = $null,
 
