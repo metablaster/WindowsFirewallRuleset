@@ -160,7 +160,7 @@ New-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
 # Location Changed handler that keeps the compatibility session PWD in sync with the parent PWD
 # This only applies on localhost.
 $LocationChangedHandler = {
-	[PSSession] $Session = Initialize-WinSession -ComputerName $SessionComputerName `
+	[PSSession] $Session = Initialize-WinSession -Domain $SessionComputerName `
 		-ConfigurationName $SessionConfigurationName -PassThru
 
 	if ($Session.ComputerName -eq "localhost")

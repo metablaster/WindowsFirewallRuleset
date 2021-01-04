@@ -36,7 +36,7 @@ Take ownership or set permissions on file system or registry object
 Set-Permission sets permission or ownership of a filesystem or registry object such as file,
 folder, registry key or registry item.
 
-.PARAMETER Path
+.PARAMETER LiteralPath
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
 Environment variables are allowed.
@@ -45,12 +45,12 @@ Environment variables are allowed.
 Principal who will be the new owner of a resource.
 Using this parameter means taking ownership of a resource.
 
-.PARAMETER Principal
-Principal to which to grant specified permissions.
+.PARAMETER User
+Principal username to which to grant specified permissions.
 Using this parameter means setting permissions on a resource.
 
 .PARAMETER Domain
-Principal domain such as computer name or authority to which principal applies
+Principal domain such as computer name or authority to which username applies
 
 .PARAMETER Type
 Access control type to either allow or deny specified rights
@@ -105,23 +105,23 @@ explicit rules and everything else is removed.
 If specified skips prompting for confirmation.
 
 .EXAMPLE
-PS> Set-Permission -Principal "SomeUser" -Path "D:\SomePath"
+PS> Set-Permission -Principal "SomeUser" -LiteralPath "D:\SomePath"
 
 Sets function defaults for user SomeUser on path D:\SomePath
 
 .EXAMPLE
-Set-Permission -Principal "Remote Management Users" -Path "D:\SomePath" -Protected
+Set-Permission -Principal "Remote Management Users" -LiteralPath "D:\SomePath" -Protected
 
 Only "Remote Management Users" have permissions on "D:\SomePath", other entries are removed
 
 .EXAMPLE
-PS> Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "D:\SomeFolder" `
+PS> Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
 	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
 LanmanServer service is denied specified rights for specified directory and all it's contents
 
 .EXAMPLE
-PS> Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"
+PS> Set-Permission -Principal SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
 
 Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
@@ -176,19 +176,19 @@ function Set-Permission
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[Alias("Directory", "File", "Key", "Item")]
-		[string] $Path,
+		[Alias("LP")]
+		[string] $LiteralPath,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Ownership")]
 		[string] $Owner,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Registry")]
 		[Parameter(Mandatory = $true, ParameterSetName = "FileSystem")]
-		[Alias("User")]
-		[string] $Principal,
+		[Alias("UserName")]
+		[string] $User,
 
 		[Parameter()]
-		[Alias("Computer", "Server", "Host", "Machine")]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain,
 
 		[Parameter(ParameterSetName = "Registry")]
@@ -243,35 +243,35 @@ function Set-Permission
 
 	if ($Owner)
 	{
-		$Principal = $Owner
-		$Message = "Grant ownership$RecurseMessage to principal: $Principal"
+		$User = $Owner
+		$Message = "Grant ownership$RecurseMessage to principal: $User"
 	}
-	elseif ($Principal)
+	elseif ($User)
 	{
-		$Message = "Grant permissions$RecurseMessage to principal: $Principal"
+		$Message = "Grant permissions$RecurseMessage to principal: $User"
 	}
 	else
 	{
 		$Message = "Reset permissions$RecurseMessage"
 	}
 
-	if (!$PSCmdlet.ShouldProcess($Path, $Message))
+	if (!$PSCmdlet.ShouldProcess($LiteralPath, $Message))
 	{
 		Write-Warning -Message "The operation has been canceled by the user"
 		return $false
 	}
 
-	if (!(Test-Path -Path $Path))
+	if (!(Test-Path -LiteralPath $LiteralPath))
 	{
 		# NOTE: [Microsoft.Win32.RegistryKey] Name might not have drive
-		if ($Path -like "HKEY_*")
+		if ($LiteralPath -like "HKEY_*")
 		{
 			try
 			{
 				# TODO: Debug, Verbose and other messages will not be clear with just "RegKey"
-				New-PSDrive -Name RegKey -Scope Local -Root $Path -PSProvider Registry -ErrorAction Stop | Out-Null
-				$Path = "RegKey:\"
-				Test-Path -Path $Path -ErrorAction Stop
+				New-PSDrive -Name RegKey -Scope Local -Root $LiteralPath -PSProvider Registry -ErrorAction Stop | Out-Null
+				$LiteralPath = "RegKey:\"
+				Test-Path -LiteralPath $LiteralPath -ErrorAction Stop
 			}
 			catch
 			{
@@ -281,17 +281,17 @@ function Set-Permission
 		}
 		else
 		{
-			Write-Error -TargetObject $Path -Category ObjectNotFound -Message "Specified resource could not be found: '$Path'"
+			Write-Error -TargetObject $LiteralPath -Category ObjectNotFound -Message "Specified resource could not be found: '$LiteralPath'"
 			return $false
 		}
 	}
-	elseif ($Recurse -and (Test-Path -Path $Path -PathType Leaf))
+	elseif ($Recurse -and (Test-Path -LiteralPath $LiteralPath -PathType Leaf))
 	{
 		$Recurse = $false
 		Write-Warning -Message "Recurse parameter ignored for leaf objects"
 	}
 
-	$Acl = Get-Acl -Path $Path
+	$Acl = Get-Acl -LiteralPath $LiteralPath
 
 	if ($Reset)
 	{
@@ -327,31 +327,31 @@ function Set-Permission
 		if ($Protected -and $PreserveInheritance)
 		{
 			$Acl.SetAccessRuleProtection($false, $PreserveInheritance)
-			Set-Acl -AclObject $Acl -Path $Path
-			$Acl = Get-Acl -Path $Path
+			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+			$Acl = Get-Acl -LiteralPath $LiteralPath
 		}
 
 		# Explicit rules were all removed, inherited will now be either inherited, removed or converted to explicit rules.
 		$Acl.SetAccessRuleProtection($Protected, $PreserveInheritance)
-		Set-Acl -AclObject $Acl -Path $Path
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object: $Path"
+		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object: $LiteralPath"
 	}
 
-	if ($Principal)
+	if ($User)
 	{
 		if ($Domain)
 		{
-			$NTAccount = New-Object -TypeName Principal.NTAccount($Domain, $Principal)
+			$NTAccount = New-Object -TypeName Principal.NTAccount($Domain, $User)
 		}
 		else
 		{
-			$NTAccount = New-Object -TypeName Principal.NTAccount($Principal)
+			$NTAccount = New-Object -TypeName Principal.NTAccount($User)
 		}
 
 		try
 		{
 			# Verify account is valid
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Verifying if principal '$Principal' is valid"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Verifying if principal '$User' is valid"
 			$NTAccount.Translate([Principal.SecurityIdentifier]).ToString() | Out-Null
 		}
 		catch
@@ -363,24 +363,24 @@ function Set-Permission
 
 	if ($Owner)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to grant ownership to principal '$Principal'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to grant ownership to principal '$User'"
 
 		$Acl.SetOwner($NTAccount)
-		Set-Acl -AclObject $Acl -Path $Path
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object: $Path"
+		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object: $LiteralPath"
 	}
-	elseif ($Principal)
+	elseif ($User)
 	{
 		# Grant permission to principal for resource
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to grant specified permissions to principal '$Principal'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to grant specified permissions to principal '$User'"
 
 		try
 		{
 			# Represents an abstraction of an access control entry (ACE) that defines an access rule for a file or directory
-			if (Test-Path -Path $Path -PathType Leaf)
+			if (Test-Path -LiteralPath $LiteralPath -PathType Leaf)
 			{
 				# Leaf. An element that does not contain other elements, such as a file or registry entry.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -Path $Path -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -LiteralPath $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule?view=dotnet-plat-ext-3.1
@@ -395,7 +395,7 @@ function Set-Permission
 			else
 			{
 				# Container. An element that contains other elements, such as a directory or registry key.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -Path $Path -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -LiteralPath $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Inheritance, $Propagation, $Type)
@@ -420,8 +420,8 @@ function Set-Permission
 			return $false
 		}
 
-		Set-Acl -AclObject $Acl -Path $Path
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object: $Path"
+		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object: $LiteralPath"
 	}
 
 	if ($Recurse)
@@ -433,11 +433,11 @@ function Set-Permission
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Attempting to recursively get target resource directory tree"
 			# NOTE: -Force, Allows the cmdlet to get items that otherwise can't be accessed by the user, such as hidden or system files.
-			$ChildItems = Get-ChildItem -Path $Path -Recurse -Force -ErrorAction Stop
+			$ChildItems = Get-ChildItem -LiteralPath $LiteralPath -Recurse -Force -ErrorAction Stop
 		}
 		catch
 		{
-			if (!$Principal)
+			if (!$User)
 			{
 				Write-Warning -Message "You have no permission to finish recursive action, please specify Principal and Rights"
 				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
@@ -445,7 +445,7 @@ function Set-Permission
 			}
 
 			Write-Warning -Message "You have no permission to finish recursive action"
-			if ($Force -or $PSCmdlet.ShouldContinue($Path, "Set required permissions to list directories and change permissions recursively"))
+			if ($Force -or $PSCmdlet.ShouldContinue($LiteralPath, "Set required permissions to list directories and change permissions recursively"))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions"
 
@@ -481,27 +481,27 @@ function Set-Permission
 
 				# NOTE: This may be called twice for each child container which fails in "try" block above,
 				# It's needed to initiate recursing on this container
-				Set-Permission -Path $Path -Principal $Principal -Rights $GrantContainer
+				Set-Permission -LiteralPath $LiteralPath -Principal $User -Rights $GrantContainer
 
 				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions", if yes remove them
-				Get-ChildItem -Path $Path -Directory -Force | ForEach-Object {
+				Get-ChildItem -LiteralPath $LiteralPath -Directory -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child container object: $($_.FullName)"
-					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantContainer -Recurse
+					Set-Permission -LiteralPath $_.FullName -Principal $User -Rights $GrantContainer -Recurse
 				}
 
-				Get-ChildItem -Path $Path -File -Recurse -Force | ForEach-Object {
+				Get-ChildItem -LiteralPath $LiteralPath -File -Recurse -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child leaf object: $($_.FullName)"
-					Set-Permission -Path $_.FullName -Principal $Principal -Rights $GrantLeaf
+					Set-Permission -LiteralPath $_.FullName -Principal $User -Rights $GrantLeaf
 				}
 
 				try
 				{
 					# Now we should be able to get it
-					$ChildItems = Get-ChildItem -Path $Path -Recurse -Force
+					$ChildItems = Get-ChildItem -LiteralPath $LiteralPath -Recurse -Force
 				}
 				catch
 				{
-					Write-Warning -Message "Recursive action failed on object: $Path"
+					Write-Warning -Message "Recursive action failed on object: $LiteralPath"
 					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
 					return $false
 				}
@@ -523,15 +523,15 @@ function Set-Permission
 				# TODO: We end up with both inherited and explicit rules if inheritance is enabled
 				# It would be preferred to avoid explicit rules if inheritance is enabled
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions on child object: $($_.FullName)"
-				Set-Permission -Path $_.FullName @PSBoundParameters
+				Set-Permission -LiteralPath $_.FullName @PSBoundParameters
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $Path"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $LiteralPath"
 			return $true
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] There are no subobjects to recurse for: $Path"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] There are no subobjects to recurse for: $LiteralPath"
 			return $false
 		}
 	} # Recurse

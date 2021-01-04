@@ -63,8 +63,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Get-SystemSKU -ComputerName $([System.Environment]::MachineName)"
-Get-SystemSKU -ComputerName $([System.Environment]::MachineName) | Format-Table
+Start-Test "Get-SystemSKU -Domain $([System.Environment]::MachineName)"
+Get-SystemSKU -Domain $([System.Environment]::MachineName) | Format-Table
 
 Start-Test "Get-SystemSKU -SKU 4"
 $Result = Get-SystemSKU -SKU 48
@@ -79,13 +79,13 @@ Start-Test '@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-Sy
 Start-Test '$Result = @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU FAILURE TEST'
 @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue | Format-Table
 
-Start-Test 'Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
-Get-SystemSKU -ComputerName @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue | Format-Table
+Start-Test 'Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") FAILURE TEST'
+Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue | Format-Table
 
 try
 {
-	Start-Test "Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName)"
-	Get-SystemSKU -SKU 4 -ComputerName $([System.Environment]::MachineName) -ErrorAction Stop
+	Start-Test "Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName)"
+	Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName) -ErrorAction Stop
 }
 catch
 {

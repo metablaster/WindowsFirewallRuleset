@@ -58,21 +58,21 @@ Also grants firewall service to write logs to project specified location.
 The Microsoft Protection Service will automatically reset permissions on firewall logs either
 on system reboot, network reconnect or firewall settings change, for security reasons.
 
-.PARAMETER Principal
+.PARAMETER User
 Non administrative user account for which to grant permission
 
-.PARAMETER ComputerName
+.PARAMETER Domain
 Principal domain for which to grant permission.
 By default specified principal gets permission from local machine
 
-.PARAMETER SkipPrompt
+.PARAMETER Force
 If specified, no starting confirmation prompt is present
 
 .EXAMPLE
 PS> .\Grant-Logs.ps1 USERNAME
 
 .EXAMPLE
-PS> .\Grant-Logs.ps1 USERNAME -Computer COMPUTERNAME
+PS> .\Grant-Logs.ps1 USERNAME -Domain COMPUTERNAME
 
 .INPUTS
 None. You cannot pipe objects to Grant-Logs.ps1
@@ -95,14 +95,15 @@ using namespace System.Security
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[string] $Principal = $DefaultUser,
+	[Alias("UserName")]
+	[string] $User = $DefaultUser,
 
 	[Parameter()]
-	[Alias("Computer", "Server", "Domain", "Host", "Machine")]
-	[string] $ComputerName = [System.Environment]::MachineName,
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
 
 	[Parameter()]
-	[switch] $SkipPrompt
+	[switch] $Force
 )
 
 #region Initialization
@@ -119,7 +120,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
-if (!$SkipPrompt)
+if (!$Force)
 {
 	$Accept = "Grant permission to read firewall log files until system reboot"
 	$Deny = "Abort operation, no permission change is done on firewall logs"
@@ -167,16 +168,16 @@ $FullControl = [AccessControl.FileSystemRights]::FullControl
 Write-Information -Tags "User" -MessageData "INFO: Granting full control to firewall service for log directory"
 
 Set-Permission $TargetFolder -Owner "System" | Out-Null
-Set-Permission $TargetFolder -Principal "System" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -Principal "Administrators" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -Principal "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
 
 $StandardUser = $true
-foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $ComputerName))
+foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
 {
-	if ($Principal -eq $Admin.User)
+	if ($User -eq $Admin.User)
 	{
-		Write-Warning -Message "User '$Principal' belongs to Administrators group, no need to grant permission"
+		Write-Warning -Message "User '$User' belongs to Administrators group, no need to grant permission"
 		$StandardUser = $false
 		break
 	}
@@ -185,14 +186,14 @@ foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Computer $Compu
 if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
-	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$Principal' for log directory"
-	if (Set-Permission $TargetFolder -Principal $Principal -Computer $ComputerName -Rights $UserControl)
+	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
+	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -Principal $Principal -Computer $ComputerName -Rights $UserControl | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
 		}
 	}
 }

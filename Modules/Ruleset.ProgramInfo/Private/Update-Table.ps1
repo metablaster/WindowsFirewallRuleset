@@ -86,7 +86,7 @@ function Update-Table
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup -Computer $PolicyStore
+		$UserGroups = Get-UserGroup -Domain $PolicyStore
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{

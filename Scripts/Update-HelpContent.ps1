@@ -53,13 +53,13 @@ Generate or update help files for all project modules
 .DESCRIPTION
 Update-HelpContent.ps1 Updates existing or generates new help files for all modules
 that are part of "Windows Firewall Ruleset" repository.
-These Help files are used for online help (Get-Help -Online) and updatable help for (Update-Help)
+These Help files are used for online help (Get-Help -Online) and updatable help (Update-Help)
 
 .PARAMETER Module
 Specify module name for which to generate help files.
 The default is all repository modules
 
-.PARAMETER SupportedUICulture
+.PARAMETER UICulture
 Supported UI cultures for which to generate help files, the default is en-US
 
 .PARAMETER Encoding
@@ -70,10 +70,10 @@ The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for
 PS> .\Update-HelpContent.ps1
 
 .EXAMPLE
-PS> .\Update-HelpContent.ps1 -IncrementVersion
+PS> .\Update-HelpContent.ps1 -Module Ruleset.ProgramInfo
 
 .EXAMPLE
-PS> .\Update-HelpContent.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
+PS> .\Update-HelpContent.ps1 -UICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
 
 .INPUTS
 None. You cannot pipe objects to Update-HelpContent.ps1
@@ -99,10 +99,11 @@ TODO: Log header is not inserted into logs
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[string[]] $ModuleName,
+	[Alias("ModuleName")]
+	[string[]] $Module,
 
 	[Parameter()]
-	[string[]] $SupportedUICulture = @(
+	[string[]] $UICulture = @(
 		"en-US"
 	),
 
@@ -179,7 +180,7 @@ function Format-Document
 # User prompt
 $Accept = "Generate new or update existing help files for all project modules"
 $Deny = "Abort operation, no change to help files is made"
-if ($ModuleName)
+if ($Module)
 {
 	$Accept = "Generate new or update existing help files for requested modules"
 }
@@ -194,10 +195,10 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Root directory of help content for current module and culture
 [string] $HelpContent = "$ProjectRoot\Config\HelpContent\$ProjectVersion"
 
-if (!$ModuleName)
+if (!$Module)
 {
 	# Generate new or update existing help files for all modules that are part of repository
-	$ModuleName = Get-ChildItem -Path $ProjectRoot\Modules\ -Directory -Filter "Ruleset.*" |
+	$Module = Get-ChildItem -Path $ProjectRoot\Modules\ -Directory -Filter "Ruleset.*" |
 	Select-Object -ExpandProperty Name
 }
 
@@ -211,13 +212,13 @@ if (!(Test-Path -PathType Container -Path $UpgradeLogsDir))
 	New-Item -ItemType Container -Path $UpgradeLogsDir | Out-Null
 }
 
-foreach ($Module in $ModuleName)
+foreach ($ModuleName in $Module)
 {
-	Write-Debug -Message "[$ThisScript] Processing module: $Module"
+	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
 
 	# NOTE: Module must be imported to avoid warnings from platyPS
-	Import-Module -Name $Module
-	[PSModuleInfo] $ModuleInfo = Get-Module -Name $Module
+	Import-Module -Name $ModuleName
+	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName
 
 	# Root directory of current module
 	[string] $ModuleRoot = $ModuleInfo.ModuleBase
@@ -244,18 +245,18 @@ specific subfolders
 "@
 	}
 
-	foreach ($UICulture in $SupportedUICulture)
+	foreach ($CultureName in $UICulture)
 	{
-		Write-Progress -Activity "Creating help files" -CurrentOperation $Module -Status $UICulture `
-			-PercentComplete (++$ProgressCount / $ModuleName.Length * $SupportedUICulture.Length * 100)
+		Write-Progress -Activity "Creating help files" -CurrentOperation $ModuleName -Status $CultureName `
+			-PercentComplete (++$ProgressCount / $Module.Length * $UICulture.Length * 100)
 
-		Write-Debug -Message "[$ThisScript] Processing culture: $UICulture"
+		Write-Debug -Message "[$ThisScript] Processing culture: $CultureName"
 
 		# Root directory of external help files for current module and culture
-		[string] $ExternalHelp = "$ModuleRoot\$UICulture"
+		[string] $ExternalHelp = "$ModuleRoot\$CultureName"
 
 		# Root directory of online help files for current module and culture
-		[string] $OnlineHelp = "$ModuleRoot\Help\$UICulture"
+		[string] $OnlineHelp = "$ModuleRoot\Help\$CultureName"
 
 		# Help content download link for Update-Help commandlet
 		# This value is required for .cab file creation.
@@ -263,19 +264,19 @@ specific subfolders
 		[string] $DownloadLink = "https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/$ProjectVersion"
 
 		# Module page file
-		[string] $ModulePage = "$OnlineHelp\$Module.md"
+		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"
 
 		# Both the help root folder and module page must exist to update
 		if (Test-Path -Path $ModulePage -PathType Leaf)
 		{
-			Write-Verbose -Message "[$ThisScript] Updating help: $Module - $UICulture"
+			Write-Verbose -Message "[$ThisScript] Updating help: $ModuleName - $CultureName"
 
 			# If download link is out of date replace it
 			$FileData = Get-Content -Path $ModulePage -Encoding $Encoding
 
 			if ([string]::IsNullOrEmpty($FileData -match "^Download Help Link: $DownloadLink$"))
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $Module.md"
+				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $ModuleName.md"
 				$FileData -replace "(?<=Download Help Link:).*", " $DownloadLink" |
 				Set-Content -Path $ModulePage -Encoding $Encoding
 			}
@@ -285,7 +286,7 @@ specific subfolders
 			# NOTE: Generates blank module page if missing
 			# -Path string[] The folder must contain a module page from which this cmdlet can get the module name
 			Update-MarkdownHelpModule -Encoding $Encoding -Path $OnlineHelp -UpdateInputOutput `
-				-LogPath $UpgradeLogsDir\$Module-HelpContent.log -UseFullTypeName `
+				-LogPath $UpgradeLogsDir\$ModuleName-HelpContent.log -UseFullTypeName `
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
 
@@ -301,13 +302,13 @@ specific subfolders
 		}
 		else # Generate new help files
 		{
-			Write-Verbose -Message "[$ThisScript] Generating new help: $Module - $UICulture"
+			Write-Verbose -Message "[$ThisScript] Generating new help: $ModuleName - $CultureName"
 
 			# NOTE: Need to run to generate module page
 			# Regenerates all help files, new ones will be later updated to include "online version" metadata
 			# Create new markdown help files (module page included, about module not included)
-			New-MarkdownHelp -Module $Module -Encoding $Encoding -OutputFolder $OnlineHelp `
-				-UseFullTypeName -WithModulePage -HelpVersion $ProjectVersion -Locale $UICulture `
+			New-MarkdownHelp -Module $ModuleName -Encoding $Encoding -OutputFolder $OnlineHelp `
+				-UseFullTypeName -WithModulePage -HelpVersion $ProjectVersion -Locale $CultureName `
 				-FwLink $DownloadLink -ModulePagePath $ModulePage -Force |
 			Select-Object -ExpandProperty Name
 			# -Metadata $HelpMetadata
@@ -324,7 +325,7 @@ specific subfolders
 
 			# Read file and single line string preserving line break characters
 			$FileData = Get-Content -Path $OnlineHelp\$Command.md -Encoding $Encoding -Raw
-			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/$Module/Help/$UICulture/$Command.md"
+			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/$ModuleName/Help/$CultureName/$Command.md"
 
 			# If online help link is out of date or missing set it
 			if (!($FileData -match "online version:\s$OnlineVersion"))
@@ -343,20 +344,20 @@ specific subfolders
 		Format-Document $ModulePage
 
 		# NOTE: Creating about_ topics is independent of both the Update and New-MarkdownHelp
-		if (Test-Path -Path $OnlineHelp\about_$Module.md -PathType Leaf)
+		if (Test-Path -Path $OnlineHelp\about_$ModuleName.md -PathType Leaf)
 		{
-			Write-Verbose -Message "[$ThisScript] about_$Module.md is present, no change to file"
+			Write-Verbose -Message "[$ThisScript] about_$ModuleName.md is present, no change to file"
 		}
 		else
 		{
-			Write-Verbose -Message "[$ThisScript] Generating new about_$Module.md"
+			Write-Verbose -Message "[$ThisScript] Generating new about_$ModuleName.md"
 
 			# New about_ModuleName help topic
-			New-MarkdownAboutHelp -OutputFolder $OnlineHelp -AboutName $Module
+			New-MarkdownAboutHelp -OutputFolder $OnlineHelp -AboutName $ModuleName
 		}
 
 		# Format about topic
-		Format-Document $OnlineHelp\about_$Module.md
+		Format-Document $OnlineHelp\about_$ModuleName.md
 
 		Write-Verbose -Message "[$ThisScript] Generating external help"
 
@@ -364,7 +365,7 @@ specific subfolders
 		# TODO: maybe global variable for line width, MaxAboutWidth affects only about_ files
 		# NOTE: Creates external help based on files or folders specified in -Path string[]
 		New-ExternalHelp -Path $OnlineHelp -Encoding $Encoding -OutputPath $OnlineHelp\External `
-			-MaxAboutWidth 120 -ErrorLogFile $UpgradeLogsDir\$Module-ExternalHelp.log -Force |
+			-MaxAboutWidth 120 -ErrorLogFile $UpgradeLogsDir\$ModuleName-ExternalHelp.log -Force |
 		Select-Object -ExpandProperty Name
 		# -ShowProgress
 

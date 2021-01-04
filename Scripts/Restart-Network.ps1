@@ -154,11 +154,7 @@ Get adapter aliases of specified state
 .DESCRIPTION
 Select-AdapterAlias gets physical interface aliases of adapters that are in specified state
 
-.PARAMETER Interface
-An optional list of required adapters that must meet given state.
-If successful aliases are returned back, otherwise warning message is show.
-
-.PARAMETER Status
+.PARAMETER State
 Specify minimum state of network adapters for which to get interface aliases:
 Removed - Network adapter is removed
 Disabled - Network adapter is disabled
@@ -166,11 +162,15 @@ Enabled - Network adapter is enabled but disconnected
 Operational - Network adapter is enabled and able to connect to network
 Connected - Network adapter has internet access
 
+.PARAMETER InterfaceAlias
+An optional list of required adapters that must meet given state.
+If successful aliases are returned back, otherwise warning message is shown.
+
 .EXAMPLE
 Select-AdapterAlias Disabled
 
 .EXAMPLE
-Select-AdapterAlias Operational -Adapter @("Ethernet", "Realtek WI-FI")
+Select-AdapterAlias Operational -InterfaceAlias @("Ethernet", "Realtek WI-FI")
 
 .NOTES
 We select InterfaceAlias instead of adapter objects because of non consistent CIM parameters
@@ -180,25 +180,24 @@ TODO: This functionality should be part of Select-IPInterface somehow if possibl
 #>
 function Select-AdapterAlias
 {
-	[OutputType([string[]])]
 	[CmdletBinding(PositionalBinding = $false)]
+	[OutputType([string[]])]
 	param (
-		[Alias("State")]
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("Removed", "Disabled", "Enabled", "Operational", "Connected")]
-		[string] $Status,
+		[string] $State,
 
-		[Alias("Interface")]
 		[Parameter()]
-		[string[]] $Adapter
+		[Alias("ifAlias")]
+		[string[]] $InterfaceAlias
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	[CimInstance[]] $TargetAdapter = @()
-	if ($Adapter)
+	if ($InterfaceAlias)
 	{
-		$TargetAdapter = Get-NetAdapter -InterfaceAlias $Adapter
+		$TargetAdapter = Get-NetAdapter -InterfaceAlias $InterfaceAlias
 	}
 	else
 	{
@@ -226,7 +225,7 @@ function Select-AdapterAlias
 					# Once physical adapter is disabled, the attached virtual switch will be
 					# put into "Disconnected" mode
 					Disable-NetAdapter -InterfaceAlias $Item -Confirm:$false
-					Wait-Adapter Disabled -Adapter $Item
+					Wait-Adapter Disabled -InterfaceAlias $Item
 
 					# HACK: This is improvisation and will pick up adapters that were already
 					# disconnected, but we want only external switches and nothing else
@@ -238,7 +237,7 @@ function Select-AdapterAlias
 					}
 
 					Enable-NetAdapter -InterfaceAlias $Item -Confirm:$false
-					Wait-Adapter Enabled -Adapter $Item
+					Wait-Adapter Enabled -InterfaceAlias $Item
 				}
 
 				$TargetAdapter = $ExternalSwitch
@@ -312,7 +311,7 @@ function Select-AdapterAlias
 			}
 		}
 
-		if ([array]::Find($AcceptStatus, [System.Predicate[string]] { $Status -eq $args[0] }))
+		if ([array]::Find($AcceptStatus, [System.Predicate[string]] { $State -eq $args[0] }))
 		{
 			$AdapterAlias += $ifAlias
 		}
@@ -330,20 +329,20 @@ Wait until adapters are put into requested state
 .DESCRIPTION
 Wait in incrementail time intervals until specified network adapters are put into requested state
 
-.PARAMETER Status
+.PARAMETER State
 Wait until adapter is put into specified state
 
-.PARAMETER Adapter
+.PARAMETER InterfaceAlias
 A list of interface aliases which should be put into requested state
 
 .PARAMETER Seconds
 Maximum time to wait for adapter state, expressed in seconds
 
 .EXAMPLE
-Wait-Adapter Enabled -Adapter "Ethernet"
+Wait-Adapter Enabled -InterfaceAlias "Ethernet"
 
 .EXAMPLE
-Wait-Adapter Connected -Adapter "Ethernet" -Seconds 20
+Wait-Adapter Connected -InterfaceAlias "Ethernet" -Seconds 20
 
 .NOTES
 TODO: This script won't work if connecting via virtual switch, in which case physical adapter has
@@ -351,15 +350,16 @@ no IP address assigned.
 #>
 function Wait-Adapter
 {
-	[OutputType([string])]
 	[CmdletBinding(PositionalBinding = $false)]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("Removed", "Disabled", "Enabled", "Operational", "Connected")]
-		[string] $Status,
+		[string] $State,
 
 		[Parameter(Mandatory = $true)]
-		[string[]] $Adapter,
+		[Alias("ifAlias")]
+		[string[]] $InterfaceAlias,
 
 		[Parameter()]
 		[uint32] $Seconds = 10
@@ -369,19 +369,19 @@ function Wait-Adapter
 
 	for ($Time = 2; $Time -le ($Seconds - $Time + 2); $Time += 2)
 	{
-		[string[]] $Result = Select-AdapterAlias $Status -Adapter $Adapter
+		[string[]] $Result = Select-AdapterAlias $State -InterfaceAlias $InterfaceAlias
 
 		# If all adapters are in desired state
-		if ($Result -and ($Result.Count -eq $Adapter.Count))
+		if ($Result -and ($Result.Count -eq $InterfaceAlias.Count))
 		{
 			return
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Waiting adapters for '$Status' state"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Waiting adapters for '$State' state"
 		Start-Sleep -Seconds $Time
 	}
 
-	Write-Warning -Message "Not all of the requested adapters are in '$Status' state"
+	Write-Warning -Message "Not all of the requested adapters are in '$State' state"
 }
 
 # Ensure adapters are put into valid state for configuration
@@ -392,7 +392,7 @@ if ($AdapterAlias)
 	Write-Information -Tags "User" -MessageData "INFO: Attempt to bring up disabled adapters"
 
 	Enable-NetAdapter -InterfaceAlias $AdapterAlias
-	Wait-Adapter Enabled -Adapter $AdapterAlias
+	Wait-Adapter Enabled -InterfaceAlias $AdapterAlias
 }
 
 # TODO: It's not clear which methods may fail with disconnected adapters
@@ -563,7 +563,7 @@ else
 
 	# NOTE: Need to wait until registry is updated for IP removal
 	Disable-NetAdapter -InterfaceAlias $AdapterAlias -Confirm:$false
-	Wait-Adapter Disabled -Adapter $AdapterAlias
+	Wait-Adapter Disabled -InterfaceAlias $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
 	Write-Information -Tags "User" -MessageData "INFO: Network stop time is $NetworkTime"
@@ -586,7 +586,7 @@ else
 	# NOTE: Need to wait for firewall service to set up file system permissions for logs in final step
 	# Setting IP and DNS also requires enabled adapter
 	Enable-NetAdapter -InterfaceAlias $AdapterAlias
-	Wait-Adapter Operational -Adapter $AdapterAlias
+	Wait-Adapter Operational -InterfaceAlias $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
 	Write-Information -Tags "User" -MessageData "INFO: Network start time is $NetworkTime"
@@ -671,7 +671,7 @@ else
 
 	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob
 
-	Wait-Adapter Connected -Adapter $AdapterAlias
+	Wait-Adapter Connected -InterfaceAlias $AdapterAlias
 
 	# TODO: Set to old profile, or define default profile in project settings
 	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {

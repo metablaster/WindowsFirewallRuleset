@@ -97,7 +97,7 @@ function Edit-Table
 		$Path = Format-Path $Path
 
 		# Not user profile path, so it applies to all users
-		$Principal = Get-UserGroup -Computer $PolicyStore | Where-Object -Property Group -EQ "Users"
+		$Principal = Get-UserGroup -Domain $PolicyStore | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

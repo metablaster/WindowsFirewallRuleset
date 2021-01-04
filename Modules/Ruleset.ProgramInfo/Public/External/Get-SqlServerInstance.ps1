@@ -44,7 +44,7 @@ If specified, try to pull and correlate CIM information for SQL
 TODO: limited testing was performed in matching up the service info to registry info.
 
 .EXAMPLE
-PS> Get-SqlServerInstance -Computername DC1
+PS> Get-SqlServerInstance -Domain DC1
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
@@ -69,7 +69,7 @@ ClusterNodes  : {}
 Caption       : SQL Server 2008
 
 .EXAMPLE
-PS> Get-SqlServerInstance -Computername Server1, Server2 -CIM
+PS> Get-SqlServerInstance -Domain Server1, Server2 -CIM
 
 Computername     : Server1
 SQLInstance      : MSSQLSERVER

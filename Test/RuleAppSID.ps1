@@ -82,7 +82,7 @@ $Principals
 foreach ($Principal in $Principals)
 {
 	Start-Test "Processing for: $($Principal.Account)"
-	$OwnerSID = Get-PrincipalSID $Principal.User -Computer $Principal.Computer
+	$OwnerSID = Get-PrincipalSID $Principal.User -Domain $Principal.Domain
 	$OwnerSID
 
 	Get-UserApps -User $Principal.User | ForEach-Object {

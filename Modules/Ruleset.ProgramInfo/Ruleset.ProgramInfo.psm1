@@ -114,17 +114,17 @@ else
 
 # Programs installed system wide
 New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (
-	Get-SystemSoftware -Computer $PolicyStore
+	Get-SystemSoftware -Domain $PolicyStore
 )
 
 # Executable paths
 New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (
-	Get-ExecutablePath -Computer $PolicyStore
+	Get-ExecutablePath -Domain $PolicyStore
 )
 
 # Program data
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (
-	Get-AllUserSoftware -Computer $PolicyStore
+	Get-AllUserSoftware -Domain $PolicyStore
 )
 
 # Allowed executable extensions

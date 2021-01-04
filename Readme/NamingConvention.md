@@ -47,7 +47,9 @@ Parameter names and aliases
 - [string] `LogName` (the name of the log file to process or use)
 - [string] `Path` (the paths to a resource when wildcard characters are supported)
   - `FilePath`
+  - `FullName`
 - [string] `LiteralPath` (the path to a resource when wildcard characters are not supported)
+  - `LP`
 - [string] `Interface` (network interface name)
 - [IPAddress] `IPAddress` (specify an IP address)
   - `LocalAddress`
@@ -60,7 +62,7 @@ Parameter names and aliases
 - [object] `InputObject` (when the cmdlet takes input from other cmdlets, ValueFromPipeline)
 - [switch] `Strict` (all errors are handled as terminating errors)
 - [switch] `Exact` (the resource term must match the resource name exactly)
-- [ValidateSet()] `Privilege` (the right a cmdlet needs to perform an operation for a particular entity)
+- [string] `Privilege` (the right a cmdlet needs to perform an operation for a particular entity)
 - [string] `Command` (specify a command string to run)
 - [switch] `Stream` (stream multiple output objects through the pipeline)
 - [int32] `Timeout` (the timeout interval (in milliseconds))
@@ -80,8 +82,11 @@ Parameter names and aliases
 - [int32] `ErrorLevel` (specify the level of errors to report)
 - [switch] `Repair` (attempt to correct something from a broken state)
 - [switch] `Overwrite` (the cmdlet overwrites any existing data when the parameter is specified)
+- [string] `Prompt` (specify a prompt for the cmdlet)
+- [array] `State` (specify the Keyword names of states)
 
-`*` Used by most commandlets but should be aliases instead
+`*` Used by most commandlets as primary parameter but should be alias instead
+`PSPath` is alias of both the Path and LiteralPath of most commandlets
 
 ### Unresolved
 
