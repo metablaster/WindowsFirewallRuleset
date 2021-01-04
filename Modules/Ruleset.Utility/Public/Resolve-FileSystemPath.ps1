@@ -36,7 +36,8 @@ Unlike Resolve-Path which accepts and produces paths supported by any PowerShell
 this function accepts only file system paths, and produces either [System.IO.DirectoryInfo] or
 [System.IO.FileInfo]
 Also unlike Resolve-Path the resultant path object is returned even if target file system item
-does not exist, as long as specified path is resolved to full path name.
+does not exist, as long as portion of the specified path is resolved and as long as new path
+doesn't resolve to multiple locations.
 
 .PARAMETER Path
 Directory or file location to target file system item.
@@ -67,6 +68,7 @@ None. You cannot pipe objects to Resolve-FileSystemPath
 
 .NOTES
 TODO: Implement -Relative parameter, see Resolve-Path
+TODO: This function needs improvements according to the rest of *FileSystem* functions
 #>
 function Resolve-FileSystemPath
 {

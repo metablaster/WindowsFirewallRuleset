@@ -32,7 +32,7 @@ Generates a log file name for logging functions
 
 .DESCRIPTION
 Generates a log file name composed of current date and appends to requested LogFile and Path.
-The function checks if the path to log file exists, if not it creates directory but not log file.
+The function checks if the path to log file exists, if not it creates a new log file.
 
 .PARAMETER Path
 Path to directory into which to write logs
@@ -44,10 +44,19 @@ File label which precedes file date, ex. "Warning" or "Error"
 If specified, this header message will be at the top of a log file.
 This parameter is ignored for existing log files
 
+.PARAMETER Overwrite
+If specified, log file is overwritten if it exists.
+
 .EXAMPLE
-PS> Initialize-Log "C:\Logs" -Label "Warning"
+PS> Initialize-Log "C:\Logs" -LogName "Warning"
 
 Warning_25.02.20.log
+
+.EXAMPLE
+PS> Initialize-Log "C:\Logs" -LogName "Warning" -Overwrite -Header "New header"
+
+Warning_25.02.20.log
+Overwrites previous log with new header.
 
 .INPUTS
 None. You cannot pipe objects to Initialize-Log
@@ -72,7 +81,10 @@ function Initialize-Log
 		[string] $LogName,
 
 		[Parameter()]
-		[string] $Header
+		[string] $Header,
+
+		[Parameter()]
+		[switch] $Overwrite
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -95,33 +107,39 @@ function Initialize-Log
 		$Directory.Create()
 	}
 
-	if (!(Test-Path -PathType Leaf -Path $LogFile))
+	if (Test-Path -PathType Leaf -Path $LogFile)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log file: $FileName"
-		New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
-		Set-Content -Path $LogFile -Value "`n#`n# Windows Firewall Ruleset $ProjectVersion"
-
-		if ([string]::IsNullOrEmpty($Header))
+		if ($Overwrite)
 		{
-			Write-Warning -Message "Log header is missing or invalid"
+			Remove-Item -LiteralPath $LogFile
 		}
 		else
 		{
-			Add-Content -Path $LogFile -Value "# $Header"
-		}
+			if (![string]::IsNullOrEmpty($Header))
+			{
+				Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
+			}
 
-		Add-Content -Path $LogFile -Value "#"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Directory"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
+			return $LogFile
+		}
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new log file: $FileName"
+	New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
+	Set-Content -Path $LogFile -Value "`n#`n# Windows Firewall Ruleset $ProjectVersion"
+
+	if ([string]::IsNullOrEmpty($Header))
+	{
+		Write-Warning -Message "Log header is missing or invalid"
 	}
 	else
 	{
-		if (![string]::IsNullOrEmpty($Header))
-		{
-			Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
-		}
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Directory"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
+		Add-Content -Path $LogFile -Value "# $Header"
 	}
+
+	Add-Content -Path $LogFile -Value "#`n"
 
 	return $LogFile
 }

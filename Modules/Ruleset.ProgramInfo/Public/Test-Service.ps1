@@ -55,7 +55,8 @@ PS> @("msiserver", "Spooler", "WSearch") | Test-Service
 [bool]
 
 .NOTES
-None.
+TODO: Implement accept ServiceController object, should be called InputObject, a good design needed,
+however it doesn't make much sense since the function is to test existence of a service too.
 #>
 function Test-Service
 {
@@ -73,6 +74,11 @@ function Test-Service
 		[switch] $Force
 	)
 
+	begin
+	{
+		# Keep track of already checked service signatures
+		[hashtable] $BinaryPathCache = @{}
+	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -97,6 +103,13 @@ function Test-Service
 			{
 				$BinaryPath = $Executable.Value + ".exe"
 
+				if ($BinaryPathCache["$BinaryPath"])
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Signature already checked for service binary '$BinaryPath'"
+					Write-Output $true
+					continue
+				}
+
 				# [System.Management.Automation.Signature]
 				$Signature = Get-AuthenticodeSignature -LiteralPath $BinaryPath
 
@@ -112,6 +125,7 @@ function Test-Service
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Service '$($Service.Name)' $($Signature.StatusMessage)"
 					}
 
+					$BinaryPathCache.Add($BinaryPath, $true)
 					Write-Output $true
 					continue
 				}

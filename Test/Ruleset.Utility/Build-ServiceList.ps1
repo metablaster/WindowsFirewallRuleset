@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Find-NetworkService
+Unit test for Build-ServiceList
 
 .DESCRIPTION
-Unit test for Find-NetworkService
+Unit test for Build-ServiceList
 
 .EXAMPLE
-PS> .\Find-NetworkService.ps1
+PS> .\Build-ServiceList.ps1
 
 .INPUTS
-None. You cannot pipe objects to Find-NetworkService.ps1
+None. You cannot pipe objects to Build-ServiceList.ps1
 
 .OUTPUTS
-None. Find-NetworkService.ps1 does not generate any output
+None. Build-ServiceList.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,11 +63,14 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 Enter-Test
 
-Start-Test "Find-NetworkService"
-$Result = Find-NetworkService "$ProjectRoot\Rules"
+Start-Test "Build-ServiceList"
+$Result = Build-ServiceList "$ProjectRoot\Rules"
 $Result
 
-Test-Output $Result -Command Find-NetworkService
+Start-Test "Build-ServiceList -Log"
+Build-ServiceList "$ProjectRoot\Rules" -Log
+
+Test-Output $Result -Command Build-ServiceList
 
 Update-Log
 Exit-Test

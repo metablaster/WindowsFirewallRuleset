@@ -85,6 +85,9 @@ Start-Test "Test-Service *xbox* pipeline"
 Start-Test "Test-Service FailureTest"
 Test-Service "FailureTest"
 
+Start-Test "Test-Service project rules"
+Build-ServiceList $ProjectRoot\Rules | Test-Service | Measure-Object
+
 Test-Output $Result -Command Test-Service
 
 Update-Log

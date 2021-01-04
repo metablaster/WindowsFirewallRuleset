@@ -93,11 +93,8 @@ Exports/*
 !Exports/README.md
 
 # Auto generated files
-Rules/NetworkServices.txt
-
 Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
 # Auto generated test folders
 Test/TestDrive/
-Modules/Ruleset.Compatibility/Test/TestDrive/

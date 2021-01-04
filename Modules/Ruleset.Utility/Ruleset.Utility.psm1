@@ -54,7 +54,7 @@ $PublicScripts = @(
 	"ConvertFrom-Wildcard"
 	"Select-EnvironmentVariable"
 	"Get-FileEncoding"
-	"Find-NetworkService"
+	"Build-ServiceList"
 	"Invoke-Process"
 	"Get-TypeName"
 	"Resolve-FileSystemPath"

@@ -33,7 +33,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated rule script for git and GitHub Desktop
   - Rules load into firewall if target executable exists and only if it's digitally signed (In progress...)
-  - Rules based on services will have services tested for digital signature
+  - Rules based on services will have services tested for digital signature in addition to
+  service existence test
 
 - New features
 

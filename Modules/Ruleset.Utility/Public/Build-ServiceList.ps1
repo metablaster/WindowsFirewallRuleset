@@ -28,47 +28,56 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get a list of windows services involved in rules
+Build a list of windows services involved in script rules
 
 .DESCRIPTION
-Scan all scripts in this repository and get windows service names involved in rules,
-the result is saved to file and used to verify existence of these services on target system.
+Scan all scripts in this repository and get windows service names involved in firewall rules.
+The result is saved to file and used to verify existence and digital signature of these services
+on target system.
 
 .PARAMETER Path
 Root folder name which to scan recursively
 
+.PARAMETER Log
+If specified, the list of services is also logged.
+
 .EXAMPLE
-PS> Find-NetworkService "C:\PathToRepo"
+PS> Build-ServiceList "C:\PathToRepo"
+
+.EXAMPLE
+PS> Build-ServiceList "C:\PathToRepo" -Log
 
 .INPUTS
-None. You cannot pipe objects to Find-NetworkService
+None. You cannot pipe objects to Build-ServiceList
 
 .OUTPUTS
-None. Find-NetworkService does not generate any output
+[string]
 
 .NOTES
 None.
 #>
-function Find-NetworkService
+function Build-ServiceList
 {
-	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Find-NetworkService.md")]
-	[OutputType([void])]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Build-ServiceList.md")]
+	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[SupportsWildcards()]
-		[System.IO.DirectoryInfo] $Path
+		[System.IO.DirectoryInfo] $Path,
+
+		[Parameter()]
+		[switch] $Log
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
 	[System.IO.DirectoryInfo] $Directory = Resolve-FileSystemPath $Path
-	# get-service | Where-Object -property BinaryPathName -NotLike "C:\WINDOWS\System32\svchost.exe *" | Select-Object -ExpandProperty BinaryPathName
 
 	if (!($Directory -and $Directory.Exists))
 	{
-		Write-Warning -Message "Unable to locate path '$Path'"
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "Unable to locate path '$Path'"
 		return
 	}
 
@@ -76,11 +85,11 @@ function Find-NetworkService
 	$Files = Get-ChildItem -Path $Directory -Recurse -Filter *.ps1
 	if (!$Files)
 	{
-		Write-Warning -Message "No powershell script files found in '$Directory'"
+		Write-Error -Category ObjectNotFound -Message "No powershell script files found in '$Directory'"
 		return
 	}
 
-	$Content = @()
+	$Services = @()
 	# Filter out service names from each powershell file in input folder
 	$Files | ForEach-Object {
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading file: $($_.FullName)"
@@ -88,44 +97,33 @@ function Find-NetworkService
 		Get-Content $_.FullName -Encoding $DefaultEncoding | ForEach-Object {
 			if ($_ -match "(?<=-Service )(.*)(?= -Program)")
 			{
-				$Content += $Matches[0]
+				$Services += $Matches[0]
 			}
 		}
 	}
 
-	if (!$Content)
+	if (!$Services)
 	{
-		Write-Warning -Message "No matches found in any of the rules"
+		Write-Error -Category ParserError -TargetObject $Files -Message "No matches found in any of the files"
 		return
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rid of duplicate matches and known bad values"
-	$Content = $Content | Select-Object -Unique
-	$Content = $Content | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' } | Sort-Object
+	$Services = $Services | Select-Object -Unique | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' } | Sort-Object
 
-	if (!$Content)
+	if (!$Services)
 	{
-		Write-Warning -Message "No valid service matches found"
+		Write-Error -Category InvalidResult -Message "No service matches found in any of the rules"
 		return
 	}
 
-	# File name where to save all matches
-	$File = "$ProjectRoot\Rules\NetworkServices.txt"
-
-	# If output file exists clear it, otherwise create a new file
-	if (Test-Path -Path $File)
+	if ($Log)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Clearing file: $File"
-		Clear-Content -Path $File
-	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating file: $File"
-		New-Item -ItemType File -Path $File | Out-Null
+		$HeaderStack.Push("Services involved in all firewall rules")
+		Write-LogFile -Message $Services -LogName "ServiceList" -Path $LogsFolder -Raw -Overwrite
+		$HeaderStack.Pop() | Out-Null
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing filtered services to: $File"
-	Add-Content -Encoding $DefaultEncoding -Path $File -Value $Content
-
-	Write-Information -Tags "Project" -MessageData "INFO: $($Content.Count) services involved in firewall rules"
+	Write-Information -Tags "Project" -MessageData "INFO: $($Services.Count) services involved in firewall rules"
+	Write-Output $Services
 }

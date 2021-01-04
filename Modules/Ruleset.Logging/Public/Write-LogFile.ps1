@@ -45,7 +45,7 @@ To write new log to different log or location within same script, the HeaderStac
 a new header, and popped before writing to previous log.
 
 .PARAMETER Message
-Message from which to construct "InformationRecord" and append to log file
+One or more messages from which to construct "InformationRecord" and append to log file
 
 .PARAMETER Hash
 Hash table or dictionary which to write to log file
@@ -59,9 +59,16 @@ Destination directory
 .PARAMETER LogFile
 File label that is added to current date for resulting file name
 
+.PARAMETER Raw
+If specified, the message is written directly to log file without any formatting,
+by default InformationRecord object is created from the message and written to log file.
+
+.PARAMETER Overwrite
+If specified, the log file is overwritten if it exists.
+
 .EXAMPLE
 PS> $HeaderStack.Push("My Header")
-PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message"
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message1", "Sample message 2"
 PS> $HeaderStack.Pop() | Out-Null
 
 Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
@@ -85,6 +92,12 @@ PS> $HeaderStack.Pop() | Out-Null
 Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
 Will write "Another message" InformationRecord to log C:\logs\next\Admin_15.12.20.log with a header set to "Another Header"
 
+.EXAMPLE
+PS> $HeaderStack.Push("Raw message overwrite")
+PS> Write-LogFile -Message "Raw message overwrite" -LogName "MyRawLog" -Path "C:\logs" -Raw -Overwrite
+
+Will write raw message and overwrite existing log file if it exists.
+
 .INPUTS
 None. You cannot pipe objects to Write-LogFile
 
@@ -96,12 +109,12 @@ Maybe there should be stack of labels and/or tags, but too early to see if this 
 #>
 function Write-LogFile
 {
-	[OutputType([void])]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Logging/Help/en-US/Write-LogFile.md")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, ParameterSetName = "Message")]
-		[string] $Message,
+		[string[]] $Message,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Hash")]
 		$Hash,
@@ -114,25 +127,45 @@ function Write-LogFile
 		[string[]] $Tags = "Administrator",
 
 		[Parameter()]
-		[string] $LogName = "Admin"
+		[string] $LogName = "Admin",
+
+		[Parameter(ParameterSetName = "Message")]
+		[switch] $Raw,
+
+		[Parameter()]
+		[switch] $Overwrite
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
 	# If Peek() fails you have called Pop() more times than Push()
-	$LogFile = Initialize-Log $Path -LogName $LogName -Header $HeaderStack.Peek()
+	$LogFile = Initialize-Log $Path -LogName $LogName -Header $HeaderStack.Peek() -Overwrite:$Overwrite
 
 	if ($LogFile)
 	{
 		if ($Message)
 		{
-			Write-Information -MessageData $Message -IV LocalBuffer -INFA "SilentlyContinue"
+			if ($Raw)
+			{
+				$Message | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+			}
+			else
+			{
+				$Caller = (Get-PSCallStack)[1].ScriptName
+				[InformationRecord[]] $AllRecords = @()
 
-			$Caller = (Get-PSCallStack)[1].ScriptName
-			[InformationRecord] $Record = [InformationRecord]::new($LocalBuffer, $Caller)
+				foreach ($msg in $Message)
+				{
+					Write-Information -MessageData $msg -IV LocalBuffer -INFA "SilentlyContinue"
 
-			$Record.Tags.AddRange($Tags)
-			$Record | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+					$Record = [InformationRecord]::new($LocalBuffer, $Caller)
+
+					$Record.Tags.AddRange($Tags)
+					$AllRecords += $Record
+				}
+
+				$AllRecords | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
+			}
 		}
 		else
 		{

@@ -90,14 +90,8 @@ Set-Variable -Name WarningStatus -Scope Global -Value $false
 # Prompt to set screen buffer to recommended value
 Set-ScreenBuffer 4000
 
-# Check all rules that apply to windows services
-Test-ExecutableFile $ServiceHost
-Find-NetworkService $ProjectRoot\Rules
-Confirm-FileEncoding $ProjectRoot\Rules\NetworkServices.txt
-Get-Content -Path $ProjectRoot\Rules\NetworkServices.txt -Encoding $DefaultEncoding |
-ForEach-Object {
-	Test-Service $_
-}
+# Check all rules which apply to windows services
+Build-ServiceList $ProjectRoot\Rules -Log | Test-Service | Out-Null
 Update-Log
 #endregion
 

@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Write-LogFile
 
 .DESCRIPTION
-Use Write-LogFile.ps1 as a template to test out module functions
+Test correctness of Write-LogFile function
 
 .EXAMPLE
 PS> .\Write-LogFile.ps1
@@ -66,23 +66,53 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 Enter-Test
 
 Start-Test "Write log no header"
-Write-LogFile -Tags "Test" -Message "Test no header" -LogName "TestLog1"
+Write-LogFile -Tags "Test" -Message "Test no header" -LogName "TestLog1" -Path $LogsFolder\Test
 
 Start-Test "Write log new header"
 $HeaderStack.Push("Test case header 1")
-Write-LogFile -Tags "Test" -Message "Test header 1" -LogName "TestLog2"
+Write-LogFile -Tags "Test" -Message "Test header 1" -LogName "TestLog2" -Path $LogsFolder\Test
 
 Start-Test "Write log 2nd header"
 $HeaderStack.Push("Test case header 2")
-Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3"
+Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3" -Path $LogsFolder\Test
+
+Start-Test "Write log -Raw to other log"
+$HeaderStack.Push("Raw message")
+Write-LogFile -Tags "Test" -Message "Raw message" -LogName "TestLog3" -Path $LogsFolder\Test -Raw
+$HeaderStack.Pop() | Out-Null
+
+Start-Test "Write log 2nd header after raw"
+Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3" -Path $LogsFolder\Test
 
 Start-Test "Write log previous header"
 $HeaderStack.Pop() | Out-Null
-Write-LogFile -Tags "Test" -Message "Test previous header" -LogName "TestLog4"
+Write-LogFile -Tags "Test" -Message "Test previous header" -LogName "TestLog4" -Path $LogsFolder\Test
 
 Start-Test "Write log initial header"
 $HeaderStack.Pop() | Out-Null
-Write-LogFile -Tags "Test" -Message "Test initial header" -LogName "TestLog5"
+Write-LogFile -Tags "Test" -Message "Test initial header" -LogName "TestLog5" -Path $LogsFolder\Test
+
+Start-Test "Write log -Raw"
+$HeaderStack.Push("Raw message")
+Write-LogFile -Tags "Test" -Message "Raw message" -LogName "TestLog6" -Path $LogsFolder\Test -Raw
+
+Start-Test "Write log -Raw -Overwrite"
+$HeaderStack.Pop() | Out-Null
+$HeaderStack.Push("Raw message overwrite")
+Write-LogFile -Message "Raw message overwrite" -LogName "TestLog6" -Path $LogsFolder\Test -Raw -Overwrite
+
+Start-Test "Write log -Raw"
+Write-LogFile -Tags "Test" -Message "New raw message after overwrite" -LogName "TestLog6" -Path $LogsFolder\Test -Raw
+$HeaderStack.Pop() | Out-Null
+
+Start-Test "Multiple log records"
+$HeaderStack.Push("Test case multiple messages")
+Write-LogFile -Tags "Test" -Message "message 1", "message 2", "message 3" -LogName "TestLog7" -Path $LogsFolder\Test
+
+Start-Test "Multiple raw log records"
+$HeaderStack.Push("Test case multiple messages")
+Write-LogFile -Tags "Test" -Message "message 1", "message 2", "message 3" -LogName "TestLog7" -Path $LogsFolder\Test -Raw
+$HeaderStack.Pop() | Out-Null
 
 Update-Log
 Exit-Test
