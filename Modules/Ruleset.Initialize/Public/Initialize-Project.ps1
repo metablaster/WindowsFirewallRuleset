@@ -86,7 +86,7 @@ function Initialize-Project
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-	# disabled when running scripts from SetupFirewall.ps1 script, in which case it runs only once
+	# disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
 	if (!$ProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"

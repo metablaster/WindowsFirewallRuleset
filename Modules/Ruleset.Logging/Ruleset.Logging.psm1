@@ -69,6 +69,7 @@ Write-Debug -Message "[$ThisModule] Initializing module variables"
 # To prevent callers from overwriting log headers of each other we need a stack of headers
 if (!(Get-Variable -Name HeaderStack -Scope Global -ErrorAction Ignore))
 {
+	# TODO: It would be better to have Push-Header and Pop-Header functions
 	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
 }
 

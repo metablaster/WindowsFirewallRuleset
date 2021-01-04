@@ -98,25 +98,25 @@ Specifies an array of UDP ports.
 The provider filters for and logs network traffic that matches the ports that this parameter specifies.
 
 .EXAMPLE
-PS> .\StartTrace.ps1 6 -Level 3
+PS> .\Start-PacketTrace.ps1 6 -Level 3
 
 Captures TCP traffic up to Warning level
 
 .EXAMPLE
-PS> .\StartTrace.ps1 1, 58
+PS> .\Start-PacketTrace.ps1 1, 58
 
 Captures ICMP traffic for both IPv4 and IPv6
 
 .EXAMPLE
-PS> .\StartTrace.ps1 -LayerSet "IPv4Outbound" -TCPPorts 443
+PS> .\Start-PacketTrace.ps1 -LayerSet "IPv4Outbound" -TCPPorts 443
 
 Captures Outbound IPv4 traffic to remote port 443, at WFP level
 
 .INPUTS
-None. You cannot pipe objects to StartTrace.ps1
+None. You cannot pipe objects to Start-PacketTrace.ps1
 
 .OUTPUTS
-None. StartTrace.ps1 does not generate any output
+None. Start-PacketTrace.ps1 does not generate any output
 
 .NOTES
 Unlike a Packet Capture provider, the WFP capture provider captures network traffic above the IP layer.
@@ -252,8 +252,7 @@ else
 	}
 
 	# -TruncationLength default = 128
-	Add-NetEventPacketCaptureProvider -IpProtocols $Protocol `
-		-TruncationLength 128 @Params
+	Add-NetEventPacketCaptureProvider -IpProtocols $Protocol -TruncationLength 128 @Params
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Starting session '$Name'"

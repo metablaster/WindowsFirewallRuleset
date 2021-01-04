@@ -162,7 +162,7 @@ In addition verify following variables are set to desired user
 3. TestUser
 
 Note that some of these may be auto adjusted after setting `Develop` to `$true`\
-Then restart PowerShell and run `.\SetupFirewall.ps1` to deploy firewall, or at least run
+Then restart PowerShell and run `.\Deploy-Firewall.ps1` to deploy firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
 
 Detailed description of variables is located in `Config\ProjectSettings.ps1`
@@ -362,7 +362,7 @@ Documentation and comments reside in 6 places as follows:
 
 5. In module Help folder (module online documentation)
 
-    The `Scripts` folder contains `UpdateHelp.ps1` which when run will scan comment based help and\
+    The `Scripts` folder contains `Update-HelpContent.ps1` which when run will scan comment based help and\
     generate online documentation for `Get-Help -Online` and help content for `Update-Help` on\
     target module.
 

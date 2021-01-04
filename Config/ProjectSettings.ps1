@@ -572,7 +572,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
-		# In that case for changes to take effect run Scripts\SetupProfile.ps1 and reboot system
+		# In that case for changes to take effect run Scripts\Complete-Firewall.ps1 and reboot system
 		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
 	}
 	else

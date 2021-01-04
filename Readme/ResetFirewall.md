@@ -4,7 +4,7 @@
 Applies to resetting firewall by hand after running Powershell scripts from this project.
 
 Useful if you encountered problems such as internet connectivity and you're unable to run\
-`Scripts\ResetFirewall.ps1` or if the script did not resolve your problems.
+`Scripts\Reset-Firewall.ps1` or if the script did not resolve your problems.
 
 **WARNING:** These steps will not save any GPO rules, all preferences will be gone, resetting
 Control Panel firewall leaves only default rules shipped with system and removes the rest.

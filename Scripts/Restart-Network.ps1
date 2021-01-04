@@ -63,7 +63,7 @@ first time connection or system boot such as DHCP or IGMP
 .PARAMETER Principal
 If specified also set permissions for firewall log files.
 This is needed only for non standard log files locations, for more information see
-Scripts\GrantLogs.ps1
+Scripts\Grant-Logs.ps1
 
 .PARAMETER KeepDNS
 Skip clearing DNS server IP addresses
@@ -80,19 +80,19 @@ Set adapter for maximum performance, all power management features are disabled
 By default, all supported power management features are enabled
 
 .EXAMPLE
-PS> .\RestartNetwork.ps1
+PS> .\Restart-Network.ps1
 
 .EXAMPLE
-PS> .\RestartNetwork.ps1 -KeepIP
+PS> .\Restart-Network.ps1 -KeepIP
 
 .EXAMPLE
-PS> .\RestartNetwork.ps1 MyUsername -KeepDNS -Reset
+PS> .\Restart-Network.ps1 MyUsername -KeepDNS -Reset
 
 .INPUTS
-None. You cannot pipe objects to RestartNetwork.ps1
+None. You cannot pipe objects to Restart-Network.ps1
 
 .OUTPUTS
-None. RestartNetwork.ps1 does not generate any output
+None. Restart-Network.ps1 does not generate any output
 
 .NOTES
 TODO: IP protocol parameter
@@ -685,7 +685,7 @@ else
 # Grant access to firewall logs
 if (![string]::IsNullOrEmpty($Principal))
 {
-	& "$ProjectRoot\Scripts\GrantLogs.ps1" -Principal $Principal -SkipPrompt
+	& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Principal $Principal -SkipPrompt
 }
 
 Update-Log

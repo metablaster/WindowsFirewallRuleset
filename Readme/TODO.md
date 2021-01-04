@@ -59,7 +59,7 @@ Todo's in this file are categorized into following sections:
     - Run master script on all target OS editions
     - Revisit and update `CHANGELOG.md`
     - Revisit and cleanup `TODO.md`
-    - Update markdown help and help content, run: `UpdateHelp.ps1`
+    - Update markdown help and help content, run: `Update-HelpContent.ps1`
     - Verify links to repository are pointing to master except if develop branch is wanted,
     links should be then tested on master branch.
     - There are 3 kinds of links to check:\

@@ -48,20 +48,22 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Setup firewall profile, network profile and global firewall behavior
+Conclude firewall deployment
 
 .DESCRIPTION
-Set all 3 firewall profiles, network adapter profile (default profile)
-and global firewall behavior.
+Conclude firewall deployment by setting private, domain and public firewall profile,
+default network adapter profile and global firewall behavior settings.
+Also update target GPO for changes to take effect.
+Optionally granting permissions to write and analyze firewall logs for debugging purposes.
 
 .EXAMPLE
-PS> .\SetupProfile.ps1
+PS> .\Complete-Firewall.ps1
 
 .INPUTS
-None. You cannot pipe objects to SetupProfile.ps1
+None. You cannot pipe objects to Complete-Firewall.ps1
 
 .OUTPUTS
-None. SetupProfile.ps1 does not generate any output
+None. Complete-Firewall.ps1 does not generate any output
 
 .NOTES
 None.
@@ -157,6 +159,6 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 gpupdate.exe /target:computer
 
 # Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\GrantLogs.ps1" -SkipPrompt
+& "$ProjectRoot\Scripts\Grant-Logs.ps1" -SkipPrompt
 
 Update-Log

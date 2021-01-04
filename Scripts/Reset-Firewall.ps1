@@ -51,17 +51,17 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 Reset GPO firewall to factory defaults
 
 .DESCRIPTION
-SetupFirewall script clears all GPO firewall rules and sets all GPO firewall
-parameter to their default values
+Reset-Firewall script clears all GPO firewall rules and sets all GPO firewall parameters to their
+default values
 
 .EXAMPLE
-PS> .\ResetFirewall.ps1
+PS> .\Reset-Firewall.ps1
 
 .INPUTS
-None. You cannot pipe objects to ResetFirewall.ps1
+None. You cannot pipe objects to Reset-Firewall.ps1
 
 .OUTPUTS
-None. ResetFirewall.ps1 does not generate any output
+None. Reset-Firewall.ps1 does not generate any output
 
 .NOTES
 None.

@@ -132,14 +132,14 @@ or inside folders called `External` for organizational purposes.
 
 Following table lists currently tested operating systems
 
-|         OS          |    Edition    |    Build    |  Architecture  |
-|---------------------|---------------|-------------|----------------|
-| Windows 10          | Pro           | 1809 - 20H2 |      x64       |
-| Windows 10          | Pro Education |    20H2     |      x64       |
-| Windows 10          | Enterprise    | 1809 - 20H2 |      x64       |
-| Windows 10          | Education     |    20H2     |      x64       |
-| Windows Server 2019 | Standard      |    1809     |      x64       |
-| Windows Server 2019 | Datacenter    |    1809     |      x64       |
+| OS                  | Edition       | Build       | Architecture |
+| ------------------- | ------------- | ----------- | ------------ |
+| Windows 10          | Pro           | 1809 - 20H2 | x64          |
+| Windows 10          | Pro Education | 20H2        | x64          |
+| Windows 10          | Enterprise    | 1809 - 20H2 | x64          |
+| Windows 10          | Education     | 20H2        | x64          |
+| Windows Server 2019 | Standard      | 1809        | x64          |
+| Windows Server 2019 | Datacenter    | 1809        | x64          |
 
 ***
 
@@ -197,11 +197,11 @@ Following are short warnings and notes first time user should be aware of
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose internet
 connectivity completely, if that happens, you can either temporarily allow outbound network traffic
-or run `Scripts\ResetFirewall.ps1`, to reset GPO firewall to system defaults and remove all rules.
+or run `Scripts\Reset-Firewall.ps1`, to reset GPO firewall to system defaults and remove all rules.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
-as rules from this ruleset, however **this does not apply to** `Scripts\ResetFirewall.ps1` which
+as rules from this ruleset, however **this does not apply to** `Scripts\Reset-Firewall.ps1` which
 will clear GPO rules completely and leave only those in control panel.
 - If you want to be 100% sure please export your GPO rules as explained in [Export\Import rules](#exportimport-rules)
 - You will be asked which rules to load, to minimize internet connectivity trouble you should
@@ -212,8 +212,8 @@ It will be easy to delete what you don't need in GPO, rather than later digging 
 what you have missed.
 - Default configuration will set global firewall behavior which is not configurable in GPO,
 such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
-`Scripts\SetupProfile.ps1` and take a look at `Set-NetFirewallSetting`.\
-Note that `Scripts\SetupProfile.ps1` is automatically called by `Scripts\SetupFirewall.ps1`
+`Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting`.\
+Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\Deploy-Firewall.ps1`
 - Some scripts require network adapter to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
 
@@ -230,8 +230,8 @@ script again, see [FAQ.md](Readme/FAQ.md)
 for information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,
-by running `Scripts\UnblockProject.ps1`\
-Master script `Scripts\SetupFirewall.ps1` does this in case if you forget, but initial YES/NO spam questions
+by running `Scripts\Unblock-Project.ps1`\
+Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO spam questions
 will still be present in that case.
 - If you download code to location that is under "Ransomware protection" (in Windows Defender),
 make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
@@ -298,12 +298,12 @@ something else:
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all project files first by executing the script called `Scripts\UnblockProject.ps1`,
+9. At this point you should "unblock" all project files first by executing the script called `Scripts\Unblock-Project.ps1`,
 btw. project files were blocked by Windows to prevent users from running untrusted script code
 downloaded from internet:
 
     ```powershell
-    .\Scripts\UnblockProject.ps1
+    .\Scripts\Unblock-Project.ps1
     ```
 
     If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
@@ -326,7 +326,7 @@ It is recommended to close down all other programs before running master script 
 12. Back to PowerShell console and run:
 
     ```powershell
-    .\Scripts\SetupFirewall.ps1
+    .\Scripts\Deploy-Firewall.ps1
     ```
 
     Hit enter and you will be asked questions such as what kind of rulesets you want.\
@@ -394,15 +394,15 @@ For more information about GPO see: [Configure security policy settings][configu
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `Scripts\SetupFirewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
+1. Execute `Scripts\Deploy-Firewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
 and hit enter to skip current ruleset.
 
 2. With PowerShell navigate (`cd`) to directory containing ruleset script you want and execute
 individual script.
 
-You might want to run `Scripts\SetupProfile.ps1` afterwards to apply default firewall behavior if
+You might want to run `Scripts\Complete-Firewall.ps1` afterwards to apply default firewall behavior if
 it's not already set, or you can do it manually in GPO but with limited power.
-"limited power" means `Scripts\SetupProfile.ps1` configures some firewall parameters which can't be
+"limited power" means `Scripts\Complete-Firewall.ps1` configures some firewall parameters which can't be
 adjusted in firewall GUI.
 
 In all 3 cases the script will delete all rules that match ruleset display group, before loading
@@ -425,7 +425,7 @@ experimental state.
 the rules from GPO, and set all properties to `Not configured` after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
-Deleting all rules or revetting to previous state can also be done with `Scripts\ResetFirewall.ps1`\
+Deleting all rules or revetting to previous state can also be done with `Scripts\Reset-Firewall.ps1`\
 Note that you'll also need to re-import your exported GPO rules if you had them.
 
 [Table of Contents](#table-of-contents)
@@ -437,11 +437,11 @@ If you want to export rules from GPO there are 2 methods available:
 1. Export in local group policy by clicking on `Export Policy...` menu, after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
-2. To export using PowerShell run `Scripts\ExportFirewall.ps1` which is much slower process but
+2. To export using PowerShell run `Scripts\Backup-Firewall.ps1` which is much slower process but
 unlike method from point 1 you can customize your export in almost any way you want.
 
 If you want to import rules, importing by using GPO is same as for export, and to import with
-PowerShell just run `Scripts\ImportFirewall.ps1` which will pick up your previous export file.
+PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previous export file.
 
 To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public\External`,
 which is where you'll find description on how to use export\import module functions.

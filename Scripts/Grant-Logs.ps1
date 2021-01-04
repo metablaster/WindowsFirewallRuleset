@@ -69,23 +69,23 @@ By default specified principal gets permission from local machine
 If specified, no starting confirmation prompt is present
 
 .EXAMPLE
-PS> .\GrantLogs.ps1 USERNAME
+PS> .\Grant-Logs.ps1 USERNAME
 
 .EXAMPLE
-PS> .\GrantLogs.ps1 USERNAME -Computer COMPUTERNAME
+PS> .\Grant-Logs.ps1 USERNAME -Computer COMPUTERNAME
 
 .INPUTS
-None. You cannot pipe objects to GrantLogs.ps1
+None. You cannot pipe objects to Grant-Logs.ps1
 
 .OUTPUTS
-None. GrantLogs.ps1 does not generate any output
+None. Grant-Logs.ps1 does not generate any output
 
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
 The benefit is to have special syntax coloring and filtering functionality with VSCode.
 First time setup requires turning off/on Windows firewall for current network profile in order for
 Windows firewall to start logging into new location.
-TODO: Need to verify if gpupdate is needed for first time setup and if so update SetupProfile.ps1
+TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
 TODO: Force could be used and propagated for this script, setupprofile and set-permission
 #>
 

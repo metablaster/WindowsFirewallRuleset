@@ -51,10 +51,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 Generate or update help files for all project modules
 
 .DESCRIPTION
-UpdateHelp.ps1 Updates existing or generates new help files for all modules
-that are part of "Windows Firewall Ruleset" repository
-These Help files are used for online help (Get-Help -Online) and
-updatable help for (Update-Help)
+Update-HelpContent.ps1 Updates existing or generates new help files for all modules
+that are part of "Windows Firewall Ruleset" repository.
+These Help files are used for online help (Get-Help -Online) and updatable help for (Update-Help)
 
 .PARAMETER Module
 Specify module name for which to generate help files.
@@ -68,19 +67,19 @@ Specify encoding for help files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 
 .EXAMPLE
-PS> .\UpdateHelp.ps1
+PS> .\Update-HelpContent.ps1
 
 .EXAMPLE
-PS> .\UpdateHelp.ps1 -IncrementVersion
+PS> .\Update-HelpContent.ps1 -IncrementVersion
 
 .EXAMPLE
-PS> .\UpdateHelp.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
+PS> .\Update-HelpContent.ps1 SupportedUICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
 
 .INPUTS
-None. You cannot pipe objects to UpdateHelp.ps1
+None. You cannot pipe objects to Update-HelpContent.ps1
 
 .OUTPUTS
-None. UpdateHelp.ps1 does not generate any output
+None. Update-HelpContent.ps1 does not generate any output
 
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
@@ -204,7 +203,7 @@ if (!$ModuleName)
 
 # Counters for progress
 [int32] $ProgressCount = 0
-[string] $UpgradeLogsDir = "$ProjectRoot\Logs\UpdateHelp"
+[string] $UpgradeLogsDir = "$ProjectRoot\Logs\HelpContent"
 
 # NOTE: separate folder for upgrade logs
 if (!(Test-Path -PathType Container -Path $UpgradeLogsDir))
@@ -286,7 +285,7 @@ specific subfolders
 			# NOTE: Generates blank module page if missing
 			# -Path string[] The folder must contain a module page from which this cmdlet can get the module name
 			Update-MarkdownHelpModule -Encoding $Encoding -Path $OnlineHelp -UpdateInputOutput `
-				-LogPath $UpgradeLogsDir\$Module-UpdateHelp.log -UseFullTypeName `
+				-LogPath $UpgradeLogsDir\$Module-HelpContent.log -UseFullTypeName `
 				-RefreshModulePage -Force -ModulePagePath $ModulePage |
 			Select-Object -ExpandProperty Name
 

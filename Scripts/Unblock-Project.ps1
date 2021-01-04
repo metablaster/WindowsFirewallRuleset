@@ -48,20 +48,20 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Unblock project files that were downloaded from the Internet.
+Unblock project files that were downloaded from the Internet
 
 .DESCRIPTION
 Unblock project files that were downloaded from the Internet, this is needed to
 unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
 
 .EXAMPLE
-PS> .\UnblockProject.ps1
+PS> .\Unblock-Project.ps1
 
 .INPUTS
-None. You cannot pipe objects to UnblockProject.ps1
+None. You cannot pipe objects to Unblock-Project.ps1
 
 .OUTPUTS
-None. UnblockProject.ps1 does not generate any output
+None. Unblock-Project.ps1 does not generate any output
 
 .NOTES
 If executing scripts after manual download from internet or transfer from

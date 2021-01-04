@@ -51,19 +51,19 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 Stop capturing network traffic
 
 .DESCRIPTION
-Stop capturing network traffic previously started with StartTrace.ps1
+Stop capturing network traffic previously started with Start-PacketTrace.ps1
 
 .PARAMETER Name
 Session name which to stop
 
 .EXAMPLE
-PS> .\StopTrace.ps1
+PS> .\Stop-PacketTrace.ps1
 
 .INPUTS
-None. You cannot pipe objects to StopTrace.ps1
+None. You cannot pipe objects to Stop-PacketTrace.ps1
 
 .OUTPUTS
-None. StopTrace.ps1 does not generate any output
+None. Stop-PacketTrace.ps1 does not generate any output
 
 .NOTES
 None.

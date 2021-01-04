@@ -48,10 +48,10 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Get a list of hidden firewall rule properties
+Get a list of hidden properties for specified firewall rule group
 
 .DESCRIPTION
-Get a list of hidden firewall rule properties from specified policy store, for all rules of given
+Get a list of firewall rule hidden properties from target policy store, for all rules of given
 group name and traffic direction.
 For example rules of same group from different stores might not work the same way and you want to
 ensure hidden properties are the same on both stores.
@@ -68,19 +68,19 @@ PersistentStore means from control panel firewall
 Computer name means from GPO store.
 
 .EXAMPLE
-PS> .\HiddenProperties.ps1 "Network Discovery"
+PS> .\Get-HiddenProperty.ps1 "Network Discovery"
 
 .EXAMPLE
-PS> .\HiddenProperties.ps1 "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
+PS> .\Get-HiddenProperty.ps1 "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
 
 .INPUTS
-None. You cannot pipe objects to HiddenProperties.ps1
+None. You cannot pipe objects to Get-HiddenProperty.ps1
 
 .OUTPUTS
-None. HiddenProperties.ps1 does not generate any output
+None. Get-HiddenProperty.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: This should probably be part of Ruleset.Firewall module
 #>
 
 [CmdletBinding(PositionalBinding = $false)]

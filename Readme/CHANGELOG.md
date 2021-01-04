@@ -135,7 +135,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Bugfix
 
-  - `RestartNetwork.ps1` script didn't work for virtual adapters
+  - `Restart-Network.ps1` script didn't work for virtual adapters
   - Rules for `WORKGROUP` didn't work
   - Maximum valid .NET Framework limitation in Windows PowerShell is 4.5 (4.8 not recognized)
   - Error starting dependent services because of invalid parameter name
@@ -144,7 +144,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - No longer asking to set network profile, because it results in missing profile settings in
   `Settings -> "Network & Internet"`
   - Update of help files would fail on system that never run `Update-Help`
-  - `Export-Firewall` would fail exporting by rule DisplayGroup
+  - `Backup-Firewall` would fail exporting by rule DisplayGroup
   - Force loading rules for GitHub Desktop would result in error
   - Force loading rules for NVIDIA resulted in error if no drivers are installed
 
@@ -181,7 +181,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Bugfix
 
-  - GrantLogs.ps1 did not set permission to create firewall log filter file
+  - Grant-Logs.ps1 did not set permission to create firewall log filter file
   - Checking for requirements would run for every script in development mode
   - DHCP configured computer won't connect to internet
   - Fixed various minor mistakes
@@ -336,7 +336,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Firewall log files are not separated for each profile (public, private, domain)
   - Set network profile for each connected hardware interface
   - Set/reset global firewall settings
-  - ResetFirewall script also deletes IPSec rules
+  - Reset-Firewall script also deletes IPSec rules
   - Script to unblock all files in project, for scripts that were downloaded from GitHub
     to prevent spamming YES/NO questions while executing them.
   - Updated some informational messages to be more descriptive and less annoying.

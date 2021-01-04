@@ -48,22 +48,22 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Export all firewall rules
+Export all firewall rules and settings
 
 .DESCRIPTION
-ExportFirewall.ps1 script exports all firewall rules to "Exports" folder
+Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory
 
 .EXAMPLE
-PS> .\ExportFirewall.ps1
+PS> .\Backup-Firewall.ps1
 
 .INPUTS
-None. You cannot pipe objects to ExportFirewall.ps1
+None. You cannot pipe objects to Backup-Firewall.ps1
 
 .OUTPUTS
-None. ExportFirewall.ps1 does not generate any output
+None. Backup-Firewall.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Exporting settings not implemented
 #>
 
 #region Initialization

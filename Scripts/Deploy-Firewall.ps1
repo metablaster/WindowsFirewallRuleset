@@ -48,22 +48,24 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Full firewall setup according to this repository
+Deploy firewall rules and configuration to local or remote computer.
 
 .DESCRIPTION
-Master script for full firewall setup according Windows Firewall Ruleset
+Deploy-Firewall.ps1 is a master script to deploy rules and configuration to local and/or multiple
+remote computers.
 
 .EXAMPLE
-PS> .\SetupFirewall.ps1
+PS> .\Deploy-Firewall.ps1
 
 .INPUTS
-None. You cannot pipe objects to SetupFirewall.ps1
+None. You cannot pipe objects to Deploy-Firewall.ps1
 
 .OUTPUTS
-None. SetupFirewall.ps1 does not generate any output
+None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: This script should be simplified by using Get-ChildItem to get all rule scripts.
+TODO: Logic should probably be separated into separate scripts: Deploy-FirewallRules, Complete-Profile etc.
 #>
 
 #region Initialization
@@ -73,7 +75,7 @@ None.
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # First unblock all files
-& "$ProjectRoot\Scripts\UnblockProject.ps1"
+& "$ProjectRoot\Scripts\Unblock-Project.ps1"
 
 # Check requirements
 Initialize-Project -Abort
@@ -430,7 +432,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
-& "$ProjectRoot\Scripts\SetupProfile.ps1"
+& "$ProjectRoot\Scripts\Complete-Firewall.ps1"
 
 # Set desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `

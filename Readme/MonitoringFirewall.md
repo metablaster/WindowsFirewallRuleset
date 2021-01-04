@@ -84,7 +84,7 @@ which I made myself, you can grab this configuration from `Config\mTail` folder 
 the config file is named `mtail_CC.ini`,
 just place it next to mTail executable, restart mTail and open firewall log,
 which is by default placed into `C:\Windows\System32\LogFiles\Firewall\pfirewall.log\`
-However `SetupProfile.ps1` script will instruct firewall to write separate logs for each firewall profile.
+However `Complete-Firewall.ps1` script will instruct firewall to write separate logs for each firewall profile.
 - There is another config file called `mtail.ini` which needs to be (re)placed into:
 `C:\Users\ADMINUSERNAME\Roaming\mtail\`, this config file contains configuration to monitor
 firewall activity for individual firewall profiles as well as number of personalized settings.
@@ -104,10 +104,10 @@ here is how it feels in VSCode.
 - Accept and install recommended workspace extentions for VSCode
 - Modify variable `FirewallLogsFolder` in `Config\ProjectSettings.ps1` to value `$LogsFolder\Firewall`
 - Modify variable `DefaultUser` to your account username in `Config\ProjectSettings.ps1`
-- To apply this setting restart PowerShell then run `Scripts\SetupProfile.ps1` and reboot system
+- To apply this setting restart PowerShell then run `Scripts\Complete-Firewall.ps1` and reboot system
 - Next step is to grant appropriate file system permissions to firewall logs which are now written
 to `Logs\Firewall` directory inside repository.
-- To grant permissions for your account and firewall service run `Scripts\GrantLogs.ps1 YOUR_USERNAME`\
+- To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot, any firewall setting change, or manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
 - To filter log contents open command palette `CTRL + SHIT + P`, type "Filter line by Config File"
@@ -417,7 +417,7 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts\Experiment` folder there are experimental `StartTrace.ps1` and `StopTrace.ps1` scripts
+Inside `Scripts\Experiment` folder there are experimental `Start-PacketTrace.ps1` and `Stop-PacketTrace.ps1` scripts
 which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop packet
 capture.
 

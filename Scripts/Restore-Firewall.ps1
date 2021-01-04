@@ -48,20 +48,20 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGE
 
 <#
 .SYNOPSIS
-Import all previously exported firewall rules
+Restore previously saved firewall rules and configuration
 
 .DESCRIPTION
-ImportFirewall script imports all firewall rules that were previously
-exported with ExportFirewall.ps1 script
+Restore-Firewall script imports all firewall rules and configuration that were previously exported
+with Backup-Firewall.ps1
 
 .EXAMPLE
-PS> .\ImportFirewall.ps1
+PS> .\Restore-Firewall.ps1
 
 .INPUTS
-None. You cannot pipe objects to ImportFirewall.ps1
+None. You cannot pipe objects to Restore-Firewall.ps1
 
 .OUTPUTS
-None. ImportFirewall.ps1 does not generate any output
+None. Restore-Firewall.ps1 does not generate any output
 
 .NOTES
 None.

@@ -185,7 +185,7 @@ So here is an overview to help you see what they do hopefully answering all of y
 
 2. Some global firewall settings are modified as explained here [Set-NetFirewallSetting][netfirewallsetting]
 
-    - For details on which settings are modified see `Scripts\SetupProfile.ps1`
+    - For details on which settings are modified see `Scripts\Complete-Firewall.ps1`
 
 3. PowerShell module path is updated for current session only
 
@@ -223,8 +223,8 @@ them as follows:
    not intended for end user or hard to get right, therefore you should review them first to learn
    their purpose
 
-    - `Scripts\GrantLogs.ps1`
-    - `Scripts\ResetFirewall.ps1`
+    - `Scripts\Grant-Logs.ps1`
+    - `Scripts\Reset-Firewall.ps1`
     - `Test\Ruleset.Utility\Set-Permission.ps1`
     - `...\Initialize-Module.ps1`
     - `...\Initialize-Provider.ps1`
@@ -291,7 +291,7 @@ actually bring these options back, so here are my favorites that should fix it i
 
    - If you do see this message, next step is to open up GPO firewall and quickly export your firewall
    rules and settings because once the problem is resolved importing them back will be easy and quick.
-   - Next step is to reset GPO firewall to defaults by using `Scripts\ResetFirewall.ps1`,
+   - Next step is to reset GPO firewall to defaults by using `Scripts\Reset-Firewall.ps1`,
    but don't do anything to firewall in Control Panel.
    - When done reboot system and see if this message was gone and also whether profile options are back.
    - If the message is still there, you can try to recall any security policies you did in GPO, it
