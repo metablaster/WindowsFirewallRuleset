@@ -99,6 +99,7 @@ TODO: IP protocol parameter
 TODO: Utilize all parameters for commandlets to make sure all is reset to default
 TODO: Optionally reset virtual and hidden adapters and their configuration, in which case removing
 their IP addresses might now work as expected?
+TODO: OutputType attribute
 
 .LINK
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell

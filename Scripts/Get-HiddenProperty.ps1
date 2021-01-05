@@ -81,6 +81,7 @@ None. Get-HiddenProperty.ps1 does not generate any output
 
 .NOTES
 TODO: This should probably be part of Ruleset.Firewall module
+TODO: OutputType attribute for [Selected.Microsoft.Management.Infrastructure.CimInstance]
 #>
 
 [CmdletBinding(PositionalBinding = $false)]

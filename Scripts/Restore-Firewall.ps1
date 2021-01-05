@@ -64,7 +64,7 @@ None. You cannot pipe objects to Restore-Firewall.ps1
 None. Restore-Firewall.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: CmdletBinding and OutputType
 #>
 
 #region Initialization

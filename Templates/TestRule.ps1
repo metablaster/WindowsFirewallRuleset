@@ -34,6 +34,9 @@ Unit test template to test firewall rules
 .DESCRIPTION
 Use TestRule.ps1 as a template to test out firewall rules
 
+.PARAMETER Force
+If specified, this unit test runs without prompt to allow execute
+
 .EXAMPLE
 PS> .\TestRule.ps1
 
@@ -47,9 +50,17 @@ None. TestRule.ps1 does not generate any output.
 None.
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+[OutputType([void])]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 # TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
@@ -64,7 +75,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # Setup local variables

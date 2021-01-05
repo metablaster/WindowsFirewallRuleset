@@ -67,6 +67,7 @@ None. Unblock-Project.ps1 does not generate any output
 If executing scripts after manual download from internet or transfer from
 another computer or media, you should "unblock" scripts by using this code.
 TODO: We should probably unblock only scripts, not all files.
+TODO: CmdletBinding and OutputType
 #>
 
 #Requires -Version 5.1

@@ -66,7 +66,7 @@ None. You cannot pipe objects to Complete-Firewall.ps1
 None. Complete-Firewall.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: CmdletBinding and OutputType
 #>
 
 #region Initialization

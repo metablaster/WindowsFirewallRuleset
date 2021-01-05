@@ -92,9 +92,10 @@ TODO: Force could be used and propagated for this script, setupprofile and set-p
 # For: AccessControl.FileSystemRights
 using namespace System.Security
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
+[OutputType([void])]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[Alias("UserName")]
 	[string] $User = $DefaultUser,
 

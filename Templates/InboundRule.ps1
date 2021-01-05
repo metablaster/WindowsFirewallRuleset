@@ -29,10 +29,14 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound rule template firewall rules for template program
+Inbound firewall rules template
 
 .DESCRIPTION
-Detailed descritpion of this inbound rule group or the program and it's networking requirements
+Detailed descritpion of this inbound rule group and involved programs and services including
+their networking requirements.
+
+.PARAMETER Force
+If specified, the script runs without prompt to allow execute
 
 .EXAMPLE
 PS> .\InboundRule.ps1
@@ -47,9 +51,17 @@ None. InboundRule.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+[OutputType([void])]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
@@ -63,13 +75,14 @@ Initialize-Project -Abort
 # Setup local variables
 $Group = "Template - TargetProgram"
 $PackageSID = "*"
+$PrincipalSID = Get-PrincipalSID $DefaultUser
 
 # User prompt
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -85,9 +98,6 @@ $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 # Test if installation exists on system
 if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
-	$Program = "$TargetProgramRoot\Steam.exe"
-	Test-ExecutableFile $Program
-
 	# Following lines/options are not used:
 	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)
 	# -RemoteUser $RemoteUser -RemoteMachine $RemoteMachine
@@ -98,42 +108,46 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 	# LocalOnlyMapping $false -LooseSourceMapping $false
 	# -Owner $PrincipalSID -Package $PackageSID
 
-	# Inbound TCP template
-	New-NetFirewallRule -DisplayName "Inbound TCP template" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-Description "Inbound TCP template description" |
-	Format-Output
+	$Program = "$TargetProgramRoot\TargetProgram.exe"
+	if (Test-ExecutableFile $Program)
+	{
+		# Inbound TCP template
+		New-NetFirewallRule -DisplayName "Inbound TCP template" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-Description "Inbound TCP template description" |
+		Format-Output
 
-	# Inbound UDP template
-	New-NetFirewallRule -DisplayName "Inbound UDP template" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Inbound UDP template description" |
-	Format-Output
+		# Inbound UDP template
+		New-NetFirewallRule -DisplayName "Inbound UDP template" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Inbound UDP template description" |
+		Format-Output
 
-	# Inbound ICMP template
-	New-NetFirewallRule -DisplayName "Inbound ICMP template" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-Description "Inbound ICMP template description" |
-	Format-Output
+		# Inbound ICMP template
+		New-NetFirewallRule -DisplayName "Inbound ICMP template" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-Description "Inbound ICMP template description" |
+		Format-Output
+	}
 
 	# Inbound StoreApp TCP template
 	New-NetFirewallRule -DisplayName "Inbound StoreApp TCP template" `

@@ -29,21 +29,21 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Script template
+A brief description of the function or script.
 
 .DESCRIPTION
-A detailed description of the script.
-This keyword can be used only once in each topic.
+A detailed description of the function or script.
 
 .PARAMETER ParameterName
-The description of a parameter. Add a ".PARAMETER" keyword for each parameter in the script syntax.
+The description of a parameter.
+Add a ".PARAMETER" keyword for each parameter in the function or script.
 
 .EXAMPLE
-A sample command that uses the script, optionally followed by sample output and a description.
+A sample command that uses the function or script, optionally followed by sample output and a description.
 Repeat this keyword for each example.
 
 .INPUTS
-The Microsoft .NET Framework types of objects that can be piped to the script.
+The Microsoft .NET Framework types of objects that can be piped to the function or script.
 You can also include a description of the input objects.
 
 .OUTPUTS
@@ -51,24 +51,35 @@ The .NET Framework type of the objects that the cmdlet returns.
 You can also include a description of the returned objects.
 
 .NOTES
-Additional information about the script.
-NOTE: All of the features of function parameters, including the Parameter attribute and its named arguments,
-are also valid in scripts.
-NOTE: The OutputType attribute identifies the .NET Framework types returned by a cmdlet, function, or script.
-NOTE: Script help can be preceded in the script only by comments and blank lines.
-NOTE: If the first item in the script body (after the help) is a function declaration,
+Additional information about the function or script.
+
+Script and comment based help design rules:
+1. All of the features of function parameters, including the Parameter attribute and its named
+arguments, are also valid in scripts.
+2. The script can have begin/process/end blocks to provide pipeline supprot but there can be no
+statement outside the B/P/E blocks except param block, using directive and #Requires statements.
+3. The #Requires statements can appear on any line in a script
+4. A "using" statement must appear before any other statements in a script.
+5. The OutputType attribute identifies the .NET Framework types returned by a cmdlet, function, or script.
+6. Script help can be preceded in the script only by comments and blank lines, #Requires statements
+can be considered also as "comments" in this context.
+7. For script help, if the first item in the script body (after the help) is a function declaration,
 there must be at least two blank lines between the end of the script help and the function declaration.
+8. For function help, there cannot be more than one blank line between the last line of the function
+help and the function keyword.
+9. There must be at least one blank line between the last non-help comment line and the beginning of
+the comment-based help.
 
 .LINK
 The name of a related topic.
-The value appears on the line below the ".LINK" keyword and must be
-preceded by a comment symbol # or included in the comment block.
+The value appears on the line below the ".LINK" keyword and must be preceded by a comment symbol #
+or included in the comment block.
 
 Repeat the .LINK keyword for each related topic.
 This content appears in the Related Links section of the help topic.
 
-The .LINK keyword content can also include a Uniform Resource Identifier (URI)
-to an online version of the same help topic.
+The .LINK keyword content can also include a Uniform Resource Identifier (URI) to an online version
+of the same help topic.
 
 The online version opens when you use the Online parameter of Get-Help.
 The URI must begin with "http" or "https".
@@ -88,25 +99,31 @@ This content appears when the Get-Help command includes the Component parameter 
 -Component parameter displays commands with the specified component value, such as "Exchange"
 
 .ROLE
-The user role for the help topic.
+The name of the user role for the help topic.
 This content appears when the Get-Help command includes the Role parameter of Get-Help.
 -Role parameter displays help customized for the specified user role.
 The role that the user plays in an organization.
 
 .FUNCTIONALITY
-The intended use of the function. This content appears when the Get-Help command includes
-the Functionality parameter of Get-Help.
+The keywords that describe the intended use of the function.
+This content appears when the Get-Help command includes the Functionality parameter of Get-Help.
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
+# TODO: Remove using statement and/or elevation requirement
+using namespace System
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding()]
 [OutputType([void])]
-param ()
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
 #region Initialization
-#Requires -Version 5.1
-# TODO: Adjust path to project settings and elevation requirement
-#Requires -RunAsAdministrator
+# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -124,7 +141,7 @@ $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 # TODO: Replace TemplateContext variable
 Update-Context $TemplateContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Update-Log

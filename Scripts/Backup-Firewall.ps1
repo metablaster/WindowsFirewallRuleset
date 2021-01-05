@@ -64,6 +64,7 @@ None. Backup-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Exporting settings not implemented
+TODO: CmdletBinding and OutputType
 #>
 
 #region Initialization

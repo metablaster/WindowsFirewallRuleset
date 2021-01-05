@@ -53,12 +53,15 @@ Prompt help menu for default action
 Prompt help menu for deny action
 
 .PARAMETER YesToAll
-True if user selects YesToAll.
+Will be set to true if user selects YesToAll.
 If this is already true, Approve-Execute will bypass the prompt and return true.
 
 .PARAMETER NoToAll
-true if user selects NoToAll.
+Will be set to true if user selects NoToAll.
 If this is already true, Approve-Execute will bypass the prompt and return false.
+
+.PARAMETER Force
+If specified, this function does nothing and returns true
 
 .EXAMPLE
 PS> Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
@@ -102,10 +105,23 @@ function Approve-Execute
 		[ref] $YesToAll,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
-		[ref] $NoToAll
+		[ref] $NoToAll,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+
+	if ($Force)
+	{
+		if ($null -ne $YesToAll)
+		{
+			$YesToAll.Value = $true
+		}
+
+		return $true
+	}
 
 	# The index of the label in the Choices to be presented to the user as the default choice
 	# NOTE: Converts switch to int32, if Unsafe is specified it's 1, otherwise it's 0
@@ -121,7 +137,7 @@ function Approve-Execute
 	$Choices += $AcceptChoice # Decision 0
 	$Choices += $DenyChoice # Decision 1
 
-	if ($null -ne $YesToAll)
+	if ($PSCmdlet.ParameterSetName -eq "ToAll")
 	{
 		if ($YesToAll.Value -eq $true) { return $true }
 		if ($NoToAll.Value -eq $true) { return $false }

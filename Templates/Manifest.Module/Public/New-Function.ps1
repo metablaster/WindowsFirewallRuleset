@@ -29,7 +29,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-A brief description of the function.
+A brief description of this function.
 This keyword can be used only once in each topic.
 
 .DESCRIPTION
@@ -39,6 +39,9 @@ This keyword can be used only once in each topic.
 .PARAMETER ParameterName
 The description of a parameter.
 Repeat ".PARAMETER" keyword for each parameter.
+
+.PARAMETER Force
+The description of Force parameter.
 
 .EXAMPLE
 PS> New-Function
@@ -62,19 +65,21 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 #>
 function New-Function
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSReviewUnusedParameter", "", Justification = "This is template function")]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string] $ParameterName
+		[string] $ParameterName,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	begin
 	{
 	}
+
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -86,7 +91,7 @@ function New-Function
 			# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
 			# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
 			$CallReason
-			if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
+			if ($Force -or $PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
 			{
 				# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
 				# Performing the operation "Template MESSAGE" on target "Template TARGET"
@@ -97,9 +102,12 @@ function New-Function
 				# "Template MESSAGE"
 
 				$CallReason
-				return $null
 			}
 		}
+	}
+
+	end
+	{
 	}
 }
 

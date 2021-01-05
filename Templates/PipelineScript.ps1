@@ -49,11 +49,11 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGEL
 
 <#
 .SYNOPSIS
-Script template.
+Script template with pipeline support.
 A brief description of the script.
 
 .DESCRIPTION
-Use ScriptTemplate.ps1 as a template to write scripts.
+Use PipelineScript.ps1 as a template to write scripts with pipeline support.
 A detailed description of the script.
 
 .PARAMETER Force
@@ -61,18 +61,20 @@ The description of a parameter.
 Repeat ".PARAMETER" keyword for each parameter.
 
 .EXAMPLE
-PS> .\ScriptTemplate.ps1
+PS> .\PipelineScript.ps1
 
 Repeat ".EXAMPLE" keyword for each example
 
 .INPUTS
-None. You cannot pipe objects to ScriptTemplate.ps1
+None. You cannot pipe objects to PipelineScript.ps1
 
 .OUTPUTS
-None. ScriptTemplate.ps1 does not generate any output
+None. PipelineScript.ps1 does not generate any output
 
 .NOTES
 None.
+Syntax to write scripts with pipeline support is different, for more information about design rules
+see notes section in Scripts\BlankTemplate.ps1
 #>
 
 # TODO: Remove using statement and/or elevation requirement
@@ -88,46 +90,55 @@ param (
 	[switch] $Force
 )
 
-#region Initialization
-# TODO: Adjust path to project settings
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-# TODO: Include modules and scripts as needed
-. $PSScriptRoot\ContextSetup.ps1
-
-# User prompt
-# TODO: Update command line help messages
-$Accept = "Template accept help message"
-$Deny = "Abort operation, template deny help message"
-Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
-
-# Setup local variables
-# TODO: define or remove variables
-$TemplateVariable = ""
-
-# TODO: Update confirm parameters
-# "TARGET", "MESSAGE", "OPERATION", [ref]$reason
-# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
-# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
-if ($Force -or $PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $TemplateVariable))
+begin
 {
-	# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
-	# Performing the operation "Template MESSAGE" on target "Template TARGET"
-	#
-	# OR
-	#
-	# "Template OPERATION"
-	# "Template MESSAGE"
+	#region Initialization
+	# TODO: Adjust path to project settings
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
-	$TemplateVariable
+	# Check requirements
+	Initialize-Project -Abort
+	Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+
+	# Imports
+	# TODO: Include modules and scripts as needed
+	. $PSScriptRoot\ContextSetup.ps1
+
+	# User prompt
+	# TODO: Update command line help messages
+	$Accept = "Template accept help message"
+	$Deny = "Abort operation, template deny help message"
+	Update-Context $ScriptContext $ThisScript
+	if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+	#endregion
+
+	# Setup local variables
+	# TODO: define or remove variables
+	$TemplateVariable = ""
 }
 
-Update-Log
+process
+{
+	# TODO: Update confirm parameters
+	# "TARGET", "MESSAGE", "OPERATION", [ref]$reason
+	# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
+	# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
+	if ($Force -or $PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $TemplateVariable))
+	{
+		# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
+		# Performing the operation "Template MESSAGE" on target "Template TARGET"
+		#
+		# OR
+		#
+		# "Template OPERATION"
+		# "Template MESSAGE"
+
+		$TemplateVariable
+	}
+}
+
+end
+{
+	Update-Log
+}

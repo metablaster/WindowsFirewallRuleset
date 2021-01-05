@@ -129,6 +129,7 @@ https://docs.microsoft.com/en-us/windows/win32/wes/consuming-events
 #>
 
 [CmdletBinding(PositionalBinding = $false)]
+[OutputType([void])]
 param (
 	[Parameter()]
 	[ValidateSet("Inbound", "Outbound", "Any")]

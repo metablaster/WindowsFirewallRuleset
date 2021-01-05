@@ -9,6 +9,7 @@ LONG DESCRIPTION
 	A detailed, full description of the subject or purpose of the module.
 
 VARIABLES
+	A list of exported variables and their purpose.
 
 EXAMPLES
 	Examples of how to use the module or how the subject feature works in practice.

@@ -32,8 +32,11 @@ SOFTWARE.
 Unit test for Test-Function or Test-Script
 
 .DESCRIPTION
-Test correctness of Test-Function or Test-Script
+Test correctness of Test-Function function or Test-Script.ps1 script
 Use TestTemplate.ps1 as a template to test out scripts and module functions
+
+.PARAMETER Force
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
 PS> .\TestTemplate.ps1
@@ -50,18 +53,20 @@ TODO: Common parameters, Verbose, Debug etc. don't work or are overridden by Pro
 Make it possible to run test with verbose or debug flag
 #>
 
+# TODO: Remove using statement and/or elevation requirement
+using namespace System
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding()]
 [OutputType([void])]
 param (
-	# TODO: Remove if not needed or test is safe
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-#Requires -Version 5.1
-# TODO: Adjust path to project settings and elevation requirement
-#Requires -RunAsAdministrator
+# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -75,7 +80,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
 Enter-Test
@@ -84,9 +89,9 @@ Enter-Test
 # $private:PSDefaultParameterValues.Add("Test-Function:Parameter", Value)
 
 # TODO: Keep this check if this test is:
-# 1. potentially dangerous
-# 2. it should not be part of RunAllTests.ps1
-# 3. it takes too much time to complete
+# 1. Experimental or potentially dangerous
+# 2. It should not be executed by RunAllTests.ps1 by default
+# 3. It takes too much time to complete
 if ($Force -or $PSCmdlet.ShouldContinue("Template Target", "Accept dangerous unit test"))
 {
 	Start-Test "Test-Function"

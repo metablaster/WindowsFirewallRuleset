@@ -123,6 +123,7 @@ Unlike a Packet Capture provider, the WFP capture provider captures network traf
 TODO: WFP capture doesn't work because:
 "A general error occurred that is not covered by a more specific error code"
 TODO: More parameters could be customized, see links for more info
+TODO: OutputType attribute
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/new-neteventsession?view=win10-ps

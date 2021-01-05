@@ -66,7 +66,7 @@ None. You cannot pipe objects to Stop-PacketTrace.ps1
 None. Stop-PacketTrace.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: OutputType attribute
 #>
 
 [CmdletBinding()]
