@@ -50,8 +50,6 @@ merchantability, fitness for a particular purpose and non-infringement.
 or derivative works that you create that run on a Microsoft Windows operating system product.
 #>
 
-#Requires -Version 5.1
-
 <#
 .SYNOPSIS
 Fetches "Preference" variable values from the caller's scope.
@@ -133,6 +131,8 @@ https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-pref
 .LINK
 https://gallery.technet.microsoft.com/scriptcenter/Inherit-Preference-82343b9d
 #>
+
+#Requires -Version 5.1
 
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "AllVariables")]
 [OutputType([void])]

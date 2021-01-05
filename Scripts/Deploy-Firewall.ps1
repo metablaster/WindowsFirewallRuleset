@@ -54,6 +54,9 @@ Deploy firewall rules and configuration to local or remote computer.
 Deploy-Firewall.ps1 is a master script to deploy rules and configuration to local and/or multiple
 remote computers.
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Deploy-Firewall.ps1
 
@@ -66,12 +69,19 @@ None. Deploy-Firewall.ps1 does not generate any output
 .NOTES
 TODO: This script should be simplified by using Get-ChildItem to get all rule scripts.
 TODO: Logic should probably be separated into separate scripts: Deploy-FirewallRules, Complete-Profile etc.
-TODO: CmdletBinding and OutputType
+TODO: OutputType attribute
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -83,7 +93,11 @@ Initialize-Project -Abort
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
-# Imports
+# User prompt
+$Accept = "Deploy firewall to target computer"
+$Deny = "Abort operation"
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 # Clear errors, error and warning status
 $Error.Clear()

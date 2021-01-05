@@ -56,6 +56,9 @@ default network adapter profile and global firewall behavior settings.
 Also update target GPO for changes to take effect.
 Optionally granting permissions to write and analyze firewall logs for debugging purposes.
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Complete-Firewall.ps1
 
@@ -66,12 +69,19 @@ None. You cannot pipe objects to Complete-Firewall.ps1
 None. Complete-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: CmdletBinding and OutputType
+TODO: OutputType attribute
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -82,13 +92,11 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 
-# Setup local variables
+# User prompt
 $Accept = "Set global firewall behavior, adjust firewall settings and set up firewall and network profile"
 $Deny = "Skip operation, no change will be done to firewall or network profile"
-
-# User prompt
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 #
@@ -159,6 +167,6 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 gpupdate.exe /target:computer
 
 # Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\Grant-Logs.ps1" -SkipPrompt
+& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Force:$Force
 
 Update-Log

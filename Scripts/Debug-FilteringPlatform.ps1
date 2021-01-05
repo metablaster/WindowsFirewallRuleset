@@ -128,6 +128,10 @@ https://docs.microsoft.com/en-us/archive/blogs/ashleymcglone/forensics-automatin
 https://docs.microsoft.com/en-us/windows/win32/wes/consuming-events
 #>
 
+#Requires -Version 5.1
+#requires -PSEdition Desktop
+#Requires -RunAsAdministrator
+
 [CmdletBinding(PositionalBinding = $false)]
 [OutputType([void])]
 param (
@@ -151,9 +155,6 @@ param (
 )
 
 #region Initialization
-#Requires -Version 5.1
-#requires -PSEdition Desktop
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -163,12 +164,6 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-
-# User prompt
-$Accept = "Parse firewall auditing entries from event viewer and write to log file"
-$Deny = "Abort operation"
-Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 # Setup local variables

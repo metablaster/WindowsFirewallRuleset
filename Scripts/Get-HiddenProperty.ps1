@@ -84,6 +84,8 @@ TODO: This should probably be part of Ruleset.Firewall module
 TODO: OutputType attribute for [Selected.Microsoft.Management.Infrastructure.CimInstance]
 #>
 
+#Requires -Version 5.1
+
 [CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter(Mandatory = $true, Position = 0)]
@@ -98,7 +100,6 @@ param (
 )
 
 #region Initialization
-#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -108,12 +109,6 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
-
-# User prompt
-$Accept = "Generate a list of firewall rules with hidden properties"
-$Deny = "Abort operation, no list of firewall rules is made"
-Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 #endregion
 
 $PredefinedRules = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup $DisplayGroup -Direction $Direction

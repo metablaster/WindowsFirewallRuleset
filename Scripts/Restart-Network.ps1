@@ -79,6 +79,9 @@ Reset all network properties in addition to restarting network
 Set adapter for maximum performance, all power management features are disabled
 By default, all supported power management features are enabled
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Restart-Network.ps1
 
@@ -105,6 +108,9 @@ TODO: OutputType attribute
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell
 #>
 
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter(Position = 0)]
@@ -120,12 +126,13 @@ param (
 	[switch] $Reset,
 
 	[Parameter()]
-	[switch] $Performance
+	[switch] $Performance,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-#Requires -Version 5.1
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -137,15 +144,18 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
-$Accept = "Restart all connected network adapters and reassign IP"
 $Deny = "Abort operation, no change to network configuration is done"
 if ($Reset)
 {
 	$Accept = "Reset all connected network adapters and network settings"
 }
+else
+{
+	$Accept = "Restart all connected network adapters and reassign IP"
+}
 
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 <#
@@ -173,6 +183,12 @@ Select-AdapterAlias Disabled
 .EXAMPLE
 Select-AdapterAlias Operational -InterfaceAlias @("Ethernet", "Realtek WI-FI")
 
+.INPUTS
+None. You cannot pipe objects to Select-AdapterAlias
+
+.OUTPUTS
+[string]
+
 .NOTES
 We select InterfaceAlias instead of adapter objects because of non consistent CIM parameters
 used by commandlets in this script resulting in errors
@@ -182,7 +198,7 @@ TODO: This functionality should be part of Select-IPInterface somehow if possibl
 function Select-AdapterAlias
 {
 	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([string[]])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("Removed", "Disabled", "Enabled", "Operational", "Connected")]
@@ -345,6 +361,12 @@ Wait-Adapter Enabled -InterfaceAlias "Ethernet"
 .EXAMPLE
 Wait-Adapter Connected -InterfaceAlias "Ethernet" -Seconds 20
 
+.INPUTS
+None. You cannot pipe objects to Wait-Adapter
+
+.OUTPUTS
+None. Wait-Adapter does not generate any output
+
 .NOTES
 TODO: This script won't work if connecting via virtual switch, in which case physical adapter has
 no IP address assigned.
@@ -352,7 +374,7 @@ no IP address assigned.
 function Wait-Adapter
 {
 	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([string])]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet("Removed", "Disabled", "Enabled", "Operational", "Connected")]

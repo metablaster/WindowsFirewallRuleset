@@ -56,6 +56,12 @@ Stop capturing network traffic previously started with Start-PacketTrace.ps1
 .PARAMETER Name
 Session name which to stop
 
+.PARAMETER WFP
+TODO: document parameter
+
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Stop-PacketTrace.ps1
 
@@ -69,18 +75,22 @@ None. Stop-PacketTrace.ps1 does not generate any output
 TODO: OutputType attribute
 #>
 
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding()]
 param (
 	[Parameter()]
 	[string] $Name = "TrafficDump",
 
 	[Parameter()]
-	[switch] $WFP
+	[switch] $WFP,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-#Requires -Version 5.1
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -95,7 +105,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 $Accept = "Start capturing network traffic into a file for analysis"
 $Deny = "Abort operation, no capture is started"
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 if (Get-NetEventSession -Name $Name -EA Ignore)

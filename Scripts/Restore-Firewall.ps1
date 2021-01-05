@@ -54,6 +54,9 @@ Restore previously saved firewall rules and configuration
 Restore-Firewall script imports all firewall rules and configuration that were previously exported
 with Backup-Firewall.ps1
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Restore-Firewall.ps1
 
@@ -64,12 +67,19 @@ None. You cannot pipe objects to Restore-Firewall.ps1
 None. Restore-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: CmdletBinding and OutputType
+TODO: OutputType attribute
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -80,13 +90,11 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 
-# Setup local variables
+# User prompt
 $Accept = "Accpet importing firewall rules and settings from file"
 $Deny = "Abort operation, no firewall rules or settings will be imported"
-
-# User prompt
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules

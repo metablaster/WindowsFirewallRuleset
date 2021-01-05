@@ -97,6 +97,9 @@ The provider filters for and logs network traffic that matches the ports that th
 Specifies an array of UDP ports.
 The provider filters for and logs network traffic that matches the ports that this parameter specifies.
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Start-PacketTrace.ps1 6 -Level 3
 
@@ -138,6 +141,9 @@ https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-net
 https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/add-neteventprovider?view=win10-ps
 #>
 
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol")]
 param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Protocol")]
@@ -167,12 +173,13 @@ param (
 	[uint16[]] $TCPPorts,
 
 	[Parameter(ParameterSetName = "WFP")]
-	[uint16[]] $UDPPorts
+	[uint16[]] $UDPPorts,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-#Requires -Version 5.1
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -187,7 +194,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 $Accept = "Start capturing network traffic into a file for analysis"
 $Deny = "Abort operation, no capture is started"
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 if (!(Test-Path -Path $LogsFolder\Audit -PathType Container))

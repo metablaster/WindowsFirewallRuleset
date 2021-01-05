@@ -67,16 +67,18 @@ None. Unblock-Project.ps1 does not generate any output
 If executing scripts after manual download from internet or transfer from
 another computer or media, you should "unblock" scripts by using this code.
 TODO: We should probably unblock only scripts, not all files.
-TODO: CmdletBinding and OutputType
 #>
 
 #Requires -Version 5.1
+
+[CmdletBinding()]
+[OutputType([void])]
+param ()
+
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
 Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
-Get-ChildItem $ProjectRoot -Recurse | Unblock-File
 
-Write-Information -Tags "User" -MessageData "INFO: Project files have been unblocked"
+Get-ChildItem $ProjectRoot -Recurse | Unblock-File
+Write-Verbose -Message "[$($MyInvocation.InvocationName)] Project files have been unblocked"
 
 Update-Log

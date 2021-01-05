@@ -54,6 +54,9 @@ Reset GPO firewall to factory defaults
 Reset-Firewall script clears all GPO firewall rules and sets all GPO firewall parameters to their
 default values
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Reset-Firewall.ps1
 
@@ -64,12 +67,19 @@ None. You cannot pipe objects to Reset-Firewall.ps1
 None. Reset-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: CmdletBinding and OutputType
+TODO: OutputType attribute
 #>
 
-#region Initialization
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -80,13 +90,11 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 
-# Setup local variables
+# User prompt
 $Accept = "All firewall rules and settings will be restored to factory defaults"
 $Deny = "Abort operation, no change will be done to firewall"
-
-# User prompt
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 #

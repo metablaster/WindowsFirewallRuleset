@@ -66,6 +66,9 @@ Supported UI cultures for which to generate help files, the default is en-US
 Specify encoding for help files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Update-HelpContent.ps1
 
@@ -97,6 +100,8 @@ TODO: Log header is not inserted into logs
 TODO: OutputType attribute
 #>
 
+#Requires -Version 5.1
+
 [CmdletBinding(PositionalBinding = $false)]
 param (
 	[Parameter(Position = 0)]
@@ -109,11 +114,13 @@ param (
 	),
 
 	[Parameter()]
-	$Encoding = $null
+	$Encoding = $null,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -134,8 +141,7 @@ if (!$Develop)
 [PSModuleInfo[]] $PlatyModule = Get-Module -Name platyPS -ListAvailable
 if ($null -eq $PlatyModule)
 {
-	Write-Error -Category ObjectNotFound -TargetObject $PlatyModule `
-		-Message "Module platyPS needs to be installed to run this script"
+	Write-Error -Category ObjectNotFound -Message "Module platyPS needs to be installed to run this script"
 	return
 }
 
@@ -145,6 +151,21 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
+
+# User prompt
+$Deny = "Abort operation, no change to help files is made"
+if ($Module)
+{
+	$Accept = "Generate new or update existing help files for requested modules"
+}
+else
+{
+	$Accept = "Generate new or update existing help files for all project modules"
+}
+
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
 
 <#
 .SYNOPSIS
@@ -178,18 +199,6 @@ function Format-Document
 	# TODO: new line is inserted in module page, NoNewline ignored
 	Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
 }
-
-# User prompt
-$Accept = "Generate new or update existing help files for all project modules"
-$Deny = "Abort operation, no change to help files is made"
-if ($Module)
-{
-	$Accept = "Generate new or update existing help files for requested modules"
-}
-
-Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
-#endregion
 
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 

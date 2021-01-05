@@ -66,7 +66,7 @@ Principal domain for which to grant permission.
 By default specified principal gets permission from local machine
 
 .PARAMETER Force
-If specified, no starting confirmation prompt is present
+If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
 PS> .\Grant-Logs.ps1 USERNAME
@@ -86,11 +86,12 @@ The benefit is to have special syntax coloring and filtering functionality with 
 First time setup requires turning off/on Windows firewall for current network profile in order for
 Windows firewall to start logging into new location.
 TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
-TODO: Force could be used and propagated for this script, setupprofile and set-permission
 #>
 
 # For: AccessControl.FileSystemRights
 using namespace System.Security
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding(PositionalBinding = $false)]
 [OutputType([void])]
@@ -108,8 +109,6 @@ param (
 )
 
 #region Initialization
-#Requires -Version 5.1
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -121,13 +120,10 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
-if (!$Force)
-{
-	$Accept = "Grant permission to read firewall log files until system reboot"
-	$Deny = "Abort operation, no permission change is done on firewall logs"
-	Update-Context $ScriptContext $ThisScript
-	if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
-}
+$Accept = "Grant permission to read firewall log files until system reboot"
+$Deny = "Abort operation, no permission change is done on firewall logs"
+Update-Context $ScriptContext $ThisScript
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
@@ -168,10 +164,10 @@ $FullControl = [AccessControl.FileSystemRights]::FullControl
 # Grant "FullControl" to firewall service for logs folder
 Write-Information -Tags "User" -MessageData "INFO: Granting full control to firewall service for log directory"
 
-Set-Permission $TargetFolder -Owner "System" | Out-Null
-Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -Owner "System" -Force:$Force | Out-Null
+Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected -Force:$Force | Out-Null
+Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected -Force:$Force | Out-Null
+Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected -Force:$Force | Out-Null
 
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
@@ -188,13 +184,13 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
-	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
+	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl -Force:$Force)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl -Force:$Force | Out-Null
 		}
 	}
 }

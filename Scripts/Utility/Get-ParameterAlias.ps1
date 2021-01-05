@@ -130,6 +130,7 @@ TODO: Some parameter aliases are not retrieved and it's not clear if this is a b
 #>
 
 #Requires -Version 5.1
+
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSAvoidGlobalVars", "", Scope = "Function", Justification = "Required for simplicity")]
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
@@ -242,6 +243,7 @@ begin
 		$ImportParams.add("SkipEditionCheck", $true)
 	}
 }
+
 process
 {
 	Write-Debug -Message "params($($PSBoundParameters.Values))"
@@ -368,6 +370,7 @@ process
 		}
 	}
 }
+
 end
 {
 	if ($Unique -and $UniqueAlias.Count)

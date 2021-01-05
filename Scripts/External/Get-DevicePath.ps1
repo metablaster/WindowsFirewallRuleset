@@ -43,6 +43,8 @@ TODO: Make it work with PowerShell Core, see: Add-WinFunction
 #>
 
 using namespace System
+#Requires -Version 5.1
+#requires -PSEdition Desktop
 
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None")]
 [OutputType([string], [System.Management.Automation.PSCustomObject])]
@@ -55,8 +57,6 @@ param (
 )
 
 #region Initialization
-#Requires -Version 5.1
-#requires -PSEdition Desktop
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 

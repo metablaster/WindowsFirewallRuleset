@@ -53,6 +53,9 @@ Export all firewall rules and settings
 .DESCRIPTION
 Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Backup-Firewall.ps1
 
@@ -64,11 +67,18 @@ None. Backup-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Exporting settings not implemented
-TODO: CmdletBinding and OutputType
+TODO: OutputType attribute
 #>
 
-#region Initialization
 #Requires -Version 5.1
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -79,13 +89,11 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Imports
 . $PSScriptRoot\ContextSetup.ps1
 
-# Setup local variables
+# User prompt
 $Accept = "Accpet exporting firewall rules and settings to file"
 $Deny = "Abort operation, no firewall rules or settings will be exported"
-
-# User prompt
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # NOTE: export speed is 10 rules per minute
