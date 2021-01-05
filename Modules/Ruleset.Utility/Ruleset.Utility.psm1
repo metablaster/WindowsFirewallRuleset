@@ -38,26 +38,33 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 #
 
 $PrivateScripts = @(
-	"External\Set-Privilege"
+	"Set-Privilege"
 )
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. "$PSScriptRoot\Private\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Private\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Private\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PublicScripts = @(
 	"Approve-Execute"
+	"Build-ServiceList"
 	"Compare-Path"
 	"Confirm-FileEncoding"
 	"ConvertFrom-Wildcard"
-	"Select-EnvironmentVariable"
 	"Get-FileEncoding"
-	"Build-ServiceList"
-	"Invoke-Process"
 	"Get-TypeName"
+	"Invoke-Process"
 	"Resolve-FileSystemPath"
+	"Select-EnvironmentVariable"
 	"Set-NetworkProfile"
 	"Set-Permission"
 	"Set-ScreenBuffer"
@@ -67,8 +74,15 @@ $PublicScripts = @(
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. "$PSScriptRoot\Public\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Public\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 #

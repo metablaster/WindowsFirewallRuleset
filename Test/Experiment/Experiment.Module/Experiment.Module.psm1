@@ -36,14 +36,22 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 #
 # Script imports
 #
+Write-Debug -Message "[$ThisModule] Importing module scripts"
 
 $ScriptsToProcess = @(
 )
 
 foreach ($Script in $ScriptsToProcess)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Scripts\$Script.ps1"
-	. "$PSScriptRoot\Scripts\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Scripts\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Scripts\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PrivateScripts = @(
@@ -51,8 +59,15 @@ $PrivateScripts = @(
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. "$PSScriptRoot\Private\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Private\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Private\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PublicScripts = @(
@@ -61,8 +76,15 @@ $PublicScripts = @(
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. "$PSScriptRoot\Public\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Public\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 #

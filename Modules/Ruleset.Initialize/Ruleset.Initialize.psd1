@@ -106,10 +106,10 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Initialize-Project"
-		"Initialize-Service"
 		"Initialize-Module"
+		"Initialize-Project"
 		"Initialize-Provider"
+		"Initialize-Service"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

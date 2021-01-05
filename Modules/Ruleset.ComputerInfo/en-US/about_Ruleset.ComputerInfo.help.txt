@@ -36,7 +36,7 @@ EXAMPLES
 
 KEYWORDS
 	ComputerInfo
-	WindowsInfo
+	SystemInfo
 	Computer
 	NetworkInfo
 

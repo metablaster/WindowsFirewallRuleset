@@ -107,8 +107,8 @@ SOFTWARE.
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
 		"ConvertFrom-OSBuild"
-		"Get-InterfaceBroadcast"
 		"Get-InterfaceAlias"
+		"Get-InterfaceBroadcast"
 		"Get-SystemSKU"
 		"Resolve-Host"
 		"Select-IPInterface"
@@ -140,19 +140,19 @@ SOFTWARE.
 		"en-US\Ruleset.ComputerInfo-help.xml"
 		"Help\en-US\about_Ruleset.ComputerInfo.md"
 		"Help\en-US\ConvertFrom-OSBuild.md"
-		"Help\en-US\Get-InterfaceBroadcast.md"
 		"Help\en-US\Get-InterfaceAlias.md"
+		"Help\en-US\Get-InterfaceBroadcast.md"
 		"Help\en-US\Get-SystemSKU.md"
-		"Help\en-US\Ruleset.ComputerInfo.md"
 		"Help\en-US\Resolve-Host.md"
+		"Help\en-US\Ruleset.ComputerInfo.md"
 		"Help\en-US\Select-IPInterface.md"
 		"Help\en-US\Test-NetBiosName.md"
 		"Help\en-US\Test-TargetComputer.md"
 		"Help\en-US\Test-UNC.md"
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
-		"Public\Get-InterfaceBroadcast.ps1"
 		"Public\Get-InterfaceAlias.ps1"
+		"Public\Get-InterfaceBroadcast.ps1"
 		"Public\Get-SystemSKU.ps1"
 		"Public\README.md"
 		"Public\Resolve-Host.ps1"
@@ -174,7 +174,7 @@ SOFTWARE.
 			# Tags applied to this module. These help with module discovery in online galleries.
 			Tags = @(
 				"ComputerInfo"
-				"WindowsInfo"
+				"SystemInfo"
 				"Computer"
 				"NetworkInfo"
 			)

@@ -40,27 +40,41 @@ New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path 
 $PrivateScripts = @(
 	"Convert-ArrayToList"
 	"Convert-ListToArray"
-	"Convert-ValueToBoolean"
 	"Convert-ListToMultiLine"
 	"Convert-MultiLineToList"
+	"Convert-ValueToBoolean"
 )
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. "$PSScriptRoot\Private\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Private\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Private\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PublicScripts = @(
 	"Export-FirewallRules"
-	"Import-FirewallRules"
-	"Remove-FirewallRules"
 	"Find-RulePrincipal"
 	"Format-Output"
+	"Import-FirewallRules"
+	"Remove-FirewallRules"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. "$PSScriptRoot\Public\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Public\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
+	}
 }

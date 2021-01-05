@@ -137,7 +137,6 @@ SOFTWARE.
 		"en-US\Manifest.Module-help.xml"
 		"Help\README.md"
 		"Private\README.md"
-		"Public\External\README.md"
 		"Public\New-Function.ps1"
 		"Public\README.md"
 		"Scripts\README.md"
@@ -157,7 +156,7 @@ SOFTWARE.
 			# Tags = @()
 
 			# A URL to the license for this module.
-			LicenseUri = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE"
+			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE"
 
 			# A URL to the main website for this project.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"
@@ -169,7 +168,7 @@ SOFTWARE.
 			# ReleaseNotes = ""
 
 			# Prerelease string of this module
-			# Prerelease = ""
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install/update/save

@@ -47,8 +47,15 @@ $ScriptsToProcess = @(
 
 foreach ($Script in $ScriptsToProcess)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Scripts\$Script.ps1"
-	. "$PSScriptRoot\Scripts\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Scripts\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Scripts\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PrivateScripts = @(
@@ -60,13 +67,19 @@ $PrivateScripts = @(
 
 foreach ($Script in $PrivateScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Private\$Script.ps1"
-	. "$PSScriptRoot\Private\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Private\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Private\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 $PublicScripts = @(
-	"External\Get-SqlServerInstance"
-	"Search-Installation"
+	"Confirm-Installation"
 	"Format-Path"
 	"Get-AllUserSoftware"
 	"Get-AppCapability"
@@ -75,6 +88,7 @@ $PublicScripts = @(
 	"Get-NetFramework"
 	"Get-OneDrive"
 	"Get-SqlManagementStudio"
+	"Get-SqlServerInstance"
 	"Get-SystemApps"
 	"Get-SystemSoftware"
 	"Get-UserApps"
@@ -82,16 +96,23 @@ $PublicScripts = @(
 	"Get-WindowsDefender"
 	"Get-WindowsKit"
 	"Get-WindowsSDK"
-	"Test-FileSystemPath"
+	"Search-Installation"
 	"Test-ExecutableFile"
-	"Confirm-Installation"
+	"Test-FileSystemPath"
 	"Test-Service"
 )
 
 foreach ($Script in $PublicScripts)
 {
-	Write-Debug -Message "[$ThisModule] Importing script: Public\$Script.ps1"
-	. "$PSScriptRoot\Public\$Script.ps1"
+	try
+	{
+		. "$PSScriptRoot\Public\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
+	}
 }
 
 #
