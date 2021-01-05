@@ -57,7 +57,7 @@ Fetches "Preference" variable values from the caller's scope.
 .DESCRIPTION
 Script module functions do not automatically inherit their caller's variables,
 but they can be obtained through the $PSCmdlet variable in Advanced Functions.
-This function is a helper function for any script module Advanced Function;
+This function is a helper function for any script module Advanced Function,
 by passing in the values of $ExecutionContext.SessionState and $PSCmdlet,
 Get-CallerPreference will set the caller's preference variables locally.
 
@@ -92,7 +92,7 @@ PS> "ErrorActionPreference", "SomeOtherVariable" | Get-CallerPreference -Cmdlet 
 Same as Example 2, but sends variable names to the Name parameter via pipeline input.
 
 .INPUTS
-String
+[string]
 
 .OUTPUTS
 None. This function does not produce pipeline output.
@@ -115,12 +115,15 @@ Added links and notes to (this) comment based help
 Added Write-* streams
 Added license and Copyright notice to (this) comment based help
 Added script invocation logic by removing function
-Changed a name and casing of local variables
+Changed the name and casing of local variables
 Changed PowerShell version requirement
 Replaced single quotes with double quotes
 Reordered preference variables
 Added OutputType and PositionalBinding attribute
-Fixed issue when the script was dot sources
+Fixed issue when the script was dot sourced
+Added optional parent scope validation
+
+TODO: This script needs unit test to simplify or improve
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.1
@@ -155,14 +158,24 @@ begin
 	$ParentScope = 1
 	if ($MyInvocation.InvocationName -eq ".")
 	{
+		# Same scope if this script is dot sourced
 		$ParentScope = 0
 	}
 
-	Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
+	try
+	{
+		# This variable should be set in parent scope for debugging purposes
+		Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
+	}
+	catch
+	{
+		Write-Warning -Message "Unexpected parent scope"
+	}
+
 	$ParentScopeName = $((Get-PSCallStack)[1].Command)
 
-	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" # -Debug
-	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" # -Debug
+	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" -Debug
+	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" -Debug
 
 	[hashtable] $FilterHash = @{}
 }
@@ -175,7 +188,7 @@ process
 	{
 		foreach ($Entry in $Name)
 		{
-			Write-Information -MessageData "[$ThisScript] Processing preference variable: '$Entry'"
+			Write-Debug -Message "[$ThisScript] Processing preference variable: '$Entry'"
 			$FilterHash[$Entry] = $true
 		}
 	}
@@ -231,6 +244,7 @@ end
 
 	foreach ($Entry in $Preferences.GetEnumerator())
 	{
+		# TODO: This needs simplification, ex. if ParameterSetName is AllVariables then there is no need to run foreach?
 		if (([string]::IsNullOrEmpty($Entry.Value) -or !$Cmdlet.MyInvocation.BoundParameters.ContainsKey($Entry.Value)) -and
 			($PSCmdlet.ParameterSetName -eq "AllVariables" -or $FilterHash.ContainsKey($Entry.Name)))
 		{

@@ -67,7 +67,7 @@ param(
 	[switch] $InModule,
 
 	[Parameter()]
-	[switch] $ShowPreference
+	[switch] $ListPreference
 )
 
 #region Initialization
@@ -628,14 +628,15 @@ if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Igno
 }
 #endregion
 
-# Module autoload is triggered for functions only not for variable exports
+# Module autoload is triggered for functions only, not for variable exports
 if (!$InModule)
 {
+	# TODO: Need to see if any other modules need to be preloaded here in the future
 	Import-Module -Scope Global -Name Ruleset.Logging
 }
 
 #region Show variables and preferences
-if ($ShowPreference)
+if ($ListPreference)
 {
 	# This function needs to run in a sanbox to prevent changing preferences for real
 	New-Module -Name Dynamic.Preference -ScriptBlock {
@@ -664,6 +665,7 @@ if ($ShowPreference)
 			[CmdletBinding(PositionalBinding = $false)]
 			param(
 				[Parameter()]
+				# TODO: Bad target if script dot sourced
 				[string] $Target = (Get-PSCallStack)[1].Command -replace ".{4}$",
 
 				[Parameter()]
@@ -671,10 +673,10 @@ if ($ShowPreference)
 			)
 
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"
-			Write-Debug -Message "[Dynamic.Preference] DebugPreference before: $DebugPreference" # -Debug
+			Write-Debug -Message "[Show-Preference] InformationPreference before Get-CallerPreference: $InformationPreference" -Debug
 
 			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-			Write-Debug -Message "[Dynamic.Preference] DebugPreference after: $DebugPreference" # -Debug
+			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference: $InformationPreference" -Debug
 
 			$Variables = Get-ChildItem -Path Variable:\*Preference |
 			Where-Object -Property Name -NE ShowPreference
@@ -683,7 +685,7 @@ if ($ShowPreference)
 			if ($All)
 			{
 				# TODO: This does not catch all of the variables from this script
-				# TODO: Ensure this is from caller's scope
+				# TODO: Double check this is from caller's scope
 				$Variables += Get-ChildItem -Path Variable:\Log*Event,
 				Variable:\*Version,
 				"Variable:\Default*",
@@ -731,7 +733,7 @@ if ($ShowPreference)
 
 	if (!$InModule)
 	{
-		# Write-Debug -Message "[$SettingsScript] DebugPreference: $DebugPreference" -Debug
+		Write-Debug -Message "[$SettingsScript] InformationPreference: $InformationPreference" -Debug
 		Show-Preference # -All
 		Remove-Module -Name Dynamic.Preference
 	}

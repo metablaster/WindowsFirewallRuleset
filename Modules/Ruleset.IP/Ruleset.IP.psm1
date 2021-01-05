@@ -52,12 +52,24 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # - Added module boilerplate code
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
 
-# Initialization
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+#region Initialization
+param (
+	[Parameter()]
+	[switch] $ListPreference
+)
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $ProjectRoot\Modules\ModulePreferences.ps1
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
+
+if ($ListPreference)
+{
+	# NOTE: Preferences defined in caller scope are not inherited, only those defined in
+	# Config\ProjectSettings.ps1 are pulled into module scope
+	Write-Debug -Message "[$ThisModule] InformationPreference in module: $InformationPreference" -Debug
+	Show-Preference -Target $ThisModule # -All
+	Remove-Module -Name Dynamic.Preference
+}
+#endregion
 
 #
 # Script imports

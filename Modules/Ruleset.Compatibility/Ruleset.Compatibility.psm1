@@ -33,14 +33,27 @@ SOFTWARE.
 # - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
 # - Fixed pester tests
 
-# Initialization
+#region Initialization
 using namespace System.Management.Automation.
 using namespace System.Management.Automation.Runspaces
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $ProjectRoot\Modules\ModulePreferences.ps1
+param (
+	[Parameter()]
+	[switch] $ListPreference
+)
+
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
+
+if ($ListPreference)
+{
+	# NOTE: Preferences defined in caller scope are not inherited, only those defined in
+	# Config\ProjectSettings.ps1 are pulled into module scope
+	Write-Debug -Message "[$ThisModule] InformationPreference in module: $InformationPreference" -Debug
+	Show-Preference -Target $ThisModule # -All
+	Remove-Module -Name Dynamic.Preference
+}
+#endregion
 
 # TODO: -NoClobber, this module may already exist on target computer
 # TODO: Take time to load + hide blinking progress bar

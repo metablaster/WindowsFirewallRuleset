@@ -33,11 +33,11 @@ SOFTWARE.
 # Import all modules into current session, useful for debugging, ie. running individual functions
 #
 
-$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory -Exclude "Ruleset.Logging"
+$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory
 
 foreach ($Module in $ProjectModules)
 {
-	Import-Module -Name $Module -Scope Global
+	Import-Module -Name $Module -Scope Global -Force
 }
 
 Update-Log

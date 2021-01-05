@@ -36,9 +36,15 @@ SOFTWARE.
 # Generated on: 21.2.2020.
 #
 
+# TODO: Remove reference link for new module:
+# https://docs.microsoft.com/en-us/powershell/scripting/developer/module/how-to-write-a-powershell-module-manifest
+
 @{
-	# Script module or binary module file associated with this manifest.
-	# TODO: Update module name
+	# Script module or binary module file associated with this manifest, (alias: ModuleToProcess)
+	# Previous versions of PowerShell called this element the ModuleToProcess.
+	# NOTE: To create a manifest module this must be empty,
+	# the name of a script module (.psm1) creates a script module,
+	# the name of a binary module (.exe or .dll) creates a binary module.
 	RootModule = "Manifest.Module.psm1"
 
 	# Version number of this module.
@@ -66,6 +72,7 @@ SOFTWARE.
 	Description = "Module manifest template"
 
 	# Minimum version of the PowerShell engine required by this module
+	# Valid values are: 1.0 / 2.0 / 3.0 / 4.0 / 5.0 / 5.1 / 6.0 / 6.1 / 6.2 / 7.0 / 7.1
 	PowerShellVersion = "5.1"
 
 	# Name of the Windows PowerShell host required by this module
@@ -76,16 +83,16 @@ SOFTWARE.
 
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	# Maximum allowed value to specify is 4.5, other valid values are:
-	# 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4 / 4.5
+	# Valid values are: 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4.0 / 4.5
 	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
-	# Valid values are: 1 / 1.1 / 2.0 / 4
+	# Valid values are: 1.0 / 1.1 / 2.0 / 4.0
 	CLRVersion = "4.0"
 
-	# Processor architecture (None, X86, Amd64) required by this module
+	# Processor architecture (None, X86, Amd64) required by this module.
+	# Valid values are: x86 / AMD64 / Arm / IA64 / MSIL / None (unknown or unspecified).
 	ProcessorArchitecture = "None"
 
 	# Modules that must be imported into the global environment prior to importing this module
@@ -103,7 +110,8 @@ SOFTWARE.
 	# Format files (.ps1xml) to be loaded when importing this module
 	FormatsToProcess = @("Manifest.Module.Format.ps1xml")
 
-	# Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
+	# Modules to import as nested modules of the module specified in RootModule.
+	# Loading (.ps1) files here is equivalent to dot sourcing the script in your root module.
 	# NestedModules = @()
 
 	# Functions to export from this module, for best performance, do not use wildcards and do not
@@ -116,7 +124,8 @@ SOFTWARE.
 	# delete the entry, use an empty array if there are no cmdlets to export.
 	CmdletsToExport = @()
 
-	# Variables to export from this module
+	# Variables to export from this module.
+	# Wildcard characters are permitted, by default, all variables ("*") are exported.
 	VariablesToExport = @(
 		"TemplateModuleVariable"
 	)
@@ -128,10 +137,12 @@ SOFTWARE.
 	# DSC resources to export from this module
 	# DscResourcesToExport = @()
 
-	# List of all modules packaged with this module
+	# List of all modules packaged with this module.
+	# These modules are not automatically processed.
 	# ModuleList = @()
 
-	# List of all files packaged with this module
+	# List of all files packaged with this module.
+	# As with ModuleList, FileList is an inventory list.
 	FileList = @(
 		"en-US\about_Manifest.Module.help.txt"
 		"en-US\Manifest.Module-help.xml"
@@ -146,13 +157,14 @@ SOFTWARE.
 		"Manifest.Module.psm1"
 	)
 
-	# Private data to pass to the module specified in RootModule/ModuleToProcess.
-	# This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+	# Specifies any private data that needs to be passed to the root module specified by the RootModule.
+	# This contain a PSData hashtable with additional module metadata used by PowerShell.
 	PrivateData = @{
 
 		PSData = @{
 
-			# Tags applied to this module. These help with module discovery in online galleries.
+			# Tags applied to this module.
+			# These help with module discovery in online galleries.
 			# Tags = @()
 
 			# A URL to the license for this module.
@@ -167,14 +179,14 @@ SOFTWARE.
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
-			# Prerelease string of this module
+			# A PreRelease string that identifies the module as a prerelease version in online galleries.
 			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
-			# install/update/save
+			# install, update, or save.
 			RequireLicenseAcceptance = $true
 
-			# External dependent modules of this module
+			# A list of external modules that this module is dependent upon.
 			# ExternalModuleDependencies = @()
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable

@@ -29,12 +29,24 @@ SOFTWARE.
 
 # TODO: If this is based on 3rd party module, include *.psm file changes here
 
-# Initialization
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+#region Initialization
+param (
+	[Parameter()]
+	[switch] $ListPreference
+)
 
-# Imports
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $ProjectRoot\Modules\ModulePreferences.ps1
+New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
+
+if ($ListPreference)
+{
+	# NOTE: Preferences defined in caller scope are not inherited, only those defined in
+	# Config\ProjectSettings.ps1 are pulled into module scope
+	Write-Debug -Message "[$ThisModule] InformationPreference in module: $InformationPreference" -Debug
+	Show-Preference -Target $ThisModule # -All
+	Remove-Module -Name Dynamic.Preference
+}
+#endregion
 
 # TODO: Remove unneeded template code
 

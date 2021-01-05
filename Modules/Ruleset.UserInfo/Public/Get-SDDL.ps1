@@ -75,7 +75,7 @@ None.
 #>
 function Get-SDDL
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "User",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md")]
 	[OutputType([string])]
 	param (
