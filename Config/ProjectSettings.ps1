@@ -64,6 +64,7 @@ TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf loca
 TODO: Variable description should be part of variable object
 TODO: Some version variables enabled for module initialization are needed in several modules
 such as PS edition, PS version etc...
+TODO: Define OutputType attribute
 #>
 
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Script")]

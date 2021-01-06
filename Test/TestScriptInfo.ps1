@@ -46,12 +46,15 @@ None. TestScriptInfo.ps1 does not generate any output
 None.
 #>
 
+#Requires -Version 5.1
+
 [CmdletBinding()]
-[OutputType([object])]
-param ()
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
 #region Initialization
-#Requires -Version 5.1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -64,7 +67,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test

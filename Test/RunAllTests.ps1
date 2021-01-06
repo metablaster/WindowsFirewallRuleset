@@ -54,14 +54,19 @@ TODO: Test should be run in order of module or function (or both) inter dependen
 TODO: We should handle to skip "dangerous" tests
 #>
 
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[switch] $Pester
+	[switch] $Pester,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-#Requires -RunAsAdministrator
 . $PSScriptRoot\..\Config\ProjectSettings.ps1
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -81,7 +86,7 @@ if ($Pester)
 }
 
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # Prompt to set screen buffer to recommended value for tests

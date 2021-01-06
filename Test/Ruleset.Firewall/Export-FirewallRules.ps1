@@ -46,6 +46,8 @@ None. Export-FirewallRules.ps1 does not generate any output
 None.
 #>
 
+#Requires -Version 5.1
+
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -53,7 +55,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements

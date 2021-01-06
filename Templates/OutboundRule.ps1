@@ -55,7 +55,6 @@ None.
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
-[OutputType([void])]
 param (
 	[Parameter()]
 	[switch] $Force

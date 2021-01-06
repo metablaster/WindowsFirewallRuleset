@@ -46,7 +46,13 @@ None. NewExperiment.ps1 does not generate any output
 None.
 #>
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
-Import-Module -Name $PSScriptRoot\Experiment.Module -Force
+Import-Module -Name $PSScriptRoot\Experiment.Module -Force:$Force

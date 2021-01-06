@@ -59,7 +59,6 @@ using namespace System
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
-[OutputType([void])]
 param (
 	[Parameter()]
 	[switch] $Force

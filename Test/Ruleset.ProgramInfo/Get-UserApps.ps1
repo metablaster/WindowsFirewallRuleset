@@ -46,8 +46,16 @@ None. Get-UserApps.ps1 does not generate any output
 None.
 #>
 
+#Requires -Version 5.1
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
@@ -59,7 +67,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 

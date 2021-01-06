@@ -56,6 +56,7 @@ None.
 #>
 
 using namespace System.Security
+#Requires -Version 5.1
 
 [CmdletBinding()]
 param (
@@ -63,11 +64,14 @@ param (
 	[switch] $FileSystem,
 
 	[Parameter()]
-	[switch] $Registry
+	[switch] $Registry,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements

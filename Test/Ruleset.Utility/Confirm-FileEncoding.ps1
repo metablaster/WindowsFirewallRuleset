@@ -46,10 +46,18 @@ None. Confirm-FileEncoding.ps1 does not generate any output
 As Administrator because of firewall logs in repository
 #>
 
-#region Initialization
+#Requires -Version 5.1
 # NOTE: As Administrator if firewall writes logs to repository
 #Requires -RunAsAdministrator
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
@@ -60,7 +68,7 @@ Initialize-Project -Abort
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test

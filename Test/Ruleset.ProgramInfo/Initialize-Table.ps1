@@ -46,13 +46,18 @@ None. Initialize-Table.ps1 does not generate any output
 None.
 #>
 
+#Requires -Version 5.1
+
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
 [CmdletBinding()]
-param ()
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
@@ -79,7 +84,7 @@ Initialize-Project -Abort
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test

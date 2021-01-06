@@ -46,6 +46,9 @@ None. Initialize-Provider.ps1 does not generate any output
 None.
 #>
 
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -53,8 +56,7 @@ param (
 )
 
 #region Initialization
-#Requires -RunAsAdministrator
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Imports
