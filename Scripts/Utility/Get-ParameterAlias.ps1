@@ -240,7 +240,7 @@ begin
 
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
-		$ImportParams.add("SkipEditionCheck", $true)
+		$ImportParams.Add("SkipEditionCheck", $true)
 	}
 }
 
