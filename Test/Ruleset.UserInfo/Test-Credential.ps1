@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,32 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-Function or Test-Script
+Unit test for Test-Credential
 
 .DESCRIPTION
-Test correctness of Test-Function function or Test-Script.ps1 script
-Use TestTemplate.ps1 as a template to test out scripts and module functions
+Test correctness of Test-Credential function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\TestTemplate.ps1
+PS> .\Test-Credential.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestTemplate.ps1
+None. You cannot pipe objects to Test-Credential.ps1
 
 .OUTPUTS
-None. TestTemplate.ps1 does not generate any output
+None. Test-Credential.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
-# TODO: Remove using statement and/or elevation requirement
-using namespace System
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -63,7 +58,6 @@ param (
 )
 
 #region Initialization
-# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
@@ -72,7 +66,6 @@ Initialize-Project -Abort
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports
-# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
@@ -82,21 +75,19 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-# TODO Specify temporary Test-Function parameters
-# $private:PSDefaultParameterValues.Add("Test-Function:Parameter", Value)
+$Cred = Get-Credential -Message "Please provide credentials to test"
 
-# TODO: Keep this check if this test is:
-# 1. Experimental or potentially dangerous
-# 2. It should not be executed by RunAllTests.ps1 by default
-# 3. It takes too much time to complete
-if ($Force -or $PSCmdlet.ShouldContinue("Template Target", "Accept dangerous unit test"))
-{
-	Start-Test "Test-Function"
-	$Result = Test-Function
-	$Result
+Start-Test "Test-Credential"
+$Result = Test-Credential $Cred -Context Machine
+$Result
 
-	Test-Output $Result -Command Test-Function
-}
+Start-Test "Test-Credential -Domain"
+Test-Credential $Cred -Domain ([System.Environment]::MachineName) -Context Machine
+
+Start-Test "Test-Credential pipeline"
+$Cred | Test-Credential -Context Machine
+
+Test-Output $Result -Command Test-Credential
 
 Update-Log
 Exit-Test

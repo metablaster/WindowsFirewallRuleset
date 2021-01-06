@@ -49,6 +49,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Test-NetBiosName` function to validate syntax of NETBIOS name
   - `Test-UNC` function to validate syntax of UNC (Universal Naming Convention) name
   - `ConvertFrom-Wildcard` function to convert wildcard pattern to regex
+  - `Test-Credential` function to validate credentials
+  - `Get-ExportedType.ps1` utility script to list exported types in current session
+  - `Get-PropertyType.ps1` utility script to get .NET types of properties
 
 - Tests
 
@@ -103,7 +106,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Test-TargetComputer`
     - `Get-GroupPrincipal`
     - `ConvertFrom-SID`
-    - `Get-AppSID` big thanks to @ljani for awesome solution: https://github.com/ljani
+    - `Get-AppSID` big thanks to @ljani for awesome solution [solution][appsid-issue]
     - `Get-SystemSKU`
   - Logging without the need for parameter splating, `@Logs` variable was removed
   - Improved program search algorithm
@@ -460,3 +463,4 @@ If you would like to see fresh changes done since last release you can do so on 
   - Reorganize and split scripts with rules for multiple targets
 
 [changelog]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md "Visit latest changelog"
+[appsid-issue]: https://github.com/metablaster/WindowsFirewallRuleset/issues/6 "See issue"

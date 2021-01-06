@@ -124,7 +124,7 @@ param (
 
 #region Initialization
 # TODO: Adjust path to project settings
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements

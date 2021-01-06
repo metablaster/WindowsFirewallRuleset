@@ -62,7 +62,7 @@ param (
 
 #region Initialization
 # TODO: Adjust path to project settings
-. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort

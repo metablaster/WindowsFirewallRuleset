@@ -26,11 +26,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+[CmdletBinding()]
+param ()
+
 # Imports
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 #
-# Import all modules into current session, useful for debugging, ie. running individual functions
+# Import all modules into current session, useful to quickly load project into session
 #
 
 $ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory

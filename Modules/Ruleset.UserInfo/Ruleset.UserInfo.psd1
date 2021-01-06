@@ -94,7 +94,8 @@ SOFTWARE.
 	# RequiredModules = @()
 
 	# Assemblies that must be loaded prior to importing this module
-	# RequiredAssemblies = @()
+	# NOTE: Works without specifying, AccountManagement required by Test-Credential.ps1
+	# RequiredAssemblies = @("System.DirectoryServices.AccountManagement")
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	# ScriptsToProcess = @()
@@ -121,6 +122,7 @@ SOFTWARE.
 		"Get-UserGroup"
 		"Merge-SDDL"
 		"Split-Principal"
+		"Test-Credential"
 		"Test-UPN"
 	)
 
@@ -166,6 +168,7 @@ SOFTWARE.
 		"Help\en-US\Merge-SDDL.md"
 		"Help\en-US\Split-Principal.md"
 		"Help\en-US\Ruleset.UserInfo.md"
+		"Help\en-US\Test-Credential.md"
 		"Help\en-US\Test-UPN.md"
 		"Help\README.md"
 		"Public\ConvertFrom-SDDL.ps1"
@@ -178,6 +181,7 @@ SOFTWARE.
 		"Public\Merge-SDDL.ps1"
 		"Public\README.md"
 		"Public\Split-Principal.ps1"
+		"Public\Test-Credential.ps1"
 		"Public\Test-UPN.ps1"
 		"Ruleset.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
 		"Ruleset.UserInfo.psd1"

@@ -251,6 +251,7 @@ if ($Develop)
 	else
 	{
 		# Respect following bound parameters
+		# TODO: Propagate bound commons to module functions for debugging
 		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
 		{
 			$VerbosePreference = "SilentlyContinue"
