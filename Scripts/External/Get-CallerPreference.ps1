@@ -164,15 +164,15 @@ begin
 
 	try
 	{
-		# This variable should be set in parent scope for debugging purposes
-		Get-Variable -Scope $ParentScope -Name IsValidParent -ErrorAction Stop | Out-Null
+		# Just to confirm, this variable should be set in parent scope which is Show-Preference function
+		Get-Variable -Scope $ParentScope -Name Caller -ErrorAction Stop | Out-Null
 	}
 	catch
 	{
 		Write-Warning -Message "Unexpected parent scope"
 	}
 
-	$ParentScopeName = $((Get-PSCallStack)[1].Command)
+	$ParentScopeName = (Get-PSCallStack)[1].Command
 
 	Write-Debug "[$ThisScript] Parrent Scope: $ParentScopeName" -Debug
 	Write-Debug "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)" -Debug
@@ -182,14 +182,14 @@ begin
 
 process
 {
-	Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+	# Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 	if ($null -ne $Name)
 	{
-		foreach ($Entry in $Name)
+		foreach ($VariableName in $Name)
 		{
-			Write-Debug -Message "[$ThisScript] Processing preference variable: '$Entry'"
-			$FilterHash[$Entry] = $true
+			Write-Debug -Message "[$ThisScript] Scheduling filtered variable: '$VariableName'"
+			$FilterHash[$VariableName] = $true
 		}
 	}
 }
@@ -198,6 +198,7 @@ end
 {
 	# NOTE: List of preference variables taken from the about_Preference_Variables for PowerShell Core 7.1
 	[hashtable] $Preferences = @{
+		# NOTE: To distinguish preferences set by common parameters we set them to common parameter name
 		"ErrorActionPreference" = "ErrorAction"
 		"WarningPreference" = "WarningAction"
 		"InformationPreference" = "InformationAction"
@@ -244,52 +245,63 @@ end
 
 	foreach ($Entry in $Preferences.GetEnumerator())
 	{
-		# TODO: This needs simplification, ex. if ParameterSetName is AllVariables then there is no need to run foreach?
+		Write-Debug -Message "[$ThisScript] Processing variable: '$($Entry.Name)'"
+
+		# NOTE: If the caller specified common parameters to 'Cmdlet', don't get preference variable
+		# for that, because it would override preference specified by parameter.
 		if (([string]::IsNullOrEmpty($Entry.Value) -or !$Cmdlet.MyInvocation.BoundParameters.ContainsKey($Entry.Value)) -and
+			# TODO: This needs simplification, ex. if ParameterSetName is 'Filtered' then there is no need to run foreach
 			($PSCmdlet.ParameterSetName -eq "AllVariables" -or $FilterHash.ContainsKey($Entry.Name)))
 		{
+			# https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/windows-powershell-session-state
 			$Variable = $Cmdlet.SessionState.PSVariable.Get($Entry.Key)
 
-			if ($null -ne $Variable)
+			if ($null -eq $Variable)
 			{
-				if ($SessionState -eq $ExecutionContext.SessionState)
-				{
-					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in scope: $ParentScopeName"
-					Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
-				}
-				else
-				{
-					# TODO: Verbose won't be correct if session scope is not module
-					Write-Verbose -Message "[$ThisScript] Setting preference variable '$($Variable.Name)' in session: $($SessionState.Module.Name)"
-					$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
-				}
+				Write-Warning -Message "Unable to fetch variable: '$($Entry.Name)'"
+			}
+			elseif ($SessionState -eq $ExecutionContext.SessionState)
+			{
+				# Same session state
+				Write-Verbose -Message "[$ThisScript] Setting variable '$($Variable.Name)' in scope: '$ParentScopeName'"
+				Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
+			}
+			else
+			{
+				# Different session state
+				# TODO: Verbose won't be correct if session scope is not module
+				Write-Verbose -Message "[$ThisScript] Setting variable '$($Variable.Name)' in session: '$($SessionState.Module.Name)'"
+				$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
 			}
 		}
 	}
 
 	if ($PSCmdlet.ParameterSetName -eq "Filtered")
 	{
-		Write-Verbose -Message "[$ThisScript] Filtering variables"
-
 		foreach ($VariableName in $FilterHash.Keys)
 		{
+			Write-Debug -Message "[$ThisScript] Processing filtered variable: '$VariableName'"
+
 			if (!$Preferences.ContainsKey($VariableName))
 			{
 				$Variable = $Cmdlet.SessionState.PSVariable.Get($VariableName)
 
-				if ($null -ne $Variable)
+				if ($null -eq $Variable)
 				{
-					if ($SessionState -eq $ExecutionContext.SessionState)
-					{
-						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in scope: $ParentScopeName"
-						Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
-					}
-					else
-					{
-						# TODO: Verbose won't be correct if session scope is not module
-						Write-Verbose -Message "[$ThisScript] Setting filtered preference variable '$($Variable.Name)' in session: $($SessionState.Module.Name)"
-						$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
-					}
+					Write-Warning -Message "Unable to fetch filtered variable: '$($Entry.Name)'"
+				}
+				elseif ($SessionState -eq $ExecutionContext.SessionState)
+				{
+					# Same session state
+					Write-Verbose -Message "[$ThisScript] Setting filtered variable '$($Variable.Name)' in scope: '$ParentScopeName'"
+					Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
+				}
+				else
+				{
+					# Different session state
+					# TODO: Verbose won't be correct if session scope is not module
+					Write-Verbose -Message "[$ThisScript] Setting filtered variable '$($Variable.Name)' in session: '$($SessionState.Module.Name)'"
+					$SessionState.PSVariable.Set($Variable.Name, $Variable.Value)
 				}
 			}
 		}

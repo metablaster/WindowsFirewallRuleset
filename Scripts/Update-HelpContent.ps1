@@ -121,7 +121,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 if ($null -eq $Encoding)

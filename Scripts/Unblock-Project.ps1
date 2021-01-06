@@ -75,7 +75,7 @@ TODO: We should probably unblock only scripts, not all files.
 [OutputType([void])]
 param ()
 
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
 
 Get-ChildItem $ProjectRoot -Recurse | Unblock-File

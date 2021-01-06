@@ -40,7 +40,7 @@ if ($ListPreference)
 	# NOTE: Preferences defined in caller scope are not inherited, only those defined in
 	# Config\ProjectSettings.ps1 are pulled into module scope
 	Write-Debug -Message "[$ThisModule] InformationPreference in module: $InformationPreference" -Debug
-	Show-Preference -Target $ThisModule # -All
+	Show-Preference # -All
 	Remove-Module -Name Dynamic.Preference
 }
 #endregion

@@ -36,14 +36,20 @@ In this file project settings and preferences are set, these are grouped into
 2. settings for release
 3. settings which apply to both use cases
 
+.PARAMETER Cmdlet
+PSCmdlet object of the calling script
+
 .PARAMETER InModule
 Script modules must call this script with this parameter
 
 .PARAMETER ShowPreference
-If specified displays preferences and/or variables in current scope
+If specified, displays preferences and optionally variables in current scope
 
 .EXAMPLE
-PS> .\ProjectSettings.ps1
+PS> .\ProjectSettings.ps1 $PSCmdlet
+
+.EXAMPLE
+PS> .\ProjectSettings.ps1 -InModule
 
 .INPUTS
 None. You cannot pipe objects to ProjectSettings.ps1
@@ -58,12 +64,16 @@ TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf loca
 TODO: Variable description should be part of variable object
 TODO: Some version variables enabled for module initialization are needed in several modules
 such as PS edition, PS version etc...
-HACK: Verbose, Debug etc. common parameters don't work per function or per script
 #>
 
-[CmdletBinding()]
-param(
-	[Parameter()]
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Script")]
+param (
+	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Script")]
+	[ValidateScript( { $_.GetType().FullName -eq "System.Management.Automation.PSScriptCmdlet" })]
+	[System.Management.Automation.PSCmdlet]	$Cmdlet,
+
+	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
+	[ValidateScript( { $_ -eq $true } )]
 	[switch] $InModule,
 
 	[Parameter()]
@@ -178,7 +188,7 @@ $MaximumVariableCount	4096
 
 #region Preference variables
 # NOTE: Following preferences should be always the same, do not modify!
-# The rest of preferences are either default or depending on "Develop" variable
+# The rest of preferences are either default, bound or depend on "Develop" variable
 
 # To control how and if errors are displayed
 $ErrorActionPreference = "Continue"
@@ -205,12 +215,6 @@ if ($Develop)
 
 	# $ErrorView = "NormalView"
 
-	$VerbosePreference = "SilentlyContinue"
-	$DebugPreference = "SilentlyContinue"
-	$ConfirmPreference = "High"
-	# TODO: Run with true, and resolve errors
-	$WhatIfPreference = $false
-
 	# Two variables for each of the three logging components:
 	# The engine (the PowerShell program), the providers and the commands.
 	# The LifeCycleEvent variables log normal starting and stopping events.
@@ -236,14 +240,42 @@ if ($Develop)
 	# Logs command errors
 	$LogCommandHealthEvent = $false
 
-	# TODO: Use $InvocationInfo.MyCommand.ModuleName
-	if (!$InModule)
+	if ($PSCmdlet.ParameterSetName -eq "Module")
 	{
+		$VerbosePreference = "SilentlyContinue"
+		$DebugPreference = "SilentlyContinue"
+		$ConfirmPreference = "High"
+		$WhatIfPreference = $false
+	}
+	else
+	{
+		# Respect following bound parameters
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
+		{
+			$VerbosePreference = "SilentlyContinue"
+		}
+
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Debug"))
+		{
+			$DebugPreference = "SilentlyContinue"
+		}
+
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Confirm"))
+		{
+			$ConfirmPreference = "High"
+		}
+
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("WhatIf"))
+		{
+			# TODO: Run with true, and resolve errors
+			$WhatIfPreference = $false
+		}
+
 		# Must be after debug preference
 		Write-Debug -Message "[$SettingsScript] Removing loaded modules"
 
 		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
-		# Skip removing modules if this script is called from inside a module which would
+		# Skip removing modules if this script is called from within a module which would
 		# cause removing modules prematurely
 		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
 		{
@@ -254,23 +286,45 @@ if ($Develop)
 				Remove-Module -ModuleInfo $TargetModule -ErrorAction Stop
 			}
 		}
+
+		Remove-Variable -Name TargetModule
 	}
 }
 else # Normal use case
 {
-	# These are set to default values for normal use case, the rest is default,
-	# TODO: Need to take into account existing user preferences if possible
+	# These are set to default values for normal use case, the rest is default.
+	if ($PSCmdlet.ParameterSetName -eq "Module")
+	{
+		$VerbosePreference = "SilentlyContinue"
+		$DebugPreference = "SilentlyContinue"
+		$ConfirmPreference = "High"
+		$WhatIfPreference = $false
+	}
+	else
+	{
+		# Respect following bound parameters
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
+		{
+			# To show verbose output in the console set to "Continue" to see a bit more
+			$VerbosePreference = "SilentlyContinue"
+		}
 
-	# To show verbose output in the console set to "Continue" to see a bit more
-	$VerbosePreference = "SilentlyContinue"
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Debug"))
+		{
+			# To show debugging messages in the console set to "Continue"
+			$DebugPreference = "SilentlyContinue"
+		}
 
-	# To show debugging messages in the console set to "Continue"
-	# Not recommended except to troubleshoot problems with code
-	$DebugPreference = "SilentlyContinue"
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Confirm"))
+		{
+			$ConfirmPreference = "High"
+		}
 
-	$ConfirmPreference = "High"
-
-	$WhatIfPreference = $false
+		if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("WhatIf"))
+		{
+			$WhatIfPreference = $false
+		}
+	}
 
 	# Must be after verbose preference
 	Write-Verbose -Message "[$SettingsScript] Project mode: Release"
@@ -648,11 +702,8 @@ if ($ListPreference)
 		Showing values of preference variables in different scopes is useful to troubleshoot
 		problems with preferences or just to confirm preferences are set as expected.
 
-		.PARAMETER Target
-		A script which calls this function
-
 		.PARAMETER All
-		If specified, shows all variables from this script
+		If specified, shows all variables from this script including Path and PSModulePath values
 
 		.EXAMPLE
 		PS> Show-Preference ModuleName
@@ -662,31 +713,41 @@ if ($ListPreference)
 		#>
 		function Show-Preference
 		{
-			[CmdletBinding(PositionalBinding = $false)]
 			param(
-				[Parameter()]
-				# TODO: Bad target if script dot sourced
-				[string] $Target = (Get-PSCallStack)[1].Command -replace ".{4}$",
-
 				[Parameter()]
 				[switch] $All
 			)
 
+			# Get base name of script that called this function
+			$Caller = Split-Path -Path $MyInvocation.ScriptName -LeafBase
+
+			if ($Caller -eq "ProjectSettings")
+			{
+				# Get base name of script that dot sourced ProjectSettings.ps1
+				$Caller = Split-Path -Path (Get-PSCallStack)[2].Command -LeafBase
+			}
+
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"
 			Write-Debug -Message "[Show-Preference] InformationPreference before Get-CallerPreference: $InformationPreference" -Debug
 
-			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState # -Verbose -Debug
 			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference: $InformationPreference" -Debug
 
-			$Variables = Get-ChildItem -Path Variable:\*Preference |
-			Where-Object -Property Name -NE ShowPreference
-			$Variables = $Variables.GetEnumerator() | Sort-Object -Property Name
+			$Variables = Get-ChildItem -Path Variable:\*Preference
+
+			# NOTE: Sorting before -All and -Name to have preference variables listed first
+			$AllVariables = $Variables.GetEnumerator() | Sort-Object -Property Name
+
+			if ($Name)
+			{
+				# Optionally add requested variables to the list
+				$AllVariables += Get-ChildItem -Path Variable:\$Name
+			}
 
 			if ($All)
 			{
 				# TODO: This does not catch all of the variables from this script
-				# TODO: Double check this is from caller's scope
-				$Variables += Get-ChildItem -Path Variable:\Log*Event,
+				$Variables = Get-ChildItem -Path Variable:\Log*Event,
 				Variable:\*Version,
 				"Variable:\Default*",
 				Variable:\Test*,
@@ -701,31 +762,33 @@ if ($ListPreference)
 				$Variables += Get-ChildItem -Path Variable:\ForceLoad
 				$Variables += Get-ChildItem -Path Variable:\ErrorStatus
 				$Variables += Get-ChildItem -Path Variable:\WarningStatus
+
+				$AllVariables += $Variables.GetEnumerator() | Sort-Object -Property Name
 			}
 
-			foreach ($Variable in $Variables)
+			foreach ($Variable in $AllVariables)
 			{
-				Write-Host "[$Target] $($Variable.Name) = $($Variable.Value)" -ForegroundColor Cyan
+				Write-Host "[$Caller] $($Variable.Name) = $($Variable.Value)" -ForegroundColor Cyan
 			}
 
 			if ($All)
 			{
-				foreach ($Entry in @($env:PSModulePath.Split(";")))
-				{
-					Write-Host "[$Target] ModulePath = $Entry" -ForegroundColor Cyan
-				}
-
-				foreach ($Entry in @($env:Path.Split(";")))
-				{
-					Write-Host "[$Target] Path = $Entry" -ForegroundColor Cyan
-				}
-
 				$DriveEntry = Get-PSDrive -PSProvider FileSystem -Name root, mod, ip4, ip6, test |
 				Select-Object -Property Name, Root
 
 				foreach ($Entry in $DriveEntry)
 				{
-					Write-Host "[$Target] $($Entry.Name):\ = $($Entry.Root)" -ForegroundColor Cyan
+					Write-Host "[$Caller] $($Entry.Name):\ = $($Entry.Root)" -ForegroundColor Cyan
+				}
+
+				foreach ($Entry in @($env:PSModulePath.Split(";")))
+				{
+					Write-Host "[$Caller] ModulePath = $Entry" -ForegroundColor Cyan
+				}
+
+				foreach ($Entry in @($env:Path.Split(";")))
+				{
+					Write-Host "[$Caller] Path = $Entry" -ForegroundColor Cyan
 				}
 			}
 		}
@@ -733,6 +796,7 @@ if ($ListPreference)
 
 	if (!$InModule)
 	{
+		# NOTE: Scripts which dot source this one are same scope thus Show-Preference pulls both
 		Write-Debug -Message "[$SettingsScript] InformationPreference: $InformationPreference" -Debug
 		Show-Preference # -All
 		Remove-Module -Name Dynamic.Preference

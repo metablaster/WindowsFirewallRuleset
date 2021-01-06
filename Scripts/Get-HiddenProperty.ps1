@@ -100,7 +100,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
@@ -120,11 +120,12 @@ $PredefinedHidden = $PredefinedRules | Select-Object -Property DisplayName, Stat
 
 for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 {
+	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'"
+
 	# NOTE: We can't apply filter on all rules at once, because the result won't be sorted the same way
 	$Program = (Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $PredefinedRules[$Index]).Program
 	$Service = (Get-NetFirewallServiceFilter -AssociatedNetFirewallRule $PredefinedRules[$Index]).ServiceName
 
-	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'"
 	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Program" -Value $Program
 	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Service" -Value $Service
 }
