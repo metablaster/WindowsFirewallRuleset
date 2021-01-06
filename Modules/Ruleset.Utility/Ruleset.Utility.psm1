@@ -75,6 +75,7 @@ $PublicScripts = @(
 	"Get-FileEncoding"
 	"Get-TypeName"
 	"Invoke-Process"
+	"Out-DataTable"
 	"Resolve-FileSystemPath"
 	"Select-EnvironmentVariable"
 	"Set-NetworkProfile"
