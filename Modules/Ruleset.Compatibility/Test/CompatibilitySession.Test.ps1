@@ -172,7 +172,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	It "Copy-WinModule should copy the specified module to the user's module path by default" {
 
 		# Get the user's module folder path
-		$destination = [environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments),
+		$destination = [System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments),
 		"PowerShell",
 		"Modules"
 		$fullModulePath = Join-Path $destination PnpDevice

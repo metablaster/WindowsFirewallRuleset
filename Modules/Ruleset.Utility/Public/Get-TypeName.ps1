@@ -104,7 +104,7 @@ function Get-TypeName
 	[OutputType([string])]
 	param (
 		[Parameter(Position = 0, ValueFromPipeline = $true, ParameterSetName = "Object")]
-		[System.Object[]] $InputObject,
+		[object[]] $InputObject,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Command")]
 		[string] $Command,

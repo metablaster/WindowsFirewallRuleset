@@ -66,7 +66,7 @@ function Test-Output
 	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[AllowNull()]
-		[System.Object[]] $InputObject,
+		[object[]] $InputObject,
 
 		[Parameter(Mandatory = $true)]
 		[string] $Command

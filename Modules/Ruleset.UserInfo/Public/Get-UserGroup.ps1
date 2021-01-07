@@ -68,10 +68,6 @@ function Get-UserGroup
 		[switch] $CIM
 	)
 
-	begin
-	{
-		[PSCustomObject[]] $UserGroups = @()
-	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -91,20 +87,21 @@ function Get-UserGroup
 						-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer |
 					Where-Object -Property LocalAccount -EQ "True"
 
+					if ([string]::IsNullOrEmpty($RemoteGroups))
+					{
+						Write-Warning -Message "There are no user groups on computer: $Computer"
+					}
+
 					foreach ($Group in $RemoteGroups)
 					{
-						$UserGroups += [PSCustomObject]@{
-							Group = $Group.Name
+						[PSCustomObject]@{
 							Domain = $Group.Domain
+							Group = $Group.Name
 							Principal = $Group.Caption
 							SID = $Group.SID
 							LocalAccount = $Group.LocalAccount -eq "True"
+							PSTypeName = "Ruleset.UserInfo"
 						}
-					}
-
-					if ([string]::IsNullOrEmpty($UserGroups))
-					{
-						Write-Warning -Message "There are no user groups on computer: $Computer"
 					}
 				}
 			} # if ($CIM)
@@ -115,20 +112,21 @@ function Get-UserGroup
 				# Querying local machine
 				$LocalGroups = Get-LocalGroup
 
+				if ([string]::IsNullOrEmpty($LocalGroups))
+				{
+					Write-Warning -Message "There are no user groups on computer: $Computer"
+				}
+
 				foreach ($Group in $LocalGroups)
 				{
-					$UserGroups += [PSCustomObject]@{
-						Group = $Group.Name
+					[PSCustomObject]@{
 						Domain = $Computer
+						Group = $Group.Name
 						Principal = Join-Path -Path $Computer -ChildPath $Group.Name
 						SID = $Group.SID
 						LocalAccount = $Group.PrincipalSource -eq "Local"
+						PSTypeName = "Ruleset.UserInfo"
 					}
-				}
-
-				if ([string]::IsNullOrEmpty($UserGroups))
-				{
-					Write-Warning -Message "There are no user groups on computer: $Computer"
 				}
 			} # if ($CIM)
 			else
@@ -137,7 +135,5 @@ function Get-UserGroup
 					-Message "Querying remote computers without CIM switch not supported"
 			} # if ($CIM)
 		} # foreach ($Computer in $Domain)
-
-		Write-Output $UserGroups
 	} # process
 }

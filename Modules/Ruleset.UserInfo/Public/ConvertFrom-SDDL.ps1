@@ -134,12 +134,13 @@ function ConvertFrom-SDDL
 						Select-Object -ExpandProperty Value
 
 						[PSCustomObject]@{
-							User = Split-Principal $Principal
 							Domain = Split-Principal $Principal -DomainName
+							User = Split-Principal $Principal
 							# TODO: Group = ?
 							Principal = $Principal
 							SID = $SID
 							SDDL = $DACL
+							PSTypeName = "Ruleset.UserInfo"
 						}
 					}
 					elseif ($RegMatch.Count -gt 1)

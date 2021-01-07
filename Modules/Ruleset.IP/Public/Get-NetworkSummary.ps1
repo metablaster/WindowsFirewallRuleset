@@ -75,7 +75,7 @@ PS> Get-NetworkSummary 0/0
 [string]
 
 .OUTPUTS
-"Ruleset.IP.NetworkSummary"
+"Ruleset.IP.NetworkSummary" [PSCustomObject]
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -107,7 +107,6 @@ function Get-NetworkSummary
 			throw $_
 		}
 
-		# TODO: variables casing not consistent with project
 		$DecimalIP = ConvertTo-DecimalIP $Network.IPAddress
 		$DecimalMask = ConvertTo-DecimalIP $Network.SubnetMask
 		$DecimalNetwork = $DecimalIP -band $DecimalMask
@@ -127,6 +126,7 @@ function Get-NetworkSummary
 			NumberOfHosts = $DecimalBroadcast - $DecimalNetwork - 1
 			Class = ""
 			IsPrivate = $false
+			# TODO: Not used in Format.ps1xml
 			PSTypeName = "Ruleset.IP.NetworkSummary"
 		}
 

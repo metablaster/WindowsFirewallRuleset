@@ -132,7 +132,7 @@ function Initialize-WinSession
 	}
 	else
 	{
-		$script:SessionName = "wincompat-$Domain-$([environment]::UserName)"
+		$script:SessionName = "wincompat-$Domain-$([System.Environment]::UserName)"
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] The compatibility session name is '$script:SessionName'."
@@ -175,7 +175,7 @@ function Initialize-WinSession
 		{
 			$NewPSSessionParameters.Credential = $Credential
 		}
-		if ($Domain -eq "localhost" -or $Domain -eq [environment]::MachineName)
+		if ($Domain -eq "localhost" -or $Domain -eq [System.Environment]::MachineName)
 		{
 			$NewPSSessionParameters.EnableNetworkAccess = $true
 		}

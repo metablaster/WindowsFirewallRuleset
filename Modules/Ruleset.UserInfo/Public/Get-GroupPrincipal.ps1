@@ -79,10 +79,6 @@ function Get-GroupPrincipal
 		[switch] $CIM
 	)
 
-	begin
-	{
-		[PSCustomObject[]] $UserAccounts = @()
-	}
 	process
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -137,13 +133,15 @@ function Get-GroupPrincipal
 							{
 								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
 
-								$UserAccounts += [PSCustomObject]@{
-									User = $Account.Name
+								[PSCustomObject]@{
 									Domain = $Account.Domain
+									User = $Account.Name
+									Group = $UserGroup
 									Principal = $Account.Caption
 									SID = $Account.SID
 									# TODO: Figure out if it's MS account using CIM
 									LocalAccount = $Account.LocalAccount -eq "True"
+									PSTypeName = "Ruleset.UserInfo"
 								}
 							}
 							else
@@ -194,12 +192,14 @@ function Get-GroupPrincipal
 						{
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
 
-							$UserAccounts += [PSCustomObject]@{
-								User = $Account.Name
+							[PSCustomObject]@{
 								Domain = $Computer
+								User = $Account.Name
+								Group = $UserGroup
 								Principal = $AccountName
 								SID = $Account.SID
 								LocalAccount = $Account.PrincipalSource -eq "Local"
+								PSTypeName = "Ruleset.UserInfo"
 							}
 						}
 					}
@@ -212,7 +212,5 @@ function Get-GroupPrincipal
 					-Message "Querying remote computers without CIM switch not supported"
 			}
 		} # foreach ($Computer in $Domain)
-
-		Write-Output $UserAccounts
 	} # process
 }

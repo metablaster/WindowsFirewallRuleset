@@ -69,7 +69,7 @@ Returns the addresses 10.1.0.0/24, 10.1.1.0/24, 10.1.2.0/24, 10.2.0.0/24, and so
 [string]
 
 .OUTPUTS
-TODO: describe outputs, define OutputType
+[string]
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -81,6 +81,7 @@ function Resolve-IPAddress
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Resolve-IPAddress.md")]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
 		[string] $IPAddress
@@ -88,8 +89,8 @@ function Resolve-IPAddress
 
 	process
 	{
-		$Groups = [regex]::Matches($IPAddress, '\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)').Groups.Captures |
-		Where-Object { $_ -and $_.Name -ne '0' } | ForEach-Object {
+		$Groups = [regex]::Matches($IPAddress, "\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)").Groups.Captures |
+		Where-Object { $_ -and ($_.Name -ne '0') } | ForEach-Object {
 			$Group = $_
 
 			$Values = switch ($Group.Name)

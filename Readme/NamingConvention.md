@@ -12,6 +12,7 @@ This file contains naming convention rules for parameters and variables
     - [Exceptions](#exceptions)
   - [Custom objects](#custom-objects)
     - [Ruleset.ProgramInfo](#rulesetprograminfo)
+    - [Ruleset.UserInfo](#rulesetuserinfo)
 
 ## Parameters
 
@@ -196,5 +197,16 @@ InstallLocation = root installation directory
 [PathInfo] RegistryKey = registry key that contains this data
 PSTypeName = unique object type name for this module
 ```
+
+### Ruleset.UserInfo
+
+Domain = computer name
+User = user name
+Group = group name
+Principal = principal name / UPN / NetBIOS principal name
+SID = security identifier of a principal
+SDDL = SDDL string of a principal
+[bool] LocalAccount = indicates local, roaming or MS account
+PSTypeName = unique object type name for this module
 
 [parameters]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/standard-cmdlet-parameter-names-and-types "Visit Microsoft docs"

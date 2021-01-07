@@ -55,22 +55,22 @@ Gets permutations of an IP address expansion expression.
 Gets permutations of an IP address expansion expression.
 
 .PARAMETER Group
-TODO: describe parameter
+ExpansionGroupInfo custom object, the result of IP wildcard pattern expansion
 
 .PARAMETER BaseAddress
-TODO: describe parameter
+Initial IP address conaining Wildcard pattern
 
 .PARAMETER Index
-TODO: describe parameter
+Index of the Group parameter array which to process
 
 .EXAMPLE
-TODO: add example
+See Resolve-IPAddress.ps1
 
 .INPUTS
 None. You cannot pipe objects to Get-Permutation
 
 .OUTPUTS
-TODO: Describe outputs
+[string]
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
@@ -78,21 +78,24 @@ Modifications by metablaster year 2019, 2020:
 - For code to be consistent with project code formatting and symbol casing.
 - Rename function to approved verb
 - Removed unnecessary position arguments, added default argument values explicitly.
-TODO: specify OutputType
+Modifications 2021:
+- Added OutputType attribute
+- Update comment based help
 #>
 function Get-Permutation
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
+	[OutputType([string])]
 	param (
-		[Parameter()]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[PSTypeName("ExpansionGroupInfo")]
-		[System.Object[]] $Group,
+		[object[]] $Group,
 
-		[Parameter()]
+		[Parameter(Mandatory = $true)]
 		[string] $BaseAddress,
 
 		[Parameter()]
-		[int32] $Index
+		[int32] $Index = 0
 	)
 
 	foreach ($Value in $Group[$Index].ReplaceWith)
@@ -106,6 +109,6 @@ function Get-Permutation
 			$Address = Get-Permutation $Group -Index ($Index + 1) -BaseAddress $Address
 		}
 
-		$Address
+		Write-Output $Address
 	}
 }

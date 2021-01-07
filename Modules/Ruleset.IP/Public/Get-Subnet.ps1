@@ -79,7 +79,7 @@ PS> Get-Subnet 0/22 -NewSubnetMask 24
 None. You cannot pipe objects to Get-Subnet
 
 .OUTPUTS
-"Ruleset.IP.Subnet"
+"Ruleset.IP.Subnet" [PSCustomObject]
 
 .NOTES
 Change log:

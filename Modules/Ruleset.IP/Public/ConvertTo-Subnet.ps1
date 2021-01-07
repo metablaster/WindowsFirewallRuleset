@@ -82,7 +82,7 @@ PS> ConvertTo-Subnet 10.0.0.23 255.255.255.0
 None. You cannot pipe objects to ConvertTo-Subnet
 
 .OUTPUTS
-"Ruleset.IP.Subnet" Custom object
+"Ruleset.IP.Subnet" [PSCustomObject]
 
 .NOTES
 Modifications by metablaster year 2019, 2020:

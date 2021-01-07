@@ -83,6 +83,8 @@ Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+January 2021:
+- Replace cast to [void] with Out-Null
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -110,8 +112,8 @@ function Invoke-WinCommand
 		[object[]] $ArgumentList
 	)
 
-	[void] $PSBoundParameters.Remove("ScriptBlock")
-	[void] $PSBoundParameters.Remove("ArgumentList")
+	$PSBoundParameters.Remove("ScriptBlock") | Out-Null
+	$PSBoundParameters.Remove("ArgumentList") | Out-Null
 
 	# Make sure the session is initialized
 	[PSSession] $Session = Initialize-WinSession @PSBoundParameters -PassThru

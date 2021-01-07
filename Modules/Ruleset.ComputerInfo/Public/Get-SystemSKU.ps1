@@ -234,7 +234,7 @@ function Get-SystemSKU
 
 						# Include just computer
 						[PSCustomObject] @{
-							Computer = $Computer
+							Domain = $Computer
 							SystemSKU = $null
 							SKU = $null
 						}

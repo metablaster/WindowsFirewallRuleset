@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/Format.xsd -->
 <!-- Represents the top-level element of a formatting file. -->
 <Configuration>
@@ -7,12 +7,12 @@
 	<ViewDefinitions>
 		<!-- Defines a view that is used to display one or more .NET objects. -->
 		<View>
-			<Name>Ruleset.IP.Subnet</Name>
+			<Name>Ruleset.UserInfo</Name>
 			<!-- Defines the .NET objects that are displayed by the view. -->
 			<!-- Each view must specify at least one .NET object. -->
 			<ViewSelectedBy>
 				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
-				<TypeName>Ruleset.IP.Subnet</TypeName>
+				<TypeName>Ruleset.UserInfo</TypeName>
 			</ViewSelectedBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
@@ -22,26 +22,27 @@
 					<TableColumnHeader>
 						<!-- Optional element. Defines the label that is displayed at the top of the column. -->
 						<!-- If no label is specified, the name of the property whose value is displayed in the rows is used. -->
-						<Label>NetworkAddress</Label>
+						<Label>Domain</Label>
+						<!-- Required element. Specifies the width (in characters) of the column. -->
+						<Width>15</Width>
 						<!-- Optional element. Specifies how the label of the column is displayed. -->
 						<!-- If no alignment is specified, the label is aligned on the left. -->
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
-						<Label>BroadcastAddress</Label>
-						<Alignment>left</Alignment>
+						<Label>User</Label>
+						<Width>15</Width>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
-						<Label>SubnetMask</Label>
-						<Alignment>left</Alignment>
+						<Label>Group</Label>
+						<Width>15</Width>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
-						<Label>MaskLength</Label>
-						<Alignment>left</Alignment>
-					</TableColumnHeader>
-					<TableColumnHeader>
-						<Label>HostAddresses</Label>
-						<Alignment>left</Alignment>
+						<Label>Principal</Label>
+						<Width>30</Width>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 				</TableHeaders>
 				<!-- Optional element. Provides the definitions of the table view. -->
@@ -52,19 +53,16 @@
 						<TableColumnItems>
 							<!-- Required element. Defines the property or script whose value is displayed in a column of the row. -->
 							<TableColumnItem>
-								<PropertyName>NetworkAddress</PropertyName>
+								<PropertyName>Domain</PropertyName>
 							</TableColumnItem>
 							<TableColumnItem>
-								<PropertyName>BroadcastAddress</PropertyName>
+								<PropertyName>User</PropertyName>
 							</TableColumnItem>
 							<TableColumnItem>
-								<PropertyName>SubnetMask</PropertyName>
+								<PropertyName>Group</PropertyName>
 							</TableColumnItem>
 							<TableColumnItem>
-								<PropertyName>MaskLength</PropertyName>
-							</TableColumnItem>
-							<TableColumnItem>
-								<PropertyName>HostAddresses</PropertyName>
+								<PropertyName>Principal</PropertyName>
 							</TableColumnItem>
 						</TableColumnItems>
 					</TableRowEntry>

@@ -78,6 +78,8 @@ Following modifications by metablaster November 2020:
 - Code formatting according to the rest of project design
 - Replace double quotes with single quotes
 - Added HelpURI link to project location
+January 2021:
+- Replace cast to [void] with Out-Null
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
@@ -107,8 +109,8 @@ function Add-WinFunction
 	)
 
 	# Make sure the session is initialized
-	[void] $PSBoundParameters.Remove("Name")
-	[void] $PSBoundParameters.Remove("ScriptBlock")
+	$PSBoundParameters.Remove("Name") | Out-Null
+	$PSBoundParameters.Remove("ScriptBlock") | Out-Null
 
 	# the session variable will be captured in the closure
 	$Session = Initialize-WinSession @PSBoundParameters -PassThru
