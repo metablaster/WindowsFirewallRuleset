@@ -79,7 +79,6 @@ function Get-WindowsSDK
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		[PSCustomObject[]] $WindowsSDK = @()
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -111,16 +110,16 @@ function Get-WindowsSDK
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 				$InstallLocation = Format-Path $InstallLocation
 
-				$WindowsSDK += [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = $HKLMSubKey
-					"Product" = $SubKey.GetValue("ProductName")
-					"Version" = $SubKey.GetValue("ProductVersion")
-					"InstallLocation" = $InstallLocation
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = $SubKey.GetValue("ProductName")
+					Version = $SubKey.GetValue("ProductVersion")
+					Publisher = "Microsoft Corporation"
+					InstallLocation = $InstallLocation
+					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $WindowsSDK
 	}
 }

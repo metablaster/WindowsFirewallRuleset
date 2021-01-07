@@ -37,7 +37,7 @@ advanced functions will be picked up by this function, formatted and then writte
 Update-Log can be called any amount of time within a script to update logs, but it must be the last
 command in a script as well to flush any remaining streams.
 
-Update-Log should be used only withing scripts, streams in module (module scope) are picked up
+Update-Log should be used only within scripts, streams in module (module scope) are picked up
 automatically by the script that calls module advanced functions.
 
 If any of the 3 preferences are set to "Ignore" those won't be logged

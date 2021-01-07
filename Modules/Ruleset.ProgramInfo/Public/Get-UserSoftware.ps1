@@ -81,7 +81,6 @@ function Get-UserSoftware
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
 		$UserKey = $RemoteKey.OpenSubkey($HKU)
 
-		[PSCustomObject[]] $UserPrograms = @()
 		if (!$UserKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -114,15 +113,16 @@ function Get-UserSoftware
 				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
-				$UserPrograms += [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = $HKUSubKey
-					"Name" = $SubKey.GetValue("displayname")
-					"InstallLocation" = $InstallLocation
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = $SubKey.GetValue("DisplayName")
+					Version = $SubKey.GetValue("DisplayVersion")
+					Publisher = $SubKey.GetValue("Publisher")
+					InstallLocation = $InstallLocation
+					RegistryKey = "HKU:\$HKU"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $UserPrograms
 	}
 }

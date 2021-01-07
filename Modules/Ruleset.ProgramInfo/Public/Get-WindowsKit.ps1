@@ -83,7 +83,6 @@ function Get-WindowsKit
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSCustomObject[]] $WindowsKits = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -110,15 +109,16 @@ function Get-WindowsKit
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
 				$InstallLocation = Format-Path $InstallLocation
 
-				$WindowsKits += [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = $RootKeyLeaf
-					"Product" = $RootKeyEntry
-					"InstallLocation" = $InstallLocation
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = "Windows Kits"
+					# TODO: Version unknown
+					Publisher = "Microsoft Corporation"
+					InstallLocation = $InstallLocation
+					RegistryKey = "$($RootKey.ToString())\$RootKeyEntry" -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $WindowsKits
 	}
 }

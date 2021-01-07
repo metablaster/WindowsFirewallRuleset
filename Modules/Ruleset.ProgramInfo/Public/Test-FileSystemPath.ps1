@@ -133,7 +133,7 @@ function Test-FileSystemPath
 	{
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 			"PSProvideCommentHelp", "", Scope = "Function", Justification = "Inner function needs no help")]
-		param([string] $Message)
+		param ([string] $Message)
 
 		if ($Quiet)
 		{

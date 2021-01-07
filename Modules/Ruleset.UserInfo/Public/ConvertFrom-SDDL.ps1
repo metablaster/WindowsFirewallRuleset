@@ -73,7 +73,7 @@ function ConvertFrom-SDDL
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SDDL: $SddlEntry"
 
-			# Case sensitive regex pattern to math exactly one DACL entry withing SDDL string
+			# Case sensitive regex pattern to math exactly one DACL entry within SDDL string
 			$RegMatch = [regex]::Matches($SddlEntry, "(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}")
 
 			if ($RegMatch.Count -ne 1)

@@ -405,7 +405,7 @@ function Get-SqlServerInstance
 						$AllInstances += [PSCustomObject]@{
 							Domain = $Computer
 							SQLInstance = $Instance
-							# TODO: To what should be InstallLocation be set?
+							# TODO: InstallLocation property?
 							SQLBinRoot = $SQLBinRoot
 							SQLPath = $SQLPath
 							Edition = $Edition
@@ -464,7 +464,7 @@ function Get-SqlServerInstance
 					$SQLServices = @(
 						Get-CimInstance -ComputerName $Computer -Namespace "root\cimv2" `
 							-OperationTimeoutSec $ConnectionTimeout -ErrorAction stop `
-							-Query "select DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
+							-Query "SELECT DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
 						# This regex matches MSSQLServer and MSSQL$*
 						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |
 						Select-Object -Property DisplayName, StartName, StartMode, State, PathName
@@ -481,7 +481,7 @@ function Get-SqlServerInstance
 							Where-Object {
 								# We need to format here because Instance path is formatted, while the path from CIM query isn't
 								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
-								(Format-Path $_.PathName) -like "$( $Instance.SQLBinRoot )*" -or $_.PathName -like "`"$( $Instance.SQLBinRoot )*"
+								(Format-Path $_.PathName) -like "$($Instance.SQLBinRoot)*" -or $_.PathName -like "`"$($Instance.SQLBinRoot)*"
 							} | Select-Object -First 1
 
 							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"

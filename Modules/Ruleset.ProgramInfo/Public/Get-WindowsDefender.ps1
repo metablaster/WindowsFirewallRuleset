@@ -70,7 +70,6 @@ function Get-WindowsDefender
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		[PSCustomObject] $WindowsDefender = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
@@ -91,14 +90,16 @@ function Get-WindowsDefender
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
 
-				$WindowsDefender = [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = $RootKeyLeaf
-					"InstallLocation" = Format-Path $InstallLocation
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = "Windows Defender"
+					Version = (Split-Path $InstallLocation -Leaf)
+					Publisher = "Microsoft Corporation"
+					InstallLocation = Format-Path $InstallLocation
+					RegistryKey = $RootKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		return $WindowsDefender
 	}
 }

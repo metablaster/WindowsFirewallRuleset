@@ -116,7 +116,7 @@ function Test-Output
 		elseif ($OutputType -like "$TypeName*" -or ($OutputType | Where-Object { $TypeName -like "$_*" }))
 		{
 			# Either typename is longer and contains one of OutputType's in it's name or
-			# typename is shorter and contained withing one of OutputTypes or
+			# typename is shorter and contained within one of OutputTypes or
 			# both are the same but different casing used.
 			Write-Warning -Message "Typename is similar to OutputType but not named exactly the same"
 		}

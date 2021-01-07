@@ -146,6 +146,7 @@ function Get-NetFramework
 						# we add entry regardless of presence of install path
 						[PSCustomObject]@{
 							Domain = $Domain
+							Name = ".NET Framework"
 							Version = $Version
 							Publisher = "Microsoft Corporation"
 							InstallLocation = $InstallLocation
