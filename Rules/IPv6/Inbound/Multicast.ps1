@@ -33,6 +33,13 @@ Inbound firewall rules for IPv6 multicast traffic
 .DESCRIPTION
 Inbound firewall rules for IPv6 multicast traffic
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\Multicast.ps1
 
@@ -98,11 +105,14 @@ https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-address
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -129,6 +139,7 @@ $Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into fi
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

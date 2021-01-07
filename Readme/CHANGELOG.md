@@ -32,9 +32,10 @@ If you would like to see fresh changes done since last release you can do so on 
 - Rules
 
   - Updated rule script for git and GitHub Desktop
-  - Rules load into firewall if target executable exists and only if it's digitally signed (In progress...)
+  - Rules load into firewall if target executable exists and only if it's digitally signed
   - Rules based on services will have services tested for digital signature in addition to
   service existence test
+  - GPO is automatically updated if running individual rule scripts manually (In progress...)
 
 - New features
 
@@ -73,7 +74,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Pramenter names and aliases follow naming convention according to community development
   guidelines (In progress...)
   - 3rd party scripts from `External` directories merged into the rest of project code, there is no
-  no point to separate code based on contributors involved. (In progress...)
+  no point to separate code based on contributors involved.
 
 - Bugfix
 

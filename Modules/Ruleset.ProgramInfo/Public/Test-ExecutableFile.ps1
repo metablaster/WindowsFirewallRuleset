@@ -44,7 +44,7 @@ Fully qualified path to executable file
 
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
-instead of an error resulting in passed test.
+instead of an error resulting in bypassed signature test.
 
 .EXAMPLE
 PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
@@ -154,7 +154,8 @@ function Test-ExecutableFile
 			if ($Force)
 			{
 				Write-Warning -Message "Digital signature verification failed for: $ExpandedPath"
-				Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+				# NOTE: StatusMessage seems to be unrelated to problem
+				# Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
 			}
 			else
 			{
@@ -162,9 +163,8 @@ function Test-ExecutableFile
 					-Message "Digital signature verification failed for: $ExpandedPath"
 
 				Write-Information -Tags "User" -MessageData "INFO: To load rules for unsigned executables run '$($MyInvocation.MyCommand)' with -Force switch"
+				return $false
 			}
-
-			return $false
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Executable file '$Executable' $($Signature.StatusMessage)"

@@ -33,6 +33,13 @@ Outbound firewall rules for core networking
 .DESCRIPTION
 Predefined rules from Core Networking are here excluding ICMP
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\CoreNetworking.ps1
 
@@ -52,11 +59,14 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -74,6 +84,7 @@ $Deny = "Skip operation, outbound IPv6 core networking rules will not be loaded 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

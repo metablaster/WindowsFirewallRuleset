@@ -33,6 +33,13 @@ Outbound firewall rules for broadcast traffic
 .DESCRIPTION
 Outbound rules for broadcast traffic
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\Broadcast.ps1
 
@@ -55,11 +62,14 @@ TODO: currently handling only UDP, also broadcast falls into multicast space
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -77,6 +87,7 @@ $Deny = "Skip operation, outbound broadcast rules will not be loaded into firewa
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # NOTE: Don't run if execute not approved

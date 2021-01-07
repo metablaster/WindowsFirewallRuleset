@@ -334,6 +334,9 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Set to false to disable logging information messages
 	Set-Variable -Name InformationLogging -Scope Global -Value $true
+
+	# Set to true to disable digital signature verification of executables involved in rules
+	Set-Variable -Name SkipSignatureCheck -Scope Global -Value $false
 }
 #endregion
 

@@ -34,6 +34,13 @@ Outbound firewall rules for network discovery
 Network Discovery predefined rules + additional rules
 Rules which apply to network discovery on LAN
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\NetworkDiscovery.ps1
 
@@ -56,11 +63,14 @@ TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -79,6 +89,7 @@ $Deny = "Skip operation, outbound network discovery rules will not be loaded int
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $DisplayGroup
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

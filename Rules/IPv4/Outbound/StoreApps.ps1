@@ -33,6 +33,13 @@ Outbound firewall rules for store apps
 .DESCRIPTION
 Outbound rules for store apps
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\StoreApps.ps1
 
@@ -82,11 +89,14 @@ NOTE: If OneNote app fails to install, start "Print Spooler" service and try aga
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -106,6 +116,7 @@ $Deny = "Skip operation, outbound rules for store apps will not be loaded into f
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

@@ -34,6 +34,13 @@ Temporary outbound rules
 Temporary rules are enabled on demand only to let some program do it's internet work, or
 to troubleshoot firewall without shuting it down completely.
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .EXAMPLE
 PS> .\Temporary.ps1
 
@@ -53,11 +60,14 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
 Initialize-Project -Abort
@@ -74,6 +84,7 @@ $Deny = "Skip operation, temporary outbound IPv4 rules will not be loaded into f
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
