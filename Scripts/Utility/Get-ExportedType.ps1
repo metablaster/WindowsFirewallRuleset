@@ -33,17 +33,6 @@ SOFTWARE.
 .GUID 0186fc8f-feff-44f7-84a9-4053993ef6a2
 
 .AUTHOR Warren Frame
-
-.COPYRIGHT Copyright (C) 2015 Warren Frame
-
-.TAGS Utility
-
-.LICENSEURI https://github.com/RamblingCookieMonster/PowerShell/blob/master/LICENSE
-
-.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
-
-.RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 <#
@@ -78,8 +67,9 @@ Wildcard characters are supported.
 Filter on IsEnum.
 
 .EXAMPLE
-List the full name of all Enums in the current session
-PS> Get-ExportedType -IsEnum $true | Select -ExpandProperty FullName | Sort -Unique
+PS> Get-ExportedType -IsEnum | Select -ExpandProperty FullName | Sort -Unique
+
+Will list the full name of all Enums in the current session
 
 .EXAMPLE
 Connect to a web service and list all the exported types
@@ -124,23 +114,23 @@ https://github.com/RamblingCookieMonster/PowerShell
 param (
 	[Parameter()]
 	[SupportsWildcards()]
-	[string] $Module = '*',
+	[string] $Module = "*",
 
 	[Parameter()]
 	[SupportsWildcards()]
-	[string] $Assembly = '*',
+	[string] $Assembly = "*",
 
 	[Parameter()]
 	[SupportsWildcards()]
-	[string] $FullName = '*',
+	[string] $FullName = "*",
 
 	[Parameter()]
 	[SupportsWildcards()]
-	[string] $Namespace = '*',
+	[string] $Namespace = "*",
 
 	[Parameter()]
 	[SupportsWildcards()]
-	[string] $BaseType = '*',
+	[string] $BaseType = "*",
 
 	[Parameter()]
 	[switch] $IsEnum

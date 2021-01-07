@@ -33,17 +33,6 @@ SOFTWARE.
 .GUID d1607417-03c5-4295-9b8d-a0b64fb06e7a
 
 .AUTHOR metablaster zebal@protonmail.com
-
-.COPYRIGHT Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
-
-.TAGS Help Markdown
-
-.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
-
-.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
-
-.RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 <#
@@ -109,9 +98,7 @@ param (
 	[string[]] $Module,
 
 	[Parameter()]
-	[string[]] $UICulture = @(
-		"en-US"
-	),
+	[string[]] $UICulture = @("en-US"),
 
 	[Parameter()]
 	$Encoding = $null,

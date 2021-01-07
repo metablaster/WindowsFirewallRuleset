@@ -27,6 +27,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#PSScriptInfo
+TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
+.VERSION 0.9.1
+
+.GUID 66e38822-834d-4a90-b9c6-9e600a472a0a
+
+.AUTHOR metablaster zebal@protonmail.com
+
+.COPYRIGHT Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+
+.TAGS Template
+
+.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
+
+.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
+
+.RELEASENOTES https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md
+#>
+
 <#
 .SYNOPSIS
 A brief description of the function or script.

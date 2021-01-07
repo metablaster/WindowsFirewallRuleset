@@ -3,18 +3,34 @@
 
 Contains following project scripts which are not part of modules
 
-1. `Backup-Firewall.ps1` to export all firewall rules from GPO policy store
-2. `Grant-Logs.ps1` grant access to firewall log files if logged into repository
-3. `Get-HiddenProperty.ps1` to show hidden firewall rule properties
-4. `Restore-Firewall.ps1` to import all exported firewall rules into GPO policy store
-5. `Debug-FilteringPlatform.ps1` to parse audit events from event log and write them to log file
-6. `Reset-Firewall.ps1` to restore GPO policy store to factory defaults
-7. `Restart-Network.ps1` to restart or reset network without the need for reboot
-8. `Deploy-Firewall.ps1` to apply firewall rules and global settings to GPO
-9. `Complete-Firewall.ps1` to apply global firewall settings (called by "Deploy-Firewall.ps1")
-10. `Unblock-Project.ps1` to unblock all files in repository (called by "Deploy-Firewall.ps1")
-11. `Update-HelpContent.ps1`  generate new or update existing help files for all project modules
+| Core scripts           | Description                                                             |
+|------------------------|-------------------------------------------------------------------------|
+| Backup-Firewall.ps1    | Export all firewall rules from GPO policy store
+| Complete-Firewall.ps1  | Apply global firewall settings (called by "Deploy-Firewall.ps1")
+| Deploy-Firewall.ps1    | Apply firewall rules and global settings to GPO
+| Grant-Logs.ps1         | Grant access to firewall log files if logged into repository
+| Reset-Firewall.ps1     | Restore GPO policy store to factory defaults
+| Restart-Network.ps1    | Restart or reset network without the need for reboot
+| Restore-Firewall.ps1   | Import all exported firewall rules into GPO policy store
+| Unblock-Project.ps1    | Unblock all files in repository (called by "Deploy-Firewall.ps1")
+| Update-HelpContent.ps1 | Generate new or update existing help files for all project modules
+
+| Utility scripts             | Description
+|-----------------------------|--------------------------------------------------------------------|
+| Debug-FilteringPlatform.ps1 | Parse audit events from event log and write them to log file
+| Get-CallerPreference.ps1    | Fetch preference variable values from the caller's scope.
+| Get-DevicePath.ps1          | Get mappings of disk volume letter and device path
+| Get-ExportedType.ps1        | Get exported types in the current session
+| Get-HiddenProperty.ps1      | Get a list of hidden properties for specified firewall rule group
+| Get-NetworkStatistics.ps1   | Display current TCP/IP connections for local or remote system
+| Get-ParameterAlias.ps1      | Gets parameter aliases of functions, commandlets, scripts or aliases
+| Get-PropertyType.ps1        | Get .NET types for properties of one or more objects
+
+| Experimental scripts        | Description
+|-----------------------------|--------------------------------------------------------------------|
+| Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis
+| Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1
 
 **Warning:**\
-Export/Import of firewall rules might take a lot of time, it is recommended to either customize these\
-2 scripts to fine tune what to export or even better to use `secpol.msc` to export/import firewall.
+Export\Import of firewall rules might take a lot of time, it is recommended to either customize these\
+2 scripts to fine tune what to export or even better to use `secpol.msc` to export\import firewall.

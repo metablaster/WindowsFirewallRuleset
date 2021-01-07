@@ -33,17 +33,6 @@ SOFTWARE.
 .GUID 075e5850-2741-4080-9f03-1d351f659b72
 
 .AUTHOR metablaster zebal@protonmail.com
-
-.COPYRIGHT Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
-
-.TAGS Execution
-
-.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
-
-.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
-
-.RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 <#

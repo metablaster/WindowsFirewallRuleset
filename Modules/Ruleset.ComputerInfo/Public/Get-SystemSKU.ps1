@@ -99,7 +99,7 @@ function Get-SystemSKU
 	begin
 	{
 		[scriptblock] $GetStringSKU = {
-			param([int32] $SKU)
+			param ([int32] $SKU)
 
 			switch ($SKU)
 			{

@@ -54,7 +54,7 @@ function Exit-Test
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Exit-Test.md")]
 	[OutputType([void])]
-	param(
+	param (
 		[Parameter()]
 		[switch] $Pester
 	)

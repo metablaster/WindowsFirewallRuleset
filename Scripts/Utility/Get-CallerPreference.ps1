@@ -50,6 +50,15 @@ merchantability, fitness for a particular purpose and non-infringement.
 or derivative works that you create that run on a Microsoft Windows operating system product.
 #>
 
+<#PSScriptInfo
+
+.VERSION 0.9.1
+
+.GUID d2826695-3fc1-47c9-80f1-6b7f80a2f26c
+
+.AUTHOR Microsoft Corporation
+#>
+
 <#
 .SYNOPSIS
 Fetches "Preference" variable values from the caller's scope.
@@ -126,10 +135,10 @@ Added optional parent scope validation
 TODO: This script needs unit test to simplify or improve
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.1
+https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-preference-variables/
 
 .LINK
-https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-preference-variables/
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7.1
 
 .LINK
 https://gallery.technet.microsoft.com/scriptcenter/Inherit-Preference-82343b9d

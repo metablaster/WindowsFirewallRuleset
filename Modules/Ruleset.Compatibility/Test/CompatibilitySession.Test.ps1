@@ -46,7 +46,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		@{command = 'Compare-WinModule' },
 		@{command = 'Copy-WinModule' }
 	) {
-		param($command)
+		param ($command)
 		Get-Command $command | Should -Not -BeNullOrEmpty
 	}
 

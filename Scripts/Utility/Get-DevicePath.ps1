@@ -56,18 +56,6 @@ param (
 	[string] $DevicePath
 )
 
-#region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-. $PSScriptRoot\..\ContextSetup.ps1
-#endregion
-
 # Build System Assembly in order to call Kernel32:QueryDosDevice.
 $DynAssembly = New-Object System.Reflection.AssemblyName("SysUtils")
 $AssemblyBuilder = [AppDomain]::CurrentDomain.DefineDynamicAssembly($DynAssembly, [Reflection.Emit.AssemblyBuilderAccess]::Run)
@@ -123,7 +111,6 @@ if ($DriveLetter)
 		Write-Warning -Message "Drive letter '$DriveLetter' not found"
 	}
 
-	Update-Log
 	return
 }
 
@@ -151,9 +138,7 @@ if ($DevicePath)
 		Write-Warning -Message "Device path '$DevicePath' not found"
 	}
 
-	Update-Log
 	return $Result
 }
 
 Write-Output $ResultTable
-Update-Log

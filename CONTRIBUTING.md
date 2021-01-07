@@ -210,7 +210,11 @@ it should be enough to take a look at the existing scripts and figure it out rig
 Use following command to see allowed verbs to name your functions
 
 ```powershell
+# PowerShell Core
 Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
+
+# Windows PowerShell
+Get-Verb | Select-Object Verb, Group | Sort-Object Verb
 ```
 
 For function nouns prefer 1 word or maximum 2 (distinguished by first uppercase letter) for example:

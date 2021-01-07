@@ -61,10 +61,12 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Scripts
 
+  - Added PSScriptInfo comment to scripts that are not part of modules
+  - Added CmdletBinding to scripts and -Force switch to skip prompt
+
 - Documentation
 
-  - `NamingConvention.md` new document to explain naming convention used by the project code
-  - Added PSScriptInfo comment to scripts that are not part of modules
+  - `NamingConvention.md` new document to explain naming convention used by project code
 
 - Design
 
@@ -77,7 +79,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent
   output (In progress...)
-  - Running individual functions with `-Debug` or `-Verbose` switch did not respect the switch (In progress...)
+  - Running individual functions and scripts with `-Debug` or `-Verbose` switch did not respect the
+  switch, fixed
 
 ## v0.9.0 (current release)
 

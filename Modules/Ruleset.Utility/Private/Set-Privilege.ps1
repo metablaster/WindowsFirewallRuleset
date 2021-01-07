@@ -141,7 +141,7 @@ function Set-Privilege
 		Add-Type -MemberDefinition $Signature -Namespace AdjPriv -Name Privilege
 
 		[scriptblock] $GetPrivilegeConstant = {
-			param($StringParam)
+			param ($StringParam)
 
 			if ($StringParam -eq "TrustedComputingBase")
 			{

@@ -83,7 +83,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"Test-Function"
+	"Debug-Experiment"
 )
 
 foreach ($Script in $PublicScripts)

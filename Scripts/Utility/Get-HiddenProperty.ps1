@@ -33,17 +33,6 @@ SOFTWARE.
 .GUID d6b158fc-ac3c-4979-a3d6-a7a656db11ec
 
 .AUTHOR metablaster zebal@protonmail.com
-
-.COPYRIGHT Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
-
-.TAGS Firewall
-
-.LICENSEURI https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/LICENSE
-
-.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
-
-.RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 <#
@@ -99,18 +88,6 @@ param (
 	[string] $PolicyStore = [System.Environment]::MachineName
 )
 
-#region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Abort
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
-#endregion
-
 $PredefinedRules = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup $DisplayGroup -Direction $Direction
 $RuleCount = ($PredefinedRules | Measure-Object).Count
 
@@ -131,5 +108,3 @@ for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 }
 
 $PredefinedHidden
-
-Update-Log

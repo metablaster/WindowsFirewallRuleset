@@ -205,7 +205,7 @@ New-Module -Name Dynamic.TestInfo -ScriptBlock {
 	function Test-DynamicFunction
 	{
 		[CmdletBinding()]
-		param()
+		param ()
 
 		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
 		$PSDefaultParameterValues

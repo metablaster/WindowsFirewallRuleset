@@ -28,44 +28,36 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Module script experiment
+Script experiment
 
 .DESCRIPTION
-Use Test-Function.ps1 to write temporary module tests
+Use Experiment.ps1 to write temporary tests
 
 .EXAMPLE
-PS> Import-Module -Name Experiment.Module
-PS> Test-Function
+PS> .\Experiment.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-Function.ps1
+None. You cannot pipe objects to Experiment.ps1
 
 .OUTPUTS
-None. Test-Function.ps1 does not generate any output
+None. Experiment.ps1 does not generate any output
 
 .NOTES
 None.
 #>
-function Test-Function
-{
-	[CmdletBinding()]
-	param (
-		[Parameter()]
-		[string] $Param
-	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
-	$InformationPreference = "Continue"
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
-	Write-Information -MessageData "Parameter: $Param"
-}
+Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
-# Template variable
-Set-Variable -Name TestVariable -Scope Script -Value "Test variable"
+# $VerbosePreference = "Continue"
+Write-Verbose "From Script"
 
-# Out of a module context
-if ($MyInvocation.InvocationName -ne '.')
-{
-	Test-Function $TestVariable
-}
+Debug-Experiment

@@ -33,17 +33,6 @@ SOFTWARE.
 .GUID 0014338b-58f3-4d41-8a0b-dcaafef55c75
 
 .AUTHOR Warren Frame
-
-.COPYRIGHT Copyright (C) 2016 Warren Frame
-
-.TAGS Utility
-
-.LICENSEURI https://github.com/RamblingCookieMonster/PowerShell/blob/master/LICENSE
-
-.PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
-
-.RELEASENOTES
-https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md
 #>
 
 <#
