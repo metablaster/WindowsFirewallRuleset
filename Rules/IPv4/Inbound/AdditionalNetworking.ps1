@@ -51,8 +51,16 @@ None. AdditionalNetworking.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -69,7 +77,7 @@ $Deny = "Skip operation, inbound additional networking rules will not be loaded 
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -159,77 +167,78 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
 Format-Output
 
-$MdeServer = "%SystemRoot%\System32\mdeserver.exe"
-Test-ExecutableFile $MdeServer
+$Program = "%SystemRoot%\System32\mdeserver.exe"
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress PlayToDevice4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress PlayToDevice4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress PlayToDevice4 `
+		-LocalPort 23554-23556 -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress PlayToDevice4 `
-	-LocalPort 23554-23556 -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort 23554-23556 -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort 23554-23556 -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
-
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
-	-Service Any -Program $MdeServer -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort 23554-23556 -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort 23554-23556 -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Cast to Device UPnP Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -315,17 +324,18 @@ unable to run." | Format-Output
 
 # NOTE: probably does not exist in Windows Server 2019
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Proximity sharing" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for Proximity sharing over." | Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Proximity sharing" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for Proximity sharing over." | Format-Output
+}
 
 #
 # DIAL Protocol predefined rules

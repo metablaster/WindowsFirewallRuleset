@@ -46,8 +46,16 @@ None. qBittorrent.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, inbound rules for qBittorrent software will not be load
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 #
@@ -84,67 +92,68 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$qBittorrentRoot\qbittorrent.exe"
-	Test-ExecutableFile $Program
+	if (Test-ExecutableFile $Program)
+	{
+		# TODO: requires uTP protocol?
+		New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort 1161 -RemotePort 1024-65535 `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "qBittorrent UDP listener, usually for DHT." |
+		Format-Output
 
-	# TODO: requires uTP protocol?
-	New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort 1161 -RemotePort 1024-65535 `
-		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterface `
-		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "qBittorrent UDP listener, usually for DHT." |
-	Format-Output
+		New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort 1161 -RemotePort 1024-65535 `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
+			-InterfaceType $DefaultInterface `
+			-Description "qBittorrent TCP listener." |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort 1161 -RemotePort 1024-65535 `
-		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent TCP listener." |
-	Format-Output
+		New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort 9000 -RemotePort 1024-65535 `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
+			-InterfaceType $DefaultInterface `
+			-Description "qBittorrent Embedded tracker port." |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort 9000 -RemotePort 1024-65535 `
-		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent Embedded tracker port." |
-	Format-Output
-
-	# NOTE: remote port can be other than 6771, remote client will fall back to 6771
-	New-NetFirewallRule -DisplayName "qBittorrent - Local Peer discovery" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 `
-		-LocalPort 6771 -RemotePort 6771 `
-		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-		-InterfaceType $DefaultInterface `
-		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "UDP multicast search to identify other peers in your subnet that are also on
+		# NOTE: remote port can be other than 6771, remote client will fall back to 6771
+		New-NetFirewallRule -DisplayName "qBittorrent - Local Peer discovery" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 `
+			-LocalPort 6771 -RemotePort 6771 `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "UDP multicast search to identify other peers in your subnet that are also on
 torrents you are on." |
-	Format-Output
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort 8080 -RemotePort Any `
-		-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
-		-InterfaceType $DefaultInterface `
-		-Description "qBittorrent Remote control from browser." |
-	Format-Output
+		New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort 8080 -RemotePort Any `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
+			-InterfaceType $DefaultInterface `
+			-Description "qBittorrent Remote control from browser." |
+		Format-Output
+	}
 }
 
 Update-Log

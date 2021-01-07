@@ -46,8 +46,16 @@ None. Steam.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound client for Steam software will not be loaded i
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -87,92 +95,98 @@ $SteamCommon = "%ProgramFiles(x86)%\Common Files\Steam"
 if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (game client traffic)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27015 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam (game client traffic)" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27015 `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27031, 27036 -RemotePort 27031, 27036 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27031, 27036 -RemotePort 27031, 27036 `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
 another PC on the same local network." | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27036, 27037 -RemotePort 27036, 27037 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27036, 27037 -RemotePort 27036, 27037 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
 another PC on the same local network." | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam downloads" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam downloads" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam Matchmaking and HLTV" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam Matchmaking and HLTV" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3478, 4379, 4380 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3478, 4379, 4380 `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "" | Format-Output
+	}
 
 	$Program = "$SteamCommon\SteamService.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "SteamService" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $LocalSystem `
-		-Description "" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "SteamService" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+			-LocalUser $LocalSystem `
+			-Description "" | Format-Output
+	}
 
 	# TODO: For all x86 rules we need checks, since those don't exist on x86 systems
 	# This path is sometimes cef.win7 sometimes cef.win7x64, need solution for this
 	# NOTE: It looks like cef.win7 is used during installation of steam on x64 system, and,
 	# cef.win7x64 after installation is done, could be cef.win7 is used on x86 in both cases.
 	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" | Format-Output
-
-	if ([System.Environment]::Is64BitOperatingSystem)
+	if (Test-ExecutableFile $Program)
 	{
-		$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
-		Test-ExecutableFile $Program
-
 		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
+			-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "" | Format-Output
+	}
+
+	if ([System.Environment]::Is64BitOperatingSystem)
+	{
+		$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
+		if (Test-ExecutableFile $Program)
+		{
+			New-NetFirewallRule -Platform $Platform `
+				-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+				-LocalUser $UsersGroupSDDL `
+				-Description "" | Format-Output
+		}
 	}
 }
 

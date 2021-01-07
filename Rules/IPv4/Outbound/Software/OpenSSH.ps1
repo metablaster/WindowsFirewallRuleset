@@ -46,8 +46,16 @@ None. OpenSSH.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for OpenSSH software will not be loaded 
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -84,14 +92,16 @@ $OpenSSHRoot = "%ProgramFiles%\OpenSSH-Win64"
 if ((Confirm-Installation "OpenSSH" ([ref] $OpenSSHRoot)) -or $ForceLoad)
 {
 	$Program = "$OpenSSHRoot\ssh.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "OpenSSH" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
-	This rule applies to open source version of OpenSSH." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "OpenSSH" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+This rule applies to open source version of OpenSSH." | Format-Output
+	}
 }
 
 Update-Log

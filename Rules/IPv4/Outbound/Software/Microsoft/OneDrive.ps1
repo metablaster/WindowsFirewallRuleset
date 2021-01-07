@@ -46,8 +46,16 @@ None. OneDrive.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for One Drive will not be loaded into fi
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -85,29 +93,32 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-	Test-ExecutableFile $Program
-
-	# NOTE: According to scheduled task the updating user is SYSTEM
-	# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
-	# C:\Users\<USERNAME>\AppData\Local\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe
-	# the rest of rule properties was the same, possibly run by schedules task, in which case SYSTEM not needed
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "OneDrive Update" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $LocalSystem `
-		-Description "Updater for OneDrive" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		# NOTE: According to scheduled task the updating user is SYSTEM
+		# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
+		# C:\Users\<USERNAME>\AppData\Local\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe
+		# the rest of rule properties was the same, possibly run by schedules task, in which case SYSTEM not needed
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "OneDrive Update" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $LocalSystem `
+			-Description "Updater for OneDrive" | Format-Output
+	}
 
 	# TODO: LocalUser should be explicit user because each user runs it's own instance
 	# and if there are multiple instances returned we need multiple rules for each user
 	$Program = "$OneDriveRoot\OneDrive.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "OneDrive" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "One drive for syncing user data" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "OneDrive" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "One drive for syncing user data" | Format-Output
+	}
 }
 
 Update-Log

@@ -46,8 +46,16 @@ None. WindowsSystem.ps1 does not generate any output
 TODO: LocalUser for most rules is missing?
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for built in system software will not be
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -86,114 +94,122 @@ $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 # TODO: does not exist in Windows Server 2019
 # NOTE: user can by any local human user
 $Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Probably related to keeping bandwidth usage information up-to-date." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Probably related to keeping bandwidth usage information up-to-date." |
+	Format-Output
+}
 
 # Test if installation exists on system
 if ((Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLoad)
 {
 	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "CLR Optimization Service" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol Any `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "CLR Optimization Service" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Block -Direction $Direction -Protocol Any `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "mscorsvw.exe is precompiling .NET assemblies in the background.
 Once it's done, it will go away. Typically, after you install the .NET Redist,
 it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until
 your computer is idle to process the low priority assemblies." |
-	Format-Output
+		Format-Output
+	}
 }
 
 if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $ForceLoad)
 {
 	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "Windows Defender" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $LocalSystem `
-		-InterfaceType $DefaultInterface `
-		-Description "Anti malware service executable." |
-	Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Windows Defender" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $LocalSystem `
+			-InterfaceType $DefaultInterface `
+			-Description "Anti malware service executable." |
+		Format-Output
+	}
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "Windows Defender CLI" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $LocalSystem `
-		-InterfaceType $DefaultInterface `
-		-Description "This utility can be useful when you want to automate Windows Defender
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Windows Defender CLI" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $LocalSystem `
+			-InterfaceType $DefaultInterface `
+			-Description "This utility can be useful when you want to automate Windows Defender
 Antivirus use." |
-	Format-Output
+		Format-Output
+	}
 }
 
 # TODO: Missing description
 $Program = "%SystemRoot%\System32\MRT.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $LocalSystem `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\slui.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Activation Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Used to activate Windows." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Activation Client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Used to activate Windows." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Activation KMS" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 1688 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Activate Office and KMS based software." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Activation KMS" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 1688 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Activate Office and KMS based software." |
+	Format-Output
+}
 
 # TODO: this app no longer exists on system, MS changed executable name?
 # $Program = "%SystemRoot%\System32\CompatTel\QueryAppBlock.exe"
@@ -213,114 +229,120 @@ Format-Output
 # Format-Output
 
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
-Test-ExecutableFile $Program
-
-# TODO: need to check if port 22 is OK.
-# TODO: Dropped connection (for admin), likely reason for app downarrows
-# NOTE: Testing with profile "Any"
-New-NetFirewallRule -DisplayName "Background task host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 22, 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "backgroundTaskHost.exe is the process that starts background tasks.
+if (Test-ExecutableFile $Program)
+{
+	# TODO: need to check if port 22 is OK.
+	# TODO: Dropped connection (for admin), likely reason for app downarrows
+	# NOTE: Testing with profile "Any"
+	New-NetFirewallRule -DisplayName "Background task host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 22, 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" |
-Format-Output
+	Format-Output
+}
 
 # NOTE: Was active while setting up MS account
 $Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Background transfer host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterface `
-	-Description "Download/Upload Host" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Background transfer host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "Download/Upload Host" |
+	Format-Output
+}
 
 # TODO: Not sure if also needed to allow Administrators for MS account here
 $Program = "%SystemRoot%\System32\UserAccountBroker.exe"
-Test-ExecutableFile $Program
+if (Test-ExecutableFile $Program)
+{
+	$MSAccountUsers = $UsersGroupSDDL
+	Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL
 
-$MSAccountUsers = $UsersGroupSDDL
-Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL
-
-New-NetFirewallRule -DisplayName "Microsoft Account" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $MSAccountUsers `
-	-InterfaceType $DefaultInterface `
-	-Description "UserAccountBroker is needed to create Microsoft account" |
-Format-Output
+	New-NetFirewallRule -DisplayName "Microsoft Account" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $MSAccountUsers `
+		-InterfaceType $DefaultInterface `
+		-Description "UserAccountBroker is needed to create Microsoft account" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
-Test-ExecutableFile $Program
-
-# TODO: no comment
-New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	# TODO: no comment
+	New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Cortana Speech Model" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $NetworkService `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Cortana Speech Model" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $NetworkService `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "This program collects and sends usage data to Microsoft,
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "This program collects and sends usage data to Microsoft,
 can be disabled in GPO." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $LocalSystem `
-	-InterfaceType $DefaultInterface `
-	-Description "The CompatTelRunner.exe process is used by Windows to perform system diagnostics
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "The CompatTelRunner.exe process is used by Windows to perform system diagnostics
 to determine if there are any compatibility issues.
 It also collects program telemetry information (if that option is selected) for the
 Microsoft Customer Experience Improvement Program.
@@ -331,127 +353,135 @@ To disable this program: Task Scheduler Library > Microsoft > Windows > Applicat
 In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser,
 ProgramDataUpdater and StartupAppTask.
 Right-click on the Microsoft Compatibility Appraiser and select Disable." |
-Format-Output
+	Format-Output
+}
 
 # TODO: TCP port 80 NT AUTHORITY\SYSTEM seen in dev channel, testing SYSTEM account
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Indexing Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $LocalSystem `
-	-InterfaceType $DefaultInterface `
-	-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Indexing Service" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Error Reporting" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Report Windows errors back to Microsoft." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Error Reporting" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Report Windows errors back to Microsoft." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Error Reporting" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Report Windows errors back to Microsoft." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Error Reporting" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Report Windows errors back to Microsoft." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\explorer.exe"
-Test-ExecutableFile $Program
+if (Test-ExecutableFile $Program)
+{
+	# TODO: remote to local subnet seen for shared folder access
+	New-NetFirewallRule -DisplayName "File Explorer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "File explorer checks for digital signatures verification, windows update." |
+	Format-Output
 
-# TODO: remote to local subnet seen for shared folder access
-New-NetFirewallRule -DisplayName "File Explorer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "File explorer checks for digital signatures verification, windows update." |
-Format-Output
-
-# TODO: possibly deprecated since Windows 10
-# Seen outbound 443 while setting up MS account on fresh Windows account
-New-NetFirewallRule -DisplayName "File Explorer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Smart Screen Filter" |
-Format-Output
+	# TODO: possibly deprecated since Windows 10
+	# Seen outbound 443 while setting up MS account on fresh Windows account
+	New-NetFirewallRule -DisplayName "File Explorer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Smart Screen Filter" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\ftp.exe"
-Test-ExecutableFile $Program
-
-# TODO: need to test and adjust for passive vs active and various types of protocol:
-# FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
-New-NetFirewallRule -DisplayName "FTP Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
-	-LocalPort Any -RemotePort 21 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "File transfer protocol client." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	# TODO: need to test and adjust for passive vs active and various types of protocol:
+	# FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
+	New-NetFirewallRule -DisplayName "FTP Client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
+		-LocalPort Any -RemotePort 21 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "File transfer protocol client." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\HelpPane.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Help pane" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Get online help, looks like windows 10+ no longer uses this,
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Help pane" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Get online help, looks like windows 10+ no longer uses this,
 it opens edge now to show help." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
-Test-ExecutableFile $Program
-
-# TODO: program possibly no longer uses networking since windows 10
-New-NetFirewallRule -DisplayName "DLL host process" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Loads and runs 32-bit dynamic-link libraries (DLLs),
+if (Test-ExecutableFile $Program)
+{
+	# TODO: program possibly no longer uses networking since windows 10
+	New-NetFirewallRule -DisplayName "DLL host process" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Loads and runs 32-bit dynamic-link libraries (DLLs),
 There are no configurable settings for Rundll32.
 possibly no longer uses networking since windows 10." |
-Format-Output
+	Format-Output
+}
 
 # TODO: this app no longer exists on system, MS changed executable name?
 # $Program = "%SystemRoot%\System32\CompatTel\wicainventory.exe"
@@ -470,180 +500,190 @@ Format-Output
 # Format-Output
 
 $Program = "%SystemRoot%\System32\msiexec.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "msiexec automatically check for updates for the program it is installing." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Installer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "msiexec automatically check for updates for the program it is installing." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\lsass.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Local Security Authority Process" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Local Security Authority Process" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Lsas.exe a process in Microsoft Windows operating systems that is responsible
 for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a
 Windows computer or server, handles password changes, and creates access tokens.
 It is also used for certificate revocation checks" |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\mmc.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "MMC Help Viewer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Display webpages in Microsoft MMC help view." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "MMC Help Viewer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Display webpages in Microsoft MMC help view." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 `
-	-LocalPort Any -RemotePort 53 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 `
+		-LocalPort Any -RemotePort 53 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
 The nslookup command-line tool is available only if you have installed the TCP/IP protocol." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\curl.exe"
-Test-ExecutableFile $Program
-
-# NOTE: Ports are specified only for some protocols
-New-NetFirewallRule -DisplayName "curl" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
-	-LocalPort Any -RemotePort 80, 110, 143, 443, 993, 995 `
-	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterface `
-	-Description "curl is a commandline tool to transfer data from or to a server,
+if (Test-ExecutableFile $Program)
+{
+	# NOTE: Ports are specified only for some protocols
+	New-NetFirewallRule -DisplayName "curl" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
+		-LocalPort Any -RemotePort 80, 110, 143, 443, 993, 995 `
+		-LocalUser $UsersGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Settings sync" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Host process for setting synchronization. Open your PC Settings and go to the
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Settings sync" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Host process for setting synchronization. Open your PC Settings and go to the
 'Sync your Settings' section.
 There are on/off switches for all the different things you can choose to sync.
 Just turn off the ones you don't want. Or you can just turn them all off at once at the top." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\smartscreen.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Smartscreen" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Smartscreen" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "SystemSettings" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterface `
-	-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
- of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
- to stop generating this traffic." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "SystemSettings" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $UsersGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
+of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
+to stop generating this traffic." |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "taskhostw" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "The main function of taskhostw.exe is to start the Windows Services based on
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "taskhostw" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "The main function of taskhostw.exe is to start the Windows Services based on
 DLLs whenever the computer boots up.
 It is a host for processes that are responsible for executing a DLL rather than an Exe." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Service Initiated Healing" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "sihclient.exe SIH Client is the client for fixing system components that are
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Service Initiated Healing" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "sihclient.exe SIH Client is the client for fixing system components that are
 important for automatic Windows updates.
 This daily task runs the SIHC client (initiated by the healing server) to detect and
 repair system components that are vital to
 automatically update Windows and the Microsoft software installed on the computer.
 The task can go online, assess the usefulness of the healing effect,
 download the necessary equipment to perform the action, and perform therapeutic actions.)" |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\DeviceCensus.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Devicecensus is used to gather information about your PC to target
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Devicecensus is used to gather information about your PC to target
 builds through Windows Update,
 In order to target builds to your machine, we need to know a few important things:
 - OS type (home, pro, enterprise, etc.)
@@ -652,7 +692,8 @@ In order to target builds to your machine, we need to know a few important thing
 - x86 or x64
 - selected Insider ring
 - etc." |
-Format-Output
+	Format-Output
+}
 
 # TODO: USOAccounts testing with users, should be SYSTEM
 $USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
@@ -660,115 +701,121 @@ Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 
 # TODO: Not available in Windows Server 2019
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $USOAccounts `
-	-InterfaceType $DefaultInterface `
-	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $USOAccounts `
+		-InterfaceType $DefaultInterface `
+		-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that
 the USO component needs done." |
-Format-Output
+	Format-Output
+}
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $USOAccounts `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $USOAccounts `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\usoclient.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $LocalSystem `
-	-InterfaceType $DefaultInterface `
-	-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the
 USO component needs done." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "WMI Provider Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 22 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "WMI Provider Host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 22 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "OpenSSH" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 22 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "OpenSSH" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 22 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 This rule applies to open source version of OpenSSH that is built into Windows." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\conhost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Console Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Console Host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "" |
+	Format-Output
+}
 
 # NOTE: Was active while setting up MS account
 # NOTE: description from: https://www.tenforums.com/tutorials/110230-enable-disable-windows-security-windows-10-a.html
 $Program = "%SystemRoot%\System32\SecurityHealthService.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Security Health Service" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $LocalSystem `
-	-InterfaceType $DefaultInterface `
-	-Description "Windows Defender AV and the Windows Security app use similarly named services for specific purposes.
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Security Health Service" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "Windows Defender AV and the Windows Security app use similarly named services for specific purposes.
 The Windows Security app uses the Windows Security Service (SecurityHealthService or Windows Security Health Service),
 which in turn utilizes the Security Center service (wscsvc) to ensure the app provides the most
 up-to-date information about the protection status on the endpoint,
@@ -778,40 +825,43 @@ These services do not affect the state of Windows Defender AV.
 Disabling or modifying these services will not disable Windows Defender AV,
 and will lead to a lowered protection state on the endpoint,
 even if you are using a third-party antivirus product." |
-Format-Output
+	Format-Output
+}
 
 #
 # Windows Device Management (predefined rules)
 #
 
 $Program = "%SystemRoot%\System32\dmcertinst.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installer" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installer" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Allow outbound TCP traffic from Windows Device Management
 Certificate Installer." |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" |
+	Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -825,17 +875,18 @@ New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" 
 Format-Output
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." |
+	Format-Output
+}
 
 Update-Log

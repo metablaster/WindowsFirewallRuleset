@@ -50,8 +50,16 @@ None. WirelessNetworking.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -69,7 +77,7 @@ $Deny = "Skip operation, outbound rules for wireless networking will not be load
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -83,36 +91,39 @@ $UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 
 # NOTE: several rules below use this path
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
-Test-ExecutableFile $WUDFHost
+$WUDFHostValid = Test-ExecutableFile $WUDFHost
 
-# TODO: local user may need to be "Any", needs testing.
-New-NetFirewallRule -DisplayName "Wireless Display" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program $WUDFHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $UserModeDrivers `
-	-InterfaceType $LocalInterface `
-	-Description "Driver Foundation - User-mode Driver Framework Host Process.
+if ($WUDFHostValid)
+{
+	# TODO: local user may need to be "Any", needs testing.
+	New-NetFirewallRule -DisplayName "Wireless Display" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program $WUDFHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $UserModeDrivers `
+		-InterfaceType $LocalInterface `
+		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
-Format-Output
+	Format-Output
 
-# TODO: remote port unknown, rule added because predefined rule for UDP exists
-New-NetFirewallRule -DisplayName "Wireless Display" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program $WUDFHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser $UserModeDrivers `
-	-InterfaceType $LocalInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Driver Foundation - User-mode Driver Framework Host Process.
+	# TODO: remote port unknown, rule added because predefined rule for UDP exists
+	New-NetFirewallRule -DisplayName "Wireless Display" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program $WUDFHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $UserModeDrivers `
+		-InterfaceType $LocalInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
-Format-Output
+	Format-Output
+}
 
 #
 # Predefined rules for WiFi Direct
@@ -170,22 +181,23 @@ Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-ExecutableFile $Program
-
-# TODO: missing protocol and port for WiFi Direct Network Discovery
-New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser $LocalService `
-	-InterfaceType Wired, Wireless `
-	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
+if (Test-ExecutableFile $Program)
+{
+	# TODO: missing protocol and port for WiFi Direct Network Discovery
+	New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $LocalService `
+		-InterfaceType Wired, Wireless `
+		-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host." |
-Format-Output
+	Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -230,27 +242,30 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `
 Simple Service Discovery Protocol." |
 Format-Output
 
-New-NetFirewallRule -DisplayName "Wireless portable devices" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
-	-Service Any -Program $WUDFHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort 15740 `
-	-LocalUser Any `
-	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
-Format-Output
+if ($WUDFHostValid)
+{
+	New-NetFirewallRule -DisplayName "Wireless portable devices" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+		-Service Any -Program $WUDFHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort 15740 `
+		-LocalUser Any `
+		-InterfaceType $LocalInterface `
+		-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Wireless portable devices" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
-	-Service Any -Program $WUDFHost -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Intranet4 `
-	-LocalPort Any -RemotePort 15740 `
-	-LocalUser Any `
-	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Wireless portable devices" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+		-Service Any -Program $WUDFHost -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Intranet4 `
+		-LocalPort Any -RemotePort 15740 `
+		-LocalUser Any `
+		-InterfaceType $LocalInterface `
+		-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
+	Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `

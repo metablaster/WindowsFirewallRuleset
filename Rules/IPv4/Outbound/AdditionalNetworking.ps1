@@ -50,8 +50,16 @@ None. AdditionalNetworking.ps1 does not generate any output
 NOTE: There are no predefined outbound rules for connections to "DIAL protocol server"
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -68,7 +76,7 @@ $Deny = "Skip operation, outbound additional networking rules will not be loaded
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -116,42 +124,44 @@ application feedback, and traffic prioritization." |
 Format-Output
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
-Test-ExecutableFile $Program
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress PlayToDevice4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress PlayToDevice4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
 
-New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-Format-Output
+	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-LocalOnlyMapping $false -LooseSourceMapping $false `
+		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
+	Format-Output
+}
 
 #
 # Connected devices platform predefined rules
@@ -231,17 +241,19 @@ Format-Output
 # TODO: does not exist in Windows Server 2019
 # TODO: description missing data
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-Test-ExecutableFile $Program
-New-NetFirewallRule -DisplayName "Proximity sharing" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Outbound rule for Proximity sharing over." |
-Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Proximity sharing" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any `
+		-InterfaceType $DefaultInterface `
+		-Description "Outbound rule for Proximity sharing over." |
+	Format-Output
+}
 
 #
 # Router access

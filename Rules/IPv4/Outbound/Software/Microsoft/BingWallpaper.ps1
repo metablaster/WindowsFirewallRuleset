@@ -46,8 +46,16 @@ None. BingWallpaper.ps1 does not generate any output
 TODO: Search algorithms can't find this program
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -63,7 +71,7 @@ $Group = "Microsoft - Bing wallpaper"
 $Accept = "Outbound rule for bing wallpaper app will be loaded"
 $Deny = "Skip operation, outbound rule for bing wallpaper app will not be loaded"
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -80,18 +88,19 @@ $BingWallpaperRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\B
 if ((Confirm-Installation "BingWallpaper" ([ref] $BingWallpaperRoot)) -or $ForceLoad)
 {
 	$Program = "$BingWallpaperRoot\BingWallpaperApp.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "Bing wallpaper" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Bing wallpaper needs internet to download fresh wallpapers" |
-	Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Bing wallpaper" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Bing wallpaper needs internet to download fresh wallpapers" |
+		Format-Output
+	}
 }
 
 Update-Log

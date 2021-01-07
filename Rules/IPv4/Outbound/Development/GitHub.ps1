@@ -46,8 +46,16 @@ None. GitHub.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, these rules will not be loaded into firewall"
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -86,59 +94,66 @@ if ((Confirm-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 	# Administrators are needed for git auto update scheduled task
 	$CurlUsers = Get-SDDL -Group "Administrators", "Users" -Merge
 	$Program = "$GitRoot\mingw64\bin\curl.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "Git - curl" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $CurlUsers `
-		-InterfaceType $DefaultInterface `
-		-Description "curl download tool, also used by Git for Windows updater
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Git - curl" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $CurlUsers `
+			-InterfaceType $DefaultInterface `
+			-Description "curl download tool, also used by Git for Windows updater
 curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
-	Format-Output
+		Format-Output
+	}
 
 	# TODO: unsure if it's 443 or 80, and not sure what's the purpose
 	$Program = "$GitRoot\mingw64\bin\git.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "Git - git" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Git - git" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "" | Format-Output
+	}
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "Git - remote-https" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "git HTTPS for clone, fetch, push, commit etc." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Git - remote-https" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "git HTTPS for clone, fetch, push, commit etc." | Format-Output
+	}
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "Git - ssh" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 22 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "SSH client for git clone, fetch, push, commit etc." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Git - ssh" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 22 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "SSH client for git clone, fetch, push, commit etc." | Format-Output
+	}
 }
 
 #
@@ -172,30 +187,32 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 		$Program = "$GitHubRoot\app-2.6.1\GitHubDesktop.exe"
 	}
 
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "GitHub Desktop - Client" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "At a minimum telemetry and authentication to GitHub" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "GitHub Desktop - Client" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "At a minimum telemetry and authentication to GitHub" | Format-Output
+	}
 
 	$Program = "$GitHubRoot\Update.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "GitHub Desktop - Update" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Checking for client updates and client auto update" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "GitHub Desktop - Update" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Checking for client updates and client auto update" | Format-Output
+	}
 
 	if ($VersionFoldersCount -gt 0)
 	{
@@ -208,17 +225,18 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 		$Program = "$GitHubRoot\app-2.6.1\resources\app\git\mingw64\bin\git-remote-https.exe"
 	}
 
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "GitHub Desktop - Git" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Used for clone, fetch, push, commit etc." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "GitHub Desktop - Git" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Used for clone, fetch, push, commit etc." | Format-Output
+	}
 }
 
 Update-Log

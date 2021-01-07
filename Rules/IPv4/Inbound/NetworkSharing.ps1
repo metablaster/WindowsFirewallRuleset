@@ -54,8 +54,16 @@ of predefined rules are duplicate of Network Discovery equivalent rules
 TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -74,7 +82,7 @@ $Deny = "Skip operation, inbound network sharing rules will not be loaded into f
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $DisplayGroup
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group

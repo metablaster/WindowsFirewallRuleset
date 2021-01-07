@@ -50,8 +50,16 @@ None. WirelessNetworking.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -69,7 +77,7 @@ $Deny = "Skip operation, inbound rules for wireless networking will not be loade
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -81,34 +89,35 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 $UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
-Test-ExecutableFile $Program
-
-# TODO: local user may need to be "Any", needs testing.
-New-NetFirewallRule -DisplayName "Wireless Display" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort 443 -RemotePort Any `
-	-LocalUser $UserModeDrivers -EdgeTraversalPolicy Block `
-	-InterfaceType $LocalInterface `
-	-Description "Driver Foundation - User-mode Driver Framework Host Process.
+if (Test-ExecutableFile $Program)
+{
+	# TODO: local user may need to be "Any", needs testing.
+	New-NetFirewallRule -DisplayName "Wireless Display" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort 443 -RemotePort Any `
+		-LocalUser $UserModeDrivers -EdgeTraversalPolicy Block `
+		-InterfaceType $LocalInterface `
+		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-Output
+}
 
 $Program = "%SystemRoot%\System32\CastSrv.exe"
-Test-ExecutableFile $Program
-
-# TODO: remote port unknown, rule added because predefined rule for UDP exists
-New-NetFirewallRule -DisplayName "Wireless Display Infrastructure back channel" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort 7250 -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
-	-InterfaceType $LocalInterface `
-	-Description "Miracast is a Wi-Fi display certification program announced by Wi-Fi Alliance for
+if (Test-ExecutableFile $Program)
+{
+	# TODO: remote port unknown, rule added because predefined rule for UDP exists
+	New-NetFirewallRule -DisplayName "Wireless Display Infrastructure back channel" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort 7250 -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy Block `
+		-InterfaceType $LocalInterface `
+		-Description "Miracast is a Wi-Fi display certification program announced by Wi-Fi Alliance for
 seamlessly displaying video between devices.
 Users attempt to connect to a Miracast receiver as they did previously.
 When the list of Miracast receivers is populated, Windows 10 will identify that the receiver is
@@ -117,6 +126,7 @@ When the user selects a Miracast receiver, Windows 10 will attempt to resolve th
 via standard DNS, as well as via multicast DNS (mDNS).
 If the name is not resolvable via either DNS method, Windows 10 will fall back to establishing the
 Miracast session using the standard Wi-Fi direct connection." | Format-Output
+}
 
 #
 # Predefined rules for WiFi Direct
@@ -172,20 +182,21 @@ For more info see description of WLAN AutoConfig service." | Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-Test-ExecutableFile $Program
-
-# TODO: missing protocol and port for WiFi Direct Network Discovery
-New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol Any `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser $LocalService -EdgeTraversalPolicy Block `
-	-InterfaceType Wired, Wireless  `
-	-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
+if (Test-ExecutableFile $Program)
+{
+	# TODO: missing protocol and port for WiFi Direct Network Discovery
+	New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser $LocalService -EdgeTraversalPolicy Block `
+		-InterfaceType Wired, Wireless  `
+		-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" | Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `

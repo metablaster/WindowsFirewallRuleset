@@ -94,8 +94,16 @@ https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-address
 https://www.ronaldschlager.com/2014/ipv6-addresses-scopes-zones/
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -122,7 +130,7 @@ $Deny = "Skip operation, outbound IPv6 multicast rules will not be loaded into f
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group

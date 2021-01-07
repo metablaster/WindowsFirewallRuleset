@@ -46,8 +46,16 @@ None. EdgeChromium.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for internet browsers will not be loaded
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -84,71 +92,74 @@ $EdgeChromiumRoot = "%ProgramFiles(x86)%\Microsoft\Edge\Application"
 if ((Confirm-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLoad)
 {
 	# TODO: no FTP rule
-	$EdgeChromiumApp = "$EdgeChromiumRoot\msedge.exe"
-	Test-ExecutableFile $EdgeChromiumApp
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium HTTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol." | Format-Output
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium QUIC" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Quick UDP Internet Connections,
-	Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Hyper text transfer protocol over SSL." | Format-Output
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium speedtest" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Ports needed for https://speedtest.net" | Format-Output
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium FTP" -Service Any -Program $EdgeChromiumApp `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "File transfer protocol." | Format-Output
-
-	if ($false)
+	$Program = "$EdgeChromiumRoot\msedge.exe"
+	if (Test-ExecutableFile $Program)
 	{
-		# NOTE: Not applied because now handled by IPv4 multicast rules
-		# TODO: Figure out why edge chromium needs this rule, do additional test and update description
 		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Edge-Chromium SSDP" -Service Any -Program $EdgeChromiumApp `
+			-DisplayName "Edge-Chromium HTTP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "Hyper text transfer protocol." | Format-Output
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium QUIC" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Quick UDP Internet Connections,
+Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium HTTPS" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Hyper text transfer protocol over SSL." | Format-Output
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium speedtest" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5060, 8080 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Ports needed for https://speedtest.net" | Format-Output
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium FTP" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "File transfer protocol." | Format-Output
+
+		if ($false)
+		{
+			# NOTE: Not applied because now handled by IPv4 multicast rules
+			# TODO: Figure out why edge chromium needs this rule, do additional test and update description
+			New-NetFirewallRule -Platform $Platform `
+				-DisplayName "Edge-Chromium SSDP" -Service Any -Program $Program `
+				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+				-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
+				-LocalUser $UsersGroupSDDL `
+				-Description "" | Format-Output
+		}
 	}
 
 	# TODO: we should probably have a function for this and similar cases?
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
-	$EdgeChromiumUpdate = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
-	Test-ExecutableFile $EdgeChromiumUpdate
+	$Program = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 
-	$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-	Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL
+	if (Test-ExecutableFile $Program)
+	{
+		$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+		Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Edge-Chromium Update" -Service Any -Program $EdgeChromiumUpdate `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UpdateAccounts `
-		-Description "Update Microsoft Edge" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium Update" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UpdateAccounts `
+			-Description "Update Microsoft Edge" | Format-Output
+	}
 }
 
 Update-Log

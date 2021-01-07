@@ -49,8 +49,16 @@ Also virtual adapters even though not connected to internet produce network traf
 TODO: currently handling only UDP, also broadcast falls into multicast space
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -68,7 +76,7 @@ $Deny = "Skip operation, outbound broadcast rules will not be loaded into firewa
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # NOTE: Don't run if execute not approved

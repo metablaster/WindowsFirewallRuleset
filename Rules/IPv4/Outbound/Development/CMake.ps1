@@ -46,8 +46,16 @@ None. CMake.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for CMake software will not be loaded in
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -84,18 +92,19 @@ $CMakeRoot = "%ProgramFiles%\CMakeFakePath"
 if ((Confirm-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 {
 	$Program = "$CMakeRoot\bin\cmake.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "CMake" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "CMake package download" |
-	Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "CMake" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "CMake package download" |
+		Format-Output
+	}
 }
 
 Update-Log

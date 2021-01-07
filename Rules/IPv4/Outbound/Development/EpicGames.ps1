@@ -46,8 +46,16 @@ None. EpicGames.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -65,7 +73,7 @@ $Deny = "Skip operation, outbound rules for Epic Games launcher and engine will 
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -88,80 +96,85 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	# TODO: this executable name depends on if the engine was built from source
 	# $Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor.exe"
-	Test-ExecutableFile $Program
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Used to send crash report to epic games." | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Used to send crash report to epic games." | Format-Output
-
-	# NOTE: port 6666
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - Invalid traffic" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
-		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
+		# NOTE: port 6666
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - Invalid traffic" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
+			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
 For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
+	}
 
 	# TODO: this executable exists only if the engine was built from source
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Engine repo source tool to download binaries." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Engine repo source tool to download binaries." | Format-Output
+	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Swarm agent is used for build farm." | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Swarm agent is used for build farm." | Format-Output
+	}
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-	Test-ExecutableFile $Program
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "" | Format-Output
-
-	# NOTE: port 6666
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - Invalid traffic" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
-		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
+		# NOTE: port 6666
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - Invalid traffic" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
+			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
 For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" | Format-Output
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" | Format-Output
+	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "" | Format-Output
+	}
 }
 
 #
@@ -175,51 +188,53 @@ if ((Confirm-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 	$LauncherRoot += "\Launcher\Portal\Binaries"
 
 	$Program = "$LauncherRoot\Win32\EpicGamesLauncher.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Used for initial setup only - Installation of launcher" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Used for initial setup only - Installation of launcher" | Format-Output
+	}
 
 	# TODO: launcher will install engine only as Administrator, and it will work even though we
 	# don't have a rule for Administrators group.
 	# It looks like BUILTIN\Users allows also Administrators?
 	$Program = "$LauncherRoot\Win64\EpicGamesLauncher.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 5222 `
-		-LocalUser $UsersGroupSDDL `
-		-Description "Storefront and software. The Epic Games Store is a storefront for games
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 5222 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Storefront and software. The Epic Games Store is a storefront for games
 available via the web and built into Epic Games' launcher application.
 Both web and application allow players to purchase games, while through the launcher the player
 can install and keep their games up to date" |
-	Format-Output
+		Format-Output
 
-	# NOTE: port 6666
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Epic Games - Invalid traffic" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
-		-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
+		# NOTE: port 6666
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Epic Games - Invalid traffic" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
+			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
 For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-		-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Storefront and software. The Epic Games Store is a storefront for games
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Storefront and software. The Epic Games Store is a storefront for games
 available via the web and built into Epic Games' launcher application.
 Both web and application allow players to purchase games, while through the launcher the player
 can install and keep their games up to date." |
-	Format-Output
+		Format-Output
+	}
 }
 
 Update-Log

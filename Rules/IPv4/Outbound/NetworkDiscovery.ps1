@@ -50,8 +50,16 @@ NOTE: Current workaround for home networks is to apply predefined "Network Disco
 TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -70,7 +78,7 @@ $Deny = "Skip operation, outbound network discovery rules will not be loaded int
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $DisplayGroup
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group

@@ -49,8 +49,16 @@ NOTE: Following rules from predefined groups are used:
 2. Remote Desktop (WebSocket)
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -67,7 +75,7 @@ $Deny = "Skip operation, inbound rules for remote Windows will not be loaded int
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -78,29 +86,30 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $Program = "%SystemRoot%\System32\RdpSa.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy DeferToApp `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Any `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy DeferToApp `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
 Remote Desktop session. " | Format-Output
 
-New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy DeferToApp `
-	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
+	New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress LocalSubnet4 `
+		-LocalPort Any -RemotePort Any `
+		-LocalUser Any -EdgeTraversalPolicy DeferToApp `
+		-InterfaceType $DefaultInterface `
+		-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
 Remote Desktop session. " | Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `

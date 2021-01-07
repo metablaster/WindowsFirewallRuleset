@@ -46,8 +46,16 @@ None. SysInternals.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -65,7 +73,7 @@ $Deny = "Skip operation, inbound rules for SysInternals software will not be loa
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -84,32 +92,36 @@ $SysInternalsRoot = "%SystemDrive%\tools"
 if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\PSTools\psping.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "Sysinternals PSPing server" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol Any `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser $SysInternalsUsers -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Sysinternals PSPing server" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol Any `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser $SysInternalsUsers -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
 This rule serves to allow PSPing.exe to act as a server." | Format-Output
+	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -DisplayName "Sysinternals PSPing64 server" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol Any `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser $SysInternalsUsers -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "Sysinternals PSPing64 server" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol Any `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser $SysInternalsUsers -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
 This rule serves to allow PSPing64.exe to act as a server." | Format-Output
+	}
 }
 
 Update-Log

@@ -46,8 +46,16 @@ None. Intel.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for Intel software will not be loaded in
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 #
@@ -84,34 +92,39 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 {
 	$Program = "$IntelXTURoot\PerfTune.exe"
-	Test-ExecutableFile $Program
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $AdminGroupSDDL `
-		-Description "Extreme Tuning utility check for updates" | Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $AdminGroupSDDL `
+			-Description "Extreme Tuning utility check for updates" | Format-Output
+	}
 }
 
+# TODO: Confirm-Installation is missing
 $Program = "%ProgramFiles(x86)%\Intel\Telemetry 2.0\lrio.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Intel telemetry" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $LocalSystem `
-	-Description "Uploader for the Intel(R) Product Improvement Program." | Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Intel telemetry" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $LocalSystem `
+		-Description "Uploader for the Intel(R) Product Improvement Program." | Format-Output
+}
 
 # TODO: port and protocol unknown for Intel PTT EK Recertification
 $Program = "%ProgramFiles%\Intel\Intel(R) Management Engine Components\iCLS\IntelPTTEKRecertification.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -Platform $Platform `
-	-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
-	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-	-LocalUser $LocalSystem `
-	-Description "" | Format-Output
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -Platform $Platform `
+		-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
+		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+		-LocalUser $LocalSystem `
+		-Description "" | Format-Output
+}
 
 Update-Log

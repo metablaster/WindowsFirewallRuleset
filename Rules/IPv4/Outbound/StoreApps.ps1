@@ -76,8 +76,16 @@ TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
 NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -97,7 +105,7 @@ $Deny = "Skip operation, outbound rules for store apps will not be loaded into f
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -259,38 +267,40 @@ foreach ($Principal in $Principals)
 #
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Runtime Broker" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $ProgramsGroup `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 443 `
-	-LocalUser $UsersGroupSDDL `
-	-InterfaceType $DefaultInterface `
-	-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Runtime Broker" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $ProgramsGroup `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
 its permissions and informing the user whether or not its being allowed" |
-Format-Output
+	Format-Output
+}
 
 $Program = "%SystemRoot%\System32\AuthHost.exe"
-Test-ExecutableFile $Program
+if (Test-ExecutableFile $Program)
+{
+	# Accounts needed for store app web authentication
+	$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
+	Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
 
-# Accounts needed for store app web authentication
-$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
-Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
-
-New-NetFirewallRule -DisplayName "Authentication Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $ProgramsGroup `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $AppAccounts `
-	-InterfaceType $DefaultInterface `
-	-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
+	New-NetFirewallRule -DisplayName "Authentication Host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $ProgramsGroup `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $AppAccounts `
+		-InterfaceType $DefaultInterface `
+		-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
 that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." |
-Format-Output
+	Format-Output
+}
 
 New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -305,20 +315,21 @@ Format-Output
 
 # https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/april/uwp-apps-develop-hosted-web-apps-for-uwp
 $Program = "%SystemRoot%\System32\wwahost.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $Program -Group $ProgramsGroup `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $AppAccounts `
-	-InterfaceType $DefaultInterface `
-	-Description "Microsoft WWA Host (wwahost.exe) is an app container for Web sites,
+if (Test-ExecutableFile $Program)
+{
+	New-NetFirewallRule -DisplayName "Microsoft WWA Host" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $ProgramsGroup `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $AppAccounts `
+		-InterfaceType $DefaultInterface `
+		-Description "Microsoft WWA Host (wwahost.exe) is an app container for Web sites,
 which has a subset of features, compared to the browser.
 Used in scenario when the Web site is running in the context of an app.
 This rule is required to connect PC to Microsoft account" |
-Format-Output
+	Format-Output
+}
 
 Update-Log

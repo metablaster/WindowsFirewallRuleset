@@ -46,8 +46,16 @@ None. LeagueOfLegends.ps1 does not generate any output
 None.
 #>
 
-#region Initialization
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
+
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1
 
 # Check requirements
@@ -64,7 +72,7 @@ $Deny = "Skip operation, outbound rules for League of Legends game will not be l
 
 # User prompt
 Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group
@@ -93,154 +101,159 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	$LoLRoot = Split-Path $LoLRoot -Parent
 
 	$Program = "$LoLRoot\Riot Client\RiotClientServices.exe"
-	Test-ExecutableFile $Program
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "LoL launcher services" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game launcher services, server traffic" |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "LoL launcher services" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services, server traffic" |
-	Format-Output
-
-	# TODO: Official site says both 5222 and 5223 but 5222 is not used
-	New-NetFirewallRule -DisplayName "LoL launcher services - PVP.Net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 5223 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services - PVP.Net (game chat)" |
-	Format-Output
+		# TODO: Official site says both 5222 and 5223 but 5222 is not used
+		New-NetFirewallRule -DisplayName "LoL launcher services - PVP.Net" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 5223 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game launcher services - PVP.Net (game chat)" |
+		Format-Output
+	}
 
 	$Program = "$LoLRoot\Riot Client\UX\RiotClientUx.exe"
-	Test-ExecutableFile $Program
-
-	# TODO: rule not used or not tested
-	New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game launcher services - user experience" |
-	Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		# TODO: rule not used or not tested
+		New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game launcher services - user experience" |
+		Format-Output
+	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClient.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "LoL launcher client" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game launcher client - UI (user interface),
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "LoL launcher client" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game launcher client - UI (user interface),
 The Launcher is the initial window that checks for game updates and launches the PVP.net client
 for League of Legends." |
-	Format-Output
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "LoL launcher client - PVP.net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 2099 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "PVP.net is a platform for League of Legends to launch from.
+		New-NetFirewallRule -DisplayName "LoL launcher client - PVP.net" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 2099 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
 be used separately." |
-	Format-Output
+		Format-Output
+	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClientUx.exe"
-	Test-ExecutableFile $Program
-
-	New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "game client - UX (user experience)" |
-	Format-Output
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "game client - UX (user experience)" |
+		Format-Output
+	}
 
 	$Program = "$LolRoot\League of Legends\Game\League of Legends.exe"
-	Test-ExecutableFile $Program
+	if (Test-ExecutableFile $Program)
+	{
+		New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 5000-5500 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Game online multiplayer traffic" |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 5000-5500 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Game online multiplayer traffic" |
-	Format-Output
+		New-NetFirewallRule -DisplayName "LoL game client - server" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game client server traffic" |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "LoL game client - server" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game client server traffic" |
-	Format-Output
-
-	# TODO: rule not used or not tested
-	New-NetFirewallRule -DisplayName "LoL game client - PVP.net" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 2099 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "PVP.net is a platform for League of Legends to launch from.
+		# TODO: rule not used or not tested
+		New-NetFirewallRule -DisplayName "LoL game client - PVP.net" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 2099 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "PVP.net is a platform for League of Legends to launch from.
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
 be used separately." |
-	Format-Output
+		Format-Output
 
-	# TODO: need to test spectator traffic
-	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 8088 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-LocalOnlyMapping $false -LooseSourceMapping $false `
-		-Description "Game spectator UDP traffic" |
-	Format-Output
+		# TODO: need to test spectator traffic
+		New-NetFirewallRule -DisplayName "LoL game client - spectator" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 8088 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Game spectator UDP traffic" |
+		Format-Output
 
-	New-NetFirewallRule -DisplayName "LoL game client - spectator" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 8088 `
-		-LocalUser $UsersGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Game spectator UDP traffic" |
-	Format-Output
+		New-NetFirewallRule -DisplayName "LoL game client - spectator" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 8088 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Game spectator UDP traffic" |
+		Format-Output
+	}
 }
 
 Update-Log
