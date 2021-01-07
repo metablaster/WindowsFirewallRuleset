@@ -74,7 +74,6 @@ function Get-NetFramework
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSCustomObject[]] $NetFramework = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -106,11 +105,12 @@ function Get-NetFramework
 					}
 
 					# we add entry regardless of presence of install path
-					$NetFramework += [PSCustomObject]@{
-						"ComputerName" = $Domain
-						"RegKey" = $HKLMSubKey
-						"Version" = $Version
-						"InstallLocation" = $InstallLocation
+					[PSCustomObject]@{
+						Domain = $Domain
+						Version = $Version
+						InstallLocation = $InstallLocation
+						RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+						PSTypeName = "Ruleset.ProgramInfo"
 					}
 				}
 				else # go one key down
@@ -144,17 +144,17 @@ function Get-NetFramework
 						}
 
 						# we add entry regardless of presence of install path
-						$NetFramework += [PSCustomObject]@{
+						[PSCustomObject]@{
 							Domain = $Domain
-							"RegKey" = $HKLMKey
-							"Version" = $Version
-							"InstallLocation" = $InstallLocation
+							Version = $Version
+							Publisher = "Microsoft Corporation"
+							InstallLocation = $InstallLocation
+							RegistryKey = $Key.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+							PSTypeName = "Ruleset.ProgramInfo"
 						}
 					}
 				}
 			}
 		}
-
-		Write-Output $NetFramework
 	}
 }

@@ -85,7 +85,6 @@ function Get-ExecutablePath
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		[PSCustomObject[]] $AppPaths = @()
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
@@ -149,18 +148,16 @@ function Get-ExecutablePath
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
 
-				# Get more key entries as needed
-				# We want to separate leaf key name because some key names are holding alternative executable name
-				$AppPaths += [PSCustomObject]@{
-					"Domain" = $Domain
-					"RegKey" = $HKLMSubKey
-					#"RegPath" = $SubKey.Name
-					"Name" = $Executable
-					"InstallLocation" = $InstallLocation
+				# Getting more key entries not possible in this leaf key
+				# NOTE: Some key names are named as alternative executable name
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = $Executable
+					InstallLocation = $InstallLocation
+					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $AppPaths
 	}
 }

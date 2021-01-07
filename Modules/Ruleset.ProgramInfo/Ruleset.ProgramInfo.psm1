@@ -45,12 +45,14 @@ if ($ListPreference)
 }
 #endregion
 
-#
-# Script imports
 # TODO: Executables involved in rules which are installed into ProgramFiles\Common Files require
 # separate search algorithm (function) instead of using Update-Table, these are present only
 # if program in question is installed, likely into ProgramFiles
 # Example programs: Adobe and Java
+# TODO: For RegistryKey property utility function is needed to convert to PSPath compatible path
+
+#
+# Script imports
 #
 
 $ScriptsToProcess = @(
@@ -93,7 +95,7 @@ foreach ($Script in $PrivateScripts)
 $PublicScripts = @(
 	"Confirm-Installation"
 	"Format-Path"
-	"Get-AllUserSoftware"
+	"Get-InstallProperties"
 	"Get-AppCapability"
 	"Get-AppSID"
 	"Get-ExecutablePath"
@@ -157,7 +159,7 @@ New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (
 
 # Program data
 New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (
-	Get-AllUserSoftware -Domain $PolicyStore
+	Get-InstallProperties -Domain $PolicyStore
 )
 
 # Allowed executable extensions

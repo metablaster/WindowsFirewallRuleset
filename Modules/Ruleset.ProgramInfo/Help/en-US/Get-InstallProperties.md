@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserSoftware.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md
 schema: 2.0.0
 ---
 
-# Get-AllUserSoftware
+# Get-InstallProperties
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Search program install properties for all users, system wide
 ## SYNTAX
 
 ```powershell
-Get-AllUserSoftware [[-ComputerName] <String>] [<CommonParameters>]
+Get-InstallProperties [[-ComputerName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,7 +26,7 @@ Search separate location in the registry for programs installed for all users.
 ### EXAMPLE 1
 
 ```powershell
-Get-AllUserSoftware "COMPUTERNAME"
+Get-InstallProperties "COMPUTERNAME"
 ```
 
 ## PARAMETERS
@@ -53,7 +53,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-AllUserSoftware
+### None. You cannot pipe objects to Get-InstallProperties
 
 ## OUTPUTS
 

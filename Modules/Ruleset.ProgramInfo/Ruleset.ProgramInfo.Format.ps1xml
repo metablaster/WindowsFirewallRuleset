@@ -22,7 +22,7 @@
 					<TableColumnHeader>
 						<!-- Optional element. Defines the label that is displayed at the top of the column. -->
 						<!-- If no label is specified, the name of the property whose value is displayed in the rows is used. -->
-						<Label>ComputerName</Label>
+						<Label>Domain</Label>
 						<!-- Required element. Specifies the width (in characters) of the column. -->
 						<Width>15</Width>
 						<!-- Optional element. Specifies how the label of the column is displayed. -->
@@ -48,7 +48,7 @@
 						<TableColumnItems>
 							<!-- Required element. Defines the property or script whose value is displayed in a column of the row. -->
 							<TableColumnItem>
-								<PropertyName>ComputerName</PropertyName>
+								<PropertyName>Domain</PropertyName>
 							</TableColumnItem>
 							<TableColumnItem>
 								<PropertyName>Name</PropertyName>

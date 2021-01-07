@@ -22,7 +22,7 @@ Find installation directory for given predefined program name
 
 Format path into firewall compatible path
 
-### [Get-AllUserSoftware](Get-AllUserSoftware.md)
+### [Get-InstallProperties](Get-InstallProperties.md)
 
 Search program install properties for all users, system wide
 

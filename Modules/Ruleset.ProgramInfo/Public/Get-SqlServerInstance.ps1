@@ -48,37 +48,37 @@ PS> Get-SqlServerInstance -Domain DC1
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
-isCluster     : False
-Computername  : DC1
+IsCluster     : False
+Domain 	 	  : DC1
 FullName      : DC1
-isClusterNode : False
+IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Caption       : SQL Server 2008
+Name      	  : SQL Server 2008
 
 SQLInstance   : MINASTIRITH
 Version       : 10.0.1600.22
-isCluster     : False
-Computername  : DC1
+IsCluster     : False
+Domain  	  : DC1
 FullName      : DC1\MINASTIRITH
-isClusterNode : False
+IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Caption       : SQL Server 2008
+Name      	  : SQL Server 2008
 
 .EXAMPLE
 PS> Get-SqlServerInstance -Domain Server1, Server2 -CIM
 
-Computername     : Server1
+Domain     		 : Server1
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition: Core-based Licensing
 Version          : 11.0.3128.0
-Caption          : SQL Server 2012
-isCluster        : False
-isClusterNode    : False
+Name        	 : SQL Server 2012
+IsCluster        : False
+IsClusterNode    : False
 ClusterName      :
 ClusterNodes     : {}
 FullName         : Server1
@@ -87,14 +87,14 @@ ServiceState     : Running
 ServiceAccount   : domain\Server1SQL
 ServiceStartMode : Auto
 
-Computername     : Server2
+Domain			 : Server2
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition
 Version          : 10.50.4000.0
-Caption          : SQL Server 2008 R2
-isCluster        : False
-isClusterNode    : False
+Name			 : SQL Server 2008 R2
+IsCluster        : False
+IsClusterNode    : False
 ClusterName      :
 ClusterNodes     : {}
 FullName         : Server2
@@ -188,9 +188,10 @@ function Get-SqlServerInstance
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 
-		[PSCustomObject[]] $AllInstances = @()
 		foreach ($Computer in $Domain)
 		{
+			[PSCustomObject[]] $AllInstances = @()
+
 			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+', '$1'
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
@@ -213,7 +214,6 @@ function Get-SqlServerInstance
 
 			foreach ($HKLMRootKey in $HKLM)
 			{
-				# TODO: add COMPUTERNAME for all keys in all registry functions
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
 				$RootKey = $RemoteKey.OpenSubKey($HKLMRootKey)
 
@@ -239,7 +239,7 @@ function Get-SqlServerInstance
 				}
 				elseif ($RootKey.GetValueNames() -contains "InstalledInstances")
 				{
-					$isCluster = $false
+					$IsCluster = $false
 					$Instances = $RootKey.GetValue("InstalledInstances")
 				}
 				else
@@ -252,7 +252,7 @@ function Get-SqlServerInstance
 					foreach ($Instance in $Instances)
 					{
 						$ClusterName = $null
-						$isCluster = $false
+						$IsCluster = $false
 						$InstanceValue = $RootKey.GetValue($Instance)
 						$Nodes = New-Object -TypeName System.Collections.Arraylist
 
@@ -267,7 +267,7 @@ function Get-SqlServerInstance
 
 						if ($InstanceReg.GetSubKeyNames() -contains "Cluster")
 						{
-							$isCluster = $true
+							$IsCluster = $true
 
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster sub key: Cluster"
 							$InstanceRegCluster = $InstanceReg.OpenSubKey("Cluster")
@@ -403,14 +403,15 @@ function Get-SqlServerInstance
 						}
 
 						$AllInstances += [PSCustomObject]@{
-							"Computername" = $Computer
-							"SQLInstance" = $Instance
-							"SQLBinRoot" = $SQLBinRoot
-							"SQLPath" = $SQLPath
-							"Edition" = $Edition
-							"Version" = $Version
+							Domain = $Computer
+							SQLInstance = $Instance
+							# TODO: To what should be InstallLocation be set?
+							SQLBinRoot = $SQLBinRoot
+							SQLPath = $SQLPath
+							Edition = $Edition
+							Version = $Version
 
-							Caption = {
+							Name = {
 								switch -Regex ($Version)
 								{
 									# https://en.wikipedia.org/wiki/History_of_Microsoft_SQL_Server
@@ -428,8 +429,8 @@ function Get-SqlServerInstance
 								}
 							}.InvokeReturnAsIs()
 
-							isCluster = $isCluster
-							isClusterNode = ($Nodes -contains $Computer)
+							IsCluster = $IsCluster
+							IsClusterNode = ($Nodes -contains $Computer)
 							ClusterName = $ClusterName
 							ClusterNodes = ($Nodes -ne $Computer)
 
@@ -443,6 +444,8 @@ function Get-SqlServerInstance
 									"$($Computer)\$($Instance)"
 								}
 							}.InvokeReturnAsIs()
+
+							PSTypeName = "Ruleset.ProgramInfo"
 						}
 					} # foreach ($Instance in $Instances)
 				} # $Instances.Count -gt 0
@@ -483,18 +486,20 @@ function Get-SqlServerInstance
 
 							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 
-							$AllInstancesCIM += $Instance | Select-Object -Property Computername,
+							$AllInstancesCIM += $Instance | Select-Object -Property Domain,
 							SQLInstance,
 							SQLBinRoot,
 							SQLPath,
 							Edition,
 							Version,
-							Caption,
-							isCluster,
-							isClusterNode,
+							Name,
+							IsCluster,
+							IsClusterNode,
 							ClusterName,
 							ClusterNodes,
 							FullName,
+							# TODO: Object not recognized as ProgramInfo
+							PSTypeName,
 							@{
 								label = "ServiceName"; expression = {
 									if ($MatchingService)
@@ -550,7 +555,7 @@ function Get-SqlServerInstance
 				{
 					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve CIM info for computer $Computer, $_"
 					Write-Output $AllInstances
-					return
+					continue
 				}
 
 				Write-Output $AllInstancesCIM
@@ -559,6 +564,6 @@ function Get-SqlServerInstance
 			{
 				Write-Output $AllInstances
 			}
-		}
+		} # foreach computer
 	}
 }

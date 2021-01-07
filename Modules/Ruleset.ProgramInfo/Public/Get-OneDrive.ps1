@@ -131,8 +131,6 @@ function Get-OneDrive
 			}
 		}
 
-		[PSCustomObject[]] $OneDriveInfo = @()
-
 		if (!$OneDriveKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
@@ -156,12 +154,15 @@ function Get-OneDrive
 				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
 
 				# Get more key entries as needed
-				$OneDriveInfo += [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = Split-Path -Path $OneDriveKey.ToString() -Leaf
-					"Name" = "OneDrive"
-					"InstallLocation" = $InstallLocation
-					"UserFolder" = $OneDriveKey.GetValue("UserFolder")
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = "OneDrive"
+					Version = $OneDriveKey.GetValue("Version")
+					Publisher = "Microsoft Corporation"
+					InstallLocation = $InstallLocation
+					UserFolder = $OneDriveKey.GetValue("UserFolder")
+					RegistryKey = "HKU:\$UserSID\Software\Microsoft\OneDrive"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 
@@ -177,7 +178,5 @@ function Get-OneDrive
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}
-
-		Write-Output $OneDriveInfo
 	}
 }

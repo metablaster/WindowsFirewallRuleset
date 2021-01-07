@@ -1,4 +1,4 @@
 
 # Scripts\Experiment directory
 
-This sub directory contains experimental scripts
+This subdirectory contains experimental scripts

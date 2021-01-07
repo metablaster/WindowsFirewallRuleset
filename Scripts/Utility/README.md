@@ -1,4 +1,5 @@
 
 # Scripts\Utility directory
 
-This sub directory contains utility scripts can help are otherwise unrelated to firewall
+This subdirectory contains utility scripts that can help in development and to troubleshoot issues,
+but are otherwise unrelated to core functionality of firewall

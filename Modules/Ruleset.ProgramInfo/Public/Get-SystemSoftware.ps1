@@ -143,12 +143,12 @@ function Get-SystemSoftware
 
 				# Get more key entries as needed
 				[PSCustomObject]@{
-					ComputerName = $Domain
+					Domain = $Domain
 					Name = $SubKey.GetValue("DisplayName")
 					Version = $SubKey.GetValue("DisplayVersion")
 					Publisher = $SubKey.GetValue("Publisher")
 					InstallLocation = $InstallLocation
-					RegKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
 					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}

@@ -37,22 +37,21 @@ Search separate location in the registry for programs installed for all users.
 Computer name which to check
 
 .EXAMPLE
-PS> Get-AllUserSoftware "COMPUTERNAME"
+PS> Get-InstallProperties "COMPUTERNAME"
 
 .INPUTS
-None. You cannot pipe objects to Get-AllUserSoftware
+None. You cannot pipe objects to Get-InstallProperties
 
 .OUTPUTS
 [PSCustomObject] list of programs installed for all users
 
 .NOTES
-TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do
-with system wide installed programs
+TODO: Should be renamed to something that best describes target registry key
 #>
-function Get-AllUserSoftware
+function Get-InstallProperties
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserSoftware.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter()]
@@ -75,7 +74,6 @@ function Get-AllUserSoftware
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSCustomObject[]] $AllUserSoftware = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
@@ -121,18 +119,18 @@ function Get-AllUserSoftware
 
 					# TODO: generate Principal entry in all registry functions
 					# Get more key entries as needed
-					$AllUserSoftware += [PSCustomObject]@{
-						"ComputerName" = $Domain
-						"RegKey" = $HKLMKey
-						"SIDKey" = $HKLSubMKey
-						"Name" = $ProductKey.GetValue("DisplayName")
-						"Version" = $ProductKey.GetValue("DisplayVersion")
-						"InstallLocation" = $InstallLocation
+					[PSCustomObject]@{
+						Domain = $Domain
+						Name = $ProductKey.GetValue("DisplayName")
+						Version = $ProductKey.GetValue("DisplayVersion")
+						Publisher = $ProductKey.GetValue("Publisher")
+						InstallLocation = $InstallLocation
+						RegistryKey = $ProductKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+						# SIDKey = $HKLSubMKey
+						PSTypeName = "Ruleset.ProgramInfo"
 					}
 				}
 			}
-
-			Write-Output $AllUserSoftware
 		}
 	}
 }

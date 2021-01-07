@@ -28,19 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-AllUserSoftware
+Unit test for Get-InstallProperties
 
 .DESCRIPTION
-Unit test for Get-AllUserSoftware
+Unit test for Get-InstallProperties
 
 .EXAMPLE
-PS> .\Get-AllUserSoftware.ps1
+PS> .\Get-InstallProperties.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-AllUserSoftware.ps1
+None. You cannot pipe objects to Get-InstallProperties.ps1
 
 .OUTPUTS
-None. Get-AllUserSoftware.ps1 does not generate any output
+None. Get-InstallProperties.ps1 does not generate any output
 
 .NOTES
 None.
@@ -71,11 +71,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-Start-Test "Get-AllUserSoftware"
-$Result = Get-AllUserSoftware
+Start-Test "Get-InstallProperties"
+$Result = Get-InstallProperties
 $Result
 
-Test-Output $Result -Command Get-AllUserSoftware
+Test-Output $Result -Command Get-InstallProperties
 
 Update-Log
 Exit-Test

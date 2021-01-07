@@ -18,7 +18,7 @@ EXAMPLES
 	Format-Path
 	Format path into firewall compatible path
 
-	Get-AllUserSoftware
+	Get-InstallProperties
 	Search program install properties for all users, system wide
 
 	Get-AppCapability

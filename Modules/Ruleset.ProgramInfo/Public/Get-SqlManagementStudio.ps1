@@ -87,7 +87,6 @@ function Get-SqlManagementStudio
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
 		$RootKey = $RemoteKey.OpenSubkey($HKLM)
 
-		[PSCustomObject[]] $ManagementStudio = @()
 		if (!$RootKey)
 		{
 			Write-Warning -Message "Failed to open registry root key: $HKLM"
@@ -115,17 +114,16 @@ function Get-SqlManagementStudio
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
 
-				# TODO: Should we return object by object to make pipeline work?
-				# also try to get same set of properties for all req queries
-				$ManagementStudio += [PSCustomObject]@{
-					"ComputerName" = $Domain
-					"RegKey" = $HKLMSubKey
-					"Version" = $SubKey.GetValue("Version")
-					"InstallLocation" = Format-Path $InstallLocation
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = "Microsoft SQL Server Management Studio"
+					Version = $SubKey.GetValue("Version")
+					Publisher = "Microsoft Corporation"
+					InstallLocation = Format-Path $InstallLocation
+					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
-
-		Write-Output $ManagementStudio
 	}
 }
