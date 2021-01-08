@@ -35,7 +35,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Rules load into firewall if target executable exists and only if it's digitally signed
   - Rules based on services will have services tested for digital signature in addition to
   service existence test
-  - GPO is automatically updated if running individual rule scripts manually (In progress...)
+  - GPO is automatically updated if running individual rule scripts manually
 
 - New features
 

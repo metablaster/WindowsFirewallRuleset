@@ -749,4 +749,9 @@ New-NetFirewallRule -DisplayName "Global scope Multicast" `
 	-Description $Description |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

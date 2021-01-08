@@ -687,4 +687,9 @@ New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
 	-Description $Description |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -327,4 +327,9 @@ It performs object activations requests, object exporter resolutions and distrib
 collection for COM and DCOM servers." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

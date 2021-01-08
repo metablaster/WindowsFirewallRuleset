@@ -145,5 +145,10 @@ if ($Develop)
 		-Description "Temporary allow all UDP with LocalOnlyMapping" |
 	Format-Output
 
+	if ($UpdateGPO)
+	{
+		Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	}
+
 	Update-Log
 }

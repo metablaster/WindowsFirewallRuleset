@@ -664,6 +664,10 @@ if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Igno
 	# Global variable to tell if warnings were generated, do not modify!
 	# Will not be set if WarningPreference is "SilentlyContinue"
 	New-Variable -Name WarningStatus -Scope Global -Value $false
+
+	# Global variable to tell if target GPO should be updated for changes, do not modify!
+	# Will be disabled by Deploy-Firewall.ps1 to run GPO update only once when deployment is done.
+	New-Variable -Name UpdateGPO -Scope Global -Value $true
 }
 #endregion
 

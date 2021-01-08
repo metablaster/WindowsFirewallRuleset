@@ -113,4 +113,9 @@ if ((Confirm-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $ForceLoad
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

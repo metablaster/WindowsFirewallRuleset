@@ -216,4 +216,9 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

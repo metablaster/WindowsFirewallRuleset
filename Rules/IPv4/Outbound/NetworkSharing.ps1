@@ -200,4 +200,9 @@ New-NetFirewallRule -DisplayName "SMB" `
 reception via Named Pipes." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -134,4 +134,9 @@ if ((Confirm-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

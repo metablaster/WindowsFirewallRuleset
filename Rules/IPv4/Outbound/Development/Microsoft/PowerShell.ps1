@@ -171,4 +171,9 @@ if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLo
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -343,4 +343,9 @@ This rule is required to connect PC to Microsoft account" |
 	Format-Output
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

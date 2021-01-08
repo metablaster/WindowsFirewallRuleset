@@ -282,4 +282,9 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 	-Description "Addresses in the Administratively Scoped Block are for local use within a domain." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

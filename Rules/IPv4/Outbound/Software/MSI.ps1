@@ -140,4 +140,9 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

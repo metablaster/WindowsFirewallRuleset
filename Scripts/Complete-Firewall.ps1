@@ -153,7 +153,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 # Set-NetworkProfile
 
 # Update Local Group Policy for changes to take effect
-gpupdate.exe /target:computer
+Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 # Verify permissions to write firewall logs if needed
 & "$ProjectRoot\Scripts\Grant-Logs.ps1" -Force:$Force

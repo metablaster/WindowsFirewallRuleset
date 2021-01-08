@@ -207,4 +207,9 @@ It does not actually install anything, as that job is handled by a separate inst
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

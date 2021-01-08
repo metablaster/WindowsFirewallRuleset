@@ -230,4 +230,9 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." | Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

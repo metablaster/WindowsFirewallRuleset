@@ -591,7 +591,7 @@ else
 	Receive-Job -Name "ClearDNSCache" -Wait -AutoRemoveJob
 
 	# Make changes done to GPO firewall effective
-	gpupdate.exe /target:computer
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 	Write-Information -Tags "User" -MessageData "INFO: Enabling network adapters"
 

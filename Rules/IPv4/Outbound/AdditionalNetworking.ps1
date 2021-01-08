@@ -281,4 +281,9 @@ New-NetFirewallRule -DisplayName "Router configuration (HTTP/S)" `
 	-Description "Allow router configuration trough browser" |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -568,4 +568,9 @@ Code:
 Code 0 may be received from a gateway or a host." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

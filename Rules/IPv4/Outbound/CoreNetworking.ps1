@@ -283,4 +283,9 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 join and depart multicast groups." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

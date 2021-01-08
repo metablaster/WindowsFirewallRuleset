@@ -294,4 +294,9 @@ New-NetFirewallRule -DisplayName "Administratively Scoped Block" `
 domain." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

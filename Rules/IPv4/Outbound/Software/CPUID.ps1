@@ -130,4 +130,9 @@ if ((Confirm-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $ForceLoad)
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

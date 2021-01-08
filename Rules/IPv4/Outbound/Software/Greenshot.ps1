@@ -113,4 +113,9 @@ if ((Confirm-Installation "Greenshot" ([ref] $GreenshotRoot)) -or $ForceLoad)
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

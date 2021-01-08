@@ -134,7 +134,7 @@ else
 if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name InboundMinutes -EA Ignore))
 {
 	# Update Local Group Policy for changes to take effect
-	gpupdate.exe /target:computer
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 	$TotalMinutes = 0
 

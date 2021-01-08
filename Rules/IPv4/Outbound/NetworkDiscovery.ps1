@@ -527,4 +527,9 @@ These FD providers supply network discovery services for the Simple Services Dis
 (SSDP) and Web Services." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -152,4 +152,9 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-Description "Service enables multiple clients to access video frames from camera devices." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -141,5 +141,10 @@ useful for troubleshooting, and disable ASAP." |
 		-Description "Temporary allow troublesome UDP traffic." |
 	Format-Output
 
+	if ($UpdateGPO)
+	{
+		Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	}
+
 	Update-Log
 }

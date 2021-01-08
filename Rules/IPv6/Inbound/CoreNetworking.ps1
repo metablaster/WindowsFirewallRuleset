@@ -253,4 +253,9 @@ Unlike similar protocols such as 6to4, it can perform its function even from beh
 translation (NAT) devices such as home routers." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

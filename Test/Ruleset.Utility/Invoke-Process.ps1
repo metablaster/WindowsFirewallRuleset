@@ -72,26 +72,26 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test
 
 Start-Test "gpupdate.exe /target:computer"
-$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Format
+$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 $Result
 
 Test-Output $Result -Command Invoke-Process
 
-Start-Test "path to gpupdate.exe /target:computer -Wait 100"
-Invoke-Process "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Wait 100
+Start-Test "path to gpupdate.exe /target:computer -Timeout 100"
+Invoke-Process "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Timeout 100
 
 Start-Test "git.exe status"
 # TODO: Does not work with Desktop edition
-$Result = Invoke-Process "git.exe" -ArgumentList "status" -NoNewWindow
+$Result = Invoke-Process "git.exe" -ArgumentList "status" -NoNewWindow -Raw
 $Result
 
 Test-Output $Result -Command Invoke-Process
 
 Start-Test "Bad path"
-Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Format -Wait 5000
+Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Timeout 5000
 
 Start-Test "Bad file"
-Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Format -Wait 5000
+Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Timeout 5000
 
 Update-Log
 Exit-Test

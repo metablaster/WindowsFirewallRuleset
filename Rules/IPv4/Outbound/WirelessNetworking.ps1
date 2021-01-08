@@ -301,4 +301,9 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
 	-Description "Wireless Portable Devices to allow use of Function discovery provider host." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -173,4 +173,9 @@ Experimental transport layer network protocol developed by Google and implemente
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

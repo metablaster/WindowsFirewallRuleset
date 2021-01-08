@@ -208,4 +208,9 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-Output
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

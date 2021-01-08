@@ -114,4 +114,9 @@ if ((Confirm-Installation "BingWallpaper" ([ref] $BingWallpaperRoot)) -or $Force
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

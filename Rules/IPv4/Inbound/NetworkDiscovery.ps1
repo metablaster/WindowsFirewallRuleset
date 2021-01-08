@@ -473,4 +473,9 @@ New-NetFirewallRule -DisplayName "Teredo UPnP Discovery" `
 	-Description "Rule for Network Discovery to allow use of the Simple Service Discovery Protocol." |
 Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

@@ -113,4 +113,9 @@ if ((Confirm-Installation "DemiseOfNations" ([ref] $DemiseOfNationsRoot)) -or $F
 	}
 }
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log

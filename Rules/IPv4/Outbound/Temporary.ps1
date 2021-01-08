@@ -294,3 +294,9 @@ if ($Develop)
 
 	Update-Log
 }
+
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Update-Log
+}

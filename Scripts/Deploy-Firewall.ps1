@@ -92,6 +92,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 $Error.Clear()
 Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
+Set-Variable -Name UpdateGPO -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
 Set-ScreenBuffer 4000
@@ -437,6 +438,7 @@ Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1"
+Set-Variable -Name UpdateGPO -Scope Global -Value $true
 
 # Set desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `

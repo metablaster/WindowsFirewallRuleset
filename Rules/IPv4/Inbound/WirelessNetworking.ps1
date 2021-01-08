@@ -259,4 +259,9 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnP)" `
 	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-Output
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log
