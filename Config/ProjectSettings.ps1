@@ -93,22 +93,23 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 }
 
 # Assemble relative path name to calling script
-New-Variable -Name Caller -Scope Private -Value ([regex]::escape($ProjectRoot))
-if ((Get-PSCallStack)[1].ScriptName -match "(?<=$Caller\\).+")
+New-Variable -Name SettingsCaller -Scope Private -Value ([regex]::escape($ProjectRoot))
+if ((Get-PSCallStack)[1].ScriptName -match "(?<=$SettingsCaller\\).+")
 {
-	$Caller = $Matches[0]
+	$SettingsCaller = $Matches[0]
 }
 
-Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $Caller)"
+Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $SettingsCaller)"
 
 if ($MyInvocation.InvocationName -ne ".")
 {
 	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
-		-Message "$SettingsScript script must be dot sourced in $Caller"
+		-Message "$SettingsScript script must be dot sourced in $SettingsCaller"
 	exit
 }
 
-Remove-Variable -Name Caller -Scope Private
+# NOTE: This name must be unique otherwise it may be removed in calling script if it defines one
+Remove-Variable -Name SettingsCaller -Scope Private
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -299,17 +300,15 @@ if ($Develop)
 		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
 		# Skip removing modules if this script is called from within a module which would
 		# cause removing modules prematurely
-		foreach ($Module in @(Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory))
-		{
-			$TargetModule = Get-Module -Name $Module
+		Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory | ForEach-Object {
+			# NOTE: Using ForEach-Object to avoid name pollution of variables
+			$TargetModule = Get-Module -Name $_
 			if ($TargetModule)
 			{
-				Write-Debug -Message "Removing module $Module"
+				Write-Debug -Message "Removing module $_"
 				Remove-Module -ModuleInfo $TargetModule -ErrorAction Stop
 			}
 		}
-
-		Remove-Variable -Name TargetModule
 	}
 }
 #endregion

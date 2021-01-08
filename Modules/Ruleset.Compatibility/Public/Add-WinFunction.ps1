@@ -74,11 +74,14 @@ None. Add-WinFunction does not generate any output
 
 .NOTES
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Replace double quotes with single quotes
 - Added HelpURI link to project location
+
 January 2021:
+
 - Replace cast to [void] with Out-Null
 
 .LINK

@@ -108,6 +108,7 @@ None. You cannot pipe objects to Import-WinModule
 
 .NOTES
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location

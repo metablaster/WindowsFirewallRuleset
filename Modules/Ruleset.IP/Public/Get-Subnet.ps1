@@ -83,11 +83,13 @@ None. You cannot pipe objects to Get-Subnet
 
 .NOTES
 Change log:
-	07/03/2016 - Chris Dent - Cleaned up code, added tests.
-	12/12/2015 - Chris Dent - Redesigned.
-	13/10/2011 - Chris Dent - Created.
+
+- 07/03/2016 - Chris Dent - Cleaned up code, added tests.
+- 12/12/2015 - Chris Dent - Redesigned.
+- 13/10/2011 - Chris Dent - Created.
 
 Modifications by metablaster year 2019, 2020:
+
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.

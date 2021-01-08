@@ -49,34 +49,34 @@ PS> Get-SqlServerInstance -Domain Server01
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
 IsCluster     : False
-Domain 	 	  : Server01
+Domain        : Server01
 FullName      : Server01
 IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Name      	  : SQL Server 2008
+Name          : SQL Server 2008
 
 SQLInstance   : SQLSERVER
 Version       : 10.0.1600.22
 IsCluster     : False
-Domain  	  : Server01
+Domain        : Server01
 FullName      : Server01\SQLSERVER
 IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Name      	  : SQL Server 2008
+Name          : SQL Server 2008
 
 .EXAMPLE
 PS> Get-SqlServerInstance -Domain Server1, Server2 -CIM
 
-Domain     		 : Server1
+Domain           : Server1
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition: Core-based Licensing
 Version          : 11.0.3128.0
-Name        	 : SQL Server 2012
+Name             : SQL Server 2012
 IsCluster        : False
 IsClusterNode    : False
 ClusterName      :
@@ -87,12 +87,12 @@ ServiceState     : Running
 ServiceAccount   : domain\Server1SQL
 ServiceStartMode : Auto
 
-Domain			 : Server2
+Domain           : Server2
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition
 Version          : 10.50.4000.0
-Name			 : SQL Server 2008 R2
+Name             : SQL Server 2008 R2
 IsCluster        : False
 IsClusterNode    : False
 ClusterName      :

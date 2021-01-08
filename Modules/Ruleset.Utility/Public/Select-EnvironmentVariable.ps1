@@ -137,19 +137,24 @@ None. You cannot pipe objects to Select-EnvironmentVariable
 
 .NOTES
 Fully Qualified Path Name (FQPN):
+
 - A UNC name of any format, which always start with two backslash characters ("\\"), ex: "\\server\share\path\file"
 - A disk designator with a backslash, for example "C:\" or "d:\".
 - A single backslash, for example, "\directory" or "\file.txt". This is also referred to as an absolute path.
 
 Relative path:
+
 If a file name begins with only a disk designator but not the backslash after the colon:
+
 - "C:tmp.txt" refers to a file named "tmp.txt" in the current directory on drive C
 - "C:tempdir\tmp.txt" refers to a file in a subdirectory to the current directory on drive C
-A path is also said to be relative if it contains "double-dots":
-- "..\tmp.txt" specifies a file named tmp.txt located in the parent of the current directory.
-- "..\tmp.txt" specifies a file named tmp.txt located in the parent of the current directory.
-Relative paths can combine both example types, for example "C:..\tmp.txt"
 
+A path is also said to be relative if it contains "double-dots":
+
+- "..\tmp.txt" specifies a file named tmp.txt located in the parent of the current directory.
+- "..\tmp.txt" specifies a file named tmp.txt located in the parent of the current directory.
+
+Relative paths can combine both example types, for example "C:..\tmp.txt"
 Path+Filename limit is 260 characters.
 
 TODO: Need to see if UNC, single backslash and relative paths without a qualifier are valid for firewall,

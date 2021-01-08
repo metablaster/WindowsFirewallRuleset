@@ -35,6 +35,7 @@ Search installed store apps in userprofile for specific user account
 
 .PARAMETER User
 User name in form of:
+
 - domain\user_name
 - user_name@fqn.domain.tld
 - user_name
@@ -61,7 +62,12 @@ None. You cannot pipe objects to Get-UserApps
 TODO: query remote computer not implemented
 TODO: multiple domains
 TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
-TODO: see also -AllUsers and other parameters
+TODO: see also -AllUsers and other parameters in related links
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md
+
+.LINK
 https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps
 #>
 function Get-UserApps

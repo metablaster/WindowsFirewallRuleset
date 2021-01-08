@@ -56,7 +56,8 @@ Specify encoding for help files.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 
 .PARAMETER Force
-If specified, no prompt for confirmation is shown to perform actions
+If specified, no prompt for confirmation is shown to perform actions, in addition help files
+are regenerated a new instead of being updated.
 
 .EXAMPLE
 PS> .\Update-HelpContent.ps1
@@ -202,7 +203,7 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 if (!$Module)
 {
 	# Generate new or update existing help files for all modules that are part of repository
-	$Module = Get-ChildItem -Path $ProjectRoot\Modules\ -Directory -Filter "Ruleset.*" |
+	$Module = Get-ChildItem -Path $ProjectRoot\Modules\* -Directory -Filter "Ruleset.*" |
 	Select-Object -ExpandProperty Name
 }
 
@@ -271,7 +272,7 @@ specific subfolders
 		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"
 
 		# Both the help root folder and module page must exist to update
-		if (Test-Path -Path $ModulePage -PathType Leaf)
+		if (!$Force -and (Test-Path -Path $ModulePage -PathType Leaf))
 		{
 			Write-Verbose -Message "[$ThisScript] Updating help: $ModuleName - $CultureName"
 

@@ -35,6 +35,7 @@ Search system wide installed store apps, those installed for all users or shippe
 
 .PARAMETER User
 User name in form of:
+
 - domain\user_name
 - user_name@fqn.domain.tld
 - user_name
@@ -54,8 +55,8 @@ None. You cannot pipe objects to Get-SystemApps
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
-[object] if using PowerShell Core which outputs deserialized object:
-[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+[object] In Windows PowerShell
+[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] In PowerShell Core
 
 .NOTES
 TODO: query remote computer not implemented

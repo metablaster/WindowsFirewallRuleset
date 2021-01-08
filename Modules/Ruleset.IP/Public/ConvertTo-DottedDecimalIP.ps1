@@ -75,6 +75,7 @@ Convert the decimal form back to dotted decimal, resulting in 192.168.0.1.
 
 .NOTES
 Modifications by metablaster year 2019, 2020:
+
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
