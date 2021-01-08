@@ -88,6 +88,7 @@ Parameter names and aliases
 - [string] `Prompt` (specify a prompt for the cmdlet)
 - [array] `State` (specify the Keyword names of states)
 - [switch] `Trusted` (trust levels are supported when the parameter is specified)
+- [string] `TempLocation` (specify the location of temporary data that is used during operation)
 
 `*` Used by most commandlets as primary parameter but should be alias instead
 `PSPath` is alias of both the Path and LiteralPath of most commandlets

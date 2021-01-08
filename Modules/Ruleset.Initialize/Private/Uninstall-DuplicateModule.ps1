@@ -60,7 +60,7 @@ User: Modules installed for current user
 If specified, don't prompt for possibly dangerous actions
 
 .EXAMPLE
-Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
+PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
 
 Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope
 
@@ -70,7 +70,7 @@ PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredV
 First get module you know should be removed and pass it to pipeline
 
 .INPUTS
-[PSModuleInfo] module object
+[PSModuleInfo[]] module object
 
 .OUTPUTS
 None. Uninstall-DuplicateModule does not generate any output

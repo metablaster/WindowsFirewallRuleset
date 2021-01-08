@@ -64,10 +64,16 @@ Indicates the test shouldn't use a proxy to reach the destination.
 This feature was added in PowerShell 6.0.0.
 
 .EXAMPLE
-Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
+PS> Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
 
 .EXAMPLE
-Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
+PS> Test-MarkdownLinks -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy
+
+.INPUTS
+None. You cannot pipe objects to Test-MarkdownLinks
+
+.OUTPUTS
+None. Test-MarkdownLinks does not generate any output
 
 .NOTES
 WebSslProtocol enum does not list Tls13
@@ -100,7 +106,7 @@ function Test-MarkdownLinks
 
 		[Parameter()]
 		[ValidateSet("Default", "Tls", "Tls11", "Tls12")]
-		$SslProtocol = "Default",
+		[string] $SslProtocol = "Default",
 
 		[Parameter()]
 		[switch] $NoProxy

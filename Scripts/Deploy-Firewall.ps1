@@ -59,6 +59,9 @@ None. Deploy-Firewall.ps1 does not generate any output
 TODO: This script should be simplified by using Get-ChildItem to get all rule scripts.
 TODO: Logic should probably be separated into separate scripts: Deploy-FirewallRules, Complete-Profile etc.
 TODO: OutputType attribute
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 #Requires -Version 5.1

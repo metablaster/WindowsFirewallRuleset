@@ -44,13 +44,11 @@ If the Value is null or empty this value will be used as a result
 
 .EXAMPLE
 PS> Convert-ValueToBoolean True
-
-$true
+True
 
 .EXAMPLE
 PS> Convert-ValueToBoolean 0
-
-$false
+False
 
 .INPUTS
 None. You cannot pipe objects to Convert-ValueToBoolean

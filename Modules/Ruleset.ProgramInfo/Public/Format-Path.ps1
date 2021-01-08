@@ -65,7 +65,7 @@ PS> Format-Path '"C:\ProgramData\Git"'
 %ALLUSERSPROFILE%\Git
 
 .INPUTS
-[string] File path to format
+[string[]] File path to format
 
 .OUTPUTS
 [string] formatted path, includes environment variables, stripped off of junk

@@ -50,7 +50,7 @@ PS> Test-Output $Result -Command Some-Function
 PS> Some-Function | Test-Output -Command Some-Function
 
 .INPUTS
-None. You cannot pipe objects to Test-Output
+[object[]]
 
 .OUTPUTS
 None. Test-Output does not generate any output

@@ -45,7 +45,7 @@ One or more computers to check if SID is not known, default is localhost
 PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 
 .EXAMPLE
-PS> '^S-1-5-32-580' | ConvertFrom-SID
+PS> "S-1-5-32-580", "S-1-5-21-34223-2342-234234-518" | ConvertFrom-SID
 
 .INPUTS
 [string[]] One or multiple SID's

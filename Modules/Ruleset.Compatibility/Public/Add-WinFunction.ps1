@@ -82,6 +82,9 @@ January 2021:
 - Replace cast to [void] with Out-Null
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md
+
+.LINK
 https://github.com/PowerShell/WindowsCompatibility
 #>
 function Add-WinFunction

@@ -104,13 +104,16 @@ This example forces a reload of the module "PnpDevice" with verbose output turne
 None. You cannot pipe objects to Import-WinModule
 
 .OUTPUTS
-System.Management.Automation.PSObject
+[PSObject]
 
 .NOTES
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility

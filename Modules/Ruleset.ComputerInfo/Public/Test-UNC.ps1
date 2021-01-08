@@ -64,7 +64,7 @@ PS> Test-UNC \SERVER-01\Share\Directory DIR
 False
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [bool]

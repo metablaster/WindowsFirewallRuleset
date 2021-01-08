@@ -63,13 +63,17 @@ or an IP address and subnet mask in a string.
 A subnet mask as an IP address.
 
 .EXAMPLE
-TODO: Provide example
+PS> ConvertTo-Network -IPAddress 10.2.3.4 -SubnetMask 255.248.0.0
+
+IPAddress SubnetMask  MaskLength
+--------- ----------  ----------
+10.2.3.4  255.248.0.0         13
 
 .INPUTS
 None. You cannot pipe objects to ConvertTo-Network
 
 .OUTPUTS
-"Ruleset.IP.Network" Custom object
+"Ruleset.IP.Network" [PSCustomObject] Custom object
 
 .NOTES
 Change log:

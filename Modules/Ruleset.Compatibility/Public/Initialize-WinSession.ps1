@@ -68,13 +68,16 @@ Initialize the compatibility session with a specific computer name and configura
 None. You cannot pipe objects to Initialize-WinSession
 
 .OUTPUTS
-System.Management.Automation.Runspaces.PSSession
+[System.Management.Automation.Runspaces.PSSession]
 
 .NOTES
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility

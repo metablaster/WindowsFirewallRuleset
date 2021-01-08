@@ -42,7 +42,10 @@ Should be specified to enter pester tests for private functions,
 this parameter implies -Private switch.
 
 .EXAMPLE
-PS> Enter-Test "Get-Something.ps1"
+PS> Enter-Test
+
+.EXAMPLE
+PS> Enter-Test -Private
 
 .INPUTS
 None. You cannot pipe objects to Enter-Test

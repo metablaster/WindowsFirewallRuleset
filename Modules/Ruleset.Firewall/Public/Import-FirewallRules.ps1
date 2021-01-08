@@ -83,6 +83,12 @@ Following modifications by metablaster August 2020:
 December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md
+
+.LINK
+https://github.com/MScholtes/Firewall-Manager
 #>
 function Import-FirewallRules
 {

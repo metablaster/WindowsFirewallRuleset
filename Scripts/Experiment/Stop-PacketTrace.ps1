@@ -62,6 +62,9 @@ None. Stop-PacketTrace.ps1 does not generate any output
 
 .NOTES
 TODO: OutputType attribute
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 #Requires -Version 5.1

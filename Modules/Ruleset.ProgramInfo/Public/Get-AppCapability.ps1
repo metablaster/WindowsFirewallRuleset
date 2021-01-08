@@ -75,6 +75,9 @@ TODO: According to unit test there are some capabilities not implemented here
 TODO: Need better descriptive parameter name for -Authority switch
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md
+
+.LINK
 https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
 
 .LINK

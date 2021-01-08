@@ -46,7 +46,7 @@ PS> Get-UserGroup "ServerPC"
 PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 
 .INPUTS
-[string[]] One or more computer names
+None. You cannot pipe objects to Get-UserGroup
 
 .OUTPUTS
 [PSCustomObject] User groups on target computers

@@ -75,6 +75,9 @@ The benefit is to have special syntax coloring and filtering functionality with 
 First time setup requires turning off/on Windows firewall for current network profile in order for
 Windows firewall to start logging into new location.
 TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 # For: AccessControl.FileSystemRights

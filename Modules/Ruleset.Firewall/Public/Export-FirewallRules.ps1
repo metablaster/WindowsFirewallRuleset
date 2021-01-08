@@ -139,6 +139,12 @@ Broadcast
 Network Discovery
 File and Printer Sharing
 Microsoft Office
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md
+
+.LINK
+https://github.com/MScholtes/Firewall-Manager
 #>
 function Export-FirewallRules
 {

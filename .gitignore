@@ -98,3 +98,6 @@ Modules/**/Help/**/External/
 
 # Auto generated test folders
 Test/TestDrive/
+
+# Personal
+Readme/Notes.txt

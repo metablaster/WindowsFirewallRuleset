@@ -50,7 +50,7 @@ Controls whether the provider initialization must succeed, if initialization fai
 otherwise only warning is generated
 
 .EXAMPLE
-PS> Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+PS> Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Required
 
 .INPUTS
 None. You cannot pipe objects to Initialize-Provider
@@ -71,7 +71,7 @@ Before updating PowerShellGet or PackageManagement, you should always install th
 function Initialize-Provider
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initializenitialize-Provider.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Provider.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

@@ -37,6 +37,9 @@ Search separate location in the registry for programs installed for all users.
 Computer name which to check
 
 .EXAMPLE
+PS> Get-InstallProperties
+
+.EXAMPLE
 PS> Get-InstallProperties "COMPUTERNAME"
 
 .INPUTS

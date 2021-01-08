@@ -44,7 +44,7 @@ excluding executable file name.
 
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-PS> Confirm-Installation "Office" ([ref] $MyProgram)
+PS> Confirm-Installation "Office" ([ref] $ProgramInstallPath)
 
 .INPUTS
 None. You cannot pipe objects to Confirm-Installation

@@ -34,7 +34,7 @@ Convert multi line string array to single line string
 Convert multi line string array to single line string
 `r is encoded as %% and `n as ||
 
-.PARAMETER MultiLine
+.PARAMETER Value
 String array which to convert
 
 .PARAMETER JSON

@@ -84,7 +84,7 @@ PS> Generate-Types | Get-TypeName | DealWith-TypeNames
 Sends typename for each input object down the pipeline
 
 .INPUTS
-[System.Object]
+[object[]]
 
 .OUTPUTS
 [string]

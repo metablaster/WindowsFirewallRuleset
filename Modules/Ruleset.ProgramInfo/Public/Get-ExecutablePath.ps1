@@ -38,6 +38,9 @@ registry path and child registry key name for target computer
 Computer name which to check
 
 .EXAMPLE
+PS> Get-ExecutablePath
+
+.EXAMPLE
 PS> Get-ExecutablePath "COMPUTERNAME"
 
 .INPUTS

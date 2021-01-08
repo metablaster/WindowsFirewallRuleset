@@ -62,6 +62,9 @@ None. ScriptTemplate.ps1 does not generate any output
 
 .NOTES
 None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 # TODO: Remove using statement and/or elevation requirement

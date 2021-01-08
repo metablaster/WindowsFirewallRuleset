@@ -40,6 +40,10 @@ Wildcard pattern string which is to be converted
 .PARAMETER Wildcard
 Wildcard pattern object which is to be converted
 
+.PARAMETER AsRegex
+Construct regex object in place with specified parameters.
+By default regex string pattern is returned.
+
 .PARAMETER Options
 Optionally specify regex options.
 By default no options are set.
@@ -48,10 +52,6 @@ By default no options are set.
 Optionally specify a time-out interval.
 By default pattern-matching operation does not time out.
 This parameter has no effect if -AsRegex switch was not specified.
-
-.PARAMETER AsRegex
-Construct regex object in place with specified parameters.
-By default regex string pattern is returned.
 
 .EXAMPLE
 PS> ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"

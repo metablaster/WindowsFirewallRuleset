@@ -184,7 +184,7 @@ function Test-FileSystemPath
 		$Status = "Path qualifier '$Qualifier' is not a file system qualifier"
 	}
 	# Invalid characters to name a file or directory: / \ : < > ? * | "
-	elseif ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($ExpandedPath))
+	elseif ([WildcardPattern]::ContainsWildcardCharacters($ExpandedPath))
 	{
 		# Handles: ? * [ ]
 		$Status = "Specified path contains unresolved wildcard pattern"

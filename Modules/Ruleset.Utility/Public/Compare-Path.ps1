@@ -35,11 +35,11 @@ Compare-Path depending on parameters either checks if 2 paths lead to same locat
 taking into account environment variables, relative path locations and wildcards
 or it checks if 2 paths are similar which depends on wildcards contained in the input
 
-.PARAMETER ReferencePath
-The path against which to compare
-
 .PARAMETER Path
 The path which to compare against the reference path
+
+.PARAMETER ReferencePath
+The path against which to compare
 
 .PARAMETER Loose
 if specified perform "loose" comparison:
@@ -51,17 +51,14 @@ If specified performs case sensitive comparison
 
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose
-
 True
 
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -CaseSensitive
-
 True
 
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\" "D:\"
-
 False
 
 .INPUTS

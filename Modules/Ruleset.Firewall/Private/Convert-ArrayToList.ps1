@@ -44,7 +44,7 @@ PS> Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
 "192.168.1.1,192.168.2.1,172.24.33.100"
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [string] comma separated list

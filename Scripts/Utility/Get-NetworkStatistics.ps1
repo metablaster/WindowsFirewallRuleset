@@ -49,7 +49,7 @@ Gets connections by the name of the process.
 Wildcard characters are supported.
 The default value is "*"
 
-.PARAMETER Address
+.PARAMETER IPAddress
 Gets connections by the IP address of the connection, local or remote.
 Wildcard characters are supported.
 The default value is "*"
@@ -91,13 +91,13 @@ http://msdn.microsoft.com/en-us/library/system.net.networkinformation.tcpstate%2
 Cookie Monster - modified these to match netstat output per here:
 http://support.microsoft.com/kb/137984
 
-.PARAMETER ShowHostNames
+.PARAMETER ShowHostName
 If specified, will attempt to resolve local and remote addresses
 
-.PARAMETER ShowProcessNames
+.PARAMETER ShowProcessName
 If specified, includes process names involved in connection
 
-.PARAMETER TempFile
+.PARAMETER TempLocation
 Temporary file to store results on remote system.
 Must be relative to remote system (not a file share).
 Default is "C:\netstat.txt"
@@ -111,13 +111,13 @@ If specified, we display any result where both the localaddress and the remotead
 PS> Get-NetworkStatistics | Format-Table
 
 .EXAMPLE
-PS> Get-NetworkStatistics iexplore -Domain k-it-thin-02 -ShowHostNames | Format-Table
+PS> Get-NetworkStatistics iexplore -Domain k-it-thin-02 -ShowHostName | Format-Table
 
 .EXAMPLE
 PS> Get-NetworkStatistics -ProcessName md* -Protocol TCP
 
 .EXAMPLE
-PS> Get-NetworkStatistics -Address 192* -State LISTENING
+PS> Get-NetworkStatistics -IPAddress 192* -State LISTENING
 
 .EXAMPLE
 PS> Get-NetworkStatistics -State LISTENING -Protocol TCP
@@ -129,7 +129,7 @@ PS> Get-NetworkStatistics -Domain Computer1, Computer2
 PS> 'Computer1', 'Computer2' | Get-NetworkStatistics
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [System.Management.Automation.PSCustomObject]
@@ -149,6 +149,9 @@ Fixed getting process list from remote computer with Invoke-Command instead of G
 Changed default for AddressFamily from * to Any
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
 https://github.com/RamblingCookieMonster/PowerShell
 
 .LINK
@@ -166,7 +169,7 @@ param (
 
 	[Parameter(Position = 1)]
 	[SupportsWildcards()]
-	[string] $Address = "*",
+	[string] $IPAddress = "*",
 
 	[Parameter(Position = 2)]
 	[SupportsWildcards()]
@@ -187,17 +190,17 @@ param (
 	[string] $State = "*",
 
 	[Parameter()]
-	[switch] $ShowHostNames,
+	[switch] $ShowHostName,
 
 	[Parameter()]
-	[switch] $ShowProcessNames,
+	[switch] $ShowProcessName,
 
 	[Parameter()]
-	[string] $TempFile = "C:\netstat.txt",
+	[string] $TempLocation = "C:\netstat.txt",
 
 	[Parameter()]
 	[ValidateSet("Any", "IPv4", "IPv6")]
-	[string] $AddressFamily = "Any"
+	[string] $IPAddressFamily = "Any"
 )
 
 begin
@@ -217,7 +220,7 @@ process
 		if ($Computer -eq [System.Environment]::MachineName)
 		{
 			# Collect processes
-			if ($ShowProcessNames)
+			if ($ShowProcessName)
 			{
 				$Processes = Get-Process -ErrorAction Stop | Select-Object Name, Id
 			}
@@ -228,7 +231,7 @@ process
 		else
 		{
 			# Collect processes
-			if ($ShowProcessNames)
+			if ($ShowProcessName)
 			{
 				try
 				{
@@ -237,25 +240,25 @@ process
 				catch
 				{
 					Write-Warning "Unable to run Get-Process on computer $Computer, defaulting to no ShowProcessNames"
-					$ShowProcessNames = $false
+					$ShowProcessName = $false
 				}
 			}
 
 			# Define command
-			[string] $cmd = "cmd /c c:\windows\system32\netstat.exe -ano >> $TempFile"
+			[string] $cmd = "cmd /c c:\windows\system32\netstat.exe -ano >> $TempLocation"
 
 			# Define remote file path - computername, drive, folder path
-			$RemoteTempFile = "\\{0}\{1}`${2}" -f "$Computer", (Split-Path $TempFile -Qualifier).TrimEnd(":"), (Split-Path $TempFile -NoQualifier)
+			$RemoteTempFile = "\\{0}\{1}`${2}" -f "$Computer", (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
 
 			# Delete previous results
 			try
 			{
 				Invoke-CimMethod -ClassName Win32_process -MethodName Create -ComputerName $Computer `
-					-Arguments @{ CommandLine = "cmd /c del $TempFile" } -ErrorAction Stop | Out-Null
+					-Arguments @{ CommandLine = "cmd /c del $TempLocation" } -ErrorAction Stop | Out-Null
 			}
 			catch
 			{
-				Write-Warning "Could not invoke create win32_process on $Computer to delete $TempFile"
+				Write-Warning "Could not invoke create win32_process on $Computer to delete $TempLocation"
 			}
 
 			# Run command
@@ -308,7 +311,7 @@ process
 			else
 			{
 				Write-Error -Category ReadError -TargetObject $RemoteTempFile `
-					-Message "'$TempFile' on $Computer converted to '$RemoteTempFile', this path is not accessible from your system."
+					-Message "'$TempLocation' on $Computer converted to '$RemoteTempFile', this path is not accessible from your system."
 				continue
 			}
 		}
@@ -351,15 +354,15 @@ process
 				}
 
 				# Filter IPv4/IPv6 if specified
-				if ($AddressFamily -ne "Any")
+				if ($IPAddressFamily -ne "Any")
 				{
-					if (($AddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
+					if (($IPAddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
 					{
 						# Both are IPv6, or ipv6 and listening, skip
 						Write-Verbose "Filtered by AddressFamily:`n$Result"
 						continue
 					}
-					elseif (($AddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
+					elseif (($IPAddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
 					{
 						# Both are IPv4, or ipv4 and listening, skip
 						Write-Verbose "Filtered by AddressFamily:`n$Result"
@@ -380,7 +383,7 @@ process
 					continue
 				}
 
-				if (($RemoteAddress -notlike $Address) -and ($LocalAddress -notlike $Address))
+				if (($RemoteAddress -notlike $IPAddress) -and ($LocalAddress -notlike $IPAddress))
 				{
 					Write-Verbose "Filtered by Address:`n$Result"
 					continue
@@ -404,7 +407,7 @@ process
 					-PercentComplete (( $Count / $TotalCount ) * 100)
 
 				# If we are running ShowProcessNames, get the matching name
-				if ($ShowProcessNames -or ($PSBoundParameters.ContainsKey -eq "ProcessName"))
+				if ($ShowProcessName -or ($PSBoundParameters.ContainsKey -eq "ProcessName"))
 				{
 					# Handle case where process spun up in the time between running get-process and running netstat
 					if ($ProcName = $Processes | Where-Object { $_.id -eq $ProcessID } | Select-Object -ExpandProperty name ) { }
@@ -418,8 +421,8 @@ process
 					continue
 				}
 
-				# If the ShowHostnames switch is specified, try to map IP to hostname
-				if ($ShowHostNames)
+				# If the ShowHostName switch is specified, try to map IP to hostname
+				if ($ShowHostName)
 				{
 					$TempAddress = $null
 					try

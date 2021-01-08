@@ -105,23 +105,23 @@ explicit rules and everything else is removed.
 If specified skips prompting for confirmation.
 
 .EXAMPLE
-PS> Set-Permission -Principal "SomeUser" -LiteralPath "D:\SomePath"
+PS> Set-Permission -User "SomeUser" -LiteralPath "D:\SomePath"
 
 Sets function defaults for user SomeUser on path D:\SomePath
 
 .EXAMPLE
-Set-Permission -Principal "Remote Management Users" -LiteralPath "D:\SomePath" -Protected
+PS> Set-Permission -User "Remote Management Users" -LiteralPath "D:\SomePath" -Protected
 
 Only "Remote Management Users" have permissions on "D:\SomePath", other entries are removed
 
 .EXAMPLE
-PS> Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
+PS> Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
 	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
 LanmanServer service is denied specified rights for specified directory and all it's contents
 
 .EXAMPLE
-PS> Set-Permission -Principal SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
+PS> Set-Permission -User SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
 
 Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
@@ -146,6 +146,9 @@ PowerShell process does not have high enough privileges even if run as Administr
 is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1

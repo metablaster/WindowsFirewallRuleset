@@ -43,7 +43,7 @@ Target computer on which to perform query
 Whether to contact CIM server (required for remote computers)
 
 .EXAMPLE
-PS> Get-PrincipalSID "USERNAME" -Server "COMPUTERNAME"
+PS> Get-PrincipalSID "User" -Server "Server01"
 
 .EXAMPLE
 PS> Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM

@@ -40,6 +40,9 @@ Should be specified to exit private function pester test
 .EXAMPLE
 PS> Exit-Test
 
+.EXAMPLE
+PS> Exit-Test -Pester
+
 .INPUTS
 None. You cannot pipe objects to Exit-Test
 

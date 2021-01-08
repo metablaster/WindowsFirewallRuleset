@@ -37,7 +37,10 @@ Get a list of software installed system wide, for all users.
 Computer name which to check
 
 .EXAMPLE
-PS> Get-SystemSoftware "COMPUTERNAME"
+PS> Get-SystemSoftware
+
+.EXAMPLE
+PS> Get-SystemSoftware "Server01"
 
 .INPUTS
 None. You cannot pipe objects to Get-SystemSoftware

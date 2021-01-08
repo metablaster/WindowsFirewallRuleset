@@ -28,7 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get computer accounts for specified user groups on target computers
+Get principals of specified groups on target computers
+
+.DESCRIPTION
+Get computer accounts for one or more user groups on local computer or one or more remote computers.
 
 .PARAMETER Group
 User group on local or remote computer

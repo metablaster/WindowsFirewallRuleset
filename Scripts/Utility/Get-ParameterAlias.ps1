@@ -103,7 +103,8 @@ PS> Get-parameterAlias -Parameter "Computer*" -Count 4
 PS> Get-parameterAlias -Parameter "Computer*" -Unique
 
 .INPUTS
-[string]
+[string[]]
+[System.Management.Automation.PSTypeName[]]
 
 .OUTPUTS
 [string]
@@ -116,6 +117,11 @@ any 3rd party function that conforms to community development guidelines.
 The end result is of course greater reusability of your code.
 TODO: Some parameter aliases are not retrieved and it's not clear if this is a bug ex:
 -Detailed and -Seconds
+TODO: Need to revisit which parameters can be bound from pipeline from other functions and
+update ValueFromPipeline arguments.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 #Requires -Version 5.1
@@ -144,7 +150,7 @@ param (
 	[SupportsWildcards()]
 	[System.Management.Automation.PSTypeName[]] $ParameterType = "*",
 
-	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[Parameter()]
 	[Alias("TotalCount")]
 	[ValidateRange(0, [int32]::MaxValue)]
 	[int32] $Count = [int32]::MaxValue,
@@ -161,7 +167,7 @@ param (
 	[Parameter(ParameterSetName = "Unique")]
 	[switch] $Unique,
 
-	[Parameter(ValueFromPipelineByPropertyName = $true)]
+	[Parameter()]
 	[switch] $ListImported,
 
 	[Parameter()]

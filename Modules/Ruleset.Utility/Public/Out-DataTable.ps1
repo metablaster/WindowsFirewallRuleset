@@ -40,7 +40,7 @@ One or more objects to convert into a DataTable
 A list of columns to set disable AllowDBNull on
 
 .INPUTS
-[object] Any object can be piped to Out-DataTable
+[PSObject[]] Any object can be piped to Out-DataTable
 
 .OUTPUTS
 [System.Data.DataTable]
@@ -75,11 +75,14 @@ Updated comment based help
 Convert inner function to scriptblock
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Out-DataTable.md
+
+.LINK
 https://github.com/RamblingCookieMonster/PowerShell
 #>
 function Out-DataTable
 {
-	[CmdletBinding()]
+	[CmdletBinding(HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Out-DataTable.md")]
 	[OutputType([System.Data.DataTable])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]

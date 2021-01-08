@@ -37,7 +37,10 @@ Gets installation information about Windows defender.
 Computer name for which to list installed Windows Defender
 
 .EXAMPLE
-PS> Get-WindowsDefender COMPUTERNAME
+PS> Get-WindowsDefender
+
+.EXAMPLE
+PS> Get-WindowsDefender Server01
 
 .INPUTS
 None. You cannot pipe objects to Get-WindowsDefender

@@ -82,6 +82,9 @@ Following modifications by metablaster November 2020:
 - Added HelpURI link to project location
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md
+
+.LINK
 https://github.com/PowerShell/WindowsCompatibility
 #>
 function Copy-WinModule

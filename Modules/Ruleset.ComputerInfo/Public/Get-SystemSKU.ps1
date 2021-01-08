@@ -57,14 +57,14 @@ Server2		Home Premium N				26
 Server3		Microsoft Hyper-V Server	42
 
 .EXAMPLE
-PS> Get-SystemSKU 7
+PS> Get-SystemSKU -SKU 7
 
 Domain      SystemSKU    	SKU
 ------      ---------    	---
 			Server Standard  7
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [PSCustomObject]

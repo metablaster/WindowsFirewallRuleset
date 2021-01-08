@@ -37,7 +37,10 @@ Get installation information about installed Windows Kit's
 Computer name for which to list installed installed windows kits
 
 .EXAMPLE
-PS> Get-WindowsKit COMPUTERNAME
+PS> Get-WindowsKit
+
+.EXAMPLE
+PS> Get-WindowsKit Server01
 
 .INPUTS
 None. You cannot pipe objects to Get-WindowsKit

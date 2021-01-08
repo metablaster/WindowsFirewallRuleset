@@ -33,8 +33,8 @@ Removes firewall rules according to a list in a CSV or JSON file.
 
 .DESCRIPTION
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
-CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName
-is used, all other fields can be omitted
+CSV files have to be separated with semicolons.
+Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
 
 .PARAMETER Domain
 Policy store from which remove rules, default is local GPO.
@@ -80,6 +80,12 @@ December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 TODO: implement removing rules not according to file
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md
+
+.LINK
+https://github.com/MScholtes/Firewall-Manager
 #>
 function Remove-FirewallRules
 {

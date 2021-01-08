@@ -43,6 +43,9 @@ Computer name on which to look for program installation
 .EXAMPLE
 PS> Search-Installation "Office"
 
+.EXAMPLE
+PS> Search-Installation "VSCode" -Domain Server01
+
 .INPUTS
 None. You cannot pipe objects to Search-Installation
 

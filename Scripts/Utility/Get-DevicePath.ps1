@@ -1,7 +1,7 @@
 
 <#
 .SYNOPSIS
-Get disk volume path
+Get device path or disk volume path
 
 .DESCRIPTION
 Get mappings of disk volume letter and device path

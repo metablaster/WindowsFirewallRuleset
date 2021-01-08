@@ -68,7 +68,7 @@ PS> Select-IPInterface -AddressFamily IPv6 -Virtual
 None. You cannot pipe objects to Select-IPInterface
 
 .OUTPUTS
-"NetIPConfiguration" or error message if no adapter configured
+"NetIPConfiguration" [PSCustomObject] or error message if no adapter configured
 
 .NOTES
 None.

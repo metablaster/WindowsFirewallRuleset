@@ -42,6 +42,9 @@ NETBIOS Computer name in form of "COMPUTERNAME"
 .EXAMPLE
 PS> Get-OneDrive "USERNAME"
 
+.EXAMPLE
+PS> Get-OneDrive "USERNAME" -Domain "Server01"
+
 .INPUTS
 None. You cannot pipe objects to Get-OneDrive
 
@@ -101,7 +104,7 @@ function Get-OneDrive
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$User' to HKU:$TempKey"
 
 				# NOTE: Start-Process is needed to make the command finish it's job and print status
-				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig"
+				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig" -Raw
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 				$ReleaseHive = $true
@@ -126,7 +129,7 @@ function Get-OneDrive
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"
 				[gc]::collect()
-				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey"
+				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}
@@ -174,7 +177,7 @@ function Get-OneDrive
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 				[gc]::collect()
-				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey"
+				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 		}

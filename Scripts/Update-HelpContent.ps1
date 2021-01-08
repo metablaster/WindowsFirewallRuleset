@@ -87,6 +87,12 @@ TODO: the "Module Name:" entry in help files (any maybe even "external help file
 if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
+https://github.com/PowerShell/platyPS
 #>
 
 #Requires -Version 5.1

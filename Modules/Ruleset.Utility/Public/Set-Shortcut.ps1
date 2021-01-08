@@ -60,7 +60,10 @@ Alternatively one of the following keywords can be specified:
 "Templates"
 
 .PARAMETER TargetPath
-The full path and filename or URL of the location that the shortcut file will open.
+The full path and filename of the location that the shortcut file will open.
+
+.PARAMETER URL
+URL of the location that the shortcut file will open.
 
 .PARAMETER IconLocation
 Full pathname of the icon file to set on shortcut.
@@ -88,10 +91,10 @@ Optionally set arguments to target file
 If specified, the shortcut is run as Administrator
 
 .EXAMPLE
-PS> Set-Shortcut -Path "$env:Home\Desktop\test.lnk" -FilePath "C:\Windows\program.exe"
+PS> Set-Shortcut -Path "$env:Home\Desktop\test.lnk" -TargetPath "C:\Windows\program.exe"
 
 .EXAMPLE
-PS> Set-Shortcut -Path "$env:Home\Desktop\test.lnk" -FilePath "C:\Windows\program.exe" -Admin -Index 16
+PS> Set-Shortcut -Path "$env:Home\Desktop\test.lnk" -TargetPath "C:\Windows\program.exe" -Admin -Index 16
 
 .INPUTS
 None. You cannot pipe objects to Set-Shortcut

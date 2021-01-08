@@ -54,7 +54,7 @@ None. You cannot pipe objects to Build-ServiceList
 [string]
 
 .NOTES
-None.
+TODO: -Log parameter should be accompanied -LogName parameter
 #>
 function Build-ServiceList
 {

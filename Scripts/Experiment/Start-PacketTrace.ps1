@@ -118,6 +118,9 @@ TODO: More parameters could be customized, see links for more info
 TODO: OutputType attribute
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
 https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/new-neteventsession?view=win10-ps
 
 .LINK

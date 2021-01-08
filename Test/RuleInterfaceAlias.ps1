@@ -207,7 +207,7 @@ if ($MultipleAdapters)
 }
 
 Start-Test "Bad adapter rule FAILURE TEST"
-[System.Management.Automation.WildcardPattern[]] $BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
+[WildcardPattern[]] $BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
 $BadAdapters += [WildcardPattern]("Local Area Connection* 644")
 
 # TODO: Need some checking when defining such rules elsewhere

@@ -34,7 +34,7 @@ Convert encoded single line string to multi line string array
 Convert encoded single line string to multi line CRLF string array
 Input string `r is encoded as %% and `n as ||
 
-.PARAMETER MultiLine
+.PARAMETER Value
 String which to convert
 
 .PARAMETER JSON

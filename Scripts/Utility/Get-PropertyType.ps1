@@ -76,7 +76,7 @@ PS> $array | ?{$_.prop2 -isnot [System.DateTime]}
 	bar       2
 
 .INPUTS
-None. You cannot pipe objects to Get-PropertyType.ps1
+[PSObject]
 
 .OUTPUTS
 [hashtable]
@@ -89,7 +89,7 @@ Convert to script by removing function
 Added links, inputs, outputs and notes to comment based help
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 .LINK
 https://github.com/RamblingCookieMonster/PowerShell

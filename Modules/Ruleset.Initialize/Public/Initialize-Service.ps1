@@ -66,7 +66,7 @@ TODO: Optionally set services to automatic startup, most of services are needed 
 function Initialize-Service
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initializenitialize-Service.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]

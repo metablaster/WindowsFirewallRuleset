@@ -52,7 +52,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Gets permutations of an IP address expansion expression.
 
 .DESCRIPTION
-Gets permutations of an IP address expansion expression.
+Gets permutations of an IP address wildcard pattern expansion.
 
 .PARAMETER Group
 ExpansionGroupInfo custom object, the result of IP wildcard pattern expansion

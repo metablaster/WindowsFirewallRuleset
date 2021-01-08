@@ -47,7 +47,7 @@ If specified, handles binary files as well.
 PS> Confirm-FileEncoding C:\SomeFile.txt utf16
 
 .INPUTS
-[string] One or more paths to file to check
+[System.IO.FileInfo[]] One or more paths to file to check
 
 .OUTPUTS
 None. Confirm-FileEncoding does not generate any output

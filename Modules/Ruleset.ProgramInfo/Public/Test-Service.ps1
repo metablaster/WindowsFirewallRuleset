@@ -49,7 +49,7 @@ PS> Test-Service dnscache
 PS> @("msiserver", "Spooler", "WSearch") | Test-Service
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [bool]

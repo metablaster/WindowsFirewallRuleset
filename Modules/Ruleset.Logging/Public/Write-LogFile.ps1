@@ -50,11 +50,11 @@ One or more messages from which to construct "InformationRecord" and append to l
 .PARAMETER Hash
 Hash table or dictionary which to write to log file
 
-.PARAMETER Tags
-One or more optional message tags
-
 .PARAMETER Path
 Destination directory
+
+.PARAMETER Tags
+One or more optional message tags
 
 .PARAMETER LogFile
 File label that is added to current date for resulting file name

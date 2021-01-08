@@ -145,7 +145,7 @@ function Resolve-FileSystemPath
 
 			if ($ItemCount -eq 1)
 			{
-				if ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($MissingPart))
+				if ([WildcardPattern]::ContainsWildcardCharacters($MissingPart))
 				{
 					Write-Error -Category InvalidArgument -TargetObject $MissingPart -Message "Missing part of the path must not contain wildcards: \$MissingPart"
 					return

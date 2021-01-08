@@ -38,6 +38,9 @@ installation directory exists or not, since some versions are built in
 Computer name for which to list installed installed framework
 
 .EXAMPLE
+PS> Get-NetFramework
+
+.EXAMPLE
 PS> Get-NetFramework COMPUTERNAME
 
 .INPUTS

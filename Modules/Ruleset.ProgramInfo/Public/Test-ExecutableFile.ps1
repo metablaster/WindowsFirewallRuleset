@@ -77,7 +77,7 @@ ERROR: Specified file path contains invalid characters: C:\Bad\<Path>\Loca'tion
 None. You cannot pipe objects to Test-ExecutableFile
 
 .OUTPUTS
-None. Test-ExecutableFile does not generate any output
+[bool]
 
 .NOTES
 TODO: We should attempt to fix the path if invalid here, ex. Get-Command

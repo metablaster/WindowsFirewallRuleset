@@ -37,7 +37,10 @@ Get installation information about installed Windows SDK
 Computer name for which to list installed installed framework
 
 .EXAMPLE
-PS> Get-WindowsSDK COMPUTERNAME
+PS> Get-WindowsSDK
+
+.EXAMPLE
+PS> Get-WindowsSDK Server01
 
 .INPUTS
 None. You cannot pipe objects to Get-WindowsSDK

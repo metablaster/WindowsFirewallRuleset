@@ -94,6 +94,9 @@ their IP addresses might now work as expected?
 TODO: OutputType attribute
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
 https://devblogs.microsoft.com/scripting/enabling-and-disabling-network-adapters-with-powershell
 #>
 

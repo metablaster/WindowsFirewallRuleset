@@ -58,6 +58,9 @@ PS> Reset-TestDrive
 .EXAMPLE
 PS> Reset-TestDrive "C:\PathTo\TestDrive"
 
+.EXAMPLE
+PS> Reset-TestDrive "C:\PathTo\TestDrive" -Retry 5 -Timeout 20000 -Force
+
 .INPUTS
 None. You cannot pipe objects to Reset-TestDrive
 

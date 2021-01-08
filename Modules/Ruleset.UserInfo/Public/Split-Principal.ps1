@@ -46,7 +46,7 @@ PS> Split-Principal COMPUTERNAME\USERNAME
 PS> @(SERVER\USER, user@domain.lan, SERVER2\USER2) | Split-Principal -DomainName
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [string]

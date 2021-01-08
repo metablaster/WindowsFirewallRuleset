@@ -61,7 +61,7 @@ or derivative works that you create that run on a Microsoft Windows operating sy
 
 <#
 .SYNOPSIS
-Fetches "Preference" variable values from the caller's scope.
+Fetch preference variable values from the caller's scope.
 
 .DESCRIPTION
 Script module functions do not automatically inherit their caller's variables,
@@ -101,7 +101,7 @@ PS> "ErrorActionPreference", "SomeOtherVariable" | Get-CallerPreference -Cmdlet 
 Same as Example 2, but sends variable names to the Name parameter via pipeline input.
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 None. This function does not produce pipeline output.
@@ -133,6 +133,9 @@ Fixed issue when the script was dot sourced
 Added optional parent scope validation
 
 TODO: This script needs unit test to simplify or improve
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 .LINK
 https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-preference-variables/

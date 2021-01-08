@@ -48,7 +48,7 @@ PS> Test-NetBiosName "*SERVER"
 False
 
 .EXAMPLE
-PS> Test-NetBiosName "-SERVER-01"
+PS> Test-NetBiosName "-SERVER-01" -Quiet
 True
 
 .EXAMPLE
@@ -56,7 +56,7 @@ PS> Test-NetBiosName "-Server-01" -Strict
 False
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [bool]

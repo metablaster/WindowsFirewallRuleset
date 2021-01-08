@@ -64,6 +64,9 @@ None. PipelineScript.ps1 does not generate any output
 None.
 Syntax to write scripts with pipeline support is different, for more information about design rules
 see notes section in Scripts\BlankTemplate.ps1
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 # TODO: Remove using statement and/or elevation requirement

@@ -44,7 +44,10 @@ User name in form of:
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
-PS> Get-UserApps "USERNAME"
+PS> Get-UserApps "User" -Domain "Server01"
+
+.EXAMPLE
+PS> Get-UserApps "Administrator"
 
 .INPUTS
 None. You cannot pipe objects to Get-UserApps

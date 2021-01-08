@@ -37,7 +37,7 @@ Get SID for single store app if the app exists
 "PackageFamilyName" string
 
 .EXAMPLE
-PS> Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+PS> Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 .INPUTS
 None. You cannot pipe objects to Get-AppSID
@@ -46,8 +46,14 @@ None. You cannot pipe objects to Get-AppSID
 [string] store app SID (security identifier) if app found
 
 .NOTES
-Big thanks to Jani for this awesome solution: https://github.com/ljani
+Big thanks to Jani for this awesome solution, see issue from "related links" section
 TODO: remote computers?
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/issues/6
 #>
 function Get-AppSID
 {

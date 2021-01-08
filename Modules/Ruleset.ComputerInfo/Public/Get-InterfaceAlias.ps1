@@ -66,13 +66,16 @@ If specified, only interfaces connected to network are returned
 PS> Get-InterfaceAlias "IPv4"
 
 .EXAMPLE
-PS> Get-InterfaceAlias "IPv6"
+PS> Get-InterfaceAlias "IPv4" -Physical
+
+.EXAMPLE
+PS> Get-InterfaceAlias "IPv6" -WildcardOption "IgnoreCase"
 
 .INPUTS
 None. You cannot pipe objects to Get-InterfaceAlias
 
 .OUTPUTS
-[System.Management.Automation.WildcardPattern]
+[WildcardPattern]
 
 .NOTES
 TODO: There is another function with the same name in Scripts folder
@@ -81,7 +84,7 @@ function Get-InterfaceAlias
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceAlias.md")]
-	[OutputType([System.Management.Automation.WildcardPattern])]
+	[OutputType([WildcardPattern])]
 	param (
 		[Parameter()]
 		[Alias("IPVersion")]

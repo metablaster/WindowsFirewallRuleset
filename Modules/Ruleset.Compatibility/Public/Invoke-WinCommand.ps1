@@ -76,7 +76,7 @@ returning the 10 newest events in the application log.
 None. You cannot pipe objects to Invoke-WinCommand
 
 .OUTPUTS
-System.Management.Automation.PSObject
+[PSObject]
 
 .NOTES
 Following modifications by metablaster November 2020:
@@ -85,6 +85,9 @@ Following modifications by metablaster November 2020:
 - Added HelpURI link to project location
 January 2021:
 - Replace cast to [void] with Out-Null
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility

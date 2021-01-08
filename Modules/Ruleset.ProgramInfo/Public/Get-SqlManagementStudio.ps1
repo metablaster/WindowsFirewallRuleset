@@ -31,17 +31,18 @@ SOFTWARE.
 Get installed Microsoft SQL Server Management Studios
 
 .DESCRIPTION
-TODO: add description
+Get all instances of installed Microsoft SQL Server Management Studios from local
+or remote machine.
 
 .PARAMETER Domain
 Computer name for which to list installed installed framework
 
 .EXAMPLE
-PS> Get-SqlManagementStudio COMPUTERNAME
+PS> Get-SqlManagementStudio SERVER01
 
-	RegKey ComputerName Version      InstallLocation
-	------ ------------ -------      -----------
-	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
+Domain       Name                                       InstallLocation
+------       ----                                       ---------------
+SERVER01     Microsoft SQL Server Management Studio     %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
 
 .INPUTS
 None. You cannot pipe objects to Get-SqlManagementStudio

@@ -44,24 +44,24 @@ If specified, try to pull and correlate CIM information for SQL
 TODO: limited testing was performed in matching up the service info to registry info.
 
 .EXAMPLE
-PS> Get-SqlServerInstance -Domain DC1
+PS> Get-SqlServerInstance -Domain Server01
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
 IsCluster     : False
-Domain 	 	  : DC1
-FullName      : DC1
+Domain 	 	  : Server01
+FullName      : Server01
 IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
 Name      	  : SQL Server 2008
 
-SQLInstance   : MINASTIRITH
+SQLInstance   : SQLSERVER
 Version       : 10.0.1600.22
 IsCluster     : False
-Domain  	  : DC1
-FullName      : DC1\MINASTIRITH
+Domain  	  : Server01
+FullName      : Server01\SQLSERVER
 IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
@@ -104,7 +104,7 @@ ServiceAccount   : domain\Server2SQL
 ServiceStartMode : Auto
 
 .INPUTS
-None. You cannot pipe objects to Get-SqlServerInstance
+[string[]]
 
 .OUTPUTS
 [PSCustomObject]
@@ -141,6 +141,9 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 See links section for original and individual versions of code
 
 TODO: Update examples to include DTS directory
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md
 
 .LINK
 https://github.com/RamblingCookieMonster/PowerShell

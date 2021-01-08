@@ -68,8 +68,8 @@ PS> Resolve-Host -FlushDNS -Domain "microsoft.com"
 PS> Resolve-Host -LocalHost -AddressFamily IPv4 -Connected
 
 .INPUTS
-[IPAddress]
-[string]
+[IPAddress[]]
+[string[]]
 
 .OUTPUTS
 [PSCustomObject]

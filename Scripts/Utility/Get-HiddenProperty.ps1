@@ -66,11 +66,14 @@ PS> .\Get-HiddenProperty.ps1 "Network Discovery" -PolicyStore ([System.Environme
 None. You cannot pipe objects to Get-HiddenProperty.ps1
 
 .OUTPUTS
-None. Get-HiddenProperty.ps1 does not generate any output
+[Selected.Microsoft.Management.Infrastructure.CimInstance]
 
 .NOTES
 TODO: This should probably be part of Ruleset.Firewall module
 TODO: OutputType attribute for [Selected.Microsoft.Management.Infrastructure.CimInstance]
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 #Requires -Version 5.1

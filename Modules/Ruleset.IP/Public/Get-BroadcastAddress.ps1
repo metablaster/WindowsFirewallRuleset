@@ -52,8 +52,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Get the broadcast address for a network range.
 
 .DESCRIPTION
-Get-BroadcastAddress returns the broadcast address for a subnet by performing a bitwise AND operation
-against the decimal forms of the IP address and inverted subnet mask.
+Get-BroadcastAddress returns the broadcast address for a subnet by performing a bitwise AND
+operation against the decimal forms of the IP address and inverted subnet mask.
 
 .PARAMETER IPAddress
 Either a literal IP address, a network range expressed as CIDR notation,
@@ -63,7 +63,7 @@ or an IP address and subnet mask in a string.
 A subnet mask as an IP address.
 
 .EXAMPLE
-Get-BroadcastAddress 192.168.0.243 255.255.255.0
+PS> Get-BroadcastAddress 192.168.0.243 255.255.255.0
 
 Returns the address 192.168.0.255.
 
@@ -93,6 +93,12 @@ Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md
+
+.LINK
+https://github.com/indented-automation/Indented.Net.IP
 #>
 function Get-BroadcastAddress
 {

@@ -69,13 +69,16 @@ This example looks for modules in the compatibility session with the string "PNP
 None. You cannot pipe objects to Get-WinModule
 
 .OUTPUTS
-System.Management.Automation.PSObject
+[PSObject]
 
 .NOTES
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility

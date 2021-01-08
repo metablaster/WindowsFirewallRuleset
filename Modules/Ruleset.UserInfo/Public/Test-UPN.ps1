@@ -74,7 +74,7 @@ PS> Test-UPN "User@site.domain.-com" -Suffix
 False
 
 .INPUTS
-[string]
+[string[]]
 
 .OUTPUTS
 [bool]

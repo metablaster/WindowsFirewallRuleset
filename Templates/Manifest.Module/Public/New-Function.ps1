@@ -49,6 +49,7 @@ PS> New-Function
 Repeat ".EXAMPLE" keyword for each example.
 
 .INPUTS
+[string]
 None. You cannot pipe objects to New-Function
 
 .OUTPUTS

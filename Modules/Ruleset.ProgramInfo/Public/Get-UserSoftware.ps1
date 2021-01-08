@@ -40,7 +40,10 @@ User name in form of "USERNAME"
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
-PS> Get-UserSoftware "USERNAME"
+PS> Get-UserSoftware "User"
+
+.EXAMPLE
+PS> Get-UserSoftware "User" -Domain "Server01"
 
 .INPUTS
 None. You cannot pipe objects to Get-UserSoftware

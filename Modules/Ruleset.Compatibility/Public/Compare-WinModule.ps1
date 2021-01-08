@@ -28,18 +28,19 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+Compare the set of modules against those in the compatibility session.
 
 .DESCRIPTION
-Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+Compare the set of modules for this version of PowerShell against those available
+in the compatibility session.
 
 .PARAMETER Name
 Specifies the names or name patterns of for the modules to compare.
 Wildcard characters are supported.
 
 .PARAMETER Domain
-If you don't want to use the default compatibility session, use this parameter to specify the name
-of the computer on which to create the compatibility session.
+If you don't want to use the default compatibility session, use this parameter to
+specify the name of the computer on which to create the compatibility session.
 
 .PARAMETER ConfigurationName
 Specifies the configuration to connect to when creating the compatibility session
@@ -63,13 +64,16 @@ This will return a list of all of the compatibility session modules matching the
 None. You cannot pipe objects to Compare-WinModule
 
 .OUTPUTS
-[System.Management.Automation.PSObject]
+[PSObject]
 
 .NOTES
 Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md
 
 .LINK
 https://github.com/PowerShell/WindowsCompatibility
