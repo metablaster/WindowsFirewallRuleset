@@ -84,12 +84,13 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item 
 Initialize-Project -Strict
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
+$PSDefaultParameterValues["Approve-Execute:Force"] = $Force
 
 # User prompt
 $Accept = "Deploy firewall to target computer"
 $Deny = "Abort operation"
 Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
 
 # Clear errors, error and warning status
 $Error.Clear()
@@ -133,18 +134,18 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -156,7 +157,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -168,7 +169,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Unsafe -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for servers
-		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ScriptName.ps1"
+		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ScriptName.ps1" -Force:$Force
 
 		Write-Warning -Message "No inbound rules for games exist"
 	}
@@ -196,11 +197,11 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -212,8 +213,8 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1" -Force:$Force
 	}
 }
 
@@ -239,19 +240,19 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsSystem.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsSystem.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -263,13 +264,13 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\CMake.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\GitHub.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\MSYS2.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\RealWorld.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\CMake.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\GitHub.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\MSYS2.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\RealWorld.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -281,15 +282,15 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\dotnet.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\HelpViewer.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\NuGet.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\PowerShell.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\vcpkg.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VisualStudio.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VSCode.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WebPlatform.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WindowsSDK.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\dotnet.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\HelpViewer.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\NuGet.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\PowerShell.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\vcpkg.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VisualStudio.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VSCode.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WebPlatform.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WindowsSDK.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -301,16 +302,16 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for games
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ArenaChess.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\CounterStrikeGO.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\DemiseOfNations.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\EVEOnline.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\LeagueOfLegends.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\OpenTTD.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PathOfExile.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PinballArcade.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PokerStars.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\WarThunder.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ArenaChess.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\CounterStrikeGO.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\DemiseOfNations.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\EVEOnline.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\LeagueOfLegends.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\OpenTTD.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PathOfExile.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PinballArcade.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PokerStars.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\WarThunder.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -322,7 +323,7 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Rules for servers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Server\SQLServer.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Server\SQLServer.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -334,28 +335,28 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for 3rd party programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Adobe.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\CPUID.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\DnsCrypt.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Google.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\GPG.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Greenshot.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Intel.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Java.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Metatrader.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\MSI.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Nvidia.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OBSStudio.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OpenSSH.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\PasswordSafe.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\qBittorrent.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\RivaTuner.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Thunderbird.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Adobe.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\CPUID.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\DnsCrypt.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Google.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\GPG.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Greenshot.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Intel.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Java.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Metatrader.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\MSI.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Nvidia.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OBSStudio.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OpenSSH.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\PasswordSafe.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\qBittorrent.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\RivaTuner.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Thunderbird.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
@@ -367,11 +368,11 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# rules for Microsoft programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\BingWallpaper.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\EdgeChromium.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\BingWallpaper.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\EdgeChromium.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1" -Force:$Force
 	}
 }
 
@@ -401,10 +402,10 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
 	}
 }
 
@@ -430,17 +431,17 @@ if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
 	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
 	{
 		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1"
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1"
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
+		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
 	}
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
-& "$ProjectRoot\Scripts\Complete-Firewall.ps1"
+& "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
 Set-Variable -Name UpdateGPO -Scope Global -Value $true
 
 # Set desktop shortcut to custom management console
