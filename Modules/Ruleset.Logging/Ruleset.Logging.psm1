@@ -45,7 +45,7 @@ if ($ListPreference)
 }
 #endregion
 
-# TODO: stream logging instead of open/close file for performance
+# TODO: stream logging instead of open/close file will give better performance
 
 #
 # Script imports

@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Get a list of IP addresses within the specified network.
+Get a list of IP addresses within the specified network
 
 .DESCRIPTION
 Get-NetworkRange finds the network and broadcast address as decimal values

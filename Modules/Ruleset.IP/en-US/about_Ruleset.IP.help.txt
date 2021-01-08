@@ -3,11 +3,10 @@ TOPIC
 	about_Ruleset.IP
 
 SHORT DESCRIPTION
-	A collection of commands written to perform IPv4 subnet math
+	Module to perform IPv4 subnet math
 
 LONG DESCRIPTION
-	A collection of commands written to perform binary, decimal and hex conversions
-	on IP and netmask.
+	Ruleset.IP module is used to perform binary, decimal and hex conversions on IP and netmask
 
 EXAMPLES
 	ConvertFrom-HexIP

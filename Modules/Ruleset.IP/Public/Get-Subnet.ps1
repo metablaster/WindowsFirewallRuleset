@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Get a list of subnets of a given size within a defined supernet.
+Get a list of subnets of a given size within a defined supernet
 
 .DESCRIPTION
 Generates a list of subnets for a given network range using either

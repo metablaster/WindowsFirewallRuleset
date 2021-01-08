@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert a start and end IP address to the closest matching subnet.
+Convert a start and end IP address to the closest matching subnet
 
 .DESCRIPTION
 ConvertTo-Subnet attempts to convert a starting and ending IP address from a range to the closest subnet.

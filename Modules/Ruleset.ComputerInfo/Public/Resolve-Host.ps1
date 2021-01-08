@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolve host or IP
+Resolve host to IP or an IP to host
 
 .DESCRIPTION
 Resolve host to IP or an IP to host.

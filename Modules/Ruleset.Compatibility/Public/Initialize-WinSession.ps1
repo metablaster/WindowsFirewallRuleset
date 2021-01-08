@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Initialize the connection to the compatibility session.
+Initialize the connection to the compatibility session
 
 .DESCRIPTION
 Initialize the connection to the compatibility session.

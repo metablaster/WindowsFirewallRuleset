@@ -29,7 +29,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Removes firewall rules according to a list in a CSV or JSON file.
+Removes firewall rules according to a list in a CSV or JSON file
 
 .DESCRIPTION
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.

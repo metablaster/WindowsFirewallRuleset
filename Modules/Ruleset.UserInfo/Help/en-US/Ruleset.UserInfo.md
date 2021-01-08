@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Module to query information about Windows users and groups
 
 ## Ruleset.UserInfo Cmdlets
 
@@ -20,7 +20,7 @@ Convert SDDL string to Principal
 
 ### [ConvertFrom-SID](ConvertFrom-SID.md)
 
-Convert SID to principal user or domain name
+Convert SID to principal, user and domain name
 
 ### [Get-GroupPrincipal](Get-GroupPrincipal.md)
 
@@ -28,11 +28,11 @@ Get principals of specified groups on target computers
 
 ### [Get-GroupSID](Get-GroupSID.md)
 
-Get SID of user groups for given computer
+Get SID of user groups on local or remote computers
 
 ### [Get-PrincipalSID](Get-PrincipalSID.md)
 
-Get SID for given user account
+Get SID for specified user account
 
 ### [Get-SDDL](Get-SDDL.md)
 
@@ -56,4 +56,4 @@ Takes a PSCredential object and validates it
 
 ### [Test-UPN](Test-UPN.md)
 
-Validate User Principal Name syntax
+Validate Universal Principal Name syntax

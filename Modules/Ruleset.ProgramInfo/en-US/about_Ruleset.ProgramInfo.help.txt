@@ -3,35 +3,34 @@ TOPIC
 	about_Ruleset.ProgramInfo
 
 SHORT DESCRIPTION
-	Query software installed on Windows systems
+	Query software installed on local and remote Windows systems
 
 LONG DESCRIPTION
-	Functions in Ruleset.ProgramInfo module can be used to query information about programs
-	installed on computer, installed system wide or installed by each user separately.
-	Also possible to query software which is built into operating system.
-	Querying remote computers is currently only partially supported.
+	Ruleset.ProgramInfo module is used to query information about software installed on local or
+	remote computers, installed either system wide or per user.
+	Or to query software which is built into operating system.
 
 EXAMPLES
 	Confirm-Installation
-	Test if given installation directory is valid
+	Verify or set program installation directory
 
 	Format-Path
-	Format path into firewall compatible path
+	Format file system path and fix syntax errors
 
 	Get-AppCapability
-	Get capabilities of Windows store app
+	Get Windows store app capabilities
 
 	Get-AppSID
 	Get store app SID
 
 	Get-ExecutablePath
-	Get list of install locations for executables and executable names
+	Get a list of install locations for executable files
 
 	Get-InstallProperties
-	Search program install properties for all users, system wide
+	Search system wide program install properties
 
 	Get-NetFramework
-	Get installed NET Frameworks
+	Get installed .NET Frameworks
 
 	Get-OneDrive
 	Get One Drive information for specific user
@@ -40,7 +39,7 @@ EXAMPLES
 	Get installed Microsoft SQL Server Management Studios
 
 	Get-SqlServerInstance
-	Retrieves SQL server information from a local or remote servers.
+	Get SQL server information from a local or remote servers
 
 	Get-SystemApps
 	Get store apps installed system wide
@@ -49,13 +48,13 @@ EXAMPLES
 	Search installed programs for all users, system wide
 
 	Get-UserApps
-	Search installed programs for all users, system wide
+	Get store apps for specific user
 
 	Get-UserSoftware
 	Get a list of programs installed by specific user
 
 	Get-WindowsDefender
-	Get installed Windows Defender
+	Get Windows Defender installation information
 
 	Get-WindowsKit
 	Get installed Windows Kits
@@ -67,13 +66,13 @@ EXAMPLES
 	Find installation directory for given predefined program name
 
 	Test-ExecutableFile
-	Check if file such as an *.exe exists
+	Check if executable file exists and is trusted
 
 	Test-FileSystemPath
-	Test if a path is valid with additional checks
+	Test file system path syntax and existence
 
 	Test-Service
-	Check if service exists on system
+	Check if system service exists and is trusted
 
 KEYWORDS
 	Program

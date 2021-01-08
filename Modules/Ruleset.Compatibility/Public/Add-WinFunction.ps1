@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-This command defines a global function that always runs in the compatibility session.
+This command defines a global function that always runs in the compatibility session
 
 .DESCRIPTION
 This command defines a global function that always runs in the compatibility session,

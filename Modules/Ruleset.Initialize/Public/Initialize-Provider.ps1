@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Update or install specified package provider
+Update or install specified package providers
 
 .DESCRIPTION
 Test if recommended and up to date packages are installed, if not user is

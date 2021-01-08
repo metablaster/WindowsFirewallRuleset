@@ -3,10 +3,10 @@ TOPIC
 	about_Ruleset.Test
 
 SHORT DESCRIPTION
-	Functions to write powershell unit tests
+	PowerShell unit test module
 
 LONG DESCRIPTION
-	Specialized functions designed for unit testing of "Windows Firewall Ruleset" project
+	Ruleset.Test module is designed for unit testing of "Windows Firewall Ruleset" project
 
 EXAMPLES
 	Enter-Test
@@ -28,7 +28,7 @@ EXAMPLES
 	Stop test case
 
 	Test-MarkdownLinks
-	Test each link in markdown file and report if any link is dead
+	Test links in markdown files
 
 	Test-Output
 	Verify TypeName and OutputType are referring to same type

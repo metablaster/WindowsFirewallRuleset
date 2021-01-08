@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Import a compatibility module.
+Import a compatibility module
 
 .DESCRIPTION
 This command allows you to import proxy modules from a local or remote session.

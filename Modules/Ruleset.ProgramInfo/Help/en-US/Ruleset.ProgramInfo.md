@@ -10,17 +10,13 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Query software installed on local and remote Windows systems
 
 ## Ruleset.ProgramInfo Cmdlets
 
 ### [Confirm-Installation](Confirm-Installation.md)
 
 Verify or set program installation directory
-
-### [Edit-Table](Edit-Table.md)
-
-Manually add new program installation directory to the table
 
 ### [Format-Path](Format-Path.md)
 
@@ -36,15 +32,15 @@ Get store app SID
 
 ### [Get-ExecutablePath](Get-ExecutablePath.md)
 
-Get list of install locations for executables and executable names
+Get a list of install locations for executable files
 
 ### [Get-InstallProperties](Get-InstallProperties.md)
 
-Search program install properties for all users, system wide
+Search system wide program install properties
 
 ### [Get-NetFramework](Get-NetFramework.md)
 
-Get installed NET Frameworks
+Get installed .NET Frameworks
 
 ### [Get-OneDrive](Get-OneDrive.md)
 
@@ -56,7 +52,7 @@ Get installed Microsoft SQL Server Management Studios
 
 ### [Get-SqlServerInstance](Get-SqlServerInstance.md)
 
-Retrieves SQL server information from a local or remote servers.
+Get SQL server information from a local or remote servers
 
 ### [Get-SystemApps](Get-SystemApps.md)
 
@@ -76,7 +72,7 @@ Get a list of programs installed by specific user
 
 ### [Get-WindowsDefender](Get-WindowsDefender.md)
 
-Get installed Windows Defender
+Get Windows Defender installation information
 
 ### [Get-WindowsKit](Get-WindowsKit.md)
 
@@ -86,21 +82,13 @@ Get installed Windows Kits
 
 Get installed Windows SDK
 
-### [Initialize-Table](Initialize-Table.md)
-
-Create data table used to hold information for a list of programs
-
 ### [Search-Installation](Search-Installation.md)
 
-Find installation directory for given predefined program name
-
-### [Show-Table](Show-Table.md)
-
-Print installation directories to console
+Find installation directory of a given predefined program name
 
 ### [Test-ExecutableFile](Test-ExecutableFile.md)
 
-Check if executable file exists and is trusted.
+Check if executable file exists and is trusted
 
 ### [Test-FileSystemPath](Test-FileSystemPath.md)
 
@@ -109,7 +97,3 @@ Test file system path syntax and existence
 ### [Test-Service](Test-Service.md)
 
 Check if system service exists and is trusted
-
-### [Update-Table](Update-Table.md)
-
-Fill data table with principal and program location

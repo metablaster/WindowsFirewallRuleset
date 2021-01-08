@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get SID of user groups for given computer
+Get SID of user groups on local or remote computers
 
 .DESCRIPTION
 Get SID's for single or multiple user groups on a target computer

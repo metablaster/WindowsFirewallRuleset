@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+PowerShell unit test module
 
 ## Ruleset.Test Cmdlets
 
@@ -40,7 +40,7 @@ Stop test case
 
 ### [Test-MarkdownLinks](Test-MarkdownLinks.md)
 
-Test markdown links
+Test links in markdown files
 
 ### [Test-Output](Test-Output.md)
 

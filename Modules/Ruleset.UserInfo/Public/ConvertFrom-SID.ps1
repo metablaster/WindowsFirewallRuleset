@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert SID to principal user or domain name
+Convert SID to principal, user and domain name
 
 .DESCRIPTION
-Convert SID to principal user or domain name, in case of pseudo and built in accounts
+Convert SID to principal, user and domain name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 

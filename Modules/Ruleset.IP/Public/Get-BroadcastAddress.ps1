@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Get the broadcast address for a network range.
+Get the broadcast address for a network range
 
 .DESCRIPTION
 Get-BroadcastAddress returns the broadcast address for a subnet by performing a bitwise AND

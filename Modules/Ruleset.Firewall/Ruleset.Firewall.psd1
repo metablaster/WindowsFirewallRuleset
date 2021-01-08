@@ -65,7 +65,7 @@ SOFTWARE.
 	Copyright = "Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
-	Description = "Module to manage firewall for 'Windows Firewall Ruleset' project"
+	Description = "Windows firewall management module"
 
 	# Minimum version of the PowerShell engine required by this module
 	# Valid values are: 1.0 / 2.0 / 3.0 / 4.0 / 5.0 / 5.1 / 6.0 / 6.1 / 6.2 / 7.0 / 7.1

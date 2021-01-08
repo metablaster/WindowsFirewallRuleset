@@ -10,13 +10,13 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+PowerShell utility module for Windows Firewall Ruleset project
 
 ## Ruleset.Utility Cmdlets
 
 ### [Approve-Execute](Approve-Execute.md)
 
-Used to prompt user to approve running script
+Prompt user to continue running script
 
 ### [Build-ServiceList](Build-ServiceList.md)
 
@@ -28,7 +28,7 @@ Compare 2 paths for equality or similarity
 
 ### [Confirm-FileEncoding](Confirm-FileEncoding.md)
 
-Verify file is correctly encoded
+Verify file is encoded as expected
 
 ### [ConvertFrom-Wildcard](ConvertFrom-Wildcard.md)
 
@@ -44,15 +44,15 @@ Get .NET outputs of a commandlet or convert to/from type accelerator
 
 ### [Invoke-Process](Invoke-Process.md)
 
-Run process and format captured output
+Run process and optionally redirect captured output
 
 ### [Out-DataTable](Out-DataTable.md)
 
-Creates a DataTable for an object
+Creates a DataTable from an object
 
 ### [Resolve-FileSystemPath](Resolve-FileSystemPath.md)
 
-Resolve wildcard directory or file location
+Resolve file system wildcard of a directory or file location
 
 ### [Select-EnvironmentVariable](Select-EnvironmentVariable.md)
 

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Invoke a ScriptBlock that runs in the compatibility runspace.
+Invoke a ScriptBlock that runs in the compatibility runspace
 
 .DESCRIPTION
 This command takes a ScriptBlock and invokes it in the compatibility session.

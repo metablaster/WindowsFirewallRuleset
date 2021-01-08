@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Format firewall rule output for display
+Format output of the Net-NewFirewallRule commandlet
 
 .DESCRIPTION
 Output of Net-NewFirewallRule is large, loading a lot of rules would spam the console

@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Converts a Decimal IP address into a 32-bit unsigned integer.
+Converts a Decimal IP address into a 32-bit unsigned integer
 
 .DESCRIPTION
 ConvertTo-DecimalIP takes a decimal IP,

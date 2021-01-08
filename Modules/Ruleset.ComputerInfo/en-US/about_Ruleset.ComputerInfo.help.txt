@@ -6,8 +6,8 @@ SHORT DESCRIPTION
 	Query computer, system and network information
 
 LONG DESCRIPTION
-	Functions in Ruleset.ComputerInfo module can be used to query information about computer,
-	operating system and network configuration, currently supported only for localhost.
+	Ruleset.ComputerInfo module is used to query information about Windows computers,
+	operating system and network configuration.
 
 EXAMPLES
 	ConvertFrom-OSBuild
@@ -17,30 +17,30 @@ EXAMPLES
 	Get interface aliases of specified network adapters
 
 	Get-InterfaceBroadcast
-	Get broadcast address
+	Get interface broadcast address
 
 	Get-SystemSKU
 	Get operating system SKU information
 
 	Resolve-Host
-	Resolve host to IP or IP to host
+	Resolve host to IP or an IP to host
 
 	Select-IPInterface
-	Get network adapter IP configuration
+	Select IP configuration for specified network adapters
 
 	Test-NetBiosName
 	Validate NETBIOS name syntax
 
 	Test-TargetComputer
-	Test target computer (policy store) on which to apply firewall
+	Test target computer (policy store) to which to deploy firewall
 
 	Test-UNC
 	Validate UNC path syntax
 
 KEYWORDS
+	Computer
 	ComputerInfo
 	SystemInfo
-	Computer
 	NetworkInfo
 
 SEE ALSO

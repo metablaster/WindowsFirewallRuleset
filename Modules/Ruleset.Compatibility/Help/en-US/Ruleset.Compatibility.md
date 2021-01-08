@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Windows PowerShell Compatibility Pack
 
 ## Ruleset.Compatibility Cmdlets
 
@@ -20,15 +20,15 @@ Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
 
 ### [Add-WinFunction](Add-WinFunction.md)
 
-This command defines a global function that always runs in the compatibility session.
+This command defines a global function that always runs in the compatibility session
 
 ### [Compare-WinModule](Compare-WinModule.md)
 
-Compare the set of modules against those in the compatibility session.
+Compare the set of modules against those in the compatibility session
 
 ### [Copy-WinModule](Copy-WinModule.md)
 
-Copy modules from the compatibility session that are directly usable in PowerShell Core.
+Copy modules from the compatibility session that are directly usable in PowerShell Core
 
 ### [Get-WinModule](Get-WinModule.md)
 
@@ -36,12 +36,12 @@ Get a list of the available modules from the compatibility session
 
 ### [Import-WinModule](Import-WinModule.md)
 
-Import a compatibility module.
+Import a compatibility module
 
 ### [Initialize-WinSession](Initialize-WinSession.md)
 
-Initialize the connection to the compatibility session.
+Initialize the connection to the compatibility session
 
 ### [Invoke-WinCommand](Invoke-WinCommand.md)
 
-Invoke a ScriptBlock that runs in the compatibility runspace.
+Invoke a ScriptBlock that runs in the compatibility runspace

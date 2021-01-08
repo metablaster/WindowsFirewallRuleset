@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Get the network address for a network range.
+Get the network address for a network range
 
 .DESCRIPTION
 Get-NetworkAddress returns the network address for a subnet by performing a bitwise AND operation

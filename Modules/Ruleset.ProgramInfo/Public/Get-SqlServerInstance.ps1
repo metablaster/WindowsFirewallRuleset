@@ -30,7 +30,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Retrieves SQL server information from a local or remote servers.
+Get SQL server information from a local or remote servers
 
 .DESCRIPTION
 Retrieves SQL server information from a local or remote servers. Pulls all

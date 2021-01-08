@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get network adapter IP configuration
+Select IP configuration for specified network adapters
 
 .DESCRIPTION
 Get a list of network adapter IP configuration for specified adapters.

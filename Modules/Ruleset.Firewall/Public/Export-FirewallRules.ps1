@@ -29,7 +29,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Exports firewall rules to a CSV or JSON file.
+Exports firewall rules to a CSV or JSON file
 
 .DESCRIPTION
 Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default.

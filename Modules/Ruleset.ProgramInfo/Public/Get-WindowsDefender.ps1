@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get installed Windows Defender
+Get Windows Defender installation information
 
 .DESCRIPTION
-Gets installation information about Windows defender.
+Gets Windows defender install location directory
 
 .PARAMETER Domain
 Computer name for which to list installed Windows Defender

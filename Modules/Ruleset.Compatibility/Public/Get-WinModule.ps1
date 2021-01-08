@@ -32,7 +32,6 @@ Get a list of the available modules from the compatibility session
 
 .DESCRIPTION
 Get a list of the available modules from the compatibility session.
-
 By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session,
 a new default session will be created.

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Creates a DataTable for an object
+Creates a DataTable from an object
 
 .DESCRIPTION
 Creates a DataTable based on an object's properties.

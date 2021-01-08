@@ -10,53 +10,53 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Module to perform IPv4 subnet math
 
 ## Ruleset.IP Cmdlets
 
 ### [ConvertFrom-HexIP](ConvertFrom-HexIP.md)
 
-Converts a hexadecimal IP address into a dotted decimal string.
+Converts a hexadecimal IP address into a dotted decimal string
 
 ### [ConvertTo-BinaryIP](ConvertTo-BinaryIP.md)
 
-Converts a Decimal IP address into a binary format.
+Converts a Decimal IP address into a binary format
 
 ### [ConvertTo-DecimalIP](ConvertTo-DecimalIP.md)
 
-Converts a Decimal IP address into a 32-bit unsigned integer.
+Converts a Decimal IP address into a 32-bit unsigned integer
 
 ### [ConvertTo-DottedDecimalIP](ConvertTo-DottedDecimalIP.md)
 
-Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address.
+Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address
 
 ### [ConvertTo-HexIP](ConvertTo-HexIP.md)
 
-Convert a dotted decimal IP address into a hexadecimal string.
+Convert a dotted decimal IP address into a hexadecimal string
 
 ### [ConvertTo-Mask](ConvertTo-Mask.md)
 
-Convert a mask length to a dotted-decimal subnet mask.
+Convert a mask length to a dotted-decimal subnet mask
 
 ### [ConvertTo-MaskLength](ConvertTo-MaskLength.md)
 
-Convert a dotted-decimal subnet mask to a mask length.
+Convert a dotted-decimal subnet mask to a mask length
 
 ### [ConvertTo-Subnet](ConvertTo-Subnet.md)
 
-Convert a start and end IP address to the closest matching subnet.
+Convert a start and end IP address to the closest matching subnet
 
 ### [Get-BroadcastAddress](Get-BroadcastAddress.md)
 
-Get the broadcast address for a network range.
+Get the broadcast address for a network range
 
 ### [Get-NetworkAddress](Get-NetworkAddress.md)
 
-Get the network address for a network range.
+Get the network address for a network range
 
 ### [Get-NetworkRange](Get-NetworkRange.md)
 
-Get a list of IP addresses within the specified network.
+Get a list of IP addresses within the specified network
 
 ### [Get-NetworkSummary](Get-NetworkSummary.md)
 
@@ -64,12 +64,12 @@ Generates a summary describing several properties of a network range
 
 ### [Get-Subnet](Get-Subnet.md)
 
-Get a list of subnets of a given size within a defined supernet.
+Get a list of subnets of a given size within a defined supernet
 
 ### [Resolve-IPAddress](Resolve-IPAddress.md)
 
-Resolves an IP address expression using wildcard expressions to individual IP addresses.
+Resolves an IP address expression using wildcard expressions to individual IP addresses
 
 ### [Test-SubnetMember](Test-SubnetMember.md)
 
-Tests an IP address to determine if it falls within IP address range.
+Tests an IP address to determine if it falls within IP address range

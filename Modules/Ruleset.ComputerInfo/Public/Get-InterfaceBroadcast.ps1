@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get broadcast address
+Get interface broadcast address
 
 .DESCRIPTION
 Get broadcast addresses, for specified network interfaces.

@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolves an IP address expression using wildcard expressions to individual IP addresses.
+Resolves an IP address expression using wildcard expressions to individual IP addresses
 
 .DESCRIPTION
 Resolves an IP address expression using wildcard expressions to individual IP addresses.

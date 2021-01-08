@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address.
+Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address
 
 .DESCRIPTION
 ConvertTo-DottedDecimalIP uses a regular expression match on the input string to convert to an IP address.

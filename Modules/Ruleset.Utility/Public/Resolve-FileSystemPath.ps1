@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolve wildcard directory or file location
+Resolve file system wildcard of a directory or file location
 
 .DESCRIPTION
 Ensure directory or file name wildcard pattern resolves to single location.

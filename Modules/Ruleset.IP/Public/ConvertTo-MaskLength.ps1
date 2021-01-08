@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert a dotted-decimal subnet mask to a mask length.
+Convert a dotted-decimal subnet mask to a mask length
 
 .DESCRIPTION
 A count of the number of 1's in a binary string.

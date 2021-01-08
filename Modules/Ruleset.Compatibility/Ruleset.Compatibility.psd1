@@ -188,8 +188,8 @@ commands much as if they were native to PowerShell Core.
 			# Tags applied to this module.
 			# These help with module discovery in online galleries.
 			Tags = @(
-				"WindowsPowerShell"
 				"Compatibility"
+				"WindowsPowerShell"
 				"Core"
 			)
 

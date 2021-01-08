@@ -29,7 +29,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Imports firewall rules from a CSV or JSON file.
+Imports firewall rules from a CSV or JSON file
 
 .DESCRIPTION
 Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.

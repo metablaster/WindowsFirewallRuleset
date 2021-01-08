@@ -10,21 +10,21 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Initialize repository development environment
 
 ## Ruleset.Initialize Cmdlets
 
 ### [Initialize-Module](Initialize-Module.md)
 
-Update or install specified out of date module
+Update or install specified modules
 
 ### [Initialize-Project](Initialize-Project.md)
 
-Check system requirements for this project
+Check repository system requirements
 
 ### [Initialize-Provider](Initialize-Provider.md)
 
-Update or install specified package provider
+Update or install specified package providers
 
 ### [Initialize-Service](Initialize-Service.md)
 

@@ -13,29 +13,32 @@ EXAMPLES
 	Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
 
 	Add-WinFunction
-	This command defines a global function that always runs in the compatibility session.
+	This command defines a global function that always runs in the compatibility session
 
 	Compare-WinModule
-	Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+	Compare the set of modules against those in the compatibility session
 
 	Copy-WinModule
-	Copy modules from the compatibility session that are directly usable in PowerShell Core.
+	Copy modules from the compatibility session that are directly usable in PowerShell Core
 
 	Get-WinModule
 	Get a list of the available modules from the compatibility session
 
 	Import-WinModule
-	Import a compatibility module.
+	Import a compatibility module
 
 	Initialize-WinSession
-	Initialize the connection to the compatibility session.
+	Initialize the connection to the compatibility session
 
 	Invoke-WinCommand
-	Invoke a ScriptBlock that runs in the compatibility runspace.
+	Invoke a ScriptBlock that runs in the compatibility runspace
+
+ALIASES
+	Add-WinPSModulePath -> Add-WindowsPSModulePath
 
 KEYWORDS
-	WindowsPowerShell
 	Compatibility
+	WindowsPowerShell
 	Core
 
 SEE ALSO

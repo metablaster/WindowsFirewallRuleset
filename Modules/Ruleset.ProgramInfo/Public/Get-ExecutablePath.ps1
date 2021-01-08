@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get list of install locations for executables and executable names
+Get a list of install locations for executable files
 
 .DESCRIPTION
 Returns a table of installed programs, with executable name, installation path,

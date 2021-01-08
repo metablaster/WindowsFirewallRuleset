@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get installed NET Frameworks
+Get installed .NET Frameworks
 
 .DESCRIPTION
 Get-NetFramework will return all NET frameworks installed regardless if

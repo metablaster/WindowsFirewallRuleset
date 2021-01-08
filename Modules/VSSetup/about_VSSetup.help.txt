@@ -1,5 +1,5 @@
 TOPIC
-    about_vssetup
+    about_VSSetup
 
 SHORT DESCRIPTION
     Enumerate and select instances of Visual Studio.

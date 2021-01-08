@@ -3,22 +3,23 @@ TOPIC
 	about_Ruleset.Initialize
 
 SHORT DESCRIPTION
-	Initialize environment for Windows Firewall Ruleset project
+	Initialize repository development environment
 
 LONG DESCRIPTION
-	This module main purpose is automated development environment setup to be able to perform quick
-	setup on multiple computers and virtual operating systems, in cases such as frequent system restores
-	for the purpose of testing project code for many environment scenarios that end users may have.
+	Ruleset.Initialize module main purpose is automated development environment setup to be able
+	to perform quick setup on multiple computers and virtual operating systems, in cases such as
+	frequent system restores for the purpose of testing project code for many environment scenarios
+	that end users may have.
 
 EXAMPLES
 	Initialize-Module
-	Update or install out of date modules
+	Update or install specified modules
 
 	Initialize-Project
-	Check complete system requirements
+	Check repository system requirements
 
 	Initialize-Provider
-	Update or install out of date package providers
+	Update or install specified package providers
 
 	Initialize-Service
 	Configure and start required system services

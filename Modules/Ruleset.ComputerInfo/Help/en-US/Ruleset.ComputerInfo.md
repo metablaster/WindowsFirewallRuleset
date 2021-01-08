@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-{{ Fill in the Description }}
+Query computer, system and network information
 
 ## Ruleset.ComputerInfo Cmdlets
 
@@ -24,7 +24,7 @@ Get interface aliases of specified network adapters
 
 ### [Get-InterfaceBroadcast](Get-InterfaceBroadcast.md)
 
-Get broadcast address
+Get interface broadcast address
 
 ### [Get-SystemSKU](Get-SystemSKU.md)
 
@@ -32,11 +32,11 @@ Get operating system SKU information
 
 ### [Resolve-Host](Resolve-Host.md)
 
-Resolve host or IP
+Resolve host to IP or an IP to host
 
 ### [Select-IPInterface](Select-IPInterface.md)
 
-Get network adapter IP configuration
+Select IP configuration for specified network adapters
 
 ### [Test-NetBiosName](Test-NetBiosName.md)
 

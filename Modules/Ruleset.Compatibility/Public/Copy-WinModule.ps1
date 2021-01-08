@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Copy modules from the compatibility session that are directly usable in PowerShell Core.
+Copy modules from the compatibility session that are directly usable in PowerShell Core
 
 .DESCRIPTION
 Copy modules from the compatibility session that are directly usable in PowerShell Core.

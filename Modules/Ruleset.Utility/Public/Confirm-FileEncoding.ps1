@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Verify file is correctly encoded
+Verify file is encoded as expected
 
 .DESCRIPTION
 Confirm-FileEncoding verifies target file is encoded as expected.

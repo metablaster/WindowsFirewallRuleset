@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Converts a hexadecimal IP address into a dotted decimal string.
+Converts a hexadecimal IP address into a dotted decimal string
 
 .DESCRIPTION
 ConvertFrom-HexIP takes a hexadecimal string and returns a dotted decimal IP address.

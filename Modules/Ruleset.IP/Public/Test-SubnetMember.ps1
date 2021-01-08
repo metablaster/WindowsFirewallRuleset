@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Tests an IP address to determine if it falls within IP address range.
+Tests an IP address to determine if it falls within IP address range
 
 .DESCRIPTION
 Test-SubnetMember attempts to determine whether or not an address or range falls within another range.

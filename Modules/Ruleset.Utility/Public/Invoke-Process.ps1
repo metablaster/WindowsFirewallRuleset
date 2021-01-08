@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Run process and format captured output
+Run process and optionally redirect captured output
 
 .DESCRIPTION
 Run process with or without arguments, set process timeout, capture and format output.

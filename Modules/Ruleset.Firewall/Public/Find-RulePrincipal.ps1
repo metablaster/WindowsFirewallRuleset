@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get all firewall rules with LocalUser value
+Get all firewall rules with or without LocalUser value
 
 .DESCRIPTION
 Get all rules which are either missing or not missing LocalUser value

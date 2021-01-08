@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert a mask length to a dotted-decimal subnet mask.
+Convert a mask length to a dotted-decimal subnet mask
 
 .DESCRIPTION
 ConvertTo-Mask returns a subnet mask in dotted decimal format from an integer value ranging between 0 and 32.

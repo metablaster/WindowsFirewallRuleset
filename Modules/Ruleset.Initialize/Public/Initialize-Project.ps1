@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Check system requirements for this project
+Check repository system requirements
 
 .DESCRIPTION
 Initialize-Project is designed for "Windows Firewall Ruleset", it first prints a short watermark,

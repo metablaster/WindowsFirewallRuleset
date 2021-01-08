@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Used to prompt user to approve running script
+Prompt user to continue running script
 
 .DESCRIPTION
 In addition to prompt, execution context is shown.

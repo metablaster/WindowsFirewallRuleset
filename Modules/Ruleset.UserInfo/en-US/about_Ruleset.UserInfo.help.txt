@@ -2,12 +2,11 @@ TOPIC
 	about_Ruleset.UserInfo
 
 SHORT DESCRIPTION
-	Query information about Windows users and groups
+	Module to query information about Windows users and groups
 
 LONG DESCRIPTION
-	Functions in UserInfo module can be used to query information about users
-	and groups on computer.
-	Currently only localhost is supported.
+	Ruleset.UserInfo module is used to query information about users and groups on local or remote
+	computers.
 
 VARIABLES
 	UsersGroupSDDL
@@ -26,23 +25,23 @@ VARIABLES
 	SDDL string for "NT AUTHORITY\NETWORK SERVICE"
 
 	CheckInitUserInfo
-	To prevent double initialization of constants
+	Serves to prevent double initialization of constants
 
 EXAMPLES
 	ConvertFrom-SDDL
 	Convert SDDL string to Principal
 
 	ConvertFrom-SID
-	Convert SID to principal user or domain name
+	Convert SID to principal, user and domain name
 
 	Get-GroupPrincipal
 	Get principals of specified groups on target computers
 
 	Get-GroupSID
-	Get SID of user groups for given computer
+	Get SID of user groups on local or remote computers
 
 	Get-PrincipalSID
-	Get SID for giver user account
+	Get SID for specified user account
 
 	Get-SDDL
 	Get SDDL string of a user, group or from path

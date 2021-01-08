@@ -30,7 +30,7 @@ using namespace System.Management.Automation
 
 <#
 .SYNOPSIS
-Write to log file
+Write a message or hash table to log file
 
 .DESCRIPTION
 Unlike Update-Log function which automatically picks up and logs Write-* streams,

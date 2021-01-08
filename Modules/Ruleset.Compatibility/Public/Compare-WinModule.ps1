@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Compare the set of modules against those in the compatibility session.
+Compare the set of modules against those in the compatibility session
 
 .DESCRIPTION
 Compare the set of modules for this version of PowerShell against those available

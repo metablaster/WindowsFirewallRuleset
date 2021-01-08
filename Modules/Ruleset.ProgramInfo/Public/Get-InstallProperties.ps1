@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Search program install properties for all users, system wide
+Search system wide program install properties
 
 .DESCRIPTION
 Search separate location in the registry for programs installed for all users.

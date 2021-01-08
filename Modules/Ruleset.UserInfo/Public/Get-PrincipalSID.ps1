@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get SID for given user account
+Get SID for specified user account
 
 .DESCRIPTION
 Get SID's for single or multiple user names on a target computer

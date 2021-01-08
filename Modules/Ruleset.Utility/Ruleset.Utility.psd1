@@ -64,7 +64,7 @@ SOFTWARE.
 	Copyright = "Copyright (C) 2019-2021 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
-	Description = "Utilities module for 'Windows Firewall Ruleset' project"
+	Description = "PowerShell utility module for Windows Firewall Ruleset project"
 
 	# Minimum version of the PowerShell engine required by this module
 	# Valid values are: 1.0 / 2.0 / 3.0 / 4.0 / 5.0 / 5.1 / 6.0 / 6.1 / 6.2 / 7.0 / 7.1
@@ -210,7 +210,6 @@ SOFTWARE.
 			Tags = @(
 				"Utility"
 				"FirewallUtility"
-				"Helper"
 			)
 
 			# A URL to the license for this module.

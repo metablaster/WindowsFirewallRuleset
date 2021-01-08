@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test markdown links
+Test links in markdown files
 
 .DESCRIPTION
 Test each link in markdown file and report if any link is dead
