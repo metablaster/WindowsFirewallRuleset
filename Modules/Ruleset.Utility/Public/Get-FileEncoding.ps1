@@ -162,9 +162,9 @@ function Get-FileEncoding
 			# For UTF encoding this will match only if there is BOM in file
 			$BOM = switch ($Result | Select-Object -ExpandProperty BodyName)
 			{
-				"utf-8" { $true }
-				"utf-16" { $true }
-				"utf-32" { $true }
+				"utf-8" { $true; break }
+				"utf-16" { $true; break }
+				"utf-32" { $true; break }
 				default { $false }
 			}
 

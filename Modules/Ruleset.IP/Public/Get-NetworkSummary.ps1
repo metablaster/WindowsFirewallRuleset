@@ -149,7 +149,7 @@ function Get-NetworkSummary
 			)
 		}
 
-		$NetworkSummary.Class = switch -regex (ConvertTo-BinaryIP $Network.IPAddress)
+		$NetworkSummary.Class = switch -Regex (ConvertTo-BinaryIP $Network.IPAddress)
 		{
 			'^1111' { "E"; break }
 			'^1110' { "D"; break }

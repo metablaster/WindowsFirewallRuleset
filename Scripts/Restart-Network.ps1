@@ -268,7 +268,7 @@ function Select-AdapterAlias
 		# Disabled - adapter is disabled and disconnected
 		# Disconnected - adapter is enabled but disconnected from network
 		# Up - adapter is enabled and able to connect to internet
-		switch -Wildcard ($Item.Status)
+		switch ($Item.Status)
 		{
 			"Not Present"
 			{

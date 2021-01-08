@@ -105,18 +105,22 @@ function Initialize-Service
 					"lmhosts"
 					{
 						"Required to manage GPO and contact computers on network using NETBIOS name resolution"
+						break
 					}
 					"LanmanWorkstation"
 					{
 						"Required to manage GPO and contact computers on network using SMB protocol"
+						break
 					}
 					"LanmanServer"
 					{
 						"Required to manage GPO firewall"
+						break
 					}
 					"WinRM"
 					{
 						"Required for non 'Core' module compatibility and remote firewall administration"
+						break
 					}
 					default
 					{

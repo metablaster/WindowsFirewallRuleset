@@ -161,20 +161,20 @@ Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 # Setup local variables
 $EventDescription = switch ($EventID)
 {
-	5146 { "The Windows Filtering Platform has blocked a packet" }
-	5147 { "A more restrictive Windows Filtering Platform filter has blocked a packet" }
-	5148 { "The Windows Filtering Platform has detected a DoS attack and entered a defensive mode; packets associated with this attack will be discarded" }
-	5149 { "The DoS attack has subsided and normal processing is being resumed." }
-	5150 { "The Windows Filtering Platform has blocked a packet." }
-	5151 { "A more restrictive Windows Filtering Platform filter has blocked a packet." }
-	5152 { "The Windows Filtering Platform blocked a packet" }
-	5153 { "A more restrictive Windows Filtering Platform filter has blocked a packet" }
-	5154 { "The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections" }
-	5155 { "The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections" }
-	5156 { "The Windows Filtering Platform has allowed a connection" }
-	5157 { "The Windows Filtering Platform has blocked a connection" }
-	5158 { "The Windows Filtering Platform has permitted a bind to a local port" }
-	5159 { "The Windows Filtering Platform has blocked a bind to a local port" }
+	5146 { "The Windows Filtering Platform has blocked a packet"; break }
+	5147 { "A more restrictive Windows Filtering Platform filter has blocked a packet"; break }
+	5148 { "The Windows Filtering Platform has detected a DoS attack and entered a defensive mode; packets associated with this attack will be discarded"; break }
+	5149 { "The DoS attack has subsided and normal processing is being resumed."; break }
+	5150 { "The Windows Filtering Platform has blocked a packet"; break }
+	5151 { "A more restrictive Windows Filtering Platform filter has blocked a packet"; break }
+	5152 { "The Windows Filtering Platform blocked a packet"; break }
+	5153 { "A more restrictive Windows Filtering Platform filter has blocked a packet"; break }
+	5154 { "The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections"; break }
+	5155 { "The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections"; break }
+	5156 { "The Windows Filtering Platform has allowed a connection"; break }
+	5157 { "The Windows Filtering Platform has blocked a connection"; break }
+	5158 { "The Windows Filtering Platform has permitted a bind to a local port"; break }
+	5159 { "The Windows Filtering Platform has blocked a bind to a local port"; break }
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Parsing '$EventDescription'"

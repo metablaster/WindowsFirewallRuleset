@@ -119,193 +119,193 @@ function ConvertFrom-SID
 			[string] $SidType = "Unknown"
 
 			# Well known SIDs value/name map
-			[string] $LoginName = switch -regex ($InputSID)
+			[string] $LoginName = switch -Regex ($InputSID)
 			{
 				# All versions of Windows
-				'^S-1-0$' { "Null Authority" }
-				'^S-1-0-0$' { "Nobody" }
-				'^S-1-1$' { "World Authority" }
-				'^S-1-1-0$' { "Everyone" }
-				'^S-1-2$' { "Local Authority" }
-				'^S-1-2-0$' { "Local" }
+				'^S-1-0$' { "Null Authority"; break }
+				'^S-1-0-0$' { "Nobody"; break }
+				'^S-1-1$' { "World Authority"; break }
+				'^S-1-1-0$' { "Everyone"; break }
+				'^S-1-2$' { "Local Authority"; break }
+				'^S-1-2-0$' { "Local"; break }
 				# Windows Server 2008 and later
-				'^S-1-2-1$' { "Console Logon" }
+				'^S-1-2-1$' { "Console Logon"; break }
 				# All versions of Windows
-				'^S-1-3$' { "Creator Authority" }
+				'^S-1-3$' { "Creator Authority"; break }
 				# All versions of Windows
-				'^S-1-3-0$' { "Creator Owner" }
-				'^S-1-3-1$' { "Creator Group" }
+				'^S-1-3-0$' { "Creator Owner"; break }
+				'^S-1-3-1$' { "Creator Group"; break }
 				# Windows Server 2003 and later
-				'^S-1-3-2$' { "Creator Owner Server" }
-				'^S-1-3-3$' { "Creator Group Server" }
+				'^S-1-3-2$' { "Creator Owner Server"; break }
+				'^S-1-3-3$' { "Creator Group Server"; break }
 				# All versions of Windows
-				'^S-1-3-4$' { "Owner Rights" }
+				'^S-1-3-4$' { "Owner Rights"; break }
 				# All versions of Windows
-				'^S-1-4$' { "Non-unique Authority" }
-				'^S-1-5$' { "NT Authority" } # NOTE: An identifier authority.
+				'^S-1-4$' { "Non-unique Authority"; break }
+				'^S-1-5$' { "NT Authority"; break } # NOTE: An identifier authority.
 				# All versions of Windows
-				'^S-1-5-1$' { "Dialup" }
-				'^S-1-5-2$' { "Network" }
-				'^S-1-5-3$' { "Batch" }
-				'^S-1-5-4$' { "Interactive" }
+				'^S-1-5-1$' { "Dialup"; break }
+				'^S-1-5-2$' { "Network"; break }
+				'^S-1-5-3$' { "Batch"; break }
+				'^S-1-5-4$' { "Interactive"; break }
 				# NOTE: A logon session. The X and Y values for these SIDs are different for each session.
 				# NOTE: X-Y omitted (S-1-5-5-X-Y)
 				# TODO: Name not valid, only approximate info given
-				'^S-1-5-5-\d+-\d+$' { "UNKNOWN-LOGON-SESSION" }
-				'^S-1-5-6$' { "Service" }
-				'^S-1-5-7$' { "Anonymous" }
+				'^S-1-5-5-\d+-\d+$' { "UNKNOWN-LOGON-SESSION"; break }
+				'^S-1-5-6$' { "Service"; break }
+				'^S-1-5-7$' { "Anonymous"; break }
 				# Windows Server 2003 and later
-				'^S-1-5-8$' { "Proxy" }
+				'^S-1-5-8$' { "Proxy"; break }
 				# All versions of Windows
-				'^S-1-5-9$' { "Enterprise Domain Controllers" }
-				'^S-1-5-10$' { "Principal Self" }
-				'^S-1-5-11$' { "Authenticated Users" }
-				'^S-1-5-12$' { "Restricted Code" }
-				'^S-1-5-13$' { "Terminal Server Users" }
-				'^S-1-5-14$' { "Remote Interactive Logon" }
+				'^S-1-5-9$' { "Enterprise Domain Controllers"; break }
+				'^S-1-5-10$' { "Principal Self"; break }
+				'^S-1-5-11$' { "Authenticated Users"; break }
+				'^S-1-5-12$' { "Restricted Code"; break }
+				'^S-1-5-13$' { "Terminal Server Users"; break }
+				'^S-1-5-14$' { "Remote Interactive Logon"; break }
 				# Windows Server 2003 and later
 				# NOTE: A group that includes all users from the same organization.
-				'^S-1-5-15$' { "This Organization" }
+				'^S-1-5-15$' { "This Organization"; break }
 				# All versions of Windows
 				# NOTE: An account that is used by the default Internet Information Services (IIS) user.
-				'^S-1-5-17$' { "IUSR" } # NT AUTHORITY\IUSR (Name learned with PsGetsid64)
-				'^S-1-5-18$' { "System" } # Changed from "Local System"
-				'^S-1-5-19$' { "Local Service" } # Changed from "NT Authority"
-				'^S-1-5-20$' { "Network Service" } # Changed from "NT Authority"
+				'^S-1-5-17$' { "IUSR"; break } # NT AUTHORITY\IUSR (Name learned with PsGetsid64)
+				'^S-1-5-18$' { "System"; break } # Changed from "Local System"
+				'^S-1-5-19$' { "Local Service"; break } # Changed from "NT Authority"
+				'^S-1-5-20$' { "Network Service"; break } # Changed from "NT Authority"
 				# TODO: Unknown system (Names learned with PsGetsid64)
-				'^S-1-5-33$' { "WRITE RESTRICTED" } # NT AUTHORITY\WRITE RESTRICTED (WRITE_RESTRICTED_CODE)
-				'^S-1-18-1$' { "Authentication authority asserted identity" } # AUTHENTICATION_AUTHORITY_ASSERTED_IDENTITY
-				'^S-1-18-2$' { "Service asserted identity" } # SERVICE_ASSERTED_IDENTITY
-				'^S-1-18-3$' { "Fresh public key identity" } # FRESH_PUBLIC_KEY_IDENTITY
-				'^S-1-18-4$' { "Key trust identity" } # KEY_TRUST_IDENTITY
-				'^S-1-18-5$' { "Key property multi-factor authentication" } # KEY_PROPERTY_MFA
-				'^S-1-18-6$' { "Key property attestation" } # KEY_PROPERTY_ATTESTATION
+				'^S-1-5-33$' { "WRITE RESTRICTED"; break } # NT AUTHORITY\WRITE RESTRICTED (WRITE_RESTRICTED_CODE)
+				'^S-1-18-1$' { "Authentication authority asserted identity"; break } # AUTHENTICATION_AUTHORITY_ASSERTED_IDENTITY
+				'^S-1-18-2$' { "Service asserted identity"; break } # SERVICE_ASSERTED_IDENTITY
+				'^S-1-18-3$' { "Fresh public key identity"; break } # FRESH_PUBLIC_KEY_IDENTITY
+				'^S-1-18-4$' { "Key trust identity"; break } # KEY_TRUST_IDENTITY
+				'^S-1-18-5$' { "Key property multi-factor authentication"; break } # KEY_PROPERTY_MFA
+				'^S-1-18-6$' { "Key property attestation"; break } # KEY_PROPERTY_ATTESTATION
 				# All versions of Windows
 				# NOTE: SID's in form of S-1-5-21-domain-xxx are "Domain" accounts/groups
 				# The <root-domain>, <domain> and <machine> identifiers all represent the three sub-authority values
-				'^S-1-5-21-\d+-\d+-\d+-500$' { "Administrator" }
-				'^S-1-5-21-\d+-\d+-\d+-501$' { "Guest" }
-				'^S-1-5-21-\d+-\d+-\d+-502$' { "KRBTGT" }
-				'^S-1-5-21-\d+-\d+-\d+-512$' { "Domain Admins" }
-				'^S-1-5-21-\d+-\d+-\d+-513$' { "Domain Users" }
-				'^S-1-5-21-\d+-\d+-\d+-514$' { "Domain Guests" }
-				'^S-1-5-21-\d+-\d+-\d+-515$' { "Domain Computers" }
-				'^S-1-5-21-\d+-\d+-\d+-516$' { "Domain Controllers" }
-				'^S-1-5-21-\d+-\d+-\d+-517$' { "Cert Publishers" }
-				'^S-1-5-21-\d+-\d+-\d+-518$' { "Schema Admins" }
-				'^S-1-5-21-\d+-\d+-\d+-519$' { "Enterprise Admins" }
-				'^S-1-5-21-\d+-\d+-\d+-520$' { "Group Policy Creator Owners" }
-				'^S-1-5-21-\d+-\d+-\d+-526$' { "Key Admins" }
-				'^S-1-5-21-\d+-\d+-\d+-527$' { "Enterprise Key Admins" }
-				'^S-1-5-21-\d+-\d+-\d+-553$' { "RAS and IAS Servers" }
+				'^S-1-5-21-\d+-\d+-\d+-500$' { "Administrator"; break }
+				'^S-1-5-21-\d+-\d+-\d+-501$' { "Guest"; break }
+				'^S-1-5-21-\d+-\d+-\d+-502$' { "KRBTGT"; break }
+				'^S-1-5-21-\d+-\d+-\d+-512$' { "Domain Admins"; break }
+				'^S-1-5-21-\d+-\d+-\d+-513$' { "Domain Users"; break }
+				'^S-1-5-21-\d+-\d+-\d+-514$' { "Domain Guests"; break }
+				'^S-1-5-21-\d+-\d+-\d+-515$' { "Domain Computers"; break }
+				'^S-1-5-21-\d+-\d+-\d+-516$' { "Domain Controllers"; break }
+				'^S-1-5-21-\d+-\d+-\d+-517$' { "Cert Publishers"; break }
+				'^S-1-5-21-\d+-\d+-\d+-518$' { "Schema Admins"; break }
+				'^S-1-5-21-\d+-\d+-\d+-519$' { "Enterprise Admins"; break }
+				'^S-1-5-21-\d+-\d+-\d+-520$' { "Group Policy Creator Owners"; break }
+				'^S-1-5-21-\d+-\d+-\d+-526$' { "Key Admins"; break }
+				'^S-1-5-21-\d+-\d+-\d+-527$' { "Enterprise Key Admins"; break }
+				'^S-1-5-21-\d+-\d+-\d+-553$' { "RAS and IAS Servers"; break }
 				# Domains - Windows Server 2008 and later
-				'^S-1-5-21-\d+-\d+-\d+-498$' { "Enterprise Read-only Domain Controllers" }
-				'^S-1-5-21-\d+-\d+-\d+-521$' { "Read-only Domain Controllers" }
-				'^S-1-5-21-\d+-\d+-\d+-571$' { "Allowed RODC Password Replication Group" }
-				'^S-1-5-21-\d+-\d+-\d+-572$' { "Denied RODC Password Replication Group" }
+				'^S-1-5-21-\d+-\d+-\d+-498$' { "Enterprise Read-only Domain Controllers"; break }
+				'^S-1-5-21-\d+-\d+-\d+-521$' { "Read-only Domain Controllers"; break }
+				'^S-1-5-21-\d+-\d+-\d+-571$' { "Allowed RODC Password Replication Group"; break }
+				'^S-1-5-21-\d+-\d+-\d+-572$' { "Denied RODC Password Replication Group"; break }
 				# Windows Server 2012 and later
-				'^S-1-5-21-\d+-\d+-\d+-522$' { "Cloneable Domain Controllers" }
+				'^S-1-5-21-\d+-\d+-\d+-522$' { "Cloneable Domain Controllers"; break }
 				# TODO: Unknown system and name
-				'^S-1-5-21-\d+-\d+-\d+-525$' { "PROTECTED_USERS" }
+				'^S-1-5-21-\d+-\d+-\d+-525$' { "PROTECTED_USERS"; break }
 				# All versions of Windows
 				# NOTE: SID's that start with S-1-5-32 are BUILTIN\
-				'^S-1-5-32-544$' { "Administrators" }
-				'^S-1-5-32-545$' { "Users" }
-				'^S-1-5-32-546$' { "Guests" }
-				'^S-1-5-32-547$' { "Power Users" }
-				'^S-1-5-32-548$' { "Account Operators" }
-				'^S-1-5-32-549$' { "Server Operators" }
-				'^S-1-5-32-550$' { "Print Operators" }
-				'^S-1-5-32-551$' { "Backup Operators" }
-				'^S-1-5-32-552$' { "Replicators" }
-				'^S-1-5-32-582$' { "Storage Replica Administrators" }
+				'^S-1-5-32-544$' { "Administrators"; break }
+				'^S-1-5-32-545$' { "Users"; break }
+				'^S-1-5-32-546$' { "Guests"; break }
+				'^S-1-5-32-547$' { "Power Users"; break }
+				'^S-1-5-32-548$' { "Account Operators"; break }
+				'^S-1-5-32-549$' { "Server Operators"; break }
+				'^S-1-5-32-550$' { "Print Operators"; break }
+				'^S-1-5-32-551$' { "Backup Operators"; break }
+				'^S-1-5-32-552$' { "Replicators"; break }
+				'^S-1-5-32-582$' { "Storage Replica Administrators"; break }
 				# Windows Server 2003 and later
 				# From all of the below 5-32 accounts the "BUILTIN\" was removed
-				'^S-1-5-32-554$' { "Pre-Windows 2000 Compatible Access" }
-				'^S-1-5-32-555$' { "Remote Desktop Users" }
-				'^S-1-5-32-556$' { "Network Configuration Operators" }
-				'^S-1-5-32-557$' { "Incoming Forest Trust Builders" }
-				'^S-1-5-32-558$' { "Performance Monitor Users" }
-				'^S-1-5-32-559$' { "Performance Log Users" }
-				'^S-1-5-32-560$' { "Windows Authorization Access Group" }
-				'^S-1-5-32-561$' { "Terminal Server License Servers" }
-				'^S-1-5-32-562$' { "Distributed COM Users" }
+				'^S-1-5-32-554$' { "Pre-Windows 2000 Compatible Access"; break }
+				'^S-1-5-32-555$' { "Remote Desktop Users"; break }
+				'^S-1-5-32-556$' { "Network Configuration Operators"; break }
+				'^S-1-5-32-557$' { "Incoming Forest Trust Builders"; break }
+				'^S-1-5-32-558$' { "Performance Monitor Users"; break }
+				'^S-1-5-32-559$' { "Performance Log Users"; break }
+				'^S-1-5-32-560$' { "Windows Authorization Access Group"; break }
+				'^S-1-5-32-561$' { "Terminal Server License Servers"; break }
+				'^S-1-5-32-562$' { "Distributed COM Users"; break }
 				# Windows Server 2008 and later
-				'^S-1-5-32-569$' { "Cryptographic Operators" }
-				'^S-1-5-32-573$' { "Event Log Readers" }
-				'^S-1-5-32-574$' { "Certificate Service DCOM Access" }
+				'^S-1-5-32-569$' { "Cryptographic Operators"; break }
+				'^S-1-5-32-573$' { "Event Log Readers"; break }
+				'^S-1-5-32-574$' { "Certificate Service DCOM Access"; break }
 				# Windows Server 2012 and later
-				'^S-1-5-32-575$' { "RDS Remote Access Servers" }
-				'^S-1-5-32-576$' { "RDS Endpoint Servers" }
-				'^S-1-5-32-577$' { "RDS Management Servers" }
-				'^S-1-5-32-578$' { "Hyper-V Administrators" }
-				'^S-1-5-32-579$' { "Access Control Assistance Operators" }
-				'^S-1-5-32-580$' { "Remote Management Users" }
+				'^S-1-5-32-575$' { "RDS Remote Access Servers"; break }
+				'^S-1-5-32-576$' { "RDS Endpoint Servers"; break }
+				'^S-1-5-32-577$' { "RDS Management Servers"; break }
+				'^S-1-5-32-578$' { "Hyper-V Administrators"; break }
+				'^S-1-5-32-579$' { "Access Control Assistance Operators"; break }
+				'^S-1-5-32-580$' { "Remote Management Users"; break }
 				# TODO: Unknown system
-				'^S-1-5-32-568$' { "IIS_IUSRS" } # Name confirmed with PsGetsid64
+				'^S-1-5-32-568$' { "IIS_IUSRS"; break } # Name confirmed with PsGetsid64
 				# All versions of Windows
-				'^S-1-5-64-10$' { "NTLM Authentication" }
-				'^S-1-5-64-14$' { "SChannel Authentication" }
-				'^S-1-5-64-21$' { "Digest Authority" }
+				'^S-1-5-64-10$' { "NTLM Authentication"; break }
+				'^S-1-5-64-14$' { "SChannel Authentication"; break }
+				'^S-1-5-64-21$' { "Digest Authority"; break }
 				# TODO: Unknown system
 				# NOTE: Name learned by testing object search
-				'^S-1-5-65-1$' { "This Organization Certificate" } # THIS_ORGANIZATION_CERTIFICATE
+				'^S-1-5-65-1$' { "This Organization Certificate"; break } # THIS_ORGANIZATION_CERTIFICATE
 				# All versions of Windows
-				'^S-1-5-80$' { "NT Service" }
+				'^S-1-5-80$' { "NT Service"; break }
 				# Windows Server 2008, Windows Vista and later
 				# NOTE: Added in Windows Vista and Windows Server 2008
-				'^S-1-5-80-0$' { "All Services" }
+				'^S-1-5-80-0$' { "All Services"; break }
 				# TODO: unknown system for NT SERVICE\TrustedInstaller
 				# NOTE: following SID is not listed on well known SID list: (SID confirmed with PsGetsid64)
 				# NOTE: for NT SERVICE reference name is required, just display name won't be found
-				'^S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464$' { "NT SERVICE\TrustedInstaller" }
+				'^S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464$' { "NT SERVICE\TrustedInstaller"; break }
 				# Windows Server 2008 and later
-				'^S-1-5-83-0$' { "Virtual Machines" } # Removed "NT VIRTUAL MACHINE\"
-				'^S-1-5-90-0$' { "Windows Manager Group" } # Removed "Windows Manager\""
+				'^S-1-5-83-0$' { "Virtual Machines"; break } # Removed "NT VIRTUAL MACHINE\"
+				'^S-1-5-90-0$' { "Windows Manager Group"; break } # Removed "Windows Manager\""
 				# TODO: Unknown system (Name confirmed with PsGetsid64)
-				'^S-1-5-84-0-0-0-0-0$' { "USER MODE DRIVERS" } # NT AUTHORITY\USER MODE DRIVERS (USER_MODE_DRIVERS)
-				'^S-1-5-113$' { "Local account" } # NT AUTHORITY\Local account
-				'^S-1-5-114$' { "Local account and member of Administrators group" } # NT AUTHORITY\Local account and member of Administrators group
-				'^S-1-5-1000$' { "Other Organization" } # NT AUTHORITY\Other Organization (OTHER_ORGANIZATION)
+				'^S-1-5-84-0-0-0-0-0$' { "USER MODE DRIVERS"; break } # NT AUTHORITY\USER MODE DRIVERS (USER_MODE_DRIVERS)
+				'^S-1-5-113$' { "Local account"; break } # NT AUTHORITY\Local account
+				'^S-1-5-114$' { "Local account and member of Administrators group"; break } # NT AUTHORITY\Local account and member of Administrators group
+				'^S-1-5-1000$' { "Other Organization"; break } # NT AUTHORITY\Other Organization (OTHER_ORGANIZATION)
 				# Windows Server 2008 and later
-				'^S-1-16-0$' { "Untrusted Mandatory Level" }
-				'^S-1-16-4096$' { "Low Mandatory Level" }
-				'^S-1-16-8192$' { "Medium Mandatory Level" }
-				'^S-1-16-8448$' { "Medium Plus Mandatory Level" }
-				'^S-1-16-12288$' { "High Mandatory Level" }
-				'^S-1-16-16384$' { "System Mandatory Level" }
-				'^S-1-16-20480$' { "Protected Process Mandatory Level" }
-				'^S-1-16-28672$' { "Secure Process Mandatory Level" }
+				'^S-1-16-0$' { "Untrusted Mandatory Level"; break }
+				'^S-1-16-4096$' { "Low Mandatory Level"; break }
+				'^S-1-16-8192$' { "Medium Mandatory Level"; break }
+				'^S-1-16-8448$' { "Medium Plus Mandatory Level"; break }
+				'^S-1-16-12288$' { "High Mandatory Level"; break }
+				'^S-1-16-16384$' { "System Mandatory Level"; break }
+				'^S-1-16-20480$' { "Protected Process Mandatory Level"; break }
+				'^S-1-16-28672$' { "Secure Process Mandatory Level"; break }
 				# TODO: Unknown system (Name confirmed with PsGetsid64)
-				'^S-1-5-21-0-0-0-496$' { "Compound Identity Present" } # NT AUTHORITY\Compound Identity Present (COMPOUNDED_AUTHENTICATION)
-				'^S-1-5-21-0-0-0-497$' { "Claims Valid" } # NT AUTHORITY\Claims Valid (CLAIMS_VALID)
+				'^S-1-5-21-0-0-0-496$' { "Compound Identity Present"; break } # NT AUTHORITY\Compound Identity Present (COMPOUNDED_AUTHENTICATION)
+				'^S-1-5-21-0-0-0-497$' { "Claims Valid"; break } # NT AUTHORITY\Claims Valid (CLAIMS_VALID)
 				# Following SID is for application packages from second link
-				'^S-1-15-2-1$' { "All Application Packages" } # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
+				'^S-1-15-2-1$' { "All Application Packages"; break } # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
 				# Following SID is for application packages that is not listed on well known SID's
-				'^S-1-15-2-2$' { "All Restricted Application Packages" } # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGES
+				'^S-1-15-2-2$' { "All Restricted Application Packages"; break } # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGES
 				# Following list is mentioned in firewall GUI (SID's learned with PsGetsid64)
 				# From all of the below S-1-15-3- accounts the "APPLICATION PACKAGE AUTHORITY\" was removed
-				'^S-1-15-3-1$' { "Your Internet connection" }
-				'^S-1-15-3-2$' { "Your Internet connection, including incoming connections from the Internet" }
-				'^S-1-15-3-3$' { "Your home or work networks" }
-				'^S-1-15-3-4$' { "Your pictures library" }
-				'^S-1-15-3-5$' { "Your videos library" }
-				'^S-1-15-3-6$' { "Your music library" }
-				'^S-1-15-3-7$' { "Your documents library" }
-				'^S-1-15-3-8$' { "Your Windows credentials" }
-				'^S-1-15-3-9$' { "Software and hardware certificates or a smart card" }
-				'^S-1-15-3-10$' { "Removable storage" }
-				'^S-1-15-3-11$' { "Your Appointments" }
-				'^S-1-15-3-12$' { "Your Contacts" }
+				'^S-1-15-3-1$' { "Your Internet connection"; break }
+				'^S-1-15-3-2$' { "Your Internet connection, including incoming connections from the Internet"; break }
+				'^S-1-15-3-3$' { "Your home or work networks"; break }
+				'^S-1-15-3-4$' { "Your pictures library"; break }
+				'^S-1-15-3-5$' { "Your videos library"; break }
+				'^S-1-15-3-6$' { "Your music library"; break }
+				'^S-1-15-3-7$' { "Your documents library"; break }
+				'^S-1-15-3-8$' { "Your Windows credentials"; break }
+				'^S-1-15-3-9$' { "Software and hardware certificates or a smart card"; break }
+				'^S-1-15-3-10$' { "Removable storage"; break }
+				'^S-1-15-3-11$' { "Your Appointments"; break }
+				'^S-1-15-3-12$' { "Your Contacts"; break }
 				# TODO: More capability categories must exist (not listed on well known SID's list), see also:
 				# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SecurityManager\CapabilityClasses\AllCachedCapabilities\capabilityClass_*
 				# NOTE: following SID is not listed on well known SID list: (Name confirmed with PsGetsid64)
-				'^S-1-5-22' { "Enterprise Read-Only Domain Controllers Beta" } # NT AUTHORITY\ENTERPRISE READ-ONLY DOMAIN CONTROLLERS BETA
+				'^S-1-5-22' { "Enterprise Read-Only Domain Controllers Beta"; break } # NT AUTHORITY\ENTERPRISE READ-ONLY DOMAIN CONTROLLERS BETA
 				default
 				{
 					[string] $ResultName = ""
 
-					switch -regex ($InputSID)
+					switch -Regex ($InputSID)
 					{
 						'^S-1-15-2-\d+-\d+-\d+-\d+-\d+-\d+-\d+$'
 						{
@@ -359,6 +359,7 @@ function ConvertFrom-SID
 							{
 								Write-Warning -Message "Input SID is unknown store app SID"
 							}
+							break
 						}
 						'^S-1-15-3-\d+[\d+-]\d+$'
 						{
@@ -368,6 +369,7 @@ function ConvertFrom-SID
 							# TODO: Display what capability SID has, for more info look into registry and see:
 							# https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers#capability-sids
 							Write-Warning -Message "Input SID: '$InputSID' is capability SID"
+							break
 						}
 						default
 						{
