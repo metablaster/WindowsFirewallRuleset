@@ -1,49 +1,72 @@
 ---
 external help file: Ruleset.Utility-help.xml
 Module Name: Ruleset.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-NetworkService.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Build-ServiceList.md
 schema: 2.0.0
 ---
 
-# Get-NetworkService
+# Build-ServiceList
 
 ## SYNOPSIS
 
-Get a list of windows services involved in rules
+Build a list of windows services involved in script rules
 
 ## SYNTAX
 
 ```powershell
-Get-NetworkService [-Folder] <String> [<CommonParameters>]
+Build-ServiceList [-Path] <DirectoryInfo> [-Log] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Scan all scripts in this repository and get windows service names involved in rules,
-the result is saved to file and used to verify existence of these services on target system.
+Scan all scripts in this repository and get windows service names involved in firewall rules.
+The result is saved to file and used to verify existence and digital signature of these services
+on target system.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Get-NetworkService "C:\PathToRepo"
+Build-ServiceList "C:\PathToRepo"
+```
+
+### EXAMPLE 2
+
+```powershell
+Build-ServiceList "C:\PathToRepo" -Log
 ```
 
 ## PARAMETERS
 
-### -Folder
+### -Path
 
 Root folder name which to scan recursively
 
 ```yaml
-Type: System.String
+Type: System.IO.DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -Log
+
+If specified, the list of services is also logged.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -54,14 +77,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-NetworkService
+### None. You cannot pipe objects to Build-ServiceList
 
 ## OUTPUTS
 
-### None. Get-NetworkService does not generate any output
+### [string]
 
 ## NOTES
 
-None.
+TODO: -Log parameter should be accompanied -LogName parameter
 
 ## RELATED LINKS

@@ -9,18 +9,19 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+Compare the set of modules against those in the compatibility session.
 
 ## SYNTAX
 
 ```powershell
-Compare-WinModule [[-Name] <String[]>] [-ComputerName <String>] [-ConfigurationName <String>]
+Compare-WinModule [[-Name] <String[]>] [-Domain <String>] [-ConfigurationName <String>]
  [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+Compare the set of modules for this version of PowerShell against those available
+in the compatibility session.
 
 ## EXAMPLES
 
@@ -46,7 +47,7 @@ This will return a list of all of the compatibility session modules matching the
 ### -Name
 
 Specifies the names or name patterns of for the modules to compare.
-Wildcard characters are permitted.
+Wildcard characters are supported.
 
 ```yaml
 Type: System.String[]
@@ -57,18 +58,18 @@ Required: False
 Position: 1
 Default value: *
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
-### -ComputerName
+### -Domain
 
-If you don't want to use the default compatibility session, use this parameter to specify the name
-of the computer on which to create the compatibility session.
+If you don't want to use the default compatibility session, use this parameter to
+specify the name of the computer on which to create the compatibility session.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: cn
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -120,15 +121,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [System.Management.Automation.PSObject]
+### [PSObject]
 
 ## NOTES
 
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md)
 
 [https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

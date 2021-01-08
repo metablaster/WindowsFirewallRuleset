@@ -16,13 +16,14 @@ Write to log file
 ### Message
 
 ```powershell
-Write-LogFile -Message <String> [-Path <String>] [-Tags <String[]>] [-Label <String>] [<CommonParameters>]
+Write-LogFile -Message <String[]> [-Path <DirectoryInfo>] [-Tags <String[]>] [-LogName <String>] [-Raw]
+ [-Overwrite] [<CommonParameters>]
 ```
 
 ### Hash
 
 ```powershell
-Write-LogFile -Hash <Object> [-Path <String>] [-Label <String>] [<CommonParameters>]
+Write-LogFile -Hash <Object> [-Path <DirectoryInfo>] [-LogName <String>] [-Overwrite] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,9 +43,9 @@ a new header, and popped before writing to previous log.
 
 ### EXAMPLE 1
 
-```powershell
+```
 $HeaderStack.Push("My Header")
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message1", "Sample message 2"
 PS> $HeaderStack.Pop() | Out-Null
 ```
 
@@ -52,10 +53,10 @@ Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.l
 
 ### EXAMPLE 2
 
-```powershell
+```
 $HeaderStack.Push("My Header")
 PS> [hashtable] $HashResult = Get-SomeHashTable
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Hash $HashResult
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Hash $HashResult
 PS> $HeaderStack.Pop() | Out-Null
 ```
 
@@ -63,11 +64,11 @@ Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header 
 
 ### EXAMPLE 3
 
-```powershell
+```
 $HeaderStack.Push("My Header")
-PS> Write-LogFile -Path "C:\logs" -Label "Settings" -Tags "MyTag" -Message "Sample message"
+PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Push("Another Header")
-PS> Write-LogFile -Path "C:\logs\next" -Label "Admin" -Tags "NewTag" -Message "Another message"
+PS> Write-LogFile -Path "C:\logs\next" -LogName "Admin" -Tags "NewTag" -Message "Another message"
 PS> $HeaderStack.Pop() | Out-Null
 PS> $HeaderStack.Pop() | Out-Null
 ```
@@ -75,14 +76,23 @@ PS> $HeaderStack.Pop() | Out-Null
 Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
 Will write "Another message" InformationRecord to log C:\logs\next\Admin_15.12.20.log with a header set to "Another Header"
 
+### EXAMPLE 4
+
+```
+$HeaderStack.Push("Raw message overwrite")
+PS> Write-LogFile -Message "Raw message overwrite" -LogName "MyRawLog" -Path "C:\logs" -Raw -Overwrite
+```
+
+Will write raw message and overwrite existing log file if it exists.
+
 ## PARAMETERS
 
 ### -Message
 
-Message from which to construct "InformationRecord" and append to log file
+One or more messages from which to construct "InformationRecord" and append to log file
 
 ```yaml
-Type: System.String
+Type: System.String[]
 Parameter Sets: Message
 Aliases:
 
@@ -114,7 +124,7 @@ Accept wildcard characters: False
 Destination directory
 
 ```yaml
-Type: System.String
+Type: System.IO.DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
@@ -122,7 +132,7 @@ Required: False
 Position: Named
 Default value: $LogsFolder
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -Tags
@@ -141,9 +151,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Label
+### -LogName
 
-File label that is added to current date for resulting file name
+{{ Fill LogName Description }}
 
 ```yaml
 Type: System.String
@@ -153,6 +163,39 @@ Aliases:
 Required: False
 Position: Named
 Default value: Admin
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Raw
+
+If specified, the message is written directly to log file without any formatting,
+by default InformationRecord object is created from the message and written to log file.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Message
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Overwrite
+
+If specified, the log file is overwritten if it exists.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

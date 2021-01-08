@@ -16,7 +16,7 @@ Used to prompt user to approve running script
 ### None (Default)
 
 ```powershell
-Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
+Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>] [-Force]
  [<CommonParameters>]
 ```
 
@@ -24,7 +24,7 @@ Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <Strin
 
 ```powershell
 Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
- -YesToAll <PSReference> -NoToAll <PSReference> [<CommonParameters>]
+ -YesToAll <PSReference> -NoToAll <PSReference> [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -133,7 +133,7 @@ Accept wildcard characters: False
 
 ### -YesToAll
 
-True if user selects YesToAll.
+Will be set to true if user selects YesToAll.
 If this is already true, Approve-Execute will bypass the prompt and return true.
 
 ```yaml
@@ -150,7 +150,7 @@ Accept wildcard characters: False
 
 ### -NoToAll
 
-true if user selects NoToAll.
+Will be set to true if user selects NoToAll.
 If this is already true, Approve-Execute will bypass the prompt and return false.
 
 ```yaml
@@ -161,6 +161,22 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified, this function does nothing and returns true
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

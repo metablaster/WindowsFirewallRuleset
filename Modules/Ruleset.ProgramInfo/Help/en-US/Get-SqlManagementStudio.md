@@ -14,35 +14,36 @@ Get installed Microsoft SQL Server Management Studios
 ## SYNTAX
 
 ```powershell
-Get-SqlManagementStudio [[-ComputerName] <String>] [<CommonParameters>]
+Get-SqlManagementStudio [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-TODO: add description
+Get all instances of installed Microsoft SQL Server Management Studios from local
+or remote machine.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Get-SqlManagementStudio COMPUTERNAME
+Get-SqlManagementStudio SERVER01
 ```
 
-RegKey ComputerName Version      InstallLocation
-	------ ------------ -------      -----------
-	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
+Domain       Name                                       InstallLocation
+------       ----                                       ---------------
+SERVER01     Microsoft SQL Server Management Studio     %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name for which to list installed installed framework
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

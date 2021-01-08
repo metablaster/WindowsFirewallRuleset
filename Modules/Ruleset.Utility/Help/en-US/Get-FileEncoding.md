@@ -14,7 +14,7 @@ Gets the encoding of a file
 ## SYNTAX
 
 ```powershell
-Get-FileEncoding [-FilePath] <String> [[-Encoding] <Object>] [<CommonParameters>]
+Get-FileEncoding [-Path] <FileInfo> [[-Encoding] <Object>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,12 +48,12 @@ utf-32
 
 ## PARAMETERS
 
-### -FilePath
+### -Path
 
 The path of the file to get the encoding of
 
 ```yaml
-Type: System.String
+Type: System.IO.FileInfo
 Parameter Sets: (All)
 Aliases:
 
@@ -61,7 +61,7 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -Encoding
@@ -96,6 +96,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: utf-16LE detected as utf-16 with BOM
-NOTE: This function is based on (but is not) sample from "Windows PowerShell Cookbook"
+TODO: Enumerate file encodings and implement parameter validation
 
 ## RELATED LINKS

@@ -14,7 +14,7 @@ Exports firewall rules to a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Export-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-DisplayName <String>]
+Export-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>]
  [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
  [<CommonParameters>]
 ```
@@ -57,14 +57,14 @@ Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 ## PARAMETERS
 
-### -PolicyStore
+### -Domain
 
 Policy store from which to export rules, default is local GPO.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -73,20 +73,20 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Folder
+### -Path
 
 Path into which to save file
 
 ```yaml
-Type: System.String
+Type: System.IO.DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: .
+Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -FileName
@@ -308,27 +308,35 @@ Changed minor flow and logic of execution
 Make output formatted and colored
 11.
 Added progress bar
-
+December 2020:
+1.
+Rename parameters according to standard name convention
+2.
+Support resolving path wildcard pattern
 TODO: export to excel
 TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"
 
 Outbound:
 
-- Broadcast
-- Network Discovery
-- File and Printer Sharing
-- GitHub
-- Development - Microsoft Visual Studio
-- Software - Nvidia
-- \[Server - SQL\] -\> SQL Server Management Studio
-- \[Microsoft - Office
-- Windows System
+Broadcast
+Network Discovery
+File and Printer Sharing
+GitHub
+Development - Microsoft Visual Studio
+Software - Nvidia
+\[Server - SQL\] -\> SQL Server Management Studio
+\[Microsoft - Office
+Windows System
 
 Inbound:
 
-- Broadcast
-- Network Discovery
-- File and Printer Sharing
-- Microsoft Office
+Broadcast
+Network Discovery
+File and Printer Sharing
+Microsoft Office
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md)
+
+[https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

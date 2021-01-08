@@ -14,7 +14,7 @@ Configure and start specified system services
 ## SYNTAX
 
 ```powershell
-Initialize-Service [-Services] <String[]> [<CommonParameters>]
+Initialize-Service [-Name] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,9 +42,9 @@ $true if WinRM service was started $false otherwise
 
 ## PARAMETERS
 
-### -Services
+### -Name
 
-An array of services to start
+Enter one or more services to configure
 
 ```yaml
 Type: System.String[]

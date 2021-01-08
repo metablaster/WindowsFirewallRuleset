@@ -197,9 +197,9 @@ SOFTWARE.
 			# Tags applied to this module.
 			# These help with module discovery in online galleries.
 			Tags = @(
+				"Users"
 				"UserInfo"
 				"ComputerUsers"
-				"Users"
 			)
 
 			# A URL to the license for this module.

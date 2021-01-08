@@ -31,6 +31,12 @@ Must be called in pair with Enter-Test and after all test cases are done in sing
 Exit-Test
 ```
 
+### EXAMPLE 2
+
+```powershell
+Exit-Test -Pester
+```
+
 ## PARAMETERS
 
 ### -Pester

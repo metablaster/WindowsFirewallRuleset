@@ -9,17 +9,17 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get computer accounts for specified user groups on target computers
+Get principals of specified groups on target computers
 
 ## SYNTAX
 
 ```powershell
-Get-GroupPrincipal [-UserGroups] <String[]> [-ComputerNames <String[]>] [-Disabled] [-CIM] [<CommonParameters>]
+Get-GroupPrincipal [-Group] <String[]> [-Domain <String[]>] [-Disabled] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-{{ Fill in the Description }}
+Get computer accounts for one or more user groups on local computer or one or more remote computers.
 
 ## EXAMPLES
 
@@ -32,19 +32,19 @@ Get-GroupPrincipal "Users", "Administrators"
 ### EXAMPLE 2
 
 ```powershell
-Get-GroupPrincipal "Users" -Machine @(DESKTOP, LAPTOP) -CIM
+Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP) -CIM
 ```
 
 ## PARAMETERS
 
-### -UserGroups
+### -Group
 
 User group on local or remote computer
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Group
+Aliases: UserGroup
 
 Required: True
 Position: 1
@@ -53,14 +53,14 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ComputerNames
+### -Domain
 
 One or more computers which to query for group users
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -115,10 +115,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
-TODO: plural parameter
 See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAccount\username@outlook.com"
 
 ## RELATED LINKS

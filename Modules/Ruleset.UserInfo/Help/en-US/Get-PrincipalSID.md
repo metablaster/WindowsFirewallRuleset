@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.UserInfo-help.xml
 Module Name: Ruleset.UserInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-AccountSID.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PrincipalSID.md
 schema: 2.0.0
 ---
 
-# Get-AccountSID
+# Get-PrincipalSID
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Get SID for given user account
 ## SYNTAX
 
 ```powershell
-Get-AccountSID [-UserNames] <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
+Get-PrincipalSID [-User] <String[]> [-Domain <String>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,25 +26,25 @@ Get SID's for single or multiple user names on a target computer
 ### EXAMPLE 1
 
 ```powershell
-Get-AccountSID "USERNAME" -Server "COMPUTERNAME"
+Get-PrincipalSID "User" -Server "Server01"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-AccountSID @("USERNAME1", "USERNAME2") -CIM
+Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM
 ```
 
 ## PARAMETERS
 
-### -UserNames
+### -User
 
 Array of user names
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: User
+Aliases: UserName
 
 Required: True
 Position: 1
@@ -53,14 +53,14 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 Target computer on which to perform query
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -99,8 +99,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
-TODO: plural parameter "UserNames"
+None.
 
 ## RELATED LINKS

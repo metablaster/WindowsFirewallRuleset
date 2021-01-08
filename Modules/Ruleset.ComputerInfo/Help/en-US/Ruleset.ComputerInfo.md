@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ComputerInfo
 Module Guid: c68a812d-076d-47bd-a73d-8d4600bd3c51
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
-Help Version: 0.9.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
+Help Version: 0.9.1
 Locale: en-US
 ---
 
@@ -18,30 +18,34 @@ Locale: en-US
 
 Convert from OS build number to OS version
 
-### [Get-Broadcast](Get-Broadcast.md)
-
-Get broadcast addresses on the local machine
-
-### [Get-ComputerName](Get-ComputerName.md)
-
-Retrieve localhost NETBIOS name
-
-### [Get-ConfiguredAdapter](Get-ConfiguredAdapter.md)
-
-Retrieve a list of configured network adapters
-
 ### [Get-InterfaceAlias](Get-InterfaceAlias.md)
 
-Retrieve a aliases of configured network adapters
+Get interface aliases of specified network adapters
 
-### [Get-IPAddress](Get-IPAddress.md)
+### [Get-InterfaceBroadcast](Get-InterfaceBroadcast.md)
 
-Retrieve a list of IP addresses on local machine
+Get broadcast address
 
 ### [Get-SystemSKU](Get-SystemSKU.md)
 
 Get operating system SKU information
 
+### [Resolve-Host](Resolve-Host.md)
+
+Resolve host or IP
+
+### [Select-IPInterface](Select-IPInterface.md)
+
+Get network adapter IP configuration
+
+### [Test-NetBiosName](Test-NetBiosName.md)
+
+Validate NETBIOS name syntax
+
 ### [Test-TargetComputer](Test-TargetComputer.md)
 
-Test target computer (policy store) on which to apply firewall
+Test target computer (policy store) to which to deploy firewall
+
+### [Test-UNC](Test-UNC.md)
+
+Validate UNC path syntax

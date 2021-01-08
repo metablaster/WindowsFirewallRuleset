@@ -361,6 +361,7 @@ Documentation and comments reside in 6 places as follows:
     You must avoid following comment based content to avoid errors while generating online help files:
     - .LINK entries must contains only one link and nothing else
     - Do not use multiple dashes in comments such as `------`
+    - Use spaces instead of tabs and do not indent comments
     - For anything else keep in mind that any markdown syntax in comments will be formatted in the
     resulting markdown file as markdown not as plain text, which may give unexpected results.
 

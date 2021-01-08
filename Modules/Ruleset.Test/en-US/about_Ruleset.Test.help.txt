@@ -12,17 +12,20 @@ EXAMPLES
 	Enter-Test
 	Initialize unit test
 
-	Start-Test
-	Start test case
-
-	Stop-Test
-	Stop test case
-
 	Exit-Test
 	Un-initialize and exit unit test
 
 	New-Section
 	Print new unit test section
+
+	Reset-TestDrive
+	Remove all items from test drive
+
+	Start-Test
+	Start test case
+
+	Stop-Test
+	Stop test case
 
 	Test-MarkdownLinks
 	Test each link in markdown file and report if any link is dead
@@ -31,9 +34,9 @@ EXAMPLES
 	Verify TypeName and OutputType are referring to same type
 
 KEYWORDS
-	PowerShellTest
-	UnitTest
 	Test
+	UnitTest
+	PowerShellTest
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Test/Help/en-US

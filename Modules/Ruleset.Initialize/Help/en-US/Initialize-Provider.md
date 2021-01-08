@@ -30,7 +30,7 @@ installing or updating packages
 ### EXAMPLE 1
 
 ```powershell
-Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"
+Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Required
 ```
 
 ## PARAMETERS

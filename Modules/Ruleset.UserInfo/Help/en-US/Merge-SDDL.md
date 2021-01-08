@@ -14,7 +14,7 @@ Merge 2 SDDL strings into one
 ## SYNTAX
 
 ```powershell
-Merge-SDDL [-RefSDDL] <PSReference> [-NewSDDL] <String> [<CommonParameters>]
+Merge-SDDL [-SDDL] <PSReference> -From <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,17 +26,17 @@ Referenced SDDL is expanded with new one
 
 ### EXAMPLE 1
 
-```powershell
-$RefSDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
-$NewSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
-Merge-SDDL ([ref] $RefSDDL) $NewSDDL
+```
+$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+Merge-SDDL ([ref] $SDDL) -From $RefSDDL
 ```
 
 ## PARAMETERS
 
-### -RefSDDL
+### -SDDL
 
-Reference to SDDL into which to merge new SDDL
+SDDL into which to merge new SDDL
 
 ```yaml
 Type: System.Management.Automation.PSReference
@@ -50,9 +50,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NewSDDL
+### -From
 
-New SDDL string which to merge with reference SDDL
+Reference SDDL string which to merge into original SDDL
 
 ```yaml
 Type: System.String
@@ -60,7 +60,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -81,7 +81,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Validate input using regex
-TODO: Process an array of SDDL's
-TODO: Pipeline input
+TODO: Process an array of SDDL's or Join-SDDL function to join multiple SDDL's
+TODO: Pipeline input and -From parameter should accept an array.
 
 ## RELATED LINKS

@@ -40,7 +40,7 @@
           <dev:defaultValue>PSGallery</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>RepositoryLocation</maml:name>
+          <maml:name>URL</maml:name>
           <maml:Description>
             <maml:para>Repository location associated with repository name, this parameter is used only if repository is not registered</maml:para>
           </maml:Description>
@@ -124,7 +124,7 @@
         <dev:defaultValue>PSGallery</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>RepositoryLocation</maml:name>
+        <maml:name>URL</maml:name>
         <maml:Description>
           <maml:para>Repository location associated with repository name, this parameter is used only if repository is not registered</maml:para>
         </maml:Description>
@@ -213,21 +213,17 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
-Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
-specified by default is not registered user is prompted to do that too.</dev:code>
+        <dev:code>Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository specified by default is not registered user is prompted to do that too.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
-&gt; "PSGallery" -RepositoryLocation "https://www.powershellgallery.com/api/v2"
-Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
-is not registered user is prompted to do that too.</dev:code>
+&gt; "PSGallery" -URL "https://www.powershellgallery.com/api/v2"</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Checks if PackageManagement is up to date, if not user is prompted to update, and if repository is not registered user is prompted to do that too.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -254,7 +250,7 @@ is not registered user is prompted to do that too.</dev:code>
       <command:syntaxItem>
         <maml:name>Initialize-Project</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Abort</maml:name>
+          <maml:name>Strict</maml:name>
           <maml:Description>
             <maml:para>If specified exit is called on failure instead of return</maml:para>
           </maml:Description>
@@ -268,7 +264,7 @@ is not registered user is prompted to do that too.</dev:code>
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Abort</maml:name>
+        <maml:name>Strict</maml:name>
         <maml:Description>
           <maml:para>If specified exit is called on failure instead of return</maml:para>
         </maml:Description>
@@ -316,7 +312,7 @@ is not registered user is prompted to do that too.</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-Project -Abort</dev:code>
+        <dev:code>Initialize-Project -Strict</dev:code>
         <dev:remarks>
           <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed and all subsequent operations are halted. If successful environment info is shown.</maml:para>
         </dev:remarks>
@@ -448,7 +444,7 @@ is not registered user is prompted to do that too.</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository "powershellgallery.com"</dev:code>
+        <dev:code>Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Required</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -477,9 +473,9 @@ is not registered user is prompted to do that too.</dev:code>
       <command:syntaxItem>
         <maml:name>Initialize-Service</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-          <maml:name>Services</maml:name>
+          <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>An array of services to start</maml:para>
+            <maml:para>Enter one or more services to configure</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -492,9 +488,9 @@ is not registered user is prompted to do that too.</dev:code>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-        <maml:name>Services</maml:name>
+        <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>An array of services to start</maml:para>
+          <maml:para>Enter one or more services to configure</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>

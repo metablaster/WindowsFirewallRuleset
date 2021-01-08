@@ -14,9 +14,9 @@ Import a compatibility module.
 ## SYNTAX
 
 ```powershell
-Import-WinModule [[-Name] <String[]>] [-Exclude <String[]>] [-ComputerName <String>]
- [-ConfigurationName <String>] [-Prefix <String>] [-DisableNameChecking] [-NoClobber] [-Force]
- [-Credential <PSCredential>] [-PassThru] [<CommonParameters>]
+Import-WinModule [[-Name] <String[]>] [-Exclude <String[]>] [-Domain <String>] [-ConfigurationName <String>]
+ [-Prefix <String>] [-DisableNameChecking] [-NoClobber] [-Force] [-Credential <PSCredential>] [-PassThru]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,7 +72,7 @@ This example forces a reload of the module "PnpDevice" with verbose output turne
 ### -Name
 
 Specifies the name of the module to be imported.
-Wildcards can be used.
+Wildcard characters are supported.
 
 ```yaml
 Type: System.String[]
@@ -83,7 +83,7 @@ Required: False
 Position: 1
 Default value: *
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -Exclude
@@ -102,7 +102,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
@@ -110,7 +110,7 @@ of the computer on which to create the compatibility session.
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: cn
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -243,15 +243,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Management.Automation.PSObject
+### [PSObject]
 
 ## NOTES
 
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md)
 
 [https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

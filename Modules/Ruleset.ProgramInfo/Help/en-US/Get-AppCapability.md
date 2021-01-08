@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get capabilities of Windows store app
+Get Windows store app capabilities
 
 ## SYNTAX
 
@@ -20,10 +20,10 @@ Get-AppCapability [-InputObject] <Object[]> [-User <String>] [-Authority] [-Netw
 ## DESCRIPTION
 
 Get-AppCapability returns a list of capabilities for an app in one of the following formats:
+1.
+Principal display name
 2.
-Account display name
-3.
-Account full reference name
+Principal full reference name
 
 ## EXAMPLES
 
@@ -68,7 +68,7 @@ Accept wildcard characters: False
 ### -User
 
 Specify user name for which to query app capabilities, this parameter
-is required only if input app is not obtained from main store
+is required only if input app is not obtained from the main store
 
 ```yaml
 Type: System.String
@@ -84,7 +84,8 @@ Accept wildcard characters: False
 
 ### -Authority
 
-If specified outputs full reference name
+If specified, outputs full reference name.
+By default only capability display name is returned.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -100,7 +101,7 @@ Accept wildcard characters: False
 
 ### -Networking
 
-If specified the result includes only networking capabilities
+If specified, the result includes only networking capabilities
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -120,7 +121,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [Object[]] Deserialized object on PowerShell Core 7.1+, otherwise
+### [object[]] Deserialized object on PowerShell Core 7.1+, otherwise
 
 ### [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage[]]
 
@@ -131,8 +132,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: According to unit test there are some capabilities not implemented here
+TODO: Need better descriptive parameter name for -Authority switch
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md)
 
 [https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations)
 

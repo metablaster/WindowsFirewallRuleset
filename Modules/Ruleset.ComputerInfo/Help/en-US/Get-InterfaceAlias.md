@@ -9,29 +9,36 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Retrieve a aliases of configured network adapters
+Get interface aliases of specified network adapters
 
 ## SYNTAX
 
-### Individual (Default)
+### None (Default)
 
 ```powershell
-Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
- [-IncludeVirtual] [-IncludeHidden] [-IncludeDisconnected] [<CommonParameters>]
+Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Hidden] [-Connected]
+ [<CommonParameters>]
 ```
 
-### All
+### Physical
 
 ```powershell
-Get-InterfaceAlias [[-AddressFamily] <String>] [-WildCardOption <WildcardOptions>] [-ExcludeHardware]
- [-IncludeAll] [<CommonParameters>]
+Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Physical] [-Hidden]
+ [-Connected] [<CommonParameters>]
+```
+
+### Virtual
+
+```powershell
+Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Virtual] [-Hidden]
+ [-Connected] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Return list of interface aliases of all configured adapters.
-Applies to adapters which have an IP assigned regardless if connected to network.
-This may include virtual adapters as well such as Hyper-V adapters on all compartments.
+Get a list of interface aliases of specified network adapters.
+This function takes care of interface aliases with wildcard patterns, by replacing them with
+escape codes which is required to create valid fiewall rule based on interface alias.
 
 ## EXAMPLES
 
@@ -44,30 +51,45 @@ Get-InterfaceAlias "IPv4"
 ### EXAMPLE 2
 
 ```powershell
-Get-InterfaceAlias "IPv6"
+Get-InterfaceAlias "IPv4" -Physical
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-InterfaceAlias "IPv6" -WildcardOption "IgnoreCase"
 ```
 
 ## PARAMETERS
 
 ### -AddressFamily
 
-IP version for which to obtain adapters, IPv4 or IPv6
+Obtain interface aliases configured for specific IP version
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: IPVersion
 
 Required: False
-Position: 1
-Default value: None
+Position: Named
+Default value: Any
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -WildCardOption
 
-TODO: describe parameter
+Specify wildcard options that modify the wildcard patterns found in interface alias strings.
+Compiled:
+The wildcard pattern is compiled to an assembly.
+This yields faster execution but increases startup time.
+CultureInvariant:
+Specifies culture-invariant matching.
+IgnoreCase:
+Specifies case-insensitive matching.
+None:
+Indicates that no special processing is required.
 
 ```yaml
 Type: System.Management.Automation.WildcardOptions
@@ -82,9 +104,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExcludeHardware
+### -Physical
 
-Exclude hardware/physical network adapters
+If specified, include only physical adapters
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Physical
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Virtual
+
+If specified, include only virtual adapters
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Virtual
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Hidden
+
+If specified, only hidden interfaces are included
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -98,61 +152,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeAll
+### -Connected
 
-Include all possible adapter types present on target computer
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: All
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeVirtual
-
-Whether to include virtual adapters
+If specified, only interfaces connected to network are returned
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeHidden
-
-Whether to include hidden adapters
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeDisconnected
-
-Whether to include disconnected
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -172,12 +178,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [System.Management.Automation.WildcardPattern]
+### [WildcardPattern]
 
 ## NOTES
 
-None.
 TODO: There is another function with the same name in Scripts folder
-TODO: shorter parameter names: Virtual, All, Hidden, Hardware
 
 ## RELATED LINKS

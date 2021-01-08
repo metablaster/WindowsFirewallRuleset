@@ -2,42 +2,115 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Find-Installation</command:name>
-      <command:verb>Find</command:verb>
+      <command:name>Confirm-Installation</command:name>
+      <command:verb>Confirm</command:verb>
       <command:noun>Installation</command:noun>
       <maml:description>
-        <maml:para>Find installation directory for given predefined program name</maml:para>
+        <maml:para>Verify or set program installation directory</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Find-Installation is called by Test-Installation, ie. only if test for existing path fails then this method kicks in</maml:para>
+      <maml:para>Test if given installation directory exists and is valid for firewall, and if not this method will search system for valid path and return it trough reference parameter. If the installation directory can't be determined reference variable remains unchanged.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Find-Installation</maml:name>
+        <maml:name>Confirm-Installation</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Program</maml:name>
           <maml:Description>
-            <maml:para>Predefined program name</maml:para>
+            <maml:para>Predefined program name for which to search</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SQLDTS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NETFramework</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">vcpkg</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Metatrader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DemiseOfNations</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CounterStrikeGO</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PinballArcade</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaUpdate</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaRuntime</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeARM</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeReader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeAcrobat</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LoLGame</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FileZilla</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PathOfExile</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HWMonitor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CPUZ</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSIAfterburner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GPG</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OBSStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordSafe</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Greenshot</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DnsCrypt</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSSH</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShellCore64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OneDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HelpViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VSCode</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MicrosoftOffice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TeamViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeChromium</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chrome</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Firefox</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yandex</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Tor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">uTorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Thuderbird</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Steam</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GeForceExperience</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WarThunder</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PokerStars</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudioInstaller</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSYS2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Git</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GitHubDesktop</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EpicGames</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">UnrealEngine</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">BingWallpaper</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>TargetProgram</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Directory</maml:name>
           <maml:Description>
-            <maml:para>Computer name on which to look for program installation</maml:para>
+            <maml:para>Reference to variable which should be updated with the path to program installation directory excluding executable file name.</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.Management.Automation.PSReference</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -45,32 +118,32 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Program</maml:name>
         <maml:Description>
-          <maml:para>Predefined program name</maml:para>
+          <maml:para>Predefined program name for which to search</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>TargetProgram</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Directory</maml:name>
         <maml:Description>
-          <maml:para>Computer name on which to look for program installation</maml:para>
+          <maml:para>Reference to variable which should be updated with the path to program installation directory excluding executable file name.</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.Management.Automation.PSReference</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Find-Installation</maml:name>
+          <maml:name>None. You cannot pipe objects to Confirm-Installation</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -80,7 +153,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] true or false if installation directory if found, installation table is updated</maml:name>
+          <maml:name>[bool] True if the reference variable contains valid path or was updated, false otherwise.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -89,13 +162,14 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: temporarily using ComputerName parameter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Find-Installation "Office"</dev:code>
+        <dev:code>$MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
+PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -104,29 +178,29 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Find-Installation.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Installation.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Format-Path</command:name>
-      <command:verb>Format</command:verb>
-      <command:noun>Path</command:noun>
+      <command:name>Edit-Table</command:name>
+      <command:verb>Edit</command:verb>
+      <command:noun>Table</command:noun>
       <maml:description>
-        <maml:para>Format path into firewall compatible path</maml:para>
+        <maml:para>Manually add new program installation directory to the table</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Various paths drilled out of registry, and those specified by the user must be checked and properly formatted. Formatted paths will also help sorting rules in firewall GUI based on path.</maml:para>
+      <maml:para>Based on path and if it's valid path fill the table with it and add principals and other information Module scope installation table is updated</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Format-Path</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-          <maml:name>FilePath</maml:name>
+        <maml:name>Edit-Table</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="InstallLocation">
+          <maml:name>Path</maml:name>
           <maml:Description>
-            <maml:para>File path to format, can have environment variables, or consists of trailing slashes.</maml:para>
+            <maml:para>Program installation directory</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -138,10 +212,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
-        <maml:name>FilePath</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="InstallLocation">
+        <maml:name>Path</maml:name>
         <maml:Description>
-          <maml:para>File path to format, can have environment variables, or consists of trailing slashes.</maml:para>
+          <maml:para>Program installation directory</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -154,7 +228,93 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string] File path to format</maml:name>
+          <maml:name>None. You cannot pipe objects to Edit-Table</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Edit-Table does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: principal parameter? TODO: search executable paths</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Edit-Table "%ProgramFiles(x86)%\TeamViewer"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Edit-Table.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Format-Path</command:name>
+      <command:verb>Format</command:verb>
+      <command:noun>Path</command:noun>
+      <maml:description>
+        <maml:para>Format file system path and fix syntax errors</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Most path syntax errors are fixed however the path is never resolved or tested for existence. For example, relative path will stay relative and if the path location does not exist it is not created.</maml:para>
+      <maml:para>Various paths drilled out of registry can be invalid and those specified manuallay may contain typos, this algorithm will attempt to correct these problems, in addition to providing consistent path output.</maml:para>
+      <maml:para>If possible portion of the path is converted into system environment variable to shorten the length of a path. Formatted paths will also help sorting rules in firewall GUI based on path. Only file system paths are supported.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Format-Path</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>File system path to format, can have environment variables, or it may contain redundant or invalid characters.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:Description>
+          <maml:para>File system path to format, can have environment variables, or it may contain redundant or invalid characters.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string[]] File path to format</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -173,13 +333,46 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: This should proably be inside utility module, it's here since only this module uses this function.</maml:para>
+        <maml:para>TODO: This should proably be in utility module, it's here since only this module uses this function.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Format-Path "C:\Program Files\\Dir\"</dev:code>
+        <dev:code>Format-Path "C:\Program Files\WindowsPowerShell"
+%ProgramFiles%\WindowsPowerShell</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Format-Path "%SystemDrive%\Windows\System32"
+%SystemRoot%\System32</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Format-Path ..\dir//.\...
+..\dir\.\..</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Format-Path ~/\Direcotry//file.exe
+~\Direcotry\file.exe</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Format-Path '"C:\ProgramData\Git"'
+%ALLUSERSPROFILE%\Git</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -194,99 +387,15 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-AllUserSoftware</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>AllUserSoftware</command:noun>
-      <maml:description>
-        <maml:para>Search program install properties for all users, system wide</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Search separate location in the registry for programs installed for all users.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Get-AllUserSoftware</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
-          <maml:Description>
-            <maml:para>Computer name which to check</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
-        <maml:Description>
-          <maml:para>Computer name which to check</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-AllUserSoftware</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>[PSCustomObject] list of programs installed for all users</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do with system wide installed programs</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-AllUserSoftware "COMPUTERNAME"</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserSoftware.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
       <command:name>Get-AppCapability</command:name>
       <command:verb>Get</command:verb>
       <command:noun>AppCapability</command:noun>
       <maml:description>
-        <maml:para>Get capabilities of Windows store app</maml:para>
+        <maml:para>Get Windows store app capabilities</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Get-AppCapability returns a list of capabilities for an app in one of the following formats: 2. Account display name 3. Account full reference name</maml:para>
+      <maml:para>Get-AppCapability returns a list of capabilities for an app in one of the following formats: 1. Principal display name 2. Principal full reference name</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -306,7 +415,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>User</maml:name>
           <maml:Description>
-            <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from main store</maml:para>
+            <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from the main store</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -318,7 +427,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Authority</maml:name>
           <maml:Description>
-            <maml:para>If specified outputs full reference name</maml:para>
+            <maml:para>If specified, outputs full reference name. By default only capability display name is returned.</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -329,7 +438,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Networking</maml:name>
           <maml:Description>
-            <maml:para>If specified the result includes only networking capabilities</maml:para>
+            <maml:para>If specified, the result includes only networking capabilities</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -355,7 +464,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>User</maml:name>
         <maml:Description>
-          <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from main store</maml:para>
+          <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from the main store</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -367,7 +476,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Authority</maml:name>
         <maml:Description>
-          <maml:para>If specified outputs full reference name</maml:para>
+          <maml:para>If specified, outputs full reference name. By default only capability display name is returned.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -379,7 +488,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Networking</maml:name>
         <maml:Description>
-          <maml:para>If specified the result includes only networking capabilities</maml:para>
+          <maml:para>If specified, the result includes only networking capabilities</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -392,7 +501,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[Object[]] Deserialized object on PowerShell Core 7.1+, otherwise</maml:name>
+          <maml:name>[object[]] Deserialized object on PowerShell Core 7.1+, otherwise</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -419,7 +528,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: According to unit test there are some capabilities not implemented here</maml:para>
+        <maml:para>TODO: According to unit test there are some capabilities not implemented here TODO: Need better descriptive parameter name for -Authority switch</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -440,7 +549,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -518,13 +627,13 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Big thanks to Jani for this awesome solution: https://github.com/ljani TODO: remote computers?</maml:para>
+        <maml:para>Big thanks to Jani for this awesome solution, see issue from "related links" section TODO: remote computers?</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"</dev:code>
+        <dev:code>Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -532,8 +641,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/issues/6</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/issues/6</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -552,8 +665,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-ExecutablePath</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name which to check</maml:para>
           </maml:Description>
@@ -567,8 +680,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name which to check</maml:para>
         </maml:Description>
@@ -608,6 +721,13 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-ExecutablePath</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Get-ExecutablePath "COMPUTERNAME"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -618,6 +738,97 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-ExecutablePath.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-InstallProperties</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>InstallProperties</command:noun>
+      <maml:description>
+        <maml:para>Search program install properties for all users, system wide</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Search separate location in the registry for programs installed for all users.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-InstallProperties</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Computer name which to check</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:Description>
+          <maml:para>Computer name which to check</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-InstallProperties</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[PSCustomObject] list of programs installed for all users</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Should be renamed to something that best describes target registry key</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-InstallProperties</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-InstallProperties "COMPUTERNAME"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -636,8 +847,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-NetFramework</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name for which to list installed installed framework</maml:para>
           </maml:Description>
@@ -651,8 +862,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name for which to list installed installed framework</maml:para>
         </maml:Description>
@@ -692,6 +903,13 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-NetFramework</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Get-NetFramework COMPUTERNAME</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -720,8 +938,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-OneDrive</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-          <maml:name>UserName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
           <maml:Description>
             <maml:para>User name in form of "USERNAME"</maml:para>
           </maml:Description>
@@ -732,8 +950,8 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
           </maml:Description>
@@ -747,8 +965,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-        <maml:name>UserName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <maml:name>User</maml:name>
         <maml:Description>
           <maml:para>User name in form of "USERNAME"</maml:para>
         </maml:Description>
@@ -759,8 +977,8 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
         </maml:Description>
@@ -805,6 +1023,13 @@
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-OneDrive "USERNAME" -Domain "Server01"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -823,13 +1048,13 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>TODO: add description</maml:para>
+      <maml:para>Get all instances of installed Microsoft SQL Server Management Studios from local or remote machine.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SqlManagementStudio</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name for which to list installed installed framework</maml:para>
           </maml:Description>
@@ -843,8 +1068,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name for which to list installed installed framework</maml:para>
         </maml:Description>
@@ -884,9 +1109,9 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SqlManagementStudio COMPUTERNAME</dev:code>
+        <dev:code>Get-SqlManagementStudio SERVER01</dev:code>
         <dev:remarks>
-          <maml:para>RegKey ComputerName Version      InstallLocation 	------ ------------ -------      ----------- 	18     COMPUTERNAME   15.0.18206.0 %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18</maml:para>
+          <maml:para>Domain       Name                                       InstallLocation ------       ----                                       --------------- SERVER01     Microsoft SQL Server Management Studio     %ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -912,8 +1137,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SqlServerInstance</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Local or remote systems to query for SQL information.</maml:para>
           </maml:Description>
@@ -938,8 +1163,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Local or remote systems to query for SQL information.</maml:para>
         </maml:Description>
@@ -966,7 +1191,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-SqlServerInstance</maml:name>
+          <maml:name>[string[]]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -985,9 +1210,16 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Name: Get-SqlServerInstance Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)</maml:para>
-        <maml:para>Version History: 1.5 //Boe Prox - 31 May 2016 	- Added CIM queries for more information 	- Custom object type name 1.0 //Boe Prox -  07 Sept 2013 	- Initial Version</maml:para>
-        <maml:para>Following modifications by metablaster based on both originals 15 Feb 2020: - change syntax, casing, code style and function name</maml:para>
+        <maml:para>Name: Get-SqlServer Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)</maml:para>
+        <maml:para>Version History:</maml:para>
+        <maml:para>v1.5 Boe Prox - 31 May 2016:</maml:para>
+        <maml:para>- Added CIM queries for more information</maml:para>
+        <maml:para>- Custom object type name</maml:para>
+        <maml:para></maml:para>
+        <maml:para>v1.0 Boe Prox -  07 Sept 2013:</maml:para>
+        <maml:para>- Initial Version</maml:para>
+        <maml:para>Following modifications by metablaster based on both originals 15 Feb 2020:</maml:para>
+        <maml:para>- change syntax, casing, code style and function name</maml:para>
         <maml:para>- resolve warnings, replacing aliases with full names</maml:para>
         <maml:para>- change how function returns</maml:para>
         <maml:para>- Add code to return SQL DTS Path</maml:para>
@@ -999,32 +1231,44 @@
         <maml:para>- 12 December 2020:</maml:para>
         <maml:para>- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module</maml:para>
         <maml:para></maml:para>
-        <maml:para>Links to original and individual versions of code https://github.com/RamblingCookieMonster/PowerShell https://github.com/metablaster/WindowsFirewallRuleset https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:para>
+        <maml:para>See links section for original and individual versions of code</maml:para>
         <maml:para>TODO: Update examples to include DTS directory</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SqlServerInstance -Computername DC1</dev:code>
+        <dev:code>Get-SqlServerInstance -Domain Server01</dev:code>
         <dev:remarks>
-          <maml:para>SQLInstance   : MSSQLSERVER Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1 isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
-          <maml:para>SQLInstance   : MINASTIRITH Version       : 10.0.1600.22 isCluster     : False Computername  : DC1 FullName      : DC1\MINASTIRITH isClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Caption       : SQL Server 2008</maml:para>
+          <maml:para>SQLInstance   : MSSQLSERVER Version       : 10.0.1600.22 IsCluster     : False Domain        : Server01 FullName      : Server01 IsClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Name          : SQL Server 2008</maml:para>
+          <maml:para>SQLInstance   : SQLSERVER Version       : 10.0.1600.22 IsCluster     : False Domain        : Server01 FullName      : Server01\SQLSERVER IsClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Name          : SQL Server 2008</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-SqlServerInstance -Computername Server1, Server2 -CIM</dev:code>
+        <dev:code>Get-SqlServerInstance -Domain Server1, Server2 -CIM</dev:code>
         <dev:remarks>
-          <maml:para>Computername     : Server1 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Caption          : SQL Server 2012 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
-          <maml:para>Computername     : Server2 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition Version          : 10.50.4000.0 Caption          : SQL Server 2008 R2 isCluster        : False isClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
+          <maml:para>Domain           : Server1 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Name             : SQL Server 2012 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
+          <maml:para>Domain           : Server2 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition Version          : 10.50.4000.0 Name             : SQL Server 2008 R2 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/RamblingCookieMonster/PowerShell</maml:linkText>
+        <maml:uri>https://github.com/RamblingCookieMonster/PowerShell</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:linkText>
+        <maml:uri>https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1043,10 +1287,11 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SystemApps</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-          <maml:name>UserName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
           <maml:Description>
-            <maml:para>User name in form of: - domain\user_name</maml:para>
+            <maml:para>User name in form of:</maml:para>
+            <maml:para>- domain\user_name</maml:para>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
@@ -1058,8 +1303,8 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
           </maml:Description>
@@ -1073,10 +1318,11 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-        <maml:name>UserName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <maml:name>User</maml:name>
         <maml:Description>
-          <maml:para>User name in form of: - domain\user_name</maml:para>
+          <maml:para>User name in form of:</maml:para>
+          <maml:para>- domain\user_name</maml:para>
           <maml:para>- user_name@fqn.domain.tld</maml:para>
           <maml:para>- user_name</maml:para>
           <maml:para>- SID-string</maml:para>
@@ -1088,8 +1334,8 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
         </maml:Description>
@@ -1122,7 +1368,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>[Object] if using PowerShell Core which outputs deserialized object:</maml:name>
+          <maml:name>[object] In Windows PowerShell</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1130,7 +1376,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]</maml:name>
+          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] In PowerShell Core</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1145,7 +1391,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SystemApps "COMPUTERNAME"</dev:code>
+        <dev:code>Get-SystemApps "User" -Domain "Server01"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-SystemApps "Administrator"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1173,8 +1426,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SystemSoftware</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name which to check</maml:para>
           </maml:Description>
@@ -1188,8 +1441,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name which to check</maml:para>
         </maml:Description>
@@ -1223,13 +1476,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>We should return empty PSCustomObject if test computer fails TODO: Parameter for x64 vs x86 software, then update Find-Installation switch as needed</maml:para>
+        <maml:para>We should return empty PSCustomObject if test computer fails TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SystemSoftware "COMPUTERNAME"</dev:code>
+        <dev:code>Get-SystemSoftware</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-SystemSoftware "Server01"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1257,10 +1517,11 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-UserApps</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-          <maml:name>UserName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
           <maml:Description>
-            <maml:para>User name in form of: - domain\user_name</maml:para>
+            <maml:para>User name in form of:</maml:para>
+            <maml:para>- domain\user_name</maml:para>
             <maml:para>- user_name@fqn.domain.tld</maml:para>
             <maml:para>- user_name</maml:para>
             <maml:para>- SID-string</maml:para>
@@ -1272,8 +1533,8 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
           </maml:Description>
@@ -1287,10 +1548,11 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-        <maml:name>UserName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <maml:name>User</maml:name>
         <maml:Description>
-          <maml:para>User name in form of: - domain\user_name</maml:para>
+          <maml:para>User name in form of:</maml:para>
+          <maml:para>- domain\user_name</maml:para>
           <maml:para>- user_name@fqn.domain.tld</maml:para>
           <maml:para>- user_name</maml:para>
           <maml:para>- SID-string</maml:para>
@@ -1302,8 +1564,8 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
         </maml:Description>
@@ -1336,7 +1598,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>[Object] if using PowerShell Core which outputs deserialized object:</maml:name>
+          <maml:name>[object] if using PowerShell Core which outputs deserialized object:</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1353,13 +1615,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: query remote computer not implemented TODO: multiple computers TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: see also -AllUsers and other parameters https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:para>
+        <maml:para>TODO: query remote computer not implemented TODO: multiple domains TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: see also -AllUsers and other parameters in related links</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-UserApps "USERNAME"</dev:code>
+        <dev:code>Get-UserApps "User" -Domain "Server01"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-UserApps "Administrator"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1367,8 +1636,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1387,8 +1660,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-UserSoftware</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-          <maml:name>UserName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
           <maml:Description>
             <maml:para>User name in form of "USERNAME"</maml:para>
           </maml:Description>
@@ -1399,8 +1672,8 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
           </maml:Description>
@@ -1414,8 +1687,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="User">
-        <maml:name>UserName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <maml:name>User</maml:name>
         <maml:Description>
           <maml:para>User name in form of "USERNAME"</maml:para>
         </maml:Description>
@@ -1426,8 +1699,8 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
         </maml:Description>
@@ -1467,7 +1740,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-UserSoftware "USERNAME"</dev:code>
+        <dev:code>Get-UserSoftware "User"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-UserSoftware "User" -Domain "Server01"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1495,8 +1775,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-WindowsDefender</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name for which to list installed Windows Defender</maml:para>
           </maml:Description>
@@ -1510,8 +1790,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name for which to list installed Windows Defender</maml:para>
         </maml:Description>
@@ -1551,7 +1831,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-WindowsDefender COMPUTERNAME</dev:code>
+        <dev:code>Get-WindowsDefender</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-WindowsDefender Server01</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1579,8 +1866,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-WindowsKit</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name for which to list installed installed windows kits</maml:para>
           </maml:Description>
@@ -1594,8 +1881,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name for which to list installed installed windows kits</maml:para>
         </maml:Description>
@@ -1635,7 +1922,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-WindowsKit COMPUTERNAME</dev:code>
+        <dev:code>Get-WindowsKit</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-WindowsKit Server01</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1663,8 +1957,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-WindowsSDK</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Computer name for which to list installed installed framework</maml:para>
           </maml:Description>
@@ -1678,8 +1972,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Computer, Server, Domain, Host, Machine">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Computer name for which to list installed installed framework</maml:para>
         </maml:Description>
@@ -1719,7 +2013,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-WindowsSDK COMPUTERNAME</dev:code>
+        <dev:code>Get-WindowsSDK</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-WindowsSDK Server01</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1734,23 +2035,379 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Test-Environment</command:name>
-      <command:verb>Test</command:verb>
-      <command:noun>Environment</command:noun>
+      <command:name>Initialize-Table</command:name>
+      <command:verb>Initialize</command:verb>
+      <command:noun>Table</command:noun>
       <maml:description>
-        <maml:para>Test if a path is valid with additional checks</maml:para>
+        <maml:para>Create data table used to hold information for a list of programs</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Similar to Test-Path but expands environment variables and performs additional checks if desired: 1. check if input path is compatible for firewall rules. 2. check if the path leads to user profile Both of which can be limited to either container or leaf path type.</maml:para>
+      <maml:para>Create data table which is filled with data about programs and principals such as users or groups and their SID for which given firewall rule applies This method is primarily used to reset the table Each entry in the table also has an ID to help choosing entries by ID</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Test-Environment</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Path</maml:name>
+        <maml:name>Initialize-Table</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null</maml:para>
+            <maml:para>Table name</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>InstallTable</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:Description>
+          <maml:para>Table name</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>InstallTable</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Initialize-Table</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Initialize-Table does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: There should be a better way to drop the table instead of recreating it TODO: We should initialize table with complete list of programs and principals and return the table by reference</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Initialize-Table</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Initialize-Table.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Search-Installation</command:name>
+      <command:verb>Search</command:verb>
+      <command:noun>Installation</command:noun>
+      <maml:description>
+        <maml:para>Find installation directory for given predefined program name</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Search-Installation is called by Confirm-Installation, ie. only if test for existing path fails then this method kicks in</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Search-Installation</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Program">
+          <maml:name>Application</maml:name>
+          <maml:Description>
+            <maml:para>Predefined program name</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SQLDTS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NETFramework</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">vcpkg</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Metatrader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DemiseOfNations</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CounterStrikeGO</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PinballArcade</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaUpdate</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaRuntime</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeARM</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeReader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeAcrobat</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LoLGame</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FileZilla</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PathOfExile</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HWMonitor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CPUZ</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSIAfterburner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GPG</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OBSStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordSafe</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Greenshot</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DnsCrypt</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSSH</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShellCore64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OneDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HelpViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VSCode</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MicrosoftOffice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TeamViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeChromium</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chrome</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Firefox</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yandex</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Tor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">uTorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Thuderbird</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Steam</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GeForceExperience</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WarThunder</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PokerStars</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudioInstaller</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSYS2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Git</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GitHubDesktop</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EpicGames</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">UnrealEngine</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">BingWallpaper</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
+          <dev:type>
+            <maml:name>TargetProgram</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:Description>
+            <maml:para>Computer name on which to look for program installation</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Program">
+        <maml:name>Application</maml:name>
+        <maml:Description>
+          <maml:para>Predefined program name</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
+        <dev:type>
+          <maml:name>TargetProgram</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:Description>
+          <maml:para>Computer name on which to look for program installation</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Search-Installation</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool] true or false if installation directory if found, installation table is updated</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Search-Installation "Office"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Search-Installation "VSCode" -Domain Server01</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Search-Installation.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Show-Table</command:name>
+      <command:verb>Show</command:verb>
+      <command:noun>Table</command:noun>
+      <maml:description>
+        <maml:para>Print installation directories to console</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Prints found program data which includes program name, program ID, install location etc.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Show-Table</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Caption</maml:name>
+          <maml:Description>
+            <maml:para>Single line string to print before printing the table</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Caption</maml:name>
+        <maml:Description>
+          <maml:para>Single line string to print before printing the table</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Show-Table</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Show-Table does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This function is needed to avoid warning of write-host inside non "Show" function</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Show-Table "Table data"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Show-Table.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Test-ExecutableFile</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>ExecutableFile</command:noun>
+      <maml:description>
+        <maml:para>Check if executable file exists and is trusted.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists. File extension is then verified to confirm it is whitelisted, ex. such as an *.exe The executable is then verified to ensure it's digitaly signed and that signature is valid. If the file can't be found or verified, an error is genrated possibly with informational message, to explain if there is any problem with the path or file name syntax, otherwise information is present to the user to explain how to resolve the problem including a stack trace to script that is producing this issue.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-ExecutableFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>Fully qualified path to executable file</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1760,21 +2417,157 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PathType</maml:name>
+          <maml:name>Force</maml:name>
           <maml:Description>
-            <maml:para>A type of path to test, can be one of the following: 1. Leaf -The path is file or registry entry 2. Container - the path is container such as folder or registry key 3. Any - Either Leaf or Container</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:Description>
+          <maml:para>Fully qualified path to executable file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Test-ExecutableFile</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: We should attempt to fix the path if invalid here, ex. Get-Command TODO: We should return true or false and conditionally load rule TODO: Verify file is executable file (and path formatted?)</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Test-ExecutableFile "C:\Windows\UnsignedFile.exe"</dev:code>
+        <dev:remarks>
+          <maml:para>ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\chrome.exe"</dev:code>
+        <dev:remarks>
+          <maml:para>WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe INFO: To fix this problem find 'chrome.exe' and update installation directory in Test-ExecutableFile.ps1 script</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Test-ExecutableFile "\\COMPUTERNAME\Directory\file.exe"</dev:code>
+        <dev:remarks>
+          <maml:para>ERROR: Specified file path is missing a file system qualifier: \\COMPUTERNAME\Directory\file.exe</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Test-ExecutableFile ".\..\file.exe"</dev:code>
+        <dev:remarks>
+          <maml:para>ERROR: Specified file path is relative: .\..\file.exe</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Test-ExecutableFile "C:\Bad\&lt;Path&gt;\Loca'tion"</dev:code>
+        <dev:remarks>
+          <maml:para>ERROR: Specified file path contains invalid characters: C:\Bad\&lt;Path&gt;\Loca'tion</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Test-FileSystemPath</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>FileSystemPath</command:noun>
+      <maml:description>
+        <maml:para>Test file system path syntax and existence</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Test-FileSystemPath checks file system path syntax by verifying environment variables and reporting unresolved wildcard pattern or bad characters. The path is then tested to confirm it points to an existing and valid location.</maml:para>
+      <maml:para>Optionally you can check if the path is compatible for firewall rules or if the path leads to user profile. All of which can be limited to either container or leaf path type.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-FileSystemPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>Path to directory or file which to test. Allows null or empty since it may come from commandlets which may return empty string or null</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>Container</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
+          <maml:name>PathType</maml:name>
+          <maml:Description>
+            <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Any</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Firewall</maml:name>
           <maml:Description>
-            <maml:para>Ensures the path is valid for firewall rule</maml:para>
+            <maml:para>Ensures path is valid for firewall rule</maml:para>
           </maml:Description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1793,13 +2586,84 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Strict</maml:name>
+          <maml:Description>
+            <maml:para>If specified, this function produces errors instead of warnings.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Test-FileSystemPath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:Description>
+            <maml:para>Path to directory or file which to test. Allows null or empty since it may come from commandlets which may return empty string or null</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
+          <maml:name>PathType</maml:name>
+          <maml:Description>
+            <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Any</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Firewall</maml:name>
+          <maml:Description>
+            <maml:para>Ensures path is valid for firewall rule</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UserProfile</maml:name>
+          <maml:Description>
+            <maml:para>Checks if the path leads to user profile</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:Description>
+            <maml:para>If specified does not write any warnings or errors, only true or false is returned.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Path</maml:name>
+        <maml:name>LiteralPath</maml:name>
         <maml:Description>
-          <maml:para>Path to folder, Allows null or empty since input may come from other commandlets which can return empty or null</maml:para>
+          <maml:para>Path to directory or file which to test. Allows null or empty since it may come from commandlets which may return empty string or null</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1808,22 +2672,22 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
         <maml:name>PathType</maml:name>
         <maml:Description>
-          <maml:para>A type of path to test, can be one of the following: 1. Leaf -The path is file or registry entry 2. Container - the path is container such as folder or registry key 3. Any - Either Leaf or Container</maml:para>
+          <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>Container</dev:defaultValue>
+        <dev:defaultValue>Any</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Firewall</maml:name>
         <maml:Description>
-          <maml:para>Ensures the path is valid for firewall rule</maml:para>
+          <maml:para>Ensures path is valid for firewall rule</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1844,11 +2708,35 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Strict</maml:name>
+        <maml:Description>
+          <maml:para>If specified, this function produces errors instead of warnings.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:Description>
+          <maml:para>If specified does not write any warnings or errors, only true or false is returned.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-Environment</maml:name>
+          <maml:name>None. You cannot pipe objects to Test-FileSystemPath</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1867,41 +2755,41 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: This should proably be part of utility module, it's here since only this module uses this function. This function should be used only to verify paths for external usage, not for commandles which don't expand system environment variables.</maml:para>
+        <maml:para>The result of this function should be used only to verify paths for external usage, not as input to commandles which don't recognize system environment variables. This function is needed in cases where the path may be a modified version of an already formatted or verified path such as in rule scripts or to verify manually edited installation table. TODO: This should proably be part of Utility or ComputerInfo module, it's here since only this module uses this function.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-Environment "%Windir%"</dev:code>
+        <dev:code>Test-FileSystemPath "%Windir%"</dev:code>
         <dev:remarks>
           <maml:para>True, The path is valid, and it exists</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Test-Environment "'%Windir%\System32'"</dev:code>
+        <dev:code>Test-FileSystemPath "'%Windir%\System32'"</dev:code>
         <dev:remarks>
           <maml:para>False, Invalid path syntax</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
+        <dev:code>Test-FileSystemPath "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
         <dev:remarks>
-          <maml:para>False, the path leads to userprofile but will not work for firewall rule</maml:para>
+          <maml:para>False, the path contains environment variable that leads to userprofile and will not work for firewall</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Test-Environment "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
+        <dev:code>Test-FileSystemPath "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile</dev:code>
         <dev:remarks>
-          <maml:para>True, the path leads to userprofile and is good for firewall rule, and it exists</maml:para>
+          <maml:para>True, the path leads to userprofile, is good for firewall rule and it exists</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>Test-Environment "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile</dev:code>
+        <dev:code>Test-FileSystemPath "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile</dev:code>
         <dev:remarks>
           <maml:para>True, the path lead to user profile, and it exists</maml:para>
         </dev:remarks>
@@ -1910,208 +2798,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Environment.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Confirm-Executable</command:name>
-      <command:verb>Test</command:verb>
-      <command:noun>File</command:noun>
-      <maml:description>
-        <maml:para>Check if file such as an *.exe exists</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>In addition to Test-Path of file, message and stack trace is shown and warning message if file not found</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Confirm-Executable</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>FilePath</maml:name>
-          <maml:Description>
-            <maml:para>path to file</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>FilePath</maml:name>
-        <maml:Description>
-          <maml:para>path to file</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Confirm-Executable</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>None. Confirm-Executable does not generate any output</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>TODO: We should attempt to fix the path if invalid here! TODO: We should return true or false and conditionally load rule TODO: This should probably be renamed to Test-Executable to make it less likely part of utility module</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Confirm-Executable "C:\Users\USERNAME\AppData\Local\Google\Chrome\Application\chrome.exe"</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Executable.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Test-Installation</command:name>
-      <command:verb>Test</command:verb>
-      <command:noun>Installation</command:noun>
-      <maml:description>
-        <maml:para>Test if given installation directory is valid</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Test if given installation directory is valid and if not this method will search the system for valid path and return it via reference parameter</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Test-Installation</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Program</maml:name>
-          <maml:Description>
-            <maml:para>Predefined program name for which to search</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>FilePath</maml:name>
-          <maml:Description>
-            <maml:para>Reference to variable which holds a path to program (excluding executable)</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
-          <dev:type>
-            <maml:name>System.Management.Automation.PSReference</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Program</maml:name>
-        <maml:Description>
-          <maml:para>Predefined program name for which to search</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>FilePath</maml:name>
-        <maml:Description>
-          <maml:para>Reference to variable which holds a path to program (excluding executable)</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.PSReference</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-Installation</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>[bool] true if path is ok or found false otherwise,</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>via reference, if test OK same path, if not try to update path, else given path back is not modified</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>TODO: temporarily using ComputerName parameter</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Installation.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-FileSystemPath.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2121,47 +2808,70 @@ PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
       <command:verb>Test</command:verb>
       <command:noun>Service</command:noun>
       <maml:description>
-        <maml:para>Check if service exists on system</maml:para>
+        <maml:para>Check if system service exists and is trusted</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Check if service exists on system, if not show warning message</maml:para>
+      <maml:para>Test-Service verifies specified Windows services exists. The service is then verified to confirm it's digitaly signed and that signature is valid. If the service can't be found or verified, an error is genrated.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Test-Service</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Service</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="ServiceName">
+          <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Service name (not display name)</maml:para>
+            <maml:para>Service short name (not display name)</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:Description>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in passed test.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Service</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="ServiceName">
+        <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Service name (not display name)</maml:para>
+          <maml:para>Service short name (not display name)</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:Description>
+          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in passed test.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-Service</maml:name>
+          <maml:name>[string[]]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2171,7 +2881,7 @@ PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Test-Service does not generate any output</maml:name>
+          <maml:name>[bool]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2180,7 +2890,7 @@ PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Implement accept ServiceController object, should be called InputObject, a good design needed, however it doesn't make much sense since the function is to test existence of a service too.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2191,11 +2901,209 @@ PS&gt; Test-Installation "Office" ([ref] $MyProgram)</dev:code>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>@("msiserver", "Spooler", "WSearch") | Test-Service</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-Table</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>Table</command:noun>
+      <maml:description>
+        <maml:para>Fill data table with principal and program location</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Module scope installation table is updated Search system for programs with input search string, and add new program installation directory to the table, as well as other information needed to make a firewall rule</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-Table</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Search</maml:name>
+          <maml:Description>
+            <maml:para>Search string which corresponds to the output of "Get programs" functions</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UserProfile</maml:name>
+          <maml:Description>
+            <maml:para>true if user profile is to be searched too, system locations only otherwise</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Executable</maml:name>
+          <maml:Description>
+            <maml:para>Optionally specify executable name which will be search first.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:Description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:Description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Search</maml:name>
+        <maml:Description>
+          <maml:para>Search string which corresponds to the output of "Get programs" functions</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UserProfile</maml:name>
+        <maml:Description>
+          <maml:para>true if user profile is to be searched too, system locations only otherwise</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Executable</maml:name>
+        <maml:Description>
+          <maml:para>Optionally specify executable name which will be search first.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:Description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:Description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Update-Table</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Update-Table does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: For programs in user profile rules should update LocalUser parameter accordingly, currently it looks like we assign entry user group for program that applies to user only TODO: Using "Executable" parameter should be possible without the use of "Search" parameter TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-Table -Search "GoogleChrome"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Update-Table -Search "Greenshot" -UserProfile</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Update-Table.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

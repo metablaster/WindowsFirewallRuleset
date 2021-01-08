@@ -14,7 +14,7 @@ Set vertical screen buffer to recommended value
 ## SYNTAX
 
 ```powershell
-Set-ScreenBuffer [[-BufferHeight] <UInt16>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-ScreenBuffer [[-Height] <UInt16>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,9 +33,9 @@ Set-ScreenBuffer
 
 ## PARAMETERS
 
-### -BufferHeight
+### -Height
 
-Sets screen buffer height to specified value
+New screen buffer height
 
 ```yaml
 Type: System.UInt16

@@ -173,6 +173,7 @@ SOFTWARE.
 			Tags = @(
 				"Initialization"
 				"Environment"
+				"Development"
 			)
 
 			# A URL to the license for this module.

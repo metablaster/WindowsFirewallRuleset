@@ -108,6 +108,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: For force loaded rules it should say: "Force Load Rule:"
 
 ## RELATED LINKS

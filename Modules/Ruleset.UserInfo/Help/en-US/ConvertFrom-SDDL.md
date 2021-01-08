@@ -1,32 +1,38 @@
 ---
-external help file: Ruleset.Utility-help.xml
-Module Name: Ruleset.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Convert-SDDLToACL.md
+external help file: Ruleset.UserInfo-help.xml
+Module Name: Ruleset.UserInfo
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SDDL.md
 schema: 2.0.0
 ---
 
-# Convert-SDDLToACL
+# ConvertFrom-SDDL
 
 ## SYNOPSIS
 
-Convert SDDL string to ACL
+Convert SDDL string to Principal
 
 ## SYNTAX
 
 ```powershell
-Convert-SDDLToACL [-SDDL] <String[]> [<CommonParameters>]
+ConvertFrom-SDDL [-SDDL] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Convert SDDL strings to ACL entries
+Convert one or multiple SDDL strings to Principals
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Convert-SDDLToACL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+ConvertFrom-SDDL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+```
+
+### EXAMPLE 2
+
+```
+$SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)" | ConvertFrom-SDDL
 ```
 
 ## PARAMETERS
@@ -43,7 +49,7 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -53,14 +59,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Convert-SDDLToACL
+### [string[]]
 
 ## OUTPUTS
 
-### [string]
+### [PSCustomObject]
 
 ## NOTES
 
-This is experimental function and needs a lot of improvements.
+None.
 
 ## RELATED LINKS

@@ -9,17 +9,17 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Convert SID to user or computer account name
+Convert SID to principal user or domain name
 
 ## SYNTAX
 
 ```powershell
-ConvertFrom-SID [-SID] <String[]> [-ComputerNames <String[]>] [<CommonParameters>]
+ConvertFrom-SID [-SID] <String[]> [-Domain <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Convert SID to user or computer account name, in case of pseudo and built in accounts
+Convert SID to principal user or domain name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 
@@ -34,7 +34,7 @@ ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 ### EXAMPLE 2
 
 ```
-'^S-1-5-32-580' | ConvertFrom-SID
+"S-1-5-32-580", "S-1-5-21-34223-2342-234234-518" | ConvertFrom-SID
 ```
 
 ## PARAMETERS
@@ -55,14 +55,14 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ComputerNames
+### -Domain
 
 One or more computers to check if SID is not known, default is localhost
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: Computer, CN
 
 Required: False
 Position: Named
@@ -93,7 +93,7 @@ https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d2
 3.
 https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To avoid confusion pseudo accounts ("Local Service" in the example below) can be represented as:
+To avoid confusion, pseudo accounts ("Local Service" in the example below) can be represented as:
 1.
 SID (S-1-5-19)
 2.
@@ -129,9 +129,10 @@ but those which are not are replaced with "Display Name" in the "WellKnownSIDs" 
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
-TODO: do we need to have consistent output ie.
-exactly DOMAIN\USER?, see test results,
+TODO: need to have consistent output ex.
+domain name, principal and username, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
 TODO: need to implement CIM switch
+TODO: test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
 
 ## RELATED LINKS

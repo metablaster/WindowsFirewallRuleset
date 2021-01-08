@@ -14,7 +14,7 @@ Convert from OS build number to OS version
 ## SYNTAX
 
 ```powershell
-ConvertFrom-OSBuild [-Build] <String> [<CommonParameters>]
+ConvertFrom-OSBuild [-Build] <Decimal> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,8 +28,9 @@ Note that "OS version" is not the same as "OS release version"
 
 ```powershell
 ConvertFrom-OSBuild 18363.1049
-1909
 ```
+
+1909
 
 ## PARAMETERS
 
@@ -38,13 +39,13 @@ ConvertFrom-OSBuild 18363.1049
 Operating system build number
 
 ```yaml
-Type: System.String
+Type: System.Decimal
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 1
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -63,6 +64,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+The ValidatePattern attribute matches decimal part as (,\d{2,5})?
+instead of (\.\d{3,5})?
+because
+ex.
+19041.450 will convert to 19041,45, last zeroes will be dropped and dot is converted to coma.
 
 ## RELATED LINKS

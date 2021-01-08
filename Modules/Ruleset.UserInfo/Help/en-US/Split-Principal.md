@@ -1,46 +1,45 @@
 ---
 external help file: Ruleset.UserInfo-help.xml
 Module Name: Ruleset.UserInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-UserAccount.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Split-Principal.md
 schema: 2.0.0
 ---
 
-# ConvertFrom-UserAccount
+# Split-Principal
 
 ## SYNOPSIS
 
-Strip computer names out of computer accounts
+Split principal to either user name or domain
 
 ## SYNTAX
 
 ```powershell
-ConvertFrom-UserAccount [-UserAccount] <String[]> [<CommonParameters>]
+Split-Principal [-Principal] <String[]> [-DomainName] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-ConvertFrom-UserAccount is a helper method to reduce typing common code
-related to splitting up user accounts
+Split principal, either UPN or NETBIOS name to user name or domain name
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-ConvertFrom-UserAccount COMPUTERNAME\USERNAME
+Split-Principal COMPUTERNAME\USERNAME
 ```
 
 ### EXAMPLE 2
 
-```powershell
-ConvertFrom-UserAccount SERVER\USER, COMPUTER\USER, SERVER2\USER2
+```
+@(SERVER\USER, user@domain.lan, SERVER2\USER2) | Split-Principal -DomainName
 ```
 
 ## PARAMETERS
 
-### -UserAccount
+### -Principal
 
-One or more user accounts in form of: COMPUTERNAME\USERNAME
+One or more principals in form of UPN or NetBIOS Name.
 
 ```yaml
 Type: System.String[]
@@ -50,6 +49,22 @@ Aliases: Account
 Required: True
 Position: 1
 Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -DomainName
+
+If specified, the result is domain name instead of user name
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -60,14 +75,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to ConvertFrom-UserAccount
+### [string[]]
 
 ## OUTPUTS
 
-### [System.String] Usernames in form of: USERNAME
+### [string]
 
 ## NOTES
 
-TODO: Rename to ConvertFrom-Account
+None.
 
 ## RELATED LINKS

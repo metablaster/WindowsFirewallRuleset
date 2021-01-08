@@ -28,15 +28,15 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Validate User Principal Name syntax
+Validate Universal Principal Name syntax
 
 .DESCRIPTION
-Test if User Principal Name (UPN) has valid syntax.
+Test if Universal Principal Name (UPN) has valid syntax.
 UPN consists of user account name, also known as the logon name and
 UPN suffix, also known as the domain name. (or an IP address)
 
 .PARAMETER Name
-User Principal Name in form of: user@domain.com
+Universal Principal Name in form of: user@domain.com
 If Prefix is specified, domain name can be omitted.
 If Suffix is specified, logon name can be omitted.
 

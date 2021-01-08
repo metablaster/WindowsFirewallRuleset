@@ -13,26 +13,29 @@ EXAMPLES
 	ConvertFrom-OSBuild
 	Convert from OS build number to OS version
 
-	Get-InterfaceBroadcast
-	Get broadcast addresses on the local machine
-
-	Get-ComputerName
-	Retrieves localhost NETBIOS name
-
-	Select-IPInterface
-	Retrieve a list of configured network adapters
-
 	Get-InterfaceAlias
-	Retrieve a aliases of configured network adapters
+	Get interface aliases of specified network adapters
 
-	Resolve-Host
-	Resolve host to IP or IP to host
+	Get-InterfaceBroadcast
+	Get broadcast address
 
 	Get-SystemSKU
 	Get operating system SKU information
 
+	Resolve-Host
+	Resolve host to IP or IP to host
+
+	Select-IPInterface
+	Get network adapter IP configuration
+
+	Test-NetBiosName
+	Validate NETBIOS name syntax
+
 	Test-TargetComputer
 	Test target computer (policy store) on which to apply firewall
+
+	Test-UNC
+	Validate UNC path syntax
 
 KEYWORDS
 	ComputerInfo

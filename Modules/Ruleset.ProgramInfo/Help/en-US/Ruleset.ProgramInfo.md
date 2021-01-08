@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
-Help Version: 0.9.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
+Help Version: 0.9.1
 Locale: en-US
 ---
 
@@ -14,21 +14,21 @@ Locale: en-US
 
 ## Ruleset.ProgramInfo Cmdlets
 
-### [Find-Installation](Find-Installation.md)
+### [Confirm-Installation](Confirm-Installation.md)
 
-Find installation directory for given predefined program name
+Verify or set program installation directory
+
+### [Edit-Table](Edit-Table.md)
+
+Manually add new program installation directory to the table
 
 ### [Format-Path](Format-Path.md)
 
-Format path into firewall compatible path
-
-### [Get-InstallProperties](Get-InstallProperties.md)
-
-Search program install properties for all users, system wide
+Format file system path and fix syntax errors
 
 ### [Get-AppCapability](Get-AppCapability.md)
 
-Get capabilities of Windows store app
+Get Windows store app capabilities
 
 ### [Get-AppSID](Get-AppSID.md)
 
@@ -37,6 +37,10 @@ Get store app SID
 ### [Get-ExecutablePath](Get-ExecutablePath.md)
 
 Get list of install locations for executables and executable names
+
+### [Get-InstallProperties](Get-InstallProperties.md)
+
+Search program install properties for all users, system wide
 
 ### [Get-NetFramework](Get-NetFramework.md)
 
@@ -82,18 +86,30 @@ Get installed Windows Kits
 
 Get installed Windows SDK
 
-### [Test-Environment](Test-Environment.md)
+### [Initialize-Table](Initialize-Table.md)
 
-Test if a path is valid with additional checks
+Create data table used to hold information for a list of programs
 
-### [Confirm-Executable](Confirm-Executable.md)
+### [Search-Installation](Search-Installation.md)
 
-Check if file such as an *.exe exists
+Find installation directory for given predefined program name
 
-### [Test-Installation](Test-Installation.md)
+### [Show-Table](Show-Table.md)
 
-Test if given installation directory is valid
+Print installation directories to console
+
+### [Test-ExecutableFile](Test-ExecutableFile.md)
+
+Check if executable file exists and is trusted.
+
+### [Test-FileSystemPath](Test-FileSystemPath.md)
+
+Test file system path syntax and existence
 
 ### [Test-Service](Test-Service.md)
 
-Check if service exists on system
+Check if system service exists and is trusted
+
+### [Update-Table](Update-Table.md)
+
+Fill data table with principal and program location

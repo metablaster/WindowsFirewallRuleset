@@ -26,7 +26,7 @@ Get SID for single store app if the app exists
 ### EXAMPLE 1
 
 ```powershell
-Get-AppSID -FamilyName "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
+Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 ```
 
 ## PARAMETERS
@@ -61,7 +61,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Big thanks to Jani for this awesome solution: https://github.com/ljani
+Big thanks to Jani for this awesome solution, see issue from "related links" section
 TODO: remote computers?
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md)
+
+[https://github.com/metablaster/WindowsFirewallRuleset/issues/6](https://github.com/metablaster/WindowsFirewallRuleset/issues/6)

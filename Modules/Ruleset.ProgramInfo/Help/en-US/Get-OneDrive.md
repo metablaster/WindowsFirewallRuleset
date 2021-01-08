@@ -14,7 +14,7 @@ Get One Drive information for specific user
 ## SYNTAX
 
 ```powershell
-Get-OneDrive [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
+Get-OneDrive [-User] <String> [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,16 +29,22 @@ Search installed One Drive instance in userprofile for specific user account
 Get-OneDrive "USERNAME"
 ```
 
+### EXAMPLE 2
+
+```powershell
+Get-OneDrive "USERNAME" -Domain "Server01"
+```
+
 ## PARAMETERS
 
-### -UserName
+### -User
 
 User name in form of "USERNAME"
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: User
+Aliases: UserName
 
 Required: True
 Position: 1
@@ -47,14 +53,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 2

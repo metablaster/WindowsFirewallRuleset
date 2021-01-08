@@ -11,21 +11,22 @@ LONG DESCRIPTION
 	for the purpose of testing project code for many environment scenarios that end users may have.
 
 EXAMPLES
-	Initialize-Project
-	Check complete system requirements
-
-	Initialize-Service
-	Configure and start required system services
-
 	Initialize-Module
 	Update or install out of date modules
+
+	Initialize-Project
+	Check complete system requirements
 
 	Initialize-Provider
 	Update or install out of date package providers
 
+	Initialize-Service
+	Configure and start required system services
+
 KEYWORDS
 	Initialization
 	Environment
+	Development
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Initialize/Help/en-US

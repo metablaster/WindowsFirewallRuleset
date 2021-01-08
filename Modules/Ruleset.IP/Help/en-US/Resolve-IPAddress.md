@@ -20,7 +20,8 @@ Resolve-IPAddress [-IPAddress] <String> [<CommonParameters>]
 ## DESCRIPTION
 
 Resolves an IP address expression using wildcard expressions to individual IP addresses.
-Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses or networks using CIDR-notation.
+Resolve-IPAddress expands groups and values in square brackets to generate a list of IP addresses
+or networks using CIDR-notation.
 Ranges of values may be specified using a start and end value using "-" to separate the values.
 Specific values may be listed as a comma separated list.
 
@@ -62,13 +63,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### TODO: describe outputs, define OutputType
+### [string]
 
 ## NOTES
 
 Modifications by metablaster year 2019, 2020:
+
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Resolve-IPAddress.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Resolve-IPAddress.md)
+
+[https://github.com/indented-automation/Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP)

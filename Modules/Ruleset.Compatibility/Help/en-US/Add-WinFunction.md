@@ -14,8 +14,8 @@ This command defines a global function that always runs in the compatibility ses
 ## SYNTAX
 
 ```powershell
-Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-ComputerName <String>]
- [-ConfigurationName <String>] [-Credential <PSCredential>] [<CommonParameters>]
+Add-WinFunction [-Name] <String> [-ScriptBlock] <ScriptBlock> [-Domain <String>] [-ConfigurationName <String>]
+ [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -77,7 +77,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
@@ -85,7 +85,7 @@ of the computer on which to create the compatibility session.
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Cn
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -142,11 +142,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Replace double quotes with single quotes
 - Added HelpURI link to project location
 
+January 2021:
+
+- Replace cast to \[void\] with Out-Null
+
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md)
 
 [https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

@@ -16,19 +16,19 @@ Get operating system SKU information
 ### Number
 
 ```powershell
-Get-SystemSKU [-SKU <Int32>] [<CommonParameters>]
+Get-SystemSKU -SKU <Int32> [<CommonParameters>]
 ```
 
 ### Computer
 
 ```powershell
-Get-SystemSKU [-ComputerName <String[]>] [<CommonParameters>]
+Get-SystemSKU [-Domain <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Get the SKU (Stock Keeping Unit) information for one or multiple target computers,
-or translate SKU number to SKU
+or translate SKU number to SKU string
 
 ## EXAMPLES
 
@@ -38,39 +38,63 @@ or translate SKU number to SKU
 Get-SystemSKU
 ```
 
-Home Premium N
+Domain      SystemSKU     SKU
+------      ---------     ---
+MY-DESKTOP  Professional  48
+
+### EXAMPLE 2
+
+```
+@(Server1, Server2, Server3) | Get-SystemSKU
+```
+
+Domain    SystemSKU                SKU
+------    ---------                ---
+Server1   Professional             48
+Server2   Home Premium N           26
+Server3   Microsoft Hyper-V Server 42
+
+### EXAMPLE 3
+
+```powershell
+Get-SystemSKU -SKU 7
+```
+
+Domain   SystemSKU   SKU
+------   ---------   ---
+         Server      Standard  7
 
 ## PARAMETERS
 
 ### -SKU
 
-Operating system SKU number, can't be used with ComputerName parameter
+Operating system SKU number
 
 ```yaml
 Type: System.Int32
 Parameter Sets: Number
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
-One or more computer names, can't be used with SKU parameter
+One or more computer names
 
 ```yaml
 Type: System.String[]
 Parameter Sets: Computer
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
-Accept pipeline input: True (ByValue)
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -80,18 +104,19 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [int32]
+### [string[]]
 
 ## OUTPUTS
 
-### [PSCustomObject] Computer/SKU value pair
+### [PSCustomObject]
 
 ## NOTES
 
-TODO: accept UPN and NETBIOS computer names
-TODO: ComputerName default value is just a placeholder, need better design
+TODO: Accept UPN and NETBIOS computer names
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md)
 
 [https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0](https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0)
 

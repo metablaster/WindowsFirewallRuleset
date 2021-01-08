@@ -14,16 +14,15 @@ Removes firewall rules according to a list in a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Remove-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons.
-Only the field Name or - if Name is missing - DisplayName
-is used, all other fields can be omitted
+Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
 
 ## EXAMPLES
 
@@ -45,14 +44,14 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
 ## PARAMETERS
 
-### -PolicyStore
+### -Domain
 
 Policy store from which remove rules, default is local GPO.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -61,20 +60,20 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Folder
+### -Path
 
 Folder in which file is located
 
 ```yaml
-Type: System.String
+Type: System.IO.DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: .
+Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -FileName
@@ -173,6 +172,15 @@ Added more output streams for debug, verbose and info
 Make output formatted and colored
 6.
 Changed minor flow of execution
+December 2020:
+1.
+Rename parameters according to standard name convention
+2.
+Support resolving path wildcard pattern
 TODO: implement removing rules not according to file
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md)
+
+[https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

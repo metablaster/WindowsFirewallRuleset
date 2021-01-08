@@ -19,8 +19,8 @@ Get-BroadcastAddress [-IPAddress] <String> [[-SubnetMask] <String>] [<CommonPara
 
 ## DESCRIPTION
 
-Get-BroadcastAddress returns the broadcast address for a subnet by performing a bitwise AND operation
-against the decimal forms of the IP address and inverted subnet mask.
+Get-BroadcastAddress returns the broadcast address for a subnet by performing a bitwise AND
+operation against the decimal forms of the IP address and inverted subnet mask.
 
 ## EXAMPLES
 
@@ -102,13 +102,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [ipaddress] The broadcast address
+### [IPAddress] The broadcast address
 
 ## NOTES
 
 Modifications by metablaster year 2019, 2020:
+
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md)
+
+[https://github.com/indented-automation/Indented.Net.IP](https://github.com/indented-automation/Indented.Net.IP)

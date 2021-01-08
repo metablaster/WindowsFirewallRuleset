@@ -16,14 +16,14 @@ Take ownership or set permissions on file system or registry object
 ### Ownership
 
 ```powershell
-Set-Permission [-Path] <String> -Owner <String> [-Domain <String>] [-Recurse] [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-Permission [-LiteralPath] <String> -Owner <String> [-Domain <String>] [-Recurse] [-Force] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### FileSystem
 
 ```powershell
-Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <AccessControlType>]
+Set-Permission [-LiteralPath] <String> -User <String> [-Domain <String>] [-Type <AccessControlType>]
  -Rights <FileSystemRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>] [-Protected]
  [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -31,7 +31,7 @@ Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <A
 ### Registry
 
 ```powershell
-Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <AccessControlType>]
+Set-Permission [-LiteralPath] <String> -User <String> [-Domain <String>] [-Type <AccessControlType>]
  -RegistryRights <RegistryRights> [-Inheritance <InheritanceFlags>] [-Propagation <PropagationFlags>]
  [-Protected] [-PreserveInheritance] [-Recurse] [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -39,8 +39,8 @@ Set-Permission [-Path] <String> -Principal <String> [-Domain <String>] [-Type <A
 ### Reset
 
 ```powershell
-Set-Permission [-Path] <String> [-Domain <String>] [-Protected] [-PreserveInheritance] [-Recurse] [-Reset]
- [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-Permission [-LiteralPath] <String> [-Domain <String>] [-Protected] [-PreserveInheritance] [-Recurse]
+ [-Reset] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,7 +53,7 @@ folder, registry key or registry item.
 ### EXAMPLE 1
 
 ```powershell
-Set-Permission -Principal "SomeUser" -Path "D:\SomePath"
+Set-Permission -User "SomeUser" -LiteralPath "D:\SomePath"
 ```
 
 Sets function defaults for user SomeUser on path D:\SomePath
@@ -61,7 +61,7 @@ Sets function defaults for user SomeUser on path D:\SomePath
 ### EXAMPLE 2
 
 ```powershell
-Set-Permission -Principal "Remote Management Users" -Path "D:\SomePath" -Protected
+Set-Permission -User "Remote Management Users" -LiteralPath "D:\SomePath" -Protected
 ```
 
 Only "Remote Management Users" have permissions on "D:\SomePath", other entries are removed
@@ -69,7 +69,7 @@ Only "Remote Management Users" have permissions on "D:\SomePath", other entries 
 ### EXAMPLE 3
 
 ```powershell
-Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "D:\SomeFolder" `
+Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
 	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 ```
 
@@ -78,14 +78,14 @@ LanmanServer service is denied specified rights for specified directory and all 
 ### EXAMPLE 4
 
 ```powershell
-Set-Permission -Principal SomeUser -Domain COMPUTERNAME -Path "D:\SomeFolder"
+Set-Permission -User SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
 ```
 
 Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
 ## PARAMETERS
 
-### -Path
+### -LiteralPath
 
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
@@ -94,7 +94,7 @@ Environment variables are allowed.
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Directory, File, Key, Item
+Aliases: LP
 
 Required: True
 Position: 1
@@ -120,15 +120,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Principal
+### -User
 
-Principal to which to grant specified permissions.
+Principal username to which to grant specified permissions.
 Using this parameter means setting permissions on a resource.
 
 ```yaml
 Type: System.String
 Parameter Sets: FileSystem, Registry
-Aliases: User
+Aliases: UserName
 
 Required: True
 Position: Named
@@ -139,12 +139,12 @@ Accept wildcard characters: False
 
 ### -Domain
 
-Principal domain such as computer name or authority to which principal applies
+Principal domain such as computer name or authority to which username applies
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -417,6 +417,8 @@ is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
 Links listed below are provided for additional parameter description in order of how parameters are declared
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md)
 
 [https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1)
 

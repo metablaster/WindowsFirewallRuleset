@@ -9,18 +9,18 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Test target computer (policy store) on which to apply firewall
+Test target computer (policy store) to which to deploy firewall
 
 ## SYNTAX
 
 ```powershell
-Test-TargetComputer [-ComputerName] <String> [-Count <Int16>] [-Timeout <Int16>] [<CommonParameters>]
+Test-TargetComputer [-Domain] <String> [-Retry <Int16>] [-Timeout <Int16>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-The purpose of this function is to reduce typing checks depending on whether PowerShell
-core or desktop edition is used, since parameters for Test-Connection are not the same
+The purpose of this function is to reduce checks, depending on whether PowerShell
+Core or Desktop edition is used, since parameters for Test-Connection are not the same
 for both PowerShell editions.
 
 ## EXAMPLES
@@ -28,25 +28,25 @@ for both PowerShell editions.
 ### EXAMPLE 1
 
 ```powershell
-Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
+Test-TargetComputer "COMPUTERNAME"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Test-TargetComputer "COMPUTERNAME"
+Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Target computer which to test
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: True
 Position: 1
@@ -55,7 +55,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Count
+### -Retry
 
 Valid only for PowerShell Core.
 Specifies the number of echo requests to send.
@@ -68,7 +68,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $ConnectionCount
+Default value: $RetryCount
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -104,8 +104,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Avoid error message, check all references which handle errors (code bloat)
+TODO: partially avoiding error messages, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex.
 Test-NetConnection)
+TODO: Credential request for remote policy store should be initialized here
 
 ## RELATED LINKS

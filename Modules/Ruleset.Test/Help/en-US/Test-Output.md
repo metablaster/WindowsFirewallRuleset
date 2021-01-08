@@ -14,7 +14,7 @@ Verify TypeName and OutputType are referring to same type
 ## SYNTAX
 
 ```powershell
-Test-Output [-InputType] <Object[]> -Command <String> [<CommonParameters>]
+Test-Output [-InputObject] <Object[]> -Command <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,16 +28,22 @@ TypeName and OutputType including equality test is printed to console
 
 ### EXAMPLE 1
 
-```powershell
+```
 $Result = Some-Function
 PS> Test-Output $Result -Command Some-Function
 ```
 
+### EXAMPLE 2
+
+```powershell
+Some-Function | Test-Output -Command Some-Function
+```
+
 ## PARAMETERS
 
-### -InputType
+### -InputObject
 
-The actual .NET typename which some function returns
+The actual .NET type that some function returns
 
 ```yaml
 Type: System.Object[]
@@ -53,8 +59,7 @@ Accept wildcard characters: False
 
 ### -Command
 
-Commandlet or function name for which to retrieve OutputType attribute values,
-and then compare InputType against those values.
+Commandlet or function name for which to retrieve OutputType attribute values.
 
 ```yaml
 Type: System.String
@@ -74,7 +79,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-Output
+### [object[]]
 
 ## OUTPUTS
 
@@ -82,6 +87,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: InputObject should be returned if pipeline is used
 
 ## RELATED LINKS

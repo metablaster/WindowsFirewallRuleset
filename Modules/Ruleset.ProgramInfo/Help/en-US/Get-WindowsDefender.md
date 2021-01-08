@@ -14,7 +14,7 @@ Get installed Windows Defender
 ## SYNTAX
 
 ```powershell
-Get-WindowsDefender [[-ComputerName] <String>] [<CommonParameters>]
+Get-WindowsDefender [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Gets installation information about Windows defender.
 ### EXAMPLE 1
 
 ```powershell
-Get-WindowsDefender COMPUTERNAME
+Get-WindowsDefender
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-WindowsDefender Server01
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name for which to list installed Windows Defender
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

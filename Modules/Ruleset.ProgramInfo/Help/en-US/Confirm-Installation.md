@@ -1,34 +1,35 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Installation.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Installation.md
 schema: 2.0.0
 ---
 
-# Test-Installation
+# Confirm-Installation
 
 ## SYNOPSIS
 
-Test if given installation directory is valid
+Verify or set program installation directory
 
 ## SYNTAX
 
 ```powershell
-Test-Installation [-Program] <String> [-FilePath] <PSReference> [<CommonParameters>]
+Confirm-Installation [-Program] <TargetProgram> [-Directory] <PSReference> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Test if given installation directory is valid and if not this method will search the
-system for valid path and return it via reference parameter
+Test if given installation directory exists and is valid for firewall, and if not this method will
+search system for valid path and return it trough reference parameter.
+If the installation directory can't be determined reference variable remains unchanged.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-```powershell
+```
 $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
-PS> Test-Installation "Office" ([ref] $MyProgram)
+PS> Confirm-Installation "Office" ([ref] $ProgramInstallPath)
 ```
 
 ## PARAMETERS
@@ -38,9 +39,10 @@ PS> Test-Installation "Office" ([ref] $MyProgram)
 Predefined program name for which to search
 
 ```yaml
-Type: System.String
+Type: TargetProgram
 Parameter Sets: (All)
 Aliases:
+Accepted values: dotnet, CMake, SQLDTS, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, Metatrader, RealWorld, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
 
 Required: True
 Position: 1
@@ -49,9 +51,10 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -FilePath
+### -Directory
 
-Reference to variable which holds a path to program (excluding executable)
+Reference to variable which should be updated with the path to program installation directory
+excluding executable file name.
 
 ```yaml
 Type: System.Management.Automation.PSReference
@@ -71,13 +74,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-Installation
+### None. You cannot pipe objects to Confirm-Installation
 
 ## OUTPUTS
 
-### [bool] true if path is ok or found false otherwise,
-
-### via reference, if test OK same path, if not try to update path, else given path back is not modified
+### [bool] True if the reference variable contains valid path or was updated, false otherwise.
 
 ## NOTES
 

@@ -9,56 +9,81 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Generate SDDL string of multiple usernames or/and groups on a given domain
+Get SDDL string of a user, group or from path
 
 ## SYNTAX
+
+### User (Default)
+
+```powershell
+Get-SDDL -User <String[]> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
+```
 
 ### Group
 
 ```powershell
-Get-SDDL [-UserNames <String[]>] -UserGroups <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
+Get-SDDL [-User <String[]>] -Group <String[]> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
 ```
 
-### User
+### Path
 
 ```powershell
-Get-SDDL -UserNames <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
+Get-SDDL -Path <String> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Get SDDL string single or multiple user names and/or user groups on a single target computer
+Get SDDL string for single or multiple user names and/or user groups, file system or registry
+locations on a single target computer
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-[string[]] $Users = "User"
-PS> [string] $Server = COMPUTERNAME
-PS> [string[]] $Groups = "Users", "Administrators"
+Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM
 ```
-
-PS\> $UsersSDDL1 = Get-SDDL -User $Users -Group $Groups
-PS\> $UsersSDDL2 = Get-SDDL -User $Users -Machine $Server
-PS\> $UsersSDDL3 = Get-SDDL -Group $Groups
 
 ### EXAMPLE 2
 
 ```powershell
-$NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "System"
+Get-SDDL -Group @("Users", "Administrators") -Merge
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-SDDL -Domain "NT AUTHORITY" -User "System"
+```
+
+### EXAMPLE 4
+
+```powershell
+Get-SDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"
 ```
 
 ## PARAMETERS
 
-### -UserNames
+### -User
 
-Array of users for which to generate SDDL string
+One or more users for which to obtain SDDL string
+
+```yaml
+Type: System.String[]
+Parameter Sets: User
+Aliases: UserName
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ```yaml
 Type: System.String[]
 Parameter Sets: Group
-Aliases: User
+Aliases: UserName
 
 Required: False
 Position: Named
@@ -67,26 +92,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-```yaml
-Type: System.String[]
-Parameter Sets: User
-Aliases: User
+### -Group
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserGroups
-
-Array of user groups for which to generate SDDL string
+One or more user groups for which to obtain SDDL string
 
 ```yaml
 Type: System.String[]
 Parameter Sets: Group
-Aliases: Group
+Aliases: UserGroup
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -Path
+
+Single file system or registry location for which to obtain SDDL
+
+```yaml
+Type: System.String
+Parameter Sets: Path
+Aliases:
 
 Required: True
 Position: Named
@@ -95,14 +124,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 Single domain or computer such as remote computer name or builtin computer domain
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -127,6 +156,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Merge
+
+If specified combines resultant SDDL strings into one
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -137,11 +182,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string] SDDL for given accounts or/and group for given domain
+### [string]
 
 ## NOTES
 
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
+None.
 
 ## RELATED LINKS

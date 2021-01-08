@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Compatibility
 Module Guid: eb203a5b-d397-4909-9fe9-00b0f083f36a
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.0
-Help Version: 0.9.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
+Help Version: 0.9.1
 Locale: en-US
 ---
 
@@ -24,7 +24,7 @@ This command defines a global function that always runs in the compatibility ses
 
 ### [Compare-WinModule](Compare-WinModule.md)
 
-Compare the set of modules for this version of PowerShell against those available in the compatibility session.
+Compare the set of modules against those in the compatibility session.
 
 ### [Copy-WinModule](Copy-WinModule.md)
 

@@ -14,7 +14,7 @@ Get user groups on target computers
 ## SYNTAX
 
 ```powershell
-Get-UserGroup [[-ComputerNames] <String[]>] [-CIM] [<CommonParameters>]
+Get-UserGroup [[-Domain] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,14 +37,14 @@ Get-UserGroup @(DESKTOP, LAPTOP) -CIM
 
 ## PARAMETERS
 
-### -ComputerNames
+### -Domain
 
 One or more computers which to query for user groups
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1
@@ -75,7 +75,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string[]] One or more computer names
+### None. You cannot pipe objects to Get-UserGroup
 
 ## OUTPUTS
 
@@ -83,7 +83,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
+None.
 
 ## RELATED LINKS

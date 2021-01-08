@@ -56,7 +56,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress] A dotted decimal IP address</maml:name>
+          <maml:name>[IPAddress] A dotted decimal IP address</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -65,7 +65,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -81,8 +82,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertFrom-HexIP.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertFrom-HexIP.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -132,7 +137,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[ipaddress] Decimal IP address</maml:name>
+          <maml:name>[IPAddress] Decimal IP address</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -151,7 +156,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -167,8 +173,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-BinaryIP.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-BinaryIP.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -218,7 +228,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[ipaddress] A decimal IP address</maml:name>
+          <maml:name>[IPAddress] A decimal IP address</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -237,7 +247,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -253,8 +264,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-DecimalIP.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-DecimalIP.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -314,7 +329,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress] IP address</maml:name>
+          <maml:name>[IPAddress] IP address</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -323,7 +338,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -346,8 +362,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-DottedDecimalIP.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-DottedDecimalIP.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -397,7 +417,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[ipaddress]</maml:name>
+          <maml:name>[IPAddress]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -416,7 +436,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -432,8 +453,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-HexIP.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-HexIP.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -493,7 +518,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress] A dotted-decimal subnet mask</maml:name>
+          <maml:name>[IPAddress] A dotted-decimal subnet mask</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -502,7 +527,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -518,8 +544,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Mask.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Mask.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -569,7 +599,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[ipaddress] A dotted-decimal subnet mask</maml:name>
+          <maml:name>[IPAddress] A dotted-decimal subnet mask</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -588,7 +618,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -604,8 +635,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-MaskLength.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-MaskLength.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -740,7 +775,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>"Ruleset.IP.Subnet" Custom object</maml:name>
+          <maml:name>"Ruleset.IP.Subnet" [PSCustomObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -749,7 +784,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -786,8 +822,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Subnet.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/ConvertTo-Subnet.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -871,7 +911,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress] The broadcast address</maml:name>
+          <maml:name>[IPAddress] The broadcast address</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -880,7 +920,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -917,8 +958,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-BroadcastAddress.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1002,7 +1047,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress]</maml:name>
+          <maml:name>[IPAddress]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1011,7 +1056,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1041,8 +1087,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkAddress.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkAddress.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1200,7 +1250,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[ipaddress]</maml:name>
+          <maml:name>[IPAddress]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1209,7 +1259,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1232,8 +1283,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkRange.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkRange.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1317,7 +1372,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>"Ruleset.IP.NetworkSummary"</maml:name>
+          <maml:name>"Ruleset.IP.NetworkSummary" [PSCustomObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1326,7 +1381,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1356,8 +1412,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkSummary.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-NetworkSummary.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1465,7 +1525,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>"Ruleset.IP.Subnet"</maml:name>
+          <maml:name>"Ruleset.IP.Subnet" [PSCustomObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1474,8 +1534,13 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Change log: 	07/03/2016 - Chris Dent - Cleaned up code, added tests. 	12/12/2015 - Chris Dent - Redesigned. 	13/10/2011 - Chris Dent - Created.</maml:para>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Change log:</maml:para>
+        <maml:para>- 07/03/2016 - Chris Dent - Cleaned up code, added tests.</maml:para>
+        <maml:para>- 12/12/2015 - Chris Dent - Redesigned.</maml:para>
+        <maml:para>- 13/10/2011 - Chris Dent - Created.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1498,8 +1563,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-Subnet.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-Subnet.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1559,7 +1628,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>TODO: describe outputs, define OutputType</maml:name>
+          <maml:name>[string]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1568,7 +1637,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1584,8 +1654,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Resolve-IPAddress.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Resolve-IPAddress.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1726,7 +1800,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster year 2019, 2020: - Include licenses and move comment based help outside of functions</maml:para>
+        <maml:para>Modifications by metablaster year 2019, 2020:</maml:para>
+        <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
       </maml:alert>
@@ -1763,8 +1838,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Test-SubnetMember.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Test-SubnetMember.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/indented-automation/Indented.Net.IP</maml:linkText>
+        <maml:uri>https://github.com/indented-automation/Indented.Net.IP</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

@@ -14,7 +14,7 @@ Initialize the connection to the compatibility session.
 ## SYNTAX
 
 ```powershell
-Initialize-WinSession [[-ComputerName] <String>] [-ConfigurationName <String>] [-Credential <PSCredential>]
+Initialize-WinSession [[-Domain] <String>] [-ConfigurationName <String>] [-Credential <PSCredential>]
  [-PassThru] [<CommonParameters>]
 ```
 
@@ -42,14 +42,14 @@ Initialize the default compatibility session.
 ### EXAMPLE 2
 
 ```powershell
-Initialize-WinSession -ComputerName localhost -ConfigurationName Microsoft.PowerShell
+Initialize-WinSession -Domain localhost -ConfigurationName Microsoft.PowerShell
 ```
 
 Initialize the compatibility session with a specific computer name and configuration
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 If you don't want to use the default compatibility session, use this parameter to specify the name
 of the computer on which to create the compatibility session.
@@ -57,7 +57,7 @@ of the computer on which to create the compatibility session.
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Cn
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1
@@ -125,15 +125,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Management.Automation.Runspaces.PSSession
+### [System.Management.Automation.Runspaces.PSSession]
 
 ## NOTES
 
 Following modifications by metablaster November 2020:
+
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md)
 
 [https://github.com/PowerShell/WindowsCompatibility](https://github.com/PowerShell/WindowsCompatibility)

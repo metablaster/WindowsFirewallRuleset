@@ -18,17 +18,17 @@ EXAMPLES
 	Export-FirewallRules
 	Exports specified firewall rules to the CSV or JSON file in the specified path.
 
-	Import-FirewallRules
-	Imports specified firewall rules from CSV or JSON file from specified path
-
-	Remove-FirewallRules
-	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
-
 	Find-RulePrincipal
 	Get all firewall rules with or without LocalUser value, rules without this value are considered weak
 
 	Format-Output
 	Format output of the Net-NewFirewallRule commandlet
+
+	Import-FirewallRules
+	Imports specified firewall rules from CSV or JSON file from specified path
+
+	Remove-FirewallRules
+	Removes specified firewall rules according to a list in the CSV or JSON file in the specified path.
 
 KEYWORDS
     Audit

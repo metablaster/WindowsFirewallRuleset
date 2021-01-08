@@ -27,7 +27,13 @@ Must be called before first test case in single unit test and in pair with Exit-
 ### EXAMPLE 1
 
 ```powershell
-Enter-Test "Get-Something.ps1"
+Enter-Test
+```
+
+### EXAMPLE 2
+
+```powershell
+Enter-Test -Private
 ```
 
 ## PARAMETERS
@@ -50,7 +56,8 @@ Accept wildcard characters: False
 
 ### -Pester
 
-Should be specified to enter pester tests for private functions
+Should be specified to enter pester tests for private functions,
+this parameter implies -Private switch.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

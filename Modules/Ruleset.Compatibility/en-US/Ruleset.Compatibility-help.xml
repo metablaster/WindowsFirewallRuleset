@@ -87,7 +87,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -112,7 +113,7 @@ PS&gt; Get-Module -ListAvailable</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WindowsPSModulePath.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WindowsPSModulePath.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -161,8 +162,8 @@ PS&gt; Get-Module -ListAvailable</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -224,8 +225,8 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -283,10 +284,14 @@ PS&gt; Get-Module -ListAvailable</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Replace double quotes with single quotes</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Replace cast to [void] with Out-Null</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -302,7 +307,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -317,7 +322,7 @@ PS&gt; myFunction Bill</dev:code>
       <command:verb>Compare</command:verb>
       <command:noun>WinModule</command:noun>
       <maml:description>
-        <maml:para>Compare the set of modules for this version of PowerShell against those available in the compatibility session.</maml:para>
+        <maml:para>Compare the set of modules against those in the compatibility session.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -326,10 +331,10 @@ PS&gt; myFunction Bill</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Compare-WinModule</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are permitted.</maml:para>
+            <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are supported.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -338,8 +343,8 @@ PS&gt; myFunction Bill</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -377,10 +382,10 @@ PS&gt; myFunction Bill</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are permitted.</maml:para>
+          <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are supported.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -389,8 +394,8 @@ PS&gt; myFunction Bill</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -439,7 +444,7 @@ PS&gt; myFunction Bill</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[System.Management.Automation.PSObject]</maml:name>
+          <maml:name>[PSObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -448,7 +453,8 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -471,7 +477,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -496,10 +502,10 @@ PS&gt; myFunction Bill</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Copy-WinModule</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are permitted.</maml:para>
+            <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are supported.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -508,8 +514,8 @@ PS&gt; myFunction Bill</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -556,35 +562,13 @@ PS&gt; myFunction Bill</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
-          <maml:Description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
-          <maml:Description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are permitted.</maml:para>
+          <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are supported.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -593,8 +577,8 @@ PS&gt; myFunction Bill</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -641,30 +625,6 @@ PS&gt; myFunction Bill</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
-        <maml:Description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
-        <maml:Description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -688,7 +648,8 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -711,7 +672,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Copy-WinModule.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -736,10 +697,10 @@ PS&gt; myFunction Bill</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-WinModule</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Pattern to filter module names by</maml:para>
+            <maml:para>Wildcard pattern to filter module names by</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -748,8 +709,8 @@ PS&gt; myFunction Bill</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -798,10 +759,10 @@ PS&gt; myFunction Bill</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Pattern to filter module names by</maml:para>
+          <maml:para>Wildcard pattern to filter module names by</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -810,8 +771,8 @@ PS&gt; myFunction Bill</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -872,7 +833,7 @@ PS&gt; myFunction Bill</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Management.Automation.PSObject</maml:name>
+          <maml:name>[PSObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -881,7 +842,8 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -898,7 +860,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Get-WinModule.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -929,10 +891,10 @@ PS&gt; myFunction Bill</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Import-WinModule</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
-            <maml:para>Specifies the name of the module to be imported. Wildcards can be used.</maml:para>
+            <maml:para>Specifies the name of the module to be imported. Wildcard characters are supported.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -953,8 +915,8 @@ PS&gt; myFunction Bill</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -1048,10 +1010,10 @@ PS&gt; myFunction Bill</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
-          <maml:para>Specifies the name of the module to be imported. Wildcards can be used.</maml:para>
+          <maml:para>Specifies the name of the module to be imported. Wildcard characters are supported.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -1072,8 +1034,8 @@ PS&gt; myFunction Bill</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -1182,7 +1144,7 @@ PS&gt; myFunction Bill</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Management.Automation.PSObject</maml:name>
+          <maml:name>[PSObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1191,7 +1153,8 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -1222,7 +1185,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -1247,8 +1210,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Initialize-WinSession</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -1297,8 +1260,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -1359,7 +1322,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:name>[System.Management.Automation.Runspaces.PSSession]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1368,7 +1331,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
       </maml:alert>
@@ -1383,7 +1347,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-WinSession -ComputerName localhost -ConfigurationName Microsoft.PowerShell</dev:code>
+        <dev:code>Initialize-WinSession -Domain localhost -ConfigurationName Microsoft.PowerShell</dev:code>
         <dev:remarks>
           <maml:para>Initialize the compatibility session with a specific computer name and configuration</maml:para>
         </dev:remarks>
@@ -1391,7 +1355,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -1428,8 +1392,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-          <maml:name>ComputerName</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
           </maml:Description>
@@ -1491,8 +1455,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cn">
-        <maml:name>ComputerName</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
         </maml:Description>
@@ -1553,7 +1517,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>System.Management.Automation.PSObject</maml:name>
+          <maml:name>[PSObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1562,9 +1526,13 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020: - Added comment based help based on original comments</maml:para>
+        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Replace cast to [void] with Out-Null</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1586,7 +1554,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>

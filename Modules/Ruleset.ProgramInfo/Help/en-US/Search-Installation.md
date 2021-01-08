@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Find-Installation.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Search-Installation.md
 schema: 2.0.0
 ---
 
-# Find-Installation
+# Search-Installation
 
 ## SYNOPSIS
 
@@ -14,12 +14,12 @@ Find installation directory for given predefined program name
 ## SYNTAX
 
 ```powershell
-Find-Installation [-Program] <String> [[-ComputerName] <String>] [<CommonParameters>]
+Search-Installation [-Application] <TargetProgram> [-Domain <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Find-Installation is called by Test-Installation, ie.
+Search-Installation is called by Confirm-Installation, ie.
 only if test for existing path
 fails then this method kicks in
 
@@ -28,19 +28,26 @@ fails then this method kicks in
 ### EXAMPLE 1
 
 ```powershell
-Find-Installation "Office"
+Search-Installation "Office"
+```
+
+### EXAMPLE 2
+
+```powershell
+Search-Installation "VSCode" -Domain Server01
 ```
 
 ## PARAMETERS
 
-### -Program
+### -Application
 
 Predefined program name
 
 ```yaml
-Type: System.String
+Type: TargetProgram
 Parameter Sets: (All)
-Aliases:
+Aliases: Program
+Accepted values: dotnet, CMake, SQLDTS, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, Metatrader, RealWorld, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
 
 Required: True
 Position: 1
@@ -49,17 +56,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 Computer name on which to look for program installation
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
-Position: 2
+Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -71,7 +78,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Find-Installation
+### None. You cannot pipe objects to Search-Installation
 
 ## OUTPUTS
 

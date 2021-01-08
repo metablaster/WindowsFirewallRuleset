@@ -14,7 +14,7 @@ Get installed Windows SDK
 ## SYNTAX
 
 ```powershell
-Get-WindowsSDK [[-ComputerName] <String>] [<CommonParameters>]
+Get-WindowsSDK [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Get installation information about installed Windows SDK
 ### EXAMPLE 1
 
 ```powershell
-Get-WindowsSDK COMPUTERNAME
+Get-WindowsSDK
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-WindowsSDK Server01
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name for which to list installed installed framework
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

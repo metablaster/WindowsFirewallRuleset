@@ -14,7 +14,7 @@ Search installed programs for all users, system wide
 ## SYNTAX
 
 ```powershell
-Get-SystemSoftware [[-ComputerName] <String>] [<CommonParameters>]
+Get-SystemSoftware [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Get a list of software installed system wide, for all users.
 ### EXAMPLE 1
 
 ```powershell
-Get-SystemSoftware "COMPUTERNAME"
+Get-SystemSoftware
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-SystemSoftware "Server01"
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name which to check
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1
@@ -62,6 +68,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 We should return empty PSCustomObject if test computer fails
-TODO: Parameter for x64 vs x86 software, then update Find-Installation switch as needed
+TODO: Parameter for x64 vs x86 software, then update Search-Installation switch as needed
 
 ## RELATED LINKS

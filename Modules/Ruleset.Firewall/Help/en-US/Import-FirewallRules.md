@@ -14,8 +14,7 @@ Imports firewall rules from a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Import-FirewallRules [-PolicyStore <String>] [-Folder <String>] [-FileName <String>] [-JSON]
- [<CommonParameters>]
+Import-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,14 +44,14 @@ Imports all firewall rules from the JSON file WmiRules
 
 ## PARAMETERS
 
-### -PolicyStore
+### -Domain
 
 Policy store into which to import rules, default is local GPO.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -61,20 +60,20 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Folder
+### -Path
 
 Path to directory where exported rules file is located
 
 ```yaml
-Type: System.String
+Type: System.IO.DirectoryInfo
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: .
+Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -FileName
@@ -146,5 +145,14 @@ Changed minor flow and logic of execution
 Make output formatted and colored
 9.
 Added progress bar
+December 2020:
+1.
+Rename parameters according to standard name convention
+2.
+Support resolving path wildcard pattern
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md)
+
+[https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

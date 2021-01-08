@@ -30,25 +30,22 @@ VARIABLES
 
 EXAMPLES
 	ConvertFrom-SDDL
-	Convert SDDL string to ACL
+	Convert SDDL string to Principal
 
 	ConvertFrom-SID
-	Convert SID to user or computer account name
-
-	Split-Principal
-	Strip computer names out of computer accounts
-
-	Get-PrincipalSID
-	Get SID for giver user account
+	Convert SID to principal user or domain name
 
 	Get-GroupPrincipal
-	Get computer accounts for a given user groups on target computers
+	Get principals of specified groups on target computers
 
 	Get-GroupSID
 	Get SID of user groups for given computer
 
+	Get-PrincipalSID
+	Get SID for giver user account
+
 	Get-SDDL
-	Generate SDDL string of multiple usernames or/and groups on a given domain
+	Get SDDL string of a user, group or from path
 
 	Get-UserGroup
 	Get user groups on target computers
@@ -56,13 +53,19 @@ EXAMPLES
 	Merge-SDDL
 	Merge 2 SDDL strings into one
 
+	Split-Principal
+	Split principal to either user name or domain
+
+	Test-Credential
+	Takes a PSCredential object and validates it
+
 	Test-UPN
-	Validate Universal Principal Name
+	Validate Universal Principal Name syntax
 
 KEYWORDS
+	Users
 	UserInfo
 	ComputerUsers
-	Users
 
 SEE ALSO
 	https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.UserInfo/Help/en-US

@@ -14,7 +14,7 @@ Get a list of programs installed by specific user
 ## SYNTAX
 
 ```powershell
-Get-UserSoftware [-UserName] <String> [[-ComputerName] <String>] [<CommonParameters>]
+Get-UserSoftware [-User] <String> [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Search installed programs in userprofile for specific user account
 ### EXAMPLE 1
 
 ```powershell
-Get-UserSoftware "USERNAME"
+Get-UserSoftware "User"
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-UserSoftware "User" -Domain "Server01"
 ```
 
 ## PARAMETERS
 
-### -UserName
+### -User
 
 User name in form of "USERNAME"
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: User
+Aliases: UserName
 
 Required: True
 Position: 1
@@ -47,14 +53,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 2

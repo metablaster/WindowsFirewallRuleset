@@ -14,7 +14,8 @@ Verify file is correctly encoded
 ## SYNTAX
 
 ```powershell
-Confirm-FileEncoding [-FilePath] <String[]> [[-Encoding] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Confirm-FileEncoding [-Path] <FileInfo[]> [[-Encoding] <String[]>] [-Binary] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,20 +33,20 @@ Confirm-FileEncoding C:\SomeFile.txt utf16
 
 ## PARAMETERS
 
-### -FilePath
+### -Path
 
 Path to the file which to check
 
 ```yaml
-Type: System.String[]
+Type: System.IO.FileInfo[]
 Parameter Sets: (All)
-Aliases:
+Aliases: FilePath
 
 Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -Encoding
@@ -60,6 +61,22 @@ Aliases:
 Required: False
 Position: 2
 Default value: @("utf-8", "us-ascii")
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Binary
+
+If specified, handles binary files as well.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -103,7 +120,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string] One or more paths to file to check
+### [System.IO.FileInfo[]] One or more paths to file to check
 
 ## OUTPUTS
 

@@ -14,7 +14,7 @@ Compare 2 paths for equality or similarity
 ## SYNTAX
 
 ```powershell
-Compare-Path [-TargetPath] <String> [-ReferencePath] <String> [-Loose] [-Sensitive] [<CommonParameters>]
+Compare-Path [-Path] <String> [-ReferencePath] <String> [-Loose] [-CaseSensitive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,29 +29,26 @@ or it checks if 2 paths are similar which depends on wildcards contained in the 
 
 ```powershell
 Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose
-```
-
 True
+```
 
 ### EXAMPLE 2
 
 ```powershell
-Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -Sensitive
-```
-
+Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -CaseSensitive
 True
+```
 
 ### EXAMPLE 3
 
 ```powershell
 Compare-Path "%SystemDrive%\" "D:\"
-```
-
 False
+```
 
 ## PARAMETERS
 
-### -TargetPath
+### -Path
 
 The path which to compare against the reference path
 
@@ -64,7 +61,7 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -ReferencePath
@@ -101,7 +98,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Sensitive
+### -CaseSensitive
 
 If specified performs case sensitive comparison
 

@@ -1,27 +1,27 @@
 ---
 external help file: Ruleset.Utility-help.xml
 Module Name: Ruleset.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-ProcessOutput.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md
 schema: 2.0.0
 ---
 
-# Get-ProcessOutput
+# Invoke-Process
 
 ## SYNOPSIS
 
-Run process and capture output
+Run process and format captured output
 
 ## SYNTAX
 
 ```powershell
-Get-ProcessOutput [-FilePath] <String> [[-ArgumentList] <String>] [-NoNewWindow] [[-Wait] <UInt32>] [-Format]
+Invoke-Process [-Path] <String> [-ArgumentList <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Run process with or without arguments, set wait time and capture output.
-If the target process results in an error, error message is formatted and shown in addition
+Run process with or without arguments, set process timeout, capture and format output.
+If target process produces error, error message is formatted and shown in addition
 to standard output if any.
 
 ## EXAMPLES
@@ -29,25 +29,32 @@ to standard output if any.
 ### EXAMPLE 1
 
 ```powershell
-Get-ProcessOutput -FilePath "git.exe" -ArgumentList "status" -NoNewWindow -Wait 3000
+Invoke-Process git.exe -ArgumentList "status" -NoNewWindow -Wait 3000
+```
+
+### EXAMPLE 2
+
+```powershell
+Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Async -Timeout 3000
 ```
 
 ## PARAMETERS
 
-### -FilePath
+### -Path
 
-The application or document to start
+Executable name or path to application to which to start.
+Wildcard characters and relative paths are supported.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: FilePath
 
 Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -ArgumentList
@@ -60,7 +67,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -82,26 +89,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Wait
+### -Timeout
 
-Number of milliseconds to wait for the associated process to exit
-Default is 0, which means wait indefinitely
+The amount of time, in milliseconds, to wait for the associated process to exit.
+Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
+The default wait time is 10000 (10 seconds).
 
 ```yaml
-Type: System.UInt32
+Type: System.Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
-Default value: 0
+Position: Named
+Default value: 10000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Format
+### -Async
 
-If specified formats standard output into INFO messages
+If specified, reading process output is asynchronous.
+This functionality is experimental because current thread will block until timeout.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Raw
+
+If specified, process output is returned as string.
+By default process output is redirected to information and error stream.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -121,15 +147,24 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-ProcessOutput
+### None. You cannot pipe objects to Invoke-Process
 
 ## OUTPUTS
 
-### [string] If the "Format" parameter is not specified
+### [string]
+
+### [System.Threading.CancellationTokenSource]
+
+### [void]
 
 ## NOTES
 
-TODO: Function needs improvements and more test cases
-TODO: consider renaming to Format-ProcessOutput
+TODO: Because of uncertain output this function needs a lot of improvements and a lot more test cases
+to handle variable varieties of process outputs.
+TODO: Domain parameter needed to invoke process remotely
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process)

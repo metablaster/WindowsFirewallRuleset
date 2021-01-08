@@ -1,72 +1,112 @@
 ---
 external help file: Ruleset.ComputerInfo-help.xml
 Module Name: Ruleset.ComputerInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-ConfiguredAdapter.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Select-IPInterface.md
 schema: 2.0.0
 ---
 
-# Get-ConfiguredAdapter
+# Select-IPInterface
 
 ## SYNOPSIS
 
-Retrieve a list of configured network adapters
+Get network adapter IP configuration
 
 ## SYNTAX
 
-### Individual (Default)
+### None (Default)
 
 ```powershell
-Get-ConfiguredAdapter [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeVirtual] [-IncludeHidden]
- [-IncludeDisconnected] [<CommonParameters>]
+Select-IPInterface [-AddressFamily <String>] [-Hidden] [-Connected] [-CompartmentId <Int32>] [-Detailed]
+ [<CommonParameters>]
 ```
 
-### All
+### Physical
 
 ```powershell
-Get-ConfiguredAdapter [[-AddressFamily] <String>] [-ExcludeHardware] [-IncludeAll] [<CommonParameters>]
+Select-IPInterface [-AddressFamily <String>] [-Physical] [-Hidden] [-Connected] [-CompartmentId <Int32>]
+ [-Detailed] [<CommonParameters>]
+```
+
+### Virtual
+
+```powershell
+Select-IPInterface [-AddressFamily <String>] [-Virtual] [-Hidden] [-Connected] [-CompartmentId <Int32>]
+ [-Detailed] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Return a list of all configured adapters and their configuration.
-By default only physical adapters connected to network are returned
-Conditionally includes virtual, hidden or disconnected adapters such as Hyper-V adapters on all compartments.
+Get a list of network adapter IP configuration for specified adapters.
+Conditionally select virtual, hidden or connected adapters.
+This may include adapters on all or specific compartments.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Get-ConfiguredAdapter "IPv4"
+Select-IPInterface -AddressFamily IPv4 -Connected -Detailed
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-ConfiguredAdapter "IPv6" -IncludeVirtual
+Select-IPInterface -AddressFamily IPv6 -Virtual
 ```
 
 ## PARAMETERS
 
 ### -AddressFamily
 
-IP version for which to obtain adapters, IPv4 or IPv6
+Obtain interfaces configured for specific IP version
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: IPVersion
 
 Required: False
-Position: 1
-Default value: None
+Position: Named
+Default value: Any
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExcludeHardware
+### -Physical
 
-Exclude hardware/physical network adapters
+If specified, include only physical adapters
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Physical
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Virtual
+
+If specified, include only virtual adapters
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Virtual
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Hidden
+
+If specified, only hidden interfaces are included
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -80,13 +120,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeAll
+### -Connected
 
-Include all possible adapter types present on target computer
+If specified, only interfaces connected to network are returned
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: All
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -96,45 +136,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeVirtual
+### -CompartmentId
 
-Whether to include virtual adapters
+Specifies an identifier for network compartment in the protocol stack.
+By default, the function gets Net IP configuration in all compartments.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
+Type: System.Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeHidden
+### -Detailed
 
-Whether to include hidden adapters
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeDisconnected
-
-Whether to include disconnected
+Indicates that the function retrieves additional interface and computer configuration information,
+including the computer name, link layer address, network profile, MTU length, and DHCP status.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -150,15 +176,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-ConfiguredAdapter
+### None. You cannot pipe objects to Select-IPInterface
 
 ## OUTPUTS
 
-### "NetIPConfiguration" or error message if no adapter configured
+### "NetIPConfiguration" [PSCustomObject] or error message if no adapter configured
 
 ## NOTES
 
-TODO: Loopback interface is missing in the output
-TODO: shorter parameter names: Virtual, All, Hidden, Hardware
+None.
 
 ## RELATED LINKS

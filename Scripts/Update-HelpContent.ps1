@@ -57,7 +57,7 @@ The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions, in addition help files
-are regenerated a new instead of being updated.
+are all removed and regenerated a new instead of being updated.
 
 .EXAMPLE
 PS> .\Update-HelpContent.ps1
@@ -77,7 +77,8 @@ None. Update-HelpContent.ps1 does not generate any output
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
 produce errors while generating online help and how to avoid them.
-Help version is automatically updated according to $ProjectVersion variable
+Help version is automatically updated according to $ProjectVersion variable.
+For best results run first time with -Force switch and second time without -Force switch.
 TODO: some markdown files will end up with additional blank line at the end of document for each
 update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
@@ -88,6 +89,7 @@ TODO: the "Module Name:" entry in help files (any maybe even "external help file
 if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute
+TODO: Get rid of blinking progress bar and make your own
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -207,8 +209,6 @@ if (!$Module)
 	Select-Object -ExpandProperty Name
 }
 
-# Counters for progress
-[int32] $ProgressCount = 0
 [string] $UpgradeLogsDir = "$ProjectRoot\Logs\HelpContent"
 
 # NOTE: separate folder for upgrade logs
@@ -252,9 +252,6 @@ specific subfolders
 
 	foreach ($CultureName in $UICulture)
 	{
-		Write-Progress -Activity "Creating help files" -CurrentOperation $ModuleName -Status $CultureName `
-			-PercentComplete (++$ProgressCount / $Module.Length * $UICulture.Length * 100)
-
 		Write-Debug -Message "[$ThisScript] Processing culture: $CultureName"
 
 		# Root directory of external help files for current module and culture
@@ -262,6 +259,13 @@ specific subfolders
 
 		# Root directory of online help files for current module and culture
 		[string] $OnlineHelp = "$ModuleRoot\Help\$CultureName"
+
+		if ($Force)
+		{
+			# Remove all online help to regenerate fresh files
+			Remove-Item -Path $OnlineHelp -Recurse -ErrorAction Ignore
+			Remove-Item -Path $ExternalHelp\*.xml -ErrorAction Ignore
+		}
 
 		# Help content download link for Update-Help commandlet
 		# This value is required for .cab file creation.
@@ -272,7 +276,7 @@ specific subfolders
 		[string] $ModulePage = "$OnlineHelp\$ModuleName.md"
 
 		# Both the help root folder and module page must exist to update
-		if (!$Force -and (Test-Path -Path $ModulePage -PathType Leaf))
+		if (Test-Path -Path $ModulePage -PathType Leaf)
 		{
 			Write-Verbose -Message "[$ThisScript] Updating help: $ModuleName - $CultureName"
 

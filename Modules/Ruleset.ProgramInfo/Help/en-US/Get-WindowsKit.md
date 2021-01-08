@@ -14,7 +14,7 @@ Get installed Windows Kits
 ## SYNTAX
 
 ```powershell
-Get-WindowsKit [[-ComputerName] <String>] [<CommonParameters>]
+Get-WindowsKit [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Get installation information about installed Windows Kit's
 ### EXAMPLE 1
 
 ```powershell
-Get-WindowsKit COMPUTERNAME
+Get-WindowsKit
+```
+
+### EXAMPLE 2
+
+```powershell
+Get-WindowsKit Server01
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name for which to list installed installed windows kits
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

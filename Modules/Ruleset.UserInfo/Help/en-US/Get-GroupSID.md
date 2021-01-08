@@ -14,7 +14,7 @@ Get SID of user groups for given computer
 ## SYNTAX
 
 ```powershell
-Get-GroupSID [-UserGroups] <String[]> [-ComputerName <String>] [-CIM] [<CommonParameters>]
+Get-GroupSID [-Group] <String[]> [-Domain <String>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,7 +26,7 @@ Get SID's for single or multiple user groups on a target computer
 ### EXAMPLE 1
 
 ```powershell
-Get-GroupSID "USERNAME" -Machine "COMPUTERNAME"
+Get-GroupSID "USERNAME" -Domain "COMPUTERNAME"
 ```
 
 ### EXAMPLE 2
@@ -37,14 +37,14 @@ Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 
 ## PARAMETERS
 
-### -UserGroups
+### -Group
 
 Array of user groups or single group name
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases: Group
+Aliases: UserGroup
 
 Required: True
 Position: 1
@@ -53,14 +53,14 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ComputerName
+### -Domain
 
 Computer name which to query for group users
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: Named
@@ -99,8 +99,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-CIM switch is not supported on PowerShell Core, meaning contacting remote computers
-is supported only on Windows PowerShell
-TODO: plural parameter
+None.
 
 ## RELATED LINKS

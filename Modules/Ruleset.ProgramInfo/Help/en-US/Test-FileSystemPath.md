@@ -1,37 +1,54 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Environment.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-FileSystemPath.md
 schema: 2.0.0
 ---
 
-# Test-Environment
+# Test-FileSystemPath
 
 ## SYNOPSIS
 
-Test if a path is valid with additional checks
+Test file system path syntax and existence
 
 ## SYNTAX
 
+### None (Default)
+
 ```powershell
-Test-Environment [-Path] <String> [-PathType <String>] [-Firewall] [-UserProfile] [<CommonParameters>]
+Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile]
+ [<CommonParameters>]
+```
+
+### Strict
+
+```powershell
+Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile] [-Strict]
+ [<CommonParameters>]
+```
+
+### Quiet
+
+```powershell
+Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile] [-Quiet]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Similar to Test-Path but expands environment variables and performs additional checks if desired:
-1.
-check if input path is compatible for firewall rules.
-2.
-check if the path leads to user profile
-Both of which can be limited to either container or leaf path type.
+Test-FileSystemPath checks file system path syntax by verifying environment variables and reporting
+unresolved wildcard pattern or bad characters.
+The path is then tested to confirm it points to an existing and valid location.
+
+Optionally you can check if the path is compatible for firewall rules or if the path leads to user profile.
+All of which can be limited to either container or leaf path type.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Test-Environment "%Windir%"
+Test-FileSystemPath "%Windir%"
 ```
 
 True, The path is valid, and it exists
@@ -39,7 +56,7 @@ True, The path is valid, and it exists
 ### EXAMPLE 2
 
 ```powershell
-Test-Environment "'%Windir%\System32'"
+Test-FileSystemPath "'%Windir%\System32'"
 ```
 
 False, Invalid path syntax
@@ -47,33 +64,33 @@ False, Invalid path syntax
 ### EXAMPLE 3
 
 ```powershell
-Test-Environment "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+Test-FileSystemPath "%HOME%\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 ```
 
-False, the path leads to userprofile but will not work for firewall rule
+False, the path contains environment variable that leads to userprofile and will not work for firewall
 
 ### EXAMPLE 4
 
 ```powershell
-Test-Environment "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
+Test-FileSystemPath "%SystemDrive%\Users\USERNAME\AppData\Local\MicrosoftEdge" -Firewall -UserProfile
 ```
 
-True, the path leads to userprofile and is good for firewall rule, and it exists
+True, the path leads to userprofile, is good for firewall rule and it exists
 
 ### EXAMPLE 5
 
 ```powershell
-Test-Environment "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile
+Test-FileSystemPath "%LOCALAPPDATA%\MicrosoftEdge" -UserProfile
 ```
 
 True, the path lead to user profile, and it exists
 
 ## PARAMETERS
 
-### -Path
+### -LiteralPath
 
-Path to folder, Allows null or empty since input may come from other commandlets which
-can return empty or null
+Path to directory or file which to test.
+Allows null or empty since it may come from commandlets which may return empty string or null
 
 ```yaml
 Type: System.String
@@ -89,29 +106,29 @@ Accept wildcard characters: False
 
 ### -PathType
 
-A type of path to test, can be one of the following:
+The type of path to test, can be one of the following:
 1.
-Leaf -The path is file or registry entry
+File - The path is path to file
 2.
-Container - the path is container such as folder or registry key
+Directory - The path is path to directory
 3.
-Any - Either Leaf or Container
+Any - The path is either path to file or directory, this is default
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases:
+Aliases: Type
 
 Required: False
 Position: Named
-Default value: Container
+Default value: Any
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Firewall
 
-Ensures the path is valid for firewall rule
+Ensures path is valid for firewall rule
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -141,13 +158,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Strict
+
+If specified, this function produces errors instead of warnings.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Strict
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Quiet
+
+If specified does not write any warnings or errors, only true or false is returned.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Quiet
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-Environment
+### None. You cannot pipe objects to Test-FileSystemPath
 
 ## OUTPUTS
 
@@ -155,9 +204,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: This should proably be part of utility module,
-it's here since only this module uses this function.
-This function should be used only to verify paths for external usage, not for commandles which
-don't expand system environment variables.
+The result of this function should be used only to verify paths for external usage, not as input to
+commandles which don't recognize system environment variables.
+This function is needed in cases where the path may be a modified version of an already formatted or
+verified path such as in rule scripts or to verify manually edited installation table.
+TODO: This should proably be part of Utility or ComputerInfo module, it's here since only this module uses this function.
 
 ## RELATED LINKS

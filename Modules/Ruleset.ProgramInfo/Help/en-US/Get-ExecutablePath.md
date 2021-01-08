@@ -14,7 +14,7 @@ Get list of install locations for executables and executable names
 ## SYNTAX
 
 ```powershell
-Get-ExecutablePath [[-ComputerName] <String>] [<CommonParameters>]
+Get-ExecutablePath [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,19 +27,25 @@ registry path and child registry key name for target computer
 ### EXAMPLE 1
 
 ```powershell
+Get-ExecutablePath
+```
+
+### EXAMPLE 2
+
+```powershell
 Get-ExecutablePath "COMPUTERNAME"
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name which to check
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

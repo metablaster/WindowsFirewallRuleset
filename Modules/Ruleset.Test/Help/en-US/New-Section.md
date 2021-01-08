@@ -14,7 +14,7 @@ Print new unit test section
 ## SYNTAX
 
 ```powershell
-New-Section [-Section] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+New-Section [-Message] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +32,7 @@ New-Section "This is new section"
 
 ## PARAMETERS
 
-### -Section
+### -Message
 
 Section title
 
@@ -95,6 +95,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: Write-Information instead of Write-Output
 
 ## RELATED LINKS

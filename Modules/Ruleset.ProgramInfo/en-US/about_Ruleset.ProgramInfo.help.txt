@@ -12,14 +12,11 @@ LONG DESCRIPTION
 	Querying remote computers is currently only partially supported.
 
 EXAMPLES
-	Search-Installation
-	Find installation directory for given predefined program name
+	Confirm-Installation
+	Test if given installation directory is valid
 
 	Format-Path
 	Format path into firewall compatible path
-
-	Get-InstallProperties
-	Search program install properties for all users, system wide
 
 	Get-AppCapability
 	Get capabilities of Windows store app
@@ -29,6 +26,9 @@ EXAMPLES
 
 	Get-ExecutablePath
 	Get list of install locations for executables and executable names
+
+	Get-InstallProperties
+	Search program install properties for all users, system wide
 
 	Get-NetFramework
 	Get installed NET Frameworks
@@ -45,6 +45,9 @@ EXAMPLES
 	Get-SystemApps
 	Get store apps installed system wide
 
+	Get-SystemSoftware
+	Search installed programs for all users, system wide
+
 	Get-UserApps
 	Search installed programs for all users, system wide
 
@@ -60,14 +63,14 @@ EXAMPLES
 	Get-WindowsSDK
 	Get installed Windows SDK
 
-	Test-FileSystemPath
-	Test if a path is valid with additional checks
+	Search-Installation
+	Find installation directory for given predefined program name
 
 	Test-ExecutableFile
 	Check if file such as an *.exe exists
 
-	Confirm-Installation
-	Test if given installation directory is valid
+	Test-FileSystemPath
+	Test if a path is valid with additional checks
 
 	Test-Service
 	Check if service exists on system

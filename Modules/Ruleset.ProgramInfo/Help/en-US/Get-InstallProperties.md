@@ -14,7 +14,7 @@ Search program install properties for all users, system wide
 ## SYNTAX
 
 ```powershell
-Get-InstallProperties [[-ComputerName] <String>] [<CommonParameters>]
+Get-InstallProperties [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,19 +26,25 @@ Search separate location in the registry for programs installed for all users.
 ### EXAMPLE 1
 
 ```powershell
+Get-InstallProperties
+```
+
+### EXAMPLE 2
+
+```powershell
 Get-InstallProperties "COMPUTERNAME"
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name which to check
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1
@@ -61,7 +67,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: should be renamed into Get-InstallProperties or something else because it has nothing to do
-with system wide installed programs
+TODO: Should be renamed to something that best describes target registry key
 
 ## RELATED LINKS

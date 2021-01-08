@@ -14,7 +14,7 @@ Retrieves SQL server information from a local or remote servers.
 ## SYNTAX
 
 ```powershell
-Get-SqlServerInstance [[-ComputerName] <String[]>] [-CIM] [<CommonParameters>]
+Get-SqlServerInstance [[-Domain] <String[]>] [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,45 +28,45 @@ instances from a SQL server and detects if in a cluster or not.
 ### EXAMPLE 1
 
 ```powershell
-Get-SqlServerInstance -Computername DC1
+Get-SqlServerInstance -Domain Server01
 ```
 
 SQLInstance   : MSSQLSERVER
 Version       : 10.0.1600.22
-isCluster     : False
-Computername  : DC1
-FullName      : DC1
-isClusterNode : False
+IsCluster     : False
+Domain        : Server01
+FullName      : Server01
+IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Caption       : SQL Server 2008
+Name          : SQL Server 2008
 
-SQLInstance   : MINASTIRITH
+SQLInstance   : SQLSERVER
 Version       : 10.0.1600.22
-isCluster     : False
-Computername  : DC1
-FullName      : DC1\MINASTIRITH
-isClusterNode : False
+IsCluster     : False
+Domain        : Server01
+FullName      : Server01\SQLSERVER
+IsClusterNode : False
 Edition       : Enterprise Edition
 ClusterName   :
 ClusterNodes  : {}
-Caption       : SQL Server 2008
+Name          : SQL Server 2008
 
 ### EXAMPLE 2
 
 ```powershell
-Get-SqlServerInstance -Computername Server1, Server2 -CIM
+Get-SqlServerInstance -Domain Server1, Server2 -CIM
 ```
 
-Computername     : Server1
+Domain           : Server1
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition: Core-based Licensing
 Version          : 11.0.3128.0
-Caption          : SQL Server 2012
-isCluster        : False
-isClusterNode    : False
+Name             : SQL Server 2012
+IsCluster        : False
+IsClusterNode    : False
 ClusterName      :
 ClusterNodes     : {}
 FullName         : Server1
@@ -75,14 +75,14 @@ ServiceState     : Running
 ServiceAccount   : domain\Server1SQL
 ServiceStartMode : Auto
 
-Computername     : Server2
+Domain           : Server2
 SQLInstance      : MSSQLSERVER
 SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
 Edition          : Enterprise Edition
 Version          : 10.50.4000.0
-Caption          : SQL Server 2008 R2
-isCluster        : False
-isClusterNode    : False
+Name             : SQL Server 2008 R2
+IsCluster        : False
+IsClusterNode    : False
 ClusterName      :
 ClusterNodes     : {}
 FullName         : Server2
@@ -93,14 +93,14 @@ ServiceStartMode : Auto
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Local or remote systems to query for SQL information.
 
 ```yaml
 Type: System.String[]
 Parameter Sets: (All)
-Aliases:
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1
@@ -132,7 +132,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-SqlServerInstance
+### [string[]]
 
 ## OUTPUTS
 
@@ -140,7 +140,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Name: Get-SqlServerInstance
+Name: Get-SqlServer
 Author: Boe Prox, edited by cookie monster (to cover wow6432node, CIM tie in)
 
 Version History:
@@ -173,6 +173,8 @@ See links section for original and individual versions of code
 TODO: Update examples to include DTS directory
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md)
 
 [https://github.com/RamblingCookieMonster/PowerShell](https://github.com/RamblingCookieMonster/PowerShell)
 

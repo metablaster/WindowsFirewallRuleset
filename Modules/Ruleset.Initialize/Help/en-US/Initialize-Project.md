@@ -14,7 +14,7 @@ Check system requirements for this project
 ## SYNTAX
 
 ```powershell
-Initialize-Project [-Abort] [<CommonParameters>]
+Initialize-Project [-Strict] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Error or warning message is shown if check failed, environment info otherwise.
 ### EXAMPLE 2
 
 ```powershell
-Initialize-Project -Abort
+Initialize-Project -Strict
 ```
 
 Performs default requirements and recommendations checks managed by global settings.
@@ -47,7 +47,7 @@ If successful environment info is shown.
 
 ## PARAMETERS
 
-### -Abort
+### -Strict
 
 If specified exit is called on failure instead of return
 

@@ -1,59 +1,64 @@
 ---
 external help file: Ruleset.ComputerInfo-help.xml
 Module Name: Ruleset.ComputerInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-Broadcast.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceBroadcast.md
 schema: 2.0.0
 ---
 
-# Get-Broadcast
+# Get-InterfaceBroadcast
 
 ## SYNOPSIS
 
-Get broadcast addresses on the local machine
+Get broadcast address
 
 ## SYNTAX
 
-### Individual (Default)
+### None (Default)
 
 ```powershell
-Get-Broadcast [-ExcludeHardware] [-IncludeVirtual] [-IncludeHidden] [-IncludeDisconnected] [<CommonParameters>]
+Get-InterfaceBroadcast [-Hidden] [<CommonParameters>]
 ```
 
-### All
+### Physical
 
 ```powershell
-Get-Broadcast [-IncludeAll] [-ExcludeHardware] [<CommonParameters>]
+Get-InterfaceBroadcast [-Physical] [-Hidden] [<CommonParameters>]
+```
+
+### Virtual
+
+```powershell
+Get-InterfaceBroadcast [-Virtual] [-Hidden] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Return broadcast addresses, for each configured adapter.
-This includes both physical and virtual adapters.
-Returned broadcast addresses are only for IPv4
+Get broadcast addresses, for specified network interfaces.
+Returned broadcast addresses are IPv4 and only for adapters connected to network.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Get-Broadcast -IncludeAll
+Get-InterfaceBroadcast -Physical
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-Broadcast -IncludeAll -ExcludeHardware
+Get-InterfaceBroadcast -Virtual -Hidden
 ```
 
 ## PARAMETERS
 
-### -IncludeAll
+### -Physical
 
-Include all possible adapter types present on target computer
+If specified, include only physical adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: All
+Parameter Sets: Physical
 Aliases:
 
 Required: False
@@ -63,61 +68,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExcludeHardware
+### -Virtual
 
-Exclude hardware/physical network adapters
+If specified, include only virtual adapters
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Virtual
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Hidden
+
+If specified, only hidden interfaces are included
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeVirtual
-
-Whether to include virtual adapters
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeHidden
-
-Whether to include hidden adapters
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeDisconnected
-
-Whether to include disconnected
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Individual
 Aliases:
 
 Required: False
@@ -133,15 +106,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-Broadcast
+### None. You cannot pipe objects to Get-InterfaceBroadcast
 
 ## OUTPUTS
 
-### [ipaddress] Broadcast addresses
+### [IPAddress] Broadcast addresses
 
 ## NOTES
 
-TODO: Some parameters most likely make no sense, otherwise we should return custom object,
-separating addresses per adapter
+None.
 
 ## RELATED LINKS

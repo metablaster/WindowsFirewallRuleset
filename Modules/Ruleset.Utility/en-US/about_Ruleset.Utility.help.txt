@@ -20,29 +20,35 @@ EXAMPLES
 	Approve-Execute
 	Used to prompt user to approve running script
 
+	Build-ServiceList
+	Build a list of windows services involved in script rules
+
 	Compare-Path
 	Compare 2 paths for equality or similarity
 
 	Confirm-FileEncoding
 	Verify file is correctly encoded
 
-	Select-EnvironmentVariable
-	Get a group of environment variables
+	ConvertFrom-Wildcard
+	Convert wildcard pattern to regex
 
 	Get-FileEncoding
 	Gets the encoding of a file
 
-	Build-ServiceList
-	Get a list of windows services involved in rules
-
-	Invoke-Process
-	Run process and capture output
-
 	Get-TypeName
 	Get .NET outputs of a commandlet or convert to/from type accelerator
 
+	Invoke-Process
+	Run process and format captured output
+
+	Out-DataTable
+	Creates a DataTable for an object
+
 	Resolve-FileSystemPath
-	Resolves path wildcard pattern and/or relative path to single file system path
+	Resolve wildcard directory or file location
+
+	Select-EnvironmentVariable
+	Select a group of system environment variables
 
 	Set-NetworkProfile
 	Set network profile for physical network interfaces

@@ -14,7 +14,7 @@ Get installed NET Frameworks
 ## SYNTAX
 
 ```powershell
-Get-NetFramework [[-ComputerName] <String>] [<CommonParameters>]
+Get-NetFramework [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,19 +27,25 @@ installation directory exists or not, since some versions are built in
 ### EXAMPLE 1
 
 ```powershell
+Get-NetFramework
+```
+
+### EXAMPLE 2
+
+```powershell
 Get-NetFramework COMPUTERNAME
 ```
 
 ## PARAMETERS
 
-### -ComputerName
+### -Domain
 
 Computer name for which to list installed installed framework
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: Computer, Server, Domain, Host, Machine
+Aliases: ComputerName, CN
 
 Required: False
 Position: 1

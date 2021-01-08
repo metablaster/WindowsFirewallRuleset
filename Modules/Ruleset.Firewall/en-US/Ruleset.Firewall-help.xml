@@ -15,8 +15,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PolicyStore</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
           </maml:Description>
@@ -27,17 +27,17 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Folder</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
           <maml:Description>
             <maml:para>Path into which to save file</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>.</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
@@ -166,8 +166,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>PolicyStore</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
         </maml:Description>
@@ -178,17 +178,17 @@
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Folder</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
         <maml:Description>
           <maml:para>Path into which to save file</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>.</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
@@ -346,21 +346,11 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar</maml:para>
-        <maml:para>TODO: export to excel TODO: Following rules (rule groups) failed to export with "WARNING: Input is missing, result is empty string": Outbound: - Broadcast</maml:para>
-        <maml:para>- Network Discovery</maml:para>
-        <maml:para>- File and Printer Sharing</maml:para>
-        <maml:para>- GitHub</maml:para>
-        <maml:para>- Development - Microsoft Visual Studio</maml:para>
-        <maml:para>- Software - Nvidia</maml:para>
-        <maml:para>- [Server - SQL] -&gt; SQL Server Management Studio</maml:para>
-        <maml:para>- [Microsoft - Office</maml:para>
-        <maml:para>- Windows System</maml:para>
-        <maml:para></maml:para>
-        <maml:para>Inbound: - Broadcast</maml:para>
-        <maml:para>- Network Discovery</maml:para>
-        <maml:para>- File and Printer Sharing</maml:para>
-        <maml:para>- Microsoft Office</maml:para>
+        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to let specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern TODO: export to excel TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"</maml:para>
+        <maml:para>Outbound:</maml:para>
+        <maml:para>Broadcast Network Discovery File and Printer Sharing GitHub Development - Microsoft Visual Studio Software - Nvidia [Server - SQL] -&gt; SQL Server Management Studio [Microsoft - Office Windows System</maml:para>
+        <maml:para>Inbound:</maml:para>
+        <maml:para>Broadcast Network Discovery File and Printer Sharing Microsoft Office</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -388,8 +378,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/MScholtes/Firewall-Manager</maml:linkText>
+        <maml:uri>https://github.com/MScholtes/Firewall-Manager</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -602,7 +596,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: For force loaded rules it should say: "Force Load Rule:"</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -636,8 +630,8 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Import-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PolicyStore</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
           </maml:Description>
@@ -648,17 +642,17 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Folder</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
           <maml:Description>
             <maml:para>Path to directory where exported rules file is located</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>.</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
@@ -686,8 +680,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>PolicyStore</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
         </maml:Description>
@@ -698,17 +692,17 @@
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Folder</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
         <maml:Description>
           <maml:para>Path to directory where exported rules file is located</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>.</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
@@ -758,7 +752,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
+        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -779,8 +773,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/MScholtes/Firewall-Manager</maml:linkText>
+        <maml:uri>https://github.com/MScholtes/Firewall-Manager</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -794,13 +792,13 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted</maml:para>
+      <maml:para>Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Remove-FirewallRules</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PolicyStore</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:Description>
             <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
           </maml:Description>
@@ -811,17 +809,17 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Folder</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
           <maml:Description>
             <maml:para>Folder in which file is located</maml:para>
           </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>.</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
@@ -871,8 +869,8 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>PolicyStore</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:Description>
           <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
         </maml:Description>
@@ -883,17 +881,17 @@
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Folder</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
         <maml:Description>
           <maml:para>Folder in which file is located</maml:para>
         </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>.</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
@@ -967,7 +965,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution TODO: implement removing rules not according to file</maml:para>
+        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern TODO: implement removing rules not according to file</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -988,8 +986,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/MScholtes/Firewall-Manager</maml:linkText>
+        <maml:uri>https://github.com/MScholtes/Firewall-Manager</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
