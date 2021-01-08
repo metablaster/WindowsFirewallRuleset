@@ -62,7 +62,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item 
 . $PSScriptRoot\ContextSetup.ps1
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 
 # User prompt
 Update-Context $TestContext $ThisScript

@@ -133,7 +133,7 @@ if ($null -eq $PlatyModule)
 }
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Imports

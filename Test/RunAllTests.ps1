@@ -71,7 +71,7 @@ param (
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Imports

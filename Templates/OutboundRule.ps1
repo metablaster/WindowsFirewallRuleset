@@ -65,7 +65,7 @@ param (
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 
 # Imports
 # TODO: adjust path

@@ -87,6 +87,7 @@ Parameter names and aliases
 - [switch] `Overwrite` (the cmdlet overwrites any existing data when the parameter is specified)
 - [string] `Prompt` (specify a prompt for the cmdlet)
 - [array] `State` (specify the Keyword names of states)
+- [switch] `Trusted` (trust levels are supported when the parameter is specified)
 
 `*` Used by most commandlets as primary parameter but should be alias instead
 `PSPath` is alias of both the Path and LiteralPath of most commandlets

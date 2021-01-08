@@ -76,7 +76,7 @@ elseif (!((Get-Command -Name Initialize-Table -EA Ignore) -and
 }
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 
 # Imports
 . $PSScriptRoot\ContextSetup.ps1

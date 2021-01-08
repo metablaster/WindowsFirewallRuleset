@@ -38,7 +38,7 @@ tests for OS, PowerShell version and edition, Administrator mode, .NET Framework
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
 
-.PARAMETER Abort
+.PARAMETER Strict
 If specified exit is called on failure instead of return
 
 .EXAMPLE
@@ -48,7 +48,7 @@ Performs default requirements and recommendations checks managed by global setti
 Error or warning message is shown if check failed, environment info otherwise.
 
 .EXAMPLE
-PS> Initialize-Project -Abort
+PS> Initialize-Project -Strict
 
 Performs default requirements and recommendations checks managed by global settings.
 Error or warning message is shown if check failed and all subsequent operations are halted.
@@ -81,7 +81,7 @@ function Initialize-Project
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[switch] $Abort
+		[switch] $Strict
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
@@ -117,7 +117,7 @@ function Initialize-Project
 		Write-Error -Category OperationStopped -TargetObject $OSPlatform `
 			-Message "$OSPlatform platform is not supported, required platform is Win32NT"
 
-		if ($Abort) { exit }
+		if ($Strict) { exit }
 		return
 	}
 
@@ -130,7 +130,7 @@ function Initialize-Project
 		Write-Error -Category NotImplemented -TargetObject $TargetOSVersion `
 			-Message "Minimum supported operating system is 'Windows v$RequireWindowsVersion' but 'Windows v$OSMajorMinorBuild present"
 
-		if ($Abort) { exit }
+		if ($Strict) { exit }
 		return
 	}
 
@@ -143,7 +143,7 @@ function Initialize-Project
 		Write-Error -Category PermissionDenied -TargetObject $Principal `
 			-Message "Elevation required, please open PowerShell as Administrator and try again"
 
-		if ($Abort) { exit }
+		if ($Strict) { exit }
 		return
 	}
 
@@ -158,7 +158,7 @@ function Initialize-Project
 		Write-Error -Category OperationStopped -TargetObject $OSEdition `
 			-Message "Windows $OSEdition doesn't have Local Group Policy required by this project"
 
-		if ($Abort) { exit }
+		if ($Strict) { exit }
 		return
 	}
 
@@ -185,7 +185,7 @@ function Initialize-Project
 		Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
 			-Message "Required PowerShell $PowerShellEdition is v$RequirePSVersion but v$TargetPSVersion present"
 
-		if ($Abort) { exit }
+		if ($Strict) { exit }
 		return
 	}
 
@@ -207,7 +207,7 @@ function Initialize-Project
 
 		if (!(Initialize-Service $RequiredServices))
 		{
-			if ($Abort) { exit }
+			if ($Strict) { exit }
 			return
 		}
 	}
@@ -259,7 +259,7 @@ function Initialize-Project
 				Write-Error -Category ObjectNotFound -TargetObject $TargetNETVersion `
 					-Message "Unable to determine installed .NET version, required .NET Framework is .NET v$RequireNETVersion"
 
-				if ($Abort) { exit }
+				if ($Strict) { exit }
 				return
 			}
 
@@ -269,7 +269,7 @@ function Initialize-Project
 					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
 				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
 
-				if ($Abort) { exit }
+				if ($Strict) { exit }
 				return
 			}
 		}
@@ -344,7 +344,7 @@ function Initialize-Project
 		if (!(Initialize-Provider -Required @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 					-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"))
 		{
-			if ($Abort) { exit }
+			if ($Strict) { exit }
 			return
 		}
 
@@ -359,14 +359,14 @@ function Initialize-Project
 		if (!(Initialize-Module -Required @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
 					-InfoMessage "PowerShellGet >= v$RequirePowerShellGetVersion is required otherwise updating other modules might fail"))
 		{
-			if ($Abort) { exit }
+			if ($Strict) { exit }
 			return
 		}
 
 		# PackageManagement is required otherwise updating modules might fail, will be installed by PowerShellGet
 		if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } ))
 		{
-			if ($Abort) { exit }
+			if ($Strict) { exit }
 			return
 		}
 
@@ -386,7 +386,7 @@ function Initialize-Project
 		if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
 					-InfoMessage "PSScriptAnalyzer >= v$RequireAnalyzerVersion is required otherwise code will start missing while editing" ))
 		{
-			if ($Abort) { exit }
+			if ($Strict) { exit }
 			return
 		}
 

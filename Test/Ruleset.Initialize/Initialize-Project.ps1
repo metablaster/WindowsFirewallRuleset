@@ -78,7 +78,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dan
 		return
 	}
 
-	Start-Test "Initialize-Project -Abort"
+	Start-Test "Initialize-Project -Strict"
 	Initialize-Project
 
 	Start-Test "Initialize-Project -SkipModules -SkipServices"

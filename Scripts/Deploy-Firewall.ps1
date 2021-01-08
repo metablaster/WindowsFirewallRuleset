@@ -78,7 +78,7 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item 
 & "$ProjectRoot\Scripts\Unblock-Project.ps1"
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 

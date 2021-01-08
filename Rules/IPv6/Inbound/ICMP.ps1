@@ -127,7 +127,7 @@ param (
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 # Check requirements
-Initialize-Project -Abort
+Initialize-Project -Strict
 
 # Imports
 . $PSScriptRoot\DirectionSetup.ps1
