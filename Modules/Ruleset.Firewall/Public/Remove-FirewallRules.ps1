@@ -89,8 +89,9 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Remove-FirewallRules
 {
+	# TODO: Should be possible to use Format-Output function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md")]
 	[OutputType([void])]

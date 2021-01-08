@@ -74,7 +74,7 @@ InModuleScope Ruleset.IP {
 	Describe 'ConvertTo-Network' {
 		BeforeAll {
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "Needs update")]
+				"PSUseDeclaredVarsMoreThanAssignment", "MaskTable", Justification = "False Positive")]
 			$MaskTable = @(
 				@{ MaskLength = 0; Mask = '0.0.0.0' }
 				@{ MaskLength = 1; Mask = '128.0.0.0' }

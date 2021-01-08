@@ -74,8 +74,9 @@ Develop from false to true in clean session
 #>
 function Initialize-Project
 {
+	# TODO: Should be possible to replace Write-Host after updates done to formatting
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "There is no way to replace Write-Host here")]
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host because of output formatting issues")]
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Project.md")]
 	[OutputType([void])]

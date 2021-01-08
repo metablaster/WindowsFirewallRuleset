@@ -131,8 +131,9 @@ function Test-FileSystemPath
 
 	function Write-Conditional
 	{
+		# TODO: Convert to script block
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-			"PSProvideCommentHelp", "", Scope = "Function", Justification = "Inner function needs no help")]
+			"PSProvideCommentHelp", "", Scope = "Function", Justification = "Self explanatory function")]
 		param ([string] $Message)
 
 		if ($Quiet)

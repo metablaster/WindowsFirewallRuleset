@@ -127,7 +127,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Scope = "Function", Justification = "Required for simplicity")]
+	"PSAvoidGlobalVars", "", Justification = "Used because of simplicity")]
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([System.Management.Automation.PSCustomObject], [string])]
 param (

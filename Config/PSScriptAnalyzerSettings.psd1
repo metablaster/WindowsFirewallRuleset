@@ -3,99 +3,101 @@
 # NOTE: PSGallery ruleset is a duplicate of these
 # TODO: Check for new or updated settings
 # NOTE: Last checked on 23.8.2020. v1.19.1
+# NOTE: Good portion of warnings is surpressed because of following false positive:
+# https://github.com/PowerShell/PSScriptAnalyzer/issues/1354
 
 @{
 	IncludeRules = @(
 		#
 		# CmdletDesign
 		#
-		'PSUseApprovedVerbs',
-		'PSReservedCmdletChar',
-		'PSReservedParams',
-		'PSShouldProcess',
-		'PSUseSingularNouns',
-		'PSMissingModuleManifestField',
-		'PSAvoidDefaultValueSwitchParameter',
+		"PSUseApprovedVerbs"
+		"PSReservedCmdletChar"
+		"PSReservedParams"
+		"PSShouldProcess"
+		"PSUseSingularNouns"
+		"PSMissingModuleManifestField"
+		"PSAvoidDefaultValueSwitchParameter"
 		#
-		# 'PSDSC*',
+		# "PSDSC*",
 		# Desired State Configuration is a management platform in PowerShell that enables you to
 		# manage your IT and development infrastructure with configuration as code
 		#
-		'PSDSCDscExamplesPresent'
-		'PSDSCDscTestsPresent'
-		'PSDSCReturnCorrectTypesForDSCFunctions'
-		'PSDSCStandardDSCFunctionsInResource'
-		'PSDSCUseIdenticalMandatoryParametersForDSC'
-		'PSDSCUseIdenticalParametersForDSC'
-		'PSDSCUseVerboseMessageInDSCResource'
+		"PSDSCDscExamplesPresent"
+		"PSDSCDscTestsPresent"
+		"PSDSCReturnCorrectTypesForDSCFunctions"
+		"PSDSCStandardDSCFunctionsInResource"
+		"PSDSCUseIdenticalMandatoryParametersForDSC"
+		"PSDSCUseIdenticalParametersForDSC"
+		"PSDSCUseVerboseMessageInDSCResource"
 		#
 		# ScriptFunctions
 		#
-		'PSAvoidUsingCmdletAliases',
-		'PSAvoidUsingWMICmdlet',
-		'PSAvoidUsingEmptyCatchBlock',
-		'PSUseCmdletCorrectly',
-		'PSUseShouldProcessForStateChangingFunctions',
-		'PSAvoidUsingPositionalParameters',
-		'PSAvoidGlobalVars',
-		'PSUseDeclaredVarsMoreThanAssignments',
-		'PSAvoidUsingInvokeExpression',
+		"PSAvoidUsingCmdletAliases"
+		"PSAvoidUsingWMICmdlet"
+		"PSAvoidUsingEmptyCatchBlock"
+		"PSUseCmdletCorrectly"
+		"PSUseShouldProcessForStateChangingFunctions"
+		"PSAvoidUsingPositionalParameters"
+		"PSAvoidGlobalVars"
+		"PSUseDeclaredVarsMoreThanAssignments"
+		"PSAvoidUsingInvokeExpression"
 		#
 		# ScriptingStyle
 		#
-		'PSProvideCommentHelp',
-		'PSAvoidUsingWriteHost',
+		"PSProvideCommentHelp"
+		"PSAvoidUsingWriteHost"
 		# New settings v1.19.1
-		'AvoidUsingDoubleQuotesForConstantString',
-		'UseUsingScopeModifierInNewRunspaces'
+		"AvoidUsingDoubleQuotesForConstantString"
+		"UseUsingScopeModifierInNewRunspaces"
 		#
 		# ScriptSecurity
 		#
-		'PSAvoidUsingPlainTextForPassword',
-		'PSAvoidUsingComputerNameHardcoded',
-		'PSUsePSCredentialType',
-		'PSAvoidUsingConvertToSecureStringWithPlainText',
-		'PSAvoidUsingUserNameAndPasswordParams',
+		"PSAvoidUsingPlainTextForPassword"
+		"PSAvoidUsingComputerNameHardcoded"
+		"PSUsePSCredentialType"
+		"PSAvoidUsingConvertToSecureStringWithPlainText"
+		"PSAvoidUsingUserNameAndPasswordParams"
 		#
 		# Rules not includes in samples
 		#
-		'PSAvoidAssignmentToAutomaticVariable'
-		'PSAvoidDefaultValueForMandatoryParameter'
-		'PSAvoidGlobalAliases'
-		'PSAvoidGlobalFunctions'
-		'PSAvoidInvokingEmptyMembers'
-		'PSAvoidLongLines'
-		'PSAvoidOverwritingBuiltInCmdlets'
-		'PSAvoidNullOrEmptyHelpMessageAttribute'
-		'PSAvoidShouldContinueWithoutForce'
-		'PSAvoidUsingDeprecatedManifestFields'
-		'PSAvoidTrailingWhitespace'
-		'PSMisleadingBacktick'
-		'PSPossibleIncorrectComparisonWithNull'
-		'PSPossibleIncorrectUsageOfAssignmentOperator'
-		'PSPossibleIncorrectUsageOfRedirectionOperator'
-		'PSReviewUnusedParameter'
-		'PSUseLiteralInitializerForHashtable'
-		'PSUseOutputTypeCorrectly'
-		'PSUseProcessBlockForPipelineCommand'
-		'PSUseSupportsShouldProcess'
-		'PSUseToExportFieldsInManifest'
+		"PSAvoidAssignmentToAutomaticVariable"
+		"PSAvoidDefaultValueForMandatoryParameter"
+		"PSAvoidGlobalAliases"
+		"PSAvoidGlobalFunctions"
+		"PSAvoidInvokingEmptyMembers"
+		"PSAvoidLongLines"
+		"PSAvoidOverwritingBuiltInCmdlets"
+		"PSAvoidNullOrEmptyHelpMessageAttribute"
+		"PSAvoidShouldContinueWithoutForce"
+		"PSAvoidUsingDeprecatedManifestFields"
+		"PSAvoidTrailingWhitespace"
+		"PSMisleadingBacktick"
+		"PSPossibleIncorrectComparisonWithNull"
+		"PSPossibleIncorrectUsageOfAssignmentOperator"
+		"PSPossibleIncorrectUsageOfRedirectionOperator"
+		"PSReviewUnusedParameter"
+		"PSUseLiteralInitializerForHashtable"
+		"PSUseOutputTypeCorrectly"
+		"PSUseProcessBlockForPipelineCommand"
+		"PSUseSupportsShouldProcess"
+		"PSUseToExportFieldsInManifest"
 		# NOTE: Use this option for version requirements
-		# 'PSUseCompatibleCmdlets'
-		'PSUseCompatibleCommands'
-		'PSUseCompatibleSyntax'
-		'PSUseCompatibleTypes'
-		'PSUseUTF8EncodingForHelpFile'
-		'PSUseBOMForUnicodeEncodedFile'
+		# "PSUseCompatibleCmdlets"
+		"PSUseCompatibleCommands"
+		"PSUseCompatibleSyntax"
+		"PSUseCompatibleTypes"
+		"PSUseUTF8EncodingForHelpFile"
+		"PSUseBOMForUnicodeEncodedFile"
 		#
 		# Code formatting, Allman
 		#
-		'PSPlaceOpenBrace',
-		'PSPlaceCloseBrace',
-		'PSUseConsistentWhitespace',
-		'PSUseConsistentIndentation',
-		'PSAlignAssignmentStatement',
-		'PSUseCorrectCasing'
+		"PSPlaceOpenBrace"
+		"PSPlaceCloseBrace"
+		"PSUseConsistentWhitespace"
+		"PSUseConsistentIndentation"
+		"PSAlignAssignmentStatement"
+		"PSUseCorrectCasing"
 	)
 
 	# NOTE: powershell.codeFormatting strings are settings for PowerShell VSCode extension
@@ -180,12 +182,12 @@
 			Enable = $true
 			# Represents the kind of indentation to be used.
 			# Possible values are: space, tab (default = space)
-			Kind = 'tab' # editor.insertSpaces, editor.detectIndentation
+			Kind = "tab" # editor.insertSpaces, editor.detectIndentation
 			# Whether to increase indentation after a pipeline for multi-line statements
 			# IncreaseIndentationForFirstPipeline (default),
 			# IncreaseIndentationAfterEveryPipeline, NoIndentation
 			# powershell.codeFormatting.pipelineIndentationStyle
-			PipelineIndentation = 'NoIndentation'
+			PipelineIndentation = "NoIndentation"
 			# Indentation size in the number of space characters (default = 4)
 			IndentationSize = 4 # editor.tabSize
 		}
@@ -236,7 +238,7 @@
 		}
 
 		PSUseCompatibleSyntax = @{
-			# identifies syntax elements that are incompatible with targeted PowerShell versions
+			# Identifies syntax elements that are incompatible with targeted PowerShell versions
 			Enable = $true
 			TargetVersions = @(
 				"7.0",
@@ -256,8 +258,9 @@
 			# OS can be either Windows, Linux or MacOS
 			# PSVERSION is the PowerShell version.
 			compatibility = @(
-				"core-6.1.0-windows"
 				"desktop-5.1.14393.206-windows"
+				# Windows 10 - 1803
+				"core-6.1.0-windows"
 			)
 		}
 
@@ -277,13 +280,13 @@
 				# TODO: No need to limit code to such old systems, see link to compile own list:
 				# https://github.com/PowerShell/PSScriptAnalyzer/blob/master/RuleDocumentation/UseCompatibleTypes.md
 				# Windows 10 1903 (PowerShell 7.0)
-				'win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core'
+				"win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core"
 				# Windows 10 1809 (PowerShell 5.1)
-				'win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'
+				"win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework"
 				# Windows Server 2019 (PowerShell 7.0)
-				'win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core'
+				"win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core"
 				# Windows Server 2019 (PowerShell 5.1)
-				'win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework'
+				"win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework"
 			)
 
 			# Full names of types or type accelerators to ignore compatibility of in scripts

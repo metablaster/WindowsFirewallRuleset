@@ -27,6 +27,8 @@ SOFTWARE.
 #>
 
 #region Initialization
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSAvoidGlobalAliases", "", Justification = "Global alias is wanted in this case")]
 param (
 	[Parameter()]
 	[switch] $ListPreference

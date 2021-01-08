@@ -69,7 +69,7 @@ Initialize-Project -Strict
 
 # User prompt
 Update-Context $TestContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
 Enter-Test

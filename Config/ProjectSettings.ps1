@@ -67,6 +67,7 @@ such as PS edition, PS version etc...
 TODO: Define OutputType attribute
 #>
 
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive")]
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Script")]
 param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Script")]
@@ -273,7 +274,6 @@ if ($Develop)
 	# The Health variables log error events.
 	# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_eventlogs?view=powershell-5.1#selecting-events-for-the-windows-powershell-event-log
 
-	# TODO: Report issue, unable to set single SuppressMessageAttribute
 	# Logs the start and stop of PowerShell
 	$LogEngineLifeCycleEvent = $false
 

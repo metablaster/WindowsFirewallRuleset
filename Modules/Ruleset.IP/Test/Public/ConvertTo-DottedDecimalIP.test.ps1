@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #region:TestFileHeader
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "Likely false positive")]
+	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
 param (
 	[switch] $UseExisting
 )
@@ -89,7 +89,7 @@ InModuleScope Ruleset.IP {
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-DottedDecimalIP).Examples.Example.Code | ForEach-Object -Begin {
 				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
+					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False Positive")]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

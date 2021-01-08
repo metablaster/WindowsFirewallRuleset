@@ -148,8 +148,9 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Export-FirewallRules
 {
+	# TODO: Should be possible to use Format-Output function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md")]
 	[OutputType([void])]

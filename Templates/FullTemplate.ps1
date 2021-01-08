@@ -134,11 +134,18 @@ using namespace System
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute( # Scope = "Function"
+	"PSAvoidUsingWriteHost", "", Justification = "Template")]
 [CmdletBinding()]
 [OutputType([void])]
 param (
 	[Parameter()]
-	[switch] $Force
+	[switch] $Force,
+
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSReviewUnusedParameter", "Unused", Justification = "Template")]
+	[Parameter()]
+	[string] $Unused
 )
 
 #region Initialization
@@ -162,5 +169,9 @@ $Deny = "Skip operation, template deny help message"
 Update-Context $TemplateContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
+
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "", Justification = "Template")]
+$UnusedVariable = $null
 
 Update-Log

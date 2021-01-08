@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #region:TestFileHeader
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "Likely false positive")]
+	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
 param (
 	[switch] $UseExisting
 )
@@ -80,13 +80,13 @@ InModuleScope Ruleset.IP {
 			}
 
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
+				"PSUseDeclaredVarsMoreThanAssignment", "FromIPAndMask", Justification = "False positive")]
 			$FromIPAndMask = @{
 				IPAddress = '0.0.0.0/32'
 			}
 
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-				"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
+				"PSUseDeclaredVarsMoreThanAssignment", "FromStartAndEnd", Justification = "False positive")]
 			$FromStartAndEnd = @{
 				Start = '0.0.0.0'
 				End = '255.255.255.255'
@@ -133,7 +133,7 @@ InModuleScope Ruleset.IP {
 		It 'Example <Number> is valid' -TestCases (
 			(Get-Help ConvertTo-Subnet).Examples.Example.Code | ForEach-Object -Begin {
 				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "", Justification = "FalsePositive")]
+					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False positive")]
 				$Number = 1
 			} -Process {
 				@{ Number = $Number++; Code = $_ }

@@ -31,6 +31,8 @@ $ScriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
 Describe "Test Add-WindowsPSModulePath cmdlet" {
 	BeforeAll {
 		Import-Module -Force "$ScriptPath\..\Ruleset.Compatibility.psd1"
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSUseDeclaredVarsMoreThanAssignment", "OriginalPsModulePath", Justification = "False positive")]
 		$OriginalPsModulePath = $env:PSModulePath
 	}
 

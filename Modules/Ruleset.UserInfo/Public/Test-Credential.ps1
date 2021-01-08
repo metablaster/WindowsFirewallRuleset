@@ -83,6 +83,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.directoryservices.accountmana
 #>
 function Test-Credential
 {
+	# TODO: SuppressMessageAttribute not working, probably because of specification in PSScriptAnalyzerSettings
+	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSUseCompatibleTypes", "", Scope = "Function", Justification = "PS 5.1.17763 is out of date")]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md")]
 	[OutputType([bool])]

@@ -58,7 +58,7 @@ TODO: For force loaded rules it should say: "Force Load Rule:"
 function Format-Output
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Justification = "There is no way to replace Write-Host here")]
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Colored output is wanted")]
 	[CmdletBinding(DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md")]
 	[OutputType([void])]
