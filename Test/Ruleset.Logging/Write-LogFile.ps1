@@ -33,6 +33,9 @@ Unit test for Write-LogFile
 .DESCRIPTION
 Test correctness of Write-LogFile function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Write-LogFile.ps1
 

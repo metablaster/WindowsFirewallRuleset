@@ -33,6 +33,9 @@ Unit test for Set-Shortcut
 .DESCRIPTION
 Unit test to test correctness of Set-Shortcut function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Set-Shortcut.ps1
 

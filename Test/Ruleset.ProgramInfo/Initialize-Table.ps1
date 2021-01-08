@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Initialize-Table
 
 .DESCRIPTION
-Unit test for Initialize-Table
+Test correctness of Initialize-Table function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Initialize-Table.ps1

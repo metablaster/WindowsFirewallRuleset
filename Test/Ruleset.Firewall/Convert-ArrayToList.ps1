@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Convert-ArrayToList
 
 .DESCRIPTION
-Unit test for Convert-ArrayToList
+Test correctness of Convert-ArrayToList function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Convert-ArrayToList.ps1

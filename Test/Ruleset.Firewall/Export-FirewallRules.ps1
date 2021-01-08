@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Export-FirewallRules
 
 .DESCRIPTION
-Unit test for Export-FirewallRules
+Test correctness of Export-FirewallRules function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Export-FirewallRules.ps1

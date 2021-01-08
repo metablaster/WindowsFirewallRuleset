@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for network discovery
+Inbound network discovery rules
 
 .DESCRIPTION
 Network Discovery predefined rules + additional rules

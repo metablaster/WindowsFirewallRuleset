@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Confirm-Installation
 
 .DESCRIPTION
-Unit test for Confirm-Installation
+Test correctness of Confirm-Installation function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Confirm-Installation.ps1

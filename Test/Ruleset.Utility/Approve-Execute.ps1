@@ -26,9 +26,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#
-# Unit test for Approve-Execute
-#
+<#
+.SYNOPSIS
+Unit test for Approve-Execute
+
+.DESCRIPTION
+Test correctness of Approve-Execute function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
+.EXAMPLE
+PS> .\Approve-Execute.ps1
+
+.INPUTS
+None. You cannot pipe objects to Approve-Execute.ps1
+
+.OUTPUTS
+None. Approve-Execute.ps1 does not generate any output
+
+.NOTES
+None.
+#>
 
 #Requires -Version 5.1
 

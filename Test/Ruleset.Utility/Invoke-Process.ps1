@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Invoke-Process
 
 .DESCRIPTION
-Unit test for Invoke-Process
+Test correctness of Invoke-Process function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Invoke-Process.ps1

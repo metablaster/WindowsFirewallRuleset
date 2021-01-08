@@ -33,6 +33,9 @@ Unit test for Test-NetBiosName
 .DESCRIPTION
 Test correctness of Test-NetBiosName function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-NetBiosName.ps1
 

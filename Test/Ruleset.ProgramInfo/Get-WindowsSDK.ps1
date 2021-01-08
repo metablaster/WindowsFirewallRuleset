@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-WindowsSDK
 
 .DESCRIPTION
-Unit test for Get-WindowsSDK
+Test correctness of Get-WindowsSDK function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-WindowsSDK.ps1

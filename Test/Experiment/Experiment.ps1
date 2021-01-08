@@ -33,6 +33,9 @@ Script experiment
 .DESCRIPTION
 Use Experiment.ps1 to write temporary tests
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Experiment.ps1
 

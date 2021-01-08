@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-WindowsKit
 
 .DESCRIPTION
-Unit test for Get-WindowsKit
+Test correctness of Get-WindowsKit function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-WindowsKit.ps1

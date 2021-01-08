@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Convert-ListToMultiLine
 
 .DESCRIPTION
-Unit test for Convert-ListToMultiLine
+Test correctness of Convert-ListToMultiLine function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Convert-ListToMultiLine.ps1

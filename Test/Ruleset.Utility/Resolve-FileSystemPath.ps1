@@ -33,6 +33,9 @@ Unit test for Resolve-FileSystemPath
 .DESCRIPTION
 Test correctness of Resolve-FileSystemPath
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Resolve-FileSystemPath.ps1
 

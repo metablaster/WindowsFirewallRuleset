@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Convert-ValueToBoolean
 
 .DESCRIPTION
-Unit test for Convert-ValueToBoolean
+Test correctness of Convert-ValueToBoolean function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Convert-ValueToBoolean.ps1

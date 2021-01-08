@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for  broadcast traffic
+Inbound broadcast traffic rules
 
 .DESCRIPTION
-Inbound firewall rules for  broadcast traffic
+Inbound firewall rules for broadcast traffic
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.

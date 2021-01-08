@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for warning logging
 
 .DESCRIPTION
-Unit test for warning logging
+Test correctness of warning logging
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Test-Warning.ps1

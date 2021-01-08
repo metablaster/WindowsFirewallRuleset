@@ -33,6 +33,9 @@ Unit test for Test-ExecutableFile
 .DESCRIPTION
 Test correctness of Test-ExecutableFile function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-ExecutableFile.ps1
 

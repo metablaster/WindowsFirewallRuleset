@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Initialize-Service
 
 .DESCRIPTION
-Unit test for Initialize-Service
+Test correctness of Initialize-Service function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Initialize-Service.ps1

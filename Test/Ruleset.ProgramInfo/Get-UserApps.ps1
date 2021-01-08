@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-UserApps
 
 .DESCRIPTION
-Unit test for Get-UserApps
+Test correctness of Get-UserApps function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-UserApps.ps1

@@ -33,6 +33,9 @@ Unit test for Test-UPN
 .DESCRIPTION
 Test correctness of Test-UPN function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-UPN.ps1
 

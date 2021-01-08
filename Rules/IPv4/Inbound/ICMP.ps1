@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for ICMPv4 traffic
+Inbound ICMPv4 rules
 
 .DESCRIPTION
 Inbound firewall rules for ICMPv4 traffic

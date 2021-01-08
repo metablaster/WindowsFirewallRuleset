@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-UserGroup
 
 .DESCRIPTION
-Unit test for Get-UserGroup
+Test correctness of Get-UserGroup function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-UserGroup.ps1

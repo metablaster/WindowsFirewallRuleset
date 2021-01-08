@@ -200,7 +200,7 @@ param (
 
 	[Parameter()]
 	[ValidateSet("Any", "IPv4", "IPv6")]
-	[string] $IPAddressFamily = "Any"
+	[string] $AddressFamily = "Any"
 )
 
 begin
@@ -354,15 +354,15 @@ process
 				}
 
 				# Filter IPv4/IPv6 if specified
-				if ($IPAddressFamily -ne "Any")
+				if ($AddressFamily -ne "Any")
 				{
-					if (($IPAddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
+					if (($AddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
 					{
 						# Both are IPv6, or ipv6 and listening, skip
 						Write-Verbose "Filtered by AddressFamily:`n$Result"
 						continue
 					}
-					elseif (($IPAddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
+					elseif (($AddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
 					{
 						# Both are IPv4, or ipv4 and listening, skip
 						Write-Verbose "Filtered by AddressFamily:`n$Result"

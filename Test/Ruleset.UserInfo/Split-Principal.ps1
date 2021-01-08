@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Split-Principal
 
 .DESCRIPTION
-Unit test for Split-Principal
+Test correctness of Split-Principal function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Split-Principal.ps1

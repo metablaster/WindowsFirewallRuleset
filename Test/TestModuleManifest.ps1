@@ -34,6 +34,9 @@ Unit test to test out module manifests
 Verifies that a module manifest files accurately describe the contents of project modules
 For binary files also verify digital signature is valid
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\TestModuleManifest.ps1
 
@@ -56,7 +59,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements

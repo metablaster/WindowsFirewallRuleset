@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Set-ScreenBuffer
 
 .DESCRIPTION
-Unit test for Set-ScreenBuffer
+Test correctness of Set-ScreenBuffer function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Set-ScreenBuffer.ps1

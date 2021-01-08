@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-AppCapability
 
 .DESCRIPTION
-Unit test for Get-AppCapability
+Test correctness of Get-AppCapability function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-AppCapability.ps1

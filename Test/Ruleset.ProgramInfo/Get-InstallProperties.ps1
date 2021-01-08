@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-InstallProperties
 
 .DESCRIPTION
-Unit test for Get-InstallProperties
+Test correctness of Get-InstallProperties function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-InstallProperties.ps1

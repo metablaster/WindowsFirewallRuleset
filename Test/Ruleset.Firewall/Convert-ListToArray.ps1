@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Convert-ListToArray
 
 .DESCRIPTION
-Unit test for Convert-ListToArray
+Test correctness of Convert-ListToArray function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Convert-ListToArray.ps1

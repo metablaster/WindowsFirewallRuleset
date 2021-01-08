@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for ConvertFrom-SID
 
 .DESCRIPTION
-Unit test for ConvertFrom-SID
+Test correctness of ConvertFrom-SID function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\ConvertFrom-SID.ps1

@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Update-Table
 
 .DESCRIPTION
-Unit test for Update-Table
+Test correctness of Update-Table function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Update-Table.ps1

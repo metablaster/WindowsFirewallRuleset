@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Select-IPInterface
 
 .DESCRIPTION
-Unit test for Select-IPInterface
+Test correctness of Select-IPInterface function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Select-IPInterface.ps1

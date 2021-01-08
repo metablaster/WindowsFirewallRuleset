@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Format-Path
 
 .DESCRIPTION
-Unit test for Format-Path
+Test correctness of Format-Path function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Format-Path.ps1

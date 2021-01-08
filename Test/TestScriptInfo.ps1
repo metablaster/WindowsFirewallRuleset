@@ -33,6 +33,9 @@ Unit test to test out script info metadata
 .DESCRIPTION
 Verifies that scripts accurately describe the contents of the individual script
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\TestScriptInfo.ps1
 
@@ -55,7 +58,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Check requirements

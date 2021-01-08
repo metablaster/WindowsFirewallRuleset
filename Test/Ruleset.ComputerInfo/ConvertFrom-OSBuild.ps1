@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for ConvertFrom-OSBuild
 
 .DESCRIPTION
-Unit test for ConvertFrom-OSBuild
+Test correctness of ConvertFrom-OSBuild function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\ConvertFrom-OSBuild.ps1

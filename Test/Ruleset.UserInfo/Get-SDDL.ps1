@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-SDDL
 
 .DESCRIPTION
-Unit test for Get-SDDL
+Test correctness of Get-SDDL function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-SDDL.ps1
@@ -79,6 +82,9 @@ Check if SDDL string has valid syntax
 
 .PARAMETER SDDL
 Security Descriptor Definition Language string
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> Get-SDDL -Group @("Users", "Administrators") | Test-SDDL

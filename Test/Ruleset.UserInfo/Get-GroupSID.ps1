@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-GroupSID
 
 .DESCRIPTION
-Unit test for Get-GroupSID
+Test correctness of Get-GroupSID function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-GroupSID.ps1

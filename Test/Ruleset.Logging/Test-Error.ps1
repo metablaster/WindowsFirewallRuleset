@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for error logging
 
 .DESCRIPTION
-Unit test for error logging
+Test correctness of error logging
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Test-Error.ps1

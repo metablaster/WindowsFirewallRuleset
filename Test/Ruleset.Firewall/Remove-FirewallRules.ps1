@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Remove-FirewallRules
 
 .DESCRIPTION
-Unit test for Remove-FirewallRules
+Test correctness of Remove-FirewallRules function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Remove-FirewallRules.ps1

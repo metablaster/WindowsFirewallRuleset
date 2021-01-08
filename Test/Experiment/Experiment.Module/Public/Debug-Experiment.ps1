@@ -33,6 +33,9 @@ Module script experiment
 .DESCRIPTION
 Use Debug-Experiment.ps1 to write temporary module tests
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> Import-Module -Name Experiment.Module
 PS> Debug-Experiment

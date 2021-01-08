@@ -33,6 +33,9 @@ Unit test for Test-UNC function
 .DESCRIPTION
 Test correctness of Test-UNC function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-UNC.ps1
 

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for IPv4 multicast
+Inbound IPv4 multicast rules
 
 .DESCRIPTION
 Inbound firewall rules for IPv4 multicast address Space

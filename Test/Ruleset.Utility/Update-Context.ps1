@@ -33,6 +33,9 @@ Unit test for Update-Context
 .DESCRIPTION
 Unit test for Update-Context
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Update-Context.ps1
 

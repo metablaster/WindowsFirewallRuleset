@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-NetFramework
 
 .DESCRIPTION
-Unit test for Get-NetFramework
+Test correctness of Get-NetFramework function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-NetFramework.ps1

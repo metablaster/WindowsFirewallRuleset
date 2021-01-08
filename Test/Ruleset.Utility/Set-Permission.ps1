@@ -31,7 +31,7 @@ SOFTWARE.
 Unit test for Set-Permission
 
 .DESCRIPTION
-Unit test for Set-Permission
+Test correctness of Set-Permission function
 
 .PARAMETER FileSystem
 Test setting file system permissions/ownership
@@ -39,8 +39,14 @@ Test setting file system permissions/ownership
 .PARAMETER Registry
 Test setting registry permissions/ownership
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Set-Permission.ps1 -FileSystem
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Set-Permission.ps1 -Registry -FileSystem

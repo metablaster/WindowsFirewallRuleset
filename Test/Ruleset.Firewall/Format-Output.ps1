@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Format-Output
 
 .DESCRIPTION
-Unit test for Format-Output
+Test correctness of Format-Output function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Format-Output.ps1

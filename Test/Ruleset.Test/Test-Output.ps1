@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Test-Output
 
 .DESCRIPTION
-Unit test for Test-Output
+Test correctness of Test-Output function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Test-Output.ps1

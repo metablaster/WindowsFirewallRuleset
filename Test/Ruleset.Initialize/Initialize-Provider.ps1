@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Initialize-Provider
 
 .DESCRIPTION
-Unit test for Initialize-Provider
+Test correctness of Initialize-Provider function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Initialize-Provider.ps1

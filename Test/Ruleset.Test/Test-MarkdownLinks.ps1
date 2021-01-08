@@ -33,6 +33,9 @@ Unit test for Test-MarkdownLinks
 .DESCRIPTION
 Test correctness of Test-MarkdownLinks function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-MarkdownLinks.ps1
 

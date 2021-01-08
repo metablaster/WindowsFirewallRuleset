@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Import-FirewallRules
 
 .DESCRIPTION
-Unit test for Import-FirewallRules
+Test correctness of Import-FirewallRules function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Import-FirewallRules.ps1

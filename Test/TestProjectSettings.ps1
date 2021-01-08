@@ -33,6 +33,9 @@ Unit test for project settings
 .DESCRIPTION
 Unit test to test global variables and preferences set in Config\ProjectSettings.ps1
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\TestProjectSettings.ps1
 
@@ -55,7 +58,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 # Imports
@@ -85,7 +88,7 @@ else
 }
 
 Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference" # -Debug
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -ListPreference
 Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" # -Debug
 
 # NOTE: For this test to show correct result $DebugPreference in ProjectSettings must be "Continue"
@@ -94,7 +97,7 @@ $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptB
 	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
 	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" # -Debug
 
-	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference -InModule
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule -ListPreference
 	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 
 	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" # -Debug
@@ -113,8 +116,8 @@ if ($ExportCount -gt 0)
 Remove-Module -Name Dynamic.TestPreference -ErrorAction Stop
 
 Start-Test "Don't show preferences"
-. $PSScriptRoot\..\Config\ProjectSettings.ps1
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 -ShowPreference:$false
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -ListPreference:$false
 
 $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
 	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
@@ -122,7 +125,7 @@ $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptB
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule
 	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 
-	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule -ShowPreference:$false
+	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$false
 	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 } | Import-Module -Scope Global -PassThru
 

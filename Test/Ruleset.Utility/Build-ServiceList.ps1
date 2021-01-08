@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Build-ServiceList
 
 .DESCRIPTION
-Unit test for Build-ServiceList
+Test correctness of Build-ServiceList function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Build-ServiceList.ps1

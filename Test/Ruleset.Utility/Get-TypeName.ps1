@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-TypeName
 
 .DESCRIPTION
-Unit test for Get-TypeName
+Test correctness of Get-TypeName function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-TypeName.ps1

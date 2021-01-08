@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Get-PrincipalSID
 
 .DESCRIPTION
-Unit test for Get-PrincipalSID
+Test correctness of Get-PrincipalSID function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Get-PrincipalSID.ps1

@@ -33,6 +33,9 @@ Unit test for Test-FileSystemPath
 .DESCRIPTION
 Test correctness of Test-FileSystemPath function
 
+.PARAMETER Force
+If specified, no prompt to run script is shown.
+
 .EXAMPLE
 PS> .\Test-FileSystemPath.ps1
 

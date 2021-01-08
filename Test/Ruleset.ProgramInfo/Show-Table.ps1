@@ -31,7 +31,10 @@ SOFTWARE.
 Unit test for Show-Table
 
 .DESCRIPTION
-Unit test for Show-Table
+Test correctness of Show-Table function
+
+.PARAMETER Force
+If specified, no prompt to run script is shown.
 
 .EXAMPLE
 PS> .\Show-Table.ps1
