@@ -161,7 +161,7 @@ function Resolve-IPAddress
 		}
 		else
 		{
-			Write-Debug "No groups found to resolve"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] No groups found to resolve"
 		}
 	}
 }

@@ -281,12 +281,12 @@ function Get-SqlServerInstance
 							}
 							else
 							{
-								Write-Warning "Failed to open InstanceRegCluster sub key: Cluster"
+								Write-Warning -Message "Failed to open InstanceRegCluster sub key: Cluster"
 							}
 
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
 							# TODO: this should probably be $InstanceReg.OpenSubKey("Cluster\Nodes") ?
-							Write-Debug -Message "TODO: this doesn't look good!"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: this doesn't look good!"
 							$ClusterReg = $RemoteKey.OpenSubKey("Cluster\Nodes")
 
 							if ($ClusterReg)
@@ -298,7 +298,7 @@ function Get-SqlServerInstance
 							}
 							else
 							{
-								Write-Warning "Failed to open ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
+								Write-Warning -Message "Failed to open ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
 							}
 						}
 
@@ -327,7 +327,7 @@ function Get-SqlServerInstance
 
 						try
 						{
-							Write-Debug "Settings ErrorActionPreference to: Stop"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Settings ErrorActionPreference to: Stop"
 							$ErrorActionPreference = "Stop"
 
 							# Get from filename to determine version
@@ -336,7 +336,7 @@ function Get-SqlServerInstance
 
 							if (!$ServicesReg)
 							{
-								Write-Warning "Failed to open ServiceReg key: HKLM:SYSTEM\CurrentControlSet\Services"
+								Write-Warning -Message "Failed to open ServiceReg key: HKLM:SYSTEM\CurrentControlSet\Services"
 							}
 							else
 							{
@@ -354,7 +354,7 @@ function Get-SqlServerInstance
 								}
 								else
 								{
-									Write-Warning "Failed to open Service sub key: $ServiceKey"
+									Write-Warning -Message "Failed to open Service sub key: $ServiceKey"
 								}
 							}
 						}
@@ -365,7 +365,7 @@ function Get-SqlServerInstance
 						}
 						finally
 						{
-							Write-Debug "Restoring ErrorActionPreference to Continue"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Restoring ErrorActionPreference to Continue"
 							$ErrorActionPreference = "Continue"
 						}
 
@@ -396,13 +396,13 @@ function Get-SqlServerInstance
 								}
 								else
 								{
-									Write-Warning "Failed to open DTSKey sub key: DTS\Setup"
+									Write-Warning -Message "Failed to open DTSKey sub key: DTS\Setup"
 								}
 							}
 						}
 						else
 						{
-							Write-Warning "Failed to open VersionKey sub key: $HKLMRootKey\$Major$Minor"
+							Write-Warning -Message "Failed to open VersionKey sub key: $HKLMRootKey\$Major$Minor"
 						}
 
 						$AllInstances += [PSCustomObject]@{
@@ -476,7 +476,7 @@ function Get-SqlServerInstance
 					# If we pulled CIM info and it wasn't empty, correlate!
 					if ($SQLServices)
 					{
-						Write-Debug "CIM service info:`n$($SQLServices | Format-List -Property * | Out-String)"
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM service info:`n$($SQLServices | Format-List -Property * | Out-String)"
 
 						foreach ($Instance in $AllInstances)
 						{
@@ -487,7 +487,7 @@ function Get-SqlServerInstance
 								(Format-Path $_.PathName) -like "$($Instance.SQLBinRoot)*" -or $_.PathName -like "`"$($Instance.SQLBinRoot)*"
 							} | Select-Object -First 1
 
-							Write-Debug "Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 
 							$AllInstancesCIM += $Instance | Select-Object -Property Domain,
 							SQLInstance,

@@ -71,6 +71,6 @@ param ()
 Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
 
 Get-ChildItem $ProjectRoot -Recurse | Unblock-File
-Write-Verbose -Message "[$($MyInvocation.InvocationName)] Project files have been unblocked"
+Write-Verbose -Message "[Unblock-Project] Project files have been unblocked"
 
 Update-Log

@@ -87,6 +87,6 @@ function Update-Context
 		}
 
 		Set-Variable -Name Context -Scope Script -Value $NewContext
-		Write-Debug -Message "Context set to '$NewContext'"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Context set to '$NewContext'"
 	}
 }

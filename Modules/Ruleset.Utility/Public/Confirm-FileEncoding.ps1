@@ -98,7 +98,7 @@ function Confirm-FileEncoding
 			$TargetEncoding = Get-FileEncoding $File
 			if (($TargetEncoding -eq "Binary") -and !$Binary)
 			{
-				Write-Debug -Message "File $FileName encoded as $TargetEncoding verification skipped"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] File $FileName encoded as $TargetEncoding verification skipped"
 				continue
 			}
 
@@ -106,7 +106,7 @@ function Confirm-FileEncoding
 
 			if ([array]::Find($Encoding, [System.Predicate[string]] { $TargetEncoding -eq $args[0] }))
 			{
-				Write-Debug -Message "File $FileName encoded as $TargetEncoding verification passed"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] File $FileName encoded as $TargetEncoding verification passed"
 			}
 			else
 			{

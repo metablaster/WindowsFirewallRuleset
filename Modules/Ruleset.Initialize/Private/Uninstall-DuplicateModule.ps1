@@ -177,7 +177,7 @@ function Uninstall-DuplicateModule
 				{
 					if ($Scope.Length -gt 1)
 					{
-						Write-Warning "System wide modules might be removed in favor of user specific installation"
+						Write-Warning -Message "System wide modules might be removed in favor of user specific installation"
 						Write-Information -Tags "User" -MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
 
 						if (!($Force -or $PSCmdlet.ShouldContinue($Scope, "Accept dangerous comparison on all specified module locations")))
@@ -266,7 +266,7 @@ function Uninstall-DuplicateModule
 						}
 					}
 
-					Write-Warning "Removing module $ModuleName failed"
+					Write-Warning -Message "Removing module $ModuleName failed"
 				}
 				else
 				{

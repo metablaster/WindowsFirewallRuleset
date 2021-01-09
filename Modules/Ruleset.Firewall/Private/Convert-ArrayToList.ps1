@@ -90,7 +90,7 @@ function Convert-ArrayToList
 		}
 		else
 		{
-			Write-Warning "Input is missing, result is empty string"
+			Write-Warning -Message "Input is missing, result is empty string"
 		}
 	}
 	end

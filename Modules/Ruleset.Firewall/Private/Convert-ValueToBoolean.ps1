@@ -81,7 +81,7 @@ function Convert-ValueToBoolean
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning "Input is missing, using default value of: $DefaultValue"
+		Write-Warning -Message "Input is missing, using default value of: $DefaultValue"
 		return $DefaultValue
 	}
 

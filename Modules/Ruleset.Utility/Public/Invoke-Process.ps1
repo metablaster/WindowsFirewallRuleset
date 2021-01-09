@@ -480,7 +480,7 @@ function Invoke-Process
 					Write-Information -Tags "User" -MessageData "INFO: $StreamLine"
 				}
 
-				Write-Debug "[$($MyInvocation.InvocationName)] Sleeping..."
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
 				Start-Sleep -Milliseconds 300
 			}
 
@@ -493,7 +493,7 @@ function Invoke-Process
 					Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
 				}
 
-				Write-Debug "[$($MyInvocation.InvocationName)] Sleeping..."
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
 				Start-Sleep -Milliseconds 300
 			}
 		}

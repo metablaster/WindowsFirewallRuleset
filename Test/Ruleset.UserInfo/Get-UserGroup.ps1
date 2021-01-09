@@ -84,7 +84,7 @@ Get-UserGroup "localhost" -CIM
 
 Start-Test "Failure test"
 Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
-Write-Warning "Ignored error: $Failure"
+Write-Warning -Message "Ignored error: $Failure"
 
 Test-Output $Result -Command Get-UserGroup
 

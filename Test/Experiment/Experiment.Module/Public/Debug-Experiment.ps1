@@ -63,7 +63,7 @@ function Debug-Experiment
 	# Write-Information -MessageData "Parameter: $Param"
 
 	# $VerbosePreference = "Continue"
-	Write-Verbose "From test function"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] From test function"
 }
 
 # Template variable

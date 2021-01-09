@@ -148,7 +148,7 @@ function Out-DataTable
 					# If it's not DBNull or Null, get the type
 					if (($Value -isnot [System.DBNull]) -and ($null -ne $Value))
 					{
-						$Column.DataType = [System.Type]::GetType( $(& $GetODTType $Property.TypeNameOfValue))
+						$Column.DataType = [System.Type]::GetType($(& $GetODTType $Property.TypeNameOfValue))
 					}
 
 					# Set it to nonnullable if specified
@@ -163,7 +163,8 @@ function Out-DataTable
 					}
 					catch
 					{
-						Write-Error "Could not add column $($Column | Out-String) for property '$Name' with value '$Value' and type '$($Value.GetType().FullName)':`n$_"
+						Write-Error -Category WriteError -TargetObject $Column `
+							-Message "Could not add column $($Column.ColumnName) with value '$Value' and type '$($Value.GetType().FullName)':`n$_"
 					}
 				}
 
@@ -185,14 +186,15 @@ function Out-DataTable
 				}
 				catch
 				{
-					Write-Error "Could not add property '$Name' with value '$Value' and type '$($Value.GetType().FullName)'"
+					Write-Error -Category WriteError -TargetObject $Row `
+						-Message "Could not add property '$Name' with value '$Value' and type '$($Value.GetType().FullName)'"
 					continue
 				}
 
 				# Did we get a null or DBNull for a non-nullable item? let the user know.
 				if ($NonNullable -contains $Name -and (($Value -is [System.DBNull]) -or ($null -eq $Value)))
 				{
-					Write-Verbose "NonNullable property '$Name' with null value found: $($object | Out-String)"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] NonNullable property '$Name' with null value found: $($object | Out-String)"
 				}
 			}
 
@@ -202,7 +204,7 @@ function Out-DataTable
 			}
 			catch
 			{
-				Write-Error "Failed to add row '$($Row | Out-String)':`n$_"
+				Write-Error -Category WriteError -TargetObject $Row -Message "Failed to add row '$($Row | Out-String)':`n$_"
 			}
 
 			$First = $false

@@ -145,7 +145,7 @@ function Get-ExecutablePath
 				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					# NOTE: Avoid spamming
-					# Write-Debug -Message "Ignoring useless key: $HKLMSubKey"
+					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
 					continue
 				}
 

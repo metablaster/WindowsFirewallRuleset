@@ -72,7 +72,7 @@ function Convert-ListToMultiLine
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning "Input is missing, result is empty string"
+		Write-Warning -Message "Input is missing, result is empty string"
 		return ""
 	}
 

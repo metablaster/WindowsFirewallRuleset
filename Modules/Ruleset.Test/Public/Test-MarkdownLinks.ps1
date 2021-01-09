@@ -182,7 +182,7 @@ function Test-MarkdownLinks
 
 		if (!$FileLinks)
 		{
-			Write-Verbose -Message "File '$File' contains no links"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] File '$File' contains no links"
 			continue
 		}
 

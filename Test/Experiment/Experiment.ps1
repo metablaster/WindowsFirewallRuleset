@@ -61,6 +61,6 @@ New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item 
 Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
 # $VerbosePreference = "Continue"
-Write-Verbose "From Script"
+Write-Verbose -Message "[$ThisScript] From Script"
 
 Debug-Experiment

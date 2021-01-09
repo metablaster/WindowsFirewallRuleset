@@ -244,7 +244,7 @@ foreach ($RawEvent in $Events)
 	if ($VerbosePreference -ne "SilentlyContinue")
 	{
 		$EventIndex = [array]::IndexOf($Events, $Event)
-		Write-Verbose -Message "Processing event date: $($Events[$EventIndex].TimeCreated)"
+		Write-Verbose -Message "[$ThisScript] Processing event date: $($Events[$EventIndex].TimeCreated)"
 	}
 
 	# Message field

@@ -204,7 +204,7 @@ function Initialize-Provider
 				if ($Decision -eq $Default)
 				{
 					Set-PackageSource -Name $PackageSource.ProviderName -Trusted
-					Write-Debug -Message "Package source $($PackageSource.ProviderName) set to trusted"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $($PackageSource.ProviderName) set to trusted"
 				}
 			}
 

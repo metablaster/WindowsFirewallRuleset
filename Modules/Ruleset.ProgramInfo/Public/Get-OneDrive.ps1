@@ -124,7 +124,7 @@ function Get-OneDrive
 		}
 		catch
 		{
-			Write-Debug -Message "Exception opening registry root key: HKU:$HKU"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Exception opening registry root key: HKU:$HKU"
 			if ($ReleaseHive)
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"

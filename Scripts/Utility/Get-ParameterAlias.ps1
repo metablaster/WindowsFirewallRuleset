@@ -176,6 +176,7 @@ param (
 
 begin
 {
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 	$InformationPreference = "Continue"
 
 	# If dot sourced update format data only for current session
@@ -241,7 +242,7 @@ begin
 
 process
 {
-	Write-Debug -Message "params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 	if (!$ListImported)
 	{
@@ -254,7 +255,7 @@ process
 		{
 			if (Get-Module -Name $ModuleName)
 			{
-				Write-Verbose -Message "Module '$ModuleName' already imported"
+				Write-Verbose -Message "[$ThisScript] Module '$ModuleName' already imported"
 				continue
 			}
 
@@ -276,7 +277,7 @@ process
 			}
 			catch
 			{
-				Write-Verbose -Message "$($_.Exception.Message)"
+				Write-Verbose -Message "[$ThisScript] $($_.Exception.Message)"
 			}
 		}
 	}
@@ -336,7 +337,7 @@ process
 			}
 			elseif ($Stream)
 			{
-				Write-Debug -Message "Streaming output"
+				Write-Debug -Message "[$ThisScript] Streaming output"
 				Write-Output $OutputObject
 			}
 			else
@@ -359,7 +360,7 @@ process
 				Write-Information "`tListing $($TargetCommand.CommandType): $DisplayCommand"
 				Write-Information ""
 
-				Write-Debug -Message "Formatting output"
+				Write-Debug -Message "[$ThisScript] Formatting output"
 				Write-Output $OutputObject | Format-Table
 			}
 		}

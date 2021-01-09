@@ -294,9 +294,6 @@ if ($Develop)
 
 	if (!$InModule)
 	{
-		# Must be after debug preference
-		Write-Debug -Message "[$SettingsScript] Removing loaded modules"
-
 		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
 		# Skip removing modules if this script is called from within a module which would
 		# cause removing modules prematurely
@@ -305,7 +302,7 @@ if ($Develop)
 			$TargetModule = Get-Module -Name $_
 			if ($TargetModule)
 			{
-				Write-Debug -Message "Removing module $_"
+				Write-Debug -Message "[$SettingsScript] Removing module $_"
 				Remove-Module -ModuleInfo $TargetModule -ErrorAction Stop
 			}
 		}

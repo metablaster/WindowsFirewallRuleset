@@ -205,6 +205,8 @@ param (
 
 begin
 {
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+
 	# Define properties
 	$Properties = "ComputerName", "Protocol", "LocalAddress", "LocalPort", "RemoteAddress", "RemotePort", "State", "ProcessName", "PID"
 
@@ -239,7 +241,7 @@ process
 				}
 				catch
 				{
-					Write-Warning "Unable to run Get-Process on computer $Computer, defaulting to no ShowProcessNames"
+					Write-Warning -Message "Unable to run Get-Process on computer $Computer, defaulting to no ShowProcessNames"
 					$ShowProcessName = $false
 				}
 			}
@@ -258,7 +260,7 @@ process
 			}
 			catch
 			{
-				Write-Warning "Could not invoke create win32_process on $Computer to delete $TempLocation"
+				Write-Warning -Message "Could not invoke create win32_process on $Computer to delete $TempLocation"
 			}
 
 			# Run command
@@ -359,13 +361,13 @@ process
 					if (($AddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
 					{
 						# Both are IPv6, or ipv6 and listening, skip
-						Write-Verbose "Filtered by AddressFamily:`n$Result"
+						Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily:`n$Result"
 						continue
 					}
 					elseif (($AddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
 					{
 						# Both are IPv4, or ipv4 and listening, skip
-						Write-Verbose "Filtered by AddressFamily:`n$Result"
+						Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily:`n$Result"
 						continue
 					}
 				}
@@ -378,26 +380,26 @@ process
 				# Filter the object
 				if (($RemotePort -notlike $Port) -and ($LocalPort -notlike $Port))
 				{
-					Write-Verbose "remote $RemotePort local $localport port $Port"
-					Write-Verbose "Filtered by Port:`n$Result"
+					Write-Verbose -Message "[$ThisScript] remote $RemotePort local $localport port $Port"
+					Write-Verbose -Message "[$ThisScript] Filtered by Port:`n$Result"
 					continue
 				}
 
 				if (($RemoteAddress -notlike $IPAddress) -and ($LocalAddress -notlike $IPAddress))
 				{
-					Write-Verbose "Filtered by Address:`n$Result"
+					Write-Verbose -Message "[$ThisScript] Filtered by Address:`n$Result"
 					continue
 				}
 
 				if ($Status -notlike $State)
 				{
-					Write-Verbose "Filtered by State:`n$Result"
+					Write-Verbose -Message "[$ThisScript] Filtered by State:`n$Result"
 					continue
 				}
 
 				if ($Proto -notlike $Protocol)
 				{
-					Write-Verbose "Filtered by Protocol:`n$Result"
+					Write-Verbose -Message "[$ThisScript] Filtered by Protocol:`n$Result"
 					continue
 				}
 
@@ -417,7 +419,7 @@ process
 
 				if ($ProcName -notlike $ProcessName)
 				{
-					Write-Verbose "Filtered by ProcessName:`n$Result"
+					Write-Verbose -Message "[$ThisScript] Filtered by ProcessName:`n$Result"
 					continue
 				}
 
@@ -437,7 +439,7 @@ process
 							if ($DnsCache.ContainsKey($RemoteAddress))
 							{
 								$RemoteAddress = $DnsCache[$RemoteAddress]
-								Write-Verbose "Using cached REMOTE '$RemoteAddress'"
+								Write-Verbose -Message "[$ThisScript] Using cached REMOTE '$RemoteAddress'"
 							}
 							else
 							{
@@ -445,7 +447,7 @@ process
 								$TempAddress = $RemoteAddress
 								$RemoteAddress = [System.Net.DNS]::GetHostByAddress($RemoteAddress).HostName
 								$DnsCache.Add($TempAddress, $RemoteAddress)
-								Write-Verbose "Using non cached REMOTE '$RemoteAddress`t$TempAddress"
+								Write-Verbose -Message "[$ThisScript] Using non cached REMOTE '$RemoteAddress`t$TempAddress"
 							}
 						}
 					}
@@ -466,7 +468,7 @@ process
 							if ($DnsCache.ContainsKey($LocalAddress))
 							{
 								$LocalAddress = $DnsCache[$LocalAddress]
-								Write-Verbose "Using cached LOCAL '$LocalAddress'"
+								Write-Verbose -Message "[$ThisScript] Using cached LOCAL '$LocalAddress'"
 							}
 							else
 							{
@@ -474,7 +476,7 @@ process
 								$TempAddress = $LocalAddress
 								$LocalAddress = [System.Net.DNS]::GetHostByAddress("$LocalAddress").hostname
 								$DnsCache.Add($LocalAddress, $TempAddress)
-								Write-Verbose "Using non cached LOCAL '$LocalAddress'`t'$TempAddress'"
+								Write-Verbose -Message "[$ThisScript] Using non cached LOCAL '$LocalAddress'`t'$TempAddress'"
 							}
 						}
 					}

@@ -85,14 +85,14 @@ Start-Test "Convert-ValueToBoolean 3"
 Convert-ValueToBoolean "3" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
-	Write-Warning "Error ignored by unit test: $CoversionError"
+	Write-Warning -Message "Error ignored by unit test: $CoversionError"
 }
 
 Start-Test "Convert-ValueToBoolean UNKNOWN"
 Convert-ValueToBoolean "UNKNOWN" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
-	Write-Warning "Error ignored by unit test: $CoversionError"
+	Write-Warning -Message "Error ignored by unit test: $CoversionError"
 }
 
 Start-Test "Convert-ValueToBoolean True"

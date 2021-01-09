@@ -84,8 +84,8 @@ function Test-Error
 	Start-Test '$PSDefaultParameterValues in Test-Error'
 	$PSDefaultParameterValues
 
-	Write-Error -Message "[$($MyInvocation.InvocationName)] error 1" -Category PermissionDenied -ErrorId 1
-	Write-Error -Message "[$($MyInvocation.InvocationName)] error 2" -Category PermissionDenied -ErrorId 2
+	Write-Error -Category PermissionDenied -Message "[$($MyInvocation.InvocationName)] error 1" -ErrorId 1
+	Write-Error -Category PermissionDenied -Message "[$($MyInvocation.InvocationName)] error 2" -ErrorId 2
 }
 
 <#
@@ -104,8 +104,8 @@ function Test-Pipeline
 
 	process
 	{
-		Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -Category NotEnabled -ErrorId 3
-		Write-Error -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -Category NotEnabled -ErrorId 4
+		Write-Error -Category NotEnabled -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -ErrorId 3
+		Write-Error -Category NotEnabled -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -ErrorId 4
 	}
 }
 
@@ -118,8 +118,8 @@ function Test-Nested
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.InvocationName)] Nested 1" -Category SyntaxError -ErrorId 5
-	Write-Error -Message "[$($MyInvocation.InvocationName)] Nested 2" -Category SyntaxError -ErrorId 6
+	Write-Error -Category SyntaxError -Message "[$($MyInvocation.InvocationName)] Nested 1" -ErrorId 5
+	Write-Error -Category SyntaxError -Message "[$($MyInvocation.InvocationName)] Nested 2" -ErrorId 6
 }
 
 <#
@@ -131,9 +131,9 @@ function Test-Parent
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.InvocationName)] Parent 1" -Category MetadataError -ErrorId 7
+	Write-Error -Category MetadataError -Message "[$($MyInvocation.InvocationName)] Parent 1" -ErrorId 7
 	Test-Nested
-	Write-Error -Message "[$($MyInvocation.InvocationName)] Parent 2" -Category MetadataError -ErrorId 8
+	Write-Error -Category MetadataError -Message "[$($MyInvocation.InvocationName)] Parent 2" -ErrorId 8
 }
 
 <#
@@ -145,7 +145,7 @@ function Test-Combo
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.InvocationName)] combo" -Category InvalidResult -ErrorId 9
+	Write-Error -Category InvalidResult -Message "[$($MyInvocation.InvocationName)] combo" -ErrorId 9
 	Write-Warning -Message "[$($MyInvocation.MyCommand.Name)] combo"
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.MyCommand.Name)] INFO: combo"
 }
@@ -223,7 +223,7 @@ New-Module -Name Dynamic.TestError -ScriptBlock {
 		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
 		$PSDefaultParameterValues
 
-		Write-Error -Message "[$($MyInvocation.InvocationName)] error in module" -Category NotSpecified -ErrorId 10
+		Write-Error -Category NotSpecified -Message "[$($MyInvocation.InvocationName)] error in module" -ErrorId 10
 	}
 } | Import-Module
 

@@ -142,7 +142,7 @@ function Test-Combo
 	[CmdletBinding()]
 	param ()
 
-	Write-Error -Message "[$($MyInvocation.MyCommand.Name)] combo" -Category PermissionDenied -ErrorId 11
+	Write-Error -Message -Category PermissionDenied "[$($MyInvocation.MyCommand.Name)] combo" -ErrorId 11
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] combo"
 	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: combo"
 }

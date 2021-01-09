@@ -81,7 +81,7 @@ function Convert-ListToArray
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning "Input is missing, using default value of: $DefaultValue"
+		Write-Warning -Message "Input is missing, using default value of: $DefaultValue"
 		Write-Output $DefaultValue
 	}
 	else

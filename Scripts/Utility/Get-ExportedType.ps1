@@ -136,6 +136,8 @@ param (
 	[switch] $IsEnum
 )
 
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+
 # Build up the Where statement
 $WhereArray = @('$_.IsPublic')
 if ($Module -ne "*") { $WhereArray += '$_.Module -like $Module' }
@@ -149,18 +151,18 @@ if ($PSBoundParameters.ContainsKey("IsEnum")) { $WhereArray += '$_.IsENum -like 
 # Give verbose output, convert where string to scriptblock
 $WhereString = $WhereArray -Join " -and "
 $WhereBlock = [scriptblock]::Create( $WhereString )
-Write-Verbose "Where ScriptBlock: { $WhereString }"
+Write-Verbose -Message "[$ThisScript] Where ScriptBlock: { $WhereString }"
 
 # Invoke the search
 [AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
-	Write-Verbose "Getting types from $($_.FullName)"
+	Write-Verbose -Message "[$ThisScript] Getting types from $($_.FullName)"
 	try
 	{
 		$_.GetExportedTypes()
 	}
 	catch
 	{
-		Write-Verbose "$($_.FullName) error getting Exported Types: $_"
+		Write-Verbose -Message "[$ThisScript] $($_.FullName) error getting Exported Types: $_"
 		$null
 	}
 } | Where-Object -FilterScript $WhereBlock

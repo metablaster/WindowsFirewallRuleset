@@ -214,7 +214,7 @@ function Select-EnvironmentVariable
 		{
 			if ([string]::IsNullOrEmpty($Name))
 			{
-				Write-Debug "[$($MyInvocation.InvocationName)] Value parameter is null or empty"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Value parameter is null or empty"
 				return $null
 			}
 
@@ -225,7 +225,7 @@ function Select-EnvironmentVariable
 		{
 			if ([string]::IsNullOrEmpty($Value))
 			{
-				Write-Debug "[$($MyInvocation.InvocationName)] Name parameter is null or empty"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Name parameter is null or empty"
 				return $null
 			}
 

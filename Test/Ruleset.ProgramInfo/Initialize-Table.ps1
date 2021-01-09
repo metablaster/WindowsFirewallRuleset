@@ -98,13 +98,13 @@ $Result
 
 if (!$global:InstallTable)
 {
-	Write-Error -Message "Table not initialized"
+	Write-Error -Category ObjectNotFound -Message "Table not initialized"
 	exit
 }
 
 if ($global:InstallTable.Rows.Count -ne 0)
 {
-	Write-Error -Message "Table not clear"
+	Write-Error -Category InvalidResult -TargetObject $global:InstallTable -Message "Table not clear"
 	exit
 }
 

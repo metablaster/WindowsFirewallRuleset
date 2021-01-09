@@ -338,7 +338,7 @@ function ConvertFrom-SID
 
 									foreach ($App in $StoreApps)
 									{
-										Write-Debug -Message "Processing app: '$App'"
+										Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app: '$App'"
 
 										# TODO: Get-AppSID should retrieve remote computer information see implementation
 										# NOTE: ignore warnings and info to reduce spam

@@ -117,7 +117,7 @@ function Initialize-Log
 		{
 			if (![string]::IsNullOrEmpty($Header))
 			{
-				Write-Debug -Message "Header parameter is valid for new log files only, ignored..."
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Header parameter is valid for new log files only, ignored..."
 			}
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Directory"

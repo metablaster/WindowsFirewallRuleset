@@ -270,7 +270,7 @@ function Initialize-Module
 
 				if ($Repositories[0].InstallationPolicy -eq "Trusted")
 				{
-					Write-Debug -Message "Repository $Repository set to trusted"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Repository $Repository set to trusted"
 				}
 			}
 		}
