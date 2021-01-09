@@ -136,18 +136,15 @@ using namespace System
 
 # NOTE: surpress script scope warning example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute( # Scope = "Function"
-	"PSAvoidUsingWriteHost", "", Justification = "Template")]
+	"PSAvoidUsingWriteHost", "", Justification = "Script scope supression")]
 [CmdletBinding()]
 [OutputType([void])]
 param (
-	[Parameter()]
-	[switch] $Force,
-
 	# NOTE: surpress parameter example
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSReviewUnusedParameter", "Unused", Justification = "Template")]
+		"PSReviewUnusedParameter", "Force", Justification = "This will work for functions only")]
 	[Parameter()]
-	[string] $Unused
+	[switch] $Force
 )
 
 #region Initialization

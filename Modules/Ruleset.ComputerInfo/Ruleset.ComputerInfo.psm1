@@ -27,8 +27,6 @@ SOFTWARE.
 #>
 
 #region Initialization
-using namespace System.Management.Automation # Get-InterfaceAlias
-
 param (
 	[Parameter()]
 	[switch] $ListPreference

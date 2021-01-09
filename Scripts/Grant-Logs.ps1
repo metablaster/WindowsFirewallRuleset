@@ -80,7 +80,6 @@ TODO: Need to verify if gpupdate is needed for first time setup and if so update
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
-# For: AccessControl.FileSystemRights
 using namespace System.Security
 #Requires -Version 5.1
 #Requires -RunAsAdministrator

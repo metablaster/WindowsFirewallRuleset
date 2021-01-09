@@ -27,6 +27,8 @@ SOFTWARE.
 #>
 
 #region Initialization
+using namespace System.Management.Automation.Host
+
 param (
 	[Parameter()]
 	[switch] $ListPreference

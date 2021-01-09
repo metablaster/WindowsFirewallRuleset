@@ -69,8 +69,7 @@ see notes section in Scripts\BlankTemplate.ps1
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
-# TODO: Remove using statement and/or elevation requirement
-using namespace System
+# TODO: Remove elevation requirement
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 

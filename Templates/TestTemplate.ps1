@@ -51,8 +51,7 @@ None. TestTemplate.ps1 does not generate any output
 None.
 #>
 
-# TODO: Remove using statement and/or elevation requirement
-using namespace System
+# TODO: Remove elevation requirement
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
