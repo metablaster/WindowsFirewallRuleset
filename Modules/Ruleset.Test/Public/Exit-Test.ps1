@@ -62,7 +62,7 @@ function Exit-Test
 		[switch] $Pester
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if (!$Pester -and $PSCmdlet.ShouldProcess("Exit unit test", $UnitTest))
 	{

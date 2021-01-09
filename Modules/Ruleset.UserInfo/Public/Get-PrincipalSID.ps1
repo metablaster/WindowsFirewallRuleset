@@ -77,13 +77,13 @@ function Get-PrincipalSID
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq "$($args[0])" }))
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($UserName in $User)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"

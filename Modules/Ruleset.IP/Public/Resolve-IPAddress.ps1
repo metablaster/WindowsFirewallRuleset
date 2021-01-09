@@ -95,6 +95,10 @@ function Resolve-IPAddress
 		[string] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		$Groups = [regex]::Matches($IPAddress, "\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)").Groups.Captures |

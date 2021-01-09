@@ -111,7 +111,7 @@ function Remove-FirewallRules
 		[switch] $JSON
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{

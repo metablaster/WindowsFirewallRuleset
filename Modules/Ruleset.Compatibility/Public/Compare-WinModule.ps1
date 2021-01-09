@@ -100,6 +100,8 @@ function Compare-WinModule
 		[PSCredential] $Credential
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing compatibility session"

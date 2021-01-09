@@ -60,13 +60,8 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\ContextSetup.ps1
+Initialize-Project -Strict
 
 # User prompt
 Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Load test rule into firewall"

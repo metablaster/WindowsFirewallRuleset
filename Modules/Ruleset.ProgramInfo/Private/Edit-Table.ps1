@@ -60,7 +60,7 @@ function Edit-Table
 		[string] $Path
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Check if input path leads to user profile and is compatible with firewall

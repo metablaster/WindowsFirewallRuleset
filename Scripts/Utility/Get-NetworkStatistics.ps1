@@ -213,7 +213,6 @@ begin
 	# Store hostnames in array for quick lookup
 	$DnsCache = @{}
 }
-
 process
 {
 	foreach ($Computer in $Domain)

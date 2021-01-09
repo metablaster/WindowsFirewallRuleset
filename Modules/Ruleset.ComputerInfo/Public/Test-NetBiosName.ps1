@@ -98,6 +98,8 @@ function Test-NetBiosName
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		if ($Quiet)
 		{
 			$WriteError = "SilentlyContinue"
@@ -119,8 +121,6 @@ function Test-NetBiosName
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($ComputerName in $Name)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing NETBIOS name: '$ComputerName'"

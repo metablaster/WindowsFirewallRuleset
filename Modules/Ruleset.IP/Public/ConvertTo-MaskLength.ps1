@@ -92,6 +92,10 @@ function ConvertTo-MaskLength
 		[IPAddress] $SubnetMask
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length

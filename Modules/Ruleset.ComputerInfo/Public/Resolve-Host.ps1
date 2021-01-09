@@ -118,10 +118,12 @@ function Resolve-Host
 		[switch] $Connected
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		if ($FlushDNS)
 		{
 			# TODO: Should this be called only once for pipelines?

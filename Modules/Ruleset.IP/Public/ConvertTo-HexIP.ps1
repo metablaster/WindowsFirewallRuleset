@@ -91,6 +91,10 @@ function ConvertTo-HexIP
 		[IPAddress] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		$Bytes = $IPAddress.GetAddressBytes()

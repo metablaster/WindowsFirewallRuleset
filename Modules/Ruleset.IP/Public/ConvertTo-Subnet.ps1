@@ -116,6 +116,8 @@ function ConvertTo-Subnet
 		[IPAddress] $End
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if ($PSCmdlet.ParameterSetName -eq "FromIPAndMask")
 	{
 		try

@@ -101,6 +101,8 @@ function Get-Permutation
 		[int32] $Index = 0
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	foreach ($Value in $Group[$Index].ReplaceWith)
 	{
 		$Octets = $BaseAddress -split '\.'

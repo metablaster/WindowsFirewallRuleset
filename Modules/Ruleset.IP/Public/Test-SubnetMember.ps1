@@ -128,6 +128,8 @@ function Test-SubnetMember
 		[string] $ObjectSubnetMask
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	try
 	{
 		$SubjectNetwork = ConvertTo-Network $SubjectIPAddress $SubjectSubnetMask

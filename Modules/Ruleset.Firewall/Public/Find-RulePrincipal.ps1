@@ -60,7 +60,7 @@ function Find-RulePrincipal
 		[switch] $Empty
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	Write-Information -Tags "User" -MessageData "INFO: Getting rules from GPO..."
 	$GPORules = Get-NetFirewallProfile -All -PolicyStore $PolicyStore |

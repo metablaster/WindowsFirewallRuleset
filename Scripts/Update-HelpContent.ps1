@@ -118,7 +118,8 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+. $PSScriptRoot\ContextSetup.ps1
+Initialize-Project -Strict
 
 if ($null -eq $Encoding)
 {
@@ -140,13 +141,6 @@ if ($null -eq $PlatyModule)
 	Write-Error -Category ObjectNotFound -Message "Module platyPS needs to be installed to run this script"
 	return
 }
-
-# Check requirements
-Initialize-Project -Strict
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
 $Deny = "Abort operation, no change to help files is made"
@@ -179,6 +173,8 @@ function Format-Document
 		[string] $FileName
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$MarkdownFile = Split-Path -Path $FileName -Leaf
 	Write-Information -Tags "Project" -MessageData "INFO: Formatting document $MarkdownFile"
 	$FileData = Get-Content -Path $FileName -Encoding $Encoding -Raw
@@ -195,8 +191,6 @@ function Format-Document
 	# TODO: new line is inserted in module page, NoNewline ignored
 	Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
 }
-
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 
 # Setup local variables
 # Root directory of help content for current module and culture

@@ -75,6 +75,8 @@ function Format-Output
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		if ($Modify)
 		{
 			$Label = "Modify Rule"
@@ -90,7 +92,6 @@ function Format-Output
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 	}
 }

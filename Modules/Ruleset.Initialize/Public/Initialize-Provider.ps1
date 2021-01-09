@@ -86,6 +86,8 @@ function Initialize-Provider
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# User prompt default values
 		[int32] $Default = 0
 		[ChoiceDescription[]] $Choices = @()
@@ -94,8 +96,6 @@ function Initialize-Provider
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		[string] $ProviderName = $FullyQualifiedName.ModuleName
 		$Deny.HelpMessage = "Skip operation, provider $ProviderName will not be installed or updated"
 

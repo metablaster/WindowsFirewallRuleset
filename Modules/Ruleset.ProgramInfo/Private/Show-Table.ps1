@@ -57,6 +57,8 @@ function Show-Table
 		[string] $Caption
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if (![string]::IsNullOrEmpty($Caption))
 	{
 		Write-Host $Caption

@@ -92,7 +92,7 @@ function Reset-TestDrive
 		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess($Path, "Recursively delete test drive"))
 	{

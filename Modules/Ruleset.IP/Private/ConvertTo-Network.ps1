@@ -101,6 +101,8 @@ function ConvertTo-Network
 		[string] $SubnetMask
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$ValidSubnetMaskValues =
 	"0.0.0.0", "128.0.0.0", "192.0.0.0",
 	"224.0.0.0", "240.0.0.0", "248.0.0.0", "252.0.0.0",

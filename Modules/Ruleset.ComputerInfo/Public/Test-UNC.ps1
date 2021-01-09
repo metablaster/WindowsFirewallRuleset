@@ -106,6 +106,8 @@ function Test-UNC
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		if ($Quiet)
 		{
 			$WriteError = "SilentlyContinue"
@@ -117,8 +119,6 @@ function Test-UNC
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($UNC in $Name)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing UNC: '$UNC'"

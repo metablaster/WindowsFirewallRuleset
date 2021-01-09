@@ -191,11 +191,8 @@ begin
 
 	[hashtable] $FilterHash = @{}
 }
-
 process
 {
-	# Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
 	if ($null -ne $Name)
 	{
 		foreach ($VariableName in $Name)
@@ -205,7 +202,6 @@ process
 		}
 	}
 }
-
 end
 {
 	# NOTE: List of preference variables taken from the about_Preference_Variables for PowerShell Core 7.1

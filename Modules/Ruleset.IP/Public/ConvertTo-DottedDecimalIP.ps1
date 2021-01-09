@@ -96,6 +96,10 @@ function ConvertTo-DottedDecimalIP
 		[string] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		try

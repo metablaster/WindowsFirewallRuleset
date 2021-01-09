@@ -73,12 +73,12 @@ function Convert-ArrayToList
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		[string] $Result = ""
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		if ($InputObject -and ($InputObject.Length -gt 0))
 		{
 			foreach ($Value In $InputObject)

@@ -109,6 +109,10 @@ function Get-NetworkAddress
 		[string] $SubnetMask
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		try

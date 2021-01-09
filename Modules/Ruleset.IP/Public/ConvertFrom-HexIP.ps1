@@ -93,6 +93,10 @@ function ConvertFrom-HexIP
 		[string] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		[IPAddress][uint64][convert]::ToUInt32($IPAddress, 16)

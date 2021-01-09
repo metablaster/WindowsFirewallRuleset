@@ -59,14 +59,8 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
+. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-. $PSScriptRoot\..\ContextSetup.ps1
 
 # User prompt
 Update-Context $TestContext $ThisScript

@@ -115,6 +115,8 @@ function Test-UPN
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
 		[regex] $SeparatorRegex = ("@")
 
@@ -148,8 +150,6 @@ function Test-UPN
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($UPN in $Name)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing UPN: '$UPN'"

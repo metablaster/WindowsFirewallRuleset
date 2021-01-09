@@ -68,7 +68,7 @@ function Confirm-Installation
 		[ref] $Directory
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs

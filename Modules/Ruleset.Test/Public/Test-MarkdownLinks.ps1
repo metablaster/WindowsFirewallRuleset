@@ -112,7 +112,7 @@ function Test-MarkdownLinks
 		[switch] $NoProxy
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Progress bar initial setup
 	$StartTime = Get-Date

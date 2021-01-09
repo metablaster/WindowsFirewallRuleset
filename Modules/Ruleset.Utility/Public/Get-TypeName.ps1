@@ -118,6 +118,8 @@ function Get-TypeName
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# TODO: This scriptblock should probably be a separate function called "Trace-TypeName" which would serve for troubleshooting
 		[scriptblock] $CheckType = {
 			param (
@@ -170,7 +172,6 @@ function Get-TypeName
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
 		[string] $TypeName = $null
 
 		# NOTE: if ($InputObject) would not handle boolean objects set to false, resulting in Void type

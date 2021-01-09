@@ -236,7 +236,7 @@ function Set-Permission
 		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$RecurseMessage = ""
 	if ($Recurse)

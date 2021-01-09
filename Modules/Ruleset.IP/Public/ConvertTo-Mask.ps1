@@ -95,6 +95,10 @@ function ConvertTo-Mask
 		[byte] $MaskLength
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		[IPAddress][uint64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)

@@ -77,7 +77,7 @@ function Update-Log
 		[System.IO.DirectoryInfo] $Path = $LogsFolder
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if there is data to write logs"
 	$ErrorBuffer = $PSCmdlet.GetVariableValue("ErrorBuffer")

@@ -75,6 +75,8 @@ function Confirm-FileEncoding
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# TODO: Windows PowerShell outputs as utf8 with BOM
 		if ($PSVersionTable.PSEdition -eq "Desktop")
 		{

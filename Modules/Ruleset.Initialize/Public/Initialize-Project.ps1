@@ -85,7 +85,7 @@ function Initialize-Project
 		[switch] $Strict
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
 	if (!$ProjectCheck)

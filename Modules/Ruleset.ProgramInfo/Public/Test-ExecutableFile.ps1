@@ -97,7 +97,7 @@ function Test-ExecutableFile
 		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path: $ExpandedPath"

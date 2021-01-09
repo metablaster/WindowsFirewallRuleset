@@ -59,7 +59,7 @@ function New-Section
 		[string] $Message
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess("Current unit test", "Print new section"))
 	{

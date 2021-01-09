@@ -60,7 +60,7 @@ function Set-ScreenBuffer
 		[uint16] $Height = 3000
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$psHost = Get-Host
 	$psWindow = $psHost.UI.RawUI

@@ -87,7 +87,7 @@ function Initialize-Log
 		[switch] $Overwrite
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Directory = Resolve-FileSystemPath $Path
 	if (!$Directory)

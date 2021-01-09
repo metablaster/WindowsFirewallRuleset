@@ -133,6 +133,8 @@ function Set-Privilege
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		$Signature = '[DllImport("ntdll.dll", EntryPoint = "RtlAdjustPrivilege")]
         public static extern IntPtr SetPrivilege(int Privilege, bool bEnablePrivilege, bool IsThreadPrivilege, out bool PreviousValue);
 

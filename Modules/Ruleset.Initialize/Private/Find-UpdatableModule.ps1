@@ -120,6 +120,8 @@ function Find-UpdatableModule
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7
 		$HelpInfoNamespace = @{ helpInfo = 'http://schemas.microsoft.com/powershell/help/2010/05' }
 
@@ -127,8 +129,6 @@ function Find-UpdatableModule
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		if ($Module)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -Name"

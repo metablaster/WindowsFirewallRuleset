@@ -81,7 +81,7 @@ function Test-TargetComputer
 		[int16] $Timeout = $null
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Be quiet for localhost
 	if ($Domain -ne [System.Environment]::MachineName)

@@ -92,6 +92,10 @@ function ConvertTo-BinaryIP
 		[IPAddress] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		$Binary = foreach ($Byte in $IPAddress.GetAddressBytes())

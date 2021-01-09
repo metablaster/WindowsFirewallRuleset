@@ -118,6 +118,8 @@ function Invoke-WinCommand
 		[object[]] $ArgumentList
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$PSBoundParameters.Remove("ScriptBlock") | Out-Null
 	$PSBoundParameters.Remove("ArgumentList") | Out-Null
 

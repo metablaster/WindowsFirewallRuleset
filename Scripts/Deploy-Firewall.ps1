@@ -75,15 +75,12 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+. $PSScriptRoot\ContextSetup.ps1
 
 # First unblock all files
 & "$ProjectRoot\Scripts\Unblock-Project.ps1"
 
-# Check requirements
 Initialize-Project -Strict
-Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
 $PSDefaultParameterValues["Approve-Execute:Force"] = $Force
 
 # User prompt
@@ -91,6 +88,9 @@ $Accept = "Deploy firewall to target computer"
 $Deny = "Abort operation"
 Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+
+# Skip checking requirements for all subsequent operations
+Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Clear errors, error and warning status
 $Error.Clear()

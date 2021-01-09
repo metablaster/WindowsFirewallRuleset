@@ -127,7 +127,7 @@ function Initialize-Module
 		[switch] $Required
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Validate module specification
 	if (!($FullyQualifiedName.Count -ge 2 -and

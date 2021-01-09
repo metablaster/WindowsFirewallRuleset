@@ -68,6 +68,8 @@ function Add-WindowsPSModulePath
 	[OutputType([void])]
 	param ()
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if ($PSVersionTable.PSEdition -eq "Core" -and -not $IsWindows)
 	{
 		throw "This cmdlet is only supported on Windows"

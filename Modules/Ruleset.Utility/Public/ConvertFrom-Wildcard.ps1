@@ -116,6 +116,8 @@ function ConvertFrom-Wildcard
 		[System.TimeSpan] $TimeSpan = [regex]::InfiniteMatchTimeout
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	# Optimize dots and stars excluding escaped dots
 	$Optimize = {
 		param ([string] $Target)

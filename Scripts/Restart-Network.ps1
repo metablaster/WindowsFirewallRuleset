@@ -126,14 +126,8 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Strict
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
 . $PSScriptRoot\ContextSetup.ps1
+Initialize-Project -Strict
 
 # User prompt
 $Deny = "Abort operation, no change to network configuration is done"
@@ -201,7 +195,7 @@ function Select-AdapterAlias
 		[string[]] $InterfaceAlias
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[CimInstance[]] $TargetAdapter = @()
 	if ($InterfaceAlias)
@@ -380,7 +374,7 @@ function Wait-Adapter
 		[uint32] $Seconds = 10
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	for ($Time = 2; $Time -le ($Seconds - $Time + 2); $Time += 2)
 	{

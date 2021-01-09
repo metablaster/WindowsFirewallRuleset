@@ -114,6 +114,8 @@ function Add-WinFunction
 		[PSCredential] $Credential
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	# Make sure the session is initialized
 	$PSBoundParameters.Remove("Name") | Out-Null
 	$PSBoundParameters.Remove("ScriptBlock") | Out-Null

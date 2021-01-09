@@ -76,13 +76,13 @@ function Test-Service
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# Keep track of already checked service signatures
 		[hashtable] $BinaryPathCache = @{}
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		$Services = Get-Service -Name $Name -ErrorAction Ignore
 
 		if (!$Services)

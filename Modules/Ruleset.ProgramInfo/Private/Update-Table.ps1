@@ -81,7 +81,7 @@ function Update-Table
 		[string] $Executable
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{

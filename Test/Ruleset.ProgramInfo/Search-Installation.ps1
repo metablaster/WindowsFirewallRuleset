@@ -63,7 +63,7 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+. $PSScriptRoot\ContextSetup.ps1
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
@@ -72,11 +72,7 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 	return
 }
 
-# Check requirements
 Initialize-Project -Strict
-
-# Imports
-. $PSScriptRoot\ContextSetup.ps1
 
 # User prompt
 Update-Context $TestContext $ThisScript

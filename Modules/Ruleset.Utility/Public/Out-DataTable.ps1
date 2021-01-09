@@ -94,6 +94,8 @@ function Out-DataTable
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		$Table = New-Object -TypeName System.Data.datatable
 		$First = $true
 

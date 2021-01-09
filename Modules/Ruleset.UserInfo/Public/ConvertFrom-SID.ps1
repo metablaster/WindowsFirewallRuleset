@@ -104,10 +104,12 @@ function ConvertFrom-SID
 		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		[PSCustomObject[]] $Result = @()
 
 		# loop through provided SIDs

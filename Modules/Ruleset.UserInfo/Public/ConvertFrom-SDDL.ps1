@@ -63,12 +63,11 @@ function ConvertFrom-SDDL
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($SddlEntry in $SDDL)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SDDL: $SddlEntry"

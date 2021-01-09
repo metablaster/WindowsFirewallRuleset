@@ -239,11 +239,8 @@ begin
 		$ImportParams.Add("SkipEditionCheck", $true)
 	}
 }
-
 process
 {
-	Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
 	if (!$ListImported)
 	{
 		# NOTE: The ParameterName and ParameterType parameters search only commands in the current session

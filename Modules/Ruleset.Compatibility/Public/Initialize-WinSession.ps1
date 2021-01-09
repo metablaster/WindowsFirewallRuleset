@@ -103,6 +103,8 @@ function Initialize-WinSession
 		[switch] $PassThru
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	if ($Domain -eq ".")

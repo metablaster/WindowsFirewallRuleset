@@ -205,7 +205,7 @@ function Select-EnvironmentVariable
 		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Make sure null or empty Name or Value arguments don't cause any overhead
 	switch ($PsCmdlet.ParameterSetName)

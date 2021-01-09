@@ -85,8 +85,7 @@ function Format-Path
 
 	begin
 	{
-		# NOTE: Not used
-		# Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	}
 	process
 	{

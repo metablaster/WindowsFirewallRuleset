@@ -127,8 +127,7 @@ function Test-FileSystemPath
 		[switch] $Quiet
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	function Write-Conditional
 	{
 		# TODO: Convert to script block

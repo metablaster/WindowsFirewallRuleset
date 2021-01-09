@@ -98,6 +98,8 @@ function Get-SystemSKU
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		[scriptblock] $GetStringSKU = {
 			param ([int32] $SKU)
 
@@ -198,8 +200,6 @@ function Get-SystemSKU
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values)) $($PSBoundParameters.Values | Get-TypeName)"
-
 		if ($PSCmdlet.ParameterSetName -eq "Number")
 		{
 			[PSCustomObject] @{

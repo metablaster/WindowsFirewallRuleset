@@ -69,5 +69,7 @@ function Merge-SDDL
 		[string] $From
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	$SDDL.Value += $From.Substring(2)
 }

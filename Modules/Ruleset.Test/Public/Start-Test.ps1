@@ -66,7 +66,8 @@ function Start-Test
 		[string] $Message
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	# TODO: This regex won't cover everything
 	# "Start-Test -Param input"
 	# Let Stop-Test know test case name

@@ -56,7 +56,7 @@ function Set-NetworkProfile
 	[OutputType([void])]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess("Configure network profile"))
 	{

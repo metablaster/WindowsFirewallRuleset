@@ -74,12 +74,11 @@ function Test-Output
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		Start-Test "Compare TypeName and OutputType"
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		# NOTE: OutputType variable may contain multiple valid entries
 		# Ignoring errors to reduce spamming console with errors
 		$OutputType = Get-TypeName -Command $Command -ErrorAction SilentlyContinue

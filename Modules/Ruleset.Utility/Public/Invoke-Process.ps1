@@ -111,6 +111,7 @@ function Invoke-Process
 		[switch] $Raw
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$CommandName = Split-Path -Path $Path -Leaf
 
 	# TODO: May return unexpected application if multiple matches exist

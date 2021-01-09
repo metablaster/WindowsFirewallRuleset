@@ -103,10 +103,12 @@ function Get-AppCapability
 		[switch] $Networking
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($StoreApp in $InputObject)
 		{
 			# Need a copy because of possible modification

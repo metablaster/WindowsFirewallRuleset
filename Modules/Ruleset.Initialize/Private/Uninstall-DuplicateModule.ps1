@@ -105,6 +105,8 @@ function Uninstall-DuplicateModule
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# Check if in elevated PowerShell
 		# NOTE: can't be part of begin block
 		# TODO: not tested if replacing with "Requires RunAs Administrator"
@@ -217,8 +219,6 @@ function Uninstall-DuplicateModule
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($Item in $Module)
 		{
 			$ModuleVersion = $Item.Version

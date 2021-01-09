@@ -111,7 +111,7 @@ function Import-FirewallRules
 		[switch] $JSON
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Path = Resolve-Path $Path
 	if (!$Path -or !$Path.Exists)

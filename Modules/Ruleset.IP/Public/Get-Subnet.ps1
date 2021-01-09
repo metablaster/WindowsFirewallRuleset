@@ -116,6 +116,7 @@ function Get-Subnet
 		[string] $NewSubnetMask
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$PSBoundParameters.Remove("NewSubnetMask") | Out-Null
 
 	try

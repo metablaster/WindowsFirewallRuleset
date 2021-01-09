@@ -159,7 +159,7 @@ function Set-Shortcut
 		[switch] $Admin
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($URL) { $Target = $URL.Authority }
 	else { $Target = Split-Path -Path $TargetPath -Leaf }

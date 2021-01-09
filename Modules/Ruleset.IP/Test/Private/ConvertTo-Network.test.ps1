@@ -54,7 +54,7 @@ param (
 
 # Initialization
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-Enter-Test -Private -Pester
+Enter-Test -Pester
 
 if (-not $UseExisting)
 {

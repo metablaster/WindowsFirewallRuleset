@@ -75,6 +75,8 @@ function Initialize-Service
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# User prompt default values
 		[int32] $Default = 0
 		[ChoiceDescription[]] $Choices = @()
@@ -89,8 +91,6 @@ function Initialize-Service
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($InputService in $Name)
 		{
 			$StatusGood = $true

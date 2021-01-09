@@ -100,7 +100,7 @@ $PredefinedHidden = $PredefinedRules | Select-Object -Property DisplayName, Stat
 
 for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'"
+	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'" -INFA "Continue"
 
 	# NOTE: We can't apply filter on all rules at once, because the result won't be sorted the same way
 	$Program = (Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $PredefinedRules[$Index]).Program
@@ -110,4 +110,4 @@ for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 	$PredefinedHidden[$Index] | Add-Member -MemberType NoteProperty -Name "Service" -Value $Service
 }
 
-$PredefinedHidden
+Write-Output $PredefinedHidden

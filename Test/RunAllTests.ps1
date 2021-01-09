@@ -71,14 +71,8 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Strict
-Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
-
-# Imports
 . $PSScriptRoot\ContextSetup.ps1
+Initialize-Project -Strict
 
 # User prompt
 New-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"
@@ -91,6 +85,9 @@ if ($Pester)
 Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
+
+# TODO: Setup trap and restore variable any way
+Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
 # Prompt to set screen buffer to recommended value for tests
 Set-ScreenBuffer 3000

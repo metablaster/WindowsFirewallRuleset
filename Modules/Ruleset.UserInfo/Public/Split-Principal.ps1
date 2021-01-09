@@ -68,10 +68,12 @@ function Split-Principal
 		[switch] $DomainName
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($Account in $Principal)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"

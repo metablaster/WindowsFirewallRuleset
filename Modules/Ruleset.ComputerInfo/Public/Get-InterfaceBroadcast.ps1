@@ -74,7 +74,7 @@ function Get-InterfaceBroadcast
 		[switch] $Hidden
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
 
 	# Broadcast address makes sense only for IPv4

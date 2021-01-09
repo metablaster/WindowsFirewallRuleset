@@ -104,7 +104,7 @@ function Test-Credential
 
 	begin
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSetName: $($PSCmdlet.ParameterSetName) params($($PSBoundParameters | Out-String))"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 		# Create principal context with appropriate context from param. If either comp or domain is null, thread's user's domain or local machine are used
 		if ($Context -eq 'ApplicationDirectory' )

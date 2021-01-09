@@ -92,6 +92,10 @@ function ConvertTo-DecimalIP
 		[IPAddress] $IPAddress
 	)
 
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
 	process
 	{
 		[uint32]([IPAddress]::HostToNetworkOrder($IPAddress.Address) -shr 32 -band [uint32]::MaxValue)

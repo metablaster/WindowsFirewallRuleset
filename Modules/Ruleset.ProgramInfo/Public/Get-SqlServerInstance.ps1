@@ -170,6 +170,8 @@ function Get-SqlServerInstance
 
 	begin
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		# TODO: begin scope for all registry functions
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 
@@ -189,8 +191,6 @@ function Get-SqlServerInstance
 
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
-
 		foreach ($Computer in $Domain)
 		{
 			[PSCustomObject[]] $AllInstances = @()

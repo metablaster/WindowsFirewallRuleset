@@ -103,7 +103,7 @@ function Get-SDDL
 		[switch] $Merge
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Glossary:
 	# SDDL: Security Descriptor Definition Language
