@@ -28,13 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Module script experiment
+Module function experiment
 
 .DESCRIPTION
 Use Debug-Experiment.ps1 to write temporary module tests
 
-.PARAMETER Force
-If specified, no prompt to run script is shown.
+.PARAMETER Param
+Template parameter
 
 .EXAMPLE
 PS> Import-Module -Name Experiment.Module

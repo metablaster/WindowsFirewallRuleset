@@ -31,19 +31,19 @@ SOFTWARE.
 Script experiment
 
 .DESCRIPTION
-Use Experiment.ps1 to write temporary tests
+Use New-Experiment.ps1 to write temporary tests
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.
 
 .EXAMPLE
-PS> .\Experiment.ps1
+PS> .\New-Experiment.ps1
 
 .INPUTS
-None. You cannot pipe objects to Experiment.ps1
+None. You cannot pipe objects to New-Experiment.ps1
 
 .OUTPUTS
-None. Experiment.ps1 does not generate any output
+None. New-Experiment.ps1 does not generate any output
 
 .NOTES
 None.

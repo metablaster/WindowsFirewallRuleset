@@ -80,10 +80,12 @@ Modifications by metablaster year 2019, 2020:
 - Rename function to approved verb
 - Removed unnecessary position arguments, added default argument values explicitly.
 
-Modifications 2021:
+January 2021:
 
 - Added OutputType attribute
 - Update comment based help
+- Added parameter debugging stream
+
 #>
 function Get-Permutation
 {

@@ -47,12 +47,11 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-#region:TestFileHeader
 param (
 	[switch] $UseExisting
 )
 
-# Initialization
+#region Initialization
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 Enter-Test -Pester
 

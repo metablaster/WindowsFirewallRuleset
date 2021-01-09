@@ -47,14 +47,13 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-#region:TestFileHeader
-# TODO: Update outdated pester code
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
 param (
 	[switch] $UseExisting
 )
 
+#region Initialization
 if (-not $UseExisting)
 {
 	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))

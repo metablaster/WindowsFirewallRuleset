@@ -52,13 +52,14 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # - Added module boilerplate code
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
 
+# TODO: Add Write-* streams to module functions
+
 #region Initialization
 param (
 	[Parameter()]
 	[switch] $ListPreference
 )
 
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
 
 if ($ListPreference)

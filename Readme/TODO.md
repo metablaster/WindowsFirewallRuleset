@@ -323,6 +323,7 @@ Todo's in this file are categorized into following sections:
     `Get-Member` output
     - After ensuring scripts can't run without edition or version check use newer `$PSEdition`
     instead of older and longer `$PSVersionTable.PSEdition`
+    - The "homepage:" comment license notice can be omitted from scripts and replaced with .LINK
 
 6. Documentation
 

@@ -27,6 +27,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Remove using statement
+using namespace System
+
 <#
 .SYNOPSIS
 A brief description of this function.

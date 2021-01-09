@@ -83,6 +83,7 @@ Following modifications by metablaster November 2020:
 January 2021:
 
 - Replace cast to [void] with Out-Null
+- Added parameter debugging stream
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WinFunction.md
