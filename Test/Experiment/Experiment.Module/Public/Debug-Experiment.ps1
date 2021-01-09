@@ -57,13 +57,9 @@ function Debug-Experiment
 		[string] $Param
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] params($($PSBoundParameters.Values))"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# $InformationPreference = "Continue"
-	# Write-Information -MessageData "Parameter: $Param"
-
-	# $VerbosePreference = "Continue"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] From test function"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Test message $Param"
 }
 
 # Template variable

@@ -32,7 +32,6 @@ param (
 	[switch] $ListPreference
 )
 
-New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Value (Split-Path $PSScriptRoot -Leaf)
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
 
 if ($ListPreference)

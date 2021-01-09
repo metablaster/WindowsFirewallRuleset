@@ -134,6 +134,7 @@ using namespace System
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
+# NOTE: surpress script scope warning example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute( # Scope = "Function"
 	"PSAvoidUsingWriteHost", "", Justification = "Template")]
 [CmdletBinding()]
@@ -142,6 +143,7 @@ param (
 	[Parameter()]
 	[switch] $Force,
 
+	# NOTE: surpress parameter example
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSReviewUnusedParameter", "Unused", Justification = "Template")]
 	[Parameter()]
@@ -151,15 +153,8 @@ param (
 #region Initialization
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Strict
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
+Initialize-Project -Strict
 
 # User prompt
 # TODO: Update command line help messages
@@ -170,6 +165,7 @@ Update-Context $TemplateContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
+# NOTE: surpress variable example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "", Justification = "Template")]
 $UnusedVariable = $null

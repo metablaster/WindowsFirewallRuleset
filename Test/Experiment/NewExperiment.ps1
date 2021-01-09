@@ -52,15 +52,27 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[switch] $Force
+	[switch] $Force,
+
+	[Parameter(ValueFromPipeline = $true)]
+	[string] $Param
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+begin
+{
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
-Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
+	Write-Debug -Message "[$ThisScript] Test message"
+	Debug-Experiment -Debug
+}
 
-# $VerbosePreference = "Continue"
-Write-Verbose -Message "[$ThisScript] From Script"
+process
+{
+	$InformationPreference = "Continue"
+	Write-Information -MessageData "INFO: $Param"
+}
 
-Debug-Experiment
+end
+{
+}

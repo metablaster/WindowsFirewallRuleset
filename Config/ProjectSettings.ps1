@@ -65,6 +65,7 @@ TODO: Variable description should be part of variable object
 TODO: Some version variables enabled for module initialization are needed in several modules
 such as PS edition, PS version etc...
 TODO: Define OutputType attribute
+TODO: Set up trap for this script
 #>
 
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive")]
@@ -86,31 +87,25 @@ param (
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
 
-if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+if ($PSCmdlet.ParameterSetName -eq "Module")
 {
-	# Repository root directory, reallocating scripts should be easy if root directory is constant
-	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+	# Calling script name, to be used for Write-* operations
+	New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value (Split-Path (Get-PSCallStack)[1].ScriptName -LeafBase) -EA Stop
+	Write-Debug -Message "[$SettingsScript] Caller = $ThisModule ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 }
-
-# Assemble relative path name to calling script
-New-Variable -Name SettingsCaller -Scope Private -Value ([regex]::escape($ProjectRoot))
-if ((Get-PSCallStack)[1].ScriptName -match "(?<=$SettingsCaller\\).+")
+else
 {
-	$SettingsCaller = $Matches[0]
+	# Calling script name, to be used for Write-* operations
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ($Cmdlet.MyInvocation.MyCommand -replace "\..+") -EA Stop
+	Write-Debug -Message "[$SettingsScript] Caller = $ThisScript ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 }
-
-Write-Debug -Message "[$SettingsScript] params($($PSBoundParameters.Values)) caller: $SettingsCaller)"
 
 if ($MyInvocation.InvocationName -ne ".")
 {
 	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
-		-Message "$SettingsScript script must be dot sourced in $SettingsCaller"
+		-Message "$SettingsScript script must be dot sourced"
 	exit
 }
-
-# NOTE: This name must be unique otherwise it may be removed in calling script if it defines one
-Remove-Variable -Name SettingsCaller -Scope Private
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -266,6 +261,13 @@ else
 	# $ErrorView = "NormalView"
 }
 
+if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+{
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+}
+
 if ($Develop)
 {
 	# Two variables for each of the three logging components:
@@ -295,16 +297,10 @@ if ($Develop)
 	if (!$InModule)
 	{
 		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
-		# Skip removing modules if this script is called from within a module which would
-		# cause removing modules prematurely
-		Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory | ForEach-Object {
-			# NOTE: Using ForEach-Object to avoid name pollution of variables
-			$TargetModule = Get-Module -Name $_
-			if ($TargetModule)
-			{
-				Write-Debug -Message "[$SettingsScript] Removing module $_"
-				Remove-Module -ModuleInfo $TargetModule -ErrorAction Stop
-			}
+		# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
+		Get-Module -Name Ruleset.* | ForEach-Object {
+			Write-Debug -Message "[$SettingsScript] Removing module $_"
+			Remove-Module -Name $_ -ErrorAction Stop
 		}
 	}
 }
@@ -788,3 +784,9 @@ if ($ListPreference)
 	}
 }
 #endregion
+
+if (!$InModule)
+{
+	# Calling script parameter status info
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($Cmdlet.ParameterSetName):$($Cmdlet.MyInvocation.BoundParameters | Out-String)"
+}

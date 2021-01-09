@@ -63,13 +63,8 @@ param (
 #region Initialization
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
-# TODO: adjust path
 . $PSScriptRoot\DirectionSetup.ps1
+Initialize-Project -Strict
 
 # Setup local variables
 $Group = "Template - TargetProgram"

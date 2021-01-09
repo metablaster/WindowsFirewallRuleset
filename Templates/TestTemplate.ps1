@@ -65,25 +65,18 @@ param (
 #region Initialization
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-
-# Check requirements
-Initialize-Project -Strict
-Write-Debug -Message "[$ThisScript] params($($PSBoundParameters.Values))"
-
-# Imports
-# TODO: Include modules and scripts as needed
 . $PSScriptRoot\ContextSetup.ps1
 
-# User prompt
+Initialize-Project -Strict
 Update-Context $TestContext $ThisScript
+
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
 Enter-Test
 
 # TODO Specify temporary Test-Function parameters
-# $private:PSDefaultParameterValues.Add("Test-Function:Parameter", Value)
+# $PSDefaultParameterValues.Add("Test-Function:Force", $Force)
 
 # TODO: Keep this check if this test is:
 # 1. Experimental or potentially dangerous

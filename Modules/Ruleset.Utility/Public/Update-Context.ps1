@@ -80,6 +80,7 @@ function Update-Context
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting context"
 
+		# TODO: [regex]::Match("$((Get-PSCallStack)[1].ScriptName)", "(?<=$([regex]::escape($ProjectRoot))\\).+").Value
 		$NewContext = $Root + "." + $Section
 		if (![string]::IsNullOrEmpty($Subsection))
 		{
