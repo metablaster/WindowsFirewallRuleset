@@ -67,13 +67,15 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
+
+if ($PSVersionTable.PSVersion -ge "7.1")
+{
+	Import-WinModule -Name Appx -ErrorAction Stop
+}
 
 # Setup local variables
 $Group = "Store Apps"

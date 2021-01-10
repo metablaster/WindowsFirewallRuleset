@@ -55,7 +55,7 @@ if ($ListPreference)
 #endregion
 
 # TODO: -NoClobber, this module may already exist on target computer
-# TODO: Take time to load + hide blinking progress bar
+# TODO: Hide blinking progress bar, will happen when importing module, ex. Import-WinModule -Name Appx
 
 #
 # Script imports

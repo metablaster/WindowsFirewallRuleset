@@ -84,7 +84,7 @@ Initialize-Project -Strict
 $PSDefaultParameterValues["Approve-Execute:Force"] = $Force
 
 # User prompt
-$Accept = "Deploy firewall to target computer"
+$Accept = "Deploy firewall to '$PolicyStore' computer"
 $Deny = "Abort operation"
 Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }

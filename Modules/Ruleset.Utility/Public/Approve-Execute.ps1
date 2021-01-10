@@ -30,27 +30,36 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Prompt user to continue running script
+Customized user prompt to continue
 
 .DESCRIPTION
-In addition to prompt, execution context is shown.
-Asking for approval helps to let run master script and only execute specific
-scripts, thus loading only needed rules.
-
-.PARAMETER Unsafe
-If specified the command is considered unsafe, and the default action is then "No"
+Prompt user to continue running script or section of code.
+In addition to prompt, an optional execution context can be shown.
+Help messages for prompt choices can be optionally customized.
+Asking for approval can help to run master script and only execute specific set of scripts.
 
 .PARAMETER Title
 Prompt title
+
+.PARAMETER Context
+Optional context to append to the title.
+Context is automatically regenerated if the -Title parameter is empty or not set.
+Otherwise previous context is reused.
+
+.PARAMETER ContextLeaf
+Optional string to append to context.
+If not specified, context leaf is automatically generated if both the -Title and -Context parameters
+are not set.
+Otherwise if -Title is set without -Context this parameter is ignored.
 
 .PARAMETER Question
 Prompt question
 
 .PARAMETER Accept
-Prompt help menu for default action
+Help message for "Yes" choice
 
 .PARAMETER Deny
-Prompt help menu for deny action
+Help message for "No" choice
 
 .PARAMETER YesToAll
 Will be set to true if user selects YesToAll.
@@ -59,6 +68,9 @@ If this is already true, Approve-Execute will bypass the prompt and return true.
 .PARAMETER NoToAll
 Will be set to true if user selects NoToAll.
 If this is already true, Approve-Execute will bypass the prompt and return false.
+
+.PARAMETER Unsafe
+If specified, the command is considered unsafe and the default action is then "No"
 
 .PARAMETER Force
 If specified, this function does nothing and returns true
@@ -75,22 +87,26 @@ PS> Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 None. You cannot pipe objects to Approve-Execute
 
 .OUTPUTS
-[bool] True if the user wants to continue, false otherwise
+[bool] True if operation should be performed, false otherwise
 
 .NOTES
-None.
+TODO: Help messages and question message needs better description to fit more scenarios
+TODO: Implement accepting arbitrary amount of choices, ex. [ChoiceDescription[]] parameter
 #>
 function Approve-Execute
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Approve-Execute.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter()]
-		[switch] $Unsafe,
+		[string] $Title,
 
 		[Parameter()]
-		[string] $Title = "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName),
+		[string] $Context,
+
+		[Parameter()]
+		[string] $ContextLeaf,
 
 		[Parameter()]
 		[string] $Question = "Do you want to run this script?",
@@ -107,7 +123,11 @@ function Approve-Execute
 		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
 		[ref] $NoToAll,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Default")]
+		[Parameter(ParameterSetName = "ToAll")]
+		[switch] $Unsafe,
+
+		[Parameter(ParameterSetName = "Force")]
 		[switch] $Force
 	)
 
@@ -115,12 +135,84 @@ function Approve-Execute
 
 	if ($Force)
 	{
-		if ($null -ne $YesToAll)
-		{
-			$YesToAll.Value = $true
-		}
-
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning true because 'Force' was specified"
 		return $true
+	}
+
+	if ([string]::IsNullOrEmpty($Title))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title message"
+		$Title = "Executing: $(Split-Path -Leaf $MyInvocation.ScriptName)"
+
+		if ([string]::IsNullOrEmpty($Context))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title context"
+
+			$LeafBase = Split-Path -Path $MyInvocation.ScriptName -LeafBase
+			$LeafRegex = [regex]::Escape($LeafBase)
+			$RootRegex = [regex]::Escape($ProjectRoot)
+
+			$Regex = [regex]::Match("$((Get-PSCallStack)[1].ScriptName)", "(?<=$RootRegex\\)(.+)(?=\\$LeafRegex)")
+
+			if ($Regex.Success)
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Regex result: $($Regex.Value)"
+
+				if ($Regex.Value.StartsWith("Rules\"))
+				{
+					$Context = $Regex.Value -replace "^Rules\\", ""
+				}
+				else
+				{
+					$Context = $Regex.Value
+				}
+
+				if ([string]::IsNullOrEmpty($ContextLeaf))
+				{
+					$Context = " [$Context -> $LeafBase]"
+				}
+				else
+				{
+					$Context = " [$Context -> $ContextLeaf]"
+				}
+			}
+			else
+			{
+				Write-Error -Category ParserError -TargetObject $Regex -Message "Unable to set up context"
+			}
+		}
+		elseif ([string]::IsNullOrEmpty($ContextLeaf))
+		{
+			$Context = " [$Context]"
+		}
+		else
+		{
+			$Context = " [$Context -> $ContextLeaf]"
+		}
+	}
+	elseif (![string]::IsNullOrEmpty($Context))
+	{
+		# TODO: Duplicate code
+		if ([string]::IsNullOrEmpty($ContextLeaf))
+		{
+			$Context = " [$Context]"
+		}
+		else
+		{
+			$Context = " [$Context -> $ContextLeaf]"
+		}
+	}
+
+	if (![string]::IsNullOrEmpty($Context))
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Context set to: $Context"
+		Set-Variable -Name PreviousContext -Scope Script -Value $Context
+	}
+
+	# First run will be null
+	if (![string]::IsNullOrEmpty($script:PreviousContext))
+	{
+		$Title += $script:PreviousContext
 	}
 
 	# The index of the label in the Choices to be presented to the user as the default choice
@@ -139,8 +231,19 @@ function Approve-Execute
 
 	if ($PSCmdlet.ParameterSetName -eq "ToAll")
 	{
-		if ($YesToAll.Value -eq $true) { return $true }
-		if ($NoToAll.Value -eq $true) { return $false }
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Previous YesToAll is: $($YesToAll.Value)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Previous NoToAll is: $($NoToAll.Value)"
+
+		if ($YesToAll.Value -eq $true)
+		{
+			$NoToAll.Value = $false
+			return $true
+		}
+		if ($NoToAll.Value -eq $true)
+		{
+			$YesToAll.Value = $false
+			return $false
+		}
 
 		$YesAllChoice = [ChoiceDescription]::new("Yes To &All")
 		$NoAllChoice = [ChoiceDescription]::new("No To A&ll")
@@ -152,31 +255,25 @@ function Approve-Execute
 		$Choices += $NoAllChoice # Decision 3
 	}
 
-	$Title += " [$Context]"
+	$Choice = $Host.UI.PromptForChoice($Title, $Question, $Choices, $DefaultAction)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Choice selection is $Choice"
 
-	[bool] $Continue = switch ($Host.UI.PromptForChoice($Title, $Question, $Choices, $DefaultAction))
+	[bool] $Continue = switch ($Choice)
 	{
-		0
-		{
-			$true
-			break
-		}
-		1
-		{
-			$false
-			break
-		}
+		0 { $true; break }
+		1 { $false; break }
 		2
 		{
 			$YesToAll.Value = $true
+			$NoToAll.Value = $false
 			$true
 			break
 		}
 		default
 		{
 			$NoToAll.Value = $true
+			$YesToAll.Value = $false
 			$false
-			break
 		}
 	}
 

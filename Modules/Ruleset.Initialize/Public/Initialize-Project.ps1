@@ -89,13 +89,6 @@ function Initialize-Project
 	if (!$ProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
-
-		if ($Develop -and ($PSVersionTable.PSVersion -ge "7.1"))
-		{
-			# NOTE: This must be imported to be able to run rules for StoreApps
-			Import-WinModule -Name Appx
-		}
-
 		return
 	}
 
