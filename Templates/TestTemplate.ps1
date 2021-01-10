@@ -62,13 +62,11 @@ param (
 )
 
 #region Initialization
-# TODO: Adjust path to project settings
+# TODO: Adjust paths
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
+. $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-Update-Context $TestContext $ThisScript
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 

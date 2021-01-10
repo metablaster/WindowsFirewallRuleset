@@ -67,21 +67,16 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\..\..\DirectionSetup.ps1
+
+Initialize-Project -Strict
 
 # Setup local variables
 $Group = "Microsoft - Bing wallpaper"
-
-# User prompt
 $Accept = "Outbound rule for bing wallpaper app will be loaded"
 $Deny = "Skip operation, outbound rule for bing wallpaper app will not be loaded"
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

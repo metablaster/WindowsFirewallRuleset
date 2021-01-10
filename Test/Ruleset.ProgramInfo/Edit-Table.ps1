@@ -61,7 +61,7 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
+. $PSScriptRoot\..\ContextSetup.ps1
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 {
@@ -78,10 +78,8 @@ elseif (!((Get-Command -Name Initialize-Table -EA Ignore) -and
 	return
 }
 
-Initialize-Project -Strict
 
-# User prompt
-Update-Context $TestContext $ThisScript
+Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

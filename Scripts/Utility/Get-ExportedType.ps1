@@ -110,7 +110,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 https://github.com/RamblingCookieMonster/PowerShell
 #>
 [CmdletBinding()]
-[OutputType([System.RuntimeType])]
+[OutputType([System.Type])]
 param (
 	[Parameter()]
 	[SupportsWildcards()]

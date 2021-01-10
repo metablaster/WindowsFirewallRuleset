@@ -127,7 +127,6 @@ SOFTWARE.
 		"Set-Permission"
 		"Set-ScreenBuffer"
 		"Set-Shortcut"
-		"Update-Context"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -174,7 +173,6 @@ SOFTWARE.
 		"Help\en-US\Set-Permission.md"
 		"Help\en-US\Set-ScreenBuffer.md"
 		"Help\en-US\Set-Shortcut.md"
-		"Help\en-US\Update-Context.md"
 		"Help\README.md"
 		"Private\Set-Privilege.ps1"
 		"Public\Approve-Execute.ps1"
@@ -193,7 +191,6 @@ SOFTWARE.
 		"Public\Set-Permission.ps1"
 		"Public\Set-ScreenBuffer.ps1"
 		"Public\Set-Shortcut.ps1"
-		"Public\Update-Context.ps1"
 		"Ruleset.Utility_5f38e46f-1bc4-489d-90df-72755129cfdd_HelpInfo.xml"
 		"Ruleset.Utility.psd1"
 		"Ruleset.Utility.psm1"

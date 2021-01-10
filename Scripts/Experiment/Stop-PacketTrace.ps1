@@ -84,13 +84,11 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\..\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
 $Accept = "Start capturing network traffic into a file for analysis"
 $Deny = "Abort operation, no capture is started"
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

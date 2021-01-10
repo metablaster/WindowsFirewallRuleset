@@ -30,8 +30,6 @@ SOFTWARE.
 # Variables related to IPv6
 #
 
-New-Variable -Name IPVersion -Scope Local -Option Constant -Value 6
-
 <# https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml
 0000::/8	Reserved by IETF
 0100::/8	Reserved by IETF

@@ -70,13 +70,11 @@ Initialize-Project -Strict
 $Group = "Template - TargetProgram"
 $PackageSID = "*"
 $PrincipalSID = Get-PrincipalSID $DefaultUser
-
-# User prompt
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
 # First remove all existing rules matching group

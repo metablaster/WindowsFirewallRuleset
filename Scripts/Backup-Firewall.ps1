@@ -72,13 +72,11 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
 $Accept = "Accpet exporting firewall rules and settings to file"
 $Deny = "Abort operation, no firewall rules or settings will be exported"
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

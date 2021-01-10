@@ -30,8 +30,6 @@ SOFTWARE.
 # Variables related to IPv4
 #
 
-New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
-
 <# http://en.wikipedia.org/wiki/Private_network
 NOTE: APIPA is how Microsoft refers to Link-Local
 Address							CIDR				Subnet Mask			Designation

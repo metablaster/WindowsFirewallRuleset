@@ -83,9 +83,7 @@ $SystemGroup = "Store Apps - System"
 $Accept = "Inbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -113,12 +113,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -136,9 +133,7 @@ $LocalInterface = "Any"
 $Accept = "Inbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

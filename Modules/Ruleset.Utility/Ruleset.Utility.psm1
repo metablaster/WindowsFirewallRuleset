@@ -83,7 +83,6 @@ $PublicScripts = @(
 	"Set-Permission"
 	"Set-ScreenBuffer"
 	"Set-Shortcut"
-	"Update-Context"
 )
 
 foreach ($Script in $PublicScripts)

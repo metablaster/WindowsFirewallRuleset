@@ -31,7 +31,7 @@ SOFTWARE.
 Context setup
 
 .DESCRIPTION
-Context and prompt setup for non module unit tests
+Context and prompt setup for unit tests
 
 .INPUTS
 None. You cannot pipe objects to ContextSetup.ps1
@@ -43,8 +43,6 @@ None. ContextSetup.ps1 does not generate any output
 None.
 #>
 
-New-Variable -Name IPVersion -Scope Local -Option Constant -Value 4
-New-Variable -Name TestContext -Scope Local -Option Constant -Value "Test"
 New-Variable -Name Direction -Scope Local -Option Constant -Value "Outbound"
 New-Variable -Name Accept -Scope Local -Option ReadOnly -Value "Run this unit test"
 New-Variable -Name Deny -Scope Local -Option ReadOnly -Value "Skip operation, this unit test will not run"

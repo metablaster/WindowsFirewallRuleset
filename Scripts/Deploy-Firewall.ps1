@@ -59,6 +59,7 @@ None. Deploy-Firewall.ps1 does not generate any output
 TODO: This script should be simplified by using Get-ChildItem to get all rule scripts.
 TODO: Logic should probably be separated into separate scripts: Deploy-FirewallRules, Complete-Profile etc.
 TODO: OutputType attribute
+TODO: Setup trap for this script to restore global variables
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -75,24 +76,24 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 
 # First unblock all files
 & "$ProjectRoot\Scripts\Unblock-Project.ps1"
-
 Initialize-Project -Strict
-$PSDefaultParameterValues["Approve-Execute:Force"] = $Force
 
 # User prompt
-$Accept = "Deploy firewall to '$PolicyStore' computer"
-$Deny = "Abort operation"
-Update-Context $ScriptContext $ThisScript
-if (!(Approve-Execute -Accept $Accept -Deny $Deny)) { exit }
+$ExecuteParams = @{
+	Accept = "Deploy firewall to '$PolicyStore' computer"
+	Deny = "Abort firewall deployment operation"
+	Force = $Force
+}
+
+if (!(Approve-Execute @ExecuteParams)) { exit }
 
 # Skip checking requirements for all subsequent operations
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
 
-# Clear errors, error and warning status
+# Clear errors, error and warning status, disable auto GPO update
 $Error.Clear()
 Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
@@ -107,338 +108,316 @@ Update-Log
 #endregion
 
 #
-# Execute IPv4 rules
-#
-
+# Deploy Inbound IPv4 rules
 # NOTE: the order of scripts is the same as it is shown in file explorer of Visual Studio Code
-
 #
-# Load Inbound rules
-#
+$Destination = "$ProjectRoot\Rules\IPv4\Inbound"
 
 # User prompt strings
-$IPVersion = "IPv4"
-$Direction = "Inbound"
-$RuleGroup = "inbound $IPVersion rules"
-$Accept = "Continue selecting which $RuleGroup to load"
-$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction
+$ExecuteParams["Accept"] = "Continue prompting which inbound IPv4 rules to deploy"
+$ExecuteParams["Deny"] = "Skip all inbound IPv4 rules"
+$ExecuteParams["Title"] = "Selecting inbound IPv4 rules"
+$ExecuteParams["Context"] = "[IPv4\Inbound]"
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
+if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt strings
-	$Ruleset = "common rules"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are recommended for proper OS network functioning"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
+	$ExecuteParams["Deny"] = "Skip all core rules"
+	$ExecuteParams["Title"] = "Selecting core rules"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1" -Force:$Force
+		# Core rules
+		& "$Destination\AdditionalNetworking.ps1" -Force:$Force
+		& "$Destination\Broadcast.ps1" -Force:$Force
+		& "$Destination\CoreNetworking.ps1" -Force:$Force
+		& "$Destination\ICMP.ps1" -Force:$Force
+		& "$Destination\Multicast.ps1" -Force:$Force
+		& "$Destination\NetworkDiscovery.ps1" -Force:$Force
+		& "$Destination\NetworkSharing.ps1" -Force:$Force
+		& "$Destination\RemoteWindows.ps1" -Force:$Force
+		& "$Destination\StoreApps.ps1" -Force:$Force
+		& "$Destination\Temporary.ps1" -Force:$Force
+		& "$Destination\WindowsServices.ps1" -Force:$Force
+		& "$Destination\WirelessNetworking.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for developers"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party development software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for 3rd party development software"
+	$ExecuteParams["Title"] = "Selecting rules for 3rd party development software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1" -Force:$Force
+		# Rules for 3rd party development software
+		& "$Destination\Development\EpicGames.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for games"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if multiplayer games are installed"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for games to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for games"
+	$ExecuteParams["Title"] = "Selecting rules for games"
+	$ExecuteParams["Unsafe"] = $true
 
-	if (Approve-Execute -Unsafe -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Rules for servers
-		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ScriptName.ps1" -Force:$Force
+		# Rules for games
+		# & "$Destination\Games\ScriptName.ps1" -Force:$Force
 
 		Write-Warning -Message "No inbound rules for games exist"
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for servers"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for servers to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for servers"
+	$ExecuteParams["Title"] = "Selecting rules for servers"
 
-	if (Approve-Execute -Unsafe -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		# & "$ProjectRoot\Rules\$IPVersion\$Direction\Server\ScriptName.ps1"
+		# & "$Destination\Server\ScriptName.ps1" -Force:$Force
 
 		Write-Warning -Message "No inbound rules for server platforms or software exist"
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for 3rd party programs"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for 3rd party software"
+	$ExecuteParams["Title"] = "Selecting rules for 3rd party software"
+	$ExecuteParams.Remove("Unsafe")
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# rules for programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1" -Force:$Force
+		# Rules for 3rd party software
+		& "$Destination\Software\FileZilla.ps1" -Force:$Force
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$Force
+		& "$Destination\Software\Steam.ps1" -Force:$Force
+		& "$Destination\Software\TeamViewer.ps1" -Force:$Force
+		& "$Destination\Software\uTorrent.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for Microsoft programs"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for Microsoft software"
+	$ExecuteParams["Title"] = "Selecting rules for Microsoft software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# rules for programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1" -Force:$Force
+		# Rules for Microsoft software
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$Force
 	}
 }
 
 #
-# Load Outbound rules
+# Deploy Outbound IPv4 rules
 #
+$Destination = "$ProjectRoot\Rules\IPv4\Outbound"
 
 # Update user prompt strings
-$IPVersion = "IPv4"
-$Direction = "Outbound"
-$RuleGroup = "outbound $IPVersion rules"
-$Accept = "Continue selecting which $RuleGroup to load"
-$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction
+$ExecuteParams["Accept"] = "Continue prompting which outbound IPv4 rules to deploy"
+$ExecuteParams["Deny"] = "Skip all outbound IPv4 rules"
+$ExecuteParams["Title"] = "Selecting outbound IPv4 rules"
+$ExecuteParams["Context"] = "[IPv4\Outbound]"
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
+if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt strings
-	$Ruleset = "common rules"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
+	$ExecuteParams["Deny"] = "Skip all core rules"
+	$ExecuteParams["Title"] = "Selecting core rules"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\AdditionalNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Broadcast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkDiscovery.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\NetworkSharing.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\RemoteWindows.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\StoreApps.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsServices.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WindowsSystem.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\WirelessNetworking.ps1" -Force:$Force
+		# Core rules
+		& "$Destination\AdditionalNetworking.ps1" -Force:$Force
+		& "$Destination\Broadcast.ps1" -Force:$Force
+		& "$Destination\CoreNetworking.ps1" -Force:$Force
+		& "$Destination\ICMP.ps1" -Force:$Force
+		& "$Destination\Multicast.ps1" -Force:$Force
+		& "$Destination\NetworkDiscovery.ps1" -Force:$Force
+		& "$Destination\NetworkSharing.ps1" -Force:$Force
+		& "$Destination\RemoteWindows.ps1" -Force:$Force
+		& "$Destination\StoreApps.ps1" -Force:$Force
+		& "$Destination\Temporary.ps1" -Force:$Force
+		& "$Destination\WindowsServices.ps1" -Force:$Force
+		& "$Destination\WindowsSystem.ps1" -Force:$Force
+		& "$Destination\WirelessNetworking.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for developers, 3rd party tools"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various 3rd party development software is installed"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party development software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for 3rd party development software"
+	$ExecuteParams["Title"] = "Selecting rules for 3rd party development software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Chocolatey.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\CMake.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\EpicGames.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\GitHub.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Incredibuild.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\MSYS2.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\RealWorld.ps1" -Force:$Force
+		# Rules for 3rd party development software
+		& "$Destination\Development\Chocolatey.ps1" -Force:$Force
+		& "$Destination\Development\CMake.ps1" -Force:$Force
+		& "$Destination\Development\EpicGames.ps1" -Force:$Force
+		& "$Destination\Development\GitHub.ps1" -Force:$Force
+		& "$Destination\Development\Incredibuild.ps1" -Force:$Force
+		& "$Destination\Development\MSYS2.ps1" -Force:$Force
+		& "$Destination\Development\RealWorld.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for developers, Microsoft tools"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if various Microsoft development software is installed"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft development software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for Microsoft development software"
+	$ExecuteParams["Title"] = "Selecting rules for Microsoft development software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Rules for developers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\dotnet.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\HelpViewer.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\NuGet.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\PowerShell.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\vcpkg.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VisualStudio.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\VSCode.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WebPlatform.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Development\Microsoft\WindowsSDK.ps1" -Force:$Force
+		# Rules for Microsoft development software
+		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for games"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules if multiplayer games are installed"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for games to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for games"
+	$ExecuteParams["Title"] = "Selecting rules for games"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\ArenaChess.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\CounterStrikeGO.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\DemiseOfNations.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\EVEOnline.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\LeagueOfLegends.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\OpenTTD.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PathOfExile.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PinballArcade.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\PokerStars.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Games\WarThunder.ps1" -Force:$Force
+		& "$Destination\Games\ArenaChess.ps1" -Force:$Force
+		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$Force
+		& "$Destination\Games\DemiseOfNations.ps1" -Force:$Force
+		& "$Destination\Games\EVEOnline.ps1" -Force:$Force
+		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$Force
+		& "$Destination\Games\OpenTTD.ps1" -Force:$Force
+		& "$Destination\Games\PathOfExile.ps1" -Force:$Force
+		& "$Destination\Games\PinballArcade.ps1" -Force:$Force
+		& "$Destination\Games\PokerStars.ps1" -Force:$Force
+		& "$Destination\Games\WarThunder.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for servers"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for server platforms and software"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for servers to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for servers"
+	$ExecuteParams["Title"] = "Selecting rules for servers"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Server\SQLServer.ps1" -Force:$Force
+		& "$Destination\Server\SQLServer.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for 3rd party programs"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for 3rd party software"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for 3rd party software"
+	$ExecuteParams["Title"] = "Selecting rules for 3rd party software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# rules for 3rd party programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Adobe.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\CPUID.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\DnsCrypt.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\FileZilla.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Google.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\GPG.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Greenshot.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Intel.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\InternetBrowser.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Java.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Metatrader.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\MSI.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Nvidia.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OBSStudio.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\OpenSSH.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\PasswordSafe.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\qBittorrent.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\RivaTuner.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Steam.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\TeamViewer.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Thunderbird.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\uTorrent.ps1" -Force:$Force
+		# Rules for 3rd party programs
+		& "$Destination\Software\Adobe.ps1" -Force:$Force
+		& "$Destination\Software\CPUID.ps1" -Force:$Force
+		& "$Destination\Software\DnsCrypt.ps1" -Force:$Force
+		& "$Destination\Software\FileZilla.ps1" -Force:$Force
+		& "$Destination\Software\Google.ps1" -Force:$Force
+		& "$Destination\Software\GPG.ps1" -Force:$Force
+		& "$Destination\Software\Greenshot.ps1" -Force:$Force
+		& "$Destination\Software\Intel.ps1" -Force:$Force
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$Force
+		& "$Destination\Software\Java.ps1" -Force:$Force
+		& "$Destination\Software\Metatrader.ps1" -Force:$Force
+		& "$Destination\Software\MSI.ps1" -Force:$Force
+		& "$Destination\Software\Nvidia.ps1" -Force:$Force
+		& "$Destination\Software\OBSStudio.ps1" -Force:$Force
+		& "$Destination\Software\OpenSSH.ps1" -Force:$Force
+		& "$Destination\Software\PasswordSafe.ps1" -Force:$Force
+		& "$Destination\Software\qBittorrent.ps1" -Force:$Force
+		& "$Destination\Software\RivaTuner.ps1" -Force:$Force
+		& "$Destination\Software\Steam.ps1" -Force:$Force
+		& "$Destination\Software\TeamViewer.ps1" -Force:$Force
+		& "$Destination\Software\Thunderbird.ps1" -Force:$Force
+		& "$Destination\Software\uTorrent.ps1" -Force:$Force
 	}
 
 	# Update user prompt strings
-	$Ruleset = "rules for Microsoft programs"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, recommended to create rules for software published by Microsoft"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
-	Update-Context $IPVersion $Direction
+	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft software to deploy"
+	$ExecuteParams["Deny"] = "Skip all rules for Microsoft software"
+	$ExecuteParams["Title"] = "Selecting rules for Microsoft software"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# rules for Microsoft programs
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\BingWallpaper.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\EdgeChromium.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\OneDrive.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Software\Microsoft\SysInternals.ps1" -Force:$Force
+		# Rules for Microsoft programs
+		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$Force
 	}
 }
 
 #
-# Execute IPv6 rules
+# Deploy Inbound IPv6 rules
 #
-
-#
-# Load Inbound rules
-#
+$Destination = "$ProjectRoot\Rules\IPv6\Inbound"
 
 # Update user prompt strings
-$IPVersion = "IPv6"
-$Direction = "Inbound"
-$RuleGroup = "inbound $IPVersion Rules"
-$Accept = "Continue selecting which $RuleGroup to load"
-$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction
+$ExecuteParams["Accept"] = "Continue prompting which inbound IPv6 rules to deploy"
+$ExecuteParams["Deny"] = "Skip all inbound IPv6 rules"
+$ExecuteParams["Title"] = "Selecting inbound IPv6 rules"
+$ExecuteParams["Context"] = "[IPv6\Inbound]"
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
+if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt strings
-	$Ruleset = "common rules"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, some of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
+	$ExecuteParams["Deny"] = "Skip all core rules"
+	$ExecuteParams["Title"] = "Selecting core rules"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
+		# Core rules
+		& "$Destination\CoreNetworking.ps1" -Force:$Force
+		& "$Destination\ICMP.ps1" -Force:$Force
+		& "$Destination\Multicast.ps1" -Force:$Force
+		& "$Destination\Temporary.ps1" -Force:$Force
 	}
 }
 
 #
-# Load Outbound rules
+# Deploy Outbound rules
 #
+$Destination = "$ProjectRoot\Rules\IPv6\Outbound"
 
 # Update user prompt strings
-$IPVersion = "IPv6"
-$Direction = "Outbound"
-$RuleGroup = "outbound $IPVersion Rules"
-$Accept = "Continue selecting which $RuleGroup to load"
-$Deny = "Skip operation, no rules from '$RuleGroup' group will be loaded"
-Update-Context $IPVersion $Direction
+$ExecuteParams["Accept"] = "Continue prompting which outbound IPv6 rules to deploy"
+$ExecuteParams["Deny"] = "Skip all outbound IPv6 rules"
+$ExecuteParams["Title"] = "Selecting outbound IPv6 rules"
+$ExecuteParams["Context"] = "[IPv6\Outbound]"
 
-if (Approve-Execute -Title "Selecting: $RuleGroup" -Accept $Accept -Deny $Deny)
+if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt strings
-	$Ruleset = "common rules"
-	$Accept = "Start executing scripts from '$Ruleset' ruleset, most of these rules are required for proper OS network functioning even if there is no IPv6 connectivity"
-	$Deny = "Skip operation, no '$Ruleset' from '$RuleGroup' group will be loaded"
+	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
+	$ExecuteParams["Deny"] = "Skip all core rules"
+	$ExecuteParams["Title"] = "Selecting core rules"
 
-	if (Approve-Execute -Title "Selecting: $Ruleset" -Accept $Accept -Deny $Deny)
+	if (Approve-Execute @ExecuteParams)
 	{
-		# Common rules
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\CoreNetworking.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\ICMP.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Multicast.ps1" -Force:$Force
-		& "$ProjectRoot\Rules\$IPVersion\$Direction\Temporary.ps1" -Force:$Force
+		# Core rules
+		& "$Destination\CoreNetworking.ps1" -Force:$Force
+		& "$Destination\ICMP.ps1" -Force:$Force
+		& "$Destination\Multicast.ps1" -Force:$Force
+		& "$Destination\Temporary.ps1" -Force:$Force
 	}
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Loading rules was completed"
+Write-Information -Tags "User" -MessageData "INFO: Deployment of firewall rules is complete"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
@@ -448,7 +427,7 @@ Set-Variable -Name UpdateGPO -Scope Global -Value $true
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `
 	-Description "View and modify GPO firewall" -IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -IconIndex -19
 
-# Show status of execution
+# Show execution status
 if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Output ""

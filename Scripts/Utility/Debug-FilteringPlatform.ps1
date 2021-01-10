@@ -148,7 +148,6 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 #endregion
 

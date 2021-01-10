@@ -126,7 +126,6 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
@@ -140,7 +139,6 @@ else
 	$Accept = "Restart all connected network adapters and reassign IP"
 }
 
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

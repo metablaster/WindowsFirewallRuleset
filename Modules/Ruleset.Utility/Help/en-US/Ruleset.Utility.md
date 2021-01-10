@@ -73,7 +73,3 @@ Set vertical screen buffer to recommended value
 ### [Set-Shortcut](Set-Shortcut.md)
 
 Set desktop or online shortcut
-
-### [Update-Context](Update-Context.md)
-
-Update context for Approve-Execute function

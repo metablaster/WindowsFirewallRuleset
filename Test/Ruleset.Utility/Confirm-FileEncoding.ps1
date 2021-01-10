@@ -61,11 +61,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
-Initialize-Project -Strict
+. $PSScriptRoot\..\ContextSetup.ps1
 
-# User prompt
-Update-Context $TestContext $ThisScript
+Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

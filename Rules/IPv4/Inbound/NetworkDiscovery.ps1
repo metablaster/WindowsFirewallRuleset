@@ -71,12 +71,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -86,9 +83,7 @@ $LocalProfile = "Private, Domain"
 $Accept = "Inbound rules for network discovery will be loaded, required for host discovery in local networks"
 $Deny = "Skip operation, inbound network discovery rules will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $DisplayGroup
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $DisplayGroup -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

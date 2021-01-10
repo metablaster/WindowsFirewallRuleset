@@ -71,12 +71,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -84,9 +81,7 @@ $Group = "Additional Networking"
 $Accept = "Outbound rules for additional networking will be loaded, recommended for specific scenarios"
 $Deny = "Skip operation, outbound additional networking rules will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -61,9 +61,6 @@ EXAMPLES
 	Set-Shortcut
 	Create or set shortcut to file or online location
 
-	Update-Context
-	Update context for Approve-Execute function
-
 ALIASES
 	gt -> Get-TypeName
 

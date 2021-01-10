@@ -82,7 +82,6 @@ if ($Pester)
 	Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all pester tests only, one by one"
 }
 
-Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

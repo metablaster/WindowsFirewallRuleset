@@ -67,12 +67,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\..\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -82,9 +79,7 @@ $SQLUsers = Get-SDDL -Group "Users", "Administrators" -Merge
 $Accept = "Outbound rules for Microsoft SQL Server software will be loaded, recommended if Microsoft SQL Server software is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft SQL Server software will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $Group
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -65,7 +65,6 @@ Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # User prompt
-Update-Context $TestContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

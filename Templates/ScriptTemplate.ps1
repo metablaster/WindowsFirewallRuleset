@@ -82,14 +82,12 @@ param (
 #region Initialization
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Abort operation, template deny help message"
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

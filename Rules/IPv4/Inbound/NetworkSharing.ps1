@@ -75,12 +75,9 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-
-# Check requirements
-Initialize-Project -Strict
-
-# Imports
 . $PSScriptRoot\DirectionSetup.ps1
+
+Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -90,9 +87,7 @@ $DisplayGroup = "File and Printer Sharing"
 $Accept = "Inbound rules for network sharing will be loaded, required to share resources in local networks"
 $Deny = "Skip operation, inbound network sharing rules will not be loaded into firewall"
 
-# User prompt
-Update-Context "IPv$IPVersion" $Direction $DisplayGroup
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $DisplayGroup -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

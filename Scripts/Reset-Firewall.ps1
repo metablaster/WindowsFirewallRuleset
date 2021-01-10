@@ -73,13 +73,11 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
 $Accept = "All firewall rules and settings will be restored to factory defaults"
 $Deny = "Abort operation, no change will be done to firewall"
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

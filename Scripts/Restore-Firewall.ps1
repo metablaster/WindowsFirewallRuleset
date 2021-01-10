@@ -73,13 +73,11 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 Initialize-Project -Strict
 
 # User prompt
 $Accept = "Accpet importing firewall rules and settings from file"
 $Deny = "Abort operation, no firewall rules or settings will be imported"
-Update-Context $ScriptContext $ThisScript
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
