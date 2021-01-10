@@ -232,7 +232,7 @@ function Uninstall-DuplicateModule
 					Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModuleName $ModuleVersion"
 					if (Set-Permission -Owner "Administrators" -Path $ModuleRoot -Recurse -Confirm:$false -Force)
 					{
-						Write-Information -MessageData "INFO: Granting permissions to Administrators group for $ModuleName $ModuleVersion"
+						Write-Information -Tags "User" -MessageData "INFO: Granting permissions to Administrators group for $ModuleName $ModuleVersion"
 						if (Set-Permission -Principal "Administrators" -Path $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
 						{
 							try
@@ -255,7 +255,7 @@ function Uninstall-DuplicateModule
 							}
 							catch
 							{
-								Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+								Write-Error -ErrorRecord $_
 								Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
 								Write-Information -Tags "User" -MessageData "INFO: If this session is inside module path, the session must be restarted"
 								continue

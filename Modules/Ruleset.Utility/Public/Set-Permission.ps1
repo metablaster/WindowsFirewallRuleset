@@ -278,13 +278,14 @@ function Set-Permission
 			}
 			catch
 			{
-				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+				Write-Error -ErrorRecord $_
 				return $false
 			}
 		}
 		else
 		{
-			Write-Error -TargetObject $LiteralPath -Category ObjectNotFound -Message "Specified resource could not be found: '$LiteralPath'"
+			Write-Error -Category ObjectNotFound -TargetObject $LiteralPath `
+				-Message "Specified resource could not be found: '$LiteralPath'"
 			return $false
 		}
 	}
@@ -359,7 +360,7 @@ function Set-Permission
 		}
 		catch
 		{
-			Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+			Write-Error -ErrorRecord $_
 			return $false
 		}
 	}
@@ -419,7 +420,7 @@ function Set-Permission
 		}
 		catch
 		{
-			Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+			Write-Error -ErrorRecord $_
 			return $false
 		}
 
@@ -443,7 +444,7 @@ function Set-Permission
 			if (!$User)
 			{
 				Write-Warning -Message "You have no permission to finish recursive action, please specify Principal and Rights"
-				Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+				Write-Error -ErrorRecord $_
 				return $false
 			}
 
@@ -505,7 +506,7 @@ function Set-Permission
 				catch
 				{
 					Write-Warning -Message "Recursive action failed on object: $LiteralPath"
-					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+					Write-Error -ErrorRecord $_
 					return $false
 				}
 			}

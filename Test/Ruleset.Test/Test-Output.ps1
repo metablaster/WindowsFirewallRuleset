@@ -69,7 +69,8 @@ Enter-Test
 
 Start-Test "Test-Path"
 $NETObject = Test-Path $env:SystemDrive
-Test-Output $NETObject -Command Test-Path
+$Result = Test-Output $NETObject -Command Test-Path
+$Result
 
 Start-Test "Test-Path pipeline"
 Test-Path $env:SystemDrive | Test-Output -Command Test-Path
@@ -93,6 +94,8 @@ Start-Test "Test-Output NULL"
 $NullVariable = $null
 Test-Output $NullVariable -Command Test-NullFunction -ErrorAction SilentlyContinue -EV TempError
 Write-Warning -Message "Error ignored: $TempError"
+
+Test-Output $Result -Command Test-Output
 
 Update-Log
 Exit-Test

@@ -73,7 +73,7 @@ If this is already true, Approve-Execute will bypass the prompt and return false
 If specified, the command is considered unsafe and the default action is then "No"
 
 .PARAMETER Force
-If specified, this function does nothing and returns true
+If specified, this function does nothing, ignores all other parameters and returns true
 
 .EXAMPLE
 PS> Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
@@ -95,7 +95,7 @@ TODO: Implement accepting arbitrary amount of choices, ex. [ChoiceDescription[]]
 #>
 function Approve-Execute
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Approve-Execute.md")]
 	[OutputType([bool])]
 	param (
@@ -123,11 +123,10 @@ function Approve-Execute
 		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
 		[ref] $NoToAll,
 
-		[Parameter(ParameterSetName = "Default")]
-		[Parameter(ParameterSetName = "ToAll")]
+		[Parameter()]
 		[switch] $Unsafe,
 
-		[Parameter(ParameterSetName = "Force")]
+		[Parameter()]
 		[switch] $Force
 	)
 
@@ -160,7 +159,17 @@ function Approve-Execute
 
 				if ($Regex.Value.StartsWith("Rules\"))
 				{
-					$Context = $Regex.Value -replace "^Rules\\", ""
+					$Regex = [regex]::Match($Regex.Value, "^Rules\\(?<selection>IPv\d\\\w+(?=\\|$))")
+
+					if ($Regex.Success)
+					{
+						$Context = $Regex.Groups["selection"]
+					}
+					else
+					{
+						Write-Error -Category ParserError -TargetObject $Regex -Message "Unable to fine tune context"
+						$Context = $Regex.Value -replace "^Rules\\", ""
+					}
 				}
 				else
 				{
@@ -281,7 +290,7 @@ function Approve-Execute
 	{
 		if ($Unsafe)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] The user refused default action"
+			Write-Warning -Message "The user refused default action"
 		}
 		else
 		{

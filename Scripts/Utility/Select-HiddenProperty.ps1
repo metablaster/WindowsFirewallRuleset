@@ -37,11 +37,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get a list of hidden properties for specified firewall rule group
+Select hidden properties for specified firewall rule group
 
 .DESCRIPTION
-Get a list of firewall rule hidden properties from target policy store, for all rules of given
-group name and traffic direction.
+Select hidden firewall rule properties from target policy store, for given group name and traffic
+direction.
 For example rules of same group from different stores might not work the same way and you want to
 ensure hidden properties are the same on both stores.
 
@@ -57,13 +57,13 @@ PersistentStore means from control panel firewall
 Computer name means from GPO store.
 
 .EXAMPLE
-PS> .\Get-HiddenProperty.ps1 "Network Discovery"
+PS> .\Select-HiddenProperty.ps1 "Network Discovery"
 
 .EXAMPLE
-PS> .\Get-HiddenProperty.ps1 "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
+PS> .\Select-HiddenProperty.ps1 "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
 
 .INPUTS
-None. You cannot pipe objects to Get-HiddenProperty.ps1
+None. You cannot pipe objects to Select-HiddenProperty.ps1
 
 .OUTPUTS
 [Selected.Microsoft.Management.Infrastructure.CimInstance]

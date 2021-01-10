@@ -75,10 +75,9 @@ param (
 )
 
 #region Initialization
+& $PSScriptRoot\Unblock-Project.ps1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
-# First unblock all files
-& "$ProjectRoot\Scripts\Unblock-Project.ps1"
 Initialize-Project -Strict
 
 # User prompt
@@ -89,6 +88,7 @@ $ExecuteParams = @{
 }
 
 if (!(Approve-Execute @ExecuteParams)) { exit }
+Write-Information -Tags "User" -MessageData "INFO: Initializing deployment..."
 
 # Skip checking requirements for all subsequent operations
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
@@ -117,7 +117,8 @@ $Destination = "$ProjectRoot\Rules\IPv4\Inbound"
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv4 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all inbound IPv4 rules"
 $ExecuteParams["Title"] = "Selecting inbound IPv4 rules"
-$ExecuteParams["Context"] = "[IPv4\Inbound]"
+$ExecuteParams["Question"] = "Do you want to deploy these rules?"
+$ExecuteParams["Context"] = "IPv4\Inbound"
 
 if (Approve-Execute @ExecuteParams)
 {
@@ -219,7 +220,7 @@ $Destination = "$ProjectRoot\Rules\IPv4\Outbound"
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv4 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all outbound IPv4 rules"
 $ExecuteParams["Title"] = "Selecting outbound IPv4 rules"
-$ExecuteParams["Context"] = "[IPv4\Outbound]"
+$ExecuteParams["Context"] = "IPv4\Outbound"
 
 if (Approve-Execute @ExecuteParams)
 {
@@ -370,7 +371,7 @@ $Destination = "$ProjectRoot\Rules\IPv6\Inbound"
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv6 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all inbound IPv6 rules"
 $ExecuteParams["Title"] = "Selecting inbound IPv6 rules"
-$ExecuteParams["Context"] = "[IPv6\Inbound]"
+$ExecuteParams["Context"] = "IPv6\Inbound"
 
 if (Approve-Execute @ExecuteParams)
 {
@@ -398,7 +399,7 @@ $Destination = "$ProjectRoot\Rules\IPv6\Outbound"
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv6 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all outbound IPv6 rules"
 $ExecuteParams["Title"] = "Selecting outbound IPv6 rules"
-$ExecuteParams["Context"] = "[IPv6\Outbound]"
+$ExecuteParams["Context"] = "IPv6\Outbound"
 
 if (Approve-Execute @ExecuteParams)
 {

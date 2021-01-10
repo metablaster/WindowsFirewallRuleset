@@ -47,16 +47,16 @@ PS> Exit-Test -Pester
 None. You cannot pipe objects to Exit-Test
 
 .OUTPUTS
-None. Exit-Test does not generate any output
+[string]
 
 .NOTES
-None.
+TODO: Write-Information instead of Write-Output
 #>
 function Exit-Test
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Exit-Test.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter()]
 		[switch] $Pester
@@ -69,6 +69,7 @@ function Exit-Test
 		# Remove resources created by Enter-Test
 		Remove-Module -Name Dynamic.UnitTest -Force
 
+		# NOTE: Write-Host would mess up test case outputs
 		Write-Output ""
 		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$UnitTest'"
 		Remove-Variable -Name UnitTest -Scope Global -Force

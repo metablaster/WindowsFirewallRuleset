@@ -218,7 +218,7 @@ function Resolve-Host
 				}
 				catch
 				{
-					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+					Write-Error -ErrorRecord $_
 				}
 
 				if (!$IPAddress)
@@ -230,7 +230,7 @@ function Resolve-Host
 						$IPAddress = $DNSRecord.IPAddress -match "([0-9]{1,3}\.){3}[0-9]{1,3}" |
 						Select-Object -ExpandProperty IPAddress -Last 1
 					}
-					elseif ($AddressFamily -eq "IPv4")
+					elseif ($AddressFamily -eq "IPv6")
 					{
 						$IPAddress = $DNSRecord.IPAddress -match "([a-f0-9:]+:)+[a-f0-9]+" |
 						Select-Object -ExpandProperty IPAddress -Last 1

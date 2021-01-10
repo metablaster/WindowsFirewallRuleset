@@ -250,7 +250,7 @@ function Import-FirewallRules
 		}
 		else
 		{
-			Write-Information -MessageData "INFO: Replacing existing rule"
+			Write-Information -Tags "User" -MessageData "INFO: Replacing existing rule"
 		}
 
 		# generate new firewall rule, parameters are assigned with splatting

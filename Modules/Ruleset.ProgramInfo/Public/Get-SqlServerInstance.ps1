@@ -211,7 +211,7 @@ function Get-SqlServerInstance
 			}
 			catch
 			{
-				Write-Error -TargetObject $Computer -Message $_
+				Write-Error -ErrorRecord $_
 				continue
 			}
 
@@ -556,7 +556,8 @@ function Get-SqlServerInstance
 				}
 				catch
 				{
-					Write-Error -TargetObject $_.TargetObject -Message "Could not retrieve CIM info for computer $Computer, $_"
+					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject `
+						-Message "Could not retrieve CIM info for computer $Computer, $($_.Exception.Message)"
 					Write-Output $AllInstances
 					continue
 				}

@@ -217,7 +217,7 @@ function Initialize-Project
 		}
 		catch
 		{
-			Write-Error -TargetObject $_.TargetObject -Category $_.CategoryInfo.Category `
+			Write-Error -Category ConnectionError -TargetObject $RemoteCredential `
 				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
 			exit
 		}

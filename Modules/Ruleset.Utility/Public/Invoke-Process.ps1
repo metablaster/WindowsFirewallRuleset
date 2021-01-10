@@ -202,8 +202,9 @@ function Invoke-Process
 
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
+					# NOTE: Explicit -Debug or INFA is needed inside event
 					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($OutLine.Data)" # -Debug
-					Write-Information -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
+					Write-Information -Tags "Project" -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
 				}
 			}
 
@@ -222,6 +223,7 @@ function Invoke-Process
 
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
+					# NOTE: Explicit -Debug is needed inside event
 					Write-Debug -Message "[& ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)" # -Debug
 					Write-Error -Category FromStdErr -TargetObject $Process -MessageData $OutLine.Data
 				}

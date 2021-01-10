@@ -44,7 +44,7 @@ PS> New-Section "This is new section"
 None. You cannot pipe objects to New-Section
 
 .OUTPUTS
-None. New-Section does not generate any output
+[string]
 
 .NOTES
 TODO: Write-Information instead of Write-Output
@@ -53,7 +53,7 @@ function New-Section
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/New-Section.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Message

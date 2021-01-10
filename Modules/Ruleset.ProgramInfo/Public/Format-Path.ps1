@@ -125,7 +125,7 @@ function Format-Path
 					$NewPath = $Regex.Replace($NewPath, ";").TrimEnd(";")
 				}
 
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified path is multi directory, likely environment variable"
+				Write-Warning -Message "Specified path is multi directory, likely environment variable"
 				Write-Output $NewPath
 				continue
 			}

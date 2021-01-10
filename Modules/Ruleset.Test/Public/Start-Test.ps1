@@ -49,17 +49,18 @@ PS> Start-Test "Get-Something"
 None. You cannot pipe objects to Start-Test
 
 .OUTPUTS
-None. Start-Test does not generate any output
+[string]
 
 .NOTES
 TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline
 TODO: Doesn't work starting tests inside dynamic modules
+TODO: Write-Information instead of Write-Output
 #>
 function Start-Test
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Start-Test.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[AllowEmptyString()]

@@ -167,7 +167,7 @@ function Get-TypeName
 				}
 			}
 
-			Write-Output -InputObject $Result
+			Write-Output $Result
 		}
 	}
 	process
@@ -373,6 +373,6 @@ function Get-TypeName
 		} # accelerator
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Success with the result of: $TypeName"
-		Write-Output -InputObject $TypeName
+		Write-Output $TypeName
 	} # process
 }

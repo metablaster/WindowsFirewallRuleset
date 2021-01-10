@@ -115,26 +115,26 @@ Approve-Execute -Title $TestTitle -ContextLeaf $TestContextLeaf
 
 Start-Test "Approve-Execute -YesToAll -NoToAll (choose NoToAll)"
 Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) -Debug
-Write-Information -MessageData "INFO: YesToAll: $YesToAll"
-Write-Information -MessageData "INFO: NoToAll: $NoToAll"
+Write-Information -Tags "Test" -MessageData "INFO: YesToAll: $YesToAll"
+Write-Information -Tags "Test" -MessageData "INFO: NoToAll: $NoToAll"
 
 Start-Test "Approve-Execute result must be automatically false"
 Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) -Debug
-Write-Information -MessageData "INFO: YesToAll: $YesToAll"
-Write-Information -MessageData "INFO: NoToAll: $NoToAll"
+Write-Information -Tags "Test" -MessageData "INFO: YesToAll: $YesToAll"
+Write-Information -Tags "Test" -MessageData "INFO: NoToAll: $NoToAll"
 
 $YesToAll = $false
 $NoToAll = $false
 
 Start-Test "Approve-Execute -YesToAll -NoToAll (choose YesToAll)"
 Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) -Debug
-Write-Information -MessageData "INFO: YesToAll: $YesToAll"
-Write-Information -MessageData "INFO: NoToAll: $NoToAll"
+Write-Information -Tags "Test" -MessageData "INFO: YesToAll: $YesToAll"
+Write-Information -Tags "Test" -MessageData "INFO: NoToAll: $NoToAll"
 
 Start-Test "Approve-Execute must be automatically true"
 Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) -Debug
-Write-Information -MessageData "INFO: YesToAll: $YesToAll"
-Write-Information -MessageData "INFO: NoToAll: $NoToAll"
+Write-Information -Tags "Test" -MessageData "INFO: YesToAll: $YesToAll"
+Write-Information -Tags "Test" -MessageData "INFO: NoToAll: $NoToAll"
 
 $YesToAll = $false
 $NoToAll = $false

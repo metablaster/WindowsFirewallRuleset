@@ -70,9 +70,10 @@ begin
 process
 {
 	$InformationPreference = "Continue"
-	Write-Information -MessageData "INFO: $Param"
+	Write-Information -Tags "Test" -MessageData "INFO: $Param"
 }
 
 end
 {
+	Update-Log
 }

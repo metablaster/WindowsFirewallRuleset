@@ -333,7 +333,7 @@ function ConvertFrom-Wildcard
 	}
 	else
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Wildcard pattern '$Pattern' contains no wildcard characters"
+		Write-Warning -Message "Wildcard pattern '$Pattern' contains no wildcard characters"
 
 		$Result = $Pattern.Insert(0, "^")
 		$Result += "$"

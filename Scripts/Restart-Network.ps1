@@ -320,7 +320,7 @@ function Select-AdapterAlias
 		Write-Information -Tags "User" -MessageData "INFO: '$ifAlias' adapter status is '$ifStatus'"
 	}
 
-	Write-Output -InputObject $AdapterAlias
+	Write-Output $AdapterAlias
 }
 
 <#

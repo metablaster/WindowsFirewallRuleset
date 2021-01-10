@@ -172,7 +172,7 @@ function Test-MarkdownLinks
 
 		$FileCounter += 1
 		Write-Progress @ProgressParams
-		Write-Information -MessageData "INFO: Analyzing file $FullName"
+		Write-Information -Tags "Project" -MessageData "INFO: Analyzing file $FullName"
 
 		[uri[]] $FileLinks = Select-String -Path $Markdown -Pattern "\[.+\]\((http.*?)\)" | ForEach-Object {
 			# [Microsoft.PowerShell.Commands.MatchInfo]
@@ -240,12 +240,12 @@ function Test-MarkdownLinks
 
 	if ($StatusReport.Count)
 	{
-		Write-Information -MessageData "*** Test summary ***"
+		Write-Information -Tags "Project" -MessageData "*** Test summary ***"
 
 		foreach ($Status in $StatusReport)
 		{
 			Write-Error -Category ResourceUnavailable -TargetObject $Status.URL -Message "Dead link -> $($Status.URL)"
-			Write-Information -MessageData "INFO: Found in file -> $($Status.FullName)"
+			Write-Information -Tags "Project" -MessageData "INFO: Found in file -> $($Status.FullName)"
 		}
 	}
 }

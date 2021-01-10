@@ -215,7 +215,7 @@ elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or per
 	}
 	catch
 	{
-		Write-Error -TargetObject $_.TargetObject -Category $_.CategoryInfo.Category -Message $_.Exception.Message
+		Write-Error -ErrorRecord $_
 		Update-Log
 		Exit-Test
 		return

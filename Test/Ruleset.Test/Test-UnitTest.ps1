@@ -71,12 +71,21 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
-Start-Test "Start-Test Test 1"
-Stop-Test
+$Result = Start-Test "Start-Test Test 1"
+$Result
+Test-Output $Result -Command Start-Test
 
-New-Section "Sample Section"
+$Result = Stop-Test
+$Result
+Test-Output $Result -Command Stop-Test
+
+$Result = New-Section "Sample Section"
+$Result
+Test-Output $Result -Command New-Section
 
 Start-Test "Start-Test Test 2"
 Stop-Test
 
-Exit-Test
+$Result = Exit-Test
+$Result
+Test-Output $Result -Command Exit-Test

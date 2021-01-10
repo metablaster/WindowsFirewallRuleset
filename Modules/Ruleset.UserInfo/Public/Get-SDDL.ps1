@@ -201,7 +201,7 @@ function Get-SDDL
 					# For each ACE, combine DACL flags with ACE
 					$DACL = $RegMatch.Captures.Value + "($($SDDLSplit[$Index]))"
 
-					Write-Debug -Message "$($ACL.Sddl) resolved to: $DACL"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] $($ACL.Sddl) resolved to: $DACL"
 					Write-Output $DACL
 				}
 
@@ -287,7 +287,7 @@ function Get-SDDL
 	{
 		if ($DACL.Length -lt 3)
 		{
-			Write-Error -TargetObject $DACL -Message "Failed to assemble SDDL"
+			Write-Error -Category InvalidResult -TargetObject $DACL -Message "Failed to assemble SDDL"
 		}
 		else
 		{

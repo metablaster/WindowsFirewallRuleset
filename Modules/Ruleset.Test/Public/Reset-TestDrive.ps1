@@ -149,7 +149,7 @@ function Reset-TestDrive
 					}
 					else
 					{
-						Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+						Write-Error -ErrorRecord $_
 						break
 					}
 				}

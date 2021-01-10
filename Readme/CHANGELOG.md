@@ -28,6 +28,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Most module functions significantly improved (In progress...)
   - Several functions were renamed to be more descriptive of their purpose
+  - Removed functions: `Update-Context` and `Get-ComputerName`
 
 - Rules
 
@@ -63,7 +64,8 @@ If you would like to see fresh changes done since last release you can do so on 
 - Scripts
 
   - Added PSScriptInfo comment to scripts that are not part of modules
-  - Added CmdletBinding to scripts and -Force switch to skip prompt
+  - Added CmdletBinding to scripts and `-Force` switch to skip prompt
+  - Added `-Trusted` switch to rule scripts to ignore missing digital signature or signature mismatch
 
 - Documentation
 
@@ -75,6 +77,7 @@ If you would like to see fresh changes done since last release you can do so on 
   guidelines (In progress...)
   - 3rd party scripts from `External` directories merged into the rest of project code, there is no
   no point to separate code based on contributors involved.
+  - Revisited Write-* commandlets to be consistent and more detailed.
 
 - Bugfix
 
@@ -130,7 +133,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - Experimental scripts to start/stop packet trace and capture.
-  - Utility script to list "hidden" rule properties
+  - `Select-HiddenProperty` Utility script to list "hidden" rule properties
   - More control and utilization of preference variables, see `ProjectSettings.ps1`
   - `ProjectSettings` script reworked to declare variables only as needed and to show variable status
   on demand for current scope

@@ -183,7 +183,7 @@ begin
 	if ($MyInvocation.InvocationName -eq ".")
 	{
 		$FormatFile = $($PSCommandPath + "xml")
-		Write-Information -MessageData "INFO: Updating format data from: $((Get-Item $FormatFile).Name)"
+		Write-Information -Tags "Project" -MessageData "INFO: Updating format data from: $((Get-Item $FormatFile).Name)"
 		Update-FormatData -PrependPath $FormatFile
 		break
 	}
@@ -193,7 +193,7 @@ begin
 		if (Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore)
 		{
 			$global:ImportedModules | ForEach-Object {
-				Write-Information -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
+				Write-Information -Tags "Project" -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
 				Remove-Module -FullyQualifiedName $_
 			}
 
@@ -264,7 +264,7 @@ process
 
 				if ($ModuleInfo)
 				{
-					Write-Information -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
+					Write-Information -Tags "Project" -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
 					$global:ImportedModules += @{ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
 				}
 				else

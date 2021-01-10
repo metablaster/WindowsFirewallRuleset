@@ -117,11 +117,12 @@ function Get-GroupSID
 
 			if ([string]::IsNullOrEmpty($GroupSID))
 			{
-				Write-Error -TargetObject $UserGroup -Message "User group '$UserGroup' cannot be resolved to a SID."
+				Write-Error -Category InvalidResult -TargetObject $UserGroup `
+					-Message "User group '$UserGroup' cannot be resolved to a SID."
 			}
 			else
 			{
-				Write-Output -InputObject $GroupSID
+				Write-Output $GroupSID
 			}
 		} # foreach ($UserGroup in $Group)
 	} # process

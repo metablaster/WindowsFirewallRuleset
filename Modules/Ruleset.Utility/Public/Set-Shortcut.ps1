@@ -254,7 +254,7 @@ function Set-Shortcut
 		}
 		catch
 		{
-			Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+			Write-Error -ErrorRecord $_
 			return
 		}
 
@@ -353,11 +353,11 @@ function Set-Shortcut
 
 		if ($FilePath.Exists)
 		{
-			Write-Information -MessageData "INFO: Updating shortcut '$FilePath'"
+			Write-Information -Tags "User" -MessageData "INFO: Updating shortcut '$FilePath'"
 		}
 		else
 		{
-			Write-Information -MessageData "INFO: Creating shortcut '$FilePath'"
+			Write-Information -Tags "User" -MessageData "INFO: Creating shortcut '$FilePath'"
 		}
 
 		# Create or update shortcut file
@@ -369,7 +369,7 @@ function Set-Shortcut
 		catch
 		{
 			Write-Warning -Message "Lacking file system permissions is likely reason for failure"
-			Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject -Message $_.Exception.Message
+			Write-Error -ErrorRecord $_
 			return
 		}
 

@@ -108,7 +108,7 @@ function Get-PrincipalSID
 			}
 			elseif ($Domain -eq [System.Environment]::MachineName -or $IsKnownDomain)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for account: $Domain\$UserName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 
 				try
 				{
@@ -127,8 +127,8 @@ function Get-PrincipalSID
 				}
 				catch
 				{
-					Write-Error -TargetObject $_.TargetObject `
-						-Message "[$($MyInvocation.InvocationName)] Account '$Domain\$UserName' cannot be resolved to a SID`n $_.Exception"
+					Write-Error -Category $_.CategoryInfo.Category -TargetObject $NTAccount `
+						-Message "[$($MyInvocation.InvocationName)] Principal '$Domain\$UserName' cannot be resolved to a SID`n $($_.Exception.Message)"
 					continue
 				}
 			} # if ($CIM)
@@ -141,11 +141,12 @@ function Get-PrincipalSID
 
 			if ([string]::IsNullOrEmpty($PrincipalSID))
 			{
-				Write-Error -TargetObject $PrincipalSID -Message "Account '$Domain\$UserName' cannot be resolved to a SID"
+				Write-Error -Category InvalidResult -TargetObject $PrincipalSID `
+					-Message "Principal '$Domain\$UserName' cannot be resolved to a SID"
 			}
 			else
 			{
-				Write-Output -InputObject $PrincipalSID
+				Write-Output $PrincipalSID
 			}
 		} # foreach ($Group in $UserGroups)
 	} # process

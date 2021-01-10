@@ -66,7 +66,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Start-Test "Enter-Test exported commands"
-Enter-Test -Private
+$Result = Enter-Test -Private
+$Result
 Write-Information -Tags "Test" -MessageData "INFO: DynamicModule exported commands"
 Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedCommands
 
@@ -89,3 +90,5 @@ catch
 {
 	Write-Information -Tags "Test" -MessageData "INFO: Test case failure success"
 }
+
+Test-Output $Result -Command Enter-Test
