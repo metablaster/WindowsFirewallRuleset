@@ -52,7 +52,7 @@ PS> New-Function
 Repeat ".EXAMPLE" keyword for each example.
 
 .INPUTS
-[string]
+[string[]]
 None. You cannot pipe objects to New-Function
 
 .OUTPUTS
@@ -74,7 +74,7 @@ function New-Function
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string] $ParameterName,
+		[string[]] $ParameterName,
 
 		[Parameter()]
 		[switch] $Force

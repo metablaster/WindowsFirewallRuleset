@@ -33,7 +33,7 @@ Validate UNC path syntax
 .DESCRIPTION
 Test if UNC (Universal Naming Convention) path has correct path syntax
 
-.PARAMETER Name
+.PARAMETER LiteralPath
 Universal Naming Convention path
 
 .PARAMETER Strict
@@ -77,6 +77,7 @@ A valid UNC path MUST contain two or more path components.
 "SERVER" is referred to as the "first pathname component", "Share" as the "second pathname component"
 The size and valid characters for a path component are defined by the protocol used to access the
 resource and the type of resource being accessed.
+TODO: Needs update since changes done to Test-NetBiosName
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-UNC.md
@@ -95,7 +96,7 @@ function Test-UNC
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[AllowEmptyString()]
-		[string[]] $Name,
+		[string[]] $LiteralPath,
 
 		[Parameter()]
 		[switch] $Strict,
@@ -119,7 +120,7 @@ function Test-UNC
 	}
 	process
 	{
-		foreach ($UNC in $Name)
+		foreach ($UNC in $LiteralPath)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing UNC: '$UNC'"
 

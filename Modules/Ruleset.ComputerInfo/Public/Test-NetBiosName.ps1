@@ -32,9 +32,11 @@ Validate NETBIOS name syntax
 
 .DESCRIPTION
 Test if NETBIOS computer name and/or user name has correct syntax
+The validation is valid for Windows 2000 DNS and the Windows Server 2003 DNS and later Windows
+systems in Active Direcotry.
 
 .PARAMETER Name
-Computer NETBIOS name which is to be checked
+Computer and/or user NETBIOS name which is to be checked
 
 .PARAMETER Target
 Specifies the kind of name checking to perform on -Name parameter as follows:
@@ -91,6 +93,10 @@ However, it isn't practical to use logon names that are longer than 64 character
 Logon names can't contain following characters " / \ [ ] : ; | = , + * ? < >
 Logon names can contain all other special characters, including spaces, periods, dashes, and underscores.
 But it's generally not a good idea to use spaces in account names.
+
+TODO: The use of NetBIOS scopes in names is a legacy configuration.
+It shouldn't be used with Active Directory forests.
+TODO: There a best practices list on MS site, for which we should generate a warning.
 
 According to IBM:
 NetBIOS names are always converted to uppercase when sent to other
@@ -151,42 +157,6 @@ function Test-NetBiosName
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-		# Reserved computer name
-		$ReservedName = @(
-			"ANONYMOUS"
-			"AUTHENTICATED USER"
-			"BATCH"
-			"BUILTIN"
-			"CREATOR GROUP"
-			"CREATOR GROUP SERVER"
-			"CREATOR OWNER"
-			"CREATOR OWNER SERVER"
-			"DIALUP"
-			"DIGEST AUTH"
-			"INTERACTIVE"
-			"INTERNET"
-			"LOCAL"
-			"LOCAL SYSTEM"
-			"NETWORK"
-			"NETWORK SERVICE"
-			"NT AUTHORITY"
-			"NT DOMAIN"
-			"NTLM AUTH"
-			"NULL"
-			"PROXY"
-			"REMOTE INTERACTIVE"
-			"RESTRICTED"
-			"SCHANNEL AUTH"
-			"SELF"
-			"SERVER"
-			"SERVICE"
-			"SYSTEM"
-			"TERMINAL SERVER"
-			"THIS ORGANIZATION"
-			"USERS"
-			"WORLD"
-		)
 
 		if ($Quiet)
 		{
@@ -299,7 +269,7 @@ function Test-NetBiosName
 					}
 				}
 
-				if (!$Force -and ($ReservedName -contains $DomainName))
+				if (!$Force -and ($script:ReservedName -contains $DomainName))
 				{
 					Write-Error -Category SyntaxError -TargetObject $DomainName -ErrorAction $WriteError `
 						-Message "NETBIOS computer name '$DomainName' is reserved word"

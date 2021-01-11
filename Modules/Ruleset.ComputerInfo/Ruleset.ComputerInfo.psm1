@@ -57,6 +57,7 @@ $PublicScripts = @(
 	"Get-SystemSKU"
 	"Resolve-Host"
 	"Select-IPInterface"
+	"Test-DnsName"
 	"Test-NetBiosName"
 	"Test-TargetComputer"
 	"Test-UNC"
@@ -74,3 +75,46 @@ foreach ($Script in $PublicScripts)
 			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
 	}
 }
+
+#
+# Module variables
+#
+
+Write-Debug -Message "[$ThisModule] Initializing module variables"
+
+# Reserved words for computers and domain names in Active Directory
+# The list is for Windows Server 2003 and later
+New-Variable -Name ReservedName -Scope Script -Option Constant -Value @(
+	"ANONYMOUS"
+	"AUTHENTICATED USER"
+	"BATCH"
+	"BUILTIN"
+	"CREATOR GROUP"
+	"CREATOR GROUP SERVER"
+	"CREATOR OWNER"
+	"CREATOR OWNER SERVER"
+	"DIALUP"
+	"DIGEST AUTH"
+	"INTERACTIVE"
+	"INTERNET"
+	"LOCAL"
+	"LOCAL SYSTEM"
+	"NETWORK"
+	"NETWORK SERVICE"
+	"NT AUTHORITY"
+	"NT DOMAIN"
+	"NTLM AUTH"
+	"NULL"
+	"PROXY"
+	"REMOTE INTERACTIVE"
+	"RESTRICTED"
+	"SCHANNEL AUTH"
+	"SELF"
+	"SERVER"
+	"SERVICE"
+	"SYSTEM"
+	"TERMINAL SERVER"
+	"THIS ORGANIZATION"
+	"USERS"
+	"WORLD"
+)
