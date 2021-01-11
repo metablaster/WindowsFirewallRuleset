@@ -42,12 +42,19 @@ Deploy firewall rules and configuration to local or remote computer.
 .DESCRIPTION
 Deploy-Firewall.ps1 is a master script to deploy rules and configuration to local and/or multiple
 remote computers.
+In addition to deployment of rules, target GPO firewall is configured, desktop shortcut to
+management console is set and optionally custom firewall log location is set.
 
 .PARAMETER Force
-If specified, no prompt for confirmation is shown to perform actions
+If specified, firewall deployment is automated and no prompt for confirmation is shown to perform
+actions.
+By default the user is present with a series of questions to fine tune deployment.
 
 .EXAMPLE
 PS> .\Deploy-Firewall.ps1
+
+.EXAMPLE
+PS> .\Deploy-Firewall.ps1 -Force
 
 .INPUTS
 None. You cannot pipe objects to Deploy-Firewall.ps1
@@ -56,10 +63,8 @@ None. You cannot pipe objects to Deploy-Firewall.ps1
 None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: This script should be simplified by using Get-ChildItem to get all rule scripts.
-TODO: Logic should probably be separated into separate scripts: Deploy-FirewallRules, Complete-Profile etc.
-TODO: OutputType attribute
-TODO: Setup trap for this script to restore global variables
+TODO: Rule deployment should probably be separated into new script
+TODO: OutputType attribute is correct but does not match the output due to Write-Output
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -69,6 +74,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
+[OutputType([void])]
 param (
 	[Parameter()]
 	[switch] $Force
@@ -89,6 +95,13 @@ $ExecuteParams = @{
 
 if (!(Approve-Execute @ExecuteParams)) { exit }
 Write-Information -Tags "User" -MessageData "INFO: Initializing deployment..."
+
+# Save the state of global variables
+$PreviousProjectCheck = (Get-Variable -Name ProjectCheck -Scope Global).Value
+$PreviousUpdateGPO = (Get-Variable -Name UpdateGPO -Scope Global).Value
+# TODO: These 2 variables should probably not be saved since only this script makes use of them
+$PreviousErrorStatus = (Get-Variable -Name ErrorStatus -Scope Global).Value
+$PreviousWarningStatus = (Get-Variable -Name WarningStatus -Scope Global).Value
 
 # Skip checking requirements for all subsequent operations
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
@@ -113,101 +126,135 @@ Update-Log
 #
 $Destination = "$ProjectRoot\Rules\IPv4\Inbound"
 
-# User prompt strings
+# User prompt
+[bool] $YesToAll = $Force
+[bool] $NoToAll = $false
+[bool] $AllCurrent = $YesToAll
+[bool] $NoCurrent = $false
+
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv4 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all inbound IPv4 rules"
 $ExecuteParams["Title"] = "Selecting inbound IPv4 rules"
 $ExecuteParams["Question"] = "Do you want to deploy these rules?"
 $ExecuteParams["Context"] = "IPv4\Inbound"
+$ExecuteParams["YesToAll"] = ([ref] $YesToAll)
+$ExecuteParams["NoToAll"] = ([ref] $NoToAll)
+$ExecuteParams["YesAllHelp"] = "Deploy all inbound IPv4 rules"
+$ExecuteParams["NoAllHelp"] = "Abort deploying rules and finish deployment"
 
 if (Approve-Execute @ExecuteParams)
 {
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all core rules"
+	$ExecuteParams["NoAllHelp"] = "Skip all subsequent inbound IPv4 rules"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$Force
-		& "$Destination\Broadcast.ps1" -Force:$Force
-		& "$Destination\CoreNetworking.ps1" -Force:$Force
-		& "$Destination\ICMP.ps1" -Force:$Force
-		& "$Destination\Multicast.ps1" -Force:$Force
-		& "$Destination\NetworkDiscovery.ps1" -Force:$Force
-		& "$Destination\NetworkSharing.ps1" -Force:$Force
-		& "$Destination\RemoteWindows.ps1" -Force:$Force
-		& "$Destination\StoreApps.ps1" -Force:$Force
-		& "$Destination\Temporary.ps1" -Force:$Force
-		& "$Destination\WindowsServices.ps1" -Force:$Force
-		& "$Destination\WirelessNetworking.ps1" -Force:$Force
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
+		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\ICMP.ps1" -Force:$AllCurrent
+		& "$Destination\Multicast.ps1" -Force:$AllCurrent
+		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
+		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
+		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent
+		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
+		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
+		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party development software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for 3rd party development software"
 	$ExecuteParams["Title"] = "Selecting rules for 3rd party development software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for 3rd party development software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\EpicGames.ps1" -Force:$Force
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for games to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for games"
 	$ExecuteParams["Title"] = "Selecting rules for games"
 	$ExecuteParams["Unsafe"] = $true
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for games"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		# & "$Destination\Games\ScriptName.ps1" -Force:$Force
+		# & "$Destination\Games\ScriptName.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "No inbound rules for games exist"
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for servers to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for servers"
 	$ExecuteParams["Title"] = "Selecting rules for servers"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for servers"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		# & "$Destination\Server\ScriptName.ps1" -Force:$Force
+		# & "$Destination\Server\ScriptName.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "No inbound rules for server platforms or software exist"
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for 3rd party software"
 	$ExecuteParams["Title"] = "Selecting rules for 3rd party software"
 	$ExecuteParams.Remove("Unsafe")
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for 3rd party software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party software
-		& "$Destination\Software\FileZilla.ps1" -Force:$Force
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$Force
-		& "$Destination\Software\Steam.ps1" -Force:$Force
-		& "$Destination\Software\TeamViewer.ps1" -Force:$Force
-		& "$Destination\Software\uTorrent.ps1" -Force:$Force
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for Microsoft software"
 	$ExecuteParams["Title"] = "Selecting rules for Microsoft software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for Microsoft software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft software
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 }
 
@@ -216,149 +263,186 @@ if (Approve-Execute @ExecuteParams)
 #
 $Destination = "$ProjectRoot\Rules\IPv4\Outbound"
 
-# Update user prompt strings
+# Update user prompt
+$YesToAll = $Force
+$AllCurrent = $YesToAll
+$NoCurrent = $false
+
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv4 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all outbound IPv4 rules"
 $ExecuteParams["Title"] = "Selecting outbound IPv4 rules"
 $ExecuteParams["Context"] = "IPv4\Outbound"
+$ExecuteParams["YesToAll"] = ([ref] $YesToAll)
+$ExecuteParams["NoToAll"] = ([ref] $NoToAll)
+$ExecuteParams["YesAllHelp"] = "Deploy all outbound IPv4 rules"
+$ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish deployment"
 
 if (Approve-Execute @ExecuteParams)
 {
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all core rules"
+	$ExecuteParams["NoAllHelp"] = "Skip all subsequent outbound IPv4 rules"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$Force
-		& "$Destination\Broadcast.ps1" -Force:$Force
-		& "$Destination\CoreNetworking.ps1" -Force:$Force
-		& "$Destination\ICMP.ps1" -Force:$Force
-		& "$Destination\Multicast.ps1" -Force:$Force
-		& "$Destination\NetworkDiscovery.ps1" -Force:$Force
-		& "$Destination\NetworkSharing.ps1" -Force:$Force
-		& "$Destination\RemoteWindows.ps1" -Force:$Force
-		& "$Destination\StoreApps.ps1" -Force:$Force
-		& "$Destination\Temporary.ps1" -Force:$Force
-		& "$Destination\WindowsServices.ps1" -Force:$Force
-		& "$Destination\WindowsSystem.ps1" -Force:$Force
-		& "$Destination\WirelessNetworking.ps1" -Force:$Force
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
+		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\ICMP.ps1" -Force:$AllCurrent
+		& "$Destination\Multicast.ps1" -Force:$AllCurrent
+		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
+		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
+		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent
+		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
+		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
+		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent
+		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party development software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for 3rd party development software"
 	$ExecuteParams["Title"] = "Selecting rules for 3rd party development software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for 3rd party development software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\Chocolatey.ps1" -Force:$Force
-		& "$Destination\Development\CMake.ps1" -Force:$Force
-		& "$Destination\Development\EpicGames.ps1" -Force:$Force
-		& "$Destination\Development\GitHub.ps1" -Force:$Force
-		& "$Destination\Development\Incredibuild.ps1" -Force:$Force
-		& "$Destination\Development\MSYS2.ps1" -Force:$Force
-		& "$Destination\Development\RealWorld.ps1" -Force:$Force
+		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent
+		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent
+		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent
+		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent
+		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft development software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for Microsoft development software"
 	$ExecuteParams["Title"] = "Selecting rules for Microsoft development software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for Microsoft development software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft development software
-		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$Force
-		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$Force
+		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for games to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for games"
 	$ExecuteParams["Title"] = "Selecting rules for games"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for games"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		& "$Destination\Games\ArenaChess.ps1" -Force:$Force
-		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$Force
-		& "$Destination\Games\DemiseOfNations.ps1" -Force:$Force
-		& "$Destination\Games\EVEOnline.ps1" -Force:$Force
-		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$Force
-		& "$Destination\Games\OpenTTD.ps1" -Force:$Force
-		& "$Destination\Games\PathOfExile.ps1" -Force:$Force
-		& "$Destination\Games\PinballArcade.ps1" -Force:$Force
-		& "$Destination\Games\PokerStars.ps1" -Force:$Force
-		& "$Destination\Games\WarThunder.ps1" -Force:$Force
+		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent
+		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent
+		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent
+		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent
+		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent
+		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent
+		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent
+		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent
+		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent
+		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for servers to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for servers"
 	$ExecuteParams["Title"] = "Selecting rules for servers"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for servers"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SQLServer.ps1" -Force:$Force
+		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for 3rd party software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for 3rd party software"
 	$ExecuteParams["Title"] = "Selecting rules for 3rd party software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for 3rd party software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party programs
-		& "$Destination\Software\Adobe.ps1" -Force:$Force
-		& "$Destination\Software\CPUID.ps1" -Force:$Force
-		& "$Destination\Software\DnsCrypt.ps1" -Force:$Force
-		& "$Destination\Software\FileZilla.ps1" -Force:$Force
-		& "$Destination\Software\Google.ps1" -Force:$Force
-		& "$Destination\Software\GPG.ps1" -Force:$Force
-		& "$Destination\Software\Greenshot.ps1" -Force:$Force
-		& "$Destination\Software\Intel.ps1" -Force:$Force
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$Force
-		& "$Destination\Software\Java.ps1" -Force:$Force
-		& "$Destination\Software\Metatrader.ps1" -Force:$Force
-		& "$Destination\Software\MSI.ps1" -Force:$Force
-		& "$Destination\Software\Nvidia.ps1" -Force:$Force
-		& "$Destination\Software\OBSStudio.ps1" -Force:$Force
-		& "$Destination\Software\OpenSSH.ps1" -Force:$Force
-		& "$Destination\Software\PasswordSafe.ps1" -Force:$Force
-		& "$Destination\Software\qBittorrent.ps1" -Force:$Force
-		& "$Destination\Software\RivaTuner.ps1" -Force:$Force
-		& "$Destination\Software\Steam.ps1" -Force:$Force
-		& "$Destination\Software\TeamViewer.ps1" -Force:$Force
-		& "$Destination\Software\Thunderbird.ps1" -Force:$Force
-		& "$Destination\Software\uTorrent.ps1" -Force:$Force
+		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent
+		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent
+		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Google.ps1" -Force:$AllCurrent
+		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Java.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Metatrader.ps1" -Force:$AllCurrent
+		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent
+		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent
+		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent
+		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent
+		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent
+		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which rules for Microsoft software to deploy"
 	$ExecuteParams["Deny"] = "Skip all rules for Microsoft software"
 	$ExecuteParams["Title"] = "Selecting rules for Microsoft software"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all rules for Microsoft software"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft programs
-		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$Force
-		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$Force
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$Force
-		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$Force
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$Force
+		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 }
 
@@ -367,54 +451,80 @@ if (Approve-Execute @ExecuteParams)
 #
 $Destination = "$ProjectRoot\Rules\IPv6\Inbound"
 
-# Update user prompt strings
+# Update user prompt
+$YesToAll = $Force
+$AllCurrent = $YesToAll
+$NoCurrent = $false
+
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv6 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all inbound IPv6 rules"
 $ExecuteParams["Title"] = "Selecting inbound IPv6 rules"
 $ExecuteParams["Context"] = "IPv6\Inbound"
+$ExecuteParams["YesToAll"] = ([ref] $YesToAll)
+$ExecuteParams["NoToAll"] = ([ref] $NoToAll)
+$ExecuteParams["YesAllHelp"] = "Deploy all inbound IPv6 rules"
+$ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish deployment"
 
 if (Approve-Execute @ExecuteParams)
 {
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all core rules"
+	$ExecuteParams["NoAllHelp"] = "Skip all subsequent inbound IPv6 rules"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\CoreNetworking.ps1" -Force:$Force
-		& "$Destination\ICMP.ps1" -Force:$Force
-		& "$Destination\Multicast.ps1" -Force:$Force
-		& "$Destination\Temporary.ps1" -Force:$Force
+		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\ICMP.ps1" -Force:$AllCurrent
+		& "$Destination\Multicast.ps1" -Force:$AllCurrent
+		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 }
 
 #
-# Deploy Outbound rules
+# Deploy Outbound IPv6 rules
 #
 $Destination = "$ProjectRoot\Rules\IPv6\Outbound"
 
-# Update user prompt strings
+# Update user prompt
+$YesToAll = $Force
+$AllCurrent = $YesToAll
+$NoCurrent = $false
+
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv6 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all outbound IPv6 rules"
 $ExecuteParams["Title"] = "Selecting outbound IPv6 rules"
 $ExecuteParams["Context"] = "IPv6\Outbound"
+$ExecuteParams["YesToAll"] = ([ref] $YesToAll)
+$ExecuteParams["NoToAll"] = ([ref] $NoToAll)
+$ExecuteParams["YesAllHelp"] = "Deploy all outbound IPv6 rules"
+$ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish deployment"
 
 if (Approve-Execute @ExecuteParams)
 {
-	# Update user prompt strings
+	# Update user prompt
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
+	$ExecuteParams["YesToAll"] = ([ref] $AllCurrent)
+	$ExecuteParams["NoToAll"] = ([ref] $NoCurrent)
+	$ExecuteParams["YesAllHelp"] = "Deploy all core rules"
+	$ExecuteParams["NoAllHelp"] = "Skip all subsequent outbound IPv6 rules"
 
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\CoreNetworking.ps1" -Force:$Force
-		& "$Destination\ICMP.ps1" -Force:$Force
-		& "$Destination\Multicast.ps1" -Force:$Force
-		& "$Destination\Temporary.ps1" -Force:$Force
+		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\ICMP.ps1" -Force:$AllCurrent
+		& "$Destination\Multicast.ps1" -Force:$AllCurrent
+		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		$AllCurrent = $YesToAll
 	}
 }
 
@@ -422,7 +532,7 @@ Write-Information -Tags "User" -MessageData "INFO: Deployment of firewall rules 
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
-Set-Variable -Name UpdateGPO -Scope Global -Value $true
+Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 
 # Set desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `
@@ -453,8 +563,9 @@ else
 
 Write-Output ""
 
-# Clear warning/error status
-Set-Variable -Name ErrorStatus -Scope Global -Value $false
-Set-Variable -Name WarningStatus -Scope Global -Value $false
+# Restore changed variables status
+Set-Variable -Name ErrorStatus -Scope Global -Value $PreviousErrorStatus
+Set-Variable -Name WarningStatus -Scope Global -Value $PreviousWarningStatus
+Set-Variable -Name ProjectCheck -Scope Global -Value $PreviousProjectCheck
 
 Update-Log

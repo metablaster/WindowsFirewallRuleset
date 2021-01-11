@@ -48,7 +48,7 @@ None. You cannot pipe objects to Set-ScreenBuffer
 None. Set-ScreenBuffer does not generate any output
 
 .NOTES
-None.
+TODO: A parameter to restore previous value may be useful
 #>
 function Set-ScreenBuffer
 {

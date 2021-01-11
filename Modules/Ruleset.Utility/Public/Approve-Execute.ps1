@@ -56,10 +56,10 @@ Otherwise if -Title is set without -Context this parameter is ignored.
 Prompt question
 
 .PARAMETER Accept
-Help message for "Yes" choice
+Custom help message for "Yes" choice
 
 .PARAMETER Deny
-Help message for "No" choice
+Custom help message for "No" choice
 
 .PARAMETER YesToAll
 Will be set to true if user selects YesToAll.
@@ -68,6 +68,12 @@ If this is already true, Approve-Execute will bypass the prompt and return true.
 .PARAMETER NoToAll
 Will be set to true if user selects NoToAll.
 If this is already true, Approve-Execute will bypass the prompt and return false.
+
+.PARAMETER YesAllHelp
+Custom help message for "YesToAll" choice
+
+.PARAMETER NoAllHelp
+Custom help message for "NoToAll" choice
 
 .PARAMETER Unsafe
 If specified, the command is considered unsafe and the default action is then "No"
@@ -92,6 +98,7 @@ None. You cannot pipe objects to Approve-Execute
 .NOTES
 TODO: Help messages and question message needs better description to fit more scenarios
 TODO: Implement accepting arbitrary amount of choices, ex. [ChoiceDescription[]] parameter
+TODO: Implement timeout to accept default choice, ex. Host.UI.RawUI.KeyAvailable
 #>
 function Approve-Execute
 {
@@ -122,6 +129,12 @@ function Approve-Execute
 
 		[Parameter(Mandatory = $true, ParameterSetName = "ToAll")]
 		[ref] $NoToAll,
+
+		[Parameter(ParameterSetName = "ToAll")]
+		[string] $YesAllHelp = "Continue with all the steps of the operation",
+
+		[Parameter(ParameterSetName = "ToAll")]
+		[string] $NoAllHelp = "Skip this operation and all subsequent operations",
 
 		[Parameter()]
 		[switch] $Unsafe,
@@ -257,8 +270,8 @@ function Approve-Execute
 		$YesAllChoice = [ChoiceDescription]::new("Yes To &All")
 		$NoAllChoice = [ChoiceDescription]::new("No To A&ll")
 
-		$YesAllChoice.HelpMessage = "Continue with all the steps of the operation"
-		$NoAllChoice.HelpMessage = "Skip this operation and all subsequent operations"
+		$YesAllChoice.HelpMessage = $YesAllHelp
+		$NoAllChoice.HelpMessage = $NoAllHelp
 
 		$Choices += $YesAllChoice # Decision 2
 		$Choices += $NoAllChoice # Decision 3

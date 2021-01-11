@@ -346,7 +346,7 @@ function Set-Shortcut
 				{
 					"Normal" { 1; break }
 					"Minimized" { 2; break }
-					"Maximized" { 3; break }
+					"Maximized" { 3 }
 				}
 			}
 		}

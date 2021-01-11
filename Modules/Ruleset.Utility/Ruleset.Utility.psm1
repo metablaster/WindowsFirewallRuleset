@@ -111,7 +111,7 @@ New-Alias -Name gt -Value Get-TypeName -Scope Global
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Default execution context, used in Approve-Execute
-New-Variable -Name Context -Scope Script -Value "Context not set"
+New-Variable -Name PreviousContext -Scope Script -Value "Context not set"
 
 if (!(Get-Variable -Name CheckInitUtility -Scope Global -ErrorAction Ignore))
 {
