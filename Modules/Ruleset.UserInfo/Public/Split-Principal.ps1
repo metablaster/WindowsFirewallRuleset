@@ -78,15 +78,16 @@ function Split-Principal
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for principal: $Account"
 
-			# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d
-			if ($Account -match "^\w[-|\w|\s]*\w\\\w[\s|\w]*\w$")
+			# TODO: This testing of NetBIOS name and UPN will hide errors but not warning, anyway
+			# it would be great to know what was the error.
+			if (Test-NetBiosName $Account -Force -Quiet)
 			{
 				if ($DomainName) { $Index = 0 }
 				else { $Index = 1 }
 
 				$Account.Split("\")[$Index]
 			}
-			elseif (Test-UPN $Account -EA SilentlyContinue)
+			elseif (Test-UPN $Account -Quiet)
 			{
 				if ($DomainName) { $Index = 1 }
 				else { $Index = 0 }
@@ -96,7 +97,6 @@ function Split-Principal
 			}
 			else
 			{
-				# TODO: Test-NBUserName would make this redundant
 				Write-Error -Category InvalidArgument -TargetObject $Account `
 					-Message "The account '$Account' is not a valid principal name"
 			}

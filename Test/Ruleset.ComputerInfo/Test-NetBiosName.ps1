@@ -46,7 +46,8 @@ None. You cannot pipe objects to Test-NetBiosName.ps1
 None. Test-NetBiosName.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Test cases for user names and principals are missing.
+TODO: Test cases for missing user name or computer name or null/empty are missing.
 #>
 
 #Requires -Version 5.1
@@ -70,36 +71,68 @@ Enter-Test
 
 $TestString = "*SERVER"
 Start-Test $TestString
-$Result = Test-NetBiosName $TestString
+$Result = Test-NetBiosName $TestString -Target Domain
 $Result
+
+$TestString = "*SERVER"
+Start-Test "$TestString -Strict"
+Test-NetBiosName $TestString -Target Domain -Strict
+
+$TestString = "SER*VER*"
+Start-Test "$TestString -Strict"
+Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "SERVER"
 Start-Test $TestString
-Test-NetBiosName $TestString
+Test-NetBiosName $TestString -Target Domain
 
 $TestString = "\\SERVER-01"
 Start-Test $TestString
-Test-NetBiosName $TestString
+Test-NetBiosName $TestString -Target Domain
 
 $TestString = "-SERVER-01"
 Start-Test $TestString
-Test-NetBiosName $TestString
-
-$TestString = "-Server-01"
-Start-Test "$TestString -Strict"
-Test-NetBiosName $TestString -Strict
+Test-NetBiosName $TestString -Target Domain
 
 $TestString = "site@domain.com"
 Start-Test $TestString
-Test-NetBiosName $TestString
+Test-NetBiosName $TestString -Target Domain
+
+$TestString = "site@domain.com"
+Start-Test "$TestString -Strict"
+Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "site.domain.com"
 Start-Test $TestString
-Test-NetBiosName $TestString
+Test-NetBiosName $TestString -Target Domain
 
 $TestString = "site.domain.com"
 Start-Test "$TestString -Strict"
-Test-NetBiosName $TestString -Strict
+Test-NetBiosName $TestString -Strict -Target Domain
+
+$TestString = ""
+Start-Test "'$TestString'"
+$TestString | Test-NetBiosName -Target Domain
+
+$TestString = ".COMPUTER"
+Start-Test $TestString
+Test-NetBiosName $TestString -Target Domain
+
+$TestString = "VeryLongSuperDuperComputerName"
+Start-Test $TestString
+Test-NetBiosName $TestString -Target Domain
+
+$TestString = "Super$([char][byte] 24)Computer"
+Start-Test $TestString
+Test-NetBiosName $TestString -Target Domain
+
+$TestString = "Super$([char][byte] 24)Computer"
+Start-Test $TestString
+Test-NetBiosName $TestString -Target Domain -Strict
+
+$TestString = "3904758"
+Start-Test $TestString
+Test-NetBiosName $TestString -Target Domain
 
 Test-Output $Result -Command Test-NetBiosName
 
