@@ -37,7 +37,7 @@ required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
 
 .PARAMETER Strict
-If specified exit is called on failure instead of return
+If specified, exit is called on failure instead of return
 
 .EXAMPLE
 PS> Initialize-Project

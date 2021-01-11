@@ -205,7 +205,10 @@ SOFTWARE.
 			RequireLicenseAcceptance = $true
 
 			# A list of external modules that this module is dependent upon.
-			# ExternalModuleDependencies = @()
+			ExternalModuleDependencies = @(
+				"Ruleset.UserInfo"
+				"Ruleset.Utility"
+			)
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable
 

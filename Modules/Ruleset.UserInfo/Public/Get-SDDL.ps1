@@ -50,7 +50,7 @@ Single domain or computer such as remote computer name or builtin computer domai
 Whether to contact CIM server (required for remote computers)
 
 .PARAMETER Merge
-If specified combines resultant SDDL strings into one
+If specified, combines resultant SDDL strings into one
 
 .EXAMPLE
 PS> Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM

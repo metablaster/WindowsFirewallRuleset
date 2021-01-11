@@ -41,7 +41,7 @@ If specified, name must be all uppercase and must conform to IBM specifications.
 By default verification conforms to Microsoft specifications and is case insensitive.
 
 .PARAMETER Quiet
-if specified name syntax errors are not shown, only true or false is returned.
+If specified, name syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
 PS> Test-NetBiosName "*SERVER"

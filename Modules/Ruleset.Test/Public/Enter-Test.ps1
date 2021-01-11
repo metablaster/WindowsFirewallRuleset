@@ -35,7 +35,7 @@ Enter-Test initializes unit test
 Must be called before first test case in single unit test and in pair with Exit-Test
 
 .PARAMETER Private
-If specified temporarily exports private module functions into global scope
+If specified, temporarily exports private module functions into global scope
 
 .PARAMETER Pester
 Should be specified to enter pester tests for private functions,

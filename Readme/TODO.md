@@ -180,6 +180,7 @@ Todo's in this file are categorized into following sections:
     - When drilling registry for programs in user profile we need to load hive for offline
     users into registry, see implementation for OneDrive
     - If there is `Path` parameter then also `LiteralPath` is required
+    - A few function (or module) for export/import of configuration into variety of file formats
 
 2. Project scripts
 

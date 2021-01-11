@@ -36,7 +36,7 @@ Rules which are missing LocalUser are considered weak and need to be updated
 This operation is slow, intended for debugging.
 
 .PARAMETER Empty
-If specified returns rules with no local user value
+If specified, returns rules with no local user value
 Otherwise only rules with local user are returned
 
 .EXAMPLE

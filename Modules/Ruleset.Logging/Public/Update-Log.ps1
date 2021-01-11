@@ -43,7 +43,7 @@ automatically by the script that calls module advanced functions.
 If any of the 3 preferences are set to "Ignore" those won't be logged
 
 .PARAMETER Path
-If specified writes logs to this location
+If specified, writes logs to this location
 
 .EXAMPLE
 PS> Some-AdvancedFunction

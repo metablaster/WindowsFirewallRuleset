@@ -76,7 +76,7 @@ Specifies an array of IP addresses.
 The provider logs network traffic that matches the addresses that this cmdlet specifies
 
 .PARAMETER LayerSet
-If specified captures Windows Firewall Platform (WFP) network events
+If specified, captures Windows Firewall Platform (WFP) network events
 
 .PARAMETER TCPPorts
 Specifies an array of TCP ports.

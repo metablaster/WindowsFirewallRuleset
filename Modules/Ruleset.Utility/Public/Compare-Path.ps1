@@ -42,12 +42,12 @@ The path which to compare against the reference path
 The path against which to compare
 
 .PARAMETER Loose
-if specified perform "loose" comparison:
+If specified, perform "loose" comparison:
 Does not attempt to resolve input paths, and respects wildcards all of which happens
 after input paths have been expanded off environment variables
 
 .PARAMETER CaseSensitive
-If specified performs case sensitive comparison
+If specified, performs case sensitive comparison
 
 .EXAMPLE
 PS> Compare-Path "%SystemDrive%\Windows" "C:\Win*" -Loose

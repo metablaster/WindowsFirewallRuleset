@@ -41,7 +41,7 @@ If specified, NETBIOS computer name must be all uppercase and must conform to IB
 By default NETBIOS computer name verification conforms to Microsoft specifications and is case insensitive.
 
 .PARAMETER Quiet
-if specified path syntax errors are not shown, only true or false is returned.
+If specified, path syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
 PS> Test-UNC \\SERVER\Share

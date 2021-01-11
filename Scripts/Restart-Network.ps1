@@ -50,7 +50,7 @@ This is useful to troubleshoot problems or to generate network traffic that occu
 first time connection or system boot such as DHCP or IGMP
 
 .PARAMETER Principal
-If specified also set permissions for firewall log files.
+If specified, also set permissions for firewall log files.
 This is needed only for non standard log files locations, for more information see
 Scripts\Grant-Logs.ps1
 

@@ -47,7 +47,7 @@ If specified, validate only the user name portion of a User Principal Name
 If specified, validate only the domain name portion of a User Principal Name
 
 .PARAMETER Quiet
-if specified UPN syntax errors are not shown, only true or false is returned.
+If specified, UPN syntax errors are not shown, only true or false is returned.
 
 .EXAMPLE
 PS> Test-UPN Administrator@machine.lan

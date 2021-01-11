@@ -31,7 +31,7 @@ SOFTWARE.
 Split principal to either user name or domain
 
 .DESCRIPTION
-Split principal, either UPN or NETBIOS name to user name or domain name
+Split either UPN or NETBIOS principal name to user name or domain name.
 
 .PARAMETER Principal
 One or more principals in form of UPN or NetBIOS Name.
@@ -76,7 +76,7 @@ function Split-Principal
 	{
 		foreach ($Account in $Principal)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for account: $Account"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for principal: $Account"
 
 			# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d
 			if ($Account -match "^\w[-|\w|\s]*\w\\\w[\s|\w]*\w$")

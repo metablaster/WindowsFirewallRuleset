@@ -102,7 +102,7 @@ If "Protected" is specified with "PreserveInheritance", then the inherited rules
 explicit rules and everything else is removed.
 
 .PARAMETER Force
-If specified skips prompting for confirmation.
+If specified, skips prompting for confirmation.
 
 .EXAMPLE
 PS> Set-Permission -User "SomeUser" -LiteralPath "D:\SomePath"

@@ -58,7 +58,7 @@ Checks if the path leads to user profile
 If specified, this function produces errors instead of warnings.
 
 .PARAMETER Quiet
-If specified does not write any warnings or errors, only true or false is returned.
+If specified, does not write any warnings or errors, only true or false is returned.
 
 .EXAMPLE
 PS> Test-FileSystemPath "%Windir%"

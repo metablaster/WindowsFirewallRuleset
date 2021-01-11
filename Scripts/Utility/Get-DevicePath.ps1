@@ -8,10 +8,10 @@ Get mappings of disk volume letter and device path
 Optionally you can convert from drive letter to device path and vice versa
 
 .PARAMETER DriveLetter
-If specified the result is device path for given drive letter
+If specified, the result is device path for given drive letter
 
 .PARAMETER DevicePath
-If specified result is drive letter for given device path
+If specified, result is drive letter for given device path
 
 .EXAMPLE
 PS> .\Get-DevicePath.ps1

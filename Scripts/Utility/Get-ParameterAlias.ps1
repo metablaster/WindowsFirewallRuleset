@@ -84,7 +84,7 @@ If specified, only commands already imported into current session are processed.
 By default modules for matched commands are imported into global scope.
 
 .PARAMETER Cleanup
-If specified removes all modules previously imported by Get-ParameterAlias from current session.
+If specified, removes all modules previously imported by Get-ParameterAlias from current session.
 Other parameters are ignored and nothing except cleanup is performed.
 
 .EXAMPLE

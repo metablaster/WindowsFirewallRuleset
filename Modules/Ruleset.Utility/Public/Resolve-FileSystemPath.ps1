@@ -44,7 +44,7 @@ Directory or file location to target file system item.
 Wildcard characters and relative paths are supported.
 
 .PARAMETER File
-If specified [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]
+If specified, [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]
 
 .PARAMETER Create
 If specified, target directory or file is created if it doesn't exist
