@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for Metatrader
+Outbound firewall rules for MetaTrader
 
 .DESCRIPTION
-Outbound firewall rules for Metatrader platform
+Outbound firewall rules for MetaTrader platform
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.
@@ -41,13 +41,13 @@ If specified, rules will be loaded for executables with missing or invalid digit
 By default an error is generated and rule isn't loaded.
 
 .EXAMPLE
-PS> .\Metatrader.ps1
+PS> .\MetaTrader.ps1
 
 .INPUTS
-None. You cannot pipe objects to Metatrader.ps1
+None. You cannot pipe objects to MetaTrader.ps1
 
 .OUTPUTS
-None. Metatrader.ps1 does not generate any output
+None. MetaTrader.ps1 does not generate any output
 
 .NOTES
 None.
@@ -73,35 +73,35 @@ Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Software - Metatrader"
-$Accept = "Outbound rules for Metatrader software will be loaded, recommended if Metatrader software is installed to let it access to network"
-$Deny = "Skip operation, outbound rules for Metatrader software will not be loaded into firewall"
+$Group = "Software - MetaTrader"
+$Accept = "Outbound rules for MetaTrader software will be loaded, recommended if MetaTrader software is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for MetaTrader software will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 #
-# Metatrader installation directories
+# MetaTrader installation directories
 # TODO: path unknown
 #
-$MetatraderRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Roaming\InstaTrader"
+$MetaTraderRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Roaming\InstaTrader"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Rules for Metatrader
+# Rules for MetaTrader
 #
 
 # Test if installation exists on system
-if ((Confirm-Installation "Metatrader" ([ref] $MetatraderRoot)) -or $ForceLoad)
+if ((Confirm-Installation "MetaTrader" ([ref] $MetaTraderRoot)) -or $ForceLoad)
 {
-	$Program = "$MetatraderRoot\terminal.exe"
+	$Program = "$MetaTraderRoot\terminal.exe"
 	if (Test-ExecutableFile $Program)
 	{
 		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Metatrader 4" -Service Any -Program $Program `
+			-DisplayName "MetaTrader 4" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `

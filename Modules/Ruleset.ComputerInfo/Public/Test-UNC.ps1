@@ -77,7 +77,6 @@ A valid UNC path MUST contain two or more path components.
 "SERVER" is referred to as the "first pathname component", "Share" as the "second pathname component"
 The size and valid characters for a path component are defined by the protocol used to access the
 resource and the type of resource being accessed.
-TODO: Needs update since changes done to Test-NetBiosName
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-UNC.md
@@ -167,11 +166,12 @@ function Test-UNC
 			}
 
 			# Test-NetBiosName will report errors otherwise
-			if (Test-NetBiosName $PathSplit[0] -Strict:$Strict -Quiet:$Quiet)
+			if (Test-NetBiosName $PathSplit[0] -Target Domain -Strict:$Strict -Quiet:$Quiet)
 			{
 				# ex: \ShareName\Directory Name\FileName.exe
 				$RemainingPath = "\" + [string]::Join("\", $PathSplit, 1, $PathSplit.Length - 1)
 
+				# TODO: This path validation may be too restrictive
 				if ($RemainingPath -notmatch '(\\[\w\-_\.\s]+)+\$?$')
 				{
 					Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `

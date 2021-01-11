@@ -39,7 +39,7 @@ In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 One or more SIDs to convert
 
 .PARAMETER Domain
-One or more computers to check if SID is not known, default is localhost
+One or more computers to check if SID is not known, the default is localhost
 
 .EXAMPLE
 PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
@@ -54,11 +54,6 @@ PS> "S-1-5-32-580", "S-1-5-21-34223-2342-234234-518" | ConvertFrom-SID
 [PSCustomObject] composed of SID information
 
 .NOTES
-SID conversion for well known SIDs and display names from following links:
-1. http://support.microsoft.com/kb/243330
-2. https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
-3. https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
-
 To avoid confusion, pseudo accounts ("Local Service" in the example below) can be represented as:
 1. SID (S-1-5-19)
 2. Name (NT AUTHORITY)
@@ -74,20 +69,32 @@ On the other side built in accounts ("Administrator" in the example below) can b
 This is important to understand because MSDN site (links in comment) just says "Name",
 but we can't just use given "Name" value to refer to user when defining rules because it's
 not valid for multiple reasons such as:
-1. there are duplicate names, which SID do you want if "Name" is duplicate?
+1. There are duplicate names, which SID do you want if "Name" is duplicate?
 2. Some "names" are not login usernames or accounts, but we need either username or account
 3. Some "names" are NULL, such as capability SID's
 See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
-but those which are not are replaced with "Display Name" in the "WellKnownSIDs" variable below.
+To solve this problem "Name" must be replaced with "Display Name", most "Name" values are OK,
+but those which are not are replaced with "Display Name" in the "WellKnownSIDs" switch below.
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
-TODO: need to have consistent output ex. domain name, principal and username, see test results,
+TODO: Need to have consistent output ex. domain name, principal and username, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
-TODO: need to implement CIM switch
-TODO: test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
+TODO: Need to implement CIM switch
+TODO: Test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md
+
+.LINK
+http://support.microsoft.com/kb/243330
+
+.LINK
+https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
+
+.LINK
+https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 #>
 function ConvertFrom-SID
 {
@@ -96,7 +103,7 @@ function ConvertFrom-SID
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-		[ValidatePattern('^S-1-\d[\d+-]+\d$')]
+		[ValidatePattern("^S-1-(\d+-)*\d+$")]
 		[string[]] $SID,
 
 		[Parameter()]
@@ -110,8 +117,6 @@ function ConvertFrom-SID
 	}
 	process
 	{
-		[PSCustomObject[]] $Result = @()
-
 		# loop through provided SIDs
 		foreach ($InputSID in $SID)
 		{
@@ -121,7 +126,7 @@ function ConvertFrom-SID
 			[string] $SidType = "Unknown"
 
 			# Well known SIDs value/name map
-			[string] $LoginName = switch -Regex ($InputSID)
+			[string] $LogonName = switch -Regex ($InputSID)
 			{
 				# All versions of Windows
 				'^S-1-0$' { "Null Authority"; break }
@@ -363,7 +368,7 @@ function ConvertFrom-SID
 							}
 							break
 						}
-						'^S-1-15-3-\d+[\d+-]\d+$'
+						'^S-1-15-3-(\d+-)*\d+$'
 						{
 							$SidType = "Capability"
 							Write-Warning -Message "Translating capability SID's not implemented"
@@ -408,7 +413,7 @@ function ConvertFrom-SID
 								if ($InputSID -match '^S-1-5-21-\d+-\d+-\d+-\d+$')
 								{
 									$SidType = "Domain"
-									Write-Warning -Message "Input SID is unknown domain or NTAccount SID"
+									Write-Warning -Message "Input SID is an unknown domain or NTAccount SID"
 								}
 								else
 								{
@@ -428,7 +433,7 @@ function ConvertFrom-SID
 
 			# Finally figure out the type of a SID for well known SID, done here to avoid code bloat
 			# TODO: there are more categorizations
-			if (![string]::IsNullOrEmpty($LoginName) -and ($SidType -eq "Unknown"))
+			if (![string]::IsNullOrEmpty($LogonName) -and ($SidType -eq "Unknown"))
 			{
 				# Check if well known SID is domain SID
 				if ($InputSID -match '^S-1-5-21')
@@ -448,15 +453,13 @@ function ConvertFrom-SID
 				}
 			}
 
-			# Add to result object
+			# Write out result
 			# TODO: we should also save system edition, authority, domain etc.
-			$Result += [PSCustomObject]@{
+			[PSCustomObject]@{
 				Type = $SidType
-				Name = $LoginName
+				Name = $LogonName
 				SID = $InputSID
 			}
 		} # foreach SID
-
-		Write-Output $Result
 	} # process
 }

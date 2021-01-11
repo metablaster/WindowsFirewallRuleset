@@ -1,7 +1,8 @@
 
 # Naming convention
 
-This file contains naming convention rules for parameters and variables
+This file contains an incomplete naming convention rules for symbols such as parameters and variables
+used accross code in this repository.
 
 - [Naming convention](#naming-convention)
   - [Parameters](#parameters)
@@ -144,8 +145,8 @@ according to this table until `key value` is reached.
 1. The subkey requested, or null if the operation failed.
 2. The value associated with name, or null if name is not found.
 3. The requested registry key.
-4. An array of strings that contains the names of the subkeys for the current key.
-5. An array of strings that contains the value names for the current key.
+4. An array of strings that contains names of the subkeys for the current key.
+5. An array of strings that contains value names for the current key.
 
 ### Exceptions
 
@@ -188,7 +189,7 @@ UnauthorizedAccessException
 
 ### Ruleset.ProgramInfo
 
-Minimum properties if possible:
+Minimum properties if possible in this order:
 
 ```none
 Domain = computer name
@@ -201,6 +202,8 @@ PSTypeName = unique object type name for this module
 ```
 
 ### Ruleset.UserInfo
+
+Minimum properties if possible in this order:
 
 Domain = computer name
 User = user name

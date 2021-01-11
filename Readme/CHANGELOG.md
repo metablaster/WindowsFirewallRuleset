@@ -29,6 +29,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Most module functions significantly improved (In progress...)
   - Several functions were renamed to be more descriptive of their purpose
   - Removed functions: `Update-Context` and `Get-ComputerName`
+  - For better pipeline support functions now output objects right away instead of creating an array
+  - For consistency, most outputs now follow same custom object property layout and naming convention.
 
 - Rules
 
@@ -66,6 +68,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added PSScriptInfo comment to scripts that are not part of modules
   - Added CmdletBinding to scripts and `-Force` switch to skip prompt
   - Added `-Trusted` switch to rule scripts to ignore missing digital signature or signature mismatch
+  - Master script `SetupFirewall.ps1` was renamed to `Deploy-Firewall.ps1`, improved and redesigned
+  for automatic firewall deployment in addition to manual procedure selection
+  - Most scripts were renamed to better describe their intended future purpose
 
 - Documentation
 
@@ -83,8 +88,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent
   output (In progress...)
-  - Running individual functions and scripts with `-Debug` or `-Verbose` switch did not respect the
-  switch, fixed
+  - Running individual functions and scripts with common parameters such as `-Debug` or `-Verbose`
+  switch did not respect the switch, fixed
 
 ## v0.9.0 (current release)
 

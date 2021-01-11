@@ -49,6 +49,7 @@ None. Edit-Table does not generate any output
 .NOTES
 TODO: principal parameter?
 TODO: search executable paths
+TODO: This function should make use of Out-DataTable function from Ruleset.Utility module
 #>
 function Edit-Table
 {
@@ -69,7 +70,7 @@ function Edit-Table
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
-		$Principal = Get-GroupPrincipal "Users" | Where-Object {
+		$UserInfo = Get-GroupPrincipal "Users" | Where-Object {
 			$Path -match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
@@ -81,13 +82,14 @@ function Edit-Table
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.User = $Principal.User
-		$Row.Domain = $Principal.Domain
-		$Row.Principal = $Principal.Principal
-		$Row.SID = $Principal.SID
+		$Row.Domain = $UserInfo.Domain
+		$Row.User = $UserInfo.User
+		$Row.Group = $UserInfo.Group
+		$Row.Principal = $UserInfo.Principal
+		$Row.SID = $UserInfo.SID
 		$Row.InstallLocation = $Path
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Principal) with $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $Path"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -97,20 +99,20 @@ function Edit-Table
 		$Path = Format-Path $Path
 
 		# Not user profile path, so it applies to all users
-		$Principal = Get-UserGroup -Domain $PolicyStore | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup -Domain $PolicyStore | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
 
 		# Enter data into row
 		$Row.ID = ++$RowIndex
-		$Row.Group = $Principal.Group
-		$Row.Domain = $Principal.Domain
-		$Row.Principal = $Principal.Principal
-		$Row.SID = $Principal.SID
+		$Row.Domain = $UserInfo.Domain
+		$Row.Group = $UserInfo.Group
+		$Row.Principal = $UserInfo.Principal
+		$Row.SID = $UserInfo.SID
 		$Row.InstallLocation = $Path
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($Principal.Principal) with $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $Path"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)

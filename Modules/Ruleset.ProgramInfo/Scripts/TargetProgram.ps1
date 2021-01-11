@@ -46,7 +46,7 @@ enum TargetProgram
 	GoogleDrive
 	RivaTuner
 	Incredibuild
-	Metatrader
+	MetaTrader
 	RealWorld
 	qBittorrent
 	OpenTTD

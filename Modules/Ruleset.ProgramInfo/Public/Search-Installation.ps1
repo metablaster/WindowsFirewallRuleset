@@ -213,7 +213,7 @@ function Search-Installation
 			Update-Table -Search "Incredibuild"
 			break
 		}
-		"Metatrader"
+		"MetaTrader"
 		{
 			Update-Table -Search "InstaTrader"
 			break

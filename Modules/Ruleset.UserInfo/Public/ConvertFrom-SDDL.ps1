@@ -31,7 +31,8 @@ SOFTWARE.
 Convert SDDL string to Principal
 
 .DESCRIPTION
-Convert one or multiple SDDL strings to Principals
+Convert one or multiple SDDL strings to custom object Principals containing
+relevant information about the principal
 
 .PARAMETER SDDL
 String array of one or more strings of SDDL syntax
@@ -108,7 +109,7 @@ function ConvertFrom-SDDL
 
 				if (!$AceSplit[1].Contains("ID")) # if (!"Inherited")
 				{
-					# TODO: Parse out the SID (store apps have 12 groups of digits in total, other SID's have 8)
+					# TODO: Parse out the SID (store apps have 12 groups of digits in total, other SID's have 8?)
 					# If the match is successful, the collection is populated with one [System.Text.RegularExpressions.Match]
 					# object for each match found in the input string.
 					[System.Text.RegularExpressions.MatchCollection] $RegMatch = [regex]::Matches($AceSplit[5], "(S(-\d+){2,12})")
@@ -135,7 +136,8 @@ function ConvertFrom-SDDL
 						[PSCustomObject]@{
 							Domain = Split-Principal $Principal -DomainName
 							User = Split-Principal $Principal
-							# TODO: Group = ?
+							# TODO: Group = ?, we have no clue about group, calling a function would be overhead
+							# the reason why to include group is consitency for "Ruleset.UserInfo" custom object
 							Principal = $Principal
 							SID = $SID
 							SDDL = $DACL
@@ -146,15 +148,14 @@ function ConvertFrom-SDDL
 					{
 						# TODO: This must be always false, confirm maximum one SID can be in there
 						Write-Error -Category NotImplemented -TargetObject $RegMatch -Message "Expected 1 regex match, got multiple"
-						exit
 					}
 					else
 					{
 						# "Not inherited"
 						continue
 					}
-				}
-			}
+				} # if (!"Inherited")
+			} # for
 		} # foreach ($SddlEntry in $SDDL)
-	}
+	} # process
 }

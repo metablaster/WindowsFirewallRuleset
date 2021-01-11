@@ -80,18 +80,18 @@ function Initialize-Table
 
 	# Define Columns
 	$ColumnID = New-Object -TypeName System.Data.DataColumn ID, ([int32])
+	$ColumnDomain = New-Object -TypeName System.Data.DataColumn Domain, ([string])
 	$ColumnUser = New-Object -TypeName System.Data.DataColumn User, ([string])
 	$ColumnGroup = New-Object -TypeName System.Data.DataColumn Group, ([string])
-	$ColumnDomain = New-Object -TypeName System.Data.DataColumn Domain, ([string])
 	$ColumnPrincipal = New-Object -TypeName System.Data.DataColumn Principal, ([string])
 	$ColumnSID = New-Object -TypeName System.Data.DataColumn SID, ([string])
 	$ColumnInstallLocation = New-Object -TypeName System.Data.DataColumn InstallLocation, ([string])
 
 	# Add the Columns
 	$InstallTable.Columns.Add($ColumnID)
+	$InstallTable.Columns.Add($ColumnDomain)
 	$InstallTable.Columns.Add($ColumnUser)
 	$InstallTable.Columns.Add($ColumnGroup)
-	$InstallTable.Columns.Add($ColumnDomain)
 	$InstallTable.Columns.Add($ColumnPrincipal)
 	$InstallTable.Columns.Add($ColumnSID)
 	$InstallTable.Columns.Add($ColumnInstallLocation)

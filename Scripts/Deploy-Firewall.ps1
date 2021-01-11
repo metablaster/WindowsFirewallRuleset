@@ -411,7 +411,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent
 		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent
 		& "$Destination\Software\Java.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Metatrader.ps1" -Force:$AllCurrent
+		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent
 		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent
 		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent
 		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent

@@ -64,6 +64,7 @@ TODO: For programs in user profile rules should update LocalUser parameter accor
 currently it looks like we assign entry user group for program that applies to user only
 TODO: Using "Executable" parameter should be possible without the use of "Search" parameter
 TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search
+TODO: This function should make use of Out-DataTable function from Ruleset.Utility module
 #>
 function Update-Table
 {
@@ -103,16 +104,17 @@ function Update-Table
 				$Row = $InstallTable.NewRow()
 
 				# TODO: Learn username from installation path, probably a function for this
-				$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
+				$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.Group = $Principal.Group
-				$Row.Domain = $Principal.Domain
-				$Row.SID = $Principal.SID
+				$Row.Domain = $UserInfo.Domain
+				$Row.Group = $UserInfo.Group
+				$Row.Principal = $UserInfo.Principal
+				$Row.SID = $UserInfo.SID
 				$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Principal) with $InstallLocation"
 
 				# Add row to the table
 				$InstallTable.Rows.Add($Row)
@@ -138,7 +140,7 @@ function Update-Table
 
 			# TODO: need better mechanism for multiple matches
 			$TargetPrograms = $SystemPrograms | Where-Object -Property Name -Like $SearchString
-			$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
+			$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 			foreach ($Program in $TargetPrograms)
 			{
@@ -149,12 +151,13 @@ function Update-Table
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.Group = $Principal.Group
-				$Row.Domain = $Principal.Domain
-				$Row.SID = $Principal.SID
+				$Row.Domain = $UserInfo.Domain
+				$Row.Group = $UserInfo.Group
+				$Row.Principal = $UserInfo.Principal
+				$Row.SID = $UserInfo.SID
 				$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Principal) with $InstallLocation"
 
 				# Add row to the table
 				$InstallTable.Rows.Add($Row)
@@ -175,24 +178,25 @@ function Update-Table
 				$KeyOwner = ConvertFrom-SID $Program.SIDKey
 				if ($KeyOwner -eq "Users")
 				{
-					$Principal = $UserGroups | Where-Object -Property Group -EQ "Users"
+					$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
 				}
 				else
 				{
 					# TODO: we need more registry samples to determine what is right, Administrators seems logical
-					$Principal = $UserGroups | Where-Object -Property Group -EQ "Administrators"
+					$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Administrators"
 				}
 
 				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
-				$Row.Group = $Principal.Group
-				$Row.Domain = $Principal.Domain
-				$Row.SID = $Principal.SID
+				$Row.Domain = $UserInfo.Domain
+				$Row.Group = $UserInfo.Group
+				$Row.Principal = $UserInfo.Principal
+				$Row.SID = $UserInfo.SID
 				$Row.InstallLocation = $InstallLocation
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Caption) with $InstallLocation"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Caption) with $InstallLocation"
 
 				# Add row to the table
 				$InstallTable.Rows.Add($Row)
@@ -205,22 +209,22 @@ function Update-Table
 		{
 			$Principals = Get-GroupPrincipal "Users"
 
-			foreach ($Principal in $Principals)
+			foreach ($UserInfo in $Principals)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($Principal.Domain) programs for $Search"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching $($UserInfo.Domain) programs for $Search"
 
 				# TODO: We handle OneDrive case here but there may be more such programs in the future
 				# so this obviously means we need better approach to handle this
 				if ($Search -eq "OneDrive")
 				{
 					# NOTE: For one drive registry drilling procedure is different
-					$UserPrograms = Get-OneDrive $Principal.User
+					$UserPrograms = Get-OneDrive $UserInfo.User
 				}
 				else
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
-					$UserPrograms = Get-UserSoftware $Principal.User | Where-Object -Property Name -Like $SearchString
+					$UserPrograms = Get-UserSoftware $UserInfo.User | Where-Object -Property Name -Like $SearchString
 				}
 
 				if ($UserPrograms)
@@ -237,15 +241,14 @@ function Update-Table
 
 						# Enter data into row
 						$Row.ID = ++$RowIndex
-						$Row.User = $Principal.User
-						# TODO: we should add group entry for users
-						# $Row.Group = $Principal.Group
-						$Row.Domain = $Principal.Domain
-						$Row.Principal = $Principal.Principal
-						$Row.SID = $Principal.SID
+						$Row.Domain = $UserInfo.Domain
+						$Row.User = $UserInfo.User
+						$Row.Group = $UserInfo.Group
+						$Row.Principal = $UserInfo.Principal
+						$Row.SID = $UserInfo.SID
 						$Row.InstallLocation = $InstallLocation
 
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($Principal.Principal) with $InstallLocation"
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Updating table for $($UserInfo.Principal) with $InstallLocation"
 
 						# Add the row to the table
 						$InstallTable.Rows.Add($Row)
