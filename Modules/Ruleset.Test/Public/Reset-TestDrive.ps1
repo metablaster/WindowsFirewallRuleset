@@ -122,6 +122,9 @@ function Reset-TestDrive
 		if ($Path.Exists)
 		{
 			$Count = 0
+			# NOTE: Increment because parameter variable must not go negative
+			# This is offset in catch by comparing Retry to -gt 0 instead of -ge 0
+			++$Retry
 			while ($Retry -ge 0)
 			{
 				try
@@ -140,9 +143,10 @@ function Reset-TestDrive
 				}
 				catch
 				{
-					if (--$Retry -ge 0)
+					if (--$Retry -gt 0)
 					{
-						Write-Warning -Message "Retrying ($(++$Count)) test drive reset: $($_.Exception.Message)"
+						++$Count
+						Write-Warning -Message "Retrying ($Count) test drive reset: $($_.Exception.Message)"
 
 						Start-Sleep -Milliseconds $Timeout
 						continue
@@ -171,13 +175,11 @@ Do not save anything here because directory contents may get lost.
 
 "@
 
-		if (Test-Path -Path $Path\README.md -PathType Leaf)
+		if (!(Test-Path -Path $Path\README.md -PathType Leaf))
 		{
-			Set-Content -Path $Path\README.md -ItemType File -Value $ReadmeData -Encoding $DefaultEncoding
+			New-Item -Path $Path\README.md -ItemType File | Out-Null
 		}
-		else
-		{
-			New-Item -Path $Path\README.md -ItemType File -Value $ReadmeData -Encoding $DefaultEncoding | Out-Null
-		}
+
+		Set-Content -Path $Path\README.md -Value $ReadmeData -Encoding $DefaultEncoding
 	}
 }

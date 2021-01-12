@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolve file system wildcard of a directory or file location
+Resolve wildcard pattern of a directory or file location
 
 .DESCRIPTION
 Ensure directory or file name wildcard pattern resolves to single location.
@@ -37,7 +37,7 @@ this function accepts only file system paths, and produces either [System.IO.Dir
 [System.IO.FileInfo]
 Also unlike Resolve-Path the resultant path object is returned even if target file system item
 does not exist, as long as portion of the specified path is resolved and as long as new path
-doesn't resolve to multiple locations.
+doesn't resolve to multiple (ambiguous) locations.
 
 .PARAMETER Path
 Directory or file location to target file system item.
@@ -68,7 +68,6 @@ None. You cannot pipe objects to Resolve-FileSystemPath
 
 .NOTES
 TODO: Implement -Relative parameter, see Resolve-Path
-TODO: This function needs improvements according to the rest of *FileSystem* functions
 #>
 function Resolve-FileSystemPath
 {
@@ -90,38 +89,46 @@ function Resolve-FileSystemPath
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path: $Path"
 
-	# Location to report in error messages
-	$TestPath = Split-Path -Path $Path -NoQualifier
+	# Qualifier ex. "C:\" "D:", "\" or "\\"
+	# Unqualified: Anything except qualifier
+	$PathGroups = [regex]::Match($Path, "(?<Qualifier>^[A-Za-z]:\\?|^\\{1,2})?(?<Unqualified>.*)")
+	$Qualifier = $PathGroups.Groups["Qualifier"]
+	$Unqualified = $PathGroups.Groups["Unqualified"]
 
-	if (!(Test-Path -Path $TestPath -IsValid))
+	if (!$PathGroups.Success)
 	{
-		Write-Error -Category SyntaxError -TargetObject $TestPath -Message "The path syntax is not valid: $TestPath"
+		# This should never be the case but can happen ex. if regex is modified
+		Write-Error -Category ParserError -TargetObject $PathGroups -Message "Unable to determine path type"
 		return
 	}
 
-	# TODO: will not work for relative paths, see: Convert-Path
-	$TestPath = Split-Path -Path $Path -Qualifier
-
-	# TODO: What about root drives, ex. no parent?
-	if (Test-Path -Path $TestPath -IsValid)
+	if ($Unqualified.Success)
 	{
-		$PSTarget = Resolve-Path -Path $TestPath -ErrorAction Ignore
+		# Location to report in error messages
+		$TestPath = $Unqualified.Value
 
-		if ($PSTarget -and ($PSTarget.Provider.Name -ne "FileSystem"))
+		# NOTE: Empty match will be "success", but this won't be the cause for qualifier
+		if (![string]::IsNullOrEmpty($TestPath) -and !(Test-Path -Path $TestPath -IsValid))
 		{
-			Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "The path qualifier is not filesystem qualifier: $TestPath\"
+			# NOTE: This will pick up qualifiers that are not file system qualifiers such as HKLM:\
+			Write-Error -Category SyntaxError -TargetObject $TestPath -Message "The path syntax is not valid: $TestPath"
 			return
 		}
-	}
-	else
+	} # else dealing root path
+
+	if ($Qualifier.Success)
 	{
-		Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "The path qualifier is not recognized: $TestPath\"
-		return
+		$TestPath = $Qualifier.Value
+		if (!(Test-Path -Path $TestPath -IsValid))
+		{
+			Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "The path qualifier is not recognized: $TestPath\"
+			return
+		}
 	}
 
 	$TestPath = $Path
 
-	# NOTE: Will error if the path does not exists but only if no wildcards are present
+	# NOTE: Will error if path does not exists but only if no wildcards are present
 	$PSTarget = Resolve-Path -Path $TestPath -ErrorAction Ignore
 	$ItemCount = ($PSTarget | Measure-Object).Count
 

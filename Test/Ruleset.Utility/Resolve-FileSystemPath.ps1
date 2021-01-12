@@ -116,6 +116,26 @@ if ($Result)
 	Test-Output $Result -Command Resolve-FileSystemPath
 }
 
+$DirectoryInfo = "\User"
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
+
+$DirectoryInfo = "\"
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
+
 #
 # File test
 #
@@ -172,7 +192,7 @@ if ($Result)
 }
 
 Start-Test "Resolve-FileSystemPath 'Bad qualifier'"
-$DirectoryInfo = "DRIVEBAD:\SOFTWARE\Microsoft\Clipboard"
+$DirectoryInfo = "BADDRIVE:\SOFTWARE\Microsoft\Clipboard"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
 if ($Result)
@@ -237,8 +257,48 @@ if ($Result)
 }
 
 #
-# TODO: Relative path
+# Relative path
 #
+
+$DirectoryInfo = ".\.."
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
+
+$DirectoryInfo = "."
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
+
+$DirectoryInfo = "C:\Windows\System32\..\regedit.exe"
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
+
+$DirectoryInfo = "~"
+Start-Test $DirectoryInfo
+$Result = Resolve-FileSystemPath $DirectoryInfo
+
+if ($Result)
+{
+	$Result.FullName
+	Test-Output $Result -Command Resolve-FileSystemPath
+}
 
 Update-Log
 Exit-Test

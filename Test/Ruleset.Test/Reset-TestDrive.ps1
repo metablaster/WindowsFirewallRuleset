@@ -67,7 +67,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-
 Remove-Item -Path $DefaultTestDrive -Recurse -ErrorAction Ignore
 $Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 

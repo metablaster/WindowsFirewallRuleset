@@ -164,6 +164,8 @@ function Format-Path
 				continue
 			}
 
+			# TODO: Duplicate of this regex is in Resolve-FileSystemPath, this means a function to
+			# get and test various parts of a path may be wanted, Split-Path is of no help here
 			# Qualifier ex. "C:\" "D:", "\" or "\\"
 			# Unqualified: Anything except qualifier
 			$PathGroups = [regex]::Match($NewPath, "(?<Qualifier>^[A-Za-z]:\\?|^\\{1,2})?(?<Unqualified>.*)")
