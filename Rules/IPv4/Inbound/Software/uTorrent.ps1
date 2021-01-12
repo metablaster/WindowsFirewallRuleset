@@ -97,7 +97,7 @@ $uTorrentRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\uTorrent"
 if ((Confirm-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
 {
 	$Program = "$uTorrentRoot\uTorrent.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "uTorrent - DHT" -Service Any -Program $Program `

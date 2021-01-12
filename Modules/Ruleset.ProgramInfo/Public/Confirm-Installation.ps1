@@ -53,7 +53,7 @@ None. You cannot pipe objects to Confirm-Installation
 [bool] True if the reference variable contains valid path or was updated, false otherwise.
 
 .NOTES
-TODO: temporarily using ComputerName parameter
+TODO: ComputerName parameter is missing for remote test
 #>
 function Confirm-Installation
 {

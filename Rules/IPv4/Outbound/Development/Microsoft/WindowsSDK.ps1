@@ -97,7 +97,7 @@ $SDKDebuggers = "Unknown Directory"
 if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 {
 	$Program = "$SDKDebuggers\x86\windbg.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
@@ -108,7 +108,7 @@ if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	}
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
@@ -119,7 +119,7 @@ if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	}
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
@@ -130,7 +130,7 @@ if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	}
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `

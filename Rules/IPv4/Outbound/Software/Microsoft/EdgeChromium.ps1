@@ -99,7 +99,7 @@ if ((Confirm-Installation "EdgeChromium" ([ref] $EdgeChromiumRoot)) -or $ForceLo
 {
 	# TODO: no FTP rule
 	$Program = "$EdgeChromiumRoot\msedge.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Edge-Chromium HTTP" -Service Any -Program $Program `
@@ -154,7 +154,7 @@ Experimental transport layer network protocol developed by Google and implemente
 	$EdgeUpdateRoot = "$(Split-Path -Path $(Split-Path -Path $EdgeChromiumRoot -Parent) -Parent)\EdgeUpdate"
 	$Program = "$EdgeUpdateRoot\MicrosoftEdgeUpdate.exe"
 
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 		Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL

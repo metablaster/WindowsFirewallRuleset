@@ -98,7 +98,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "MetaTrader" ([ref] $MetaTraderRoot)) -or $ForceLoad)
 {
 	$Program = "$MetaTraderRoot\terminal.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MetaTrader 4" -Service Any -Program $Program `

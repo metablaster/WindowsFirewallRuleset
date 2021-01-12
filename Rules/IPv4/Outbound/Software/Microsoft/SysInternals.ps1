@@ -98,7 +98,7 @@ $SysInternalsRoot = "Unknown path" #"%SystemDrive%\tools"
 if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLoad)
 {
 	$Program = "$SysInternalsRoot\Autoruns\Autoruns64.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals Autoruns" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -114,7 +114,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	# TODO: It also uses port 80 but not known for what, not setting here.
 	# Most likely to fetch symbols
 	$Program = "$SysInternalsRoot\ProcessExplorer\procexp64.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals ProcessExplorer" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -128,7 +128,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	}
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals ProcessMonitor" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -142,7 +142,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	}
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals TcpView" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -156,7 +156,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	}
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals WhoIs" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -171,7 +171,7 @@ that you specify" | Format-Output
 	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals PSPing client" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -187,7 +187,7 @@ This rule serves to allow PSPing.exe to act as a client." | Format-Output
 	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Sysinternals PSPing64 client" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

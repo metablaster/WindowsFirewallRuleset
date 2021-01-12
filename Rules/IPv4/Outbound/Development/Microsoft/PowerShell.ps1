@@ -103,7 +103,7 @@ $PowerShellUsers = Get-SDDL -Group "Users", "Administrators" -Merge
 if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell64Root\powershell_ise.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerShell ISE x64" -Service Any -Program $Program `
@@ -114,7 +114,7 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 	}
 
 	$Program = "$PowerShell64Root\powershell.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerShell x64" -Service Any -Program $Program `
@@ -129,7 +129,7 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShellCore64Root\pwsh.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerShell Core x64" -Service Any -Program $Program `
@@ -144,7 +144,7 @@ if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or 
 if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell_ise.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerShell ISE x86" -Service Any -Program $Program `
@@ -155,7 +155,7 @@ if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLo
 	}
 
 	$Program = "$PowerShell86Root\powershell.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerShell x86" -Service Any -Program $Program `

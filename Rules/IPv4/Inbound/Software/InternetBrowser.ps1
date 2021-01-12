@@ -105,7 +105,7 @@ $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$Program = "$ChromeRoot\Chrome\Application\chrome.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Google Chrome mDNS IPv4" -Service Any -Program $Program `

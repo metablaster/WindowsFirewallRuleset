@@ -95,7 +95,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 $UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 $Program = "%SystemRoot%\System32\WUDFHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: local user may need to be "Any", needs testing.
 	New-NetFirewallRule -DisplayName "Wireless Display" `
@@ -112,7 +112,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format
 }
 
 $Program = "%SystemRoot%\System32\CastSrv.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: remote port unknown, rule added because predefined rule for UDP exists
 	New-NetFirewallRule -DisplayName "Wireless Display Infrastructure back channel" `
@@ -188,7 +188,7 @@ For more info see description of WLAN AutoConfig service." | Format-Output
 #
 
 $Program = "%SystemRoot%\System32\dasHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: missing protocol and port for WiFi Direct Network Discovery
 	New-NetFirewallRule -DisplayName "Wi-Fi Direct Network Discovery" `

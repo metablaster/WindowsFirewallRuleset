@@ -31,6 +31,7 @@ SOFTWARE.
 Global project settings and preferences
 
 .DESCRIPTION
+almost every script file and module dot sources this script before doing anything else.
 In this file project settings and preferences are set, these are grouped into
 1. settings for development
 2. settings for release
@@ -43,13 +44,16 @@ PSCmdlet object of the calling script
 Script modules must call this script with this parameter
 
 .PARAMETER ShowPreference
-If specified, displays preferences and optionally variables in current scope
+If specified, displays preferences and optionally variables in the calling scope
 
 .EXAMPLE
 PS> .\ProjectSettings.ps1 $PSCmdlet
 
 .EXAMPLE
 PS> .\ProjectSettings.ps1 -InModule
+
+.EXAMPLE
+PS> .\ProjectSettings.ps1 -InModule -ShowPreference
 
 .INPUTS
 None. You cannot pipe objects to ProjectSettings.ps1
@@ -60,12 +64,11 @@ None. ProjectSettings.ps1 does not generate any output
 .NOTES
 TODO: We could auto include this file with module manifests or dynamic module
 NOTE: Make sure not to modify variables commented as "do not modify" or "do not decrement"
-TODO: Use advanced parameters to control Verbose, Debug, Confirm and WhatIf locally
 TODO: Variable description should be part of variable object
 TODO: Some version variables enabled for module initialization are needed in several modules
-such as PS edition, PS version etc...
+such as PS edition, PS version etc. and should be always available
 TODO: Define OutputType attribute
-TODO: Set up trap for this script
+TODO: Set up try/catch or trap for this script only
 #>
 
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive")]
@@ -409,8 +412,9 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# NOTE: Do not modify except to to debug rules or unless absolutely needed!
 	Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
 
-	# To force loading rules regardless of presence of program set to true
-	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
+	# To force loading rules regardless of presence of a program set to true
+	# The purpose of this is to test loading rules that would otherwise be skipped
+	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
 
 	# Amount of connection tests toward target policy store
 	Set-Variable -Name RetryCount -Scope Global -Option ReadOnly -Force -Value 2

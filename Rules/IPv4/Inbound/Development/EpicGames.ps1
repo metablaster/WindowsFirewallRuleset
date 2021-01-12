@@ -104,7 +104,7 @@ $EngineRoot = "%SystemDrive%\Users\$DefaultUser\source\repos\UnrealEngine\Engine
 if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 {
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
@@ -122,7 +122,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
@@ -140,7 +140,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `

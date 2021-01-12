@@ -100,7 +100,7 @@ $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 # TODO: does not exist in Windows Server 2019
 # NOTE: user can by any local human user
 $Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -119,7 +119,7 @@ if ((Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLo
 {
 	# TODO: are these really user accounts we need here
 	$Program = "$NETFrameworkRoot\mscorsvw.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "CLR Optimization Service" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -140,7 +140,7 @@ your computer is idle to process the low priority assemblies." |
 if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $ForceLoad)
 {
 	$Program = "$WindowsDefenderRoot\MsMpEng.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Windows Defender" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -155,7 +155,7 @@ if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $F
 	}
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Windows Defender CLI" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -173,7 +173,7 @@ Antivirus use." |
 
 # TODO: Missing description
 $Program = "%SystemRoot%\System32\MRT.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Malicious Software Removal Tool" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -188,7 +188,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\slui.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Activation Client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -203,7 +203,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Activation KMS" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -235,7 +235,7 @@ if (Test-ExecutableFile $Program)
 # Format-Output
 
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: need to check if port 22 is OK.
 	# TODO: Dropped connection (for admin), likely reason for app downarrows
@@ -257,7 +257,7 @@ https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with
 
 # NOTE: Was active while setting up MS account
 $Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Background transfer host" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -273,7 +273,7 @@ if (Test-ExecutableFile $Program)
 
 # TODO: Not sure if also needed to allow Administrators for MS account here
 $Program = "%SystemRoot%\System32\UserAccountBroker.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	$MSAccountUsers = $UsersGroupSDDL
 	Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL
@@ -291,7 +291,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: no comment
 	New-NetFirewallRule -DisplayName "Cortana Speech Runtime" `
@@ -307,7 +307,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Cortana Speech Model" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -322,7 +322,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Customer Experience Improvement Program" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -338,7 +338,7 @@ can be disabled in GPO." |
 }
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Microsoft Compatibility Telemetry" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -364,7 +364,7 @@ Right-click on the Microsoft Compatibility Appraiser and select Disable." |
 
 # TODO: TCP port 80 NT AUTHORITY\SYSTEM seen in dev channel, testing SYSTEM account
 $Program = "%SystemRoot%\System32\SearchProtocolHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Indexing Service" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -380,7 +380,7 @@ an application that indexes files on the local drive making them easier to searc
 }
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Error Reporting" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -395,7 +395,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Error Reporting" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -410,7 +410,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\explorer.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: remote to local subnet seen for shared folder access
 	New-NetFirewallRule -DisplayName "File Explorer" `
@@ -439,7 +439,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\ftp.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: need to test and adjust for passive vs active and various types of protocol:
 	# FTP, SFPT, FTPS etc... All this have to be updated also for other FTP programs
@@ -456,7 +456,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\HelpPane.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Help pane" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -472,7 +472,7 @@ it opens edge now to show help." |
 }
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: program possibly no longer uses networking since windows 10
 	New-NetFirewallRule -DisplayName "DLL host process" `
@@ -506,7 +506,7 @@ possibly no longer uses networking since windows 10." |
 # Format-Output
 
 $Program = "%SystemRoot%\System32\msiexec.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Installer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -521,7 +521,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\lsass.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Local Security Authority Process" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -540,7 +540,7 @@ It is also used for certificate revocation checks" |
 }
 
 $Program = "%SystemRoot%\System32\mmc.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "MMC Help Viewer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -555,7 +555,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "nslookup (Name server lookup)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -572,7 +572,7 @@ The nslookup command-line tool is available only if you have installed the TCP/I
 }
 
 $Program = "%SystemRoot%\System32\curl.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# NOTE: Ports are specified only for some protocols
 	New-NetFirewallRule -DisplayName "curl" `
@@ -591,7 +591,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 }
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Settings sync" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -609,7 +609,7 @@ Just turn off the ones you don't want. Or you can just turn them all off at once
 }
 
 $Program = "%SystemRoot%\System32\smartscreen.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Smartscreen" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -624,7 +624,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "SystemSettings" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -641,7 +641,7 @@ to stop generating this traffic." |
 }
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "taskhostw" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -658,7 +658,7 @@ It is a host for processes that are responsible for executing a DLL rather than 
 }
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Service Initiated Healing" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -679,7 +679,7 @@ download the necessary equipment to perform the action, and perform therapeutic 
 }
 
 $Program = "%SystemRoot%\System32\DeviceCensus.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Update (Devicecensus)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -707,7 +707,7 @@ Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 
 # TODO: Not available in Windows Server 2019
 $Program = "%SystemRoot%\System32\usocoreworker.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -728,7 +728,7 @@ the USO component needs done." |
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Mo Update Session Orchestrator" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -743,7 +743,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\usoclient.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -763,7 +763,7 @@ USO component needs done." |
 }
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "WMI Provider Host" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -778,7 +778,7 @@ if (Test-ExecutableFile $Program)
 }
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "OpenSSH" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -794,7 +794,7 @@ This rule applies to open source version of OpenSSH that is built into Windows."
 }
 
 $Program = "%SystemRoot%\System32\conhost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Console Host" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -811,7 +811,7 @@ if (Test-ExecutableFile $Program)
 # NOTE: Was active while setting up MS account
 # NOTE: description from: https://www.tenforums.com/tutorials/110230-enable-disable-windows-security-windows-10-a.html
 $Program = "%SystemRoot%\System32\SecurityHealthService.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Security Health Service" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -839,7 +839,7 @@ even if you are using a third-party antivirus product." |
 #
 
 $Program = "%SystemRoot%\System32\dmcertinst.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Device Management Certificate Installer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -855,7 +855,7 @@ Certificate Installer." |
 }
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Device Management Device Enroller" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -881,7 +881,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" 
 Format-Output
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Windows Device Management Sync Client" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

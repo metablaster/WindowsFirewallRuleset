@@ -97,7 +97,7 @@ $NuGetRoot = "%SystemDrive%\tools"
 if ((Confirm-Installation "NuGet" ([ref] $NuGetRoot)) -or $ForceLoad)
 {
 	$Program = "$NuGetRoot\nuget.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Nuget CLI" -Service Any -Program $Program `

@@ -97,7 +97,7 @@ $WarThunderRoot = "%ProgramFiles(x86)%\Steam\steamapps\common\War Thunder"
 if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 {
 	$Program = "$WarThunderRoot\win64\aces.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WarThunder - aces" -Service Any -Program $Program `
@@ -115,7 +115,7 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$WarThunderRoot\gaijin_downloader.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
@@ -133,7 +133,7 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$WarThunderRoot\gjagent.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WarThunder - gjagent" -Service Any -Program $Program `
@@ -144,7 +144,7 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$WarThunderRoot\launcher.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `

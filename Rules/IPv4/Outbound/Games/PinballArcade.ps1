@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $ForceLoad)
 {
 	$Program = "$PinballArcadeRoot\PinballArcade.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Pinball Arcade" -Service Any -Program $Program `
@@ -108,7 +108,7 @@ if ((Confirm-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $Force
 	}
 
 	$Program = "$PinballArcadeRoot\PinballArcade11.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Pinball Arcade DX11" -Service Any -Program $Program `

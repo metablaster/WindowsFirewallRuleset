@@ -99,7 +99,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "AdobeReader" ([ref] $ReaderRoot)) -or $ForceLoad)
 {
 	$Program = "$ReaderRoot\Reader\AcroRd32.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Adobe Reader" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -113,7 +113,7 @@ if ((Confirm-Installation "AdobeReader" ([ref] $ReaderRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$ReaderRoot\Reader\AcroCEF\RdrCEF.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Adobe Reader cloud services" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -134,7 +134,7 @@ Document Cloud services like Fill and Sign, Send For Signature, Share for view/r
 if ((Confirm-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 {
 	$Program = "$AcrobatRoot\Acrobat\Acrobat.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Adobe Acrobat Pro" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -148,7 +148,7 @@ if ((Confirm-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$AcrobatRoot\Acrobat\AcroCEF\AcroCEF.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Adobe Acrobat Pro cloud services" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -166,7 +166,7 @@ Document Cloud services like Fill and Sign, Send For Signature, Share for view/r
 
 	# TODO: This is workaround, see todo comment in Programinfo.psm1, separate search needed
 	$Program = "%SystemDrive%\Program Files (x86)\Common Files\Adobe\AdobeGCClient\AdobeGCClient.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Adobe Genuine Software Integrity" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -185,7 +185,7 @@ Document Cloud services like Fill and Sign, Send For Signature, Share for view/r
 if ((Confirm-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $ForceLoad)
 {
 	$Program = "$AdobeARMRoot\AdobeARM.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Acrobat ARM" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

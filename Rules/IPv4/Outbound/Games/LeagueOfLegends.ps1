@@ -107,7 +107,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	$LoLRoot = Split-Path $LoLRoot -Parent
 
 	$Program = "$LoLRoot\Riot Client\RiotClientServices.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "LoL launcher services" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -134,7 +134,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$LoLRoot\Riot Client\UX\RiotClientUx.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# TODO: rule not used or not tested
 		New-NetFirewallRule -DisplayName "LoL launcher services - user experience" `
@@ -150,7 +150,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClient.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "LoL launcher client" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -181,7 +181,7 @@ be used separately." |
 	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClientUx.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "LoL launcher client - user experience" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -196,7 +196,7 @@ be used separately." |
 	}
 
 	$Program = "$LolRoot\League of Legends\Game\League of Legends.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "LoL game client - multiplayer" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

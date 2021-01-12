@@ -110,7 +110,7 @@ $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
 if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 {
 	$Program = "$ChromeRoot\Chrome\Application\chrome.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome HTTP" -Service Any -Program $Program `
@@ -194,7 +194,7 @@ Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync (with fa
 	}
 
 	$Program = "$ChromeRoot\Update\GoogleUpdate.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome Update" -Service Any -Program $Program `
@@ -213,7 +213,7 @@ Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync (with fa
 if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 {
 	$Program = "$FirefoxRoot\firefox.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Firefox HTTP" -Service Any -Program $Program `
@@ -238,7 +238,7 @@ if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$FirefoxRoot\pingsender.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Firefox Telemetry" -Service Any -Program $Program `
@@ -258,7 +258,7 @@ instead of waiting next firefox start which could take hours, days or even more.
 if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 {
 	$Program = "$YandexRoot\YandexBrowser\Application\browser.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Yandex HTTP" -Service Any -Program $Program `
@@ -292,7 +292,7 @@ if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 {
 	$Program = "$TorRoot\Browser\TorBrowser\Tor\tor.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor HTTP" -Service Any -Program $Program `

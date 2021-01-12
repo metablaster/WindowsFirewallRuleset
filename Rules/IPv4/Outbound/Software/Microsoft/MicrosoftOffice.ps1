@@ -98,7 +98,7 @@ $OfficeShared = "%ProgramFiles%\Common Files\microsoft shared"
 if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 {
 	$Program = "$OfficeRoot\MSACCESS.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Access" -Service Any -Program $Program `
@@ -114,7 +114,7 @@ if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 	# https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through/
 	# TL;DR: netsh winhttp set proxy proxy-server="fubar" bypass-list="<local>"
 	$Program = "$OfficeShared\ClickToRun\OfficeClickToRun.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Click to Run" -Service Any -Program $Program `
@@ -127,7 +127,7 @@ to reduce the time required to install Office and help run multiple versions of 
 	}
 
 	$Program = "$OfficeShared\ClickToRun\OfficeC2RClient.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "ClickC2RClient" -Service Any -Program $Program `
@@ -138,7 +138,7 @@ to reduce the time required to install Office and help run multiple versions of 
 	}
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Document Cache" -Service Any -Program $Program `
@@ -150,7 +150,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\EXCEL.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Excel" -Service Any -Program $Program `
@@ -161,7 +161,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Excel (Mashup Container)" -Service Any -Program $Program `
@@ -172,7 +172,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\CLVIEW.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Help" -Service Any -Program $Program `
@@ -183,7 +183,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (HTTP/S)" -Service Any -Program $Program `
@@ -229,7 +229,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\POWERPNT.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PowerPoint" -Service Any -Program $Program `
@@ -240,7 +240,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\WINPROJ.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Project" -Service Any -Program $Program `
@@ -251,7 +251,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\MSPUB.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Publisher" -Service Any -Program $Program `
@@ -264,7 +264,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	# NOTE: If you load office rules soon after it has been installed sdxhelper may be missing
 	# reload again later when it appears
 	$Program = "$OfficeRoot\SDXHelper.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "sdxhelper" -Service Any -Program $Program `
@@ -275,7 +275,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\lync.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Skype for business" -Service Any -Program $Program `
@@ -286,7 +286,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	}
 
 	$Program = "$OfficeRoot\msoia.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Telemetry Agent" -Service Any -Program $Program `
@@ -299,7 +299,7 @@ https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-age
 
 	# TODO: Visio and Project are not part of office by default
 	$Program = "$OfficeRoot\VISIO.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Visio" -Service Any -Program $Program `
@@ -310,7 +310,7 @@ https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-age
 	}
 
 	$Program = "$OfficeRoot\WINWORD.EXE"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Word" -Service Any -Program $Program `

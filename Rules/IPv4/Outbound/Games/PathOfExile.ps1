@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $ForceLoad)
 {
 	$Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Path of exile" -Service Any -Program $Program `

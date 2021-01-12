@@ -97,7 +97,7 @@ $vcpkgRoot = "Unknown Directory"
 if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 {
 	$Program = "$vcpkgRoot\vcpkg.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "vcpkg" -Service Any -Program $Program `
@@ -110,7 +110,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# TODO: need to update for all users
 	# TODO: this bad path somehow gets into rule
 	$Program = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "vcpkg (telemetry)" -Service Any -Program $Program `
@@ -121,7 +121,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "vcpkg (powershell)" -Service Any -Program $Program `
@@ -144,7 +144,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# TODO: Why cmd needs network to download packages, is it just temporary?
 	$Program = Format-Path "C:\Windows\SysWOW64"
 	$Program += "\cmd.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "cmd" -Service Any -Program $Program `

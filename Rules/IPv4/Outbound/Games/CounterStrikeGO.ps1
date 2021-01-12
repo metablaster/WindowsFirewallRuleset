@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $ForceLoad)
 {
 	$Program = "$CounterStrikeRoot\csgo.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
@@ -108,7 +108,7 @@ if ((Confirm-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $For
 	}
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Counter Strike GO" -Service Any -Program $Program `

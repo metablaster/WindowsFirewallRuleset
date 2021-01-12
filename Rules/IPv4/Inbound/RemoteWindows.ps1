@@ -92,7 +92,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 
 $Program = "%SystemRoot%\System32\RdpSa.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `

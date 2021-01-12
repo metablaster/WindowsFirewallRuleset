@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "ArenaChess" ([ref] $ArenaChessRoot)) -or $ForceLoad)
 {
 	$Program = "$ArenaChessRoot\Timeseal.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Arena Chess" -Service Any -Program $Program `

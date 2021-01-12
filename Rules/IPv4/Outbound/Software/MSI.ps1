@@ -98,7 +98,7 @@ $MSIAfterburnerRoot = "%ProgramFiles(x86)%\MSI Afterburner"
 if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceLoad)
 {
 	$Program = "$MSIAfterburnerRoot\MSIAfterburner.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSI Afterburner" -Service Any -Program $Program `
@@ -113,7 +113,7 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceLoad)
 {
 	$Program = "$MSIRoot\Live Update\Live Update.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSI live update" -Service Any -Program $Program `
@@ -124,7 +124,7 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 	}
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSI app manager" -Service Any -Program $Program `

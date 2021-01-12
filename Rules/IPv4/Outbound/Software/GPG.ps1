@@ -97,7 +97,7 @@ $GPGRoot = "%ProgramFiles(x86)%\GnuPG"
 if ((Confirm-Installation "GPG" ([ref] $GPGRoot)) -or $ForceLoad)
 {
 	$Program = "$GPGRoot\bin\dirmngr.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Certificate key servers" -Service Any -Program $Program `

@@ -98,7 +98,7 @@ $TeamViewerRoot = "%ProgramFiles(x86)%\TeamViewer"
 if ((Confirm-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 {
 	$Program = "$TeamViewerRoot\TeamViewer.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Teamviewer Remote Control Application" -Service Any -Program $Program `
@@ -109,7 +109,7 @@ if ((Confirm-Installation "TeamViewer" ([ref] $TeamViewerRoot)) -or $ForceLoad)
 	}
 
 	$Program = "$TeamViewerRoot\TeamViewer_Service.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Teamviewer Remote Control Service" -Service Any -Program $Program `

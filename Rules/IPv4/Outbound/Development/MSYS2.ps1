@@ -97,7 +97,7 @@ $MSYS2Root = "%SystemRoot%\dev\msys64"
 if ((Confirm-Installation "MSYS2" ([ref] $MSYS2Root)) -or $ForceLoad)
 {
 	$Program = "$MSYS2Root\usr\bin\curl.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - curl" -Service Any -Program $Program `
@@ -113,7 +113,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\usr\bin\git.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - git protocol" -Service Any -Program $Program `
@@ -124,7 +124,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - git-remote-https" -Service Any -Program $Program `
@@ -135,7 +135,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\usr\bin\ssh.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - git SSH" -Service Any -Program $Program `
@@ -146,7 +146,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\mingw64\bin\glade.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - glade help" -Service Any -Program $Program `
@@ -157,7 +157,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - pacman" -Service Any -Program $Program `
@@ -168,7 +168,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	}
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "MSYS2 - wget" -Service Any -Program $Program `

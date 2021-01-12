@@ -97,7 +97,7 @@ $SteamRoot = "%ProgramFiles(x86)%\Steam"
 if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam Dedicated or Listen Servers" -Service Any -Program $Program `

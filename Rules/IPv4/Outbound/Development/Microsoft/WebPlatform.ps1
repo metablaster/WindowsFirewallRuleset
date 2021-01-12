@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $ForceLoad)
 {
 	$Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Web Platform Installer" -Service Any -Program $Program `

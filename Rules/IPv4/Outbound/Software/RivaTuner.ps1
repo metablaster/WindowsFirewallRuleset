@@ -98,7 +98,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "RivaTuner" ([ref] $RivaTunerRoot)) -or $ForceLoad)
 {
 	$Program = "$RivaTunerRoot\RTSS.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Riva Tuner Statistics Server" -Service Any -Program $Program `

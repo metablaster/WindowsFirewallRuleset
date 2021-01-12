@@ -97,7 +97,7 @@ $PasswordSafeRoot = "%ProgramFiles%\Password Safe"
 if ((Confirm-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLoad)
 {
 	$Program = "$PasswordSafeRoot\pwsafe.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "PasswordSafe" -Service Any -Program $Program `

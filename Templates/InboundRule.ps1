@@ -101,7 +101,7 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 	# -Owner $PrincipalSID -Package $PackageSID
 
 	$Program = "$TargetProgramRoot\TargetProgram.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# Inbound TCP template
 		New-NetFirewallRule -DisplayName "Inbound TCP template" `

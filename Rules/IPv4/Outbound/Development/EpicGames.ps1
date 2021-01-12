@@ -102,7 +102,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	# TODO: this executable name depends on if the engine was built from source
 	# $Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
@@ -123,7 +123,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 
 	# TODO: this executable exists only if the engine was built from source
 	$Program = "$EngineRoot\Binaries\DotNET\GitDependencies.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - GitDependencies" -Service Any -Program $Program `
@@ -134,7 +134,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
@@ -145,7 +145,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 	}
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
@@ -172,7 +172,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - UnrealBuildTool" -Service Any -Program $Program `
@@ -194,7 +194,7 @@ if ((Confirm-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 	$LauncherRoot += "\Launcher\Portal\Binaries"
 
 	$Program = "$LauncherRoot\Win32\EpicGamesLauncher.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Epic Games - Launcher x32" -Service Any -Program $Program `
@@ -208,7 +208,7 @@ if ((Confirm-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 	# don't have a rule for Administrators group.
 	# It looks like BUILTIN\Users allows also Administrators?
 	$Program = "$LauncherRoot\Win64\EpicGamesLauncher.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `

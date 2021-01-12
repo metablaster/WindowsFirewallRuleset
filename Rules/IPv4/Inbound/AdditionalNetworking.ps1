@@ -174,7 +174,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 Format-Output
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -330,7 +330,7 @@ unable to run." | Format-Output
 
 # NOTE: probably does not exist in Windows Server 2019
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Proximity sharing" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `

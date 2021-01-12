@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "dotnet" ([ref] $dotnetRoot)) -or $ForceLoad)
 {
 	$Program = "$dotnetRoot\dotnet.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# TODO: There could be more ports or specific users, needs complete testing...
 		New-NetFirewallRule -Platform $Platform `

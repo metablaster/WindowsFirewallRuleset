@@ -101,7 +101,7 @@ $SteamCommon = "%ProgramFiles(x86)%\Common Files\Steam"
 if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 {
 	$Program = "$SteamRoot\Steam.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam (game client traffic)" -Service Any -Program $Program `
@@ -156,7 +156,7 @@ another PC on the same local network." | Format-Output
 	}
 
 	$Program = "$SteamCommon\SteamService.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "SteamService" -Service Any -Program $Program `
@@ -171,7 +171,7 @@ another PC on the same local network." | Format-Output
 	# NOTE: It looks like cef.win7 is used during installation of steam on x64 system, and,
 	# cef.win7x64 after installation is done, could be cef.win7 is used on x86 in both cases.
 	$Program = "$SteamRoot\bin\cef\cef.win7\steamwebhelper.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam (webhelper x86)" -Service Any -Program $Program `
@@ -184,7 +184,7 @@ another PC on the same local network." | Format-Output
 	if ([System.Environment]::Is64BitOperatingSystem)
 	{
 		$Program = "$SteamRoot\bin\cef\cef.win7x64\steamwebhelper.exe"
-		if (Test-ExecutableFile $Program)
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
 			New-NetFirewallRule -Platform $Platform `
 				-DisplayName "Steam (webhelper x64)" -Service Any -Program $Program `

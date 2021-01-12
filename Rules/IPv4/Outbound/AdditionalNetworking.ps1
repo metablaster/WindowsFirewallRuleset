@@ -130,7 +130,7 @@ application feedback, and traffic prioritization." |
 Format-Output
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -247,7 +247,7 @@ Format-Output
 # TODO: does not exist in Windows Server 2019
 # TODO: description missing data
 $Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-if (Test-ExecutableFile $Program)
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "Proximity sharing" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `

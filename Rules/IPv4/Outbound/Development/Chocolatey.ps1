@@ -98,7 +98,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 if ((Confirm-Installation "Chocolatey" ([ref] $ChocolateyRoot)) -or $ForceLoad)
 {
 	$Program = "$ChocolateyRoot\choco.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chocolatey" -Service Any -Program $Program `

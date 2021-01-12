@@ -99,7 +99,7 @@ $OneDriveRoot = "%ProgramFiles(x86)%\Microsoft OneDrive"
 if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 {
 	$Program = "$OneDriveRoot\OneDriveStandaloneUpdater.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# NOTE: According to scheduled task the updating user is SYSTEM
 		# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
@@ -116,7 +116,7 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 	# TODO: LocalUser should be explicit user because each user runs it's own instance
 	# and if there are multiple instances returned we need multiple rules for each user
 	$Program = "$OneDriveRoot\OneDrive.exe"
-	if (Test-ExecutableFile $Program)
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "OneDrive" -Service Any -Program $Program `
