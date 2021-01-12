@@ -102,7 +102,7 @@ Windows Update Delivery Optimization works by letting you get Windows updates an
 apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network or
-PCs on the Internet, based on your settings." | Format-Output
+PCs on the Internet, based on your settings." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -118,7 +118,7 @@ Windows Update Delivery Optimization works by letting you get Windows updates an
 apps from sources in addition to Microsoft,
 like other PCs on your local network, or PCs on the Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
-or PCs on the Internet, based on your settings." | Format-Output
+or PCs on the Internet, based on your settings." | Format-RuleOutput
 
 #
 # @FirewallAPI.dll,-80204 predefined rule
@@ -133,7 +133,7 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Service enables multiple clients to access video frames from camera devices." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
@@ -145,7 +145,7 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Service enables multiple clients to access video frames from camera devices." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

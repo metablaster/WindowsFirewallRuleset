@@ -104,7 +104,7 @@ if ((Confirm-Installation "GPG" ([ref] $GPGRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "For Kleopatra server key lookup and key publish." | Format-Output
+			-Description "For Kleopatra server key lookup and key publish." | Format-RuleOutput
 	}
 }
 

@@ -109,7 +109,7 @@ if ((Confirm-Installation "AdobeReader" ([ref] $ReaderRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$ReaderRoot\Reader\AcroCEF\RdrCEF.exe"
@@ -126,7 +126,7 @@ if ((Confirm-Installation "AdobeReader" ([ref] $ReaderRoot)) -or $ForceLoad)
 			-Description "RdrCEF.exe is inseparable processes of Adobe Reader.
 It handles multiple integral aspects of application like network interaction and
 Document Cloud services like Fill and Sign, Send For Signature, Share for view/review, and so on)" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 
@@ -144,7 +144,7 @@ if ((Confirm-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$AcrobatRoot\Acrobat\AcroCEF\AcroCEF.exe"
@@ -161,7 +161,7 @@ if ((Confirm-Installation "AdobeAcrobat" ([ref] $AcrobatRoot)) -or $ForceLoad)
 			-Description "AcroCEF.exe is inseparable processes of Acrobat Reader.
 It handles multiple integral aspects of application like network interaction and
 Document Cloud services like Fill and Sign, Send For Signature, Share for view/review, and so on)" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# TODO: This is workaround, see todo comment in Programinfo.psm1, separate search needed
@@ -177,7 +177,7 @@ Document Cloud services like Fill and Sign, Send For Signature, Share for view/r
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Adobe Genuine Software Integrity Service" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 
@@ -198,7 +198,7 @@ if ((Confirm-Installation "AdobeARM" ([ref] $AdobeARMRoot)) -or $ForceLoad)
 			-Description "Adobe updater is responsible for checking for, downloading, and launching the
 update installer for Reader or Acrobat.
 The Updater primarily keeps itself up to date and downloads and extracts needed files.
-It does not actually install anything, as that job is handled by a separate installer" | Format-Output
+It does not actually install anything, as that job is handled by a separate installer" | Format-RuleOutput
 	}
 }
 

@@ -104,7 +104,7 @@ if ((Confirm-Installation "DemiseOfNations" ([ref] $DemiseOfNationsRoot)) -or $F
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

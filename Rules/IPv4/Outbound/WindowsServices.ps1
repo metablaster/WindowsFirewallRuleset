@@ -107,7 +107,7 @@ apps from sources in addition to Microsoft, like other PCs on your local network
 Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
 or PCs on the Internet, based on your settings." |
-Format-Output
+Format-RuleOutput
 
 # TODO: duplicate description
 New-NetFirewallRule -DisplayName "Delivery Optimization" `
@@ -124,7 +124,7 @@ apps from sources in addition to Microsoft, like other PCs on your local network
 Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
 or PCs on the Internet, based on your settings." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Delivery Optimization" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -141,7 +141,7 @@ apps from sources in addition to Microsoft, like other PCs on your local network
 Internet that are downloading the same files.
 Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
 or PCs on the Internet, based on your settings." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Modules Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -154,7 +154,7 @@ New-NetFirewallRule -DisplayName "Windows Modules Installer" `
 	-Description "Enables installation, modification, and removal of Windows updates and optional
 components.
 If this service is disabled, install or uninstall of Windows updates might fail for this computer." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Time (NTP/SNTP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -168,7 +168,7 @@ New-NetFirewallRule -DisplayName "Windows Time (NTP/SNTP)" `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -181,7 +181,7 @@ New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -195,7 +195,7 @@ New-NetFirewallRule -DisplayName "Windows Time (DayTime)" `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -208,7 +208,7 @@ New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -222,7 +222,7 @@ New-NetFirewallRule -DisplayName "Windows Time (TIME)" `
 	-Description "Maintains date and time synchronization on all clients and servers in the network.
 If this service is stopped, date and time synchronization will be unavailable.
 If this service is disabled, any services that explicitly depend on it will fail to start." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -234,7 +234,7 @@ New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
 	-InterfaceType $DefaultInterface `
 	-Description "This service runs in session 0 and hosts the notification platform and connection
 provider which handles the connection between the device and WNS server." |
-Format-Output
+Format-RuleOutput
 
 # NOTE: this service's name isn't constant, need to query correct name
 $Service = Get-Service | Where-Object {
@@ -255,7 +255,7 @@ if ($Service)
 		-InterfaceType $DefaultInterface `
 		-Description "This service hosts Windows notification platform which provides support for
 local and push notifications. Supported notifications are tile, toast and raw." |
-	Format-Output
+	Format-RuleOutput
 }
 else
 {
@@ -273,7 +273,7 @@ New-NetFirewallRule -DisplayName "Windows Insider Service" `
 	-InterfaceType $DefaultInterface `
 	-Description "Provides infrastructure support for the Windows Insider Program.
 This service must remain enabled for the Windows Insider Program to work." |
-Format-Output
+Format-RuleOutput
 
 # TODO: utcsvc was seen in "Education" edition but soon dissapeared
 # Looks like Diagnostic Tracking Service or DiagTrack
@@ -290,7 +290,7 @@ New-NetFirewallRule -DisplayName "Connected User Experiences and Telemetry" `
 	-Description "Enables features that support in-application and connected user experiences.
 Additionally, this service manages the event driven collection and transmission of diagnostic and
 usage information when the diagnostics and usage privacy option settings are enabled under Feedback
-and Diagnostics." | Format-Output
+and Diagnostics." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Group Policy Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -306,7 +306,7 @@ If the service is disabled, the settings will not be applied and applications an
 not be manageable through Group Policy.
 Any components or applications that depend on the Group Policy component might not be functional
 if the service is disabled." |
-Format-Output
+Format-RuleOutput
 
 # NOTE: Account detected is: SECURITY_LOCAL_SYSTEM_RID S-1-5-18 A special account used by the operating system.
 New-NetFirewallRule -DisplayName "Device Setup Manager" `
@@ -320,7 +320,7 @@ New-NetFirewallRule -DisplayName "Device Setup Manager" `
 	-Description "Enables the detection, download and installation of device-related software.
 If this service is disabled, devices may be configured with outdated software, and may not work
 correctly." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Network Location Awareness" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -333,7 +333,7 @@ New-NetFirewallRule -DisplayName "Network Location Awareness" `
 	-Description "Collects and stores configuration information for the network and notifies
 programs when this information is modified.
 If this rule is disabled, configuration information might be unavailable." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Network services discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -348,7 +348,7 @@ New-NetFirewallRule -DisplayName "Network services discovery" `
 defines a multicast discovery protocol
 to locate services on a local network.
 It operates over TCP and UDP port 3702 and uses IP multicast address 239.255.255.250." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Router SSDP discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -362,7 +362,7 @@ New-NetFirewallRule -DisplayName "Router SSDP discovery" `
 protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
 If this rule is blocked, router SSDP-based services will not be discovered." |
-Format-Output
+Format-RuleOutput
 
 #
 # Windows services extension rules
@@ -388,7 +388,7 @@ Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS),
 BITS and CryptSvc in addition need System account and wlidsvc needs both Network Service and
 local service account" |
-Format-Output
+Format-RuleOutput
 
 #
 # Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
@@ -408,7 +408,7 @@ note that BITS is used by many third-party tools to download their own updates l
 Transfers files in the background using idle network bandwidth. If the service is disabled,
 then any applications that depend on BITS, such as Windows Update or MSN Explorer,
 will be unable to automatically download programs and other information." |
-Format-Output
+Format-RuleOutput
 
 # BITS to Router info: https://docs.microsoft.com/en-us/windows/win32/bits/network-bandwidth
 # NOTE: Port was 48300, but other random ports can be used too
@@ -431,7 +431,7 @@ of using only the available bandwidth on the slow link;
 To use a gateway device, the device must support byte counters
 (the device must respond to the GetTotalBytesSent and GetTotalBytesReceived actions)
 and Universal Plug and Play (UPnP) must be enabled." |
-Format-Output
+Format-RuleOutput
 
 # TODO: fails on port 80 regardless of extension rule
 New-NetFirewallRule -DisplayName "Cryptographic Services" `
@@ -449,7 +449,7 @@ Protected Root Service, which adds and removes Trusted Root Certification Author
 from this computer;
 and Automatic Root Certificate Update Service, which retrieves root certificates from
 Windows Update and enable scenarios such as SSL." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Windows update service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -464,7 +464,7 @@ other programs.
 If this service is disabled, users of this computer will not be able to use Windows Update or its
 automatic updating feature,
 and programs will not be able to use the Windows Update Agent (WUA) API." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Microsoft Account Sign-in Assistant" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -477,7 +477,7 @@ New-NetFirewallRule -DisplayName "Microsoft Account Sign-in Assistant" `
 	-Description "Enables user sign-in through Microsoft account identity services.
 If this service is stopped, users will not be able to logon to the computer with their
 Microsoft account." |
-Format-Output
+Format-RuleOutput
 
 #
 # Recommended Troubleshooting predefined rule
@@ -493,7 +493,7 @@ New-NetFirewallRule -DisplayName "Recommended Troubleshooting Client" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound HTTP/HTTPS traffic from Recommended Troubleshooting Client." |
-Format-Output
+Format-RuleOutput
 
 #
 # @FirewallAPI.dll,-80204 predefined rule
@@ -508,7 +508,7 @@ New-NetFirewallRule -DisplayName "Windows Camera Frame Server" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Service enables multiple clients to access video frames from camera devices." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

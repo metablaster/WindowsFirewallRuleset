@@ -17,7 +17,7 @@ EXAMPLES
 	Find-RulePrincipal
 	Get all firewall rules with or without LocalUser value
 
-	Format-Output
+	Format-RuleOutput
 	Format output of the Net-NewFirewallRule commandlet
 
 	Import-FirewallRules

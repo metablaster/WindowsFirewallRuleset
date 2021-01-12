@@ -105,7 +105,7 @@ if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	# Clicktorun.exe starts downloading the most recent version of itself.
@@ -123,7 +123,7 @@ if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 			-LocalUser $LocalSystem `
 			-Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
 of installing and updating Office, that utilizes streaming and virtualization technology
-to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-Output
+to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeShared\ClickToRun\OfficeC2RClient.exe"
@@ -134,7 +134,7 @@ to reduce the time required to install Office and help run multiple versions of 
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $LocalSystem `
-			-Description "Allows users to check for and install updates for Office on demand." | Format-Output
+			-Description "Allows users to check for and install updates for Office on demand." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"
@@ -146,7 +146,7 @@ to reduce the time required to install Office and help run multiple versions of 
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
-to give you a way to see the state of files you are uploading to a SharePoint server. " | Format-Output
+to give you a way to see the state of files you are uploading to a SharePoint server. " | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\EXCEL.EXE"
@@ -157,7 +157,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\ADDINS\Microsoft Power Query for Excel Integrated\bin\Microsoft.Mashup.Container.NetFX40.exe"
@@ -168,7 +168,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Used to query data from web in excel." | Format-Output
+			-Description "Used to query data from web in excel." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\CLVIEW.EXE"
@@ -179,7 +179,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\OUTLOOK.EXE"
@@ -190,42 +190,42 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (IMAP SSL)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Incoming mail server over SSL." | Format-Output
+			-Description "Incoming mail server over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (IMAP)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Incoming mail server." | Format-Output
+			-Description "Incoming mail server." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (POP3 SSL)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Incoming mail server over SSL." | Format-Output
+			-Description "Incoming mail server over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (POP3)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Incoming mail server." | Format-Output
+			-Description "Incoming mail server." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (SMTP)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Outgoing mail server." | Format-Output
+			-Description "Outgoing mail server." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\POWERPNT.EXE"
@@ -236,7 +236,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\WINPROJ.EXE"
@@ -247,7 +247,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\MSPUB.EXE"
@@ -258,7 +258,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	# NOTE: If you load office rules soon after it has been installed sdxhelper may be missing
@@ -271,7 +271,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." | Format-Output
+			-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\lync.exe"
@@ -282,7 +282,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 33033 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Skype for business, previously lync." | Format-Output
+			-Description "Skype for business, previously lync." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\msoia.exe"
@@ -294,7 +294,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "The telemetry agent collects several types of telemetry data for Office.
-https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" | Format-Output
+https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" | Format-RuleOutput
 	}
 
 	# TODO: Visio and Project are not part of office by default
@@ -306,7 +306,7 @@ https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-age
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\WINWORD.EXE"
@@ -317,7 +317,7 @@ https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-age
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

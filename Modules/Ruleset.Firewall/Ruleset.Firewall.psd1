@@ -115,7 +115,7 @@ SOFTWARE.
 	FunctionsToExport = @(
 		"Export-FirewallRules"
 		"Find-RulePrincipal"
-		"Format-Output"
+		"Format-RuleOutput"
 		"Import-FirewallRules"
 		"Remove-FirewallRules"
 	)
@@ -147,7 +147,7 @@ SOFTWARE.
 		"Help\en-US\about_Ruleset.Firewall.md"
 		"Help\en-US\Export-FirewallRules.md"
 		"Help\en-US\Find-RulePrincipal.md"
-		"Help\en-US\Format-Output.md"
+		"Help\en-US\Format-RuleOutput.md"
 		"Help\en-US\Import-FirewallRules.md"
 		"Help\en-US\Remove-FirewallRules.md"
 		"Help\en-US\Ruleset.Firewall.md"
@@ -160,7 +160,7 @@ SOFTWARE.
 		"Private\README.md"
 		"Public\Export-FirewallRules.ps1"
 		"Public\Find-RulePrincipal.ps1"
-		"Public\Format-Output.ps1"
+		"Public\Format-RuleOutput.ps1"
 		"Public\Import-FirewallRules.ps1"
 		"Public\README.md"
 		"Public\Remove-FirewallRules.ps1"

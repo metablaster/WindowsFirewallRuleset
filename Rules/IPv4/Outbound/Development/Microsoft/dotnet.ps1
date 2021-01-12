@@ -105,7 +105,7 @@ if ((Confirm-Installation "dotnet" ([ref] $dotnetRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $LocalSystem `
-			-Description "Provides commands for working with .NET Core projects." | Format-Output
+			-Description "Provides commands for working with .NET Core projects." | Format-RuleOutput
 	}
 }
 

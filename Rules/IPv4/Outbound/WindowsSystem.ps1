@@ -111,7 +111,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Probably related to keeping bandwidth usage information up-to-date." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # Test if installation exists on system
@@ -133,7 +133,7 @@ if ((Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot)) -or $ForceLo
 Once it's done, it will go away. Typically, after you install the .NET Redist,
 it will be done with the high priority assemblies in 5 to 10 minutes and then will wait until
 your computer is idle to process the low priority assemblies." |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 
@@ -151,7 +151,7 @@ if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $F
 			-LocalUser $LocalSystem `
 			-InterfaceType $DefaultInterface `
 			-Description "Anti malware service executable." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$WindowsDefenderRoot\MpCmdRun.exe"
@@ -167,7 +167,7 @@ if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $F
 			-InterfaceType $DefaultInterface `
 			-Description "This utility can be useful when you want to automate Windows Defender
 Antivirus use." |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 
@@ -184,7 +184,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser $LocalSystem `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\slui.exe"
@@ -199,7 +199,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Used to activate Windows." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
@@ -214,7 +214,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Activate Office and KMS based software." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: this app no longer exists on system, MS changed executable name?
@@ -232,7 +232,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 # 	-Description "Its purpose is to scans your hardware, devices, and installed programs for
 # known compatibility issues
 # with a newer Windows version by comparing them against a specific database." |
-# Format-Output
+# Format-RuleOutput
 
 $Program = "%SystemRoot%\System32\backgroundTaskHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -252,7 +252,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
 Port 22 is most likely used for installation.
 https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with-background-tasks" |
-	Format-Output
+	Format-RuleOutput
 }
 
 # NOTE: Was active while setting up MS account
@@ -268,7 +268,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "Download/Upload Host" |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: Not sure if also needed to allow Administrators for MS account here
@@ -287,7 +287,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser $MSAccountUsers `
 		-InterfaceType $DefaultInterface `
 		-Description "UserAccountBroker is needed to create Microsoft account" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechRuntime.exe"
@@ -303,7 +303,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\Speech_OneCore\common\SpeechModelDownload.exe"
@@ -318,7 +318,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser $NetworkService `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\wsqmcons.exe"
@@ -334,7 +334,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "This program collects and sends usage data to Microsoft,
 can be disabled in GPO." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\CompatTelRunner.exe"
@@ -359,7 +359,7 @@ To disable this program: Task Scheduler Library > Microsoft > Windows > Applicat
 In the middle pane, you will see all the scheduled tasks, such as Microsoft Compatibility Appraiser,
 ProgramDataUpdater and StartupAppTask.
 Right-click on the Microsoft Compatibility Appraiser and select Disable." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: TCP port 80 NT AUTHORITY\SYSTEM seen in dev channel, testing SYSTEM account
@@ -376,7 +376,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "SearchProtocolHost.exe is part of the Windows Indexing Service,
 an application that indexes files on the local drive making them easier to search." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\WerFault.exe"
@@ -391,7 +391,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Report Windows errors back to Microsoft." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\wermgr.exe"
@@ -406,7 +406,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Report Windows errors back to Microsoft." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\explorer.exe"
@@ -422,7 +422,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "File explorer checks for digital signatures verification, windows update." |
-	Format-Output
+	Format-RuleOutput
 
 	# TODO: possibly deprecated since Windows 10
 	# Seen outbound 443 while setting up MS account on fresh Windows account
@@ -435,7 +435,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Smart Screen Filter" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\ftp.exe"
@@ -452,7 +452,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "File transfer protocol client." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\HelpPane.exe"
@@ -468,7 +468,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "Get online help, looks like windows 10+ no longer uses this,
 it opens edge now to show help." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\rundll32.exe"
@@ -486,7 +486,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Description "Loads and runs 32-bit dynamic-link libraries (DLLs),
 There are no configurable settings for Rundll32.
 possibly no longer uses networking since windows 10." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: this app no longer exists on system, MS changed executable name?
@@ -503,7 +503,7 @@ possibly no longer uses networking since windows 10." |
 # 	-LocalUser Any `
 # 	-InterfaceType $DefaultInterface `
 # 	-Description "" |
-# Format-Output
+# Format-RuleOutput
 
 $Program = "%SystemRoot%\System32\msiexec.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -517,7 +517,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "msiexec automatically check for updates for the program it is installing." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\lsass.exe"
@@ -536,7 +536,7 @@ for enforcing the security policy on the system.
 It specifically deals with local security and login policies.It verifies users logging on to a
 Windows computer or server, handles password changes, and creates access tokens.
 It is also used for certificate revocation checks" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\mmc.exe"
@@ -551,7 +551,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Display webpages in Microsoft MMC help view." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\nslookup.exe"
@@ -568,7 +568,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
 The nslookup command-line tool is available only if you have installed the TCP/IP protocol." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\curl.exe"
@@ -587,7 +587,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
@@ -605,7 +605,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 'Sync your Settings' section.
 There are on/off switches for all the different things you can choose to sync.
 Just turn off the ones you don't want. Or you can just turn them all off at once at the top." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\smartscreen.exe"
@@ -620,7 +620,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\ImmersiveControlPanel\SystemSettings.exe"
@@ -637,7 +637,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Description "Seems like it's connecting to display some 'useful tips' on the right hand side
 of the settings menu, NOTE: Configure the gpo 'Control Panel\allow online tips' to 'disabled'
 to stop generating this traffic." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\taskhostw.exe"
@@ -654,7 +654,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Description "The main function of taskhostw.exe is to start the Windows Services based on
 DLLs whenever the computer boots up.
 It is a host for processes that are responsible for executing a DLL rather than an Exe." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\sihclient.exe"
@@ -675,7 +675,7 @@ repair system components that are vital to
 automatically update Windows and the Microsoft software installed on the computer.
 The task can go online, assess the usefulness of the healing effect,
 download the necessary equipment to perform the action, and perform therapeutic actions.)" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\DeviceCensus.exe"
@@ -698,7 +698,7 @@ In order to target builds to your machine, we need to know a few important thing
 - x86 or x64
 - selected Insider ring
 - etc." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: USOAccounts testing with users, should be SYSTEM
@@ -723,7 +723,7 @@ When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that
 the USO component needs done." |
-	Format-Output
+	Format-RuleOutput
 }
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
@@ -739,7 +739,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser $USOAccounts `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\usoclient.exe"
@@ -759,7 +759,7 @@ When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that the
 USO component needs done." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\wbem\WmiPrvSE.exe"
@@ -774,7 +774,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
@@ -790,7 +790,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 This rule applies to open source version of OpenSSH that is built into Windows." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\conhost.exe"
@@ -805,7 +805,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
-	Format-Output
+	Format-RuleOutput
 }
 
 # NOTE: Was active while setting up MS account
@@ -831,7 +831,7 @@ These services do not affect the state of Windows Defender AV.
 Disabling or modifying these services will not disable Windows Defender AV,
 and will lead to a lowered protection state on the endpoint,
 even if you are using a third-party antivirus product." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -851,7 +851,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "Allow outbound TCP traffic from Windows Device Management
 Certificate Installer." |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\deviceenroller.exe"
@@ -866,7 +866,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Allow outbound TCP traffic from Windows Device Management Device Enroller" |
-	Format-Output
+	Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" `
@@ -878,7 +878,7 @@ New-NetFirewallRule -DisplayName "Windows Device Management Enrollment Service" 
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow outbound TCP traffic from Windows Device Management Enrollment Service." |
-Format-Output
+Format-RuleOutput
 
 $Program = "%SystemRoot%\System32\omadmclient.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -892,7 +892,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." |
-	Format-Output
+	Format-RuleOutput
 }
 
 if ($UpdateGPO)

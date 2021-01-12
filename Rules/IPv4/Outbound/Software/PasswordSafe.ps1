@@ -104,7 +104,7 @@ if ((Confirm-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLo
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Password safe check for updates." | Format-Output
+			-Description "Password safe check for updates." | Format-RuleOutput
 	}
 }
 

@@ -113,7 +113,7 @@ if ($WUDFHostValid)
 		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
-	Format-Output
+	Format-RuleOutput
 
 	# TODO: remote port unknown, rule added because predefined rule for UDP exists
 	New-NetFirewallRule -DisplayName "Wireless Display" `
@@ -128,7 +128,7 @@ loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
 		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
 loads one or more UMDF driver DLLs, in addition to the framework DLLs." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -149,7 +149,7 @@ Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
 For more info see description of WLAN AutoConfig service." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -164,7 +164,7 @@ Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
 For more info see description of WLAN AutoConfig service." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -180,7 +180,7 @@ Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
 For more info see description of WLAN AutoConfig service." |
-Format-Output
+Format-RuleOutput
 
 #
 # Predefined rules for WiFi Direct Network Discovery
@@ -202,7 +202,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 Host enables pairing between the system and wired or wireless devices.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host." |
-	Format-Output
+	Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
@@ -216,7 +216,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-Description "Rule to use WSD scanners on Wi-Fi Direct networks.
 Windows Image Acquisition (WIA) service provides image acquisition services for scanners
 and cameras." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -229,7 +229,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
 If you turn off this service, you won't be able to print or see your printers." |
-Format-Output
+Format-RuleOutput
 
 #
 # Predefined rules for Wireless portable devices
@@ -246,7 +246,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Wireless Portable Devices to allow use of the
 Simple Service Discovery Protocol." |
-Format-Output
+Format-RuleOutput
 
 if ($WUDFHostValid)
 {
@@ -259,7 +259,7 @@ if ($WUDFHostValid)
 		-LocalUser Any `
 		-InterfaceType $LocalInterface `
 		-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Wireless portable devices" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -270,7 +270,7 @@ if ($WUDFHostValid)
 		-LocalUser Any `
 		-InterfaceType $LocalInterface `
 		-Description "Wireless Portable Devices to allow use of the Usermode Driver Framework." |
-	Format-Output
+	Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
@@ -282,7 +282,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnPHost)" `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." |
-Format-Output
+Format-RuleOutput
 
 # TODO: possible bug in predefined rule, description is not consistent with service parameter
 New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
@@ -294,7 +294,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (FDPHost)" `
 	-LocalUser Any `
 	-InterfaceType $LocalInterface `
 	-Description "Wireless Portable Devices to allow use of Function discovery provider host." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

@@ -104,7 +104,7 @@ if ((Confirm-Installation "GoogleDrive" ([ref] $GoogleDriveRoot)) -or $ForceLoad
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Google drive synchronization service" | Format-Output
+			-Description "Google drive synchronization service" | Format-RuleOutput
 	}
 }
 

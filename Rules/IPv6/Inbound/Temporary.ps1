@@ -106,7 +106,7 @@ if ($Develop)
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Enable only to let any service communicate on link local,
 useful for troubleshooting, and disable ASAP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -118,7 +118,7 @@ useful for troubleshooting, and disable ASAP." |
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
 	Merge-SDDL ([ref] $mDnsUsers) -From $UsersGroupSDDL
@@ -134,7 +134,7 @@ useful for troubleshooting, and disable ASAP." |
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	if ($UpdateGPO)
 	{

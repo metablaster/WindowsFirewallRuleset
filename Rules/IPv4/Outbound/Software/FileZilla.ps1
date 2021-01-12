@@ -105,7 +105,7 @@ if ((Confirm-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "FileZilla FTP protocol" | Format-Output
+			-Description "FileZilla FTP protocol" | Format-RuleOutput
 	}
 
 	$Program = "$FileZillaRoot\fzsftp.exe"
@@ -116,7 +116,7 @@ if ((Confirm-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21098 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "FileZilla SSH FTP protocol" | Format-Output
+			-Description "FileZilla SSH FTP protocol" | Format-RuleOutput
 	}
 }
 

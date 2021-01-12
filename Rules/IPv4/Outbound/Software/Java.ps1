@@ -107,7 +107,7 @@ if ((Confirm-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	# TODO: This must be under "%ProgramFiles(x86)%\
@@ -119,7 +119,7 @@ if ((Confirm-Installation "JavaRuntime" ([ref] $JavaRuntimeRoot)) -or $ForceLoad
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Run java applets" | Format-Output
+			-Description "Run java applets" | Format-RuleOutput
 	}
 }
 
@@ -134,7 +134,7 @@ if ((Confirm-Installation "JavaUpdate" ([ref] $JavaUpdateRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Update java software" | Format-Output
+			-Description "Update java software" | Format-RuleOutput
 	}
 }
 

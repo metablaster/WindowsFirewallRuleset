@@ -104,7 +104,7 @@ if ((Confirm-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $For
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "download maps" | Format-Output
+			-Description "download maps" | Format-RuleOutput
 	}
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
@@ -115,7 +115,7 @@ if ((Confirm-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $For
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

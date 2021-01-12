@@ -113,7 +113,7 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-Description "Outbound TCP template description" |
-		Format-Output
+		Format-RuleOutput
 
 		# Outbound UDP template
 		New-NetFirewallRule -DisplayName "Outbound UDP template" `
@@ -126,7 +126,7 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Outbound UDP template description" |
-		Format-Output
+		Format-RuleOutput
 
 		# Outbound ICMP template
 		New-NetFirewallRule -DisplayName "Outbound ICMP template" `
@@ -138,7 +138,7 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-Description "Outbound ICMP template description" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# Outbound StoreApp TCP template
@@ -152,7 +152,7 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 		-InterfaceType $DefaultInterface `
 		-Owner $PrincipalSID -Package $PackageSID `
 		-Description "Outbound StoreApp TCP template description" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Update-Log

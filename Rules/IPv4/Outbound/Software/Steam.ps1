@@ -108,7 +108,7 @@ if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27015 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
@@ -116,7 +116,7 @@ if ((Confirm-Installation "Steam" ([ref] $SteamRoot)) -or $ForceLoad)
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27031, 27036 -RemotePort 27031, 27036 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
-another PC on the same local network." | Format-Output
+another PC on the same local network." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam (In-Home Streaming)" -Service Any -Program $Program `
@@ -124,35 +124,35 @@ another PC on the same local network." | Format-Output
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4, $BroadcastAddress -LocalPort 27036, 27037 -RemotePort 27036, 27037 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "Steam's In-Home Streaming allows you to stream PC games from one PC to
-another PC on the same local network." | Format-Output
+another PC on the same local network." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam (HTTP/HTTPS)" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam downloads" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam Matchmaking and HLTV" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27015-27030 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Steam P2P Networking and Steam Voice Chat" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3478, 4379, 4380 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$SteamCommon\SteamService.exe"
@@ -163,7 +163,7 @@ another PC on the same local network." | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $LocalSystem `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	# TODO: For all x86 rules we need checks, since those don't exist on x86 systems
@@ -178,7 +178,7 @@ another PC on the same local network." | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	if ([System.Environment]::Is64BitOperatingSystem)
@@ -191,7 +191,7 @@ another PC on the same local network." | Format-Output
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
-				-Description "" | Format-Output
+				-Description "" | Format-RuleOutput
 		}
 	}
 }

@@ -109,7 +109,7 @@ if ((Confirm-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "CMake package download" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

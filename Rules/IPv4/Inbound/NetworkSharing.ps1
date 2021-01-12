@@ -97,7 +97,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
-	$_ | Format-Output -Modify
+	$_ | Format-RuleOutput -Modify
 	[hashtable] $Params = @{
 		InputObject = $_
 		Enabled = "True"
@@ -136,7 +136,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Service Any -Program System -Group $Group `
@@ -147,7 +147,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Service Any -Program System -Group $Group `
@@ -158,7 +158,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-InterfaceType $DefaultInterface `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
@@ -170,7 +170,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
@@ -182,7 +182,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Service Any -Program System -Group $Group `
@@ -194,7 +194,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
@@ -208,7 +208,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
 If you disable this rule, you won't be able to print or see your printers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
@@ -222,7 +222,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
 If you disable this rule, you won't be able to print or see your printers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 	-Service Spooler -Program $ServiceHost -Group $Group `
@@ -236,7 +236,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC)" `
 communicate via TCP/RPC.
 Spooler service spools print jobs and handles interaction with the printer.
 If you disable this rule, you won't be able to print or see your printers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
@@ -250,7 +250,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
@@ -264,7 +264,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 	-Service RpcSs -Program $ServiceHost -Group $Group `
@@ -278,7 +278,7 @@ New-NetFirewallRule -DisplayName "Spooler Service (RPC-EPMAP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
@@ -292,7 +292,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
@@ -306,7 +306,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 	-Service Any -Program System -Group $Group `
@@ -320,7 +320,7 @@ New-NetFirewallRule -DisplayName "SMBDirect (iWARP)" `
 The RPCSS service is the Service Control Manager for COM and DCOM servers.
 It performs object activations requests, object exporter resolutions and distributed garbage
 collection for COM and DCOM servers." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

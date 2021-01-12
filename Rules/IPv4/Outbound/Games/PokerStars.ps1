@@ -104,7 +104,7 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Main game interface." | Format-Output
+			-Description "Main game interface." | Format-RuleOutput
 	}
 
 	# NOTE: It looks like browser no longer needs any interface and any remote address
@@ -116,7 +116,7 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "In game HTML browser" | Format-Output
+			-Description "In game HTML browser" | Format-RuleOutput
 	}
 
 	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
@@ -127,7 +127,7 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
@@ -138,7 +138,7 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Game updater" | Format-Output
+			-Description "Game updater" | Format-RuleOutput
 	}
 }
 

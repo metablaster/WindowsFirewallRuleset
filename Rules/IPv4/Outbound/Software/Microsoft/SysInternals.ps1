@@ -108,7 +108,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Access to VirusTotal" | Format-Output
+			-Description "Access to VirusTotal" | Format-RuleOutput
 	}
 
 	# TODO: It also uses port 80 but not known for what, not setting here.
@@ -124,7 +124,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Access to VirusTotal" | Format-Output
+			-Description "Access to VirusTotal" | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\ProcessMonitor\Procmon.exe"
@@ -138,7 +138,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Access to symbols server" | Format-Output
+			-Description "Access to symbols server" | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\TCPView\Tcpview.exe"
@@ -152,7 +152,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-LocalPort Any -RemotePort 43 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "WhoIs access" | Format-Output
+			-Description "WhoIs access" | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\WhoIs\whois64.exe"
@@ -167,7 +167,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
 			-Description "WhoIs performs the registration record for the domain name or IP address
-that you specify" | Format-Output
+that you specify" | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping.exe"
@@ -183,7 +183,7 @@ that you specify" | Format-Output
 			-InterfaceType $DefaultInterface `
 			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
-This rule serves to allow PSPing.exe to act as a client." | Format-Output
+This rule serves to allow PSPing.exe to act as a client." | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
@@ -199,7 +199,7 @@ This rule serves to allow PSPing.exe to act as a client." | Format-Output
 			-InterfaceType $DefaultInterface `
 			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
-This rule serves to allow PSPing64.exe to act as a client." | Format-Output
+This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 	}
 }
 

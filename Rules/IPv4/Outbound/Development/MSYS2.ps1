@@ -109,7 +109,7 @@ curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\usr\bin\git.exe"
@@ -120,7 +120,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 9418 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "git access over git:// protocol" | Format-Output
+			-Description "git access over git:// protocol" | Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\usr\bin\git-remote-https.exe"
@@ -131,7 +131,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "git over HTTPS in MSYS2 shell" | Format-Output
+			-Description "git over HTTPS in MSYS2 shell" | Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\usr\bin\ssh.exe"
@@ -142,7 +142,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 22 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "git over SSH in MSYS2 shell" | Format-Output
+			-Description "git over SSH in MSYS2 shell" | Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\mingw64\bin\glade.exe"
@@ -153,7 +153,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Get online help for glade" | Format-Output
+			-Description "Get online help for glade" | Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
@@ -164,7 +164,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "pacman package manager in MSYS2 shell" | Format-Output
+			-Description "pacman package manager in MSYS2 shell" | Format-RuleOutput
 	}
 
 	$Program = "$MSYS2Root\usr\bin\pacman.exe"
@@ -175,7 +175,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "HTTP download manager" | Format-Output
+			-Description "HTTP download manager" | Format-RuleOutput
 	}
 }
 

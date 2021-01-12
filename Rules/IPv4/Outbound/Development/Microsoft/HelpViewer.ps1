@@ -107,7 +107,7 @@ if ((Confirm-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$HelpViewerRoot\HlpViewer.exe"
@@ -118,7 +118,7 @@ if ((Confirm-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Review downloadable content." | Format-Output
+			-Description "Review downloadable content." | Format-RuleOutput
 	}
 }
 

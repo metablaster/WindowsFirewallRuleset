@@ -117,28 +117,28 @@ if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol." | Format-Output
+			-Description "Hyper text transfer protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome HTTPS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol over SSL." | Format-Output
+			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome FTP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "File transfer protocol." | Format-Output
+			-Description "File transfer protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome GCM" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5228 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Google cloud messaging, google services use 5228, hangouts, google play, GCP.. etc use 5228." | Format-Output
+			-Description "Google cloud messaging, google services use 5228, hangouts, google play, GCP.. etc use 5228." | Format-RuleOutput
 
 		# TODO: removed port 80, probably not used
 		New-NetFirewallRule -Platform $Platform `
@@ -147,7 +147,7 @@ if ((Confirm-Installation "Chrome" ([ref] $ChromeRoot)) -or $ForceLoad)
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Quick UDP Internet Connections,
-Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-Output
+Experimental transport layer network protocol developed by Google and implemented in 2013." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome XMPP" -Service Any -Program $Program `
@@ -155,42 +155,42 @@ Experimental transport layer network protocol developed by Google and implemente
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 5222 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "Extensible Messaging and Presence Protocol.
-Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync (with fallback to 443 if 5222 is blocked)." | Format-Output
+Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync (with fallback to 443 if 5222 is blocked)." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome mDNS IPv4" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.251 -LocalPort 5353 -RemotePort 5353 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
+			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome mDNS IPv6" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress ff02::fb -LocalPort 5353 -RemotePort 5353 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-Output
+			-Description "The multicast Domain Name System (mDNS) resolves host names to IP addresses within small networks that do not include a local name server." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome Chromecast SSDP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Network Discovery to allow use of the Simple Service Discovery Protocol." | Format-Output
+			-Description "Network Discovery to allow use of the Simple Service Discovery Protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome Chromecast" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString -LocalPort Any -RemotePort 8008, 8009 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Allow Chromecast outbound TCP data" | Format-Output
+			-Description "Allow Chromecast outbound TCP data" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Chrome Chromecast" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress $CHROMECAST_IP.IPAddressToString -LocalPort 32768-61000 -RemotePort 32768-61000 `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Allow Chromecast outbound UDP data" | Format-Output
+			-Description "Allow Chromecast outbound UDP data" | Format-RuleOutput
 	}
 
 	$Program = "$ChromeRoot\Update\GoogleUpdate.exe"
@@ -201,7 +201,7 @@ Google Drive (Talk), Cloud printing, Chrome Remote Desktop, Chrome Sync (with fa
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Update google products" | Format-Output
+			-Description "Update google products" | Format-RuleOutput
 	}
 }
 
@@ -220,21 +220,21 @@ if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol." | Format-Output
+			-Description "Hyper text transfer protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Firefox HTTPS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol over SSL." | Format-Output
+			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Firefox FTP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "File transfer protocol." | Format-Output
+			-Description "File transfer protocol." | Format-RuleOutput
 	}
 
 	$Program = "$FirefoxRoot\pingsender.exe"
@@ -246,7 +246,7 @@ if ((Confirm-Installation "Firefox" ([ref] $FirefoxRoot)) -or $ForceLoad)
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "Pingsender ensures shutdown telemetry data is sent to mozilla after shutdown,
-instead of waiting next firefox start which could take hours, days or even more." | Format-Output
+instead of waiting next firefox start which could take hours, days or even more." | Format-RuleOutput
 	}
 }
 
@@ -265,21 +265,21 @@ if ((Confirm-Installation "Yandex" ([ref] $YandexRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol." | Format-Output
+			-Description "Hyper text transfer protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Yandex HTTPS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol over SSL." | Format-Output
+			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Yandex FTP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 21 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "File transfer protocol." | Format-Output
+			-Description "File transfer protocol." | Format-RuleOutput
 	}
 }
 
@@ -299,21 +299,21 @@ if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol." | Format-Output
+			-Description "Hyper text transfer protocol." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor HTTPS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Hyper text transfer protocol over SSL." | Format-Output
+			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor DNS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 53 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "DNS requests to exit relay over Tor network." | Format-Output
+			-Description "DNS requests to exit relay over Tor network." | Format-RuleOutput
 
 		# OLD: -RemotePort 9001, 9030, 9050, 9051, 9101, 9150
 		New-NetFirewallRule -Platform $Platform `
@@ -321,49 +321,49 @@ if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 8080, 8443, 9001-9003, 9010, 9101 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Tor network specific ports" | Format-Output
+			-Description "Tor network specific ports" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor IMAP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 143 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor IMAP SSL/TLS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 993 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor POP3" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 110 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor POP3 SSL/TLS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 995 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor SMTP" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 25 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Tor SMTP SSL/TLS" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 465 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

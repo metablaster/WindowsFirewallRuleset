@@ -110,7 +110,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-InterfaceType $DefaultInterface `
 			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
-This rule serves to allow PSPing.exe to act as a server." | Format-Output
+This rule serves to allow PSPing.exe to act as a server." | Format-RuleOutput
 	}
 
 	$Program = "$SysInternalsRoot\PSTools\psping64.exe"
@@ -126,7 +126,7 @@ This rule serves to allow PSPing.exe to act as a server." | Format-Output
 			-InterfaceType $DefaultInterface `
 			-Description "PsPing implements Ping functionality, TCP ping, latency and bandwidth measurement.
 Due to wide range of address and port options these should be set to Any.
-This rule serves to allow PSPing64.exe to act as a server." | Format-Output
+This rule serves to allow PSPing64.exe to act as a server." | Format-RuleOutput
 	}
 }
 

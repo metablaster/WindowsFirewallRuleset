@@ -105,7 +105,7 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Startup update" | Format-Output
+			-Description "Startup update" | Format-RuleOutput
 	}
 }
 
@@ -120,7 +120,7 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Startup update" | Format-Output
+			-Description "Startup update" | Format-RuleOutput
 	}
 
 	$Program = "$MSIRoot\APP Manager\AppManager.exe"
@@ -131,7 +131,7 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Startup update" | Format-Output
+			-Description "Startup update" | Format-RuleOutput
 	}
 }
 

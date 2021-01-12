@@ -118,7 +118,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Game launcher services, server traffic" |
-		Format-Output
+		Format-RuleOutput
 
 		# TODO: Official site says both 5222 and 5223 but 5222 is not used
 		New-NetFirewallRule -DisplayName "LoL launcher services - PVP.Net" `
@@ -130,7 +130,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Game launcher services - PVP.Net (game chat)" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$LoLRoot\Riot Client\UX\RiotClientUx.exe"
@@ -146,7 +146,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Game launcher services - user experience" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClient.exe"
@@ -163,7 +163,7 @@ if ((Confirm-Installation "LoLGame" ([ref] $LoLRoot)) -or $ForceLoad)
 			-Description "Game launcher client - UI (user interface),
 The Launcher is the initial window that checks for game updates and launches the PVP.net client
 for League of Legends." |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "LoL launcher client - PVP.net" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -177,7 +177,7 @@ for League of Legends." |
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
 be used separately." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$LolRoot\League of Legends\LeagueClientUx.exe"
@@ -192,7 +192,7 @@ be used separately." |
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "game client - UX (user experience)" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$LolRoot\League of Legends\Game\League of Legends.exe"
@@ -208,7 +208,7 @@ be used separately." |
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Game online multiplayer traffic" |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "LoL game client - server" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -219,7 +219,7 @@ be used separately." |
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Game client server traffic" |
-		Format-Output
+		Format-RuleOutput
 
 		# TODO: rule not used or not tested
 		New-NetFirewallRule -DisplayName "LoL game client - PVP.net" `
@@ -234,7 +234,7 @@ be used separately." |
 It allows you to add friends, check the League of Legends store, and join chat rooms.
 PVP.net can be considered a separate entity from the actual game but the two are linked and cannot
 be used separately." |
-		Format-Output
+		Format-RuleOutput
 
 		# TODO: need to test spectator traffic
 		New-NetFirewallRule -DisplayName "LoL game client - spectator" `
@@ -247,7 +247,7 @@ be used separately." |
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Game spectator UDP traffic" |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "LoL game client - spectator" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -258,7 +258,7 @@ be used separately." |
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Game spectator UDP traffic" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

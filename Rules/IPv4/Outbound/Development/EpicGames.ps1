@@ -109,7 +109,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Used to send crash report to epic games." | Format-Output
+			-Description "Used to send crash report to epic games." | Format-RuleOutput
 
 		# NOTE: port 6666
 		New-NetFirewallRule -Platform $Platform `
@@ -118,7 +118,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
+For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 	}
 
 	# TODO: this executable exists only if the engine was built from source
@@ -130,7 +130,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Engine repo source tool to download binaries." | Format-Output
+			-Description "Engine repo source tool to download binaries." | Format-RuleOutput
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
@@ -141,7 +141,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Swarm agent is used for build farm." | Format-Output
+			-Description "Swarm agent is used for build farm." | Format-RuleOutput
 	}
 
 	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
@@ -152,7 +152,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 
 		# NOTE: port 6666
 		New-NetFirewallRule -Platform $Platform `
@@ -161,14 +161,14 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
+For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Unreal Engine - Editor x64" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
@@ -179,7 +179,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 
@@ -201,7 +201,7 @@ if ((Confirm-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Used for initial setup only - Installation of launcher" | Format-Output
+			-Description "Used for initial setup only - Installation of launcher" | Format-RuleOutput
 	}
 
 	# TODO: launcher will install engine only as Administrator, and it will work even though we
@@ -219,7 +219,7 @@ if ((Confirm-Installation "EpicGames" ([ref] $LauncherRoot)) -or $ForceLoad)
 available via the web and built into Epic Games' launcher application.
 Both web and application allow players to purchase games, while through the launcher the player
 can install and keep their games up to date" |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: port 6666
 		New-NetFirewallRule -Platform $Platform `
@@ -228,7 +228,7 @@ can install and keep their games up to date" |
 			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 230.0.0.1 -LocalPort Any -RemotePort Any `
 			-LocalUser Any -LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
+For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Epic Games - Launcher x64" -Service Any -Program $Program `
@@ -239,7 +239,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-Output
 available via the web and built into Epic Games' launcher application.
 Both web and application allow players to purchase games, while through the launcher the player
 can install and keep their games up to date." |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

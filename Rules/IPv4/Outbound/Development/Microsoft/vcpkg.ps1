@@ -104,7 +104,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "install package source code" | Format-Output
+			-Description "install package source code" | Format-RuleOutput
 	}
 
 	# TODO: need to update for all users
@@ -117,7 +117,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "vcpkg sends usage data to Microsoft" | Format-Output
+			-Description "vcpkg sends usage data to Microsoft" | Format-RuleOutput
 	}
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
@@ -128,7 +128,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "vcpkg has it's own powershell" | Format-Output
+			-Description "vcpkg has it's own powershell" | Format-RuleOutput
 	}
 
 	# TODO: if cmake in root and of required version it's used, needs conditional rule
@@ -139,7 +139,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 	# 	-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 	# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 	# 	-LocalUser $UsersGroupSDDL `
-	# 	-Description "vcpkg has it's own cmake" | Format-Output
+	# 	-Description "vcpkg has it's own cmake" | Format-RuleOutput
 
 	# TODO: Why cmd needs network to download packages, is it just temporary?
 	$Program = Format-Path "C:\Windows\SysWOW64"
@@ -151,7 +151,7 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

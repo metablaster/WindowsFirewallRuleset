@@ -113,7 +113,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "HTTP check for updates, HTTPS for client unknown" |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: local port can be other than 6771, client will fall back to 6771
 		New-NetFirewallRule -DisplayName "qbittorrent - Local Peer Discovery" `
@@ -127,7 +127,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "UDP multicast search to identify other peers in your subnet that are also on
 torrents you are on." |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "qbittorrent - SSDP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -139,7 +139,7 @@ torrents you are on." |
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 		New-NetFirewallRule -DisplayName "qbittorrent - DHT" `
@@ -157,7 +157,7 @@ What this means is that your client will be able to find peers even when the tra
 or doesn't even exist anymore.
 You can also download .torrent files through DHT if you have a magnet link, which can be obtained
 from various sources." |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: We use any local port instead of LocalPort 1161,
 		# but otherwise the rule overlaps with DHT rule
@@ -171,7 +171,7 @@ from various sources." |
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "BitTorrent part of full range of ports used most often (Trackers)	" |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "qbittorrent - NAT Port mapping protocol" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -185,7 +185,7 @@ from various sources." |
 			-Description "The NAT Port Mapping Protocol (NAT-PMP) is a network protocol for establishing
 network address translation (NAT) settings and port forwarding configurations automatically without
 user effort." |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
 		New-NetFirewallRule -DisplayName "qBittorrent - Client to peers" `
@@ -197,7 +197,7 @@ user effort." |
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Torrent client" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

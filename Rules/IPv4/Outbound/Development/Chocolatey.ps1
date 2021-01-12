@@ -105,7 +105,7 @@ if ((Confirm-Installation "Chocolatey" ([ref] $ChocolateyRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $ChocolateyAccounts `
-			-Description "Chocolatey package manager" | Format-Output
+			-Description "Chocolatey package manager" | Format-RuleOutput
 	}
 }
 

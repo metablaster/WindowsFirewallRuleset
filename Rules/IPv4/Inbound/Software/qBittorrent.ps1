@@ -111,7 +111,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "qBittorrent UDP listener, usually for DHT." |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "qBittorrent - Listening port" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -122,7 +122,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 			-InterfaceType $DefaultInterface `
 			-Description "qBittorrent TCP listener." |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -133,7 +133,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 			-InterfaceType $DefaultInterface `
 			-Description "qBittorrent Embedded tracker port." |
-		Format-Output
+		Format-RuleOutput
 
 		# NOTE: remote port can be other than 6771, remote client will fall back to 6771
 		New-NetFirewallRule -DisplayName "qBittorrent - Local Peer discovery" `
@@ -147,7 +147,7 @@ if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "UDP multicast search to identify other peers in your subnet that are also on
 torrents you are on." |
-		Format-Output
+		Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -158,7 +158,7 @@ torrents you are on." |
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
 			-InterfaceType $DefaultInterface `
 			-Description "qBittorrent Remote control from browser." |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

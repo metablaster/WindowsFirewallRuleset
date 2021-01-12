@@ -104,7 +104,7 @@ if ((Confirm-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $Force
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "login" | Format-Output
+			-Description "login" | Format-RuleOutput
 	}
 
 	$Program = "$PinballArcadeRoot\PinballArcade11.exe"
@@ -115,7 +115,7 @@ if ((Confirm-Installation "PinballArcade" ([ref] $PinballArcadeRoot)) -or $Force
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 27030-27050 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

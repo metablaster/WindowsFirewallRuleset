@@ -90,7 +90,7 @@ if ($VirtualAdapter)
 		-LocalUser Any `
 		-InterfaceAlias $VirtualAdapter.ToWql() `
 		-Description "Virtual adapter rule without WildcardPattern" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Virtual adapter rule CultureInvariant"
@@ -108,7 +108,7 @@ if ($VirtualAdapterCultureInvariant)
 		-LocalUser Any `
 		-InterfaceAlias $VirtualAdapterCultureInvariant `
 		-Description "Virtual adapter rule using WildcardPattern" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Virtual adapter rule IgnoreCase"
@@ -126,7 +126,7 @@ if ($VirtualAdapterIgnoreCase)
 		-LocalUser Any `
 		-InterfaceAlias $VirtualAdapterIgnoreCase `
 		-Description "Virtual adapter rule using WildcardPattern" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Virtual adapter rule None"
@@ -144,7 +144,7 @@ if ($VirtualAdapterNone)
 		-LocalUser Any `
 		-InterfaceAlias $VirtualAdapterNone `
 		-Description "Virtual adapter rule using WildcardPattern" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Virtual adapter rule Compiled"
@@ -162,7 +162,7 @@ if ($VirtualAdapterCompiled)
 		-LocalUser Any `
 		-InterfaceAlias $VirtualAdapterCompiled `
 		-Description "Virtual adapter rule using WildcardPattern" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Hardware adapter rule"
@@ -180,7 +180,7 @@ if ($HardwareAdapter)
 		-LocalUser Any `
 		-InterfaceAlias $HardwareAdapter `
 		-Description "Hardware test rule description" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Multiple adapters rule"
@@ -198,7 +198,7 @@ if ($MultipleAdapters)
 		-LocalUser Any `
 		-InterfaceAlias $MultipleAdapters `
 		-Description "Multiple test rule description" |
-	Format-Output
+	Format-RuleOutput
 }
 
 Start-Test "Bad adapter rule FAILURE TEST"
@@ -216,7 +216,7 @@ New-NetFirewallRule -DisplayName "Bad adapter rule" `
 	-LocalUser Any `
 	-InterfaceAlias $BadAdapters `
 	-Description "Bad adapter test rule description" -ErrorAction SilentlyContinue |
-Format-Output
+Format-RuleOutput
 Write-Warning -Message "TODO - Such rules should fail"
 
 Update-Log

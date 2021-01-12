@@ -105,7 +105,7 @@ if ($Develop)
 		-InterfaceType Any `
 		-Description "Enable only to let any service communicate on link local,
 useful for troubleshooting, and disable ASAP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - LLMNR" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -116,7 +116,7 @@ useful for troubleshooting, and disable ASAP." |
 		-LocalUser $NetworkService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP ports" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -127,7 +127,7 @@ useful for troubleshooting, and disable ASAP." |
 		-LocalUser $LocalService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
 	Merge-SDDL ([ref] $mDnsUsers) -From $UsersGroupSDDL
@@ -142,7 +142,7 @@ useful for troubleshooting, and disable ASAP." |
 		-LocalUser $mDnsUsers `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Troubleshoot UDP - DHCP" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -153,7 +153,7 @@ useful for troubleshooting, and disable ASAP." |
 		-LocalUser $LocalService `
 		-InterfaceType Any `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	if ($UpdateGPO)
 	{

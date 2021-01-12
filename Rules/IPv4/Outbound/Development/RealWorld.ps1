@@ -104,7 +104,7 @@ if ((Confirm-Installation "RealWorld" ([ref] $RealWorldRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "To get online resources and template projects" | Format-Output
+			-Description "To get online resources and template projects" | Format-RuleOutput
 	}
 }
 

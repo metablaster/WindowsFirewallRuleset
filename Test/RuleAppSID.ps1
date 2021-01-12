@@ -107,7 +107,7 @@ New-NetFirewallRule -DisplayName "Get-AppSID" `
 	-InterfaceType $DefaultInterface `
 	-Owner $OwnerSID -Package $PackageSID `
 	-Description "TargetProgram test rule description" |
-Format-Output
+Format-RuleOutput
 
 Update-Log
 Exit-Test

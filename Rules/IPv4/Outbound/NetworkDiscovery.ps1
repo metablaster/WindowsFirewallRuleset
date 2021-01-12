@@ -94,7 +94,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
-	$_ | Format-Output -Modify
+	$_ | Format-RuleOutput -Modify
 	[hashtable] $Params = @{
 		InputObject = $_
 		Enabled = "True"
@@ -139,7 +139,7 @@ computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
 However, the results of DNS name queries will not be cached and the computer's name will
 not be registered." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link Local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -156,7 +156,7 @@ computer name for this computer.
 If the rule is disabled, DNS names will continue to be resolved.
 However, the results of DNS name queries will not be cached and the computer's name will
 not be registered." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -169,7 +169,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
 reception." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -182,7 +182,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
 reception." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -195,7 +195,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Datagram" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Datagram transmission and
 reception." |
-Format-Output
+Format-RuleOutput
 
 # TODO: wont work to send to other subnets, applies to all traffic that sends to other
 # local subnets such as Hyper-V subnets
@@ -209,7 +209,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -221,7 +221,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -233,7 +233,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Name" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to allow NetBIOS Name Resolution." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -249,7 +249,7 @@ Publishes this computer and resources attached to this computer so they can be d
 the network.
 If this rule is disabled, network resources will no longer be published and they will not be
 discovered by other computers on the network." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD (FDResPub)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -265,7 +265,7 @@ Publishes this computer and resources attached to this computer so they can be d
 the network.
 If this rule is disabled, network resources will no longer be published and they will not be
 discovered by other computers on the network." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -281,7 +281,7 @@ Service discovers networked devices and services that use the SSDP discovery pro
 such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
 If this rule is disabled, SSDP-based devices will not be discovered." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -297,7 +297,7 @@ Service discovers networked devices and services that use the SSDP discovery pro
 such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
 If this rule is disabled, SSDP-based devices will not be discovered." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -311,7 +311,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
 devices can be added." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "UPnP Device Host" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -325,7 +325,7 @@ New-NetFirewallRule -DisplayName "UPnP Device Host" `
 Allows UPnP devices to be hosted on this computer.
 If this rule is disabled, any hosted UPnP devices will stop functioning and no additional hosted
 devices can be added." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "UPnP FDPHost" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -340,7 +340,7 @@ The FDPHOST service hosts the Function Discovery (FD) network discovery provider
 These FD providers supply network discovery services for the Simple Services Discovery Protocol
 (SSDP) and Web Services - Discovery (WS-D) protocol.
 Disabling this rule will disable network discovery for these protocols when using FD." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "UPnP FDPHost" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -355,7 +355,7 @@ The FDPHOST service hosts the Function Discovery (FD) network discovery provider
 These FD providers supply network discovery services for the Simple Services Discovery Protocol
 (SSDP) and Web Services - Discovery (WS-D) protocol.
 Disabling this rule will disable network discovery for these protocols when using FD." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "UPnP FDPHost" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -370,7 +370,7 @@ The FDPHOST service hosts the Function Discovery (FD) network discovery provider
 These FD providers supply network discovery services for the Simple Services Discovery Protocol
 (SSDP) and Web Services - Discovery (WS-D) protocol.
 Disabling this rule will disable network discovery for these protocols when using FD." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -381,7 +381,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -392,7 +392,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -403,7 +403,7 @@ New-NetFirewallRule -DisplayName "WSD Events" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow WSDAPI Events via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -415,7 +415,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function
 Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -426,7 +426,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -437,7 +437,7 @@ New-NetFirewallRule -DisplayName "WSD Events Secure" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for Network Discovery to allow Secure WSDAPI Events via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -449,7 +449,7 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -461,7 +461,7 @@ New-NetFirewallRule -DisplayName "WSD (FDPHost)" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Rule for Network Discovery to discover devices via Function Discovery." |
-Format-Output
+Format-RuleOutput
 
 # TODO: This executable is used by WI-FI direct group, see rules, it's also used for Network Discovery
 # see inbound rules, added here because predefined outbound do not define it.
@@ -477,7 +477,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Host)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -490,7 +490,7 @@ New-NetFirewallRule -DisplayName "WSD (Device Association Framework Provider Hos
 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 This service is new since Windows 8.
 Executable also known as Device Association Framework Provider Host" |
-Format-Output
+Format-RuleOutput
 
 # NOTE: Remote address of DefaultGateway4 changed with LocalSubnet (rule above),
 # both of which are needed, remote port was Any for router, set to 5357 for local subnet
@@ -506,7 +506,7 @@ Format-Output
 # 	-Description "Rule for Network Discovery to discover devices via Function Discovery.
 # This service is new since Windows 8.
 # Executable also known as Device Association Framework Provider Host" |
-# Format-Output
+# Format-RuleOutput
 
 # TODO: missing local user
 New-NetFirewallRule -DisplayName "Network infrastructure discovery" `
@@ -520,7 +520,7 @@ New-NetFirewallRule -DisplayName "Network infrastructure discovery" `
 Function Discovery (FD) network discovery providers.
 These FD providers supply network discovery services for the Simple Services Discovery Protocol
 (SSDP) and Web Services." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

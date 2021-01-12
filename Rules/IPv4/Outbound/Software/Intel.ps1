@@ -105,7 +105,7 @@ if ((Confirm-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $AdminGroupSDDL `
-			-Description "Extreme Tuning utility check for updates" | Format-Output
+			-Description "Extreme Tuning utility check for updates" | Format-RuleOutput
 	}
 }
 
@@ -118,7 +118,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $LocalSystem `
-		-Description "Uploader for the Intel(R) Product Improvement Program." | Format-Output
+		-Description "Uploader for the Intel(R) Product Improvement Program." | Format-RuleOutput
 }
 
 # TODO: port and protocol unknown for Intel PTT EK Recertification
@@ -130,7 +130,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
 		-LocalUser $LocalSystem `
-		-Description "" | Format-Output
+		-Description "" | Format-RuleOutput
 }
 
 if ($UpdateGPO)

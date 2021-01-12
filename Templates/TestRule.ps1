@@ -91,7 +91,7 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Test rule description" |
-Format-Output
+Format-RuleOutput
 
 Update-Log
 Exit-Test

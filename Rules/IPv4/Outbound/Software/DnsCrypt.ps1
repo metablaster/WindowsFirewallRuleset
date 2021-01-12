@@ -117,7 +117,7 @@ and a DNS resolver. It prevents DNS spoofing.
 It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver
 and haven't been tampered with.
 This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
-		Format-Output
+		Format-RuleOutput
 
 		# $LocalSystem
 		# TODO: see if LooseSourceMapping is needed
@@ -135,7 +135,7 @@ and a DNS resolver. It prevents DNS spoofing.
 It uses cryptographic signatures to verify that responses originate from the chosen DNS resolver and
 haven't been tampered with.
 This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$DnsCryptRoot\SimpleDnsCrypt.exe"
@@ -150,7 +150,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 			-LocalUser $AdminGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Simple DNS Crypt update check on startup" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

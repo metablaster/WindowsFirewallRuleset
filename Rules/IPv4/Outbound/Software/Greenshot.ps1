@@ -104,7 +104,7 @@ if ((Confirm-Installation "Greenshot" ([ref] $GreenshotRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Screen capture tool, needs rules to upload screenshots to imgur" | Format-Output
+			-Description "Screen capture tool, needs rules to upload screenshots to imgur" | Format-RuleOutput
 	}
 }
 

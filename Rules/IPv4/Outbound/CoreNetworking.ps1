@@ -105,7 +105,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's
 TCP/IP network resources." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Loopback" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -117,7 +117,7 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's
 TCP/IP network resources." |
-Format-Output
+Format-RuleOutput
 
 #
 # DNS (Domain Name System)
@@ -137,7 +137,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 DNS responses based on requests that matched this rule will be permitted regardless of source
 address.
 This behavior is classified as loose source mapping." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "DNS Client" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -151,7 +151,7 @@ New-NetFirewallRule -DisplayName "DNS Client" `
 DNS responses based on requests that matched this rule will be permitted regardless of source
 address.
 This behavior is classified as loose source mapping." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Domain Name System" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -163,7 +163,7 @@ New-NetFirewallRule -DisplayName "Domain Name System" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DNS (Domain Name System) requests by System to default gateway." |
-Format-Output
+Format-RuleOutput
 
 #
 # mDNS (Multicast Domain Name System)
@@ -193,7 +193,7 @@ if ($false)
 to IP addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." |
-	Format-Output
+	Format-RuleOutput
 
 	# TODO: $PhysicalAdapters = Get-InterfaceAlias IPv4 -InterfaceAlias $PhysicalAdapters
 	# NOTE: Specifying interface or local port might not work for public profile
@@ -210,7 +210,7 @@ packet formats and operating semantics as the unicast Domain Name System (DNS)."
 to IP addresses within small networks that do not include a local name server.
 It is a zero-configuration service, using essentially the same programming interfaces,
 packet formats and operating semantics as the unicast Domain Name System (DNS)." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -229,7 +229,7 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration.
 UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -245,7 +245,7 @@ the destination address 255.255.255.255 (limited broadcast) or
 the specific subnet broadcast address (directed broadcast).
 In response to the DHCP offer, the client replies with a DHCPREQUEST message, broadcast to the server,
 requesting the offered address." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "DHCP Server" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -259,7 +259,7 @@ New-NetFirewallRule -DisplayName "DHCP Server" `
 	-Description "When a DHCP server receives a DHCPDISCOVER message from a client, which is an IP
 address lease request, the DHCP server reserves an IP address for the client and makes a lease offer
 by sending a DHCPOFFER message to the client" |
-Format-Output
+Format-RuleOutput
 
 #
 # IGMP (Internet Group Management Protocol)
@@ -276,7 +276,7 @@ New-NetFirewallRule -DisplayName "Internet Group Management Protocol" `
 	-InterfaceType $DefaultInterface `
 	-Description "IGMP messages are sent and received by nodes to create,
 join and depart multicast groups." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

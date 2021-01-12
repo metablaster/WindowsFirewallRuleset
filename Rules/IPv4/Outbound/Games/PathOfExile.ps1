@@ -104,7 +104,7 @@ if ((Confirm-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $ForceLoad
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 6112, 20481 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Needed for online gaming" | Format-Output
+			-Description "Needed for online gaming" | Format-RuleOutput
 	}
 }
 

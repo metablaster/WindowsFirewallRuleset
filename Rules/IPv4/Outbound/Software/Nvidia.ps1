@@ -124,7 +124,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 					-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 					-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 					-LocalUser $ContainerAccounts `
-					-Description "" | Format-Output
+					-Description "" | Format-RuleOutput
 			}
 
 			$Program = "$NvidiaRoot64\NVIDIA GeForce Experience\NVIDIA GeForce Experience.exe"
@@ -135,7 +135,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 					-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 					-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 					-LocalUser $UsersGroupSDDL `
-					-Description "" | Format-Output
+					-Description "" | Format-RuleOutput
 			}
 
 			# TODO: this rule is not implemented for x86 system
@@ -147,7 +147,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 					-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 					-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 					-LocalUser $UsersGroupSDDL `
-					-Description "" | Format-Output
+					-Description "" | Format-RuleOutput
 			}
 		}
 
@@ -189,7 +189,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 					-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 					-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 					-LocalUser $LocalSystem `
-					-Description "" | Format-Output
+					-Description "" | Format-RuleOutput
 			}
 		}
 	}
@@ -223,7 +223,7 @@ if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 				-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $ContainerAccounts `
-				-Description "" | Format-Output
+				-Description "" | Format-RuleOutput
 		}
 
 		# NOTE: it's duplicate of x64 rule, should be fixed after testing x86 rules
@@ -237,7 +237,7 @@ if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 					-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 					-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 					-LocalUser $UsersGroupSDDL `
-					-Description "" | Format-Output
+					-Description "" | Format-RuleOutput
 			}
 		}
 
@@ -249,7 +249,7 @@ if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 		# 	-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 		# 	-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
 		# 	-LocalUser $UsersGroupSDDL `
-		# 	-Description "" | Format-Output
+		# 	-Description "" | Format-RuleOutput
 
 		$Program = "$NvidiaRoot86\NvNode\NVIDIA Web Helper.exe"
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -259,7 +259,7 @@ if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 				-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 				-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
-				-Description "" | Format-Output
+				-Description "" | Format-RuleOutput
 		}
 	}
 }

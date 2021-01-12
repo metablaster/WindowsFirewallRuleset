@@ -103,7 +103,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
-Remote Desktop session. " | Format-Output
+Remote Desktop session. " | Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Remote desktop - Shadow" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -114,7 +114,7 @@ Remote Desktop session. " | Format-Output
 		-LocalUser Any -EdgeTraversalPolicy DeferToApp `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound rule for the Remote Desktop service to allow shadowing of an existing
-Remote Desktop session. " | Format-Output
+Remote Desktop session. " | Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
@@ -127,7 +127,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-InterfaceType $DefaultInterface `
 	-Description "Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." | Format-Output
+properties control panel item." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -139,7 +139,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-InterfaceType $DefaultInterface `
 	-Description "Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." | Format-Output
+properties control panel item." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -152,7 +152,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." | Format-Output
+properties control panel item." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -165,7 +165,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
-properties control panel item." | Format-Output
+properties control panel item." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -176,7 +176,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -187,7 +187,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -198,7 +198,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -209,7 +209,7 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

@@ -146,7 +146,7 @@ foreach ($Principal in $Principals)
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -208,7 +208,7 @@ foreach ($Principal in $Principals)
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" |
-			Format-Output
+			Format-RuleOutput
 
 			Update-Log
 		}
@@ -266,7 +266,7 @@ foreach ($Principal in $Principals)
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" |
-			Format-Output
+			Format-RuleOutput
 
 			Update-Log
 		}
@@ -290,7 +290,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "The Runtime Broker is responsible for checking if a store app is declaring all of
 its permissions and informing the user whether or not its being allowed" |
-	Format-Output
+	Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\AuthHost.exe"
@@ -310,7 +310,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "Connects Universal Windows Platform (UWP) app to an online identity provider
 that uses authentication protocols like OpenID or OAuth, such as Facebook, Twitter, Instagram, etc." |
-	Format-Output
+	Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Windows License Manager Service" `
@@ -322,7 +322,7 @@ New-NetFirewallRule -DisplayName "Windows License Manager Service" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Provides infrastructure support for the Microsoft Store." |
-Format-Output
+Format-RuleOutput
 
 # https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/april/uwp-apps-develop-hosted-web-apps-for-uwp
 $Program = "%SystemRoot%\System32\wwahost.exe"
@@ -340,7 +340,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 which has a subset of features, compared to the browser.
 Used in scenario when the Web site is running in the context of an app.
 This rule is required to connect PC to Microsoft account" |
-	Format-Output
+	Format-RuleOutput
 }
 
 if ($UpdateGPO)

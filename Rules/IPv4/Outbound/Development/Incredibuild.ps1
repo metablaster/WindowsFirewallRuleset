@@ -104,7 +104,7 @@ if ((Confirm-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $ForceLo
 			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Used to connect to license server for activation" | Format-Output
+			-Description "Used to connect to license server for activation" | Format-RuleOutput
 	}
 }
 

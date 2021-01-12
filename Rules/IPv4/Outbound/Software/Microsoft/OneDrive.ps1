@@ -110,7 +110,7 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $LocalSystem `
-			-Description "Updater for OneDrive" | Format-Output
+			-Description "Updater for OneDrive" | Format-RuleOutput
 	}
 
 	# TODO: LocalUser should be explicit user because each user runs it's own instance
@@ -123,7 +123,7 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "One drive for syncing user data" | Format-Output
+			-Description "One drive for syncing user data" | Format-RuleOutput
 	}
 }
 

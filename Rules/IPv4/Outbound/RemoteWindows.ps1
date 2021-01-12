@@ -105,7 +105,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
 properties control panel item." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Remote desktop - User Mode" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -119,7 +119,7 @@ properties control panel item." |
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
 properties control panel item." |
-	Format-Output
+	Format-RuleOutput
 }
 
 if ($UpdateGPO)

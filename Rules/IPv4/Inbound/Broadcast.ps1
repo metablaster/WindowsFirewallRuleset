@@ -106,7 +106,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
-Format-Output
+Format-RuleOutput
 
 # TODO: unsure if Intranet makes sense here
 New-NetFirewallRule -DisplayName "Limited Broadcast" `
@@ -119,7 +119,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Explicitly deny broadcast traffic on public subnets" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -131,7 +131,7 @@ New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

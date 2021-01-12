@@ -110,7 +110,7 @@ foreach ($Principal in $Principals)
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -171,7 +171,7 @@ foreach ($Principal in $Principals)
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" |
-			Format-Output
+			Format-RuleOutput
 
 			Update-Log
 		}
@@ -228,7 +228,7 @@ foreach ($Principal in $Principals)
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
 				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" |
-			Format-Output
+			Format-RuleOutput
 
 			Update-Log
 		}

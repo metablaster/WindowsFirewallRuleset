@@ -105,7 +105,7 @@ if ((Confirm-Installation "BingWallpaper" ([ref] $BingWallpaperRoot)) -or $Force
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Bing wallpaper needs internet to download fresh wallpapers" |
-		Format-Output
+		Format-RuleOutput
 	}
 }
 

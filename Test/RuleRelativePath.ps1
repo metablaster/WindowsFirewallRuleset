@@ -90,7 +90,7 @@ New-NetFirewallRule -DisplayName "TargetProgram" `
 	-LocalUser $LocalService `
 	-InterfaceType $DefaultInterface `
 	-Description "Relative path test" |
-Format-Output
+Format-RuleOutput
 
 Update-Log
 Exit-Test

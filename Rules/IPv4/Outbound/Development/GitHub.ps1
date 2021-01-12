@@ -115,7 +115,7 @@ curl is a commandline tool to transfer data from or to a server,
 using one of the supported protocols:
 (DICT, FILE, FTP, FTPS, GOPHER, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP,
 RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# TODO: unsure if it's 443 or 80, and not sure what's the purpose
@@ -130,7 +130,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$GitRoot\mingw64\libexec\git-core\git-remote-https.exe"
@@ -144,7 +144,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "git HTTPS for clone, fetch, push, commit etc." | Format-Output
+			-Description "git HTTPS for clone, fetch, push, commit etc." | Format-RuleOutput
 	}
 
 	$Program = "$GitRoot\usr\bin\ssh.exe"
@@ -158,7 +158,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 			-LocalPort Any -RemotePort 22 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "SSH client for git clone, fetch, push, commit etc." | Format-Output
+			-Description "SSH client for git clone, fetch, push, commit etc." | Format-RuleOutput
 	}
 }
 
@@ -203,7 +203,7 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "At a minimum telemetry and authentication to GitHub" | Format-Output
+			-Description "At a minimum telemetry and authentication to GitHub" | Format-RuleOutput
 	}
 
 	$Program = "$GitHubRoot\Update.exe"
@@ -217,7 +217,7 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Checking for client updates and client auto update" | Format-Output
+			-Description "Checking for client updates and client auto update" | Format-RuleOutput
 	}
 
 	if ($VersionFoldersCount -gt 0)
@@ -241,7 +241,7 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Used for clone, fetch, push, commit etc." | Format-Output
+			-Description "Used for clone, fetch, push, commit etc." | Format-RuleOutput
 	}
 }
 

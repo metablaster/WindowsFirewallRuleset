@@ -104,7 +104,7 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." | Format-Output
+			-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." | Format-RuleOutput
 	}
 }
 

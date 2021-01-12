@@ -154,7 +154,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Interface-Local Multicast filtering (Individual destinations)
@@ -170,7 +170,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Nodes" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -182,7 +182,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - All Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Interface-Local Multicast - mDNSv6" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -194,7 +194,7 @@ New-NetFirewallRule -DisplayName "Interface-Local Multicast - mDNSv6" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Link-Local Multicast filtering (All destinations)
@@ -210,7 +210,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Link-Local Multicast filtering (Individual destinations)
@@ -226,7 +226,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Nodes" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -238,7 +238,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -250,7 +250,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DVMRP Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -262,7 +262,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -274,7 +274,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - OSPFIGP Designated Rout
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -286,7 +286,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -298,7 +298,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - ST Hosts" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -310,7 +310,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RIP Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -322,7 +322,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - EIGRP Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile Agents" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -334,7 +334,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Mobile Agents" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -346,7 +346,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - SSDP" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -358,7 +358,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All PIM Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP ENCAPSULATION" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -370,7 +370,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - RSVP ENCAPSULATION" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -382,7 +382,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - UPnP" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All BBF Access Nodes" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -394,7 +394,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All BBF Access Nodes" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -406,7 +406,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - VRRP" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2 capable routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -418,7 +418,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All MLDv2 capable route
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All RPL nodes" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -430,7 +430,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All RPL nodes" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All Snoopers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -442,7 +442,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All Snoopers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP pdelay" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -454,7 +454,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - PTP pdelay" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -466,7 +466,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Saratoga" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - LL MANET Routers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -478,7 +478,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - LL MANET Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -490,7 +490,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - IGRS" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -502,7 +502,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - iADT Discovery" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -514,7 +514,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - mDNSv6" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -526,7 +526,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link Name" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - All DHCP Agents" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -538,7 +538,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - All DHCP Agents" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Name Resolution" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -550,7 +550,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Link-local Multicast Na
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -562,7 +562,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - DTCP Announcement" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -574,7 +574,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - afore_vdp" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -586,7 +586,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Babel" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited-Node Address" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -598,7 +598,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Solicited-Node Address"
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Queries" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -610,7 +610,7 @@ New-NetFirewallRule -DisplayName "Link-Local Multicast - Node Information Querie
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Site-Local Multicast filtering (All destinations)
@@ -626,7 +626,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Site-Local Multicast filtering (Individual destinations)
@@ -642,7 +642,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All Routers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -654,7 +654,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - mDNSv6" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - All DHCP Servers" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -666,7 +666,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - All DHCP Servers" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Site-Local Multicast - SL MANET ROUTERS" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -678,7 +678,7 @@ New-NetFirewallRule -DisplayName "Site-Local Multicast - SL MANET ROUTERS" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Realm-Local Multicast filtering (All destinations)
@@ -694,7 +694,7 @@ New-NetFirewallRule -DisplayName "Realm-Local Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Admin-Local Multicast filtering (All destinations)
@@ -710,7 +710,7 @@ New-NetFirewallRule -DisplayName "Admin-Local Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Organization-Local Multicast filtering (All destinations)
@@ -726,7 +726,7 @@ New-NetFirewallRule -DisplayName "Organization-Local Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 #
 # Global scope Multicast filtering (All destinations)
@@ -742,7 +742,7 @@ New-NetFirewallRule -DisplayName "Global scope Multicast" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

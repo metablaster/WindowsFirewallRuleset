@@ -89,7 +89,7 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Remove-FirewallRules
 {
-	# TODO: Should be possible to use Format-Output function
+	# TODO: Should be possible to use Format-RuleOutput function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",

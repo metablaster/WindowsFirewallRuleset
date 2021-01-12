@@ -106,7 +106,7 @@ New-NetFirewallRule -DisplayName "Limited Broadcast" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -118,7 +118,7 @@ New-NetFirewallRule -DisplayName "Directed Broadcast" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "" |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

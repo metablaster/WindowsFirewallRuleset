@@ -131,7 +131,7 @@ foreach ($Instance in $VSInstances)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "CMake bundled with Visual Studio" | Format-Output
+			-Description "CMake bundled with Visual Studio" | Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
@@ -145,7 +145,7 @@ foreach ($Instance in $VSInstances)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "git bundled with Visual Studio over HTTPS." | Format-Output
+			-Description "git bundled with Visual Studio over HTTPS." | Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\usr\bin\ssh.exe"
@@ -160,7 +160,7 @@ foreach ($Instance in $VSInstances)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Team explorer Git (looks like it's not used if using custom git installation)." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# TODO: need better approach for administrators, ie. powershell, VS, services etc. maybe separate group, or put into "temporary" group?
@@ -175,7 +175,7 @@ foreach ($Instance in $VSInstances)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $VSUpdateUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Check for updates, symbols download and built in browser." | Format-Output
+			-Description "Check for updates, symbols download and built in browser." | Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\IDE\Extensions\Microsoft\LiveShare\Agent\vsls-agent.exe"
@@ -189,7 +189,7 @@ foreach ($Instance in $VSInstances)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "liveshare extension." | Format-Output
+			-Description "liveshare extension." | Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\IDE\PerfWatson2.exe"
@@ -204,7 +204,7 @@ foreach ($Instance in $VSInstances)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "PerfWatson monitors delays on the UI thread, and submits error reports on
-these delays with the user's consent." | Format-Output
+these delays with the user's consent." | Format-RuleOutput
 	}
 
 	# TODO: same comment in 4 rules
@@ -222,7 +222,7 @@ these delays with the user's consent." | Format-Output
 			-Description "ServiceHub services provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
@@ -239,7 +239,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-Description "ServiceHub services provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# NOTE: System account is needed for port 9354
@@ -257,7 +257,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-Description "ServiceHub programs provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
@@ -274,7 +274,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-Description "ServiceHub services provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
@@ -288,7 +288,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Managed language service (Roslyn)." | Format-Output
+			-Description "Managed language service (Roslyn)." | Format-RuleOutput
 	}
 
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
@@ -305,7 +305,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-Description "ServiceHub services provide identity (sign-in for VS),
 	and support for internal services (like extension management, compiler support, etc).
 	These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	# NOTE: subdirectory name consists of version number so let's get that:
@@ -327,7 +327,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Runs when opening up VS, vctip.exe is 'Microsoft VC compiler and tools
-experience improvement data uploader'" | Format-Output
+experience improvement data uploader'" | Format-RuleOutput
 	}
 }
 
@@ -351,7 +351,7 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Run when updating or using add features to VS in installer." | Format-Output
+			-Description "Run when updating or using add features to VS in installer." | Format-RuleOutput
 	}
 
 	# NOTE: tested: $ExtensionAccounts, Administrator account was needed
@@ -368,7 +368,7 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 			-LocalUser $VSUpdateUsers `
 			-InterfaceType $DefaultInterface `
 			-Description "Used when 'Automatically download updates' in VS2019?
-Tools->Options->Environment->Product Updates->Automatically download updates." | Format-Output
+Tools->Options->Environment->Product Updates->Automatically download updates." | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
@@ -383,7 +383,7 @@ Tools->Options->Environment->Product Updates->Automatically download updates." |
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Run when Installing update or using add features to VS, also for sign in,
-in report problem window." | Format-Output
+in report problem window." | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\setup.exe"
@@ -397,7 +397,7 @@ in report problem window." | Format-Output
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $VSUpdateUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Used for updates since 16.0.3." | Format-Output
+			-Description "Used for updates since 16.0.3." | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\vs_installer.exe"
@@ -412,7 +412,7 @@ in report problem window." | Format-Output
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Looks like it's not used anymore, but vs_installerservice is used instead" |
-		Format-Output
+		Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\vs_installershell.exe"
@@ -426,7 +426,7 @@ in report problem window." | Format-Output
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $VSUpdateUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Run when running VS Installer for add new features" | Format-Output
+			-Description "Run when running VS Installer for add new features" | Format-RuleOutput
 	}
 
 	# TODO: needs testing what users are needed for VSIX rules
@@ -441,7 +441,7 @@ in report problem window." | Format-Output
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXAutoUpdate.exe"
@@ -455,7 +455,7 @@ in report problem window." | Format-Output
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $LocalSystem `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VSIXConfigurationUpdater.exe"
@@ -469,7 +469,7 @@ in report problem window." | Format-Output
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-Output
+			-Description "" | Format-RuleOutput
 	}
 }
 

@@ -161,7 +161,7 @@ New-NetFirewallRule -DisplayName "Destination Unreachable (1)" `
 	-InterfaceType $LocalInterface `
 	-Description "Destination Unreachable error messages are sent from any node that a packet
 traverses which is unable to forward the packet for any reason except congestion. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -173,7 +173,7 @@ New-NetFirewallRule -DisplayName "Packet Too Big (2)" `
 	-InterfaceType $LocalInterface `
 	-Description "Packet Too Big error messages are sent from any node that a packet traverses which
 is unable to forward the packet because the packet is too large for the next link. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -185,7 +185,7 @@ New-NetFirewallRule -DisplayName "Time Exceeded (3)" `
 	-InterfaceType $LocalInterface `
 	-Description "Time Exceeded error messages are generated from any node that a packet traverses
 if the Hop Limit value is decremented to zero at any point on the path. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -197,7 +197,7 @@ New-NetFirewallRule -DisplayName "Parameter Problem (4)" `
 	-InterfaceType $LocalInterface `
 	-Description "Parameter Problem error messages are sent by nodes as a result of incorrectly
 generated packets. $Description" |
-Format-Output
+Format-RuleOutput
 
 #
 # ICMP Type filtering ( Informational messages )
@@ -212,7 +212,7 @@ New-NetFirewallRule -DisplayName "Echo Request (128)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description "Echo Request messages are sent as ping requests to other nodes. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Echo Reply (129)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -223,7 +223,7 @@ New-NetFirewallRule -DisplayName "Echo Reply (129)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description "Echo Reply messages are sent as a response to Echo Request pings. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -235,7 +235,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Query (130)" `
 	-InterfaceType $LocalInterface `
 	-Description "An IPv6 multicast-capable router uses the Multicast Listener Query message to
 query a link for multicast group membership. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -248,7 +248,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Report (131)" `
 	-Description "The Multicast Listener Report message is used by a listening node to either
 immediately report its interest in receiving multicast traffic at a specific multicast address or
 in response to a Multicast Listener Query. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -260,7 +260,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Done (132)" `
 	-InterfaceType $LocalInterface `
 	-Description "Multicast Listener Done messages inform local routers that there are no longer
 any members remaining for a specific multicast address on the subnet. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -272,7 +272,7 @@ New-NetFirewallRule -DisplayName "Router Solicitation (133)" `
 	-InterfaceType $LocalInterface `
 	-Description "Router Solicitation messages are sent by nodes seeking routers to provide
 stateless auto-configuration. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -284,7 +284,7 @@ New-NetFirewallRule -DisplayName "Router Advertisement (134)" `
 	-InterfaceType $LocalInterface `
 	-Description "Router Advertisement messages are sent by routers to other nodes for stateless
 auto-configuration. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -296,7 +296,7 @@ New-NetFirewallRule -DisplayName "Neighbor Solicitation (135)" `
 	-InterfaceType $LocalInterface `
 	-Description "Neighbor Discovery Solicitations are sent by nodes to discover the link-layer
 address of another on-link IPv6 node. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -308,7 +308,7 @@ New-NetFirewallRule -DisplayName "Neighbor Advertisement (136)" `
 	-InterfaceType $LocalInterface `
 	-Description "Neighbor Discovery Advertisement messages are sent by nodes to notify other nodes
 of link-layer address changes or in response to a Neighbor Discovery Solicitation request. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Redirect Message (137)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -322,7 +322,7 @@ New-NetFirewallRule -DisplayName "Redirect Message (137)" `
 node on the path to a destination. Hosts can be redirected to a
 better first-hop router but can also be informed by a redirect that
 the destination is in fact a neighbor." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Router Renumbering (138)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -333,7 +333,7 @@ New-NetFirewallRule -DisplayName "Router Renumbering (138)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "ICMP Node Information Query (139)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -346,7 +346,7 @@ New-NetFirewallRule -DisplayName "ICMP Node Information Query (139)" `
 	-Description "Used for IPv6 Node Information Queries.
 a protocol for asking an IPv6 node to supply certain network information, such as its hostname or
 fully-qualified domain name." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "ICMP Node Information Response (140)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -359,7 +359,7 @@ New-NetFirewallRule -DisplayName "ICMP Node Information Response (140)" `
 	-Description "Used for IPv6 Node Information Queries.
 a protocol for asking an IPv6 node to supply certain network information, such as its hostname or
 fully-qualified domain name." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Solicitation Message (141)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -370,7 +370,7 @@ New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Solicitation Messag
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Message (142)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -381,7 +381,7 @@ New-NetFirewallRule -DisplayName "Inverse Neighbor Discovery Advertisement Messa
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 # TODO: inbound equivalent not updated, (reason, localhost IP should be added as well to LocalAddress)
 New-NetFirewallRule -DisplayName "Multicast Listener Report Version 2 (143)" `
@@ -395,7 +395,7 @@ New-NetFirewallRule -DisplayName "Multicast Listener Report Version 2 (143)" `
 	-Description "Multicast Listener Report v2 message is used by a listening node to either
 immediately report its interest in receiving multicast traffic at a specific multicast address or
 in response to a Multicast Listener Query. $Description" |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Home Agent Address Discovery Request Message (144)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -409,7 +409,7 @@ New-NetFirewallRule -DisplayName "Home Agent Address Discovery Request Message (
 regardless of its current point of attachment to the Internet.
 The mobile node and the home agent SHOULD use an IPsec security association to protect the integrity
 and authenticity of the Mobile Prefix Solicitations and Advertisements." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Home Agent Address Discovery Reply Message (145)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -423,7 +423,7 @@ New-NetFirewallRule -DisplayName "Home Agent Address Discovery Reply Message (14
 regardless of its current point of attachment to the Internet.
 The mobile node and the home agent SHOULD use an IPsec security association to protect the integrity
 and authenticity of the Mobile Prefix Solicitations and Advertisements." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Mobile Prefix Solicitation (146)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -434,7 +434,7 @@ New-NetFirewallRule -DisplayName "Mobile Prefix Solicitation (146)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Mobile Prefix Advertisement (147)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -445,7 +445,7 @@ New-NetFirewallRule -DisplayName "Mobile Prefix Advertisement (147)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Certification Path Solicitation Message (148)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -466,7 +466,7 @@ sending interface.
 Destination Address:
 Typically the All-Routers multicast address, the Solicited-Node
 multicast address, or the address of the host's default router." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Certification Path Advertisement Message (149)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -488,7 +488,7 @@ unique identification of routers.
 Destination Address:
 Either the Solicited-Node multicast address of the receiver or
 the link-scoped All-Nodes multicast address." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "ICMP messages utilized by experimental mobility protocols such as Seamoby (150)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -499,7 +499,7 @@ New-NetFirewallRule -DisplayName "ICMP messages utilized by experimental mobilit
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Router Advertisement (151)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -510,7 +510,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Advertisement (151)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Router Solicitation (152)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -521,7 +521,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Solicitation (152)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Multicast Router Termination (153)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -532,7 +532,7 @@ New-NetFirewallRule -DisplayName "Multicast Router Termination (153)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "FMIPv6 Messages (154)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -545,7 +545,7 @@ New-NetFirewallRule -DisplayName "FMIPv6 Messages (154)" `
 	-Description "Fast Mobile IPv6,
 Mobile IPv6 enables a mobile node (MN) to maintain its connectivity
 to the Internet when moving from one Access Router to another, a process referred to as handover." |
-Format-Output
+Format-RuleOutput
 
 # TODO: edge traversal unknown
 New-NetFirewallRule -DisplayName "RPL Control Message (155)" `
@@ -566,7 +566,7 @@ For all other RPL control messages, the source address is a link-local address,
 and the destination address is either the all-RPL-nodes multicast address or a link-local unicast
 address of the destination.
 The all-RPL-nodes multicast address is a new address with a value of ff02::1a." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "ILNPv6 Locator Update Message (156)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -579,7 +579,7 @@ New-NetFirewallRule -DisplayName "ILNPv6 Locator Update Message (156)" `
 	-Description "The Identifier-Locator Network Protocol (ILNP) is an experimental, evolutionary
 enhancement to IP. This message is used to dynamically update Identifier/Locator bindings for an
 existing ILNP session." |
-Format-Output
+Format-RuleOutput
 
 <#
 A personal area network (PAN) is a computer network for interconnecting devices centered on an
@@ -611,7 +611,7 @@ A non-link-local address of the sending router.
 IPv6 Destination:
 In a Duplicate Address Request (DAR), a non-link-local address of a 6LBR.
 In a Duplicate Address Confirmation (DAC), this is just the source from the DAR." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Duplicate Address Confirmation (158)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -628,7 +628,7 @@ A non-link-local address of the sending router.
 IPv6 Destination:
 In a Duplicate Address Request (DAR), a non-link-local address of a 6LBR.
 In a Duplicate Address Confirmation (DAC), this is just the source from the DAR." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "MPL Control Message (159)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -646,7 +646,7 @@ scope (scopvalue 3).
 For each MPL Domain Address that an MPL Interface subscribes to, the MPL Interface MUST also
 subscribe to the MPL Domain Address with Link-Local scope (scop value 2) when reactive forwarding
 is in use." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Extended Echo Request (160)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -657,7 +657,7 @@ New-NetFirewallRule -DisplayName "Extended Echo Request (160)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -668,7 +668,7 @@ New-NetFirewallRule -DisplayName "Extended Echo Reply (161)" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $LocalInterface `
 	-Description $Description |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

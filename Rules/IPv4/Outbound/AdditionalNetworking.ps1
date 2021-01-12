@@ -108,7 +108,7 @@ qWave enhances AV streaming performance and reliability by ensuring network qual
 for AV applications.
 It provides mechanisms for admission control, run time monitoring and enforcement,
 application feedback, and traffic prioritization." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
@@ -127,7 +127,7 @@ qWave enhances AV streaming performance and reliability by ensuring network qual
 for AV applications.
 It provides mechanisms for admission control, run time monitoring and enforcement,
 application feedback, and traffic prioritization." |
-Format-Output
+Format-RuleOutput
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -142,7 +142,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -154,7 +154,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -166,7 +166,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -182,7 +182,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform - Wi-Fi Direct Tran
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Outbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -193,7 +193,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "Outbound rule for Connected Devices Platform traffic." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -205,7 +205,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Outbound rule for Connected Devices Platform traffic." |
-Format-Output
+Format-RuleOutput
 
 #
 # AllJoyn Router predefined rules
@@ -223,7 +223,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
 unable to run." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -238,7 +238,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
 unable to run." |
-Format-Output
+Format-RuleOutput
 
 #
 # Proximity sharing predefined rule
@@ -258,7 +258,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Outbound rule for Proximity sharing over." |
-	Format-Output
+	Format-RuleOutput
 }
 
 #
@@ -274,7 +274,7 @@ New-NetFirewallRule -DisplayName "Router configuration (HTTP/S)" `
 	-LocalUser $UsersGroupSDDL `
 	-InterfaceType $DefaultInterface `
 	-Description "Allow router configuration trough browser" |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

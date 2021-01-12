@@ -108,7 +108,7 @@ if ($Develop)
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	$mDnsUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
 	Merge-SDDL ([ref] $mDnsUsers) -From $UsersGroupSDDL
@@ -124,7 +124,7 @@ if ($Develop)
 		-InterfaceType Any `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Temporary allow troublesome UDP traffic." |
-	Format-Output
+	Format-RuleOutput
 
 	# HACK: Inbound rule with "-LooseSourceMapping $true" cant be created:
 	# Invalid flags specified.
@@ -138,7 +138,7 @@ if ($Develop)
 		-InterfaceType Any `
 		-LocalOnlyMapping $true -LooseSourceMapping $false `
 		-Description "Temporary allow all UDP with LocalOnlyMapping" |
-	Format-Output
+	Format-RuleOutput
 
 	if ($UpdateGPO)
 	{

@@ -108,7 +108,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $LocalInterface `
 		-Description "Driver Foundation - User-mode Driver Framework Host Process.
 The driver host process (Wudfhost.exe) is a child process of the driver manager service.
-loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-Output
+loads one or more UMDF driver DLLs, in addition to the framework DLLs." | Format-RuleOutput
 }
 
 $Program = "%SystemRoot%\System32\CastSrv.exe"
@@ -131,7 +131,7 @@ capable of supporting a connection over the infrastructure.
 When the user selects a Miracast receiver, Windows 10 will attempt to resolve the device's hostname
 via standard DNS, as well as via multicast DNS (mDNS).
 If the name is not resolvable via either DNS method, Windows 10 will fall back to establishing the
-Miracast session using the standard Wi-Fi direct connection." | Format-Output
+Miracast session using the standard Wi-Fi direct connection." | Format-RuleOutput
 }
 
 #
@@ -152,7 +152,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD ASP Coordination Protocol" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -166,7 +166,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -181,7 +181,7 @@ New-NetFirewallRule -DisplayName "WLAN Service WFD Driver-only" `
 Wi-Fi Direct (WFD) Protocol Specifies: Proximity Extensions, which enable two or more devices that
 are running the same application to establish a direct connection without requiring an intermediary,
 such as an infrastructure wireless access point (WAP).
-For more info see description of WLAN AutoConfig service." | Format-Output
+For more info see description of WLAN AutoConfig service." | Format-RuleOutput
 
 #
 # Predefined rules for WiFi Direct Network Discovery
@@ -201,7 +201,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType Wired, Wireless  `
 		-Description "Rule to discover WSD devices on Wi-Fi Direct networks.
 Host enables pairing between the system and wired or wireless devices. This service is new since Windows 8.
-Executable also known as Device Association Framework Provider Host" | Format-Output
+Executable also known as Device Association Framework Provider Host" | Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
@@ -214,7 +214,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Scan Service" `
 	-InterfaceType Wired, Wireless  `
 	-Description "Rule to use WSD scanners on Wi-Fi Direct networks.
 Windows Image Acquisition (WIA) service provides image acquisition services for scanners and cameras." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -226,7 +226,7 @@ New-NetFirewallRule -DisplayName "Wi-Fi Direct Spooler Use" `
 	-InterfaceType Wired, Wireless  `
 	-Description "Rule to use WSD printers on Wi-Fi Direct networks.
 Print Spooler service spools print jobs and handles interaction with the printer.
-If you turn off this service, you won't be able to print or see your printers." | Format-Output
+If you turn off this service, you won't be able to print or see your printers." | Format-RuleOutput
 
 #
 # Predefined rules for Wireless portable devices
@@ -242,7 +242,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (SSDP)" `
 	-InterfaceType $LocalInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Wireless Portable Devices to allow use of the Simple Service Discovery Protocol." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Wireless portable devices (UPnP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
@@ -252,7 +252,7 @@ New-NetFirewallRule -DisplayName "Wireless portable devices (UPnP)" `
 	-LocalPort 2869 -RemotePort Any `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $LocalInterface `
-	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-Output
+	-Description "Wireless Portable Devices to allow use of Universal Plug and Play." | Format-RuleOutput
 
 if ($UpdateGPO)
 {

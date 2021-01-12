@@ -108,7 +108,7 @@ streaming applications on IP home networks.
 qWave enhances AV streaming performance and reliability by ensuring network quality-of-service
 (QoS) for AV applications.
 It provides mechanisms for admission control, run time monitoring and enforcement,
-application feedback, and traffic prioritization." | Format-Output
+application feedback, and traffic prioritization." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device functionality (qWave)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
@@ -126,7 +126,7 @@ streaming applications on IP home networks.
 qWave enhances AV streaming performance and reliability by ensuring network quality-of-service
 (QoS) for AV applications.
 It provides mechanisms for admission control, run time monitoring and enforcement,
-application feedback, and traffic prioritization." | Format-Output
+application feedback, and traffic prioritization." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device SSDP Discovery" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
@@ -138,7 +138,7 @@ New-NetFirewallRule -DisplayName "Cast to Device SSDP Discovery" `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Inbound rule to allow discovery of Cast to Device targets using SSDP." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -149,7 +149,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -160,7 +160,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -171,7 +171,7 @@ New-NetFirewallRule -DisplayName "Cast to Device streaming server (HTTP)" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule for the Cast to Device server to allow streaming using HTTP." |
-Format-Output
+Format-RuleOutput
 
 $Program = "%SystemRoot%\System32\mdeserver.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -186,7 +186,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Inbound ror the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -198,7 +198,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTCP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -210,7 +210,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -221,7 +221,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -232,7 +232,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 
 	New-NetFirewallRule -DisplayName "Cast to Device streaming server (RTSP)" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -243,7 +243,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
 		-Description "Inbound rule for the Cast to Device server to allow streaming using RTSP and RTP." |
-	Format-Output
+	Format-RuleOutput
 }
 
 New-NetFirewallRule -DisplayName "Cast to Device UPnP Events" `
@@ -255,7 +255,7 @@ New-NetFirewallRule -DisplayName "Cast to Device UPnP Events" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule to allow receiving UPnP Events from Cast to Device targets." |
-Format-Output
+Format-RuleOutput
 
 #
 # Connected devices platform predefined rules
@@ -270,7 +270,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform - Wi-Fi Direct Tran
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "Inbound rule to use Wi-Fi Direct traffic in the Connected Devices Platform." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -280,7 +280,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-LocalPort Any -RemotePort Any `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
-	-Description "Inbound rule for Connected Devices Platform traffic." | Format-Output
+	-Description "Inbound rule for Connected Devices Platform traffic." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -291,7 +291,7 @@ New-NetFirewallRule -DisplayName "Connected Devices Platform" `
 	-LocalUser Any -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Inbound rule for Connected Devices Platform traffic." | Format-Output
+	-Description "Inbound rule for Connected Devices Platform traffic." | Format-RuleOutput
 
 #
 # AllJoyn Router predefined rules
@@ -308,7 +308,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-Description "Inbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
-unable to run." | Format-Output
+unable to run." | Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
@@ -322,7 +322,7 @@ New-NetFirewallRule -DisplayName "AllJoyn Router" `
 	-Description "Inbound rule for AllJoyn Router traffic.
 AllJoyn Router service routes AllJoyn messages for the local AllJoyn clients.
 If this service is stopped the AllJoyn clients that do not have their own bundled routers will be
-unable to run." | Format-Output
+unable to run." | Format-RuleOutput
 
 #
 # Proximity sharing predefined rules
@@ -340,7 +340,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any -EdgeTraversalPolicy Block `
 		-InterfaceType $DefaultInterface `
-		-Description "Inbound rule for Proximity sharing over." | Format-Output
+		-Description "Inbound rule for Proximity sharing over." | Format-RuleOutput
 }
 
 #
@@ -359,7 +359,7 @@ New-NetFirewallRule -DisplayName "DIAL protocol server (HTTP)" `
 Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
 It is a mechanism for discovering and launching applications on a single subnet, typically a home network.
 It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (SSDP), and HTTP protocols." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "DIAL protocol server (HTTP)" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -373,7 +373,7 @@ New-NetFirewallRule -DisplayName "DIAL protocol server (HTTP)" `
 Discovery and Launch (DIAL) is a protocol co-developed by Netflix and YouTube with help from Sony and Samsung.
 It is a mechanism for discovering and launching applications on a single subnet, typically a home network.
 It relies on Universal Plug and Play (UPnP), Simple Service Discovery Protocol (SSDP), and HTTP protocols." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {

@@ -96,7 +96,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
-	$_ | Format-Output -Modify
+	$_ | Format-RuleOutput -Modify
 	[hashtable] $Params = @{
 		InputObject = $_
 		Enabled = "True"
@@ -135,7 +135,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -146,7 +146,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -157,7 +157,7 @@ New-NetFirewallRule -DisplayName "NetBIOS Session" `
 	-LocalUser $LocalSystem `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow NetBIOS Session Service connections." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
@@ -169,7 +169,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Domain `
@@ -181,7 +181,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "SMB" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
@@ -193,7 +193,7 @@ New-NetFirewallRule -DisplayName "SMB" `
 	-InterfaceType $DefaultInterface `
 	-Description "Rule for File and Printer Sharing to allow Server Message Block transmission and
 reception via Named Pipes." |
-Format-Output
+Format-RuleOutput
 
 if ($UpdateGPO)
 {
