@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Firewall-help.xml
 Module Name: Ruleset.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md
 schema: 2.0.0
 ---
 
-# Remove-FirewallRules
+# Remove-FirewallRule
 
 ## SYNOPSIS
 
@@ -14,13 +14,13 @@ Removes firewall rules according to a list in a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Remove-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-WhatIf] [-Confirm]
+Remove-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
+Removes firewall rules according to a with Export-FirewallRule generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons.
 Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
 
@@ -29,7 +29,7 @@ Only the field Name or - if Name is missing - DisplayName is used, all other fie
 ### EXAMPLE 1
 
 ```powershell
-Remove-FirewallRules
+Remove-FirewallRule
 ```
 
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
@@ -37,7 +37,7 @@ Removes all firewall rules according to a list in the CSV file FirewallRules.csv
 ### EXAMPLE 2
 
 ```powershell
-Remove-FirewallRules WmiRules.json -JSON
+Remove-FirewallRule WmiRules.json -JSON
 ```
 
 Removes all firewall rules according to the list in the JSON file WmiRules.json.
@@ -147,11 +147,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Remove-FirewallRules
+### None. You cannot pipe objects to Remove-FirewallRule
 
 ## OUTPUTS
 
-### None. Remove-FirewallRules does not generate any output
+### None. Remove-FirewallRule does not generate any output
 
 ## NOTES
 
@@ -181,6 +181,6 @@ TODO: implement removing rules not according to file
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md)
 
 [https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

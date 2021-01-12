@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Firewall-help.xml
 Module Name: Ruleset.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md
 schema: 2.0.0
 ---
 
-# Format-Output
+# Format-RuleOutput
 
 ## SYNOPSIS
 
@@ -16,19 +16,19 @@ Format firewall rule output for display
 ### None (Default)
 
 ```powershell
-Format-Output -Rule <CimInstance[]> [<CommonParameters>]
+Format-RuleOutput -Rule <CimInstance[]> [<CommonParameters>]
 ```
 
 ### Modify
 
 ```powershell
-Format-Output -Rule <CimInstance[]> [-Modify] [<CommonParameters>]
+Format-RuleOutput -Rule <CimInstance[]> [-Modify] [<CommonParameters>]
 ```
 
 ### Import
 
 ```powershell
-Format-Output -Rule <CimInstance[]> [-Import] [<CommonParameters>]
+Format-RuleOutput -Rule <CimInstance[]> [-Import] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,7 +41,7 @@ very fast, this function helps to output only relevant, formatted and colored ou
 ### EXAMPLE 1
 
 ```powershell
-Net-NewFirewallRule ... | Format-Output
+Net-NewFirewallRule ... | Format-RuleOutput
 ```
 
 ## PARAMETERS
@@ -104,7 +104,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Format-Output does not generate any output
+### None. Format-RuleOutput does not generate any output
 
 ## NOTES
 

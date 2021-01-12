@@ -78,25 +78,25 @@ Export blocking rules
 Append exported rules to existing file instead of replacing
 
 .EXAMPLE
-PS> Export-FirewallRules
+PS> Export-FirewallRule
 
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-FirewallRules -Inbound -Allow
+PS> Export-FirewallRule -Inbound -Allow
 
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-FirewallRules -DisplayGroup ICMP* ICMPRules.json -json
+PS> Export-FirewallRule -DisplayGroup ICMP* ICMPRules.json -json
 
 Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 .INPUTS
-None. You cannot pipe objects to Export-FirewallRules
+None. You cannot pipe objects to Export-FirewallRule
 
 .OUTPUTS
-None. Export-FirewallRules does not generate any output
+None. Export-FirewallRule does not generate any output
 
 .NOTES
 Author: Markus Scholtes
@@ -141,18 +141,18 @@ File and Printer Sharing
 Microsoft Office
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md
 
 .LINK
 https://github.com/MScholtes/Firewall-Manager
 #>
-function Export-FirewallRules
+function Export-FirewallRule
 {
 	# TODO: Should be possible to use Format-RuleOutput function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md")]
 	[OutputType([void])]
 	param (
 		[Parameter()]

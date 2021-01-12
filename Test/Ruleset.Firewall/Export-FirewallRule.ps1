@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Export-FirewallRules
+Unit test for Export-FirewallRule
 
 .DESCRIPTION
-Test correctness of Export-FirewallRules function
+Test correctness of Export-FirewallRule function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.
 
 .EXAMPLE
-PS> .\Export-FirewallRules.ps1
+PS> .\Export-FirewallRule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Export-FirewallRules.ps1
+None. You cannot pipe objects to Export-FirewallRule.ps1
 
 .OUTPUTS
-None. Export-FirewallRules.ps1 does not generate any output
+None. Export-FirewallRule.ps1 does not generate any output
 
 .NOTES
 None.
@@ -73,32 +73,32 @@ $Exports = "$ProjectRoot\Exports"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
-	Start-Test "Export-FirewallRules -DisplayGroup"
-	Export-FirewallRules -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" # -DisplayName "Gwent"
+	Start-Test "Export-FirewallRule -DisplayGroup"
+	Export-FirewallRule -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" # -DisplayName "Gwent"
 
-	Start-Test "Export-FirewallRules -DisplayGroup"
-	Export-FirewallRules -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport"
+	Start-Test "Export-FirewallRule -DisplayGroup"
+	Export-FirewallRule -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport"
 
-	Start-Test "Export-FirewallRules -DisplayName NONEXISTENT"
-	Export-FirewallRules -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1"
+	Start-Test "Export-FirewallRule -DisplayName NONEXISTENT"
+	Export-FirewallRule -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1"
 
-	Start-Test "Export-FirewallRules -DisplayName"
-	Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1"
+	Start-Test "Export-FirewallRule -DisplayName"
+	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1"
 
-	Start-Test "Export-FirewallRules -DisplayName -JSON"
-	Export-FirewallRules -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2"
+	Start-Test "Export-FirewallRule -DisplayName -JSON"
+	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2"
 
-	Start-Test "Export-FirewallRules -Outbound -Disabled -Allow"
-	Export-FirewallRules -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport"
+	Start-Test "Export-FirewallRule -Outbound -Disabled -Allow"
+	Export-FirewallRule -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport"
 
-	Start-Test "Export-FirewallRules -Inbound -Enabled -Block -JSON"
-	Export-FirewallRules -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport"
+	Start-Test "Export-FirewallRule -Inbound -Enabled -Block -JSON"
+	Export-FirewallRule -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport"
 
-	Start-Test "Export-FirewallRules -DisplayGroup"
-	$Result = Export-FirewallRules -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" # -DisplayName "Gwent"
+	Start-Test "Export-FirewallRule -DisplayGroup"
+	$Result = Export-FirewallRule -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" # -DisplayName "Gwent"
 	$Result
 
-	Test-Output $Result -Command Export-FirewallRules
+	Test-Output $Result -Command Export-FirewallRule
 }
 
 Update-Log

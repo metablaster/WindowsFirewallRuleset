@@ -11,7 +11,7 @@ LONG DESCRIPTION
 	functionality for firewall rule and policy auditing.
 
 EXAMPLES
-	Export-FirewallRules
+	Export-FirewallRule
 	Exports firewall rules to a CSV or JSON file
 
 	Find-RulePrincipal
@@ -20,10 +20,10 @@ EXAMPLES
 	Format-RuleOutput
 	Format output of the Net-NewFirewallRule commandlet
 
-	Import-FirewallRules
+	Import-FirewallRule
 	Imports firewall rules from a CSV or JSON file
 
-	Remove-FirewallRules
+	Remove-FirewallRule
 	Removes firewall rules according to a list in a CSV or JSON file
 
 KEYWORDS

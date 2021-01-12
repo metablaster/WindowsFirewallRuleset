@@ -14,7 +14,7 @@ Windows firewall management module
 
 ## Ruleset.Firewall Cmdlets
 
-### [Export-FirewallRules](Export-FirewallRules.md)
+### [Export-FirewallRule](Export-FirewallRule.md)
 
 Exports firewall rules to a CSV or JSON file
 
@@ -22,14 +22,14 @@ Exports firewall rules to a CSV or JSON file
 
 Get all firewall rules with or without LocalUser value
 
-### [Format-Output](Format-Output.md)
+### [Format-RuleOutput](Format-RuleOutput.md)
 
 Format output of the Net-NewFirewallRule commandlet
 
-### [Import-FirewallRules](Import-FirewallRules.md)
+### [Import-FirewallRule](Import-FirewallRule.md)
 
 Imports firewall rules from a CSV or JSON file
 
-### [Remove-FirewallRules](Remove-FirewallRules.md)
+### [Remove-FirewallRule](Remove-FirewallRule.md)
 
 Removes firewall rules according to a list in a CSV or JSON file

@@ -100,7 +100,7 @@ else
 {
 	$StopWatch.Start()
 	# Import all outbound rules to GPO
-	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore
+	Import-FirewallRule -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore
 	$StopWatch.Stop()
 
 	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
@@ -119,7 +119,7 @@ else
 {
 	$StopWatch.Start()
 	# Import all inbound rules from GPO
-	Import-FirewallRules -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
+	Import-FirewallRule -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 	$StopWatch.Stop()
 
 	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes

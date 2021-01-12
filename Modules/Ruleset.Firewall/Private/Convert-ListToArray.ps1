@@ -33,7 +33,7 @@ Convert comma separated list to string array
 
 .DESCRIPTION
 Convert comma separated list to string array
-Used by Import-FirewallRules ex. to unpack a list of IP addresses back to string array
+Used by Import-FirewallRule ex. to unpack a list of IP addresses back to string array
 
 .PARAMETER Value
 List of comma separated string values, previously packed with Convert-ArrayToList

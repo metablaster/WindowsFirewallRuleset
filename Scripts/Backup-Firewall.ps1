@@ -90,7 +90,7 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 
 $StopWatch.Start()
 # Export all outbound rules from GPO
-Export-FirewallRules -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
+Export-FirewallRule -Outbound -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
@@ -100,7 +100,7 @@ Write-Information -Tags "User" -MessageData "INFO: Time needed to export outboun
 $StopWatch.Reset()
 $StopWatch.Start()
 # Export all inbound rules from GPO
-Export-FirewallRules -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
+Export-FirewallRule -Inbound -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $InboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours

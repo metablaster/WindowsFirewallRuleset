@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Format-Output
+Unit test for Format-RuleOutput
 
 .DESCRIPTION
-Test correctness of Format-Output function
+Test correctness of Format-RuleOutput function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.
 
 .EXAMPLE
-PS> .\Format-Output.ps1
+PS> .\Format-RuleOutput.ps1
 
 .INPUTS
-None. You cannot pipe objects to Format-Output.ps1
+None. You cannot pipe objects to Format-RuleOutput.ps1
 
 .OUTPUTS
-None. Format-Output.ps1 does not generate any output
+None. Format-RuleOutput.ps1 does not generate any output
 
 .NOTES
 None.
@@ -76,7 +76,7 @@ Enter-Test
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-Start-Test "Format-Output"
+Start-Test "Format-RuleOutput"
 
 New-NetFirewallRule -DisplayName "TargetProgram1" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -87,7 +87,7 @@ New-NetFirewallRule -DisplayName "TargetProgram1" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "TargetProgram1 test rule description" |
-Format-Output
+Format-RuleOutput
 
 $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -98,10 +98,10 @@ $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-LocalUser Any `
 	-InterfaceType $DefaultInterface `
 	-Description "TargetProgram2 test rule description" |
-Format-Output
+Format-RuleOutput
 
 $Result
-Test-Output $Result -Command Format-Output
+Test-Output $Result -Command Format-RuleOutput
 
 Update-Log
 Exit-Test

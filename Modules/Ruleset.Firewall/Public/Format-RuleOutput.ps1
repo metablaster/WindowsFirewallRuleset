@@ -44,23 +44,23 @@ If specified, output status represents rule modification
 If specified, output status represents importing rule
 
 .EXAMPLE
-PS> Net-NewFirewallRule ... | Format-Output
+PS> Net-NewFirewallRule ... | Format-RuleOutput
 
 .INPUTS
 [Microsoft.Management.Infrastructure.CimInstance[]]
 
 .OUTPUTS
-None. Format-Output does not generate any output
+None. Format-RuleOutput does not generate any output
 
 .NOTES
 TODO: For force loaded rules it should say: "Force Load Rule:"
 #>
-function Format-Output
+function Format-RuleOutput
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Colored output is wanted")]
 	[CmdletBinding(DefaultParameterSetName = "None",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-Output.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]

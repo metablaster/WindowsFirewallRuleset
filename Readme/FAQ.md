@@ -229,9 +229,9 @@ them as follows:
     - `...\Initialize-Module.ps1`
     - `...\Initialize-Provider.ps1`
     - `...\Uninstall-DuplicateModule.ps1`
-    - `...\Ruleset.Firewall\Remove-FirewallRules.ps1`
-    - `...\Ruleset.Firewall\Export-FirewallRules.ps1`
-    - `...\Ruleset.Firewall\Import-FirewallRules.ps1`
+    - `...\Ruleset.Firewall\Remove-FirewallRule.ps1`
+    - `...\Ruleset.Firewall\Export-FirewallRule.ps1`
+    - `...\Ruleset.Firewall\Import-FirewallRule.ps1`
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
 
     By default none of these scripts run on their own, except as explained in point 4.\

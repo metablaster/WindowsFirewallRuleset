@@ -32,7 +32,7 @@ SOFTWARE.
 Imports firewall rules from a CSV or JSON file
 
 .DESCRIPTION
-Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
+Imports firewall rules generated with Export-FirewallRule, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
 
@@ -49,21 +49,21 @@ Input file
 Input from JSON instead of CSV format
 
 .EXAMPLE
-PS> Import-FirewallRules
+PS> Import-FirewallRule
 
 Imports all firewall rules in the CSV file FirewallRules.csv
 If no file is specified, FirewallRules .csv or .json in the current directory is searched.
 
 .EXAMPLE
-PS> Import-FirewallRules -FileName WmiRules -JSON
+PS> Import-FirewallRule -FileName WmiRules -JSON
 
 Imports all firewall rules from the JSON file WmiRules
 
 .INPUTS
-None. You cannot pipe objects to Import-FirewallRules
+None. You cannot pipe objects to Import-FirewallRule
 
 .OUTPUTS
-None. Import-FirewallRules does not generate any output
+None. Import-FirewallRule does not generate any output
 
 .NOTES
 Author: Markus Scholtes
@@ -85,15 +85,15 @@ December 2020:
 2. Support resolving path wildcard pattern
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
 
 .LINK
 https://github.com/MScholtes/Firewall-Manager
 #>
-function Import-FirewallRules
+function Import-FirewallRule
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md")]
 	[OutputType([void])]
 	param (
 		[Parameter()]

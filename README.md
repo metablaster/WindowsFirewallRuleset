@@ -417,7 +417,7 @@ At the moment there are 3 options to delete firewall rules:
 1. The easiest way is to select all rules you want to delete in GPO, right click and delete.
 
 2. To delete rules according to file there is a function for this purpose, located in:\
-`Modules\Ruleset.Firewall\Public\Remove-FirewallRules.ps1`\
+`Modules\Ruleset.Firewall\Public\Remove-FirewallRule.ps1`\
 however you're advised to perform some tests before using it due to it's
 experimental state.
 

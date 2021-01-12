@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Firewall-help.xml
 Module Name: Ruleset.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md
 schema: 2.0.0
 ---
 
-# Export-FirewallRules
+# Export-FirewallRule
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Exports firewall rules to a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Export-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>]
+Export-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>]
  [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
  [<CommonParameters>]
 ```
@@ -34,7 +34,7 @@ If the export file already exists it's content will be replaced by default.
 ### EXAMPLE 1
 
 ```powershell
-Export-FirewallRules
+Export-FirewallRule
 ```
 
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
@@ -42,7 +42,7 @@ Exports all firewall rules to the CSV file FirewallRules.csv in the current dire
 ### EXAMPLE 2
 
 ```powershell
-Export-FirewallRules -Inbound -Allow
+Export-FirewallRule -Inbound -Allow
 ```
 
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
@@ -50,7 +50,7 @@ Exports all inbound and allowing firewall rules to the CSV file FirewallRules.cs
 ### EXAMPLE 3
 
 ```powershell
-Export-FirewallRules -DisplayGroup ICMP* ICMPRules.json -json
+Export-FirewallRule -DisplayGroup ICMP* ICMPRules.json -json
 ```
 
 Exports all ICMP firewall rules to the JSON file ICMPRules.json.
@@ -273,11 +273,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Export-FirewallRules
+### None. You cannot pipe objects to Export-FirewallRule
 
 ## OUTPUTS
 
-### None. Export-FirewallRules does not generate any output
+### None. Export-FirewallRule does not generate any output
 
 ## NOTES
 
@@ -337,6 +337,6 @@ Microsoft Office
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRules.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md)
 
 [https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

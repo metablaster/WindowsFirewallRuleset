@@ -33,7 +33,7 @@ Convert String array to comma separated list
 
 .DESCRIPTION
 Convert String array to comma separated list.
-Used by Export-FirewallRules ex. to pack an array of IP addresses into a single string
+Used by Export-FirewallRule ex. to pack an array of IP addresses into a single string
 
 .PARAMETER InputObject
 String array which to convert

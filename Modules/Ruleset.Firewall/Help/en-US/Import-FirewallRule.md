@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Firewall-help.xml
 Module Name: Ruleset.Firewall
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
 schema: 2.0.0
 ---
 
-# Import-FirewallRules
+# Import-FirewallRule
 
 ## SYNOPSIS
 
@@ -14,12 +14,12 @@ Imports firewall rules from a CSV or JSON file.
 ## SYNTAX
 
 ```powershell
-Import-FirewallRules [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [<CommonParameters>]
+Import-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Imports firewall rules generated with Export-FirewallRules, CSV or JSON file.
+Imports firewall rules generated with Export-FirewallRule, CSV or JSON file.
 CSV files have to be separated with semicolons.
 Existing rules with same name will be overwritten.
 
@@ -28,7 +28,7 @@ Existing rules with same name will be overwritten.
 ### EXAMPLE 1
 
 ```powershell
-Import-FirewallRules
+Import-FirewallRule
 ```
 
 Imports all firewall rules in the CSV file FirewallRules.csv
@@ -37,7 +37,7 @@ If no file is specified, FirewallRules .csv or .json in the current directory is
 ### EXAMPLE 2
 
 ```powershell
-Import-FirewallRules -FileName WmiRules -JSON
+Import-FirewallRule -FileName WmiRules -JSON
 ```
 
 Imports all firewall rules from the JSON file WmiRules
@@ -114,11 +114,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Import-FirewallRules
+### None. You cannot pipe objects to Import-FirewallRule
 
 ## OUTPUTS
 
-### None. Import-FirewallRules does not generate any output
+### None. Import-FirewallRule does not generate any output
 
 ## NOTES
 
@@ -153,6 +153,6 @@ Support resolving path wildcard pattern
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRules.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md)
 
 [https://github.com/MScholtes/Firewall-Manager](https://github.com/MScholtes/Firewall-Manager)

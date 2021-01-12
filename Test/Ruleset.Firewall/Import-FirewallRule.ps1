@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Remove-FirewallRules
+Unit test for Import-FirewallRule
 
 .DESCRIPTION
-Test correctness of Remove-FirewallRules function
+Test correctness of Import-FirewallRule function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown.
 
 .EXAMPLE
-PS> .\Remove-FirewallRules.ps1
+PS> .\Import-FirewallRule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Remove-FirewallRules.ps1
+None. You cannot pipe objects to Import-FirewallRule.ps1
 
 .OUTPUTS
-None. Remove-FirewallRules.ps1 does not generate any output
+None. Import-FirewallRule.ps1 does not generate any output
 
 .NOTES
 None.
@@ -68,23 +68,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test
 
-if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow and experimental unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
 	$Exports = "$ProjectRoot\Exports"
 
 	# TODO: need to test failure cases, see also module todo's for more info
+	# TODO: need to test store apps import for "Any" and "*" owner/package
 
-	Start-Test "Remove-FirewallRules"
-	$Result = Remove-FirewallRules -Folder $Exports -FileName "GroupExport"
+	Start-Test "Import-FirewallRule -FileName GroupExport.csv"
+	Import-FirewallRule -Folder $Exports -FileName "GroupExport.csv"
+
+	Start-Test "Import-FirewallRule -FileName NamedExport1.csv"
+	Import-FirewallRule -Folder $Exports -FileName "$Exports\NamedExport1.csv"
+
+	Start-Test "Import-FirewallRule -JSON -FileName NamedExport2.json"
+	Import-FirewallRule -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
+
+	Start-Test "Import-FirewallRule -FileName StoreAppExport.csv"
+	$Result = Import-FirewallRule -Folder $Exports -FileName "StoreAppExport.csv"
 	$Result
 
-	Start-Test "Remove-FirewallRules"
-	Remove-FirewallRules -Folder $Exports -FileName "$Exports\NamedExport1.csv"
-
-	Start-Test "Remove-FirewallRules -JSON"
-	Remove-FirewallRules -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
-
-	Test-Output $Result -Command Remove-FirewallRules
+	Test-Output $Result -Command Import-FirewallRule
 }
 
 Update-Log

@@ -32,7 +32,7 @@ SOFTWARE.
 Removes firewall rules according to a list in a CSV or JSON file
 
 .DESCRIPTION
-Removes firewall rules according to a with Export-FirewallRules generated list in a CSV or JSON file.
+Removes firewall rules according to a with Export-FirewallRule generated list in a CSV or JSON file.
 CSV files have to be separated with semicolons.
 Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
 
@@ -49,20 +49,20 @@ File name according to which to delete rules
 Input file in JSON instead of CSV format
 
 .EXAMPLE
-PS> Remove-FirewallRules
+PS> Remove-FirewallRule
 
 Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-Remove-FirewallRules WmiRules.json -JSON
+Remove-FirewallRule WmiRules.json -JSON
 
 Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
 .INPUTS
-None. You cannot pipe objects to Remove-FirewallRules
+None. You cannot pipe objects to Remove-FirewallRule
 
 .OUTPUTS
-None. Remove-FirewallRules does not generate any output
+None. Remove-FirewallRule does not generate any output
 
 .NOTES
 Author: Markus Scholtes
@@ -82,18 +82,18 @@ December 2020:
 TODO: implement removing rules not according to file
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md
 
 .LINK
 https://github.com/MScholtes/Firewall-Manager
 #>
-function Remove-FirewallRules
+function Remove-FirewallRule
 {
 	# TODO: Should be possible to use Format-RuleOutput function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRules.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md")]
 	[OutputType([void])]
 	param (
 		[Parameter()]

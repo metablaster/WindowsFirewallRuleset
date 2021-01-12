@@ -113,11 +113,11 @@ SOFTWARE.
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
 	FunctionsToExport = @(
-		"Export-FirewallRules"
+		"Export-FirewallRule"
 		"Find-RulePrincipal"
 		"Format-RuleOutput"
-		"Import-FirewallRules"
-		"Remove-FirewallRules"
+		"Import-FirewallRule"
+		"Remove-FirewallRule"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -145,11 +145,11 @@ SOFTWARE.
 		"en-US\about_Ruleset.Firewall.help.txt"
 		"en-US\Ruleset.Firewall-help.xml"
 		"Help\en-US\about_Ruleset.Firewall.md"
-		"Help\en-US\Export-FirewallRules.md"
+		"Help\en-US\Export-FirewallRule.md"
 		"Help\en-US\Find-RulePrincipal.md"
 		"Help\en-US\Format-RuleOutput.md"
-		"Help\en-US\Import-FirewallRules.md"
-		"Help\en-US\Remove-FirewallRules.md"
+		"Help\en-US\Import-FirewallRule.md"
+		"Help\en-US\Remove-FirewallRule.md"
 		"Help\en-US\Ruleset.Firewall.md"
 		"Help\README.md"
 		"Private\Convert-ArrayToList.ps1"
@@ -158,12 +158,12 @@ SOFTWARE.
 		"Private\Convert-MultiLineToList.ps1"
 		"Private\Convert-ValueToBoolean.ps1"
 		"Private\README.md"
-		"Public\Export-FirewallRules.ps1"
+		"Public\Export-FirewallRule.ps1"
 		"Public\Find-RulePrincipal.ps1"
 		"Public\Format-RuleOutput.ps1"
-		"Public\Import-FirewallRules.ps1"
+		"Public\Import-FirewallRule.ps1"
 		"Public\README.md"
-		"Public\Remove-FirewallRules.ps1"
+		"Public\Remove-FirewallRule.ps1"
 		"Ruleset.Firewall_3ee23849-8adf-46ee-95f9-7a02417e1f4b_HelpInfo.xml"
 		"Ruleset.Firewall.psd1"
 		"Ruleset.Firewall.psm1"
