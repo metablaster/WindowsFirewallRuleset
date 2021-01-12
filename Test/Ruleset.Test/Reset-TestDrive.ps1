@@ -69,8 +69,9 @@ Enter-Test
 
 Remove-Item -Path $DefaultTestDrive -Recurse -ErrorAction Ignore
 $Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
+$StandardUser = Get-GroupPrincipal Users | Where-Object -Property Principal -EQ $Principal.Identities.Name
 
-if ($Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::User))
+if ($StandardUser)
 {
 	Start-Test "Reset-TestDrive non default new drive"
 	Reset-TestDrive $DefaultTestDrive\$ThisScript
@@ -82,10 +83,6 @@ if ($Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::User))
 else
 {
 	Start-Test "Reset-TestDrive as Administrator"
-	Reset-TestDrive $DefaultTestDrive\$ThisScript
-
-	Start-Test "Reset-TestDrive as Administrator"
-	Remove-Item -Path $DefaultTestDrive\$ThisScript\README.md -Confirm
 	Reset-TestDrive $DefaultTestDrive\$ThisScript
 }
 

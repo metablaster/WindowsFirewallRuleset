@@ -39,6 +39,12 @@ User group on local or remote computer
 .PARAMETER Domain
 One or more computers which to query for group users
 
+.PARAMETER Include
+Specifies a username as a wildcard pattern that this function includes in the operation.
+
+.PARAMETER Exclude
+Specifies a username as a wildcard pattern that this function excludes from operation.
+
 .PARAMETER Disabled
 If specified, result is disabled accounts instead
 
@@ -76,6 +82,14 @@ function Get-GroupPrincipal
 		[string[]] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
+		[SupportsWildcards()]
+		[string] $Include = "*",
+
+		[Parameter()]
+		[SupportsWildcards()]
+		[string] $Exclude,
+
+		[Parameter()]
 		[switch] $Disabled,
 
 		[Parameter()]
@@ -85,6 +99,22 @@ function Get-GroupPrincipal
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+		# Include/Exclude filter
+		[scriptblock] $SkipUser = {
+			param ($User)
+
+			if ($User -notlike $Include)
+			{
+				return $true
+			}
+			elseif (![string]::IsNullOrEmpty($Exclude) -and ($User -like $Exclude))
+			{
+				return $true
+			}
+
+			return $false
+		}
 	}
 	process
 	{
@@ -115,7 +145,7 @@ function Get-GroupPrincipal
 							continue
 						}
 
-						# Get only enabled users, these include SID but also non group users
+						# Get either enabled or disabled users, these include SID but also non group users
 						$EnabledAccounts = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" `
 							-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
@@ -129,6 +159,11 @@ function Get-GroupPrincipal
 						# Finally compare these 2 results and assemble group users which are active, also includes SID
 						foreach ($Account in $EnabledAccounts)
 						{
+							if (& $SkipUser $Account.Name)
+							{
+								continue
+							}
+
 							$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
 									# NOTE: Account.Domain Because $Computer may be set to "localhost"
 									$Account.Caption -eq "$($Account.Domain)\$($args[0])"
@@ -178,7 +213,7 @@ function Get-GroupPrincipal
 						continue
 					}
 
-					# Get only enabled users, these include SID but also non group users
+					# Get either enabled or disabled users, these include SID but also non group users
 					$EnabledAccounts = Get-LocalUser | Where-Object -Property Enabled -NE $Disabled
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
@@ -189,6 +224,11 @@ function Get-GroupPrincipal
 
 					foreach ($Account in $EnabledAccounts)
 					{
+						if (& $SkipUser $Account.Name)
+						{
+							continue
+						}
+
 						$AccountName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
 								$args[0] -eq "$Computer\$($Account.Name)"
 							})

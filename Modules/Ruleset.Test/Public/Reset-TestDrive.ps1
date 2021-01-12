@@ -68,7 +68,6 @@ None. You cannot pipe objects to Reset-TestDrive
 None. Reset-TestDrive does not generate any output
 
 .NOTES
-None.
 TODO: Path supports wildcards
 #>
 function Reset-TestDrive
@@ -99,9 +98,9 @@ function Reset-TestDrive
 		if ($Path.FullName -ne "$ProjectRoot\Test\TestDrive")
 		{
 			$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
+			$StandardUser = Get-GroupPrincipal Users | Where-Object -Property Principal -EQ $Principal.Identities.Name
 
-			# TODO: not working as expected
-			if (!$Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::User))
+			if (!$StandardUser)
 			{
 				Write-Error -Category PermissionDenied -TargetObject $Principal `
 					-Message "This operation requires standard user privileges"
