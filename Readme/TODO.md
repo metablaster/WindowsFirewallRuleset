@@ -32,7 +32,7 @@ Todo's in this file are categorized into following sections:
 1. Modules
 
     - 3rd party scripts and modules need to be checked for updates or useful changes
-    - `Find-Installation` function is hungry for constant updates and improvements
+    - `Search-Installation` function is hungry for constant updates and improvements
 
 2. All scripts
 
@@ -42,7 +42,7 @@ Todo's in this file are categorized into following sections:
 
 3. Code style
 
-    - Limit code to 100-120 column rule.
+    - Limit code to 100-120 column rule where possible.
 
 4. Release checklist
 
@@ -51,8 +51,8 @@ Todo's in this file are categorized into following sections:
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version
-    - Run PScriptAnalyzer
-    - Check master script includes all rule scripts
+    - Run PScriptAnalyzer and resolve issues.
+    - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
     - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one admin),
     and 1 disabled account for each of these 3 groups for best test results.
     - Run all tests in both release and develop mode, both Desktop and Core editions
@@ -61,7 +61,7 @@ Todo's in this file are categorized into following sections:
     - Revisit and cleanup `TODO.md`
     - Update markdown help and help content, run: `Update-HelpContent.ps1`
     - Verify links to repository are pointing to master except if develop branch is wanted,
-    links should be then tested on master branch.
+    links should be then tested on master branch with `Test-MarkdownLinks.ps1`.
     - There are 3 kinds of links to check:\
     WindowsFirewallRuleset/develop\
     WindowsFirewallRuleset/blob/develop\
@@ -79,33 +79,33 @@ Todo's in this file are categorized into following sections:
 
 6. Test
 
-    - Test everything on Windows Insider channels, hopefully catching up with new OS releases
+    - Test everything on Windows insider channels, hopefully catching up with new OS releases
 
 ## High priority
 
 1. Modules
 
-    - There are breaks missing for switches all over the place
-    - Revisit code and make consistent `PSCustomObject` properties for all function outputs, consider
-    using [formats][about format] for custom objects
     - Need to see which functions/commands may throw and setup try catch blocks
     - Revisit parameter validation for functions, specifically acceptance of null or empty
     - Registry drilling for some programs are complex and specific, such as for NVIDIA or OneDrive,
     in these and similar cases we should return installation table which
     would be used within rule scripts to get individual paths for target programs.
-    - Revisit function parameters, their types, aliases, names are singular, consistent etc..
     - Change bool parameters to switch where possible
-    - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
-    some other functions also have dubious names
+    - Finish pipeline support, use begin/process/end blocks to make functions work for pipeline as
+    needed, revisit parameter arguments and aliases for this purpose
+    - Some function variables such as `ComputerName` take an array of values, make sure this functionality
+    actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
+    - If there is `Path` parameter then also `LiteralPath` is required
 
-2. Project scripts
+2. Scripts
 
-    - Apply only rules for installed executables, `Confirm-Executable` function
     - Auto detect interfaces, ex. to be used with InterfaceAlias parameter
-    - For individual runs of rule scripts we should call `gpupdate.exe`
     - null corectness, in specific cases just `if (something)` doesn't work as in other languages
     - Detect if a script was run manually, to be able to reset errors and warning status, or to
     conditionally run `gpuupdate.exe`
+    - Make it possible to deploy firewall to computers on network
+    - For remoting `ComputerName` parameters are needed, this could be also
+    specified/learned with/from PolicyStore parameter
 
 3. Rules
 
@@ -119,26 +119,21 @@ Todo's in this file are categorized into following sections:
     - Some rule defaults are biased or relaxed for troubleshooting purposes, ex. Edge Chromium SSDP,
     such rules should be either removed or explicitly blocking
     - Some programs searches assume userprofile, but same program can also be installed system wide.
+    - Need better and unified approach to write rule descriptions, because comments must not be
+    formatted, formatting would be visible in GUI.
 
 4. Test and debugging
 
-    - For `Write-Debug`, `$PSBoundParameters.Values` check if it's in process block or begin block,
-    make sure wanted parameters are shown, make sure values are visible instead of object name
     - Use try/catch in test scripts to avoid writing errors and write information instead,
-    so that `Run-AllTests.ps1` gets clean output, not very useful if testing with PS Core since
-    `-CIM` calls will fail, see `Get-SystemSKU` test
-    - Unit tests for private functions in `Ruleset.Firewall` module are missing
-    - Unit tests for `Ruleset.Logging` include scripts are missing (no longer clear what this means)
+    so that `Run-AllTests.ps1` gets clean output, see `Get-SystemSKU` test
     - Program search test cases should test for either always installed program or certain failure
     - Unit test should have `TestData` which can be used to test pipeline support or to reduce the
     size of unit tests, another benefit is that tests will be easier to update to work on updated data.
+    - Some test case outputs will be messed up, ex. some output might be shown prematurely,
+    while other won't be shown until 3-4 more test cases run.
+    For an example, see `Get-UserGroup` test or `RunAllTests.ps1`
 
-5. Code style
-
-    - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is
-    that one can be expanded property and other could be custom object. Many similar cases for naming.
-
-6. Partially fixed, need testing and/or improvements
+5. Partially fixed, need testing and/or improvements
 
     - Most program query functions return (or could return) multiple program instances,
     need to select latest or add multiple rules.
@@ -146,57 +141,52 @@ Todo's in this file are categorized into following sections:
     searches, for release providing a path is needed to prevent "path fixed" info messages
     - Finish implementation for rule import/export, including rules without group (user made rules)
     - Store app rules for administrators, probably only those that break important functionalities
+    - Revisit function parameters, their types, aliases, names are singular, consistent etc..
 
-7. Other
+6. Other
 
-    - Need convention for `Write-*` streams, when to use which one, and also common format for quoting
-    and pointing out local variables, some places are missing streams while others have too many of them.
+    - Need convention for `Write-*` commandlets, when to use which one, and also convention for quoting
+    and including local variables in the stream, some places are missing streams while others have
+    too many of them.
     Somewhere the same (ie. debug stream) can be put into 2 places in call stack, which one to chose?
     - Need global setting to allow more detailed warnings, which will list at a minimum function name
     where the warning was generated, or this additional data could be logged but not displayed.
     - Any function that depend on "Users" group will fail if there are no users, just Administrator
-    - `HelpUri` is valid only when there are no `.LINK` entries and when there is no help content installed
 
 ## Medium priority
 
 1. Modules
 
-    - Make it possible to deploy firewall to computers on network
     - Provide following keywords in function comments: `.DESCRIPTION` `.LINK` `.COMPONENT` `.ROLE`
     `.FUNCTIONALITY`
-    - `DefaultParameterSetName` for functions with parameter sets is missing but might be desired
+    - `DefaultParameterSetName` for functions with parameter sets is missing but might be desired,
+    on another side many functions name default parameter set name to `None` which isn't descriptive.
     - Revisit function return statements, return keyword or Write-Output should be preferred for visibility
     - VSSetup module is likely no longer needed, changes require testing with multiple VS instances
     - Line numbers for verbose and debug messages
-    - Use begin/process/end blocks to make functions work for pipeline if needed
     - Use default error (thrown object) description in `catch` blocks instead of custom message if
     possible, see `Set-Permission.ps1`
     - Functions which use `ShouldProcess` must not ask for additional input, but use additional
     ShouldProcess instead.
     - `Write-Error` will fail if `-TargetObject` is not set, in cases where this is possible we should
     supply string instead. See `ComputerInfo\Get-ConfiguredAdapter` for example
-    - Some function variables such as `ComputerName` take array of values, make sure this functionality
-    actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
     - When drilling registry for programs in user profile we need to load hive for offline
     users into registry, see implementation for OneDrive
-    - If there is `Path` parameter then also `LiteralPath` is required
-    - A few function (or module) for export/import of configuration into variety of file formats
+    - A few functions (or module) for export/import of configuration into variety of file formats
+    - Several module functions and scripts use nested functions, consider converting to either
+    scriptblocks or filters.
 
-2. Project scripts
+2. Scripts
 
     - "Access is denied" randomly while loading rules, need some check around this, ex. catching the
     error and ask to re-run the script.
-    - make possible to apply or enable only rules relevant for current firewall profile
+    - Make possible to apply or enable only rules relevant for current firewall profile
     - See if adding `#Requires -Modules` to scripts will help to remove module inclusions and to auto
     load variables
     - Make `$WhatIfPreference` for rules, we should skip everything except rules.
-    - For remoting `ComputerName` parameters are needed, this could be also
-    specified/learned with/from PolicyStore parameter
     - Verify `Select-Object -Last 1` is used instead of `-First 1` to get highest value
     - Rules for services, need to check services are networking services, if not write warning,
     could be implemented in `Test-Service` function
-    - Instead of `Approve-Execute` we should use `ShouldProcess` or `ShouldContinue` passing in
-    context variable and setting help if this is possible.
     - Parameter HelpMessage for mandatory parameters
 
 3. Rules
@@ -205,8 +195,6 @@ Todo's in this file are categorized into following sections:
     - Make rule display names and groups modular for easy search, ex. Group - Subgroup,
     Company - Program.
     This can also prove useful for WFP state logs to determine blocking rule.
-    - Need better and unified approach to write rule descriptions, because comments must not be
-    formatted, formatting would be visible in GUI.
     - Some rules apply to both IPv4 and IPv6 such as `qBittorrent.ps1`, for these we should probably
     group them into `Hybrid` instead of explicit `IPv4` or `IPv6` directory which are supposed to be
     IP version specific rules.
@@ -216,18 +204,15 @@ Todo's in this file are categorized into following sections:
     grouping model, we should define a model for server rules (not necessarily Windows Server,
     workstation PC can also act as a server)
     - Rules for programs (ex. OneDrive in userprofile) which apply to multiple users should assign
-    specific user to `-LocalUser` instead of assigning user group, there are duplicate todo's in
+    specific user to `-LocalUser` instead of assigning user group, there are duplicate todo's accross
     code about this, this also applies to todo's about returning installation table to rule scripts.
     - If target program does not exist conditionally disable rule and update rule description,
-    insert into rule name that the rule has no effect, or write a list into separate log file.
+    insert comment into rule name that the rule has no effect, or write a list into separate log file.
 
 4. Test and debugging
 
     - Move `Ruleset.IP` tests into test folder, clean up directory add `Write-*` streams
     - Many test cases are local to our environment, other people might get different results
-    - Some test case outputs will be messed up, ex. some output might be shown prematurely,
-    while other won't be shown until 3-4 more test cases run.
-    For an example, see `Get-UserGroup` test or `RunAllTests.ps1`
     - There is no test for `Get-Permutation` in `Ruleset.IP`
     - Module `Ruleset.Compatibility` is missing multiple tests
     - Some Pester tests are out of date and don't work well with Pester 5.x
@@ -242,12 +227,9 @@ Todo's in this file are categorized into following sections:
 6. Documentation
 
     - Update `FirewallParameters.md` with a list of incompatible parameters for reference
-    - Several comment based documentation is either missing comments or comments are out of date
     - `FirewallParameters.md` contains missing mappings
     - `FirewallParameters.md` contains no info about compartments and IPSec setup
     - Universal and quick setup to install all required modules for all hosts and all users.
-    - Need document for naming convention breakdown probably with links to best practices,
-    a few similar documents would be great too.
 
 7. Other
 
@@ -257,7 +239,7 @@ Todo's in this file are categorized into following sections:
 
 1. Modules
 
-    - Function to check executables for signature and optionally "virus total" hash
+    - `Test-Executable` function could optionally check for "virus total" hash
     - `localhost` != `[System.Environment]::MachineName` because localhost needs to resolve with `WinRM`
     - `Write-Error` streams should be extended to include exception record etc.
     - `Write-Error` categories should be checked, some are inconsistent with the actual error
@@ -278,7 +260,7 @@ Todo's in this file are categorized into following sections:
     manifest `FileList` entries
     - Use Module-Qualified Cmdlet Names to avoid name colision
 
-2. Project scripts
+2. Scripts
 
     - Test if already loaded rules are pointing to valid program or service, also functions to query
     rules which are missing `Owner`, `InterfaceType` and similar parameter to easily detect rule
@@ -321,7 +303,7 @@ Todo's in this file are categorized into following sections:
 5. Code style
 
     - For variables with no explicitly decalred type, put "Typename" comment above them from
-    `Get-Member` output
+    `Get-TypeName` or `Get-Member` output
     - After ensuring scripts can't run without edition or version check use newer `$PSEdition`
     instead of older and longer `$PSVersionTable.PSEdition`
     - The "homepage:" comment license notice can be omitted from scripts and replaced with .LINK
@@ -353,8 +335,13 @@ Todo's in this file are categorized into following sections:
     to avoid confusion due to different versioning and new code
     - Need to check if `WinRM` service is started when contacting computers via CIM
     - 3rd party modules are not consistent with our own modules
+    - There are breaks missing for switches all over the place
+    - Revisit code and make consistent `PSCustomObject` properties for all function outputs, consider
+    using [formats][about format] for custom objects
+    - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
+    some other functions also have dubious names
 
-2. Project scripts
+2. Scripts
 
     - Information output is not enabled for modules and probably other code
     - Use `Get-NetConnectionProfile` to aks user / set default network profile
@@ -362,6 +349,10 @@ Todo's in this file are categorized into following sections:
     - We should add `Scripts` folder to PS scripts path in ProjectSettings
     - Specify on which adapters Windows firewall is filtering data, see option in
     Windows firewall in control panel
+    - Apply only rules for installed executables, `Confirm-Executable` function
+    - For individual runs of rule scripts we should call `gpupdate.exe`
+    - Instead of `Approve-Execute` we should use `ShouldProcess` or `ShouldContinue` passing in
+    context variable and setting help if this is possible.
 
 3. Rules
 
@@ -379,6 +370,11 @@ Todo's in this file are categorized into following sections:
     - Some tests fail to run in non "develop" mode due to missing variables
     - A lot of pester tests from `Ruleset.IP` module require private function export,
     make sure the rest of a module works fine without these private exports
+    - For `Write-Debug`, `$PSBoundParameters.Values` check if it's in process block or begin block,
+    make sure wanted parameters are shown, make sure values are visible instead of object name
+    - Unit tests for private functions in `Ruleset.Firewall` module are missing
+    - Unit tests for `Ruleset.Logging` include scripts are missing (no longer clear what this means,
+    it was likely fixed by the way)
 
 5. Documentation
 
@@ -386,13 +382,19 @@ Todo's in this file are categorized into following sections:
     - Links in markdown files should be handled with reference links instead of inline links with
     relative paths, this way there is a minimum need to update them, also markdown formatting will
     be much easier.
+    - Several comment based documentation is either missing comments or comments are out of date
 
 6. Code style
 
     - Separation of comment based keywords so that there is one line between a comment and next keyword
+    - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is
+    that one can be expanded property and other could be custom object. Many similar cases for naming.
 
 7. Other
 
     - Some cmdlets take encoding parameter, we should probably have a variable to specify encoding
+    - `HelpUri` is valid only when there are no `.LINK` entries and when there is no help content installed
+    - Need document for naming convention breakdown probably with links to best practices,
+    a few similar documents would be great too.
 
 [about format]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7

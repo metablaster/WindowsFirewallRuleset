@@ -41,6 +41,8 @@ Get parameter aliases
 
 .DESCRIPTION
 Gets aliases of all or specific parameters for one or multiple functions, commandlets, scripts or aliases.
+All modules available on local computer are processed to harvest parameter aliases.
+In addition to parameter alias the result also includes parameter type.
 
 .PARAMETER Command
 One or more commandlet, function or script names or their alias names for which to get parameter aliases.

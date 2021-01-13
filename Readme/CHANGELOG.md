@@ -26,7 +26,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - Most module functions significantly improved (In progress...)
+  - Most module functions significantly improved
   - Several functions were renamed to be more descriptive of their purpose
   - Removed functions: `Update-Context` and `Get-ComputerName`
   - For better pipeline support functions now output objects right away instead of creating an array

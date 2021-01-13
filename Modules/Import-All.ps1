@@ -33,14 +33,11 @@ param ()
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 #
-# Import all modules into current session, useful to quickly load project into session
+# Import all modules into current session, useful to quickly load module functions into session
 #
 
-$ProjectModules = Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory
-
-foreach ($Module in $ProjectModules)
-{
-	Import-Module -Name $Module -Scope Global -Force
+Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory | ForEach-Object {
+	Import-Module -Name $_ -Scope Global -Force
 }
 
 Update-Log
