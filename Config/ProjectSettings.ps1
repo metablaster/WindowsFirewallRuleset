@@ -90,16 +90,15 @@ param (
 # Name of this script for debugging messages, do not modify!.
 Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
 
+# Calling script name, to be used for Write-* operations
 if ($PSCmdlet.ParameterSetName -eq "Module")
 {
-	# Calling script name, to be used for Write-* operations
-	New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value (Split-Path (Get-PSCallStack)[1].ScriptName -LeafBase) -EA Stop
+	New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Split-Path -Path (Get-PSCallStack)[1].ScriptName -Leaf) -replace "\.\w{2,3}1$") -EA Stop
 	Write-Debug -Message "[$SettingsScript] Caller = $ThisModule ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 }
 else
 {
-	# Calling script name, to be used for Write-* operations
-	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ($Cmdlet.MyInvocation.MyCommand -replace "\..+") -EA Stop
+	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ($Cmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$") -EA Stop
 	Write-Debug -Message "[$SettingsScript] Caller = $ThisScript ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 }
 
@@ -259,9 +258,6 @@ else
 	# To control if modules automatically load, do not modify!
 	# Values: All, ModuleQualified or None
 	$PSModuleAutoLoadingPreference = "All"
-
-	# To control error message default view
-	# $ErrorView = "NormalView"
 }
 
 if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
@@ -273,6 +269,12 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 
 if ($Develop)
 {
+	if ($PSVersionTable.PSEdition -eq "Desktop")
+	{
+		# Global because of known issue: https://github.com/PowerShell/PowerShell/issues/3645
+		Set-Variable -Name ErrorView -Scope Global -Value "CategoryView"
+	}
+
 	# Two variables for each of the three logging components:
 	# The engine (the PowerShell program), the providers and the commands.
 	# The LifeCycleEvent variables log normal starting and stopping events.
@@ -704,12 +706,12 @@ if ($ListPreference)
 			)
 
 			# Get base name of script that called this function
-			$Caller = Split-Path -Path $MyInvocation.ScriptName -LeafBase
+			$Caller = (Split-Path -Path $MyInvocation.ScriptName -Leaf) -replace "\.\w{2,3}1$"
 
 			if ($Caller -eq "ProjectSettings")
 			{
 				# Get base name of script that dot sourced ProjectSettings.ps1
-				$Caller = Split-Path -Path (Get-PSCallStack)[2].Command -LeafBase
+				$Caller = (Split-Path -Path (Get-PSCallStack)[2].Command -Leaf) -replace "\.\w{2,3}1$"
 			}
 
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"

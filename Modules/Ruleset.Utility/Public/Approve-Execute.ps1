@@ -154,17 +154,18 @@ function Approve-Execute
 	if ([string]::IsNullOrEmpty($Title))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title message"
-		$Title = "Executing: $(Split-Path -Leaf $MyInvocation.ScriptName)"
+		$Leaf = Split-Path -Path $MyInvocation.ScriptName -Leaf
+		$Title = "Executing: $Leaf"
 
 		if ([string]::IsNullOrEmpty($Context))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title context"
 
-			$LeafBase = Split-Path -Path $MyInvocation.ScriptName -LeafBase
+			$LeafBase = $Leaf -replace "\.\w{2,3}1$"
 			$LeafRegex = [regex]::Escape($LeafBase)
 			$RootRegex = [regex]::Escape($ProjectRoot)
 
-			$Regex = [regex]::Match("$((Get-PSCallStack)[1].ScriptName)", "(?<=$RootRegex\\)(.+)(?=\\$LeafRegex)")
+			$Regex = [regex]::Match("$($MyInvocation.ScriptName)", "(?<=$RootRegex\\)(.+)(?=\\$LeafRegex)")
 
 			if ($Regex.Success)
 			{
@@ -201,6 +202,7 @@ function Approve-Execute
 			else
 			{
 				Write-Error -Category ParserError -TargetObject $Regex -Message "Unable to set up context"
+				Write-Debug -Message "LeafBase: $LeafBase"
 			}
 		}
 		elseif ([string]::IsNullOrEmpty($ContextLeaf))

@@ -67,9 +67,13 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
+Start-Test "Single file"
+$Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md
+$Result | Test-Output -Command Test-MarkdownLinks
+
 if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))
 {
-	Start-Test "Test-MarkdownLinks"
+	Start-Test "Recurse project"
 	Test-MarkdownLinks $ProjectRoot -Recurse | Test-Output -Command Test-MarkdownLinks
 }
 

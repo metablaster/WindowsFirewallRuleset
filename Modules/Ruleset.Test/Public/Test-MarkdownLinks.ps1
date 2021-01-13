@@ -40,15 +40,17 @@ The path to directory containing target markdown files
 If specified, recurse in to the path specified by Path parameter
 
 .PARAMETER TimeoutSec
-Specifies how long the request can be pending before it times out
+Specifies (per link) how long the request can be pending before it times out
 
 .PARAMETER MaximumRetryCount
-Specifies how many times PowerShell retries a connection when a failure code between 400 and
-599, inclusive or 304 is received
+Specifies (per link) how many times PowerShell retries a connection when a failure code between 400
+and 599, inclusive or 304 is received.
+This parameter is valid for PowerShell Core edition only.
 
 .PARAMETER RetryIntervalSec
 Specifies the interval between retries for the connection when a failure code between 400 and
 599, inclusive or 304 is received
+This parameter is valid for PowerShell Core edition only.
 
 .PARAMETER MaximumRedirection
 Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource
@@ -77,7 +79,6 @@ None. Test-MarkdownLinks does not generate any output
 
 .NOTES
 WebSslProtocol enum does not list Tls13
-TODO: Update time elapsed and remaining when testing links in single file
 TODO: Implement parameters for Get-ChildItem
 #>
 function Test-MarkdownLinks
@@ -114,64 +115,88 @@ function Test-MarkdownLinks
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Progress bar initial setup
-	$StartTime = Get-Date
-	[System.TimeSpan] $SecondsElapsed = 0
-	[nullable[double]] $SecondsRemaining = $null
+	# Get markdown files recursively
+	[System.IO.FileInfo[]] $MarkdownFiles = Get-ChildItem -Path $Path -Recurse:$Recurse -Include "*.md"
+
+	if ($MarkdownFiles.Count -eq 0)
+	{
+		Write-Warning -Message "No markdown files were found specified by Path parameter"
+		return
+	}
+
+	# Save progress preference
+	$DefaultProgress = $ProgressPreference
+
+	[scriptblock] $GetElapsedTime = {
+		param ($SecondsElapsed)
+
+		# Convert elapsed time to short time string: [double] -> [string] -> [System.DateTime] -> [string]
+		$DmftTime = [System.Management.ManagementDateTimeConverter]::ToDmtfDateTime($SecondsElapsed.ToString())
+		$DateTimeTotal = [System.Management.ManagementDateTimeConverter]::ToDateTime($DmftTime)
+		[string]::Format($DateTimeTotal.ToLongTimeString(), "dd\:hh\:mm")
+	}
 
 	# Unreachable links
 	[PSCustomObject[]] $StatusReport = @()
 
-	# Get markdown files recursively
-	[System.IO.FileInfo[]] $MarkdownFiles = Get-ChildItem -Path $Path -Recurse:$Recurse -Include "*.md"
-
 	# Set up web request parameters
 	$WebParams = [hashtable]@{
 		TimeoutSec = $TimeoutSec
-		MaximumRetryCount = $MaximumRetryCount
-		RetryIntervalSec = $RetryIntervalSec
 		MaximumRedirection = $MaximumRedirection
+		DisableKeepAlive = $true
 	}
 
-	if ($PSVersionTable.PSVersion -ge "6.0.0")
+	if ($PSVersionTable.PSEdition -eq "Desktop")
 	{
-		$WebParams.Add("NoProxy", $NoProxy)
+		# Beginning with PowerShell 6.0.0 Invoke-WebRequest supports basic parsing only
+		# Otherwise throws: WebCmdletIEDomNotSupportedException
+		$WebParams.Add("UseBasicParsing", $true)
+	}
+	else
+	{
+		$WebParams.Add("MaximumRetryCount", $MaximumRetryCount)
+		$WebParams.Add("RetryIntervalSec", $RetryIntervalSec)
 
-		# [Microsoft.PowerShell.Commands.WebSslProtocol]
-		$WebParams.Add("SslProtocol", $SslProtocol)
+		if ($PSVersionTable.PSVersion -ge "6.0.0")
+		{
+			$WebParams.Add("NoProxy", $NoProxy)
+
+			# [Microsoft.PowerShell.Commands.WebSslProtocol]
+			$WebParams.Add("SslProtocol", $SslProtocol)
+		}
+		elseif ($NoProxy -or ($SslProtocol -ne "Default"))
+		{
+			Write-Warning -Message "NoProxy and SslProtocol parameters are valid only for PowerShell Core 6+"
+		}
 	}
-	elseif ($NoProxy -or ($SslProtocol -ne "Default"))
-	{
-		Write-Warning -Message "NoProxy and SslProtocol parameters are valid only for PowerShell Core 6+"
-	}
+
+	# Outer progress bar setup
+	$StartTime = Get-Date
+	[timespan] $Elapsed = 0
+	[double] $Remaining = -1
+	$MultiFile = $MarkdownFiles.Count -gt 1
 
 	$FileCounter = 0
 	foreach ($Markdown in $MarkdownFiles)
 	{
 		$File = $Markdown.Name
 		$FullName = $Markdown.FullName
-		$PercentComplete = $FileCounter / $MarkdownFiles.Count * 100
 
-		# Convert elapsed time to short time string: [double] -> [string] -> [System.DateTime] -> [string]
-		$DmftTime = [System.Management.ManagementDateTimeConverter]::ToDmtfDateTime($SecondsElapsed.ToString())
-		$DateTimeTotal = [System.Management.ManagementDateTimeConverter]::ToDateTime($DmftTime)
-		$TotalTime = [string]::Format($DateTimeTotal.ToLongTimeString(), "dd\:hh\:mm")
-
-		$ProgressParams = @{
-			Activity = "File [$($FileCounter + 1)/$($MarkdownFiles.Count)] $TotalTime elapsed"
-			Status = "Analyzing file: $File"
-			CurrentOperation = "File path: $FullName"
-			PercentComplete = $PercentComplete
-			Id = 1
-		}
-
-		if ($SecondsRemaining)
+		if ($MultiFile)
 		{
-			$ProgressParams["SecondsRemaining"] = $SecondsRemaining
+			$ProgressParams = [hashtable]@{
+				Activity = "File [$($FileCounter + 1)/$($MarkdownFiles.Count)] $(& $GetElapsedTime $Elapsed) elapsed"
+				Status = "Analyzing file"
+				CurrentOperation = "File: $FullName"
+				PercentComplete = $FileCounter / $MarkdownFiles.Count * 100
+				SecondsRemaining = $Remaining
+				Id = 1
+			}
+
+			Write-Progress @ProgressParams
 		}
 
-		$FileCounter += 1
-		Write-Progress @ProgressParams
+		++$FileCounter
 		Write-Information -Tags "Project" -MessageData "INFO: Analyzing file $FullName"
 
 		[uri[]] $FileLinks = Select-String -Path $Markdown -Pattern "\[.+\]\((http.*?)\)" | ForEach-Object {
@@ -186,37 +211,51 @@ function Test-MarkdownLinks
 			continue
 		}
 
-		# NOTE: The counter will not reset on subsequent foreach loop
-		# New-Variable -Name LinkCounter -Scope Script -Value 0
+		# Inner progress bar setup
+		$StartTime2 = Get-Date
+		[timespan] $Elapsed2 = 0
+		[double] $Remaining2 = -1
 
 		$LinkCounter = 0
 		foreach ($Link in $FileLinks)
 		{
 			$URL = $Link.AbsoluteUri
-			$PercentComplete = $LinkCounter / $FileLinks.Count * 100
+			$Percent2 = $LinkCounter / $FileLinks.Count * 100
 
-			$ProgressParams = [hashtable]@{
-				Activity = "Link [$($LinkCounter + 1)/$($FileLinks.Count)]"
-				Status = "Testing link"
-				CurrentOperation = "Link URL: $URL"
-				PercentComplete = $PercentComplete
-				Id = 2
-				ParentId = 1
+			if ($MultiFile)
+			{
+				$ProgressParams2 = [hashtable]@{
+					Activity = "Link [$($LinkCounter + 1)/$($FileLinks.Count)] $(& $GetElapsedTime $Elapsed2) elapsed"
+					Status = "Testing link"
+					CurrentOperation = "URL: $URL"
+					PercentComplete = $Percent2
+					SecondsRemaining = $Remaining2
+					Id = 2
+					ParentId = 1
+				}
+			}
+			else
+			{
+				$ProgressParams2 = [hashtable]@{
+					Activity = "Link [$($LinkCounter + 1)/$($FileLinks.Count)] $(& $GetElapsedTime $Elapsed2) elapsed"
+					Status = "Analyzing file: $FullName"
+					CurrentOperation = "Testing link: $URL"
+					PercentComplete = $Percent2
+					SecondsRemaining = $Remaining2
+				}
 			}
 
-			$LinkCounter += 1
-			Write-Progress @ProgressParams
+			++$LinkCounter
+			Write-Progress @ProgressParams2
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Testing link $URL"
 
 			try
 			{
 				# Suppress progress bar from Invoke-WebRequest
-				$DefaultProgress = $ProgressPreference
 				$ProgressPreference = "SilentlyContinue"
 
 				# [Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject]
-				Invoke-WebRequest -Uri $URL -DisableKeepAlive @WebParams | Out-Null
-
-				$ProgressPreference = $DefaultProgress
+				Invoke-WebRequest -Uri $URL @WebParams | Out-Null
 			}
 			catch
 			{
@@ -226,21 +265,36 @@ function Test-MarkdownLinks
 					URL = $URL
 				}
 			}
+			finally
+			{
+				$ProgressPreference = $DefaultProgress
+			}
+
+			if ($MultiFile)
+			{
+				# Estimate the time remaining
+				$Elapsed = (Get-Date) - $StartTime
+				$Remaining = ($Elapsed.TotalSeconds / $FileCounter) * ($MarkdownFiles.Count - $FileCounter)
+			}
+
+			$Elapsed2 = (Get-Date) - $StartTime2
+			$Remaining2 = ($Elapsed2.TotalSeconds / $LinkCounter) * ($FileLinks.Count - $LinkCounter)
 		}
 
-		# Remove-Variable -Name LinkCounter -Scope Script
+		Write-Progress $ProgressParams2 -Completed
 
-		# Estimate the time remaining
-		$SecondsElapsed = (Get-Date) - $StartTime
-		$SecondsRemaining = ($SecondsElapsed.TotalSeconds / $FileCounter) * ($MarkdownFiles.Count - $FileCounter)
+		$Elapsed = (Get-Date) - $StartTime
+		$Remaining = ($Elapsed.TotalSeconds / $FileCounter) * ($MarkdownFiles.Count - $FileCounter)
 	}
 
-	# Optional, if the progress bar don't go away by itself, un-comment this line
-	# Write-Progress -Activity "Test markdown links" -Completed
+	if ($MultiFile)
+	{
+		Write-Progress $ProgressParams -Completed
+	}
 
 	if ($StatusReport.Count)
 	{
-		Write-Information -Tags "Project" -MessageData "*** Test summary ***"
+		Write-Information -Tags "Project" -MessageData "*** LINK STATUS REPORT ***"
 
 		foreach ($Status in $StatusReport)
 		{
