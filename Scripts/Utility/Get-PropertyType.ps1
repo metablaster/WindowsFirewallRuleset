@@ -88,7 +88,7 @@ Updated formatting, casing and naming according to the rest of project
 Convert to script by removing function
 Added links, inputs, outputs and notes to comment based help
 
-TODO: This function need unit test to resolve warnings
+TODO: This function need unit test to resolve warnings and introduce improvements
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

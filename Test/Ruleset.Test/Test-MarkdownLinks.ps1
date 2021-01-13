@@ -67,8 +67,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
+Start-Test "Reference links"
+Test-MarkdownLinks $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
+
 Start-Test "Single file"
-$Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md
+$Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md -LinkType "Inline" -Exclude *microsoft.com*
 $Result | Test-Output -Command Test-MarkdownLinks
 
 if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))

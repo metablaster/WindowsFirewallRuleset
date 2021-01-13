@@ -67,10 +67,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 [OutputType([void])]
 param ()
 
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-Write-Information -Tags "User" -MessageData "INFO: Unblocking project files"
+Write-Information -Tags "User" -MessageData "INFO: Unblocking repository files" -INFA "Continue"
 
-Get-ChildItem $ProjectRoot -Recurse | Unblock-File
-Write-Verbose -Message "[Unblock-Project] Project files have been unblocked"
+$Files = Get-ChildItem $PSScriptRoot\.. -Recurse
+Unblock-File -Path $Files
 
-Update-Log
+Write-Verbose -Message "[$($MyInvocation.MyCommand -replace "\.\w{2,3}1$")] $($Files.Count) repository files have been unblocked"

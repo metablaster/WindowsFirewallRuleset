@@ -88,7 +88,7 @@ An example path in SYSVOL contains:
 Single-label DNS names can't be registered by using an Internet registrar.
 The DNS Server service may not be used to locate domain controllers in domains that have single-label DNS names.
 Don't use top-level Internet domain names on the intranet, such as .com, .net, and .org.
-TODO: There a best practices list on MS site, for which we should generate a warning.
+TODO: There is a best practices list on MS site, for which we should generate a warning.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-DnsName.md
@@ -122,6 +122,15 @@ function Test-DnsName
 
 	begin
 	{
+		$Record = [System.Management.Automation.ErrorRecord]::new(
+			[System.NotImplementedException] "This prototype function lacks implementation",
+			"This prototype function lacks implementation",
+			"NotImplemented",
+			$Name
+		)
+
+		$PSCmdlet.ThrowTerminatingError($Record)
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 		if ($Quiet)
@@ -142,7 +151,7 @@ function Test-DnsName
 	{
 		foreach ($DnsName in $Name)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing NETBIOS name: '$NameEntry'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing NETBIOS name: '$DnsName'"
 
 			[string] $DomainName1 = $null
 			[string] $Sysvol = $null
@@ -152,7 +161,7 @@ function Test-DnsName
 			[string] $UserName = $null
 			[string] $CSE = $null
 
-			Write-Output $true
+			Write-Output $false
 		}
 	}
 }

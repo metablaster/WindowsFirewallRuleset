@@ -578,7 +578,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 5))
 
 		# Recommended minimum platyPS version used to generate online help files for modules, do not decrement!
-		New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 0))
+		New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 1))
 
 		# Recommended minimum PSReadline version for command line editing experience of PowerShell
 		# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
