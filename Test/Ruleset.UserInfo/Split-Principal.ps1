@@ -66,32 +66,32 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Split-Principal"
 
 Start-Test "Get-GroupPrincipal 'Users', 'Administrators'"
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts
 
-Start-Test "Split-Principal"
+Start-Test "default"
 $UserNames = Split-Principal ($UserAccounts | Select-Object -ExpandProperty Principal)
 $UserNames
 
-Start-Test "Split-Principal -DomainName"
+Start-Test "-DomainName"
 Split-Principal ($UserAccounts | Select-Object -ExpandProperty Principal) -DomainName
 
-Start-Test "Split-Principal NT AUTHORITY"
+Start-Test "NT AUTHORITY"
 Split-Principal "NT AUTHORITY\NETWORK SERVICE"
 
-Start-Test "Split-Principal NT AUTHORITY -Domain"
+Start-Test "NT AUTHORITY -Domain"
 Split-Principal "NT AUTHORITY\NETWORK SERVICE" -Domain
 
-Start-Test "Split-Principal 'MicrosoftAccount\$TestUser@domain.com'"
+Start-Test "'MicrosoftAccount\$TestUser@domain.com'"
 Split-Principal "MicrosoftAccount\$TestUser@domain.com"
 
-Start-Test "Split-Principal '$TestUser@domain.com' -DomainName"
+Start-Test "'$TestUser@domain.com' -DomainName"
 Split-Principal "$TestUser@domain.com" -DomainName
 
-Start-Test "Split-Principal FAIL"
+Start-Test "FAIL"
 $BadAccount = "\ac", "$TestUser@email"
 Split-Principal $BadAccount
 

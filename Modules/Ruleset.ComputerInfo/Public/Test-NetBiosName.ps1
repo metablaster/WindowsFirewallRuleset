@@ -43,7 +43,7 @@ Specifies the kind of name checking to perform on -Name parameter as follows:
 
 - User: Name parameter is logon name
 - Domain: Name parameter is domain name
-- Principal: Name parameter is in form of DOMAIN\USERNAME
+- Principal: Name parameter is both, in the form of DOMAIN\USERNAME
 
 The default is Principal.
 
@@ -56,7 +56,8 @@ This switch is experimental.
 If specified, name syntax errors are not shown, only true or false is returned.
 
 .PARAMETER Force
-If specified, domain name isn't checked against reserved words
+If specified, domain name isn't checked against reserved words, thus the length of domain
+name isn't check either since reserved words may exceed the limit.
 
 .EXAMPLE
 PS> Test-NetBiosName "*SERVER" -Target Domain
@@ -96,7 +97,7 @@ But it's generally not a good idea to use spaces in account names.
 
 TODO: The use of NetBIOS scopes in names is a legacy configuration.
 It shouldn't be used with Active Directory forests.
-TODO: There a best practices list on MS site, for which we should generate a warning.
+TODO: There is a best practices list on MS site, for which we should generate warnings.
 
 According to IBM:
 NetBIOS names are always converted to uppercase when sent to other
@@ -161,10 +162,12 @@ function Test-NetBiosName
 		if ($Quiet)
 		{
 			$WriteError = "SilentlyContinue"
+			$WriteWarning = "SilentlyContinue"
 		}
 		else
 		{
 			$WriteError = $ErrorActionPreference
+			$WriteWarning = $WarningPreference
 		}
 
 		if ($Strict)
@@ -237,7 +240,7 @@ function Test-NetBiosName
 					continue
 				}
 
-				if ($DomainName.Length -gt 15)
+				if (!$Force -and $DomainName.Length -gt 15)
 				{
 					Write-Error -Category SyntaxError -TargetObject $DomainName -ErrorAction $WriteError `
 						-Message "NETBIOS computer name '$DomainName' is $($DomainName.Length) characters long, but limit is 15 characters"
@@ -280,7 +283,7 @@ function Test-NetBiosName
 				$BadMatch = [regex]::Match($DomainName, "^\d+$")
 				if ($BadMatch.Success)
 				{
-					Write-Warning -Message "NETBIOS computer name '$DomainName' is not valid for AD membership"
+					Write-Warning -Message "NETBIOS computer name '$DomainName' is not valid for AD membership" -WarningAction $WriteWarning
 				}
 			}
 
@@ -305,12 +308,12 @@ function Test-NetBiosName
 
 				if ($UserName.Length -gt 64)
 				{
-					Write-Warning -Message "NETBIOS user name '$UserName' isn't practical to use because it's longer than 64 characters"
+					Write-Warning -Message "NETBIOS user name '$UserName' isn't practical to use because it's longer than 64 characters" -WarningAction $WriteWarning
 				}
 
 				if ($UserName.Contains(" "))
 				{
-					Write-Warning -Message "NETBIOS user name '$UserName' it's generally not a good idea to use spaces in account names"
+					Write-Warning -Message "NETBIOS user name '$UserName' it's generally not a good idea to use spaces in account names" -WarningAction $WriteWarning
 				}
 			}
 

@@ -67,22 +67,27 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
+Enter-Test "ConvertFrom-SID"
+
 $VerbosePreference = "Continue"
 $DebugPreference = "Continue"
 
-Enter-Test
+if ($PSVersionTable.PSVersion -ge "7.1")
+{
+	Import-WinModule -Name Appx -ErrorAction Stop
+}
 
-Start-Test "Get-GroupPrincipal 'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE"
+Start-Test "'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts
 
 Test-Output $UserAccounts[0] -Command Get-GroupPrincipal
 
-Start-Test "Get-PrincipalSID NT SYSTEM, NT LOCAL SERVICE"
+Start-Test "Get-PrincipalSID NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
 $NTAccounts = Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
 $NTAccounts
 
-Start-Test "ConvertFrom-SID users and admins"
+Start-Test "users and admins"
 $AccountSIDs = @()
 foreach ($Account in $UserAccounts)
 {
@@ -90,31 +95,31 @@ foreach ($Account in $UserAccounts)
 }
 $AccountSIDs | ConvertFrom-SID | Format-Table
 
-Start-Test "ConvertFrom-SID NT AUTHORITY users"
+Start-Test "NT AUTHORITY users"
 foreach ($Account in $NTAccounts)
 {
 	ConvertFrom-SID $Account | Format-Table
 }
 
-Start-Test "ConvertFrom-SID Unknown domain"
+Start-Test "Unknown domain"
 ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction SilentlyContinue | Format-Table
 
-Start-Test "ConvertFrom-SID App SID for Microsoft.AccountsControl"
+Start-Test "App SID for Microsoft.AccountsControl"
 $AppSID = "S-1-15-2-969871995-3242822759-583047763-1618006129-3578262429-3647035748-2471858633"
 $AppResult = ConvertFrom-SID $AppSID
 $AppResult | Format-Table
 
-Start-Test "ConvertFrom-SID nonexistent App SID"
+Start-Test "nonexistent App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
 $AppResult = ConvertFrom-SID $AppSID -ErrorAction SilentlyContinue
 $AppResult | Format-Table
 
-Start-Test "ConvertFrom-SID APPLICATION PACKAGE AUTHORITY"
+Start-Test "APPLICATION PACKAGE AUTHORITY"
 $AppSID = "S-1-15-2-2"
 $PackageResult = ConvertFrom-SID $AppSID
 $PackageResult | Format-Table
 
-Start-Test "ConvertFrom-SID Capability"
+Start-Test "Capability"
 $AppSID = "S-1-15-3-12345"
 $PackageResult = ConvertFrom-SID $AppSID
 $PackageResult | Format-Table

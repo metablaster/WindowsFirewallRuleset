@@ -66,7 +66,7 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Merge-SDDL"
 
 [string[]] $Users = @($TestUser)
 [string] $Domain = [System.Environment]::MachineName
@@ -80,7 +80,7 @@ Start-Test "Get-SDDL -Domain 'NT AUTHORITY' -User 'SYSTEM', 'USER MODE DRIVERS'"
 $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" -Merge
 $NewSDDL
 
-Start-Test "Merge-SDDL"
+Start-Test "default"
 $Result = Merge-SDDL ([ref] $TestUsersSDDL) -From $NewSDDL
 $Result
 $TestUsersSDDL

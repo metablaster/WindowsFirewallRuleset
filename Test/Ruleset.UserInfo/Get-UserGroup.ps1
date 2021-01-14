@@ -66,13 +66,13 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-UserGroup"
 
-Start-Test "Get-UserGroup"
+Start-Test "default"
 $Result = Get-UserGroup
 $Result
 
-Start-Test "Get-UserGroup CIM server"
+Start-Test "CIM server"
 Get-UserGroup "localhost" -CIM
 
 Start-Test "Failure test"

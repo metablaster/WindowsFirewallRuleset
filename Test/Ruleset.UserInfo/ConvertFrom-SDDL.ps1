@@ -66,7 +66,7 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "ConvertFrom-SDDL"
 
 #
 # Test groups
@@ -74,7 +74,7 @@ Enter-Test
 
 [string[]] $Group = @("Users", "Administrators")
 
-Start-Test "Get-SDDL: $Group"
+Start-Test -Command "Get-SDDL" -Message "$Group"
 $SDDL1 = Get-SDDL -Group $Group
 $SDDL1
 
@@ -84,7 +84,7 @@ $SDDL1
 
 [string[]] $User = "Administrator", $TestAdmin, $TestUser
 
-Start-Test "Get-SDDL: $User"
+Start-Test -Command "Get-SDDL" -Message "$User"
 $SDDL2 = Get-SDDL -User $User
 $SDDL2
 
@@ -96,7 +96,7 @@ $SDDL2
 [string[]] $NTUser = "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
 
 
-Start-Test "Get-SDDL: $NTDomain"
+Start-Test -Command "Get-SDDL" -Message "$NTDomain"
 $SDDL3 = Get-SDDL -Domain $NTDomain -User $NTUser
 $SDDL3
 
@@ -107,7 +107,7 @@ $SDDL3
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
-Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
+Start-Test -Command "Get-SDDL" -Message "-Domain $AppDomain -User $AppUser"
 $SDDL4 = Get-SDDL -Domain $AppDomain -User $AppUser
 $SDDL4
 
@@ -118,7 +118,7 @@ $SDDL4
 $FileSystem = "C:\Users\Public\Desktop\" # Inherited
 $Registry = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Start-Test "Get-SDDL -Path FileSystem"
+Start-Test -Command "Get-SDDL" -Message "-Path FileSystem"
 $SDDL5 = Get-SDDL -Path $FileSystem
 $SDDL5
 
@@ -130,28 +130,29 @@ $SDDL6
 # Test convert
 #
 
-Start-Test "ConvertFrom-SDDL SDDL1, SDDL2, SDDL3"
-$Result = ConvertFrom-SDDL $SDDL1, $SDDL2, $SDDL3
+Start-Test "ArraySDDL"
+$ArraySDDL = $SDDL1 + $SDDL2 + $SDDL3
+$Result = ConvertFrom-SDDL $ArraySDDL
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL
 
-# Start-Test "ConvertFrom-SDDL pipeline"
-# $Result = $SDDL1, $SDDL2, $SDDL3 | ConvertFrom-SDDL
-# $Result
+Start-Test "pipeline"
+$Result = $ArraySDDL | ConvertFrom-SDDL
+$Result
 
-# Test-Output $Result -Command ConvertFrom-SDDL
+Test-Output $Result -Command ConvertFrom-SDDL
 
-Start-Test "ConvertFrom-SDDL Store apps"
+Start-Test "Store apps"
 $Result = ConvertFrom-SDDL $SDDL4
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL
 
-Start-Test "ConvertFrom-SDDL file path"
+Start-Test "file path"
 ConvertFrom-SDDL $SDDL5
 
-Start-Test "ConvertFrom-SDDL file path"
+Start-Test "file path"
 $Result = ConvertFrom-SDDL $SDDL6
 $Result
 

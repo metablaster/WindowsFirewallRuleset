@@ -66,7 +66,7 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-PrincipalSID"
 
 #
 # Test users
@@ -74,11 +74,11 @@ Enter-Test
 
 [string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
 
-Start-Test "Get-PrincipalSID -User $Users"
+Start-Test "-User $Users"
 $AccountSID1 = Get-PrincipalSID -User $Users
 $AccountSID1
 
-Start-Test "Get-PrincipalSID -User $Users -CIM"
+Start-Test "-User $Users -CIM"
 $AccountSID1 = Get-PrincipalSID -User $Users -CIM
 $AccountSID1
 
@@ -95,12 +95,12 @@ $AccountSID1 | Get-TypeName
 [string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE", "USER MODE DRIVERS")
 [string] $NTDomain = "NT AUTHORITY"
 
-Start-Test "Get-PrincipalSID -Domain $NTDomain -User $NTUsers"
+Start-Test "-Domain $NTDomain -User $NTUsers"
 $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers #
 $AccountSID2
 
 # NOTE: not valid
-# Start-Test "Get-PrincipalSID -Domain $NTDomain -User $NTUsers -CIM"
+# Start-Test "-Domain $NTDomain -User $NTUsers -CIM"
 # $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers -CIM
 # $AccountSID2
 
@@ -114,12 +114,12 @@ $AccountSID2 | Get-TypeName
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string] $AppUser = "Your Internet connection"
 
-Start-Test "Get-PrincipalSID -Domain $AppDomain -User $AppUser"
+Start-Test "-Domain $AppDomain -User $AppUser"
 $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
 $AccountSID3
 
 # NOTE: not valid
-# Start-Test "Get-PrincipalSID -Domain $AppDomain -User $AppUser -CIM"
+# Start-Test "-Domain $AppDomain -User $AppUser -CIM"
 # $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser -CIM
 # $AccountSID3
 

@@ -66,20 +66,20 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-GroupPrincipal"
 
-Start-Test "Get-GroupPrincipal Users"
+Start-Test "Users"
 $UsersTest = Get-GroupPrincipal "Users"
 $UsersTest
 
-Start-Test "Get-GroupPrincipal Disabled Administrators"
+Start-Test "Disabled Administrators"
 Get-GroupPrincipal "Administrators" -Disabled
 
-Start-Test "Get-GroupPrincipal Users, Administrators -CIM"
+Start-Test "Users, Administrators -CIM"
 $CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM
 $CIMTest
 
-Start-Test "Get-GroupPrincipal Disabled Users, Administrators -CIM"
+Start-Test "Disabled Users, Administrators -CIM"
 Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM -Disabled
 
 Start-Test "Failure test"

@@ -70,12 +70,12 @@ Enter-Test "Test-NetBiosName"
 # $private:PSDefaultParameterValues.Add("Test-NetBiosName:Quiet", $true)
 
 $TestString = "*SERVER"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 $Result = Test-NetBiosName $TestString -Target Domain
 $Result
 
 $TestString = "*SERVER"
-Start-Test "$TestString -Strict"
+Start-Test "$TestString -Strict" -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "SER*VER*"
@@ -83,11 +83,11 @@ Start-Test "$TestString -Strict"
 Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "SERVER"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "\\SERVER-01"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "-SERVER-01"
@@ -99,7 +99,7 @@ Start-Test $TestString
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "site@domain.com"
-Start-Test "$TestString -Strict"
+Start-Test "$TestString -Strict" -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "site.domain.com"
@@ -107,32 +107,36 @@ Start-Test $TestString
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "site.domain.com"
-Start-Test "$TestString -Strict"
+Start-Test "$TestString -Strict" -Expected "FAIL"
 Test-NetBiosName $TestString -Strict -Target Domain
 
 $TestString = ""
-Start-Test "'$TestString'"
+Start-Test "'$TestString'" -Expected "FAIL"
 $TestString | Test-NetBiosName -Target Domain
 
 $TestString = ".COMPUTER"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "VeryLongSuperDuperComputerName"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "Super$([char][byte] 24)Computer"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain
 
 $TestString = "Super$([char][byte] 24)Computer"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-NetBiosName $TestString -Target Domain -Strict
 
 $TestString = "3904758"
-Start-Test $TestString
+Start-Test $TestString -Expected "WARNING"
 Test-NetBiosName $TestString -Target Domain
+
+$TestString = "APPLICATION PACKAGE AUTHORITY\Your Internet connection"
+Start-Test $TestString -Expected "WARNING"
+Test-NetBiosName $TestString -Force
 
 Test-Output $Result -Command Test-NetBiosName
 

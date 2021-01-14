@@ -31,11 +31,14 @@ SOFTWARE.
 Convert SDDL string to Principal
 
 .DESCRIPTION
-Convert one or multiple SDDL strings to custom object Principals containing
-relevant information about the principal
+Convert one or multiple SDDL strings to Principal, a custom object containing
+relevant information about the principal.
 
 .PARAMETER SDDL
-String array of one or more strings of SDDL syntax
+One or more strings of SDDL syntax
+
+.EXAMPLE
+PS> ConvertFrom-SDDL -SDDL "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 
 .EXAMPLE
 PS> ConvertFrom-SDDL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
@@ -84,7 +87,7 @@ function ConvertFrom-SDDL
 			}
 
 			$SddlSplit = $SddlEntry.Split("(").TrimEnd(")")
-			$RegMatch = [regex]::Matches($SddlSplit[0], "D\:\w+")
+			$RegMatch = [regex]::Matches($SddlSplit[0], "D:(\w+)?")
 
 			if ($RegMatch.Count -eq 1)
 			{
@@ -95,6 +98,12 @@ function ConvertFrom-SDDL
 				"NO_ACCESS_CONTROL"	ACL is null.
 				#>
 				$DaclFlags = $RegMatch.Captures.Value
+			}
+			else
+			{
+				Write-Error -Category ParserError -TargetObject $RegMatch `
+					-Message "Unable to parse out DACL flags"
+				continue
 			}
 
 			# Iterate DACL entry for each ACE

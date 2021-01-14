@@ -69,18 +69,19 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test "Test-Credential"
 
+Start-Test "to test" -Command "Get-Credential"
 $Cred = Get-Credential -Message "Please provide credentials to test"
 
-Start-Test "Test-Credential"
+Start-Test "default"
 $Result = Test-Credential $Cred -Context Machine
 $Result
 
-Start-Test "Test-Credential -Domain"
+Start-Test "-Domain"
 Test-Credential $Cred -Domain ([System.Environment]::MachineName) -Context Machine
 
-Start-Test "Test-Credential pipeline"
+Start-Test "pipeline"
 $Cred | Test-Credential -Context Machine
 
 Test-Output $Result -Command Test-Credential

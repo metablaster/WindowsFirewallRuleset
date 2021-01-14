@@ -66,20 +66,20 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-GroupSID"
 
 #
 # Test single group
 #
 
 [string] $SingleGroup = "Users"
-Start-Test "Get-GroupSID $SingleGroup"
+Start-Test "$SingleGroup"
 $GroupsTest = Get-GroupSID $SingleGroup
 $GroupsTest
 
 Test-Output $GroupsTest -Command Get-GroupSID
 
-Start-Test "Get-GroupSID 'Users' -CIM"
+Start-Test "'Users' -CIM"
 $GroupsTest = Get-GroupSID $SingleGroup -CIM
 $GroupsTest
 
@@ -89,13 +89,13 @@ $GroupsTest
 
 [string[]] $GroupArray = @("Users", "Hyper-V Administrators")
 
-Start-Test "Get-GroupSID $GroupArray"
+Start-Test "$GroupArray"
 $GroupsTest = Get-GroupSID $GroupArray
 $GroupsTest
 
 Test-Output $GroupsTest -Command Get-GroupSID
 
-Start-Test "Get-GroupSID $GroupArray -CIM"
+Start-Test "$GroupArray -CIM"
 $GroupsTest = Get-GroupSID $GroupArray -CIM
 $GroupsTest
 

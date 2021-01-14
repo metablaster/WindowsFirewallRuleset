@@ -353,18 +353,18 @@ function ConvertFrom-SID
 										{
 											$ResultName = $App.Name
 											# TODO: we probably also need to save target computer where this SID is valid
-											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is known store app SID for computer: '$Computer'"
+											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is known store app SID for computer: '$Computer'"
 											break computer
 										}
 									}
 								}
 
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is unknown store app SID for computer: '$Computer'"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID for computer: '$Computer'"
 							} # foreach computer
 
 							if ([string]::IsNullOrEmpty($ResultName))
 							{
-								Write-Warning -Message "Input SID is unknown store app SID"
+								Write-Warning -Message "Specified SID is unknown store app SID"
 							}
 							break
 						}
@@ -375,7 +375,7 @@ function ConvertFrom-SID
 
 							# TODO: Display what capability SID has, for more info look into registry and see:
 							# https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers#capability-sids
-							Write-Warning -Message "Input SID: '$InputSID' is capability SID"
+							Write-Warning -Message "Specified SID: '$InputSID' is capability SID"
 							break
 						}
 						default
@@ -399,7 +399,7 @@ function ConvertFrom-SID
 
 									# NTAccount represents a user or group account
 									$SidType = "NTAccount"
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Computer' recognizes input SID as NTAccount SID"
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Computer' recognizes specified SID as NTAccount SID"
 									break computer
 								}
 								catch
@@ -413,7 +413,7 @@ function ConvertFrom-SID
 								if ($InputSID -match '^S-1-5-21-\d+-\d+-\d+-\d+$')
 								{
 									$SidType = "Domain"
-									Write-Warning -Message "Input SID is an unknown domain or NTAccount SID"
+									Write-Warning -Message "Specified SID is an unknown domain or NTAccount SID"
 								}
 								else
 								{
@@ -439,17 +439,17 @@ function ConvertFrom-SID
 				if ($InputSID -match '^S-1-5-21')
 				{
 					$SidType = "Well Known Domain"
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is well known domain SID"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is well known domain SID"
 				}
 				elseif ($InputSID -match '^S-1-15-2-[1-2]$')
 				{
 					$SidType = "Package Authority"
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is package authority SID"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is package authority SID"
 				}
 				else
 				{
 					$SidType = "Well known"
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input SID is well known SID"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is well known SID"
 				}
 			}
 

@@ -64,7 +64,7 @@ function Test-Output
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-Output.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[AllowNull()]
 		[object[]] $InputObject,
 

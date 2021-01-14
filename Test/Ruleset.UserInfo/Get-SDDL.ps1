@@ -123,7 +123,7 @@ function Test-SDDL
 	}
 }
 
-Enter-Test
+Enter-Test "Get-SDDL"
 
 #
 # Test groups
@@ -131,19 +131,19 @@ Enter-Test
 
 [string[]] $Groups = @("Users", "Administrators")
 
-Start-Test "Get-SDDL -Group $Groups"
+Start-Test "-Group $Groups"
 $Result = Get-SDDL -Group $Groups
 
 Test-SDDL $Result
 Test-Output $Result -Command Get-SDDL
 
-Start-Test "Get-SDDL -Group $Groups -Merge"
+Start-Test "-Group $Groups -Merge"
 Get-SDDL -Group $Groups -Merge | Test-SDDL
 
-Start-Test "Get-SDDL -Group $Groups -CIM"
+Start-Test "-Group $Groups -CIM"
 Get-SDDL -Group $Groups -CIM | Test-SDDL
 
-Start-Test "Get-SDDL -Group $Groups -CIM -Merge"
+Start-Test "-Group $Groups -CIM -Merge"
 Get-SDDL -Group $Groups -CIM -Merge | Test-SDDL
 
 #
@@ -152,19 +152,19 @@ Get-SDDL -Group $Groups -CIM -Merge | Test-SDDL
 
 [string[]] $Users = "Administrator", $TestAdmin, $TestUser
 
-Start-Test "Get-SDDL -User $Users"
+Start-Test "-User $Users"
 Get-SDDL -User $Users | Test-SDDL
 
-Start-Test "Get-SDDL -User $Users -Merge"
+Start-Test "-User $Users -Merge"
 Get-SDDL -User $Users -Merge | Test-SDDL
 
-Start-Test "Get-SDDL -User $Users -CIM"
+Start-Test "-User $Users -CIM"
 $Result = Get-SDDL -User $Users -CIM
 
 Test-SDDL $Result
 Test-Output $Result -Command Get-SDDL
 
-Start-Test "Get-SDDL -User $Users -CIM -Merge"
+Start-Test "-User $Users -CIM -Merge"
 $Result = Get-SDDL -User $Users -CIM -Merge
 $Result | Test-SDDL
 
@@ -177,10 +177,10 @@ Test-Output $Result -Command Get-SDDL
 [string] $NTDomain = "NT AUTHORITY"
 [string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
 
-Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers"
+Start-Test "-Domain $NTDomain -User $NTUsers"
 Get-SDDL -Domain $NTDomain -User $NTUsers | Test-SDDL
 
-Start-Test "Get-SDDL -Domain $NTDomain -User $NTUsers -Merge"
+Start-Test "-Domain $NTDomain -User $NTUsers -Merge"
 Get-SDDL -Domain $NTDomain -User $NTUsers -Merge | Test-SDDL
 
 #
@@ -190,10 +190,10 @@ Get-SDDL -Domain $NTDomain -User $NTUsers -Merge | Test-SDDL
 [string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
 [string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
-Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser"
+Start-Test "-Domain $AppDomain -User $AppUser"
 Get-SDDL -Domain $AppDomain -User $AppUser | Test-SDDL
 
-Start-Test "Get-SDDL -Domain $AppDomain -User $AppUser -Merge"
+Start-Test "-Domain $AppDomain -User $AppUser -Merge"
 $Result = Get-SDDL -Domain $AppDomain -User $AppUser -Merge
 $Result | Test-SDDL
 
@@ -207,13 +207,13 @@ $FileSystem = "C:\Users\Public\Desktop\" # Inherited
 $Registry1 = "HKCU:\" # Not Inherited
 $Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Start-Test "Get-SDDL -Path FileSystem"
+Start-Test "-Path FileSystem"
 Get-SDDL -Path $FileSystem | Test-SDDL
 
-Start-Test "Get-SDDL -Path Registry1"
+Start-Test "-Path Registry1"
 Get-SDDL -Path $Registry1 | Test-SDDL
 
-Start-Test "Get-SDDL -Path Registry2 -Merge"
+Start-Test "-Path Registry2 -Merge"
 $Result = Get-SDDL -Path $Registry2 -Merge
 $Result | Test-SDDL
 

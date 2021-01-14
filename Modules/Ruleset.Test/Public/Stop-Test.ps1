@@ -45,6 +45,8 @@ None. Stop-Test does not generate any output
 
 .NOTES
 This function is not used for now.
+TODO: Start-Test should set error action preference to SilentlyContinue for failure tests,
+then this function could restore it.
 #>
 function Stop-Test
 {
