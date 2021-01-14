@@ -50,6 +50,7 @@ None.
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (

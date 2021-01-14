@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test #"Test-FileSystemPath"
 
 #
 # Root drives
@@ -74,23 +74,23 @@ Enter-Test
 New-Section "Root drive"
 
 $TestPath = "C:"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath -PathType Directory
 
 $TestPath = "C:\\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "D:\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "Z:\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 #
@@ -100,19 +100,19 @@ Test-FileSystemPath $TestPath
 New-Section "Expanded paths"
 
 $TestPath = "C:\\Windows\System32"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:/Windows/explorer.exe"
-Start-Test "Test-FileSystemPath -PathType Leaf: $TestPath"
+Start-Test "-PathType Leaf: $TestPath"
 Test-FileSystemPath $TestPath -PathType File
 
 $TestPath = "C:\\NoSuchFolder"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "\Windows"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 #
@@ -122,24 +122,24 @@ Test-FileSystemPath $TestPath
 New-Section "Environment variables"
 
 $TestPath = "%SystemDrive%"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 $Status = Test-FileSystemPath $TestPath
 $Status
 
 $TestPath = "C:\Program Files (x86)\Windows Defender\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%Path%"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%SystemDrive%\Windows\%ProgramFiles%"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%SystemDrive%\%NUMBER_OF_PROCESSORS%\directory"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 $Status = Test-FileSystemPath $TestPath
 $Status
 
@@ -150,27 +150,27 @@ $Status
 New-Section "Invalid syntax"
 
 $TestPath = '"C:\ProgramData\ssh"'
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "'C:\Windows\Microsoft.NET\Framework64\v3.5'"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:\Unk[n]own\*tory"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:\Bad\<Path>\Loca'tion"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%SystemRoot%\%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:\%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 #
@@ -181,51 +181,51 @@ New-Section "Users folder"
 # ((C:\\?)|\\)Users(?!\\+(Public$|Public\\+))\\
 
 $TestPath = "C:\Users"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:Users\\\PublicUser"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "\Users\user"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:\\UsersA\"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:\\Users\3"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:\Users\Public\Downloads" # "\Public Downloads"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:\Users"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:Users\\\PublicUser"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\Users\\"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\\UsersA\"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\\Users\3"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "\Users\user"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 #
@@ -235,35 +235,35 @@ Test-FileSystemPath -Firewall $TestPath
 New-Section "UserProfile"
 
 $TestPath = "%LOCALAPPDATA%\Temp"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%LOCALAPPDATA%\Temp"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "%HOMEPATH%\AppData\Local\Temp"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "%HOMEPATH%\AppData\Local\Temp"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "C:\Users\$TestUser\AppData"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:\Users\$TestUser\AppData"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 $TestPath = "F:\Users\$TestUser"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "F:\Users\$TestUser"
-Start-Test "Test-FileSystemPath -UserProfile: $TestPath"
+Start-Test "-UserProfile: $TestPath"
 Test-FileSystemPath -UserProfile $TestPath
 
 #
@@ -273,43 +273,43 @@ Test-FileSystemPath -UserProfile $TestPath
 New-Section "Test firewall"
 
 $TestPath = "C:\\Windows\System32"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "%LOCALAPPDATA%\Temp"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "%HOMEPATH%\AppData\Local\Temp"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\Users\$TestUser\AppData"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\Users\Public\Downloads" # "\Public Downloads"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "F:\Users\$TestUser"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "%UNKNOWNVARIABLE%\directory"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "C:"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "C:\"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath -Firewall $TestPath
 
 $TestPath = "\Windows"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 #
@@ -319,27 +319,27 @@ Test-FileSystemPath $TestPath -Firewall
 New-Section "-Firewall + -UserProfile"
 
 $TestPath = "%HOME%\AppData\Local\MicrosoftEdge"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 $TestPath = "C:\Users\$TestUser\AppData"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 $TestPath = "C:\Program Files (x86)\Windows Defender"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 $TestPath = "%HOMEPATH%\AppData\Local\Temp"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 $TestPath = "C:\Users\\"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 $TestPath = "C:\Users\Public"
-Start-Test "Test-FileSystemPath -Firewall -UserProfile: $TestPath"
+Start-Test "-Firewall -UserProfile: $TestPath"
 Test-FileSystemPath -Firewall -UserProfile $TestPath
 
 #
@@ -349,11 +349,11 @@ Test-FileSystemPath -Firewall -UserProfile $TestPath
 New-Section "Null test"
 
 $TestPath = ""
-Start-Test "Test-FileSystemPath: '$TestPath'"
+Start-Test "'$TestPath'"
 Test-FileSystemPath $TestPath
 
 $TestPath = $null
-Start-Test "Test-FileSystemPath: null"
+Start-Test "null"
 $Status = Test-FileSystemPath $TestPath
 $Status
 
@@ -366,43 +366,43 @@ Test-Output $Status -Command Test-FileSystemPath
 New-Section "Relative paths"
 
 $TestPath = ".\.."
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "."
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:\Windows\System32\..\regedit.exe"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "C:Windows"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "~\Direcotry\file.exe"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = ".\.."
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "."
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "C:\Windows\System32\..\regedit.exe"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "C:Windows"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 $TestPath = "~\Direcotry\file.exe"
-Start-Test "Test-FileSystemPath -Firewall: $TestPath"
+Start-Test "-Firewall: $TestPath"
 Test-FileSystemPath $TestPath -Firewall
 
 #
@@ -412,15 +412,15 @@ Test-FileSystemPath $TestPath -Firewall
 New-Section "Not file system"
 
 $TestPath = "HKLM:\SOFTWARE\Microsoft\Clipboard"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "\\COMPUTERNAME\Directory\file.exe"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 $TestPath = "\\"
-Start-Test "Test-FileSystemPath: $TestPath"
+Start-Test "$TestPath"
 Test-FileSystemPath $TestPath
 
 Test-Output $Status -Command Test-FileSystemPath

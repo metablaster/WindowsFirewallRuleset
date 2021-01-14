@@ -1,11 +1,10 @@
-
 <#
 MIT License
 
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,63 +25,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-<#
-.SYNOPSIS
-Unit test for Get-SystemApps
+# Appx module must be imported in compatibility mode for PowerShell version 7.1+
 
-.DESCRIPTION
-Test correctness of Get-SystemApps function
-
-.PARAMETER Force
-If specified, no prompt to run script is shown.
-
-.EXAMPLE
-PS> .\Get-SystemApps.ps1
-
-.INPUTS
-None. You cannot pipe objects to Get-SystemApps.ps1
-
-.OUTPUTS
-None. Get-SystemApps.ps1 does not generate any output
-
-.NOTES
-None.
-#>
-
-#Requires -Version 5.1
-#Requires -RunAsAdministrator
-
-[CmdletBinding()]
-param (
-	[Parameter()]
-	[switch] $Force
-)
-
-#region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\..\ContextSetup.ps1
-
-Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
-
-
-Enter-Test "Get-SystemApps"
-
-Start-Test "$TestAdmin"
-Get-SystemApps -User $TestAdmin
-
-Start-Test "$TestUser"
-$Result = Get-SystemApps -User $TestUser
-$Result
-
-Start-Test "Format-List"
-$Result | Format-List
-
-Start-Test "Format-Wide"
-$Result | Format-Wide
-
-Test-Output $Result -Command Get-SystemApps
-
-Update-Log
-Exit-Test
+if ($PSVersionTable.PSVersion -ge "7.1")
+{
+	Import-WinModule -Name Appx -ErrorAction Stop
+}

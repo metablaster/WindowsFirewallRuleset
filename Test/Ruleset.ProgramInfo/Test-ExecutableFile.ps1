@@ -82,19 +82,19 @@ $Result
 Start-Test "Directory"
 Test-ExecutableFile $Directory
 
-Start-Test "Blacklisted extension"
+Start-Test "Blacklisted extension" -Expected "FAIL"
 Test-ExecutableFile $BlacklistedExtension.FullName
 
-Start-Test "Unknown extension"
+Start-Test "Unknown extension" -Expected "FAIL"
 Test-ExecutableFile $UnknownExtension.FullName
 
-Start-Test "No extension"
+Start-Test "No extension" -Expected "FAIL"
 Test-ExecutableFile $NoExtension.FullName
 
-Start-Test "Unsigned file"
+Start-Test "Unsigned file" -Expected "FAIL"
 Test-ExecutableFile $UnsignedFile.FullName
 
-Start-Test "Force unsigned file"
+Start-Test "Force unsigned file" -Expected "WARNING"
 Test-ExecutableFile $UnsignedFile.FullName -Force
 
 Start-Test "Non existent directory"

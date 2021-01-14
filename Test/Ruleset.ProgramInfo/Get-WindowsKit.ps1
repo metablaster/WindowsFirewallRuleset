@@ -65,13 +65,13 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-WindowsKit"
 
-Start-Test "Get-WindowsKit"
+Start-Test "default"
 $WindowsKits = Get-WindowsKit
 $WindowsKits
 
-Start-Test "Get-WindowsKit DebuggersRoot latest"
+Start-Test "DebuggersRoot latest"
 if ($null -ne $WindowsKits)
 {
 	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |

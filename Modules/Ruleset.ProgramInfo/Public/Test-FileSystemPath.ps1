@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test file system path syntax and existence
+Test existence of a file system path and validate path syntax
 
 .DESCRIPTION
 Test-FileSystemPath checks file system path syntax by verifying environment variables and reporting
@@ -222,7 +222,7 @@ function Test-FileSystemPath
 				# Verify path environment variables are whitelisted
 				# NOTE: This check must be before qualifier check to get precise error description
 				$RegexVariable = [regex]::Match($LiteralPath, "(?<=%)[^%\\]+(?=%)")
-				$WhiteList = Select-EnvironmentVariable -From BlackList -Property Name -Exact
+				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact
 
 				while ($RegexVariable.Success)
 				{

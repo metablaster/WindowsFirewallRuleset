@@ -82,28 +82,38 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Show-Table"
 
-Start-Test "-UserProfile switch Fill table with Greenshot"
+Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
-Update-Table "Greenshot" -UserProfile
+Update-Table -Search "Visual Studio" -UserProfile
+Show-Table
+
+Start-Test "-Executable PowerShell.exe"
+Initialize-Table
+Update-Table -Executable "PowerShell.exe"
+Show-Table
+
+Start-Test "-Search EdgeChromium -Executable msedge.exe"
+Initialize-Table
+Update-Table -Search "EdgeChromium" -Executable "msedge.exe"
+$Result = Show-Table
+$Result
+
+Start-Test "Good user profile path"
+Initialize-Table
+Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\"
+Show-Table
+
+Start-Test "Good system path"
+Initialize-Table
+Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
 Show-Table
 
 Start-Test "Failure Test"
 Initialize-Table
 Update-Table "Failure" -UserProfile
 Show-Table
-
-Start-Test "Test multiple paths"
-Initialize-Table
-Update-Table "Visual Studio" -UserProfile
-Show-Table
-
-Start-Test "-Executables switch - Fill table with PowerShell"
-Initialize-Table
-Update-Table "PowerShell.exe" -Executable
-$Result = Show-Table
-$Result
 
 Test-Output $Result -Command Show-Table
 

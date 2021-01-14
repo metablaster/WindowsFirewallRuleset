@@ -65,15 +65,14 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-ExecutablePath"
 
-Start-Test "Get-ExecutablePath"
-$ExecutablePaths = Get-ExecutablePath | Sort-Object -Property Name
+Start-Test "default"
+$ExecutablePaths = Get-ExecutablePath
 $ExecutablePaths
 
-Start-Test "Get-ExecutablePath pwsh.exe"
-$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" |
-Select-Object -ExpandProperty InstallLocation
+Start-Test "pwsh.exe"
+$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" | Format-Wide
 
 Test-Output $ExecutablePaths -Command Get-ExecutablePath
 

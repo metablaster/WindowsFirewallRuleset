@@ -65,19 +65,20 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-SqlServerInstance"
 
-Start-Test "Get-SqlServerInstance"
+Start-Test "default"
 $Instances = Get-SqlServerInstance
 $Instances
 
-Start-Test "Get-SqlServerInstance CIM"
+Start-Test "CIM"
 Get-SqlServerInstance -CIM
 
-Start-Test "Get-SqlServerInstance binn directory"
+# TODO: Format-Wide when InstallLocation is available
+Start-Test "binn directory"
 Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
 
-Start-Test "Get-SqlServerInstance DTS directory"
+Start-Test "DTS directory"
 Get-SqlServerInstance | Select-Object -ExpandProperty SQLPath
 
 Test-Output $Instances -Command Get-SqlServerInstance

@@ -65,14 +65,14 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "SqlManagementStudio"
 
-Start-Test "SqlManagementStudio"
+Start-Test "default"
 $Instances = Get-SqlManagementStudio
 $Instances
 
-Start-Test "SqlManagementStudio - Install path"
-$Instances | Select-Object -ExpandProperty InstallLocation
+Start-Test "Install path Format-Wide"
+$Instances | Format-Wide
 
 Test-Output $Instances -Command Get-SqlManagementStudio
 

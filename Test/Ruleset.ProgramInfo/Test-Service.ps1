@@ -65,31 +65,31 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Test-Service"
 
-Start-Test "Test-Service dnscache"
+Start-Test "dnscache"
 $Result = Test-Service dnscache
 $Result
 
-Start-Test "Test-Service array to pipeline"
+Start-Test "array to pipeline"
 @("msiserver", "DOESNOTEXIST", "Spooler", "WSearch") | Test-Service
 
-Start-Test "Get-Service *xbox*"
+Start-Test "*xbox*" -Command "Get-Service" -Expected "FAIL"
 Test-Service (Get-Service -Name *xbox*)
 
-Start-Test "Get-Service *xbox* to pipeline"
+Start-Test "*xbox* to pipeline" -Command "Get-Service" -Expected "FAIL"
 Get-Service -Name *xbox* | Test-Service
 
-Start-Test "Test-Service *xbox*"
+Start-Test "*xbox*"
 Test-Service "*xbox*"
 
-Start-Test "Test-Service *xbox* pipeline"
+Start-Test "*xbox* pipeline"
 "*xbox*" | Test-Service
 
-Start-Test "Test-Service FailureTest"
+Start-Test "FailureTest"
 Test-Service "FailureTest"
 
-Start-Test "Test-Service project rules"
+Start-Test "project rules"
 Build-ServiceList $ProjectRoot\Rules | Test-Service | Measure-Object
 
 Test-Output $Result -Command Test-Service

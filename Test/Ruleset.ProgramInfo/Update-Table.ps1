@@ -85,50 +85,41 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Update-Table"
 
-Start-Test "-UserProfile switch Fill table with Greenshot"
+Start-Test "Greenshot -UserProfile"
 Initialize-Table
 Update-Table -Search "Greenshot" -UserProfile
 $global:InstallTable | Format-Table -AutoSize
-
-Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Start-Test "Failure Test"
 Initialize-Table
 Update-Table -Search "Failure" -UserProfile
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Test multiple paths"
+Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
 Update-Table -Search "Visual Studio" -UserProfile
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
-
-Start-Test "-Executables PowerShell.exe"
+Start-Test "-Executable PowerShell.exe"
 Initialize-Table
-Update-Table -Search "" -Executable "PowerShell.exe"
+Update-Table -Executable "PowerShell.exe"
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
-
-Start-Test "-UserProfile switch Fill table with Greenshot"
+Start-Test "-Search EdgeChromium -Executable msedge.exe"
 Initialize-Table
 Update-Table -Search "EdgeChromium" -Executable "msedge.exe"
 $global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
-
-Start-Test "-UserProfile switch Fill table with OneDrive"
+Start-Test "OneDrive -UserProfile"
 Initialize-Table
 $Result = Update-Table -Search "OneDrive" -UserProfile
 $Result
 $global:InstallTable | Format-Table -AutoSize
+
+Start-Test "Install Path"
+$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 Test-Output $Result -Command Update-Table
 

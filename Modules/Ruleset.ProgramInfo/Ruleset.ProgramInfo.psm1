@@ -136,7 +136,6 @@ Write-Debug -Message "[$ThisModule] Initializing module variables"
 # Installation table holds user and program directory pair
 if ($Develop)
 {
-	# TODO: script scope variable should be exportable?
 	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
 	New-Variable -Name InstallTable -Scope Global -Value $null
 }

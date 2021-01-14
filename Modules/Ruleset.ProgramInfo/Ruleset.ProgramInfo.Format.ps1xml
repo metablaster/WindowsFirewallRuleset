@@ -7,13 +7,21 @@
 	<ViewDefinitions>
 		<!-- Defines a view that is used to display one or more .NET objects. -->
 		<View>
-			<Name>Ruleset.ProgramInfo</Name>
+			<Name>ProgramInfoTable</Name>
 			<!-- Defines the .NET objects that are displayed by the view. -->
 			<!-- Each view must specify at least one .NET object. -->
 			<ViewSelectedBy>
 				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
 				<TypeName>Ruleset.ProgramInfo</TypeName>
+				<TypeName>Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
+				<TypeName>Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
 			</ViewSelectedBy>
+			<!-- Defines how a new group of objects is displayed. -->
+			<!-- This element is used when defining a table, list, wide, or custom control view. -->
+			<GroupBy>
+				<!-- Specifies the object property by which items are to be grouped. -->
+				<PropertyName>Domain</PropertyName>
+			</GroupBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
 				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
@@ -64,6 +72,75 @@
 					</TableRowEntry>
 				</TableRowEntries>
 			</TableControl>
+		</View>
+		<View>
+			<Name>ProgramInfoList</Name>
+			<!-- Defines the .NET objects that are displayed by the view. -->
+			<!-- Each view must specify at least one .NET object. -->
+			<ViewSelectedBy>
+				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
+				<TypeName>Ruleset.ProgramInfo</TypeName>
+				<TypeName>Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
+				<TypeName>Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
+			</ViewSelectedBy>
+			<GroupBy>
+				<PropertyName>Domain</PropertyName>
+			</GroupBy>
+			<ListControl>
+				<!-- Required element. Provides the definitions of the list view. -->
+				<!-- Provides the definitions of the list view. The list view must specify one or more definitions. -->
+				<ListEntries>
+					<!-- Provides a definition of the list view. -->
+					<ListEntry>
+						<!-- Required element. Defines the properties and scripts whose values are displayed by the list view. -->
+						<ListItems>
+							<!-- Required element. Defines the property or script whose value is displayed by the list view. -->
+							<ListItem>
+								<!-- Optional element Specifies the label that is displayed to the left of the property or script value in the row. -->
+								<Label>Domain</Label>
+								<!-- Specify the object property to be displayed at the specified location in the list. -->
+								<PropertyName>Domain</PropertyName>
+							</ListItem>
+							<ListItem>
+								<Label>Name</Label>
+								<PropertyName>Name</PropertyName>
+							</ListItem>
+							<ListItem>
+								<Label>InstallLocation</Label>
+								<PropertyName>InstallLocation</PropertyName>
+							</ListItem>
+						</ListItems>
+					</ListEntry>
+				</ListEntries>
+			</ListControl>
+		</View>
+		<View>
+			<Name>ProgramInfoWide</Name>
+			<ViewSelectedBy>
+				<TypeName>Ruleset.ProgramInfo</TypeName>
+				<TypeName>Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
+				<TypeName>Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
+			</ViewSelectedBy>
+			<GroupBy>
+				<PropertyName>Domain</PropertyName>
+			</GroupBy>
+			<!-- Optional element. Defines a wide (single value) list format for the view. -->
+			<!-- This view displays a single property value or script value for each object. -->
+			<WideControl>
+				<!-- Optional element. Specifies the number of columns displayed in the wide view. -->
+				<ColumnNumber>1</ColumnNumber>
+				<!-- Required element. Provides the definitions of the wide view. -->
+				<WideEntries>
+					<!-- Provides a definition of the wide view. -->
+					<WideEntry>
+						<!-- Required element. Defines the property or script whose value is displayed. -->
+						<WideItem>
+							<!-- Specifies the property to be displayed at the specified location in the view. -->
+							<PropertyName>InstallLocation</PropertyName>
+						</WideItem>
+					</WideEntry>
+				</WideEntries>
+			</WideControl>
 		</View>
 	</ViewDefinitions>
 </Configuration>

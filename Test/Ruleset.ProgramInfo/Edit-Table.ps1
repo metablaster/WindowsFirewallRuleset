@@ -83,7 +83,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Edit-Table"
 
 Start-Test "Good system path"
 Initialize-Table

@@ -65,9 +65,9 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-WindowsDefender"
 
-Start-Test "Get-WindowsDefender"
+Start-Test "default"
 $Result = Get-WindowsDefender #| Select-Object -ExpandProperty InstallLocation
 $Result
 

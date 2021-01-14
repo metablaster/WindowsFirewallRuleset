@@ -66,7 +66,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Confirm-Installation"
 
 $VSCodeRoot = ""
 $OneDrive = "unknown"
@@ -74,20 +74,20 @@ $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
-Start-Test "Confirm-Installation 'VSCode' $VSCodeRoot"
+Start-Test "'VSCode' $VSCodeRoot"
 $Result = Confirm-Installation "VSCode" ([ref] $VSCodeRoot)
 $Result
 
-Start-Test "Confirm-Installation 'OneDrive' $OneDrive"
+Start-Test "'OneDrive' $OneDrive"
 Confirm-Installation "OneDrive" ([ref] $OneDrive)
 
-Start-Test "Confirm-Installation 'MicrosoftOffice' $OfficeRoot"
+Start-Test "'MicrosoftOffice' $OfficeRoot"
 Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
 
-Start-Test "Confirm-Installation 'VisualStudio' $TestBadVariable"
+Start-Test "'VisualStudio' $TestBadVariable"
 Confirm-Installation "VisualStudio" ([ref] $TestBadVariable)
 
-Start-Test "Confirm-Installation 'FailureTest' $TestBadVariable2"
+Start-Test "'FailureTest' $TestBadVariable2"
 Confirm-Installation "FailureTest" ([ref] $TestBadVariable2)
 
 Test-Output $Result -Command Confirm-Installation

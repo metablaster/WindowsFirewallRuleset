@@ -87,19 +87,19 @@ function Get-SystemApps
 		# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
 		Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object {
 			$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*"
-		} | Where-Object {
-			# NOTE: This path will be missing for default apps Windows server
+		} | ForEach-Object {
+			# NOTE: This path will be missing for default apps on Windows server
 			# It may also be missing in fresh installed OS before connecting to internet
 			# TODO: See if "$_.Status" property can be used to determine if app is valid
 			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$User\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
 			{
-				$true
+				# There is no Domain property, so add one, PSComputerName property is of no use here
+				Add-Member -InputObject $_ -PassThru -Type NoteProperty -Name Domain -Value $Domain
 			}
 			else
 			{
 				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$User' or the app is missing"
 				Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
-				$false
 			}
 		}
 	}

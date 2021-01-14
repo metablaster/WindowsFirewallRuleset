@@ -98,13 +98,13 @@ function Get-UserApps
 			# TODO: See if "$_.Status" property can be used to determine if app is valid
 			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$User\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
 			{
-				$true
+				# There is no Domain property, so add one, PSComputerName property is of no use here
+				Add-Member -InputObject $_ -PassThru -Type NoteProperty -Name Domain -Value $Domain
 			}
 			else
 			{
 				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$User' or the app is missing"
 				Write-Information -Tags "User" -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
-				$false
 			}
 		}
 	}

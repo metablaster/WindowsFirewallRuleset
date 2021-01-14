@@ -69,14 +69,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "ConvertFrom-SID"
 
-$VerbosePreference = "Continue"
-$DebugPreference = "Continue"
-
-if ($PSVersionTable.PSVersion -ge "7.1")
-{
-	Import-WinModule -Name Appx -ErrorAction Stop
-}
-
 Start-Test "'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts

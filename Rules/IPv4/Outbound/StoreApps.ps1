@@ -102,11 +102,6 @@ param (
 Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
-if ($PSVersionTable.PSVersion -ge "7.1")
-{
-	Import-WinModule -Name Appx -ErrorAction Stop
-}
-
 # Setup local variables
 $Group = "Store Apps"
 $ProgramsGroup = "Store Apps - Programs"

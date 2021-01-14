@@ -68,27 +68,33 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-AppSID"
 
-Start-Test "Get-GroupPrincipal:"
+Start-Test "default" -Command "Get-GroupPrincipal"
 $GroupAccounts = Get-GroupPrincipal "Users", "Administrators"
 $GroupAccounts
 
 foreach ($Account in $GroupAccounts)
 {
-	Start-Test "Get-AppSID: $($Account.User)"
+	Start-Test "$($Account.User)"
 	Get-UserApps -User $Account.User | ForEach-Object {
-		Get-AppSID -FamilyName $_.PackageFamilyName
+		[PSCustomObject]@{
+			PackageFamilyName = $_.PackageFamilyName
+			SID = Get-AppSID -FamilyName $_.PackageFamilyName
+		} | Format-List
 	}
 }
 
-Start-Test "Get-AppSID: system apps"
+Start-Test "system apps"
 $Result = Get-SystemApps -User $TestAdmin | ForEach-Object {
-	Get-AppSID -FamilyName $_.PackageFamilyName
+	[PSCustomObject]@{
+		PackageFamilyName = $_.PackageFamilyName
+		SID = Get-AppSID -FamilyName $_.PackageFamilyName
+	} | Format-List
 }
 $Result
 
-Test-Output $Result -Command Get-AppSID
+Test-Output ($Result | Select-Object -Property SID) -Command Get-AppSID
 
 Update-Log
 Exit-Test

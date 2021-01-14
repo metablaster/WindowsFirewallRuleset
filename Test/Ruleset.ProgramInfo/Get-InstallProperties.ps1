@@ -65,9 +65,9 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-InstallProperties"
 
-Start-Test "Get-InstallProperties"
+Start-Test "default"
 $Result = Get-InstallProperties
 $Result
 

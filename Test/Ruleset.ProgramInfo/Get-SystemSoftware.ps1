@@ -65,21 +65,17 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-SystemSoftware"
 
 $SystemPrograms = Get-SystemSoftware
 
-Start-Test "Get-SystemSoftware Name"
-$SystemPrograms | Sort-Object -Property Name | Select-Object -ExpandProperty Name
+Start-Test "Name"
+$SystemPrograms | Sort-Object -Property Name | Format-Wide -Property Name -Column 1
 
-Start-Test "Get-SystemSoftware InstallLocation"
-$SystemPrograms | Sort-Object -Property InstallLocation |
-Select-Object -ExpandProperty InstallLocation
+Start-Test "Format-Wide InstallLocation"
+$SystemPrograms | Format-Wide
 
-Start-Test "Get-SystemSoftware"
-$SystemPrograms | Sort-Object -Property Name
-
-Start-Test "Get-SystemSoftware | Select *"
+Start-Test "| Select *"
 $SystemPrograms | Sort-Object -Property Name | Select-Object *
 
 Test-Output $SystemPrograms -Command Get-SystemSoftware

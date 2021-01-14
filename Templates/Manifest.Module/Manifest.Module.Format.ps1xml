@@ -7,13 +7,19 @@
 	<ViewDefinitions>
 		<!-- Defines a view that is used to display one or more .NET objects. -->
 		<View>
-			<Name>ViewName</Name>
+			<Name>TableViewName</Name>
 			<!-- Defines the .NET objects that are displayed by the view. -->
 			<!-- Each view must specify at least one .NET object. -->
 			<ViewSelectedBy>
 				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
 				<TypeName>TemplateType</TypeName>
 			</ViewSelectedBy>
+			<GroupBy>
+				<!-- Optional element. Specifies a label that is displayed when a new group is encountered. -->
+				<Label>Label1</Label>
+				<!-- Specifies the object property by which items are to be grouped. -->
+				<PropertyName>Property1</PropertyName>
+			</GroupBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
 				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
@@ -56,6 +62,16 @@
 					</TableRowEntry>
 				</TableRowEntries>
 			</TableControl>
+		</View>
+		<View>
+			<Name>ListViewName</Name>
+			<ViewSelectedBy>
+				<TypeName>TemplateType</TypeName>
+			</ViewSelectedBy>
+			<GroupBy>
+				<Label>Label1</Label>
+				<PropertyName>Property1</PropertyName>
+			</GroupBy>
 			<!-- Optional element. Defines a list format for the view. -->
 			<ListControl>
 				<!-- Required element. Provides the definitions of the list view. -->
@@ -80,6 +96,36 @@
 					</ListEntry>
 				</ListEntries>
 			</ListControl>
+		</View>
+		<View>
+			<Name>WideViewName</Name>
+			<ViewSelectedBy>
+				<TypeName>TemplateType</TypeName>
+			</ViewSelectedBy>
+			<GroupBy>
+				<Label>Label1</Label>
+				<PropertyName>Property1</PropertyName>
+			</GroupBy>
+			<!-- Optional element. Defines a wide (single value) list format for the view. -->
+			<!-- This view displays a single property value or script value for each object. -->
+			<WideControl>
+				<!-- AutoSize and ColumnNumber are mutually exclusive. -->
+				<!-- Autosize may split one column into multiple columns -->
+				<AutoSize>True</AutoSize>
+				<!-- Optional element. Specifies the number of columns displayed in the wide view. -->
+				<ColumnNumber>1</ColumnNumber>
+				<!-- Required element. Provides the definitions of the wide view. -->
+				<WideEntries>
+					<!-- Provides a definition of the wide view. -->
+					<WideEntry>
+						<!-- Required element. Defines the property or script whose value is displayed. -->
+						<WideItem>
+							<!-- Specifies the property to be displayed at the specified location in the view. -->
+							<PropertyName>Property1</PropertyName>
+						</WideItem>
+					</WideEntry>
+				</WideEntries>
+			</WideControl>
 		</View>
 	</ViewDefinitions>
 </Configuration>

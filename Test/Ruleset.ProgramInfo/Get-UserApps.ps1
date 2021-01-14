@@ -50,6 +50,7 @@ None.
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -67,14 +68,20 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 
-Enter-Test
+Enter-Test "Get-UserApps"
 
-Start-Test "Get-UserApps $TestAdmin"
-Get-UserApps -User $TestAdmin | Select-Object PackageFamilyName
+Start-Test "$TestAdmin"
+Get-UserApps -User $TestAdmin
 
-Start-Test "Get-UserApps $TestUser"
+Start-Test "$TestUser"
 $Result = Get-UserApps -User $TestUser
-$Result | Select-Object PackageFamilyName
+$Result
+
+Start-Test "Format-List"
+$Result | Format-List
+
+Start-Test "Format-Wide"
+$Result | Format-Wide
 
 Test-Output $Result -Command Get-UserApps
 

@@ -28,21 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Fill data table with principal and program location
+Fill data table with information required to define firewall rule based on application.
 
 .DESCRIPTION
-Module scope installation table is updated
-Search system for programs with input search string, and add new program installation directory
-to the table, as well as other information needed to make a firewall rule
+Search system for specified program and add relevant program information such as
+installation directory and principal to the table.
+This information is sufficient to make a firewall rule based on executable.
 
 .PARAMETER Search
-Search string which corresponds to the output of "Get programs" functions
+Search string which is a partial name of the program name as shown in the Name property of
+program search functions.
 
 .PARAMETER UserProfile
-true if user profile is to be searched too, system locations only otherwise
+True if user profile is to be searched in addition to system wide installations
 
 .PARAMETER Executable
 Optionally specify executable name which will be search first.
+This method can be useful if the result is ambiguous, ex. multiple results.
 
 .EXAMPLE
 PS> Update-Table -Search "GoogleChrome"
@@ -53,6 +55,9 @@ PS> Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"
 .EXAMPLE
 PS> Update-Table -Search "Greenshot" -UserProfile
 
+.EXAMPLE
+PS> Update-Table -Executable "PowerShell.exe"
+
 .INPUTS
 None. You cannot pipe objects to Update-Table
 
@@ -61,24 +66,24 @@ None. Update-Table does not generate any output
 
 .NOTES
 TODO: For programs in user profile rules should update LocalUser parameter accordingly,
-currently it looks like we assign entry user group for program that applies to user only
-TODO: Using "Executable" parameter should be possible without the use of "Search" parameter
+currently it looks like we assign entry user group for program that applies to single user only.
 TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search
 TODO: This function should make use of Out-DataTable function from Ruleset.Utility module
+TODO: Using Format.psm1xml for DataTable would apply to all data tables, maybe reveting to PSCustomObject?
 #>
 function Update-Table
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "None")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true)]
-		[AllowEmptyString()]
+		[Parameter(Mandatory = $true, ParameterSetName = "Search")]
 		[string] $Search,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Search")]
 		[switch] $UserProfile,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Search")]
+		[Parameter(Mandatory = $true, ParameterSetName = "Executable")]
 		[string] $Executable
 	)
 
@@ -122,11 +127,12 @@ function Update-Table
 				# TODO: If the path is known there is no need to continue?
 				return
 			}
-		}
-		elseif ([string]::IsNullOrEmpty($Search))
-		{
-			# Function was called to search by executables only
-			return
+
+			if ($PSCmdlet.ParameterSetName -eq "Executable")
+			{
+				# Function was called to search by executable only
+				return
+			}
 		}
 
 		# TODO: try to search also for path in addition to program name

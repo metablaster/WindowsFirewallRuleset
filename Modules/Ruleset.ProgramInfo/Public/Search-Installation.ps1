@@ -343,12 +343,12 @@ function Search-Installation
 		}
 		"PowerShellCore64"
 		{
-			Update-Table -Search "" -Executable "pwsh.exe"
+			Update-Table -Executable "pwsh.exe"
 			break
 		}
 		"PowerShell64"
 		{
-			Update-Table -Search "" -Executable "PowerShell.exe"
+			Update-Table -Executable "PowerShell.exe"
 			break
 		}
 		"PowerShell86"

@@ -68,11 +68,12 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-OneDrive"
 
-$UserGroup = "Users"
+# NOTE: Invoke access denied to registry if test run as standard user
+$UserGroup = @("Users", "Administrators")
 
-Start-Test "Get-GroupPrincipal $UserGroup"
+Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
 $Principals = Get-GroupPrincipal $UserGroup
 # TODO: see also @Get-UserSoftware,
 # This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
@@ -80,13 +81,13 @@ $Principals | Format-Table
 
 foreach ($Principal in $Principals)
 {
-	Start-Test "Get-OneDrive $($Principal.User)"
+	Start-Test "$($Principal.User)"
 	Get-OneDrive $Principal.User
 }
 
 foreach ($Principal in $Principals)
 {
-	Start-Test "Get-OneDrive $($Principal.User) | InstallLocation"
+	Start-Test "$($Principal.User) | InstallLocation"
 	Get-OneDrive $Principal.User | Select-Object -ExpandProperty InstallLocation
 }
 

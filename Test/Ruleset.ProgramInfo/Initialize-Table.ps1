@@ -77,16 +77,13 @@ elseif (!(Get-Command -Name Initialize-Table -EA Ignore) -and
 	return
 }
 
-return
-
-
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Initialize-Table"
 
-Start-Test "Initialize-Table"
+Start-Test "default"
 $Result = Initialize-Table
 $Result
 

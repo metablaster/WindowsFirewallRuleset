@@ -66,18 +66,19 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-UserSoftware"
 
-$UserGroup = "Users"
+# NOTE: Invoke access denied to registry if test run as standard user
+$UserGroup = @("Users", "Administrators")
 
-Start-Test "Get-GroupPrincipal $UserGroup"
+Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
 $Principals = Get-GroupPrincipal $UserGroup
 # TODO: This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
 $Principals | Format-Table
 
 foreach ($Principal in $Principals)
 {
-	Start-Test "Get-UserSoftware: $($Principal.User)"
+	Start-Test "$($Principal.User)"
 	$Result = Get-UserSoftware $Principal.User
 	$Result
 }

@@ -65,13 +65,13 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-WindowsSDK"
 
-Start-Test "Get-WindowsSDK"
+Start-Test "default"
 $WindowsSDK = Get-WindowsSDK
 $WindowsSDK
 
-Start-Test "Get-WindowsSDK latest"
+Start-Test "latest"
 if ($null -ne $WindowsSDK)
 {
 	$WindowsSDK | Sort-Object -Property Version |

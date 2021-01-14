@@ -65,13 +65,13 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-NetFramework"
 
-Start-Test "Get-NetFramework"
+Start-Test "default"
 $NETFramework = Get-NetFramework
 $NETFramework
 
-Start-Test "Get-NetFramework latest"
+Start-Test "latest"
 if ($null -ne $NETFramework)
 {
 	$NETFrameworkRoot = $NETFramework |
