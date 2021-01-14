@@ -272,7 +272,7 @@ if ($Develop)
 	if ($PSVersionTable.PSEdition -eq "Desktop")
 	{
 		# Global because of known issue: https://github.com/PowerShell/PowerShell/issues/3645
-		Set-Variable -Name ErrorView -Scope Global -Value "CategoryView"
+		# Set-Variable -Name ErrorView -Scope Global -Value "CategoryView"
 	}
 
 	# Two variables for each of the three logging components:
@@ -522,6 +522,8 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# Encoding used to write and read files, UTF8 without BOM
 		# https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+		# TODO: Beginning with PowerShell 6.2, the Encoding parameter also allows numeric IDs of registered
+		# code pages (like -Encoding 1251) or string names of registered code pages (like -Encoding "windows-1251")
 		Set-Variable -Name DefaultEncoding -Scope Global -Option Constant -Value (
 			New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false)
 

@@ -174,6 +174,7 @@ SOFTWARE.
 		"Help\en-US\Set-ScreenBuffer.md"
 		"Help\en-US\Set-Shortcut.md"
 		"Help\README.md"
+		"Private\Convert-EncodingString.ps1"
 		"Private\Set-Privilege.ps1"
 		"Public\Approve-Execute.ps1"
 		"Public\Build-ServiceList.ps1"

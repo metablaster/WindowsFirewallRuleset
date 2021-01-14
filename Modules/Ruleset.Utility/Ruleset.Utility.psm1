@@ -51,6 +51,7 @@ if ($ListPreference)
 #
 
 $PrivateScripts = @(
+	"Convert-EncodingString"
 	"Set-Privilege"
 )
 

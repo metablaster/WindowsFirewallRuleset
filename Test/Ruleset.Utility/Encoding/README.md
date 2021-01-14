@@ -1,4 +1,4 @@
 
 # Encoding directory
 
-Test files for `Confirm-FileEncoding` function
+Test files for `Get-FileEncoding` and `Confirm-FileEncoding` functions

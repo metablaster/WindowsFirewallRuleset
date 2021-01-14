@@ -85,6 +85,7 @@ $TestFiles = @(
 	"ANSI.txt"
 	"ascii.txt"
 	"utf-16LE.txt"
+	"utf-16LE+NonPrintable.txt"
 	"utf8.txt"
 	"utf8BOM.txt"
 	"utf16BE.txt"
@@ -106,7 +107,7 @@ $ProjectFiles | ForEach-Object {
 	$FileName = Split-Path $_ -Leaf
 	if ($FileName -notin $TestFiles)
 	{
-		$_ | Confirm-FileEncoding
+		Confirm-FileEncoding -LiteralPath $_
 	}
 	else # Test files
 	{
@@ -126,6 +127,12 @@ Start-Test "Confirm-FileEncoding file"
 $TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
 $Result = Confirm-FileEncoding $TestFile.Path
 $Result
+
+Start-Test "Confirm-FileEncoding binary file"
+Confirm-FileEncoding "$env:SystemRoot\regedit.exe"
+
+Start-Test "Confirm-FileEncoding binary file"
+Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -Binary -Debug
 
 Test-Output $Result -Command Confirm-FileEncoding
 

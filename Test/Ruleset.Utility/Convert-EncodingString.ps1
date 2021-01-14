@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-FileEncoding
+Unit test for Convert-EncodingString
 
 .DESCRIPTION
-Test correctness of Get-FileEncoding function
+Test correctness of Convert-EncodingString function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Get-FileEncoding.ps1
+PS> .\Convert-EncodingString.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-FileEncoding.ps1
+None. You cannot pipe objects to Convert-EncodingString.ps1
 
 .OUTPUTS
-None. Get-FileEncoding.ps1 does not generate any output
+None. Convert-EncodingString.ps1 does not generate any output
 
 .NOTES
 None.
@@ -63,27 +63,36 @@ param (
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-Enter-Test
+Enter-Test -Private
 
-# Start-Test "Get-FileEncoding windows-1251"
-# Get-FileEncoding $PSScriptRoot\Encoding\utf8.txt -Encoding "windows-1251"
+$Encodings = @(
+	"ascii", "bigendianunicode", "bigendianutf32", "oem", "unicode", "utf7",
+	"utf8", "utf32", "utf8BOM", "utf8NoBOM", "byte", "default", "string", "unknown",
+	"us-ascii", "utf-7", "utf-8", "unicodeFFFE", "utf-16BE", "utf-32BE", "utf-16", "utf-32"
+)
 
-# Start-Test "Get-FileEncoding 932"
-# Get-FileEncoding $PSScriptRoot\Encoding\utf8.txt -Encoding 932
+Start-Test "Convert-EncodingString utf-8 -BOM"
+Convert-EncodingString "utf-8" -BOM
 
-$TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
-$TestFiles += "$env:SystemRoot\regedit.exe"
+Start-Test "Convert-EncodingString utf-8 -BOM:$false"
+Convert-EncodingString "utf-8" -BOM:$false
 
-foreach ($File in $TestFiles)
-{
-	Start-Test "Get-FileEncoding $File"
-	$Result = Get-FileEncoding $File
-	$Result
+Start-Test "Convert-EncodingString utf8BOM"
+$Result = Convert-EncodingString "utf8BOM"
+$Result
+
+Start-Test "Convert-EncodingString all strings"
+$Encodings | ForEach-Object {
+	$LocalResult = Convert-EncodingString $_
+	if ($LocalResult)
+	{
+		Write-Information -Tags "Test" -MessageData "INFO: $_ -> $LocalResult"
+	}
 }
 
-Test-Output $Result -Command Get-FileEncoding
+Test-Output $Result -Command Convert-EncodingString
 
 Update-Log
 Exit-Test
