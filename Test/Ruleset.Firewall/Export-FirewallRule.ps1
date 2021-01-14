@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Export-FirewallRule"
 
 $Exports = "$ProjectRoot\Exports"
 
@@ -73,28 +73,28 @@ $Exports = "$ProjectRoot\Exports"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
-	Start-Test "Export-FirewallRule -DisplayGroup"
+	Start-Test "-DisplayGroup"
 	Export-FirewallRule -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" # -DisplayName "Gwent"
 
-	Start-Test "Export-FirewallRule -DisplayGroup"
+	Start-Test "-DisplayGroup"
 	Export-FirewallRule -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport"
 
-	Start-Test "Export-FirewallRule -DisplayName NONEXISTENT"
+	Start-Test "-DisplayName NONEXISTENT"
 	Export-FirewallRule -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1"
 
-	Start-Test "Export-FirewallRule -DisplayName"
+	Start-Test "-DisplayName"
 	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1"
 
-	Start-Test "Export-FirewallRule -DisplayName -JSON"
+	Start-Test "-DisplayName -JSON"
 	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2"
 
-	Start-Test "Export-FirewallRule -Outbound -Disabled -Allow"
+	Start-Test "-Outbound -Disabled -Allow"
 	Export-FirewallRule -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport"
 
-	Start-Test "Export-FirewallRule -Inbound -Enabled -Block -JSON"
+	Start-Test "-Inbound -Enabled -Block -JSON"
 	Export-FirewallRule -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport"
 
-	Start-Test "Export-FirewallRule -DisplayGroup"
+	Start-Test "-DisplayGroup"
 	$Result = Export-FirewallRule -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" # -DisplayName "Gwent"
 	$Result
 

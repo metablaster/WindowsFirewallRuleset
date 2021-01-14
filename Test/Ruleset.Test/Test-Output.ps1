@@ -98,5 +98,8 @@ Write-Warning -Message "Error ignored: $TempError"
 
 Test-Output $Result -Command Test-Output
 
+Start-Test "Array to pipeline"
+Get-ChildItem | Test-Output -Command Get-ChildItem
+
 Update-Log
 Exit-Test

@@ -65,45 +65,47 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Resolve-Host"
 
 # Prepare test IP
 Start-Test "Get google IP"
-$NSLookup = Invoke-Process nslookup.exe -ArgumentList "google.com" -EA Ignore
-if ($NSLookup -and $NSLookup -match "(?<!\s)([0-9]{1,3}\.){3}[0-9]{1,3}")
+$NSLookup = Invoke-Process nslookup.exe -ArgumentList "google.com" -Raw -EA Ignore
+[System.Text.RegularExpressions.Match[]] $Regex = [regex]::Matches($NSLookup, "(?<=\D)(?<IPAddress>([0-9]{1,3}\.){3}[0-9]{1,3})")
+if ($Regex.Count)
 {
-	[IPAddress] $GoogleIP = $Matches[0]
-	$GoogleIP.IPAddressToString
+	[IPAddress] $GoogleIP = $Regex.Captures[$Regex.Count - 1].Value
+	Write-Information -Tags "Test" -MessageData "INFO: Google IP is $($GoogleIP.IPAddressToString)"
 }
 
-Start-Test "Resolve-Host IPv4 LocalHost"
+Start-Test "IPv4 LocalHost"
 Resolve-Host -AddressFamily IPv4 -Physical
 
-Start-Test "Resolve-Host Virtual"
+Start-Test "Virtual"
 Resolve-Host -Virtual
 
-Start-Test "Resolve-Host LocalHost"
+Start-Test "LocalHost"
 Resolve-Host -Domain ([System.Environment]::MachineName)
 
-Start-Test "Resolve-Host pipeline FlushDNS"
+Start-Test "pipeline FlushDNS"
 Select-IPInterface -Physical | Resolve-Host -FlushDNS
 
-Start-Test "Resolve-Host IPv4 microsoft.com"
+Start-Test "IPv4 microsoft.com"
 Resolve-Host -AddressFamily IPv4 -Domain "microsoft.com"
 
-Start-Test "Resolve-Host GoogleIP"
+Start-Test "GoogleIP"
 $Result = Resolve-Host -IPAddress $GoogleIP
 $Result
 
 Test-Output $Result -Command Resolve-Host
 
-Start-Test "Resolve-Host microsoft.com FlushDNS"
-Resolve-Host -FlushDNS -Domain "microsoft.com"
-
-Start-Test "Resolve-Host GoogleIP FlushDNS"
-Resolve-Host -FlushDNS -IPAddress $GoogleIP
+Start-Test "microsoft.com FlushDNS"
+$Result = Resolve-Host -FlushDNS -Domain "microsoft.com"
+$Result
 
 Test-Output $Result -Command Resolve-Host
+
+Start-Test "GoogleIP FlushDNS"
+Resolve-Host -FlushDNS -IPAddress $GoogleIP
 
 Update-Log
 Exit-Test

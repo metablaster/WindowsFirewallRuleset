@@ -62,12 +62,12 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test -Private "Convert-ListToArray"
 
-Start-Test "Convert-ListToArray null"
+Start-Test "null"
 Convert-ListToArray
 
-Start-Test "Convert-ListToArray"
+Start-Test "default"
 $Result = Convert-ListToArray "192.168.1.1,192.168.2.1,172.24.33.100"
 $Result
 

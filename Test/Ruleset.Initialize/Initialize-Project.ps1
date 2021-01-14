@@ -65,7 +65,7 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Initialize-Project"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dangerous unit test"))
 {
@@ -76,16 +76,16 @@ if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dan
 		return
 	}
 
-	Start-Test "Initialize-Project -Strict"
+	Start-Test "-Strict"
 	Initialize-Project
 
-	Start-Test "Initialize-Project -SkipModules -SkipServices"
+	Start-Test "-SkipModules -SkipServices"
 	Initialize-Project
 
-	Start-Test "Initialize-Project -SkipModules"
+	Start-Test "-SkipModules"
 	Initialize-Project
 
-	Start-Test "Initialize-Project -SkipServices"
+	Start-Test "-SkipServices"
 	$Result = Initialize-Project
 	$Result
 

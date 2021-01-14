@@ -65,9 +65,9 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test "Test-DnsName"
 
-Start-Test "Test-DnsName"
+Start-Test "default"
 $Result = Test-DnsName
 $Result
 

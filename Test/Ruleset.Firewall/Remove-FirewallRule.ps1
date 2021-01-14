@@ -66,7 +66,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Remove-FirewallRule"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow and experimental unit test"))
 {
@@ -74,14 +74,14 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow an
 
 	# TODO: need to test failure cases, see also module todo's for more info
 
-	Start-Test "Remove-FirewallRule"
+	Start-Test "default"
 	$Result = Remove-FirewallRule -Folder $Exports -FileName "GroupExport"
 	$Result
 
-	Start-Test "Remove-FirewallRule"
+	Start-Test "csv extension"
 	Remove-FirewallRule -Folder $Exports -FileName "$Exports\NamedExport1.csv"
 
-	Start-Test "Remove-FirewallRule -JSON"
+	Start-Test " -JSON"
 	Remove-FirewallRule -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
 
 	Test-Output $Result -Command Remove-FirewallRule

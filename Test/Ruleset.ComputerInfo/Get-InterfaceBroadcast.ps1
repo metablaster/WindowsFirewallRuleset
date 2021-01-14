@@ -65,19 +65,19 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-InterfaceBroadcast"
 
-Start-Test "Get-InterfaceBroadcast"
+Start-Test "default"
 $Result = Get-InterfaceBroadcast
 $Result
 
-Start-Test "Get-InterfaceBroadcast -Virtual"
+Start-Test "-Virtual"
 Get-InterfaceBroadcast -Virtual
 
-Start-Test "Get-InterfaceBroadcast -Physical"
+Start-Test "-Physical"
 Get-InterfaceBroadcast -Physical
 
-Start-Test "Get-InterfaceBroadcast -Hidden"
+Start-Test "-Hidden"
 Get-InterfaceBroadcast -Hidden
 
 Test-Output $Result -Command Get-InterfaceBroadcast

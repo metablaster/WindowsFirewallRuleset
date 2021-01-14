@@ -16,6 +16,10 @@
 			</ViewSelectedBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
+				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
+				<AutoSize>True</AutoSize>
+				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
+				<HideTableHeaders>False</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
@@ -34,11 +38,6 @@
 						<Width>15</Width>
 						<Alignment>Left</Alignment>
 					</TableColumnHeader>
-					<TableColumnHeader>
-						<Label>Header3</Label>
-						<Width>15</Width>
-						<Alignment>Left</Alignment>
-					</TableColumnHeader>
 				</TableHeaders>
 				<!-- Optional element. Provides the definitions of the table view. -->
 				<TableRowEntries>
@@ -53,13 +52,34 @@
 							<TableColumnItem>
 								<PropertyName>Property2</PropertyName>
 							</TableColumnItem>
-							<TableColumnItem>
-								<PropertyName>Property3</PropertyName>
-							</TableColumnItem>
 						</TableColumnItems>
 					</TableRowEntry>
 				</TableRowEntries>
 			</TableControl>
+			<!-- Optional element. Defines a list format for the view. -->
+			<ListControl>
+				<!-- Required element. Provides the definitions of the list view. -->
+				<!-- Provides the definitions of the list view. The list view must specify one or more definitions. -->
+				<ListEntries>
+					<!-- Provides a definition of the list view. -->
+					<ListEntry>
+						<!-- Required element. Defines the properties and scripts whose values are displayed by the list view. -->
+						<ListItems>
+							<!-- Required element. Defines the property or script whose value is displayed by the list view. -->
+							<ListItem>
+								<!-- Optional element Specifies the label that is displayed to the left of the property or script value in the row. -->
+								<Label>Label1</Label>
+								<!-- Specify the object property to be displayed at the specified location in the list. -->
+								<PropertyName>Property1</PropertyName>
+							</ListItem>
+							<ListItem>
+								<Label>Label2</Label>
+								<PropertyName>Property2</PropertyName>
+							</ListItem>
+						</ListItems>
+					</ListEntry>
+				</ListEntries>
+			</ListControl>
 		</View>
 	</ViewDefinitions>
 </Configuration>

@@ -65,34 +65,34 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Select-IPInterface"
 
-Start-Test "Select-IPInterface"
+Start-Test "default"
 Select-IPInterface -Detailed
 
-Start-Test "Select-IPInterface IPv6 FAILURE TEST"
+Start-Test "IPv6 FAILURE TEST"
 Select-IPInterface -AddressFamily IPv6 -ErrorAction SilentlyContinue
 
-Start-Test "Select-IPInterface IPv4 -Physical"
+Start-Test "IPv4 -Physical"
 $Result = Select-IPInterface -AddressFamily IPv4 -Physical
 $Result
 
-Start-Test "Select-IPInterface -Physical -Hidden"
+Start-Test "-Physical -Hidden"
 Select-IPInterface -Physical -Hidden
 
-Start-Test "Select-IPInterface IPv4 -Virtual"
+Start-Test "IPv4 -Virtual"
 Select-IPInterface -AddressFamily IPv4 -Virtual
 
-Start-Test "Select-IPInterface -Virtual -Hidden"
+Start-Test "-Virtual -Hidden"
 Select-IPInterface -Virtual -Hidden
 
-Start-Test "Select-IPInterface -Hidden"
+Start-Test "-Hidden"
 Select-IPInterface -Hidden
 
-Start-Test "Select-IPInterface -Connected"
+Start-Test "-Connected"
 Select-IPInterface -Connected -Detailed
 
-Start-Test "Select-IPInterface binding"
+Start-Test "binding"
 Select-IPInterface -AddressFamily IPv4 -Physical | Select-Object -ExpandProperty IPv4Address
 
 Test-Output $Result -Command Select-IPInterface

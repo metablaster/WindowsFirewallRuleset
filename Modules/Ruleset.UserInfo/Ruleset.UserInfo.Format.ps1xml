@@ -16,6 +16,10 @@
 			</ViewSelectedBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
+				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
+				<AutoSize>True</AutoSize>
+				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
+				<HideTableHeaders>False</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->

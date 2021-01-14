@@ -66,7 +66,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test "Test-NetBiosName"
 # $private:PSDefaultParameterValues.Add("Test-NetBiosName:Quiet", $true)
 
 $TestString = "*SERVER"

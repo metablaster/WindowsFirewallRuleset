@@ -66,7 +66,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Import-FirewallRule"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
@@ -75,16 +75,16 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 	# TODO: need to test failure cases, see also module todo's for more info
 	# TODO: need to test store apps import for "Any" and "*" owner/package
 
-	Start-Test "Import-FirewallRule -FileName GroupExport.csv"
+	Start-Test "-FileName GroupExport.csv"
 	Import-FirewallRule -Folder $Exports -FileName "GroupExport.csv"
 
-	Start-Test "Import-FirewallRule -FileName NamedExport1.csv"
+	Start-Test "-FileName NamedExport1.csv"
 	Import-FirewallRule -Folder $Exports -FileName "$Exports\NamedExport1.csv"
 
-	Start-Test "Import-FirewallRule -JSON -FileName NamedExport2.json"
+	Start-Test "-JSON -FileName NamedExport2.json"
 	Import-FirewallRule -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
 
-	Start-Test "Import-FirewallRule -FileName StoreAppExport.csv"
+	Start-Test "-FileName StoreAppExport.csv"
 	$Result = Import-FirewallRule -Folder $Exports -FileName "StoreAppExport.csv"
 	$Result
 

@@ -65,23 +65,23 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Test-TargetComputer"
 
 if ($PSVersionTable.PSEdition -eq "Core")
 {
-	Start-Test "Test-TargetComputer -Retry 2 -Timeout 1"
+	Start-Test "-Retry 2 -Timeout 1"
 	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
 }
 else
 {
-	Start-Test "Test-TargetComputer -Retry 2"
+	Start-Test "-Retry 2"
 	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2
 }
 
-Start-Test "Test-TargetComputer FAILURE"
+Start-Test "FAILURE"
 Test-TargetComputer "FAILURE-COMPUTER" -Retry 2
 
-Start-Test "Test-TargetComputer"
+Start-Test "default"
 $Result = Test-TargetComputer ([System.Environment]::MachineName)
 $Result
 

@@ -92,7 +92,7 @@ function Get-InterfaceAlias
 		[string] $AddressFamily = "Any",
 
 		[Parameter()]
-		[WildcardOptions] $WildCardOption = [WildcardOptions]::None,
+		[System.Management.Automation.WildcardOptions] $WildCardOption = "None",
 
 		[Parameter(ParameterSetName = "Physical")]
 		[switch] $Physical,

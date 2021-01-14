@@ -62,32 +62,32 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test -Private "Convert-ValueToBoolean"
 
-Start-Test "Convert-ValueToBoolean 0"
+Start-Test "0"
 Convert-ValueToBoolean "0"
 
-Start-Test "Convert-ValueToBoolean 1"
+Start-Test "1"
 Convert-ValueToBoolean "1"
 
-Start-Test "Convert-ValueToBoolean False"
+Start-Test "False"
 Convert-ValueToBoolean "False"
 
-Start-Test "Convert-ValueToBoolean 3"
+Start-Test "3"
 Convert-ValueToBoolean "3" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
 	Write-Warning -Message "Error ignored by unit test: $CoversionError"
 }
 
-Start-Test "Convert-ValueToBoolean UNKNOWN"
+Start-Test "UNKNOWN"
 Convert-ValueToBoolean "UNKNOWN" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
 	Write-Warning -Message "Error ignored by unit test: $CoversionError"
 }
 
-Start-Test "Convert-ValueToBoolean True"
+Start-Test "True"
 $Result = Convert-ValueToBoolean "True"
 $Result
 

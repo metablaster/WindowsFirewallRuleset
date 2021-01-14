@@ -62,17 +62,17 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test -Private "Convert-ArrayToList"
 
-Start-Test "Convert-ArrayToList null"
+Start-Test "null"
 Convert-ArrayToList
 $null | Convert-ArrayToList
 
-Start-Test "Convert-ArrayToList"
+Start-Test "default"
 $Result = Convert-ArrayToList -InputObject @("192.168.1.1", "192.168.2.1", "172.24.33.100")
 $Result
 
-Start-Test "Convert-ArrayToList pipeline"
+Start-Test "pipeline"
 @("192.168.1.1", "192.168.2.1", $null, "172.24.33.100") | Convert-ArrayToList
 
 Test-Output $Result -Command Convert-ArrayToList

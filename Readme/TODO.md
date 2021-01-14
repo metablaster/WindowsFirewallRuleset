@@ -216,6 +216,7 @@ Todo's in this file are categorized into following sections:
     - There is no test for `Get-Permutation` in `Ruleset.IP`
     - Module `Ruleset.Compatibility` is missing multiple tests
     - Some Pester tests are out of date and don't work well with Pester 5.x
+    - A function to detect and confirm file line endings
 
 5. Code style
 

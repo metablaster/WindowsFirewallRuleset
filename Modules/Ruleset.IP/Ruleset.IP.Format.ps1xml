@@ -16,6 +16,10 @@
 			</ViewSelectedBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
+				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
+				<AutoSize>True</AutoSize>
+				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
+				<HideTableHeaders>False</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
@@ -23,24 +27,30 @@
 						<!-- Optional element. Defines the label that is displayed at the top of the column. -->
 						<!-- If no label is specified, the name of the property whose value is displayed in the rows is used. -->
 						<Label>NetworkAddress</Label>
+						<!-- Required element. Specifies the width (in characters) of the column. -->
+						<Width>15</Width>
 						<!-- Optional element. Specifies how the label of the column is displayed. -->
 						<!-- If no alignment is specified, the label is aligned on the left. -->
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>BroadcastAddress</Label>
+						<Width>15</Width>
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>SubnetMask</Label>
+						<Width>15</Width>
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>MaskLength</Label>
+						<Width>5</Width>
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>HostAddresses</Label>
+						<Width>15</Width>
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 				</TableHeaders>

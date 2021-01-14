@@ -184,6 +184,7 @@ SOFTWARE.
 		"Public\Test-Credential.ps1"
 		"Public\Test-UPN.ps1"
 		"Ruleset.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
+		"Ruleset.UserInfo.Format.ps1xml"
 		"Ruleset.UserInfo.psd1"
 		"Ruleset.UserInfo.psm1"
 	)

@@ -44,7 +44,7 @@ Target IP which to resolve to host name.
 Flush DNS resolver cache before resolving IP or host name
 
 .PARAMETER AddressFamily
-Obtain IP address specified IP version
+Obtain IP address for specified IP version
 
 .PARAMETER Physical
 Resolve local host name to an IP of a physical adapter
@@ -153,6 +153,7 @@ function Resolve-Host
 				[PSCustomObject] @{
 					Domain = $Domain
 					IPAddress = $IP
+					PSTypeName = "Ruleset.HostInfo"
 				}
 			}
 		}
@@ -193,6 +194,7 @@ function Resolve-Host
 				[PSCustomObject] @{
 					Domain = [System.Environment]::MachineName
 					IPAddress = $IPAddress
+					PSTypeName = "Ruleset.HostInfo"
 				}
 			}
 
@@ -250,6 +252,7 @@ function Resolve-Host
 				[PSCustomObject] @{
 					Domain = $HostName
 					IPAddress = $IPAddress
+					PSTypeName = "Ruleset.HostInfo"
 				}
 			}
 		}

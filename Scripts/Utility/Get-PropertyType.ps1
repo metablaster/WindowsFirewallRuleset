@@ -99,6 +99,8 @@ https://github.com/RamblingCookieMonster/PowerShell
 
 #Requires -Version 5.1
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "Property", Justification = "False positive")]
 [CmdletBinding()]
 [OutputType([hashtable])]
 param (
@@ -182,7 +184,8 @@ process
 	foreach ($ObjectEntry in $InputObject)
 	{
 		# Extract the properties in this object
-		$AllProperties = @(Get-PropertyOrder -InputObject $ObjectEntry | Where-Object { -not $Property -or $Property -contains $_ } )
+		$AllProperties = @(Get-PropertyOrder -InputObject $ObjectEntry |
+			Where-Object { -not $Property -or $Property -contains $_ } )
 
 		foreach ($PropEntry in $AllProperties)
 		{

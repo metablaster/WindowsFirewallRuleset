@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/Format.xsd -->
+<!-- Represents the top-level element of a formatting file. -->
+<Configuration>
+	<!-- Optional element. Defines the views used to display .NET objects. -->
+	<!-- These views can display the properties and script values of an object  in a table format, list format, wide format, and custom control format. -->
+	<ViewDefinitions>
+		<!-- Defines a view that is used to display one or more .NET objects. -->
+		<View>
+			<Name>Ruleset.HostInfo</Name>
+			<!-- Defines the .NET objects that are displayed by the view. -->
+			<!-- Each view must specify at least one .NET object. -->
+			<ViewSelectedBy>
+				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
+				<TypeName>Ruleset.HostInfo</TypeName>
+			</ViewSelectedBy>
+			<!-- Optional element. Defines a list format for the view. -->
+			<ListControl>
+				<!-- Required element. Provides the definitions of the list view. -->
+				<ListEntries>
+					<!-- Provides a definition of the list view. -->
+					<ListEntry>
+						<!-- Required element. Defines the properties and scripts whose values are displayed by the list view. -->
+						<ListItems>
+							<!-- Required element. Defines the property or script whose value is displayed by the list view. -->
+							<ListItem>
+								<!-- Optional element Specifies the label that is displayed to the left of the property or script value in the row. -->
+								<Label>Domain</Label>
+								<!-- Specify the object property to be displayed at the specified location in the list. -->
+								<PropertyName>Domain</PropertyName>
+							</ListItem>
+							<ListItem>
+								<Label>IPAddress</Label>
+								<PropertyName>IPAddress</PropertyName>
+							</ListItem>
+						</ListItems>
+					</ListEntry>
+				</ListEntries>
+			</ListControl>
+		</View>
+	</ViewDefinitions>
+</Configuration>

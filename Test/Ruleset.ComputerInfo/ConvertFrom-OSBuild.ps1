@@ -65,23 +65,23 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "ConvertFrom-OSBuild"
 
-Start-Test "ConvertFrom-OSBuild 17763 = 1809"
+Start-Test "17763 = 1809"
 ConvertFrom-OSBuild 17763
 
-Start-Test "ConvertFrom-OSBuild 19041.450 = 2004"
+Start-Test "19041.450 = 2004"
 ConvertFrom-OSBuild 19041.450
 
 # TODO: -ErrorAction Ignore doesn't work in Windows PowerShell (all tests)
-Start-Test "ConvertFrom-OSBuild 11111.133 = unknown"
+Start-Test "11111.133 = unknown"
 ConvertFrom-OSBuild 11111.133 -ErrorAction SilentlyContinue
 
 # NOTE: This value must be updated once that build become RTM for test case to be success
-Start-Test "ConvertFrom-OSBuild 21277 = Insider"
+Start-Test "21277 = Insider"
 ConvertFrom-OSBuild 21277
 
-Start-Test "ConvertFrom-OSBuild 16299.2045 = 1079"
+Start-Test "16299.2045 = 1079"
 $Result = ConvertFrom-OSBuild 16299.2045
 $Result
 

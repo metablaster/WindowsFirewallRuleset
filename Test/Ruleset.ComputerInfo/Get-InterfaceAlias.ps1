@@ -65,41 +65,41 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-InterfaceAlias"
 
-Start-Test "Get-InterfaceAlias"
+Start-Test "default"
 $Result = Get-InterfaceAlias
-if ($Result) {	$Result.ToWql() }
+if ($Result) { $Result.ToWql() }
 
-Start-Test "Get-InterfaceAlias -AddressFamily IPv4"
+Start-Test "-AddressFamily IPv4"
 $Aliases = Get-InterfaceAlias -AddressFamily IPv4
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -AddressFamily IPv6"
+Start-Test "-AddressFamily IPv6"
 $Aliases = Get-InterfaceAlias -AddressFamily IPv6
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -WildCardOption"
+Start-Test "-WildCardOption"
 $Aliases = Get-InterfaceAlias -WildCardOption IgnoreCase
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -Virtual"
+Start-Test "-Virtual"
 $Aliases = Get-InterfaceAlias -Virtual
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -AddressFamily IPv4 -Physical"
+Start-Test "-AddressFamily IPv4 -Physical"
 $Aliases = Get-InterfaceAlias -AddressFamily IPv4 -Physical
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -AddressFamily IPv4 -Virtual"
+Start-Test "-AddressFamily IPv4 -Virtual"
 $Aliases = Get-InterfaceAlias -AddressFamily IPv4 -Virtual
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -Hidden"
+Start-Test "-Hidden"
 $Aliases = Get-InterfaceAlias -Hidden
 if ($Aliases) {	$Aliases.ToWql() }
 
-Start-Test "Get-InterfaceAlias -Virtual  -Hidden"
+Start-Test "-Virtual  -Hidden"
 $Aliases = Get-InterfaceAlias -Virtual -Hidden
 if ($Aliases) {	$Aliases.ToWql() }
 

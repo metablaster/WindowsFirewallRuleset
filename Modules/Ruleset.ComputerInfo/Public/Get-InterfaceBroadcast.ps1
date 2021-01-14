@@ -53,7 +53,7 @@ PS> Get-InterfaceBroadcast -Virtual -Hidden
 None. You cannot pipe objects to Get-InterfaceBroadcast
 
 .OUTPUTS
-[IPAddress] Broadcast addresses
+[string] Broadcast addresses
 
 .NOTES
 None.
@@ -62,7 +62,7 @@ function Get-InterfaceBroadcast
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceBroadcast.md")]
-	[OutputType([IPAddress])]
+	[OutputType([string])]
 	param (
 		[Parameter(ParameterSetName = "Physical")]
 		[switch] $Physical,
@@ -92,7 +92,7 @@ function Get-InterfaceBroadcast
 
 	if ($Count -gt 0)
 	{
-		[IPAddress[]] $BroadcastAddress = @()
+		[string[]] $BroadcastAddress = @()
 		foreach ($Adapter in $ConfiguredAdapters)
 		{
 			[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress

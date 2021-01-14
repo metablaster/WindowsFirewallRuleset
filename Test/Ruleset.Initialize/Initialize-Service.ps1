@@ -65,12 +65,12 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Initialize-Servic"
 
-Start-Test "Initialize-Service pipeline"
+Start-Test "pipeline"
 @("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service
 
-Start-Test "Initialize-Service WinRM"
+Start-Test "WinRM"
 $Result = Initialize-Service "WinRM"
 
 $Result

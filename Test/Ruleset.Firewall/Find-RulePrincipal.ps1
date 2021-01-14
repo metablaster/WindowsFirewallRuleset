@@ -65,11 +65,11 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Find-RulePrincipal"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
-	Start-Test "Find-RulePrincipal"
+	Start-Test "default"
 	$Result = Find-RulePrincipal
 	$Result
 

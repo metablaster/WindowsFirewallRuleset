@@ -103,7 +103,7 @@ SOFTWARE.
 	# TypesToProcess = @()
 
 	# Format files (.ps1xml) to be loaded when importing this module
-	# FormatsToProcess = @()
+	FormatsToProcess = @("Ruleset.ComputerInfo.Format.ps1xml")
 
 	# Modules to import as nested modules of the module specified in RootModule.
 	# Loading (.ps1) files here is equivalent to dot sourcing the script in your root module.
@@ -173,6 +173,7 @@ SOFTWARE.
 		"Public\Test-TargetComputer.ps1"
 		"Public\Test-UNC.ps1"
 		"Ruleset.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
+		"Ruleset.ComputerInfo.Format.ps1xml"
 		"Ruleset.ComputerInfo.psd1"
 		"Ruleset.ComputerInfo.psm1"
 	)

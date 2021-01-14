@@ -62,12 +62,12 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test -Private "Convert-ListToMultiLine"
 
-Start-Test "Convert-ListToMultiLine null"
+Start-Test "null"
 Convert-ListToMultiLine
 
-Start-Test "Convert-ListToMultiLine Some%%||String"
+Start-Test "Some%%||String"
 $Result = Convert-ListToMultiLine "Some%%||String"
 $Result
 

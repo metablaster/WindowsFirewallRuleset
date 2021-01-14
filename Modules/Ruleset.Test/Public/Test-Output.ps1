@@ -87,13 +87,21 @@ function Test-Output
 		{
 			Start-Test "Compare TypeName and OutputType of '$Command'"
 		}
+
+		$AllOutputType = @()
+		$AllTypeName = @()
 	}
 	process
 	{
 		# NOTE: OutputType variable may contain multiple valid entries
 		# Ignoring errors to reduce spamming console with errors
-		$OutputType = Get-TypeName -Command $Command -ErrorAction SilentlyContinue
-		$TypeName = Get-TypeName $InputObject -ErrorAction SilentlyContinue
+		$AllOutputType += Get-TypeName -Command $Command -ErrorAction SilentlyContinue
+		$AllTypeName += Get-TypeName $InputObject -ErrorAction SilentlyContinue
+	}
+	end
+	{
+		$TypeName = $AllTypeName | Select-Object -Unique
+		$OutputType = $AllOutputType | Select-Object -Unique
 
 		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
 		$OutputType | ForEach-Object {
@@ -135,9 +143,7 @@ function Test-Output
 			Write-Error -Category InvalidResult -TargetObject $TypeName `
 				-Message "Typename and OutputType are not identical"
 		}
-	}
-	end
-	{
+
 		Stop-Test
 	}
 }

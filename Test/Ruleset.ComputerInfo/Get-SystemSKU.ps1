@@ -65,12 +65,12 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-SystemSKU"
 
-Start-Test "Get-SystemSKU"
+Start-Test "default"
 Get-SystemSKU
 
-Start-Test "Get-SystemSKU -SKU 4"
+Start-Test "-SKU 4"
 $Result = Get-SystemSKU -SKU 48
 $Result
 
@@ -87,12 +87,12 @@ catch
 Start-Test 'multiple computers | Get-SystemSKU FAILURE TEST'
 @($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
 
-Start-Test "Get-SystemSKU -Domain multiple computers"
+Start-Test "-Domain multiple computers"
 Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue
 
 try
 {
-	Start-Test "Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName)"
+	Start-Test "-SKU 4 -Domain $([System.Environment]::MachineName)"
 	Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName) -ErrorAction Stop
 }
 catch

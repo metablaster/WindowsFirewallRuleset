@@ -65,7 +65,7 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Initialize-Provider"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Accept dangerous unit test"))
 {
@@ -76,7 +76,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Ac
 		return
 	}
 
-	Start-Test "Initialize-ProviderNuGet"
+	Start-Test "NuGet"
 	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"
 

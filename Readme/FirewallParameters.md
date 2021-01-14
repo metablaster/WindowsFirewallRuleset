@@ -162,7 +162,7 @@ except if InterfaceType is "Any", use just one of these two parameters.
 
 ```powershell
 [WildCardPattern] ([string])
-[WildCardPattern] ([string], [WildCardOptions])
+[WildCardPattern] ([string], [System.Management.Automation.WildCardOptions])
 ```
 
 ## Users
