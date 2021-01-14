@@ -66,12 +66,15 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Set-NetworkProfile"
 
-Start-Test "Set-NetworkProfile"
-$Result = Set-NetworkProfile
+if ($Force -or $PSCmdlet.ShouldContinue("Possible network Configuration bug", "Accept dangerous unit test"))
+{
+	Start-Test "default"
+	$Result = Set-NetworkProfile
 
-Test-Output $Result -Command Set-NetworkProfile
+	Test-Output $Result -Command Set-NetworkProfile
+}
 
 Update-Log
 Exit-Test

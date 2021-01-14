@@ -65,7 +65,8 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+# Command should be ignored by Test-Output
+Enter-Test -Command Test-Output
 
 Start-Test "Test-Path"
 $NETObject = Test-Path $env:SystemDrive

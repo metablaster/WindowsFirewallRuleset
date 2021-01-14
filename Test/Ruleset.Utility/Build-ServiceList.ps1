@@ -65,13 +65,13 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Build-ServiceList"
 
-Start-Test "Build-ServiceList"
+Start-Test "default"
 $Result = Build-ServiceList "$ProjectRoot\Rules"
 $Result
 
-Start-Test "Build-ServiceList -Log"
+Start-Test "-Log"
 Build-ServiceList "$ProjectRoot\Rules" -Log
 
 Test-Output $Result -Command Build-ServiceList

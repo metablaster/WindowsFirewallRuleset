@@ -351,7 +351,7 @@ function ConvertFrom-Wildcard
 	}
 	catch
 	{
-		Write-Error -Category InvalidResult -TargetObject $Result -Message $_
+		Write-Error -Category InvalidResult -TargetObject $Result -Message $_.Exception.Message
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting string '$Pattern' resolved to regex '$Result'"

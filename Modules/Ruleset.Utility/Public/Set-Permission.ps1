@@ -42,7 +42,7 @@ Valid resources are files, directories, registry keys and registry entries.
 Environment variables are allowed.
 
 .PARAMETER Owner
-Principal who will be the new owner of a resource.
+Principal username who will be the new owner of a resource.
 Using this parameter means taking ownership of a resource.
 
 .PARAMETER User
@@ -258,7 +258,7 @@ function Set-Permission
 		$Message = "Reset permissions$RecurseMessage"
 	}
 
-	if (!$PSCmdlet.ShouldProcess($LiteralPath, $Message))
+	if (!$Force -and !$PSCmdlet.ShouldProcess($LiteralPath, $Message))
 	{
 		Write-Warning -Message "The operation has been canceled by the user"
 		return $false
@@ -384,7 +384,7 @@ function Set-Permission
 			if (Test-Path -LiteralPath $LiteralPath -PathType Leaf)
 			{
 				# Leaf. An element that does not contain other elements, such as a file or registry entry.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -LiteralPath $LiteralPath -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -Path $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule?view=dotnet-plat-ext-3.1
@@ -399,7 +399,7 @@ function Set-Permission
 			else
 			{
 				# Container. An element that contains other elements, such as a directory or registry key.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -LiteralPath $LiteralPath -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -Path $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Inheritance, $Propagation, $Type)
@@ -485,17 +485,17 @@ function Set-Permission
 
 				# NOTE: This may be called twice for each child container which fails in "try" block above,
 				# It's needed to initiate recursing on this container
-				Set-Permission -LiteralPath $LiteralPath -Principal $User -Rights $GrantContainer
+				Set-Permission -LiteralPath $LiteralPath -User $User -Rights $GrantContainer -Force:$Force | Out-Null
 
 				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions", if yes remove them
 				Get-ChildItem -LiteralPath $LiteralPath -Directory -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child container object: $($_.FullName)"
-					Set-Permission -LiteralPath $_.FullName -Principal $User -Rights $GrantContainer -Recurse
+					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantContainer -Recurse -Force:$Force | Out-Null
 				}
 
 				Get-ChildItem -LiteralPath $LiteralPath -File -Recurse -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child leaf object: $($_.FullName)"
-					Set-Permission -LiteralPath $_.FullName -Principal $User -Rights $GrantLeaf
+					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantLeaf -Force:$Force | Out-Null
 				}
 
 				try
@@ -527,7 +527,7 @@ function Set-Permission
 				# TODO: We end up with both inherited and explicit rules if inheritance is enabled
 				# It would be preferred to avoid explicit rules if inheritance is enabled
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions on child object: $($_.FullName)"
-				Set-Permission -LiteralPath $_.FullName @PSBoundParameters
+				Set-Permission -LiteralPath $_.FullName @PSBoundParameters | Out-Null
 			}
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $LiteralPath"

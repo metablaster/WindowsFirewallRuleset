@@ -205,7 +205,7 @@ function Initialize-Project
 	}
 
 	# If PolicyStore variable doesn't point to localhost, but the project is not yet ready for remote administration
-	if (Get-Variable -Scope Global -Name RemoteCredential -ErrorAction Ignore)
+	if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
 	{
 		Write-Warning -Message "Remote firewall administration is not implemented"
 

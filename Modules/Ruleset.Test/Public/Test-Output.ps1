@@ -75,7 +75,18 @@ function Test-Output
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-		Start-Test "Compare TypeName and OutputType of '$Command'"
+		if (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)
+		{
+			$TestCommand = $script:TestCommand
+			Remove-Variable -Name TestCommand -Scope Script -Force
+
+			Start-Test "Compare TypeName and OutputType of '$Command'"
+			Set-Variable -Name TestCommand -Scope Script -Force -Value $TestCommand
+		}
+		else
+		{
+			Start-Test "Compare TypeName and OutputType of '$Command'"
+		}
 	}
 	process
 	{

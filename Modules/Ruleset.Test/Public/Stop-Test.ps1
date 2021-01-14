@@ -44,7 +44,7 @@ None. You cannot pipe objects to Stop-Test
 None. Stop-Test does not generate any output
 
 .NOTES
-None.
+This function is not used for now.
 #>
 function Stop-Test
 {

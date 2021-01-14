@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Start-Test "Enter-Test exported commands"
+Start-Test "Exported commands" -Command "Enter-Test"
 $Result = Enter-Test -Private
 $Result
 Write-Information -Tags "Test" -MessageData "INFO: DynamicModule exported commands"
@@ -74,12 +74,12 @@ Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedComman
 Exit-Test
 Stop-Test
 
-Start-Test "Enter-Test -Private -Pester"
+Start-Test "-Private -Pester" -Command "Enter-Test"
 Enter-Test -Private -Pester
 Exit-Test -Pester
 Stop-Test
 
-Start-Test "Enter-Test -Pester FAIL"
+Start-Test "-Pester FAIL" -Command "Enter-Test"
 try
 {
 	Enter-Test -Pester

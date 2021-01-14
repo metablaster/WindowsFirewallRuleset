@@ -92,23 +92,23 @@ function global:Test-Multiple
 	return $null
 }
 
-Enter-Test
+Enter-Test "Get-TypeName"
 
 #
 # Defaults test
 #
 New-Section "Test default"
 
-Start-Test "Get-TypeName -> System.String"
+Start-Test "-InputObject" -Expected "System.String"
 Get-TypeName ([System.Environment]::MachineName)
 
-Start-Test "Get-TypeName -Accelerator -> string"
+Start-Test "-Accelerator" -Expected "string"
 Get-TypeName ([System.Environment]::MachineName) -Accelerator
 
-Start-Test "Get-TypeName -> System.Void"
+Start-Test "-InputObject" -Expected "System.Void"
 Get-TypeName (Test-NoReturn)
 
-Start-Test "Get-TypeName -Accelerator -> void"
+Start-Test "-Accelerator" -Expected "void"
 Get-TypeName (Test-NoReturn) -Accelerator
 
 #
@@ -116,10 +116,10 @@ Get-TypeName (Test-NoReturn) -Accelerator
 #
 New-Section "Test command parameter"
 
-Start-Test "Get-TypeName -Command -> int32"
+Start-Test "-Command" -Expected "int32"
 Get-TypeName -Command Test-NoReturn
 
-Start-Test "Get-TypeName -Command -> int32, System.String"
+Start-Test "-Command" -Expected "int32, System.String"
 Get-TypeName -Command Test-Multiple
 
 #
@@ -127,11 +127,11 @@ Get-TypeName -Command Test-Multiple
 #
 New-Section "Test with Get-Process"
 
-Start-Test "Get-TypeName -> System.Diagnostics.Process"
+Start-Test "-InputObject" -Expected "System.Diagnostics.Process"
 $Result = Get-TypeName (Get-Process)
 $Result
 
-Start-Test "Get-TypeName -Command -> Get-Process"
+Start-Test "-Command" -Expected "Get-Process"
 Get-TypeName -Command Get-Process
 
 #
@@ -139,16 +139,16 @@ Get-TypeName -Command Get-Process
 #
 New-Section "Test -Accelerator parameter"
 
-Start-Test "Get-TypeName -Name -> System.Management.Automation.SwitchParameter"
+Start-Test "-Name" -Expected "System.Management.Automation.SwitchParameter"
 Get-TypeName -Name [switch]
 
-Start-Test "Get-TypeName -Name -Accelerator -> switch"
+Start-Test "-Name -Accelerator" -Expected "switch"
 Get-TypeName -Name [System.Management.Automation.SwitchParameter] -Accelerator
 
-Start-Test "Get-TypeName -Name -> FAIL"
+Start-Test "-Name" -Expected "FAIL"
 Get-TypeName -Name [string]
 
-Start-Test "Get-TypeName -Name -Accelerator -> FAIL"
+Start-Test "-Name -Accelerator" -Expected "FAIL"
 Get-TypeName -Name [string] -Accelerator
 
 #
@@ -156,16 +156,16 @@ Get-TypeName -Name [string] -Accelerator
 #
 New-Section "Test pipeline"
 
-Start-Test "Get-TypeName -> System.String"
+Start-Test "-InputObject" -Expected "System.String"
 ([System.Environment]::MachineName) | Get-TypeName
 
-Start-Test "Get-TypeName -Accelerator -> string"
+Start-Test "-Accelerator" -Expected "string"
 ([System.Environment]::MachineName) | Get-TypeName -Accelerator
 
-Start-Test "Get-TypeName -> System.Void"
+Start-Test "-InputObject" -Expected "System.Void"
 Test-NoReturn | Get-TypeName
 
-Start-Test "Get-TypeName -Accelerator -> void"
+Start-Test "-Accelerator" -Expected "void"
 Test-NoReturn | Get-TypeName -Accelerator
 
 #
@@ -173,26 +173,26 @@ Test-NoReturn | Get-TypeName -Accelerator
 #
 New-Section "Test pipeline with Get-Process"
 
-Start-Test "Get-TypeName -> System.Diagnostics.Process"
+Start-Test "-InputObject" -Expected "System.Diagnostics.Process"
 Write-Warning -Message "Test did not run to reduce output"
 # Get-Process | Get-TypeName -Verbose:$false -Debug:$false | Out-Null
 
 #
 # Other common issues
 #
-Start-Test "Get-TypeName -> null"
+Start-Test "null" -Expected "null"
 Get-TypeName
 
-Start-Test "Get-TypeName False"
+Start-Test "false" -Expected "False"
 $FalseType = $false
 $FalseType | Get-TypeName
 
 # TODO: These tests fail, Get-TypeName not implementing these
-# Start-Test "Get-TypeName Get-Service"
+# Start-Test "Get-Service"
 # $ServiceController = Get-Service
 # Get-TypeName $ServiceController
 
-# Start-Test "Get-TypeName Get-Service"
+# Start-Test "Get-Service"
 # Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
 
 Test-Output $Result -Command Get-TypeName

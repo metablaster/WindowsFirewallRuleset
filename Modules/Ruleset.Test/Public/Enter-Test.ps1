@@ -34,6 +34,10 @@ Initialize unit test
 Enter-Test initializes unit test
 Must be called before first test case in single unit test and in pair with Exit-Test
 
+.PARAMETER Command
+Optionally specify the command which is to be tested by default.
+This value is used by Start-Test function by default unless specified in Start-Test.
+
 .PARAMETER Private
 If specified, temporarily exports private module functions into global scope
 
@@ -43,6 +47,9 @@ this parameter implies -Private switch.
 
 .EXAMPLE
 PS> Enter-Test
+
+.EXAMPLE
+PS> Enter-Test -Command "Get-Something"
 
 .EXAMPLE
 PS> Enter-Test -Private
@@ -58,10 +65,13 @@ None.
 #>
 function Enter-Test
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Enter-Test.md")]
 	[OutputType([void])]
 	param (
+		[Parameter(Position = 0)]
+		[string] $Command,
+
 		[Parameter()]
 		[switch] $Private,
 
@@ -75,22 +85,27 @@ function Enter-Test
 	if ($Pester)
 	{
 		$Private = $true
-		$UnitTest = (Get-PSCallStack)[1].Command -replace ".{4}$"
+		$UnitTest = (Get-PSCallStack)[1].Command -replace "\.\w{2,3}1$"
 	}
 	else
 	{
 		# NOTE: Global scope because this module could be removed before calling Exit-Test
 		# NOTE: This will fail if Exit-Test was not called, run Exit-Test manually in that case
-		if (Get-Variable -Scope Global -Name UnitTest -ErrorAction Ignore)
+		if (Get-Variable -Name UnitTest -Scope Global -ErrorAction Ignore)
 		{
 			Write-Warning -Message "Either previous unit test did not complete or test module was reloaded"
 		}
 		else
 		{
-			New-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace ".{4}$")
+			New-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace "\.\w{2,3}1$")
 		}
 
 		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
+
+		if (![string]::IsNullOrEmpty($Command))
+		{
+			Set-Variable -Name TestCommand -Scope Script -Option ReadOnly -Force -Value $Command
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("Enter unit test", $UnitTest))

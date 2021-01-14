@@ -65,12 +65,12 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Get-FileEncoding"
 
-# Start-Test "Get-FileEncoding windows-1251"
+# Start-Test "windows-1251"
 # Get-FileEncoding $PSScriptRoot\Encoding\utf8.txt -Encoding "windows-1251"
 
-# Start-Test "Get-FileEncoding 932"
+# Start-Test "932"
 # Get-FileEncoding $PSScriptRoot\Encoding\utf8.txt -Encoding 932
 
 $TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
@@ -78,7 +78,7 @@ $TestFiles += "$env:SystemRoot\regedit.exe"
 
 foreach ($File in $TestFiles)
 {
-	Start-Test "Get-FileEncoding $File"
+	Start-Test "$File"
 	$Result = Get-FileEncoding $File
 	$Result
 }

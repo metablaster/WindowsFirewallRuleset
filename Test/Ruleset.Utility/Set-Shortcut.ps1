@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test "Set-Shortcut"
 
 $TestDrive = "$DefaultTestDrive\$ThisScript"
 $Restricted = "$env:SystemDrive\Windows"

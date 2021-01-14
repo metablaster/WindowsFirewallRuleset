@@ -66,7 +66,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 # TODO: All except ExpandProperty will be blank in bulk test run in this unit
-Enter-Test
+Enter-Test "Select-EnvironmentVariable"
 
 # $private:PSDefaultParameterValues.Add("Select-EnvironmentVariable:IncludeFile", $true)
 
@@ -75,30 +75,30 @@ Enter-Test
 #
 New-Section "Scope test"
 
-Start-Test "Select-EnvironmentVariable UserProfile -Force"
+Start-Test "UserProfile -Force"
 # Only one -Force is needed
 Select-EnvironmentVariable -From UserProfile -Force
 
-Start-Test "Select-EnvironmentVariable WhiteList"
+Start-Test "WhiteList"
 $Result = Select-EnvironmentVariable -From WhiteList
 $Result
 
-Start-Test "Select-EnvironmentVariable FullyQualified"
+Start-Test "FullyQualified"
 Select-EnvironmentVariable -From FullyQualified
 
-Start-Test "Select-EnvironmentVariable Rooted"
+Start-Test "Rooted"
 Select-EnvironmentVariable -From Rooted
 
-Start-Test "Select-EnvironmentVariable FileSystem -Exact"
+Start-Test "FileSystem -Exact"
 Select-EnvironmentVariable -From FileSystem -Exact
 
-Start-Test "Select-EnvironmentVariable Relative"
+Start-Test "Relative"
 Select-EnvironmentVariable -From Relative
 
-Start-Test "Select-EnvironmentVariable BlackList"
+Start-Test "BlackList"
 Select-EnvironmentVariable -From BlackList
 
-Start-Test "Select-EnvironmentVariable All"
+Start-Test "All"
 Select-EnvironmentVariable -From All
 
 #
@@ -106,21 +106,21 @@ Select-EnvironmentVariable -From All
 #
 New-Section "By value"
 
-Start-Test "Select-EnvironmentVariable for C:"
+Start-Test "for C:"
 Select-EnvironmentVariable -Value "C:"
 
-Start-Test "Select-EnvironmentVariable for C:\Program Files -Exact"
+Start-Test "for C:\Program Files -Exact"
 Select-EnvironmentVariable -Value "C:\Program Files" -Exact
 
 # Try again name select with Exact names
-Start-Test "Select-EnvironmentVariable All -Force -Exact | Out-Null"
+Start-Test "All -Force -Exact | Out-Null"
 Select-EnvironmentVariable -From All -Force -Exact | Out-Null
 
 # Make sure input works for both cases with and without: %%
-Start-Test "Select-EnvironmentVariable for C: -Exact"
+Start-Test "for C: -Exact"
 Select-EnvironmentVariable -Value "C:" -Exact
 
-Start-Test "Select-EnvironmentVariable for C:\Program Files"
+Start-Test "for C:\Program Files"
 Select-EnvironmentVariable -Value "C:\Program Files"
 
 #
@@ -128,13 +128,13 @@ Select-EnvironmentVariable -Value "C:\Program Files"
 #
 New-Section "By name"
 
-Start-Test "Select-EnvironmentVariable -Name DOESNOTEXIST is FAIL"
+Start-Test "-Name DOESNOTEXIST" -Expected "FAIL"
 Select-EnvironmentVariable -Name "DOESNOTEXIST"
 
-Start-Test "Select-EnvironmentVariable -Name LOGONSERVER"
+Start-Test "-Name LOGONSERVER"
 Select-EnvironmentVariable -Name "LOGONSERVER"
 
-Start-Test "Select-EnvironmentVariable -Name %HOMEPATH% -Exact FAIL"
+Start-Test "-Name %HOMEPATH% -Exact" -Expected "FAIL"
 Select-EnvironmentVariable -Name "%HOMEPATH%" -Exact
 
 Test-Output $Result -Command Select-EnvironmentVariable
@@ -150,7 +150,7 @@ $Result | Select-Object -ExpandProperty Name
 Start-Test "Select Value (WhiteList)"
 $Result | Select-Object -ExpandProperty Value
 
-Start-Test "Select-EnvironmentVariable WhiteList | Sort"
+Start-Test "WhiteList | Sort"
 Select-EnvironmentVariable -From WhiteList | Sort-Object -Descending { $_.Value.Length }
 
 #
@@ -175,16 +175,16 @@ Select-EnvironmentVariable -Value ""
 #
 New-Section "Wildcard pattern"
 
-Start-Test "Select-EnvironmentVariable -Name *"
+Start-Test "-Name *"
 Select-EnvironmentVariable -Name *
 
-Start-Test "Select-EnvironmentVariable *proces[so]o?*"
+Start-Test "*proces[so]o?*"
 Select-EnvironmentVariable -Name "*proces[so]o?*"
 
-Start-Test "Select-EnvironmentVariable -Value *Program* -Exact"
+Start-Test "-Value *Program* -Exact"
 Select-EnvironmentVariable -Value "*Program*" -Exact
 
-Start-Test "Select-EnvironmentVariable -Value C:\uSe[er]?*"
+Start-Test "-Value C:\uSe[er]?*"
 Select-EnvironmentVariable -Value "C:\uSe[er]?*"
 
 #
@@ -192,22 +192,22 @@ Select-EnvironmentVariable -Value "C:\uSe[er]?*"
 #
 New-Section "Selection"
 
-Start-Test "Select-EnvironmentVariable -Name *user* -Property Name"
+Start-Test "-Name *user* -Property Name"
 Select-EnvironmentVariable -Name *user* -Property Name
 
-Start-Test "Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList"
+Start-Test "-Name *user* -Property Name -From WhiteList"
 Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList
 
-Start-Test "Select-EnvironmentVariable -Name *user* -Property Value"
+Start-Test "-Name *user* -Property Value"
 Select-EnvironmentVariable -Name *user* -Property Value
 
-Start-Test "Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList"
+Start-Test "-Name *user* -Property Value -From WhiteList"
 Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList
 
-Start-Test "Select-EnvironmentVariable -Name AND -Value should FAIL"
+Start-Test "-Name AND -Value should FAIL"
 Select-EnvironmentVariable -Name *user* -Property Value -Value *DESKTOP* -From All
 
-Start-Test "Select-EnvironmentVariable -From UserProfile -Property Name"
+Start-Test "-From UserProfile -Property Name"
 Select-EnvironmentVariable -From UserProfile -Property Name
 
 Update-Log

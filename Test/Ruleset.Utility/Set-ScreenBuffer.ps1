@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Set-ScreenBuffer"
 
 # Reset to invoke prompt
 $psHost = Get-Host
@@ -75,7 +75,7 @@ $NewBuffer = 1000
 $NewSize.Height = $NewBuffer
 $psWindow.BufferSize = $NewSize
 
-Start-Test "Set-ScreenBuffer 4000"
+Start-Test "4000"
 $Result = Set-ScreenBuffer 4000
 $Result
 

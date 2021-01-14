@@ -70,8 +70,9 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
-$Result = Start-Test "Start-Test Test 1"
+Enter-Test "Start-Test"
+
+$Result = Start-Test "Test 1" -Expected "Test 1"
 $Result
 Test-Output $Result -Command Start-Test
 
@@ -83,7 +84,7 @@ $Result = New-Section "Sample Section"
 $Result
 Test-Output $Result -Command New-Section
 
-Start-Test "Start-Test Test 2"
+Start-Test "Test 2" -Expected "Test 2"
 Stop-Test
 
 $Result = Exit-Test

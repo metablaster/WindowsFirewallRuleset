@@ -67,7 +67,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Confirm-FileEncoding"
 
 Start-Test "Initialize ProjectFiles variable"
 $Excludes = @(
@@ -101,7 +101,7 @@ if ($PSVersionTable.PSEdition -eq "Core")
 $ProjectFiles = Get-ChildItem -Path $ProjectRoot -Recurse -Exclude $Excludes |
 Where-Object { $_.Mode -notlike "*d*" } | Select-Object -ExpandProperty FullName
 
-Start-Test "Confirm-FileEncoding"
+Start-Test "all files"
 # NOTE: Avoiding errors for test files only
 $ProjectFiles | ForEach-Object {
 	$FileName = Split-Path $_ -Leaf
@@ -123,15 +123,15 @@ $ProjectFiles | ForEach-Object {
 	}
 }
 
-Start-Test "Confirm-FileEncoding file"
+Start-Test "utf8.txt"
 $TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
 $Result = Confirm-FileEncoding $TestFile.Path
 $Result
 
-Start-Test "Confirm-FileEncoding binary file"
+Start-Test "binary file"
 Confirm-FileEncoding "$env:SystemRoot\regedit.exe"
 
-Start-Test "Confirm-FileEncoding binary file"
+Start-Test "binary file -Binary"
 Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -Binary -Debug
 
 Test-Output $Result -Command Confirm-FileEncoding

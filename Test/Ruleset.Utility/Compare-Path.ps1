@@ -65,27 +65,27 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Compare-Path"
 
-Start-Test "Compare-Path same path"
+Start-Test "same path"
 Compare-Path "%SystemDrive%\Windows" "C:\Windows"
 
-Start-Test "Compare-Path relative path"
+Start-Test "relative path"
 Compare-Path "%SystemDrive%/Windows" "C:\Windows\System32\..\"
 
-Start-Test "Compare-Path non existent path"
+Start-Test "non existent path"
 Compare-Path "%SystemDrive%\Windows" "Z:\Nonexistent"
 
-Start-Test "Compare-Path wildcards + relative path -Sensitive"
+Start-Test "wildcards + relative path -Sensitive"
 Compare-Path "%SystemDrive%\Win*\System32\en-US\.." "C:\Wind*\System3?\" -CaseSensitive
 
-Start-Test "Compare-Path same -Loose"
+Start-Test "same -Loose"
 Compare-Path "%SystemDrive%\\Windows" "C:/Win*/" -Loose
 
-Start-Test "Compare-Path same wrong order -Loose"
+Start-Test "same wrong order -Loose"
 Compare-Path "C:\Win*" "%SystemDrive%\Windows" -Loose
 
-Start-Test "Compare-Path not same path"
+Start-Test "not same path"
 $Result = Compare-Path "%SystemDrive%\" "D:\"
 $Result
 

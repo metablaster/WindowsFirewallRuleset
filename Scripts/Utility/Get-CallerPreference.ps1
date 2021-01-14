@@ -177,7 +177,7 @@ begin
 	try
 	{
 		# Just to confirm, this variable should be set in parent scope which is Show-Preference function
-		Get-Variable -Scope $ParentScope -Name Caller -ErrorAction Stop | Out-Null
+		Get-Variable -Name Caller -Scope $ParentScope -ErrorAction Stop | Out-Null
 	}
 	catch
 	{
@@ -272,7 +272,7 @@ end
 			{
 				# Same session state
 				Write-Verbose -Message "[$ThisScript] Setting variable '$($Variable.Name)' in scope: '$ParentScopeName'"
-				Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
+				Set-Variable -Name $Variable.Name -Scope $ParentScope -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
 			}
 			else
 			{
@@ -302,7 +302,7 @@ end
 				{
 					# Same session state
 					Write-Verbose -Message "[$ThisScript] Setting filtered variable '$($Variable.Name)' in scope: '$ParentScopeName'"
-					Set-Variable -Scope $ParentScope -Name $Variable.Name -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
+					Set-Variable -Name $Variable.Name -Scope $ParentScope -Value $Variable.Value -Force -Confirm:$false -WhatIf:$false
 				}
 				else
 				{

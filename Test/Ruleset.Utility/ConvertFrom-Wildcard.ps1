@@ -65,70 +65,70 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test
+Enter-Test "ConvertFrom-Wildcard"
 
-Start-Test "ConvertFrom-Wildcard *PowerShell*"
+Start-Test "*PowerShell*"
 [string] $Pattern = ConvertFrom-Wildcard "*PowerShell*"
-$Pattern
+Write-Output "Pattern: $Pattern"
 [regex] $Regex = $Pattern
 $Regex.Match("SuperPowerShellUltra")
 
-Start-Test "ConvertFrom-Wildcard Power[Sn]ell"
+Start-Test "Power[Sn]ell"
 $Pattern = ConvertFrom-Wildcard "Power[Sn]ell"
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("Powernell")
 
-Start-Test "ConvertFrom-Wildcard Power?hell*"
+Start-Test "Power?hell*"
 $Pattern = ConvertFrom-Wildcard "Power?hell*"
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("Powerxhell")
 
-Start-Test "ConvertFrom-Wildcard *Power[a-z]Shell"
+Start-Test "*Power[a-z]Shell"
 $Pattern = ConvertFrom-Wildcard "*Power[a-z]Shell"
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("PowerzShell")
 
-Start-Test "ConvertFrom-Wildcard ^ha*ha$"
+Start-Test "^ha*ha$"
 $Pattern = ConvertFrom-Wildcard "^ha*ha$" -Options ([System.Text.RegularExpressions.RegexOptions]::RightToLeft)
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("^ha*ha$")
 
-Start-Test "ConvertFrom-Wildcard match 'PowerShell' -AsRegex"
+Start-Test "match 'PowerShell' -AsRegex"
 $Regex = ConvertFrom-Wildcard "Po?er[A-Z]hell*" -AsRegex -TimeSpan ([System.TimeSpan]::FromSeconds(3))
 $Regex.Match("PowerShellaa")
 
-Start-Test "ConvertFrom-Wildcard match '4[PowerShellz'"
+Start-Test "match '4[PowerShellz'"
 $Pattern = ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("4[PowerShellz")
 
-Start-Test "ConvertFrom-Wildcard wildcard"
+Start-Test "wildcard"
 $Pattern = ConvertFrom-Wildcard "wildcard"
-$Pattern
+Write-Output "Pattern: $Pattern"
 $Regex = $Pattern
 $Regex.Match("wildcard")
 
 Test-Output $Regex -Command ConvertFrom-Wildcard
 
-Start-Test "ConvertFrom-Wildcard *[0-9][[]Po?er[A-Z]he*l?"
+Start-Test "*[0-9][[]Po?er[A-Z]he*l?"
 ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"
 # .*[0-9][[]Po.er[A-Z]he.*l.$
 
-Start-Test "ConvertFrom-Wildcard a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+Start-Test "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 ConvertFrom-Wildcard "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 # ^a_b.*c%d[e\.\.f]\.\..g_%%_.*\?. { 2 }\*\\i[[]. { 2, }[%%]\\Z\\w\+$
 
-Start-Test "ConvertFrom-Wildcard MatchThis* -AsRegex IgnoreCase"
+Start-Test "MatchThis* -AsRegex IgnoreCase"
 $Regex = ConvertFrom-Wildcard "MatchThis*" -AsRegex -Options "IgnoreCase"
 $Regex.Match("MatchThis44Whatever")
 # ^MatchThis.*
 
-Start-Test "ConvertFrom-Wildcard a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
+Start-Test "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 [WildcardPattern] $Wildcard = "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 ConvertFrom-Wildcard -Wildcard $Wildcard
 
@@ -137,13 +137,13 @@ ConvertFrom-Wildcard -Wildcard $Wildcard
 #
 New-Section "null or empty"
 
-Start-Test "ConvertFrom-Wildcard null"
+Start-Test "null"
 ConvertFrom-Wildcard
 
-Start-Test "ConvertFrom-Wildcard empty"
+Start-Test "empty"
 ConvertFrom-Wildcard ""
 
-Start-Test "ConvertFrom-Wildcard implicitly AsRegex"
+Start-Test "implicitly AsRegex"
 ConvertFrom-Wildcard -AsRegex
 
 Update-Log

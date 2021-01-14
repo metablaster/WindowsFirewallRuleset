@@ -73,5 +73,10 @@ function Exit-Test
 		Write-Output ""
 		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$UnitTest'"
 		Remove-Variable -Name UnitTest -Scope Global -Force
+
+		if (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)
+		{
+			Remove-Variable -Name TestCommand -Scope Script -Force
+		}
 	}
 }

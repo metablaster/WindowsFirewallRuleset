@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test -Private
+Enter-Test -Private "Convert-EncodingString"
 
 $Encodings = @(
 	"ascii", "bigendianunicode", "bigendianutf32", "oem", "unicode", "utf7",
@@ -73,17 +73,17 @@ $Encodings = @(
 	"us-ascii", "utf-7", "utf-8", "unicodeFFFE", "utf-16BE", "utf-32BE", "utf-16", "utf-32"
 )
 
-Start-Test "Convert-EncodingString utf-8 -BOM"
+Start-Test "utf-8 -BOM"
 Convert-EncodingString "utf-8" -BOM
 
-Start-Test "Convert-EncodingString utf-8 -BOM:$false"
+Start-Test "utf-8 -BOM:$false"
 Convert-EncodingString "utf-8" -BOM:$false
 
-Start-Test "Convert-EncodingString utf8BOM"
+Start-Test "utf8BOM"
 $Result = Convert-EncodingString "utf8BOM"
 $Result
 
-Start-Test "Convert-EncodingString all strings"
+Start-Test "all strings"
 $Encodings | ForEach-Object {
 	$LocalResult = Convert-EncodingString $_
 	if ($LocalResult)

@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Invoke-Process"
 
 Start-Test "gpupdate.exe /target:computer"
 $Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"

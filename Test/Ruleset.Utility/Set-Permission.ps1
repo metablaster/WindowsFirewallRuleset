@@ -84,26 +84,29 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test
+Enter-Test "Set-Permission"
 
 if ($FileSystem)
 {
 	# Set up test variables
 	$Computer = [System.Environment]::MachineName
 	$TestDrive = "$DefaultTestDrive\$ThisScript"
+	$PSDefaultParameterValues.Add("Set-Permission:Force", $Force)
 
 	[AccessControl.FileSystemRights] $Access = "ReadAndExecute, ListDirectory, Traverse"
 
 	# NOTE: temporary reset
-	if ($false)
+	if ($true)
 	{
 		# Test ownership
-		Start-Test "Set-Permission ownership"
-		Set-Permission -Owner $TestUser -Domain $Computer -Path $TestDrive -Recurse
+		Start-Test "ownership"
+		Set-Permission -Owner $TestUser -Domain $Computer -LiteralPath $TestDrive -Recurse
 
 		# Reset existing tree for re-test
 		Start-Test "Reset existing tree"
-		Set-Permission -Principal $TestUser -Domain $Computer -Path $TestDrive -Reset -Grant $Access -Recurse
+		Set-Permission -User $TestUser -Domain $Computer -LiteralPath $TestDrive -Reset -Grant $Access -Recurse
+
+		Reset-TestDrive
 	}
 
 	$TestFolders = @(
@@ -152,30 +155,30 @@ if ($FileSystem)
 	}
 
 	# Test ownership
-	Start-Test "Set-Permission ownership"
-	Set-Permission -Owner $TestUser -Domain $Computer -Path $TestDrive
+	Start-Test "ownership"
+	Set-Permission -Owner $TestUser -Domain $Computer -LiteralPath $TestDrive
 
 	# Test defaults
-	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on file"
-	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestDrive\$($TestFiles[0])" -Grant $Access
+	Start-Test "NT SERVICE\LanmanServer permission on file"
+	Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "$TestDrive\$($TestFiles[0])" -Rights $Access
 
-	Start-Test "Set-Permission - Local Service permission on file"
-	Set-Permission -Principal "Local Service" -Path "$TestDrive\$($TestFiles[1])" -Grant $Access
+	Start-Test "Local Service permission on file"
+	Set-Permission -User "Local Service" -LiteralPath "$TestDrive\$($TestFiles[1])" -Grant $Access
 
-	Start-Test "Set-Permission - Group permission on file"
-	Set-Permission -Principal "Remote Management Users" -Path "$TestDrive\$($TestFiles[2])" -Grant $Access
+	Start-Test "Group permission on file"
+	Set-Permission -User "Remote Management Users" -LiteralPath "$TestDrive\$($TestFiles[2])" -Grant $Access
 
 	# Test parameters
-	Start-Test "Set-Permission - NT SERVICE\LanmanServer permission on folder"
-	Set-Permission -Principal "LanmanServer" -Domain "NT SERVICE" -Path "$TestDrive\$($TestFolders[0])" `
+	Start-Test "NT SERVICE\LanmanServer permission on folder"
+	Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "$TestDrive\$($TestFolders[0])" `
 		-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
-	Start-Test "Set-Permission - Local Service permission on folder"
-	Set-Permission -Principal "Local Service" -Path "$TestDrive\$($TestFolders[1])" `
+	Start-Test "Local Service permission on folder"
+	Set-Permission -User "Local Service" -LiteralPath "$TestDrive\$($TestFolders[1])" `
 		-Type "Allow" -Inheritance "ObjectInherit" -Propagation "NoPropagateInherit" -Grant $Access
 
-	Start-Test "Set-Permission - Group permission on folder"
-	$Result = Set-Permission -Principal "Remote Management Users" -Path "$TestDrive\$($TestFolders[2])" -Grant $Access `
+	Start-Test "Group permission on folder"
+	$Result = Set-Permission -User "Remote Management Users" -LiteralPath "$TestDrive\$($TestFolders[2])" -Grant $Access `
 		-Protected
 
 	$Result
@@ -185,66 +188,69 @@ if ($FileSystem)
 
 	# Test reset/recurse
 	Start-Test "Reset permissions inheritance to explicit"
-	Set-Permission -Path "$TestDrive\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
+	Set-Permission -LiteralPath "$TestDrive\Protected\Remote Management Users.txt" -Reset -Protected -PreserveInheritance
 
 	Start-Test "Reset permissions recurse"
-	Set-Permission -Principal "Administrators" -Grant "FullControl" -Path $TestDrive -Reset -Recurse
+	Set-Permission -User "Administrators" -Grant "FullControl" -LiteralPath $TestDrive -Reset -Recurse
 
 	Start-Test "Recursive ownership on folder"
-	Set-Permission -Owner "Replicator" -Path $TestDrive -Recurse
+	Set-Permission -Owner "Replicator" -LiteralPath $TestDrive -Recurse
 
 	Start-Test "Recursively reset"
-	Set-Permission -Path $TestDrive -Reset -Recurse
+	Set-Permission -LiteralPath $TestDrive -Reset -Recurse
 
 	Start-Test "Recursively clear all rules or folder"
-	Set-Permission -Path $TestDrive -Reset -Recurse -Protected
+	Set-Permission -LiteralPath $TestDrive -Reset -Recurse -Protected
 }
-elseif ($Registry -or $PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
+elseif ($Registry)
 {
-	# NOTE: This test may fail until Set-Privilege script is considered into Set-Permission function
-	# Ownership + Full control
-	$TestKey = "TestKey"
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening registry hive"
-	$RegistryHive = [Microsoft.Win32.RegistryHive]::CurrentUser
-	$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
-
-	try
+	if ($PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
 	{
-		$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView)
-	}
-	catch
-	{
-		Write-Error -ErrorRecord $_
-		Update-Log
-		Exit-Test
-		return
-	}
+		# NOTE: This test may fail until Set-Privilege script is considered into Set-Permission function
+		# Ownership + Full control
+		$TestKey = "TestKey"
 
-	if (!$RootKey)
-	{
-		Write-Warning -Message "Failed to open registry root key: HKCU"
-	}
-	else
-	{
-		[Microsoft.Win32.RegistryKey] $SubKey = $RootKey.OpenSubkey($TestKey)
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening registry hive"
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::CurrentUser
+		$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
 
-		if ($SubKey)
+		try
 		{
-			# TODO: Return value is 'HKEY_CURRENT_USER\TestKey'
-			$KeyLocation = $SubKey.Name # "HKCU:\TestKey" #
+			$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			Update-Log
+			Exit-Test
+			return
+		}
 
-			# Take ownership and set full control
-			# NOTE: setting other owner (except current user) will not work for HKCU
-			Set-Permission -Principal "TrustedInstaller" -Domain "NT SERVICE" -Path $KeyLocation -Reset -RegistryRight "ReadKey"
-			Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -Path $KeyLocation
-
-			Set-Permission -Principal $TestUser -Path $KeyLocation -Reset -RegistryRight "ReadKey"
-			Set-Permission -Owner $TestUser -Path $KeyLocation
+		if (!$RootKey)
+		{
+			Write-Warning -Message "Failed to open registry root key: HKCU"
 		}
 		else
 		{
-			Write-Warning -Message "Failed to open registry sub key: HKCU:$TestKey"
+			[Microsoft.Win32.RegistryKey] $SubKey = $RootKey.OpenSubkey($TestKey)
+
+			if ($SubKey)
+			{
+				# TODO: Return value is 'HKEY_CURRENT_USER\TestKey'
+				$KeyLocation = $SubKey.Name # "HKCU:\TestKey" #
+
+				# Take ownership and set full control
+				# NOTE: setting other owner (except current user) will not work for HKCU
+				Set-Permission -User "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
+				Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation
+
+				Set-Permission -User $TestUser -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
+				Set-Permission -Owner $TestUser -LiteralPath $KeyLocation
+			}
+			else
+			{
+				Write-Warning -Message "Failed to open registry sub key: HKCU:$TestKey"
+			}
 		}
 	}
 }

@@ -36,14 +36,30 @@ Formatted message block is shown in the console.
 This function must be called before single test case starts executing
 
 .PARAMETER Message
-Message to format and print before test case begins
+Message to format and print before test case begins.
+This message is appended to command being tested and then printed.
+
+.PARAMETER Expected
+Expected output of a test.
+This value is appended to Message.
+
+.PARAMETER Command
+The command which is to be tested.
+This value overrides default Command parameter specified in Enter-Test.
 
 .EXAMPLE
-PS> Start-Test "Get-Something"
+PS> Start-Test "some test"
 
-**************************
-* Testing: Get-Something *
-**************************
+************************************
+* Testing: Get-Something some test *
+************************************
+
+.EXAMPLE
+PS> Start-Test "some test" -Expected "output 123" -Command "Set-Something"
+
+*****************************************************
+* Testing: Set-Something some test -> output 123 *
+*****************************************************
 
 .INPUTS
 None. You cannot pipe objects to Start-Test
@@ -58,13 +74,19 @@ TODO: Write-Information instead of Write-Output
 #>
 function Start-Test
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium",
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Start-Test.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[AllowEmptyString()]
-		[string] $Message
+		[string] $Message,
+
+		[Parameter()]
+		[string] $Expected,
+
+		[Parameter()]
+		[string] $Command
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -76,7 +98,24 @@ function Start-Test
 
 	if ($PSCmdlet.ShouldProcess("Start test case", $Message))
 	{
-		$OutputString = "Testing: $Message"
+		if (![string]::IsNullOrEmpty($Command))
+		{
+			$OutputString = "Testing: $Command $Message"
+		}
+		elseif (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)
+		{
+			$OutputString = "Testing: $script:TestCommand $Message"
+		}
+		else
+		{
+			$OutputString = "Testing: $Message"
+		}
+
+		if (![string]::IsNullOrEmpty($Expected))
+		{
+			$OutputString += " -> $Expected"
+		}
+
 		$Asterisks = ("*" * ($OutputString.Length + 4))
 
 		# NOTE: Write-Host would mess up test case outputs
