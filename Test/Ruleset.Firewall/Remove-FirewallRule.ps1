@@ -34,7 +34,7 @@ Unit test for Remove-FirewallRule
 Test correctness of Remove-FirewallRule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Remove-FirewallRule.ps1

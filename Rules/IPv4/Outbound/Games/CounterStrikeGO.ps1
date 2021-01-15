@@ -34,7 +34,7 @@ Outbound firewall rules for CounterStrikeGO
 Outbound firewall rules for CS:GO game
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

@@ -34,7 +34,7 @@ Outbound firewall rules for PowerShell
 Outbound firewall rules for PowerShell Core and Desktop editions
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

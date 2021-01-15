@@ -34,7 +34,7 @@ Unit test for rules based on store apps
 Unit test for adding store apps rules based on computer users
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RuleAppSID.ps1
@@ -83,13 +83,13 @@ $Principals
 
 [string] $PackageSID = ""
 [string] $OwnerSID = ""
-foreach ($Principal in $Principals)
+foreach ($Account in $Principals)
 {
-	Start-Test "Processing for: $($Principal.Account)"
-	$OwnerSID = Get-PrincipalSID $Principal.User -Domain $Principal.Domain
+	Start-Test "Processing for: $($Account.Principal)"
+	$OwnerSID = Get-PrincipalSID $Account.User -Domain $Account.Domain
 	$OwnerSID
 
-	Get-UserApps -User $Principal.User | ForEach-Object {
+	Get-UserApps -User $Account.User | ForEach-Object {
 		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 		$PackageSID
 	}

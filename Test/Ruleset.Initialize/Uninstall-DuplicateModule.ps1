@@ -34,7 +34,7 @@ Unit test for Uninstall-DuplicateModule
 Test correctness of Uninstall-DuplicateModule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Uninstall-DuplicateModule.ps1

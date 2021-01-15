@@ -34,7 +34,7 @@ Unit test for Get-UserSoftware
 Test correctness of Get-UserSoftware function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-UserSoftware.ps1

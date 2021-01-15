@@ -34,7 +34,7 @@ Unit test for Get-SystemSoftware
 Test correctness of Get-SystemSoftware function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-SystemSoftware.ps1

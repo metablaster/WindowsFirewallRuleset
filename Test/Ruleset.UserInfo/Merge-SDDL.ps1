@@ -34,7 +34,7 @@ Unit test for Merge-SDDL
 Test correctness of Merge-SDDL function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Merge-SDDL.ps1

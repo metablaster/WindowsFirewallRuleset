@@ -34,7 +34,7 @@ Unit test for Find-RulePrincipal
 Test correctness of Find-RulePrincipal function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Find-RulePrincipal.ps1

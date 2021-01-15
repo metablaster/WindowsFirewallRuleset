@@ -34,7 +34,7 @@ Outbound firewall rules for uTorrent
 Outbound firewall rules for uTorrent torrent client
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

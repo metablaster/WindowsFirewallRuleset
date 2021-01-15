@@ -34,7 +34,7 @@ Unit test for Edit-Table
 Test correctness of Edit-Table function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Edit-Table.ps1

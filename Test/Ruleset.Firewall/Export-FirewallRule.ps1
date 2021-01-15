@@ -34,7 +34,7 @@ Unit test for Export-FirewallRule
 Test correctness of Export-FirewallRule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Export-FirewallRule.ps1

@@ -35,7 +35,7 @@ Verifies that a module manifest files accurately describe the contents of projec
 For binary files also verify digital signature is valid
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\TestModuleManifest.ps1

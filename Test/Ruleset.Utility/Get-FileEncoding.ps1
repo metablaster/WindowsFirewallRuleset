@@ -34,7 +34,7 @@ Unit test for Get-FileEncoding
 Test correctness of Get-FileEncoding function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-FileEncoding.ps1

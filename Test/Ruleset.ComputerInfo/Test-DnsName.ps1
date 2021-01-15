@@ -57,6 +57,9 @@ param (
 	[switch] $Force
 )
 
+Write-Warning -Message "Test-DnsName function is not implemented, skipping unit test..."
+return
+
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\ContextSetup.ps1

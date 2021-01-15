@@ -34,7 +34,7 @@ Unit test for Import-FirewallRule
 Test correctness of Import-FirewallRule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Import-FirewallRule.ps1

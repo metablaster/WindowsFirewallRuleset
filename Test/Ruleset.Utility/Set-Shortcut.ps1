@@ -34,7 +34,7 @@ Unit test for Set-Shortcut
 Unit test to test correctness of Set-Shortcut function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Set-Shortcut.ps1
@@ -79,13 +79,13 @@ Start-Test "LNK"
 Set-Shortcut -Name "Test.url" -Path $TestDrive -IconIndex -19 -Hotkey "ALT+CTRL+F" `
 	-TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" `
 	-Description "View and modify GPO firewall" -ArgumentList "/test /args" `
-	-WorkingDirectory "$ProjectRoot\Config\Windows" `
-	-WindowStyle "Maximized" -IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" -Admin
+	-WorkingDirectory "$ProjectRoot\Config\Windows" -WindowStyle "Maximized" `
+	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" -Admin -Confirm:$false
 
 Start-Test "URL"
 $Result = Set-Shortcut -Name "online.lnk" -Path $TestDrive -IconIndex -19 `
 	-URL "https://docs.microsoft.com" -Hotkey "ALT+CTRL+F" `
-	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll"
+	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:$false
 
 $Result
 
@@ -112,7 +112,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Windows folder", "Test elevation"))
 	}
 
 	Set-Shortcut -Name "Test.lnk" -Path $Restricted `
-		-TargetPath "$ProjectRoot\Config\Windows\Firewall.msc"
+		-TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Confirm:$false
 }
 
 Test-Output $Result -Command Set-Shortcut

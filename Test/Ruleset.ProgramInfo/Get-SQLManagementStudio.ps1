@@ -34,7 +34,7 @@ Unit test for Get-SqlManagementStudio
 Test correctness of Get-SqlManagementStudio function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-SqlManagementStudio.ps1

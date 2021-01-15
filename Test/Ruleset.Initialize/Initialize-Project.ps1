@@ -34,7 +34,7 @@ Unit test for Initialize-Project
 Test correctness of Initialize-Project function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Initialize-Project.ps1

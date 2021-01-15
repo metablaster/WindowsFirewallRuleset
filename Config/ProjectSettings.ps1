@@ -529,7 +529,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 0))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 1))
 	}
 	else
 	{

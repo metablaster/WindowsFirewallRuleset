@@ -34,7 +34,7 @@ Unit test for Set-NetworkProfile
 Test correctness of Set-NetworkProfile function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Set-NetworkProfile.ps1

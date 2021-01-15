@@ -34,7 +34,7 @@ Unit test for Enter-Test
 Test correctness of Enter-Test function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Enter-Test.ps1

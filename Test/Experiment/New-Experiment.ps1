@@ -34,7 +34,7 @@ Script experiment
 Use New-Experiment.ps1 to write temporary tests
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\New-Experiment.ps1

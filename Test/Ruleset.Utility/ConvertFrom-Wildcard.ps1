@@ -34,7 +34,7 @@ Unit test for ConvertFrom-Wildcard
 Test correctness of ConvertFrom-Wildcard function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\ConvertFrom-Wildcard.ps1

@@ -34,7 +34,7 @@ Outbound firewall rules for Chocolatey
 Outbound firewall rules for Chocolatey package manager
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

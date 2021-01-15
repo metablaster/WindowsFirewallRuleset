@@ -34,7 +34,7 @@ Unit test for Get-DevicePath
 Test correctness of Get-DevicePath.ps1 script
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-DevicePath.ps1

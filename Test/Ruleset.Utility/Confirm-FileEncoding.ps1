@@ -34,7 +34,7 @@ Unit test for Confirm-FileEncoding
 Test correctness of Confirm-FileEncoding function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Confirm-FileEncoding.ps1

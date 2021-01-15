@@ -34,7 +34,7 @@ Unit test for Select-EnvironmentVariable
 Test correctness of Select-EnvironmentVariable function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Select-EnvironmentVariable.ps1

@@ -34,7 +34,7 @@ Unit test for Approve-Execute
 Test correctness of Approve-Execute function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Approve-Execute.ps1

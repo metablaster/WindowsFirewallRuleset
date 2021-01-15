@@ -34,7 +34,7 @@ Unit test for Get-VSSetupInstance
 Unit test for Get-VSSetupInstance
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-VSSetupInstance.ps1

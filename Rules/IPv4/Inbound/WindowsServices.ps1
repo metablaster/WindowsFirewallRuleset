@@ -35,7 +35,7 @@ Windows services rules
 Rules which apply to Windows services which are not handled by predefined rules
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

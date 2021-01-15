@@ -31,10 +31,11 @@ SOFTWARE.
 Unit test for rules with relative path
 
 .DESCRIPTION
-Unit test for adding rules based on relative paths
+Unit test for adding rules based on relative paths.
+Also serves to test adding rule based on application.
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RuleRelativePath.ps1
@@ -68,7 +69,7 @@ if (!(Approve-Execute -Accept "Load test rule into firewall" -Deny $Deny -Force:
 # Setup local variables
 $Group = "Test - Relative path"
 $LocalProfile = "Any"
-$TargetProgramRoot = "C:\Program Files (x86)\Realtek\..\PokerStars.EU"
+$TargetProgramRoot = "C:\Program Files (x86)\GnuPG\share\..\bin"
 
 Enter-Test
 
@@ -78,19 +79,20 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Start-Test "Relative path"
 
 # Test if installation exists on system
-$Program = "$TargetProgramRoot\PokerStars.exe"
-Test-ExecutableFile $Program
-
-New-NetFirewallRule -DisplayName "TargetProgram" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
-	-Service Any -Program $Program -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443, 26002 `
-	-LocalUser $LocalService `
-	-InterfaceType $DefaultInterface `
-	-Description "Relative path test" |
-Format-RuleOutput
+$Program = "$TargetProgramRoot\gpg.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "TargetProgram" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443, 26002 `
+		-LocalUser $LocalService `
+		-InterfaceType $DefaultInterface `
+		-Description "Relative path test" |
+	Format-RuleOutput
+}
 
 Update-Log
 Exit-Test

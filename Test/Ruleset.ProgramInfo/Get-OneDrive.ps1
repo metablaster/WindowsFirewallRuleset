@@ -34,7 +34,7 @@ Unit test for Get-OneDrive
 Test correctness of Get-OneDrive function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-OneDrive.ps1

@@ -34,7 +34,7 @@ Unit test for Resolve-Host
 Test correctness of Resolve-Host function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Resolve-Host.ps1

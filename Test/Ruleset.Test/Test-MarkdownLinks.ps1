@@ -34,7 +34,7 @@ Unit test for Test-MarkdownLinks
 Test correctness of Test-MarkdownLinks function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-MarkdownLinks.ps1
@@ -67,12 +67,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-Start-Test "Reference links"
-Test-MarkdownLinks $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
-
 Start-Test "Single file"
 $Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md -LinkType "Inline" -Exclude *microsoft.com*
 $Result | Test-Output -Command Test-MarkdownLinks
+
+Start-Test "Reference links"
+Test-MarkdownLinks $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
 
 if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))
 {

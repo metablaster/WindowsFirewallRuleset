@@ -34,7 +34,7 @@ Unit test to test out script info metadata
 Verifies that scripts accurately describe the contents of the individual script
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\TestScriptInfo.ps1

@@ -34,7 +34,7 @@ Outbound rule for Bing wallpaper app
 Outbound rule for Bing Wallpaper app
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

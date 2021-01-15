@@ -34,7 +34,7 @@ Unit test for project settings
 Unit test to test global variables and preferences set in Config\ProjectSettings.ps1
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\TestProjectSettings.ps1
@@ -56,6 +56,9 @@ param (
 	[Parameter()]
 	[switch] $Force
 )
+
+Write-Warning -Message "Unit test 'TestProjectSettings' is out of date, skipped..."
+return
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
@@ -87,11 +90,9 @@ Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" # -
 # NOTE: For this test to show correct result $DebugPreference in ProjectSettings must be "Continue"
 Start-Test "Script module preferences"
 $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
-	Set-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value "Dynamic.TestPreference"
 	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" # -Debug
 
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule -ListPreference
-	. $PSScriptRoot\..\Modules\ModulePreferences.ps1
 
 	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" # -Debug
 } | Import-Module -Scope Global -PassThru

@@ -34,7 +34,7 @@ Unit test for Get-WindowsKit
 Test correctness of Get-WindowsKit function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-WindowsKit.ps1
@@ -78,6 +78,9 @@ if ($null -ne $WindowsKits)
 	Sort-Object -Property Product |
 	Select-Object -Last 1 -ExpandProperty InstallLocation
 }
+
+Start-Test "default"
+$WindowsKits | Format-List *
 
 Test-Output $WindowsKits -Command Get-WindowsKit
 

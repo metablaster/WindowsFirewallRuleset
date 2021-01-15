@@ -34,7 +34,7 @@ Unit test for Set-ScreenBuffer
 Test correctness of Set-ScreenBuffer function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Set-ScreenBuffer.ps1

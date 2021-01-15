@@ -34,7 +34,7 @@ Unit test for Format-Path
 Test correctness of Format-Path function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Format-Path.ps1
@@ -312,7 +312,7 @@ Format-Path $TestPath
 Test-Output $Result -Command Format-Path
 
 New-Section "Test data to pipeline"
-$TestData = Get-Content -Path $ThisScript\..\TestData\Format-Path.txt
+$TestData = Get-Content -Path $ThisScript\TestData\Format-Path.txt
 # TODO: Need pipeline support for Start-Test
 $TestData | Format-Path
 

@@ -34,7 +34,7 @@ Unit test to test global variables
 Unit test to test global variables
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\TestModuleVariables.ps1
@@ -73,6 +73,12 @@ Enter-Test -Private
 Start-Test "Ruleset.Utility - ServiceHost:"
 $ServiceHost
 
+Start-Test "Ruleset.Utility - CheckInitUtility:"
+$CheckInitUtility
+
+Start-Test "Ruleset.Logging - HeaderStack:"
+$HeaderStack
+
 if ($Develop)
 {
 	Import-Module -Name Ruleset.ProgramInfo
@@ -94,6 +100,9 @@ $AdminGroupSDDL
 
 Start-Test "Ruleset.UserInfo - UsersGroupSDDL:"
 $UsersGroupSDDL
+
+Start-Test "Ruleset.UserInfo - CheckInitUserInfo:"
+$CheckInitUserInfo
 
 Update-Log
 Exit-Test

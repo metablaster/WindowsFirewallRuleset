@@ -39,7 +39,7 @@ Unit test for:
 4. Exit-Test
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-UnitTest.ps1

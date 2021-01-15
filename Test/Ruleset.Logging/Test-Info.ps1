@@ -34,7 +34,7 @@ Unit test for info logging
 Test correctness of info logging
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-Info.ps1

@@ -40,13 +40,13 @@ Test setting file system permissions/ownership
 Test setting registry permissions/ownership
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Set-Permission.ps1 -FileSystem
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Set-Permission.ps1 -Registry -FileSystem
@@ -92,6 +92,7 @@ if ($FileSystem)
 	$Computer = [System.Environment]::MachineName
 	$TestDrive = "$DefaultTestDrive\$ThisScript"
 	$PSDefaultParameterValues.Add("Set-Permission:Force", $Force)
+	$PSDefaultParameterValues.Add("Set-Permission:Confirm", $false)
 
 	[AccessControl.FileSystemRights] $Access = "ReadAndExecute, ListDirectory, Traverse"
 

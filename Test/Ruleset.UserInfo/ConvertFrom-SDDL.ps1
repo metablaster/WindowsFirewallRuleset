@@ -34,7 +34,7 @@ Unit test for ConvertFrom-SDDL
 Test correctness of ConvertFrom-SDDL function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\ConvertFrom-SDDL.ps1

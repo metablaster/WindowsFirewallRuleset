@@ -102,7 +102,7 @@ If "Protected" is specified with "PreserveInheritance", then the inherited rules
 explicit rules and everything else is removed.
 
 .PARAMETER Force
-If specified, skips prompting for confirmation.
+If specified, skips prompting for confirmation to perform recursive action
 
 .EXAMPLE
 PS> Set-Permission -User "SomeUser" -LiteralPath "D:\SomePath"
@@ -258,7 +258,7 @@ function Set-Permission
 		$Message = "Reset permissions$RecurseMessage"
 	}
 
-	if (!$Force -and !$PSCmdlet.ShouldProcess($LiteralPath, $Message))
+	if (!$PSCmdlet.ShouldProcess($LiteralPath, $Message))
 	{
 		Write-Warning -Message "The operation has been canceled by the user"
 		return $false
@@ -431,7 +431,7 @@ function Set-Permission
 	if ($Recurse)
 	{
 		# TODO: Will fail with "-Reset -Recurse -Protected"
-		Write-Information -Tags "Project" -MessageData "INFO: Attempting to perform recursive action"
+		Write-Information -Tags "Project" -MessageData "INFO: Performing recursive action"
 
 		try
 		{
@@ -485,17 +485,17 @@ function Set-Permission
 
 				# NOTE: This may be called twice for each child container which fails in "try" block above,
 				# It's needed to initiate recursing on this container
-				Set-Permission -LiteralPath $LiteralPath -User $User -Rights $GrantContainer -Force:$Force | Out-Null
+				Set-Permission -LiteralPath $LiteralPath -User $User -Rights $GrantContainer -Force -Confirm:$false | Out-Null
 
 				# TODO: Not sure if this will work without "ReadPermissions, ChangePermissions", if yes remove them
 				Get-ChildItem -LiteralPath $LiteralPath -Directory -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child container object: $($_.FullName)"
-					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantContainer -Recurse -Force:$Force | Out-Null
+					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantContainer -Recurse -Force -Confirm:$false | Out-Null
 				}
 
 				Get-ChildItem -LiteralPath $LiteralPath -File -Recurse -Force | ForEach-Object {
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions on child leaf object: $($_.FullName)"
-					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantLeaf -Force:$Force | Out-Null
+					Set-Permission -LiteralPath $_.FullName -User $User -Rights $GrantLeaf -Force -Confirm:$false | Out-Null
 				}
 
 				try

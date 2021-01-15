@@ -34,7 +34,7 @@ Inbound IPv4 multicast rules
 Inbound firewall rules for IPv4 multicast address Space
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

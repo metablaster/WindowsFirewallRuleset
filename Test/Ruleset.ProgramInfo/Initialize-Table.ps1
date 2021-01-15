@@ -34,7 +34,7 @@ Unit test for Initialize-Table
 Test correctness of Initialize-Table function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Initialize-Table.ps1

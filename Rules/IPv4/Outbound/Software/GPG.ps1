@@ -34,7 +34,7 @@ Outbound firewall rules for GPG
 Outbound firewall rules for Gpg4Win and GPG related software
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

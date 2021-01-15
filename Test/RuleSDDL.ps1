@@ -34,7 +34,7 @@ Unit test for principal based rules
 Unit test for adding rules based on computer accounts
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RuleSDDL.ps1

@@ -34,7 +34,7 @@ Unit test for Get-SystemSKU
 Test correctness of Get-SystemSKU function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-SystemSKU.ps1

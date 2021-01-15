@@ -94,7 +94,7 @@ function New-Function
 			# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
 			# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
 			$CallReason
-			if ($Force -or $PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
+			if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
 			{
 				# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
 				# Performing the operation "Template MESSAGE" on target "Template TARGET"

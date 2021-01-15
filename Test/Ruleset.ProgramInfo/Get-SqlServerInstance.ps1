@@ -34,7 +34,7 @@ Unit test for Get-SqlServerInstance
 Test correctness of Get-SqlServerInstance function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-SqlServerInstance.ps1

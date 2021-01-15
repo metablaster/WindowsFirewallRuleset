@@ -34,7 +34,7 @@ Unit test for Find-UpdatableModule
 Test correctness of Find-UpdatableModule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Find-UpdatableModule.ps1

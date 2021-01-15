@@ -34,7 +34,7 @@ Unit test for Get-InterfaceBroadcast
 Test correctness of Get-InterfaceBroadcast function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-InterfaceBroadcast.ps1

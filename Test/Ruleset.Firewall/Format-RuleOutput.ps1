@@ -34,7 +34,7 @@ Unit test for Format-RuleOutput
 Test correctness of Format-RuleOutput function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Format-RuleOutput.ps1
@@ -69,7 +69,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 # Setup local variables
 $Group = "Test - Format output"
 $LocalProfile = "Any"
-$Direction = "Outbound"
 
 Enter-Test
 

@@ -40,7 +40,7 @@ Todo's in this file are categorized into following sections:
     - Spellchecking files
     - Move duplicate and global todo's from scripts here into global todo list
 
-3. Code style
+3. Code style and design
 
     - Limit code to 100-120 column rule where possible.
 
@@ -133,7 +133,13 @@ Todo's in this file are categorized into following sections:
     while other won't be shown until 3-4 more test cases run.
     For an example, see `Get-UserGroup` test or `RunAllTests.ps1`
 
-5. Partially fixed, need testing and/or improvements
+5. Code style and design
+
+    - Revisit functions test for valid implementation of `-Confirm`, `-Force` and `-WhatIf`,
+    Confirm for ShouldProcess, Force for ShouldContinue and WhatIf should not do anything.
+    For test to be valid, a combination of these parameters should be specified.
+
+6. Partially fixed, need testing and/or improvements
 
     - Most program query functions return (or could return) multiple program instances,
     need to select latest or add multiple rules.
@@ -143,7 +149,7 @@ Todo's in this file are categorized into following sections:
     - Store app rules for administrators, probably only those that break important functionalities
     - Revisit function parameters, their types, aliases, names are singular, consistent etc..
 
-6. Other
+7. Other
 
     - Need convention for `Write-*` commandlets, when to use which one, and also convention for quoting
     and including local variables in the stream, some places are missing streams while others have
@@ -218,7 +224,7 @@ Todo's in this file are categorized into following sections:
     - Some Pester tests are out of date and don't work well with Pester 5.x
     - A function to detect and confirm file line endings
 
-5. Code style
+5. Code style and design
 
     - Indentation doesn't work as expected for pipeline operators, currently using "NoIndentation",
     also there is no indentation for back ticks.
@@ -301,7 +307,7 @@ Todo's in this file are categorized into following sections:
     - Almost all tests need more test cases and consistency improvements
     - Test comment based help
 
-5. Code style
+5. Code style and design
 
     - For variables with no explicitly decalred type, put "Typename" comment above them from
     `Get-TypeName` or `Get-Member` output
@@ -385,7 +391,7 @@ Todo's in this file are categorized into following sections:
     be much easier.
     - Several comment based documentation is either missing comments or comments are out of date
 
-6. Code style
+6. Code style and design
 
     - Separation of comment based keywords so that there is one line between a comment and next keyword
     - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is

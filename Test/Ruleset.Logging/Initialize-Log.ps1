@@ -35,7 +35,7 @@ Unit test for Initialize-Log
 Test correctness of Initialize-Log function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Initialize-Log.ps1

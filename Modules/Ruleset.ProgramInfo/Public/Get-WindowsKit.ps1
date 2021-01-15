@@ -102,7 +102,7 @@ function Get-WindowsKit
 					Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
 					continue
 				}
-				elseif ($InstallLocation -notlike "C:\Program Files*")
+				elseif ($InstallLocation -notmatch "^[A-Za-z]:\\.*")
 				{
 					# NOTE: Avoid spamming
 					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key entry: $RootKeyLeaf\$RootKeyEntry"
@@ -112,13 +112,38 @@ function Get-WindowsKit
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
 				$InstallLocation = Format-Path $InstallLocation
 
+				$AllVersions = @()
+
+				foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+				{
+					$VersionKey = $RootKey.OpenSubKey($HKLMSubKey)
+
+					if ($InstallLocation -like "WindowsDebuggersRoot*")
+					{
+						$SubKey = $VersionKey.OpenSubKey("Installed Options")
+						$Value = $SubKey.GetValue("OptionId.WindowsDesktopDebuggers")
+
+						# For DebuggersRoot process version only if debuggers are installed
+						if (!($Value -and ($Value -eq 1)))
+						{
+							continue
+						}
+					}
+
+					$AllVersions += $VersionKey.ToString() | Split-Path -Leaf
+				}
+
+				# TODO: This version is just an estimate, selecting latest one
+				$Version = $AllVersions | Select-Object -Last 1
+
 				[PSCustomObject]@{
 					Domain = $Domain
 					Name = "Windows Kits"
-					# TODO: Version unknown
+					Version = $Version
 					Publisher = "Microsoft Corporation"
 					InstallLocation = $InstallLocation
 					RegistryKey = "$($RootKey.ToString())\$RootKeyEntry" -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					Product = $RootKeyEntry
 					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}

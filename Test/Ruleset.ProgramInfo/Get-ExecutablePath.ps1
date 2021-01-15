@@ -34,7 +34,7 @@ Unit test for Get-ExecutablePath
 Test correctness of Get-ExecutablePath function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-ExecutablePath.ps1

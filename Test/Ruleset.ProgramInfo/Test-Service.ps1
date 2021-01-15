@@ -34,7 +34,7 @@ Unit test for Test-Service
 Test correctness of Test-Service function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-Service.ps1

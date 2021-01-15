@@ -34,7 +34,7 @@ Unit test for Compare-Path
 Test correctness of Compare-Path function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Compare-Path.ps1

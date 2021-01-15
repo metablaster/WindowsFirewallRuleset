@@ -37,7 +37,7 @@ Test correctness of Test-Credential function
 If specified, this unit test runs without prompt to allow execute
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-Credential.ps1

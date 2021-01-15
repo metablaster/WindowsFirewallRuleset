@@ -126,6 +126,7 @@ function Test-MarkdownLinks
 		[string[]] $Path,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Literal")]
+		[Alias("LP")]
 		[string[]] $LiteralPath,
 
 		[Parameter()]

@@ -34,7 +34,7 @@ Unit test for Reset-TestDrive
 Test correctness of Reset-TestDrive function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Reset-TestDrive.ps1

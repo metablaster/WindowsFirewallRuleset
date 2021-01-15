@@ -34,7 +34,7 @@ Unit test for interface alias rules
 Unit test for adding rules based on interface alias
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RuleInterfaceAlias.ps1
@@ -76,7 +76,7 @@ Start-Test "Remove-NetFirewallRule"
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 Start-Test "Virtual adapter rule no wildcard"
-$VirtualAdapter = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware
+$VirtualAdapter = Get-InterfaceAlias -AddressFamily IPv4 -Virtual
 
 if ($VirtualAdapter)
 {
@@ -94,7 +94,7 @@ if ($VirtualAdapter)
 }
 
 Start-Test "Virtual adapter rule CultureInvariant"
-$VirtualAdapterCultureInvariant = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption CultureInvariant
+$VirtualAdapterCultureInvariant = Get-InterfaceAlias -AddressFamily IPv4 -Virtual -WildCardOption CultureInvariant
 
 if ($VirtualAdapterCultureInvariant)
 {
@@ -112,7 +112,7 @@ if ($VirtualAdapterCultureInvariant)
 }
 
 Start-Test "Virtual adapter rule IgnoreCase"
-$VirtualAdapterIgnoreCase = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption IgnoreCase
+$VirtualAdapterIgnoreCase = Get-InterfaceAlias -AddressFamily IPv4 -Virtual -WildCardOption IgnoreCase
 
 if ($VirtualAdapterIgnoreCase)
 {
@@ -130,7 +130,7 @@ if ($VirtualAdapterIgnoreCase)
 }
 
 Start-Test "Virtual adapter rule None"
-$VirtualAdapterNone = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption None
+$VirtualAdapterNone = Get-InterfaceAlias -AddressFamily IPv4 -Virtual -WildCardOption None
 
 if ($VirtualAdapterNone)
 {
@@ -148,7 +148,7 @@ if ($VirtualAdapterNone)
 }
 
 Start-Test "Virtual adapter rule Compiled"
-$VirtualAdapterCompiled = Get-InterfaceAlias IPv4 -IncludeVirtual -IncludeDisconnected -ExcludeHardware -WildCardOption Compiled
+$VirtualAdapterCompiled = Get-InterfaceAlias -AddressFamily IPv4 -Virtual -WildCardOption Compiled
 
 if ($VirtualAdapterCompiled)
 {
@@ -166,7 +166,7 @@ if ($VirtualAdapterCompiled)
 }
 
 Start-Test "Hardware adapter rule"
-$HardwareAdapter = Get-InterfaceAlias IPv4
+$HardwareAdapter = Get-InterfaceAlias -AddressFamily IPv4 -Physical
 
 if ($HardwareAdapter)
 {
@@ -184,7 +184,8 @@ if ($HardwareAdapter)
 }
 
 Start-Test "Multiple adapters rule"
-$MultipleAdapters = Get-InterfaceAlias IPv4 -IncludeAll
+$MultipleAdapters = @(Get-InterfaceAlias -AddressFamily IPv4 -Physical)
+$MultipleAdapters += Get-InterfaceAlias -AddressFamily IPv4 -Virtual
 
 if ($MultipleAdapters)
 {
@@ -202,7 +203,7 @@ if ($MultipleAdapters)
 }
 
 Start-Test "Bad adapter rule FAILURE TEST"
-[WildcardPattern[]] $BadAdapters = Get-InterfaceAlias IPv4 -IncludeAll
+[WildcardPattern[]] $BadAdapters = $MultipleAdapters
 $BadAdapters += [WildcardPattern]("Local Area Connection* 644")
 
 # TODO: Need some checking when defining such rules elsewhere

@@ -34,7 +34,7 @@ Unit test for Convert-ListToArray
 Test correctness of Convert-ListToArray function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Convert-ListToArray.ps1

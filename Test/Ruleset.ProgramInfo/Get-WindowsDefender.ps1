@@ -34,7 +34,7 @@ Unit test for Get-WindowsDefender
 Test correctness of Get-WindowsDefender function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-WindowsDefender.ps1

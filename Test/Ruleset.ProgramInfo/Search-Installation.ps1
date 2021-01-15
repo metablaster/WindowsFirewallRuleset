@@ -34,7 +34,7 @@ Unit test for Search-Installation
 Test correctness of Search-Installation function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Search-Installation.ps1

@@ -34,7 +34,7 @@ Inbound firewall rules for IPv6 multicast traffic
 Inbound firewall rules for IPv6 multicast traffic
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.

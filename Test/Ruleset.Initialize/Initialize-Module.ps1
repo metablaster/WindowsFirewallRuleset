@@ -34,7 +34,7 @@ Unit test for Initialize-Module
 Test correctness of Initialize-Module function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Initialize-Module.ps1

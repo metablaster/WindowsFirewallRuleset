@@ -34,7 +34,7 @@ Unit test for Get-GroupPrincipal
 Test correctness of Get-GroupPrincipal function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-GroupPrincipal.ps1

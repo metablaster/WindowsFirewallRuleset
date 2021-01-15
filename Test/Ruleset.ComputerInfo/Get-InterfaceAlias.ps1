@@ -34,7 +34,7 @@ Unit test for Get-InterfaceAlias
 Test correctness of Get-InterfaceAlias function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-InterfaceAlias.ps1

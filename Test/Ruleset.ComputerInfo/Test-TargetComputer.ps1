@@ -34,7 +34,7 @@ Unit test for Test-TargetComputer
 Test correctness of Test-TargetComputer function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Test-TargetComputer.ps1

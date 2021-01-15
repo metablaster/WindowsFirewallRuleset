@@ -37,7 +37,7 @@ Run all unit tests located inside "Test" folder one by one
 If specified, run only pester tests
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RunAllTests.ps1
@@ -85,8 +85,9 @@ if ($Pester)
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-# TODO: Setup trap and restore variable any way
+$PreviousProjectCheck = (Get-Variable -Name ProjectCheck -Scope Global).Value
 Set-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Force -Value $false
+Reset-TestDrive
 
 # Prompt to set screen buffer to recommended value for tests
 Set-ScreenBuffer 3000
@@ -143,9 +144,10 @@ else
 
 if (!$Pester)
 {
-	Test-MarkdownLinks $ProjectRoot -Recurse
+	Test-MarkdownLinks -LiteralPath $ProjectRoot -Recurse -Unique #-Exclude "github.com"
 }
 
+Set-Variable -Name ProjectCheck -Scope Global -Value $PreviousProjectCheck
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

@@ -34,7 +34,7 @@ Unit test for Get-SystemApps
 Test correctness of Get-SystemApps function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown.
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Get-SystemApps.ps1
