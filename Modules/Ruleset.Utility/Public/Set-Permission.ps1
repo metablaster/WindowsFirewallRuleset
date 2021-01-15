@@ -36,10 +36,12 @@ Take ownership or set permissions on file system or registry object
 Set-Permission sets permission or ownership of a filesystem or registry object such as file,
 folder, registry key or registry item.
 
+Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
+This function also serves as replacement for takeown.exe and icacls.exe whose syntax is arcane.
+
 .PARAMETER LiteralPath
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
-Environment variables are allowed.
 
 .PARAMETER Owner
 Principal username who will be the new owner of a resource.
@@ -134,16 +136,13 @@ None. You cannot pipe objects to Set-Permission
 .NOTES
 Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
 PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
-is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
+is in Set-Privilege.ps1 which this function makes use of.
 
 TODO: Manage audit entries
 TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object"
 TODO: Which combination is for "Include inheritable permissions from this object's parent"
-Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
-This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and
-using these in PowerShell is usually awkward.
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
-TODO: switch to ignore errors and continue doing things, useful for recurse
+TODO: A switch to ignore errors and continue doing things, useful for recurse
 TODO: A bunch of other security options can be implemented
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
@@ -268,28 +267,9 @@ function Set-Permission
 	# TODO: This will error if access to the path is denied
 	if (!(Test-Path -LiteralPath $LiteralPath))
 	{
-		# NOTE: [Microsoft.Win32.RegistryKey] Name might not have drive
-		if ($LiteralPath -like "HKEY_*")
-		{
-			try
-			{
-				# TODO: Debug, Verbose and other messages will not be clear with just "RegKey"
-				New-PSDrive -Name RegKey -Scope Local -Root $LiteralPath -PSProvider Registry -ErrorAction Stop | Out-Null
-				$LiteralPath = "RegKey:\"
-				Test-Path -LiteralPath $LiteralPath -ErrorAction Stop
-			}
-			catch
-			{
-				Write-Error -ErrorRecord $_
-				return $false
-			}
-		}
-		else
-		{
-			Write-Error -Category ObjectNotFound -TargetObject $LiteralPath `
-				-Message "Specified resource could not be found: '$LiteralPath'"
-			return $false
-		}
+		Write-Error -Category ObjectNotFound -TargetObject $LiteralPath `
+			-Message "Specified resource could not be found: '$LiteralPath'"
+		return $false
 	}
 	elseif ($Recurse -and (Test-Path -LiteralPath $LiteralPath -PathType Leaf))
 	{

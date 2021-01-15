@@ -40,7 +40,9 @@ SOFTWARE.
 Get type for properties of one or more objects
 
 .DESCRIPTION
-Extract unique .NET types for properties of one or more objects
+Extract unique .NET types for properties of one or more objects.
+This method can prove useful to detect inconsistent property types in a
+collection of generated objects where the same property type is expected.
 
 .PARAMETER InputObject
 Get properties and their types for each of these
@@ -49,34 +51,35 @@ Get properties and their types for each of these
 If specified, only return unique types for these properties
 
 .EXAMPLE
-Define an array of objects
-PS> $array = [PSCustomObject]@{
-	prop1 = "har"
-	prop2 = $(get-date)
+Define an array of sample objects:
+
+PS> $Array = [PSCustomObject]@{
+	Property1 = "har"
+	Property2 = $(get-date)
 },
 [PSCustomObject]@{
-	prop1 = "bar"
-	prop2 = 2
+	Property1 = "bar"
+	Property2 = 2
 }
 
-Extract the property types from this array.
-In this example, Prop1 is always a System.String, Prop2 is a System.DateTime and System.Int32
-PS> $array | Get-PropertyType
+Get property types from sample array.
+In this example, Property1 is always a System.String, Property2 is a System.DateTime and System.Int32
+PS> $Array | Get-PropertyType
 
 	Name  Value
 	----  -----
-	prop1 {System.String}
-	prop2 {System.DateTime, System.Int32}
+	Property1 {System.String}
+	Property2 {System.DateTime, System.Int32}
 
-Pretend prop2 should always be a DateTime, extract all objects from $array where this is not the case
-PS> $array | ?{$_.prop2 -isnot [System.DateTime]}
+Pretend Property2 should always be a DateTime, extract all objects from $Array where this is not the case
+PS> $Array | Where-Object { $_.Property2 -isnot [System.DateTime] }
 
 	prop1 prop2
 	----- -----
 	bar       2
 
 .INPUTS
-[PSObject]
+[PSCustomObject]
 
 .OUTPUTS
 [hashtable]
@@ -87,8 +90,8 @@ Added #Requires statement, Parameter and OutputType attributes
 Updated formatting, casing and naming according to the rest of project
 Convert to script by removing function
 Added links, inputs, outputs and notes to comment based help
-
-TODO: This function need unit test to resolve warnings and introduce improvements
+Replaced PSObject entries with PSCustomObject
+Added SuppressMessageAttribute for false positive
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -101,11 +104,11 @@ https://github.com/RamblingCookieMonster/PowerShell
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSReviewUnusedParameter", "Property", Justification = "False positive")]
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([hashtable])]
 param (
-	[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-	[PSObject] $InputObject,
+	[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+	[PSCustomObject] $InputObject,
 
 	[Parameter()]
 	[string[]] $Property = $null
@@ -129,16 +132,13 @@ begin
 
 	.PARAMETER ExcludeProperty
 	Specific properties to exclude
-
-	.FUNCTIONALITY
-	PowerShell Language
 	#>
 	function Get-PropertyOrder
 	{
 		[CmdletBinding()]
 		param (
 			[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromRemainingArguments = $false)]
-			[PSObject] $InputObject,
+			[PSCustomObject] $InputObject,
 
 			[Parameter()]
 			[ValidateSet("AliasProperty", "CodeProperty", "Property", "NoteProperty",
@@ -148,10 +148,11 @@ begin
 			[string[]] $MemberType = @(
 				"NoteProperty"
 				"Property"
-				"ScriptProperty"),
+				"ScriptProperty"
+			),
 
 			[Parameter()]
-			[string[]] $ExcludeProperty = $null
+			[string[]] $ExcludeProperty
 		)
 
 		begin
@@ -172,7 +173,7 @@ begin
 			$FirstObject.PSObject.Properties |
 			Where-Object { $MemberType -contains $_.MemberType } |
 			Select-Object -ExpandProperty Name |
-			Where-Object { -not $ExcludeProperty -or ($ExcludeProperty -notcontains $_) }
+			Where-Object { !$ExcludeProperty -or ($ExcludeProperty -notcontains $_) }
 		}
 	} # Get-PropertyOrder
 
@@ -185,7 +186,7 @@ process
 	{
 		# Extract the properties in this object
 		$AllProperties = @(Get-PropertyOrder -InputObject $ObjectEntry |
-			Where-Object { -not $Property -or $Property -contains $_ } )
+			Where-Object { !$Property -or $Property -contains $_ } )
 
 		foreach ($PropEntry in $AllProperties)
 		{
@@ -199,7 +200,7 @@ process
 			}
 
 			# Check to see if we already have types for this prop
-			if (-not $Result.ContainsKey($PropEntry))
+			if (!$Result.ContainsKey($PropEntry))
 			{
 				# We don't have an array yet, start one, put the type in it
 				$List = New-Object System.Collections.ArrayList
@@ -217,5 +218,5 @@ process
 
 end
 {
-	$Result
+	Write-Output $Result
 }

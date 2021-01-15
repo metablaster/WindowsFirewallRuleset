@@ -150,19 +150,20 @@ if ($PSBoundParameters.ContainsKey("IsEnum")) { $WhereArray += '$_.IsENum -like 
 
 # Give verbose output, convert where string to scriptblock
 $WhereString = $WhereArray -Join " -and "
-$WhereBlock = [scriptblock]::Create( $WhereString )
+$WhereBlock = [scriptblock]::Create($WhereString)
 Write-Verbose -Message "[$ThisScript] Where ScriptBlock: { $WhereString }"
 
 # Invoke the search
 [AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object {
-	Write-Verbose -Message "[$ThisScript] Getting types from $($_.FullName)"
+	$FullName = $_.FullName
+	Write-Verbose -Message "[$ThisScript] Getting types from $FullName"
+
 	try
 	{
 		$_.GetExportedTypes()
 	}
 	catch
 	{
-		Write-Verbose -Message "[$ThisScript] $($_.FullName) error getting Exported Types: $_"
-		$null
+		Write-Verbose -Message "[$ThisScript] $FullName error getting Exported Types: $_"
 	}
 } | Where-Object -FilterScript $WhereBlock

@@ -65,11 +65,11 @@ Wildcard characters are supported.
 
 .PARAMETER Count
 Specifies maximum number of matching commands to process.
-You can use this parameter to limit the output of a command.
+You can use this parameter to limit output of a command.
 
 .PARAMETER Stream
-Specify this parameter when you want to stream output object through the pipeline,
-by default output object is formatted for output.
+Specify this parameter when you want to stream output objects down the pipeline,
+by default output object is formatted with Format-Table.
 
 .PARAMETER Exact
 If specified, ParameterName pattern does not apply to parameter aliases.
@@ -90,10 +90,10 @@ If specified, removes all modules previously imported by Get-ParameterAlias from
 Other parameters are ignored and nothing except cleanup is performed.
 
 .EXAMPLE
-PS> Get-ParameterAlias Test-DscConfiguration
+PS> Get-ParameterAlias -Command Test-DscConfiguration
 
 .EXAMPLE
-PS> Get-ParameterAlias "Start*", "Stop-Process" -ShowCommon
+PS> Get-ParameterAlias -Command "Start*", "Stop-Process" -ShowCommon
 
 .EXAMPLE
 PS> Get-Command Enable-NetAdapter* | Get-ParameterAlias -Type Function
@@ -121,6 +121,7 @@ TODO: Some parameter aliases are not retrieved and it's not clear if this is a b
 -Detailed and -Seconds
 TODO: Need to revisit which parameters can be bound from pipeline from other functions and
 update ValueFromPipeline arguments.
+NOTE: To use Format-List, Format-Wide or custom format specify -Stream parameter
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -153,7 +154,6 @@ param (
 	[System.Management.Automation.PSTypeName[]] $ParameterType = "*",
 
 	[Parameter()]
-	[Alias("TotalCount")]
 	[ValidateRange(0, [int32]::MaxValue)]
 	[int32] $Count = [int32]::MaxValue,
 
@@ -178,17 +178,8 @@ param (
 
 begin
 {
-	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 	$InformationPreference = "Continue"
-
-	# If dot sourced update format data only for current session
-	if ($MyInvocation.InvocationName -eq ".")
-	{
-		$FormatFile = $($PSCommandPath + "xml")
-		Write-Information -Tags "Project" -MessageData "INFO: Updating format data from: $((Get-Item $FormatFile).Name)"
-		Update-FormatData -PrependPath $FormatFile
-		break
-	}
 
 	if ($Cleanup)
 	{
@@ -267,7 +258,7 @@ process
 				if ($ModuleInfo)
 				{
 					Write-Information -Tags "Project" -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
-					$global:ImportedModules += @{ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
+					$global:ImportedModules += @{ ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
 				}
 				else
 				{
@@ -281,9 +272,12 @@ process
 		}
 	}
 
+	# NOTE: Specifying -TotalCount to Get-Command may produce less than expected amount of outputs
+	$OutputCount = 0
+
 	# NOTE: Get-Command -ParameterName gets commands that have the specified parameter names or parameter aliases.
 	foreach ($TargetCommand in @(Get-Command -Name $Command -CommandType $CommandType -ParameterType $ParameterType `
-				-ParameterName $ParameterName -TotalCount $Count -ListImported:$ListImported -EA SilentlyContinue -EV +NotFound))
+				-ParameterName $ParameterName -ListImported:$ListImported -EA SilentlyContinue -EV +NotFound))
 	{
 		$Params = $TargetCommand.Parameters.Values
 		if (!$ShowCommon)
@@ -317,7 +311,7 @@ process
 									ParameterType = $Param.ParameterType
 									Alias = $Param | Select-Object -ExpandProperty Aliases
 									Module = $TargetCommand.ModuleName
-									PSTypeName = "ParameterAlias"
+									PSTypeName = "Ruleset.ParameterAlias"
 								}
 							}
 						}
@@ -362,6 +356,11 @@ process
 				Write-Debug -Message "[$ThisScript] Formatting output"
 				Write-Output $OutputObject | Format-Table
 			}
+
+			if (++$OutputCount -eq $Count)
+			{
+				break
+			}
 		}
 	}
 }
@@ -372,10 +371,6 @@ end
 	{
 		Write-Output $UniqueAlias
 	}
-
-	# Here to avoid duplicate log entries
-	# NOTE: Not used to avoid importing project modules
-	# Update-Log
 
 	if ($NotFound)
 	{

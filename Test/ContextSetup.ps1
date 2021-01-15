@@ -43,6 +43,7 @@ None. ContextSetup.ps1 does not generate any output
 None.
 #>
 
-New-Variable -Name Direction -Scope Local -Option Constant -Value "Outbound"
-New-Variable -Name Accept -Scope Local -Option ReadOnly -Value "Run this unit test"
-New-Variable -Name Deny -Scope Local -Option ReadOnly -Value "Skip operation, this unit test will not run"
+# Not constant because of scripts which dot source format files more than once per session
+Set-Variable -Name Direction -Scope Local -Option ReadOnly -Force -Value "Outbound"
+Set-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run this unit test"
+Set-Variable -Name Deny -Scope Local -Option ReadOnly -Force -Value "Skip operation, this unit test will not run"

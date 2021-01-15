@@ -98,7 +98,8 @@ if ($PSCmdlet.ParameterSetName -eq "Module")
 }
 else
 {
-	New-Variable -Name ThisScript -Scope Private -Option Constant -Value ($Cmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$") -EA Stop
+	# Not constant because of scripts which dot source format files more than once per session, and for unit testing
+	New-Variable -Name ThisScript -Scope Private -Option ReadOnly -Force -Value ($Cmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$") -EA Stop
 	Write-Debug -Message "[$SettingsScript] Caller = $ThisScript ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 }
 
@@ -636,11 +637,12 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Utility"
 	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
 
-	# Load format data into session
-	$PathEntry = Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse
-	Update-FormatData -PrependPath $PathEntry.FullName
-
 	Remove-Variable -Name PathEntry -Scope Private
+
+	# Load format data into session
+	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
+		Update-FormatData -AppendPath $_
+	}
 
 	# Default output location for unit tests that produce file system output
 	New-Variable -Name DefaultTestDrive -Scope Global -Option Constant -Value $ProjectRoot\Test\TestDrive
