@@ -14,6 +14,8 @@
 				<!-- Optional element. Specifies a .NET object that is displayed by the view. -->
 				<TypeName>TemplateType</TypeName>
 			</ViewSelectedBy>
+			<!-- Defines how a new group of objects is displayed. -->
+			<!-- This element is used when defining a table, list, wide, or custom control view. -->
 			<GroupBy>
 				<!-- Optional element. Specifies a label that is displayed when a new group is encountered. -->
 				<Label>Label1</Label>

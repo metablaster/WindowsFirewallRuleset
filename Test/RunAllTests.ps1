@@ -147,7 +147,7 @@ if (!$Pester)
 	Test-MarkdownLinks -LiteralPath $ProjectRoot -Recurse -Unique #-Exclude "github.com"
 }
 
-Set-Variable -Name ProjectCheck -Scope Global -Value $PreviousProjectCheck
+Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
 
 Update-Log

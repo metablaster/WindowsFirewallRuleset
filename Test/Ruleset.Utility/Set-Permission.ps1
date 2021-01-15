@@ -63,6 +63,7 @@ None.
 
 using namespace System.Security
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -96,18 +97,26 @@ if ($FileSystem)
 
 	[AccessControl.FileSystemRights] $Access = "ReadAndExecute, ListDirectory, Traverse"
 
-	# NOTE: temporary reset
-	if ($true)
+	while ($true)
 	{
-		# Test ownership
-		Start-Test "ownership"
-		Set-Permission -Owner $TestUser -Domain $Computer -LiteralPath $TestDrive -Recurse
+		# NOTE: temporary reset
+		if (Test-Path -LiteralPath $TestDrive)
+		{
+			# Test ownership
+			Start-Test "Take ownership"
+			if (Set-Permission -Owner $TestAdmin -Domain $Computer -LiteralPath $TestDrive -Recurse)
+			{
+				# Reset existing tree for re-test
+				Start-Test "Reset existing tree"
+				if (Set-Permission -User $TestAdmin -Domain $Computer -LiteralPath $TestDrive -Reset -Grant $Access -Recurse)
+				{
+					Reset-TestDrive
+					break
+				}
+			}
 
-		# Reset existing tree for re-test
-		Start-Test "Reset existing tree"
-		Set-Permission -User $TestUser -Domain $Computer -LiteralPath $TestDrive -Reset -Grant $Access -Recurse
-
-		Reset-TestDrive
+			return
+		}
 	}
 
 	$TestFolders = @(

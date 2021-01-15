@@ -69,7 +69,7 @@ Enter-Test "Test-UNC"
 # $private:PSDefaultParameterValues.Add("Test-UNC:Quiet", $true)
 
 $TestString = "\\SERVER\Share"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 $Result = Test-UNC $TestString
 $Result
 
@@ -86,18 +86,18 @@ Start-Test $TestString
 Test-UNC $TestString
 
 $TestString = "\\site.domain.com\Share"
-Start-Test "$TestString -Strict"
+Start-Test "$TestString -Strict" -Expected "FAIL"
 Test-UNC $TestString -Strict
 
 $TestString = "\\SERVER"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 
-$TestString = "\\*SERVER\Share$"
-Start-Test $TestString
+$TestString = "\\*COMPUTER\Share$"
+Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 
-$TestString = "\\SERVER\Share$"
+$TestString = "\\COMPUTER\Share$"
 Start-Test $TestString
 Test-UNC $TestString
 
@@ -110,19 +110,19 @@ Start-Test $TestString
 Test-UNC $TestString
 
 $TestString = "\SERVER-01\Share\Directory DIR"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 
 $TestString = "\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE"
-Start-Test $TestString
+Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 
 $TestString = ""
-Start-Test "Empty string"
+Start-Test "Empty string" -Expected "FAIL"
 Test-UNC $TestString
 
 $TestString = $null
-Start-Test "null"
+Start-Test "null" -Expected "FAIL"
 Test-UNC $TestString
 
 New-Section "Test data to pipeline"

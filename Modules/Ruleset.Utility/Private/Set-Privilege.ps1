@@ -29,7 +29,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Toggle security privileges for the current PowerShell session.
+Toggle security privileges for current PowerShell session.
 
 .DESCRIPTION
 Toggle security privileges for the current PowerShell session.
@@ -49,7 +49,8 @@ PS> .\Set-Privilege.ps1 -Privilege SeSecurityPrivilege, SeTakeOwnershipPrivilege
 None. You cannot pipe objects to Set-Privilege.ps1
 
 .OUTPUTS
-None. Set-Privilege.ps1 does not generate any output
+[bool]
+True if toggling all specified security privileges was successful, false if at least one failed
 
 .NOTES
 Author: Pyprohly
@@ -61,14 +62,23 @@ then any such third party programs without license terms may be used under the t
 License attached as Exhibit A
 
 TODO: After runing this script, seems like some variables are removed, See Exit-Text "UnitTest" variable
+TODO: A function to convert NTSTATUS code to message would be great
 
 Following modifications by metablaster, November 2020:
-1. Format code according to project best practices
-2. Added boilerplate code
-3. Make function produce some informational output
-4. Added comment based help
+
+-Format code according to project best practices
+-Added boilerplate code
+-Make function produce some informational output
+-Added comment based help
+
 December 2020:
-5. Rename parameter to standard parameter name
+
+-Rename parameter to standard parameter name
+
+January 2021:
+
+- Handle NTSTATUS return code instead of bool type
+- Add detailed native API links and comments
 
 .LINK
 https://www.powershellgallery.com/packages/Set-Privilege/1.1.2
@@ -131,72 +141,90 @@ function Set-Privilege
 		[switch] $Disable
 	)
 
-	begin
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	# TODO: Why is this set to SilentlyContinue by default?
+	$InformationPreference = "Continue"
 
-		$Signature = '[DllImport("ntdll.dll", EntryPoint = "RtlAdjustPrivilege")]
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	# https://www.pinvoke.net/default.aspx/ntdll/RtlAdjustPrivilege.html
+	$Signature = '[DllImport("ntdll.dll", EntryPoint = "RtlAdjustPrivilege")]
         public static extern IntPtr SetPrivilege(int Privilege, bool bEnablePrivilege, bool IsThreadPrivilege, out bool PreviousValue);
 
         [DllImport("advapi32.dll")]
 		public static extern bool LookupPrivilegeValue(string host, string name, out long pluid);'
-		Add-Type -MemberDefinition $Signature -Namespace AdjPriv -Name Privilege
+	Add-Type -MemberDefinition $Signature -Namespace AdjPriv -Name Privilege
 
-		[scriptblock] $GetPrivilegeConstant = {
-			param ($StringParam)
+	[scriptblock] $GetPrivilegeConstant = {
+		param ($StringParam)
 
-			if ($StringParam -eq "TrustedComputingBase")
-			{
-				return "SeTcbPrivilege"
-			}
-			elseif ($StringParam -match '^Se.*Privilege$')
-			{
-				return $StringParam
-			}
-			else
-			{
-				"Se${StringParam}Privilege"
-			}
-		}
-
-		[string] $StatusMessage = "Set"
-
-		if ($Disable)
+		if ($StringParam -eq "TrustedComputingBase")
 		{
-			$StatusMessage = "Unset"
+			return "SeTcbPrivilege"
+		}
+		elseif ($StringParam -match '^Se.*Privilege$')
+		{
+			return $StringParam
+		}
+		else
+		{
+			"Se${StringParam}Privilege"
 		}
 	}
-	process
-	{
-		foreach ($Name in $Privilege)
-		{
-			if ($PSCmdlet.ShouldProcess("PowerShell process", "$StatusMessage $Name privilege"))
-			{
-				[long] $PrivID = $null
-				# https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluew
-				# If the function succeeds, the function returns nonzero.
-				if ([AdjPriv.Privilege]::LookupPrivilegeValue($null, (& $GetPrivilegeConstant $Name), [ref] $PrivID))
-				{
-					[bool] $PreviousValue = $null
 
-					# https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-privileges-in-c--
-					# https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-adjusttokenprivileges
-					if (![bool][long][AdjPriv.Privilege]::SetPrivilege($PrivID, !$Disable, $false, [ref] $PreviousValue))
-					{
-						Write-Information -Tags "User" -MessageData "INFO: Previous value for $Name was: $PreviousValue"
-						Write-Information -Tags "User" -MessageData "INFO: Privilege $Name successfully $($StatusMessage.ToLower())"
-					}
-					else
-					{
-						Write-Information -Tags "User" -MessageData "INFO: Previous value: $PreviousValue"
-						Write-Error -Category NotSpecified -TargetObject $Name -Message "Privilege '$Name' could not be set"
-					}
+	[string] $StatusMessage = "Set"
+
+	if ($Disable)
+	{
+		$StatusMessage = "Unset"
+	}
+
+	[bool] $Status = $true
+	foreach ($Name in $Privilege)
+	{
+		if ($PSCmdlet.ShouldProcess("$([System.Diagnostics.Process]::GetCurrentProcess().ProcessName) process", "$StatusMessage $Name privilege"))
+		{
+			[long] $PrivID = $null
+			# https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-lookupprivilegevaluew
+			# If the function succeeds, the function returns nonzero.
+			if ([AdjPriv.Privilege]::LookupPrivilegeValue($null, (& $GetPrivilegeConstant $Name), [ref] $PrivID) -ne 0)
+			{
+				[bool] $PreviousValue = $null
+
+				# Enables or disables a privilege from the calling thread or process.
+				# https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-privileges-in-c--
+				# https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-adjusttokenprivileges
+				# Params:
+				# Privilege (In) - Privilege index to change
+				# bEnablePrivilege (In) - If TRUE, then enable the privilege otherwise disable
+				# IsThreadPrivilege (In) - If TRUE, then enable in calling thread, otherwise process
+				# PreviousValue (Out) - Whether privilege was previously enabled or disabled
+				# Returns:
+				# Success: STATUS_SUCCESS 0x00000000
+				# Failure: NTSTATUS code
+				$Result = [long][AdjPriv.Privilege]::SetPrivilege($PrivID, !$Disable, $false, [ref] $PreviousValue)
+				Write-Information -Tags "User" -MessageData "INFO: Previous value for $Name was '$PreviousValue'"
+
+				if ($Result -eq 0)
+				{
+					Write-Information -Tags "User" -MessageData "INFO: Privilege $Name successfully $($StatusMessage.ToLower())"
+					$Status = $Status -and $true
+					continue
 				}
 				else
 				{
-					Write-Error -Category InvalidArgument -TargetObject $Name -Message "Privilege '$Name' could no be resolved"
+					# https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55
+					$NTSTATUS = "0x{0:X}" -f $Result
+					Write-Error -Category SecurityError -TargetObject $Name -Message "Privilege '$Name' could not be set, NTSTATUS = $NTSTATUS"
 				}
 			}
+			else
+			{
+				Write-Error -Category InvalidArgument -TargetObject $Name -Message "Privilege '$Name' could not be resolved"
+			}
 		}
+
+		$Status = $false
 	}
+
+	Write-Output $Status
 }

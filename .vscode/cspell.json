@@ -172,6 +172,7 @@
         "nslookup",
         "ntdll",
         "NTLM",
+        "NTSTATUS",
         "Nuget",
         "omadmclient",
         "onedrive",

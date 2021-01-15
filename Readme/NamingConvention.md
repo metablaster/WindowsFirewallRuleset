@@ -79,7 +79,6 @@ Parameter names and aliases
 - [switch] `Unique`
 - [object] `Value` (specify a value to provide to the cmdlet)
 - [switch] `Create` (to indicate that a resource is created if one does not already exist)
-- [string] `Privilege` (specify the right a cmdlet needs to perform an operation for a particular entity)
 - [switch] `CaseSensitive`
 - [switch] `Binary` (the cmdlet handles binary values)
 - [switch] `Quiet` (the cmdlet suppresses user feedback during its actions)
@@ -110,6 +109,7 @@ Parameter names and aliases
 - `Reference*`
 - `Difference*`
 - [uint32] Seconds, Minutes, Hours...
+- [switch] `Disable` (disable or remove setting)
 
 ## Registry keys
 

@@ -107,12 +107,19 @@ function Resolve-FileSystemPath
 		# Location to report in error messages
 		$TestPath = $Unqualified.Value
 
-		# NOTE: Empty match will be "success", but this won't be the cause for qualifier
-		if (![string]::IsNullOrEmpty($TestPath) -and !(Test-Path -Path $TestPath -IsValid))
+		# NOTE: Empty match may be "success"
+		if (![string]::IsNullOrEmpty($TestPath))
 		{
-			# NOTE: This will pick up qualifiers that are not file system qualifiers such as HKLM:\
-			Write-Error -Category SyntaxError -TargetObject $TestPath -Message "The path syntax is not valid: $TestPath"
-			return
+			if ($TestPath -match "([A-Za-z]{2,}:\\?)")
+			{
+				Write-Error -Category InvalidArgument -TargetObject $TestPath -Message "Unexpected path qualifier: $($Matches[0])"
+				return
+			}
+			elseif ($TestPath -match '[<>:"|]')
+			{
+				Write-Error -Category SyntaxError -TargetObject $TestPath -Message "Specified path contains invalid characters: $Path"
+				return
+			}
 		}
 	} # else dealing root path
 

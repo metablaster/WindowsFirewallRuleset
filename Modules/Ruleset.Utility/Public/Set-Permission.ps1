@@ -132,6 +132,10 @@ None. You cannot pipe objects to Set-Permission
 [bool]
 
 .NOTES
+Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
+PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
+is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
+
 TODO: Manage audit entries
 TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object"
 TODO: Which combination is for "Include inheritable permissions from this object's parent"
@@ -141,9 +145,6 @@ using these in PowerShell is usually awkward.
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
 TODO: switch to ignore errors and continue doing things, useful for recurse
 TODO: A bunch of other security options can be implemented
-TODO: Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
-PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
-is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
 
@@ -264,6 +265,7 @@ function Set-Permission
 		return $false
 	}
 
+	# TODO: This will error if access to the path is denied
 	if (!(Test-Path -LiteralPath $LiteralPath))
 	{
 		# NOTE: [Microsoft.Win32.RegistryKey] Name might not have drive
@@ -331,13 +333,50 @@ function Set-Permission
 		if ($Protected -and $PreserveInheritance)
 		{
 			$Acl.SetAccessRuleProtection($false, $PreserveInheritance)
-			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+			try
+			{
+				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			}
+			catch
+			{
+				try
+				{
+					Write-Warning -Message $_.Exception.Message
+					Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
+					Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+				}
+				catch
+				{
+					Write-Error -ErrorRecord $_
+					return $false
+				}
+			}
+
 			$Acl = Get-Acl -LiteralPath $LiteralPath
 		}
 
 		# Explicit rules were all removed, inherited will now be either inherited, removed or converted to explicit rules.
 		$Acl.SetAccessRuleProtection($Protected, $PreserveInheritance)
-		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+
+		try
+		{
+			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+		}
+		catch
+		{
+			try
+			{
+				Write-Warning -Message $_.Exception.Message
+				Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
+				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			}
+			catch
+			{
+				Write-Error -ErrorRecord $_
+				return $false
+			}
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object: $LiteralPath"
 	}
 
@@ -370,7 +409,25 @@ function Set-Permission
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempting to grant ownership to principal '$User'"
 
 		$Acl.SetOwner($NTAccount)
-		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+		try
+		{
+			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+		}
+		catch
+		{
+			try
+			{
+				Write-Warning -Message $_.Exception.Message
+				Set-Privilege SeSecurityPrivilege, SeTakeOwnershipPrivilege -ErrorAction Stop | Out-Null
+				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			}
+			catch
+			{
+				Write-Error -ErrorRecord $_
+				return $false
+			}
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object: $LiteralPath"
 	}
 	elseif ($User)
@@ -384,7 +441,7 @@ function Set-Permission
 			if (Test-Path -LiteralPath $LiteralPath -PathType Leaf)
 			{
 				# Leaf. An element that does not contain other elements, such as a file or registry entry.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is leaf: '$(Split-Path -Path $LiteralPath -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Specified path is leaf: '$(Split-Path -Path $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule?view=dotnet-plat-ext-3.1
@@ -399,7 +456,7 @@ function Set-Permission
 			else
 			{
 				# Container. An element that contains other elements, such as a directory or registry key.
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input path is container: '$(Split-Path -Path $LiteralPath -Leaf)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Specified path is container: '$(Split-Path -Path $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
 					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Inheritance, $Propagation, $Type)
@@ -424,7 +481,25 @@ function Set-Permission
 			return $false
 		}
 
-		Set-Acl -AclObject $Acl -LiteralPath $LiteralPath
+		try
+		{
+			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+		}
+		catch
+		{
+			try
+			{
+				Write-Warning -Message $_.Exception.Message
+				Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
+				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			}
+			catch
+			{
+				Write-Error -ErrorRecord $_
+				return $false
+			}
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object: $LiteralPath"
 	}
 
@@ -520,7 +595,7 @@ function Set-Permission
 		if ($ChildItems)
 		{
 			# These are manually set or not used here
-			$PSBoundParameters.Remove("Path") | Out-Null
+			$PSBoundParameters.Remove("LiteralPath") | Out-Null
 			$PSBoundParameters.Remove("Recurse") | Out-Null
 
 			$ChildItems | ForEach-Object {

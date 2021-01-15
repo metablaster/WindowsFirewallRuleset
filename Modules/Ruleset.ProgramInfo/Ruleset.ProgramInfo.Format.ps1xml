@@ -19,6 +19,8 @@
 			<!-- Defines how a new group of objects is displayed. -->
 			<!-- This element is used when defining a table, list, wide, or custom control view. -->
 			<GroupBy>
+				<!-- Optional element. Specifies a label that is displayed when a new group is encountered. -->
+				<Label>Domain</Label>
 				<!-- Specifies the object property by which items are to be grouped. -->
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
@@ -84,8 +86,10 @@
 				<TypeName>Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
+				<Label>Domain</Label>
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
+			<!-- Optional element. Defines a list format for the view. -->
 			<ListControl>
 				<!-- Required element. Provides the definitions of the list view. -->
 				<!-- Provides the definitions of the list view. The list view must specify one or more definitions. -->
@@ -122,6 +126,7 @@
 				<TypeName>Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
+				<Label>Domain</Label>
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a wide (single value) list format for the view. -->

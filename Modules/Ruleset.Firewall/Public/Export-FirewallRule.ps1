@@ -342,7 +342,7 @@ function Export-FirewallRule
 		return
 	}
 
-	# NOTE: (Split-Path -Extension $FileName) does not work in Windows PowerShell
+	# NOTE: Split-Path -Extension is not available in Windows PowerShell
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
 
 	if ($JSON)

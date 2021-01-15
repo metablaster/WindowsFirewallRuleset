@@ -78,7 +78,7 @@ New-Variable -Name TestPath -Option Constant -Value "$ProjectRoot\Tes?\Te*tD[rs]
 # Bad leaf name test
 #
 
-Start-Test "'wildcard leaf'"
+Start-Test "'wildcard leaf'" -Expected "FAIL"
 Reset-TestDrive
 
 [string] $FileInfo = "$TestDrive\badf[iz]le.txt"
@@ -95,8 +95,7 @@ if ($Result)
 #
 
 Start-Test "'Existing directory'"
-[string] $DirectoryInfo = $TestPath
-# New-Item -ItemType Directory -Path $TestDrive | Out-Null
+[string] $DirectoryInfo = $TestDrive
 $Result = Resolve-FileSystemPath $DirectoryInfo -Create
 
 if ($Result)
@@ -107,7 +106,7 @@ if ($Result)
 
 Start-Test "'New directory'"
 
-$DirectoryInfo = "$TestPath\TestDir1"
+$DirectoryInfo = "$TestDrive\TestDir1"
 $Result = Resolve-FileSystemPath $DirectoryInfo -Create
 
 if ($Result)
@@ -143,7 +142,7 @@ if ($Result)
 Start-Test "'Existing file'"
 # Reset-TestDrive
 
-$FileInfo = "$TestPath\infofile1.txt"
+$FileInfo = "$TestDrive\infofile1.txt"
 New-Item -ItemType File -Path $TestDrive\infofile1.txt | Out-Null
 $Result = Resolve-FileSystemPath $FileInfo -File -Create
 
@@ -156,7 +155,7 @@ if ($Result)
 Start-Test "'Missing file'"
 Reset-TestDrive
 
-$FileInfo = "$TestPath\infofile2.txt"
+$FileInfo = "$TestDrive\infofile2.txt"
 $Result = Resolve-FileSystemPath $FileInfo -File -Create
 
 if ($Result)
@@ -165,10 +164,10 @@ if ($Result)
 	Test-Output $Result -Command Resolve-FileSystemPath
 }
 
-Start-Test "'Missing parent directory'"
+Start-Test "'Missing parent directory'" -Expected "FAIL"
 Reset-TestDrive
 
-$FileInfo = "$TestPath\TestDir2\infofile3.txt"
+$FileInfo = "$TestDrive\TestDir2\infofile3.txt"
 $Result = Resolve-FileSystemPath $FileInfo -File -Create
 
 if ($Result)
@@ -181,7 +180,7 @@ if ($Result)
 # Not filesystem path
 #
 
-Start-Test "'Not file system qualifier'"
+Start-Test "'Not file system qualifier'" -Expected "FAIL"
 $DirectoryInfo = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
@@ -191,7 +190,7 @@ if ($Result)
 	Test-Output $Result -Command Resolve-FileSystemPath
 }
 
-Start-Test "'Bad qualifier'"
+Start-Test "'Bad qualifier'" -Expected "FAIL"
 $DirectoryInfo = "BADDRIVE:\SOFTWARE\Microsoft\Clipboard"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
@@ -205,8 +204,8 @@ if ($Result)
 # Bad path syntax
 #
 
-Start-Test "'Bad path'"
-$DirectoryInfo = "$DefaultTestDrive\HKLM:\SOFTWARE\Microsoft\Clipboard"
+Start-Test "'Bad path'" -Expected "FAIL"
+$DirectoryInfo = "$TestDrive\HKLM:\SOFTWARE\Microsoft\Clipboard"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
 if ($Result)
@@ -219,15 +218,15 @@ if ($Result)
 # Bad wildcard pattern
 #
 
-Start-Test "'Multiple existent paths'"
+Start-Test "'Multiple existent paths'" -Expected "FAIL"
 Reset-TestDrive
 
-$DirectoryInfo = "$DefaultTestDrive\TestDir3"
+$DirectoryInfo = "$TestDrive\TestDir3"
 New-Item -ItemType Directory -Path $DirectoryInfo | Out-Null
-$DirectoryInfo = "$DefaultTestDrive\TestDir4"
+$DirectoryInfo = "$TestDrive\TestDir4"
 New-Item -ItemType Directory -Path $DirectoryInfo | Out-Null
 
-$DirectoryInfo = "$DefaultTestDrive\*stDi*"
+$DirectoryInfo = "$TestDrive\*stDi*"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
 if ($Result)
@@ -236,7 +235,7 @@ if ($Result)
 	Test-Output $Result -Command Resolve-FileSystemPath
 }
 
-Start-Test "'Multiple parent paths'"
+Start-Test "'Multiple parent paths'" -Expected "FAIL"
 $DirectoryInfo = "$TestDrive\*e?tDi*\SubDirectory\NewDir"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 
@@ -246,7 +245,7 @@ if ($Result)
 	Test-Output $Result -Command Resolve-FileSystemPath
 }
 
-Start-Test "'No match'"
+Start-Test "'No match'" -Expected "FAIL"
 $DirectoryInfo = "NewDir"
 $Result = Resolve-FileSystemPath $DirectoryInfo
 

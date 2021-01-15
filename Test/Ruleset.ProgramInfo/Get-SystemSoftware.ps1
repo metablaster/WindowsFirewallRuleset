@@ -68,6 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Get-SystemSoftware"
 
 $SystemPrograms = Get-SystemSoftware
+$SystemPrograms
 
 Start-Test "Name"
 $SystemPrograms | Sort-Object -Property Name | Format-Wide -Property Name -Column 1

@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,28 +28,29 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-TargetComputer
+Unit test for Set-Privilege
 
 .DESCRIPTION
-Test correctness of Test-TargetComputer function
+Test correctness of Set-Privilege function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Test-TargetComputer.ps1
+PS> .\Set-Privilege.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-TargetComputer.ps1
+None. You cannot pipe objects to Set-Privilege.ps1
 
 .OUTPUTS
-None. Test-TargetComputer.ps1 does not generate any output
+None. Set-Privilege.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -63,29 +64,29 @@ param (
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-Enter-Test "Test-TargetComputer"
+Enter-Test "Set-Privilege" -Private
 
-if ($PSVersionTable.PSEdition -eq "Core")
+if ($Force -or $PSCmdlet.ShouldContinue("$([System.Diagnostics.Process]::GetCurrentProcess().ProcessName) process", "Adjust process privilege"))
 {
-	Start-Test "-Retry 2 -Timeout 1"
-	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
+	$PSDefaultParameterValues.Add("Set-Privilege:Confirm", $false)
+
+	Start-Test "SeSecurityPrivilege"
+	$Result = Set-Privilege "SeSecurityPrivilege"
+	$Result
+
+	Test-Output $Result -Command Set-Privilege
+
+	Start-Test "SeSecurityPrivilege -Disable"
+	Set-Privilege "SeSecurityPrivilege" -Disable
+
+	Start-Test "SeSecurityPrivilege, SeTakeOwnershipPrivilege"
+	Set-Privilege -Privilege SeSecurityPrivilege, SeTakeOwnershipPrivilege
+
+	Start-Test "SeSecurityPrivilege, SeTakeOwnershipPrivilege -Disable"
+	Set-Privilege -Privilege SeSecurityPrivilege, SeTakeOwnershipPrivilege -Disable
 }
-else
-{
-	Start-Test "-Retry 2"
-	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2
-}
-
-Start-Test "-Retry" -Expected "FAIL"
-Test-TargetComputer "FAILURE-COMPUTER" -Retry 2
-
-Start-Test "default"
-$Result = Test-TargetComputer ([System.Environment]::MachineName)
-$Result
-
-Test-Output $Result -Command Test-TargetComputer
 
 Update-Log
 Exit-Test

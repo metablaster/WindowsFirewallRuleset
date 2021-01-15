@@ -219,7 +219,8 @@ function Set-Shortcut
 			$Extension = ".lnk"
 		}
 
-		if ([string]::IsNullOrEmpty($(Split-Path -Path $Name -Extension)))
+		# NOTE: Split-Path -Extension is not available in Windows PowerShell
+		if ([string]::IsNullOrEmpty([System.IO.Path]::GetExtension($Name)))
 		{
 			$Name += $Extension
 			Write-Warning -Message "Shortcut extension implicitly set to *$Extension"

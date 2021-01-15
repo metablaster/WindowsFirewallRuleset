@@ -94,8 +94,7 @@ SOFTWARE.
 	# RequiredModules = @()
 
 	# Assemblies that must be loaded prior to importing this module
-	# NOTE: Works without specifying, AccountManagement required by Test-Credential.ps1
-	# RequiredAssemblies = @("System.DirectoryServices.AccountManagement")
+	RequiredAssemblies = @("System.DirectoryServices.AccountManagement")
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	# ScriptsToProcess = @()

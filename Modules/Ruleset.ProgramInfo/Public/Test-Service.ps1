@@ -96,8 +96,24 @@ function Test-Service
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Testing service '$($Service.DisplayName)'"
 
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				$BinaryPath = $Service.BinaryPathName
+			}
+			else
+			{
+				# TODO: This should probably be updated for remote computer
+				$BinaryPath = Get-CimInstance Win32_Service -Filter "Name = '$($Service.Name)'" |
+				Select-Object -ExpandProperty PathName
+			}
+
+			if ([string]::IsNullOrEmpty($BinaryPath))
+			{
+				return $false
+			}
+
 			# regex out ex. "C:\WINDOWS\system32\svchost.exe -k netsvcs -p"
-			$Executable = [regex]::Match($Service.BinaryPathName.TrimStart('"'), ".+(?=\.exe)")
+			$Executable = [regex]::Match($BinaryPath.TrimStart('"'), ".+(?=\.exe)")
 
 			if ($Executable.Success)
 			{

@@ -59,9 +59,10 @@ None. You cannot pipe objects to Get-SystemApps
 [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] In PowerShell Core
 
 .NOTES
-TODO: query remote computer not implemented
-TODO: multiple computers
-TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
+TODO: Query remote computer not implemented
+TODO: Multiple computers
+TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
+TODO: Format.ps1xml not applied in Windows PowerShell
 #>
 function Get-SystemApps
 {

@@ -140,6 +140,12 @@ function Reset-TestDrive
 
 					break
 				}
+				catch [System.UnauthorizedAccessException]
+				{
+					# TODO: Maybe Set-Permission here?
+					Write-Error -ErrorRecord $_
+					return
+				}
 				catch
 				{
 					if (--$Retry -gt 0)
@@ -153,7 +159,7 @@ function Reset-TestDrive
 					else
 					{
 						Write-Error -ErrorRecord $_
-						break
+						return
 					}
 				}
 			}

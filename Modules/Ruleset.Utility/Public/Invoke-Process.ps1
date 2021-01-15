@@ -419,6 +419,7 @@ function Invoke-Process
 		}
 		catch # [System.InvalidOperationException]
 		{
+			# TODO: Will be triggered in Windows PowerShell but not in Core (run unit test to repro)
 			Write-Error -Category NotSpecified -TargetObject $Process `
 				-Message "There is no process associated with this Process object"
 		}

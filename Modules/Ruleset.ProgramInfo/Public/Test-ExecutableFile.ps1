@@ -112,7 +112,8 @@ function Test-ExecutableFile
 			Write-Warning -Message "Specified file path contains parent directory notation: $ExpandedPath"
 		}
 
-		[string] $Extension = Split-Path -Path $Executable -Extension
+		# NOTE: Split-Path -Extension is not available in Windows PowerShell
+		[string] $Extension = [System.IO.Path]::GetExtension($Executable)
 
 		if ([string]::IsNullOrEmpty($Extension))
 		{

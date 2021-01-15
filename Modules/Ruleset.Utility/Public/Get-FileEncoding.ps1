@@ -70,6 +70,7 @@ None. You cannot pipe objects to Get-FileEncoding
 TODO: Encoding parameter should also accept code page or encoding name, Encoding class has
 static functions to convert.
 TODO: Parameter to specify output as [System.Text.Encoding] instead of default [string]
+TODO: utf8 file reported as ascii in Windows PowerShell
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md

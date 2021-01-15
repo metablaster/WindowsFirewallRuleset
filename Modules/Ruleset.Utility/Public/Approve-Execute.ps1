@@ -99,6 +99,7 @@ None. You cannot pipe objects to Approve-Execute
 TODO: Help messages and question message needs better description to fit more scenarios
 TODO: Implement accepting arbitrary amount of choices, ex. [ChoiceDescription[]] parameter
 TODO: Implement timeout to accept default choice, ex. Host.UI.RawUI.KeyAvailable
+TODO: Standard parameter for help message should be -Prompt
 #>
 function Approve-Execute
 {
