@@ -35,6 +35,8 @@
 
 ## About Windows Firewall Ruleset
 
+This project consists of 2 major parts, firewall rules and firewall deployment framework.
+
 - Windows firewall rules sorted into individual PowerShell scripts according to:
 
   - Rule group
@@ -55,8 +57,8 @@
   - broadcast traffic
   - multicast traffic
 
-- In addition to firewall rules you will find a number of PowerShell modules, scripts and
-functions used to gather environment info relevant to build specialized firewall such as:
+- Firewall deployment framework consists of a number of PowerShell modules, scripts and documentation
+used to gather environment information relevant to build specialized firewall such as:
 
   - Computers on network
   - Installed programs
@@ -65,43 +67,42 @@ functions used to gather environment info relevant to build specialized firewall
   - Network configuration
   - Firewall management
   - Quick analysis of packet trace and audit logs
-  - Various firewall, system and network utility functions
+  - Various firewall, system, troubleshooting and network utility functions
 
 - Meaning this project is a good base to easily extend your firewall and include more rules and
 functionalities.
 - Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
 and a bunch of useful documentation.
-- You can choose which rules you want, and apply only those or apply them all with
-master script to your firewall.
-- All of the rules are loaded into GPO (Local Group Policy),
-giving you full power over the default Windows firewall.
+- You can choose which rules you want, and apply only those or apply them all with master script
+to your firewall.
+- All of the rules are loaded into GPO (Local Group Policy), giving you full power over the default
+Windows firewall.
 
 [Table of Contents](#table-of-contents)
 
 ## Core benefits of this firewall project
 
-1. System administrators would usually try to evade setting up firewall because detailed firewall
-configuration is very time consuming process, takes a lot of troubleshooting, changes require
+1. System administrators would usually try to evade setting up detailed firewall because detailed
+firewall configuration is time consuming process, takes a lot of troubleshooting, changes require
 testing and security auditing and it only gets worse if you want to deploy firewall to hundreds or
 thousands of remote computers, for example not all computers might have same software or restriction
 requirements.
 
 2. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
-(Local group policy), meaning system settings changes or random programs which install rules as
-part of their installation process will have no effect on firewall unless you
-explicitly make an exception.
+(Local Group Policy), meaning system settings changes or random programs which install rules as
+part of their installation process will have no effect on firewall unless you explicitly make an exception.
 
 3. Unlike default (aka predefined) Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports, network interfaces, specific executables,
 services etc. all of which is learned automatically from target system.
 
-4. Unlike in usual scenario, you will know which rules have no effect or are redundant
+4. Unlike in usual scenario, you will know which rules no longer have an effect or are redundant
 due to ex. uninstalled program, a missing system service which no longer exists, renamed
-executable after Windows update or are redundant/invalid for what ever other reason.
+executable after Windows update and similar reasons.
 
 5. Updating, filtering or sorting rules and attributes such as ports, addresses and similar is much
-easier since these rules are in scripts, you can use editor tools such as `CTRL + F`, regex or
-multicursor to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond
+easier since these rules are in scripts, you can use editor tools such as regex, multicursor or
+`CTRL + F` to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond
 all pain or not possible due to interface limitations.
 
 6. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
@@ -109,7 +110,10 @@ in default Windows firewall this is not possible unless you maintain rules for e
 program or service, thanks to this collection of rules, setting default outbound to block
 requires very little or no additional work.
 
-7. A good portion of code is dedicated to provide cross platform and automated solution to build and
+7. Rules based on programs and services will have their involved executable file checked for digital
+signature, rule is not created or loaded into firewall if this verification fails. (can be forced)
+
+8. A good portion of code is dedicated to provide cross platform and automated solution to build and
 define firewall specialized for specific target system and users, minimizing the need to do something
 manually thus saving you much valuable administration time.
 
@@ -121,10 +125,7 @@ manually thus saving you much valuable administration time.
 
 This project `Windows Firewall Ruleset` is licensed under `MIT` license.
 
-License files and and Copyright notices are maintained **"per file"**.
-
-3rd party and sublicensed code is located either inside their own folders (with individual license file)\
-or inside folders called `External` for organizational purposes.
+License and Copyright notices are maintained **"per file"**.
 
 [Table of Contents](#table-of-contents)
 
@@ -153,11 +154,11 @@ Following table lists currently tested operating systems
 ### Requirements details
 
 - All operating systems 10.0 (Major 10, Minor 0) and above are supported,
-but only those editions listed in the table are actively tested.\
+but only those editions listed in the table above are actively tested.\
 Build column indicates tested releases, however only latest builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
-- PowerShell "Core" is not built into Windows, you will need to install it separately\
-or use [Windows PowerShell](Readme/WindowsPowerShell.md) which is already installed.
+- PowerShell "Core" is not built into Windows, you will need to install it separately or use
+[Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
 - .NET Framework version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5)
@@ -165,12 +166,13 @@ Windows 10 ships with min .NET 4.6 (which includes .NET 4.5)
 to easily switch between branches or to contribute code.
 - VS Code is preferred and recommended editor to navigate project and edit scripts for your
 own needs or contribution.
-- If you get VSCode, you'll also need PowerShell extension for code navigation and
-PowerShell specific features.
+- If you get VSCode, you'll also need PowerShell extension for code navigation and PowerShell
+language features.
 - To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing
 experience may behave really odd due to other project settings.
-- Hardware requirements are min. 8GB of memory and SSD drive to work on project, otherwise to just
-apply rules to your personal firewall less than that should work just fine!
+- There are no hardware requirements but if you plan to write code recommendation is min. 8GB of
+memory and SSD drive to comfortably work on project, otherwise to just apply rules to your personal
+firewall less than that will work just fine.
 
 [Table of Contents](#table-of-contents)
 
@@ -184,8 +186,8 @@ need adjustment, full functionality for 32 bit system is work in progress.\
 For now you can load rules on 32 bit system just fine with the exception of few rules probably not
 relevant at all for your configuration.
 
-For information on how to make use of this firewall on older Windows systems such as\
-Windows 7 or Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
+For information on how to make use of this firewall on older Windows systems such as Windows 7 or
+Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -226,13 +228,12 @@ contains rules will be significantly slower (depends on number of existing rules
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
 want to fix some problem, most warnings can be safely ignored but errors should be resolved.
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
-script again, see [FAQ.md](Readme/FAQ.md)
-for information on why this may happen.
+script again, see [FAQ.md](Readme/FAQ.md) for more information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,
 by running `Scripts\Unblock-Project.ps1`\
-Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO spam questions
-will still be present in that case.
+Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO
+questions will still be present in that case.
 - If you download code to location that is under "Ransomware protection" (in Windows Defender),
 make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
 otherwise doing anything may be blocked.\
@@ -321,7 +322,7 @@ downloaded from internet:
 Most paths are auto-searched and variables are updated, otherwise you get warning and description
 on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
-It is recommended to close down all other programs before running master script in the next step
+It is recommended to close down all other programs before running master script in the next step.
 
 12. Back to PowerShell console and run:
 
@@ -339,8 +340,8 @@ it will take at least 15 minutes of your attention.
 then re-run that specific script once again later.
 
 15. When done you might want to adjust some of the rules in Local Group Policy,
-not all rules are enabled by default or you might want to toggle default Allow/Block behavior.
-Rules which don't exist for specific programs need to be made additionally.
+not all rules are enabled by default or you might want to toggle default Allow/Block behavior.\
+Rules may not cover all programs installed on your system, in which case missing rules need to be made.
 
 16. Now go ahead and test your internet connection (ex. with a browser or some other program),
 If you're unable to connect to internet after applying these rules you have several options:
@@ -362,11 +363,11 @@ startup)
 
 ### Manage loaded rules
 
-There are 2 mothods to manage your rules:
+There are 2 mothods to manage GPO rules:
 
-1. Using Local Group Policy, this method gives you limited freedom on what you can do with project
-rules, such as disabling them, changing some attributes or adding new rules. For more information see:
-[Manage GPO Firewall](Readme/ManageGPOFirewall.md)
+1. Using Local Group Policy, this method gives you limited freedom on what you can do with rules from
+this repository, such as disabling them, changing some attributes or adding new rules.\
+For more information see: [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 
 2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
 rules with no restriction or add new ones.
@@ -394,19 +395,18 @@ For more information about GPO see: [Configure security policy settings][configu
 
 If you want to apply only specific rules there are 2 ways to do this:
 
-1. Execute `Scripts\Deploy-Firewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose `No`
-and hit enter to skip current ruleset.
+1. Execute `Scripts\Deploy-Firewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose
+`No` and hit enter to skip current ruleset.
 
-2. With PowerShell navigate (`cd`) to directory containing ruleset script you want and execute
+2. In PowerShell console navigate `cd` to directory containing ruleset script you want and execute
 individual script.
 
 You might want to run `Scripts\Complete-Firewall.ps1` afterwards to apply default firewall behavior if
 it's not already set, or you can do it manually in GPO but with limited power.
-"limited power" means `Scripts\Complete-Firewall.ps1` configures some firewall parameters which can't be
-adjusted in firewall GUI.
+"limited power" means `Scripts\Complete-Firewall.ps1` configures some firewall parameters which
+can't be adjusted in firewall GUI.
 
-In all 3 cases the script will delete all rules that match ruleset display group, before loading
-rules into GPO.
+In both cases all rules that match ruleset display group will be deleted before loading rules into GPO.
 
 [Table of Contents](#table-of-contents)
 
@@ -443,7 +443,7 @@ unlike method from point 1 you can customize your export in almost any way you w
 If you want to import rules, importing by using GPO is same as for export, and to import with
 PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previous export file.
 
-To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public\External`,
+To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
 which is where you'll find description on how to use export\import module functions.
 
 **NOTE:** Method 2 is experimental and really slow, you're advised to verify results.
@@ -455,7 +455,7 @@ which is where you'll find description on how to use export\import module functi
 Just like any other software on your computer, this firewall will go out of date as well,
 become obsolete, and may no longer function properly.
 
-This repository consists of 2 branches, `master` (stable) and `develop` (possibly unstable).\
+This repository consists of 2 branches, `master` (stable) and `develop` (beta, possibly unstable).\
 The "develop" branch is where all updates directly go, so it's work in progress,
 unlike "master" branch which is updated from develop once in a while and not before all scripts
 are thoroughly tested on fresh installed systems, which is what makes master brach stable.
@@ -562,14 +562,14 @@ instead.
 Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
 Just make sure you abide to notices below:
 
-1. If possible provide some documentation or links (preferably official) for your rules or changes
-so that it can be easy to verify these rules don't contain mistakes, ex. for ICMP rules you would
-provide a link to [IANA][iana] with relevant reference document.
+1. If possible provide some documentation or links (preferably official) for your rules or design
+changes so that it can be easy to verify these rules or changes don't contain mistakes.\
+ex. for ICMP rules you would provide a link to [IANA][iana] with relevant reference document.
 
-2. To suggest new rules, report problems, or various rule and code improvements, please open new issue
+2. To report problems, suggest new rules or various rule and code improvements, please open new issue
 here on github and provide details as outlined in "New issue".
 
-3. To contribute your own rules, it is also desired that each rule contains good description of it's
+3. To contribute your own rules, it is desired that each rule contains good description of it's
 purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
 and easily conclude whether to enable/disable rule or allow/block network traffic.
 
@@ -578,7 +578,7 @@ IP addresses, ports, system user, interface type and other relevant information.
 For example just saying: allow TCP outbound port 2891 for my new game without telling where, why
 or which user account to allow, or no explanation what this is supposed to allow or block is not acceptable.
 
-If you lack some of the information, no problem but please try to do some research first.
+If you lack some of the information, no problem but please try to collect some information first.
 
 [Table of Contents](#table-of-contents)
 
@@ -588,8 +588,8 @@ If you would like to customize how scripts run, such as force loading rules and 
 visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for this.
 
 If you would like to customize project code or add more firewall rules to suit your private or corporate
-interests then first step is to set up development environment and learn about project best practices
-all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
+interests then first step is to set up development environment and learn about best practices used by
+this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
 
@@ -603,6 +603,9 @@ general information on how to troubleshoot firewall and network problems, or gat
 It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time.
 
+If you have random questions that don't fit anywhere else or you just want to say something then
+please open new discussion here on this site under "Discussions"
+
 [Table of Contents](#table-of-contents)
 
 ## The future
@@ -611,7 +614,7 @@ Following features are desired and might be available at some point in the futur
 
 1. Remote firewall administration
 
-   - Deploying firewall configuration to remote computers on domain or home networks
+   - Deploying firewall configuration to one or multiple remote computers on domain or home networks
 
 2. Comprehensive firewall rulesets for Windows Server editions
 

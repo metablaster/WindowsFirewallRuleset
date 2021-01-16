@@ -1,7 +1,7 @@
 
 # How to contribute
 
-You can use this document not only to see how to contribute code but also to prepare yourself to\
+Use this document to see how to contribute code or to prepare yourself to\
 extend this firewall for your personal or corporate needs.
 
 Here is a list of most important things to keep in mind.
@@ -14,12 +14,19 @@ Here is a list of most important things to keep in mind.
   - [Environment setup](#environment-setup)
   - [Code style](#code-style)
     - [Automatic formatting](#automatic-formatting)
+    - [Development Guidelines](#development-guidelines)
+    - [Naming convention](#naming-convention)
     - [Script desing](#script-desing)
     - [Rule design](#rule-design)
     - [Module design](#module-design)
-    - [Development Guidelines](#development-guidelines)
   - [Static analysis](#static-analysis)
   - [Documentation and comments](#documentation-and-comments)
+    - [In scripts (code comments)](#in-scripts-code-comments)
+    - [In rules (rule description)](#in-rules-rule-description)
+    - [In command line prompts (current execution help)](#in-command-line-prompts-current-execution-help)
+    - [In comment based help (module and script main documentation source)](#in-comment-based-help-module-and-script-main-documentation-source)
+    - [In module Help folder (module online documentation)](#in-module-help-folder-module-online-documentation)
+    - [In Readme folder (general project documentation)](#in-readme-folder-general-project-documentation)
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
   - [Commits and pull requests](#commits-and-pull-requests)
@@ -74,7 +81,7 @@ specific to Visual Studio Code, aka. "Workspace", these settings include:
 repository root folder with VSCode
 3. Debugging and code analysis settings which you can use to debug code
 4. Settings for recommended extensions, ex. markdown and script formatting
-5. Spelling settings such as random good words which would be detected as misspelled.
+5. Spelling settings such as random good words which would be otherwise detected as misspelled.
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any directory see:
@@ -84,11 +91,11 @@ Recommended workspace extensions are as follows:
 
 1. [TODO tree][extension todo-tree]
 
-    Required to easily navigate TODO, HACK and NOTE comments located in source files.
+    Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
 
 2. [PowerShell][extension powershell]
 
-    Should be obvious, syntax highlighting, intellisense, formatting etc.
+    PowerShell syntax highlighting, intellisense, formatting and other language support.
 
 3. [Markdownlint][extension markdownlint]
 
@@ -100,12 +107,12 @@ Recommended workspace extensions are as follows:
 
 5. [Highlight Dodgy Characters][extension gremlins]
 
-    Helps to detect bad chars aka. gremlins, which cause issues such as unable to save file
+    Helps to detect gremlins (bad chars), which cause issues such as unable to save file
     in UTF-8 format
 
 6. [Bookmarks][extension bookmarks]
 
-    Helps you to bookmark various places in project to easily navigate back and forth.
+    Helps you to bookmark various places in code to easily navigate various choke points.
 
 7. [Rainbow CSV][extension csv]
 
@@ -118,17 +125,17 @@ Recommended workspace extensions are as follows:
 
 9. [XML Tools][extension xml]
 
-    Useful module xml files navigation
+    Useful for navigation of xml files, can also help to detect issues with xml
 
 10. [Log File Highlighter][extension logs]
 
-    Custom syntax highlighting for log files, useful for firewall logs as an alternative of mTail.
-    This extension complements "Auto Scroll"
+    Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
+    This extension complements "Auto Scroll" extension below.
 
 11. [Auto Scroll][extension scroll]
 
-    Automatic scrolling of log files, useful to tail firewall logs.
-    This extension complements "Log File Highlighter"
+    Automatic scrolling of log files, useful to tail firewall logs.\
+    This extension complements "Log File Highlighter" extension above.
 
 12. [Filter Line][extension filterline]
 
@@ -138,7 +145,7 @@ Following 2 extensions are optional and will not be automatically offerred for i
 
 - [GitLens][extension gitlens]
 
-    It provides so many great features for git inside VSCode it can't be explained in one line
+    It provides so many great git features inside VSCode it can't be explained in one line
 
 - [GitHub Pull Requests and Issues][pull requests]
 
@@ -161,7 +168,7 @@ In addition verify following variables are set to desired user
 2. TestAdmin
 3. TestUser
 
-Note that some of these may be auto adjusted after setting `Develop` to `$true`\
+Note that some of these may be auto adjusted after setting `Develop` variable to `$true`\
 Then restart PowerShell and run `.\Deploy-Firewall.ps1` to deploy firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
 
@@ -174,7 +181,7 @@ If you don't have this environment setup, you'll have to do this some other way 
 code editor and the rest of environment.
 
 It is recommended to also enable specific development features in Windows which you can find in:\
-`Settings -> Update & Security -> For Developers`, here under `File Explorer` apply all settings.
+`Settings -> Update & Security -> For Developers`, there under `File Explorer` apply all settings.
 
 [Table of Contents](#table-of-contents)
 
@@ -191,21 +198,28 @@ rule, workspace settings are configured to show rulers inside code editor.
 If you use some other code editor you should configure it according to these rules which are found
 in `.vscode`, `Config` and repository root directory.
 
+[Table of Contents](#table-of-contents)
+
+### Development Guidelines
+
+Following link explains the must know style guidelines to write functions and commandlets:\
+[Cmdlet Development Guidelines][develop cmdlets]
+
+Following link describes general rules about PowerShell code style if you like reading,
+however keep in mind, it's not completely in line with this repository best practices:\
+[The PowerShell Style Guide][powershell style]
+
+[Table of Contents](#table-of-contents)
+
+### Naming convention
+
 Not everything is automatically formatted, in short:\
-Use **PascalCase** for variables, types, symbols etc; **lowercase** for language keywords,
-for more info about type casing run:
+Use **PascalCase** for variables, types, symbols etc. and **lowercase** for language keywords,
+for more information about type casing run:
 
 ```powershell
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
-
-[Table of Contents](#table-of-contents)
-
-### Script desing
-
-All of the scripts should use the same code style and order of code,
-without writing a long list of preferred code style\
-it should be enough to take a look at the existing scripts and figure it out right away.
 
 Use following command to see allowed verbs to name your functions
 
@@ -217,9 +231,9 @@ Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
 Get-Verb | Select-Object Verb, Group | Sort-Object Verb
 ```
 
-For function nouns prefer 1 word or maximum 2 (distinguished by first uppercase letter) for example:
+For function nouns prefer 1 word or maximum 3 (distinguished by first uppercase letter) for example:
 
-- `Sort-Data`
+- `Invoke-Process`
 - `Get-SqlServer`
 
 Sometimes this is not possible, for example `Get-SqlServer` function may collide with existing
@@ -227,57 +241,68 @@ PowerShell commandlets, in this case it's better to use 3 words rather than nami
 something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too although
 such exceptions should be rare.
 
-Noun words must be singular not plural, regardless if input or output is an array of objects.
+Noun words must be singular not plural, regardless if input or output is an array of objects.\
+For more information about naming see [Naming Convention](/Readme/NamingConvention.md)
 
-The order of code in scripts is ordered into "sections" which depends on purpose,\
-in the following way and may be different if needed for what ever reason:
+[Table of Contents](#table-of-contents)
+
+### Script desing
+
+All of the scripts should use the same code style and order of code, without writing a long list
+of preferred code style it should be enough to take a look at the existing scripts and figure it
+out right away.
+
+Code in scripts is ordered into "sections" which depends script and purpose, in the following way
+and may be different if needed for what ever reason:
 
 1. License notice
 2. Comment based help
-3. Initialization
-4. Imports (ex. modules and scripts)
-5. User input
-6. Local variables (ex. default installation directories)
-7. Removal of exiting rules / Unit test startup etc..
-8. Rules / functions / code etc..
+3. Initialization (ex. imports of modules and scripts)
+4. User input
+5. Script local variables (ex. default installation directories)
+6. Removal of exiting rules / Unit test startup etc..
+7. Rules / functions / code etc..
 
 [Table of Contents](#table-of-contents)
 
 ### Rule design
 
-Each firewall rule uses exactly the same order of parameters split into exactly the same number of lines.\
+Each firewall rule uses the same order of parameters split into the same number of lines.\
 This is so that when you need to change or search for something or do some regex magic then it's
 easy to see what is where, easy to use advanced search/replace or multicursor tricks.
 
 Performing regex operations on firewall rules in combination with multicursor feature can be
 done in a matter of minutes, without this strict rule design it would take an entry day and might
-result in bugs or security issues!
+result in bugs or random issues.
 
 [Table of Contents](#table-of-contents)
 
 ### Module design
 
-Repository contains few custom modules of various type grouped by relevance on
-what the module is supposed to expose.
+Repository contains few custom modules of various purpose, module functionality is grouped by
+relevance on what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules.\
-Existing modules should be extended and new written by using Powershell only if possible.
+If needed existing modules can be extended or new written without introducing dependencies or new
+languages.
 
 Only if this is not enough we can try to look for 3rd party modules which could be
 easily customized without too much change or learning curve.
 
-3rd party code/scripts are dot sourced into existing modules instead of copy pasted into module
-directly, this must be so, to easily see to which file does license/Copyright apply in full.
+3rd party module scripts or functions should be included into existing modules as scripts instead
+of copy pasted into existing code directly, this must be so, to easily see to which file does
+license/Copyright apply.
 
-Exception to this rule are complete modules which should retain their directory domain within repository.
+Exception to this rule are complete modules (larger portion of code) which should retain their
+directory domain within repository.
 
-Rules for code in modules is different, most important is to keep each function in it's own script,
-separated into Public/Private folders, this is required for 2 valid reasons:
+Most important is to keep each function in it's own script, separated into Public/Private folders,
+this is required for 2 valid reasons:
 
 1. To perform tests on private functions without exporting them from module
-2. For organizational purposes, to make it easy to maintain and navigate modules.
+2. For organizational purposes, to make it easy to maintain and navigate module functions.
 
-Module naming convention which are part of this project is simple:
+Module naming convention is simple:
 
 `Ruleset.ModulePurpose`
 
@@ -286,19 +311,7 @@ For example:
 1. `Ruleset.ComputerInfo`
 2. `Ruleset.Utility`
 
-3rd party modules must not follow this naming convention, that's what word "Ruleset" means here,
-to distinguish project modules from 3rd party code.
-
 [Table of Contents](#table-of-contents)
-
-### Development Guidelines
-
-Following link explains must know style guidelines to write functions and commandlets:\
-[Cmdlet Development Guidelines][develop cmdlets]
-
-Following link describes general rules about PowerShell code style if you like reading,
-however keep in mind, it's not completely in line with this repository best practices:\
-[The PowerShell Style Guide][powershell style]
 
 ## Static analysis
 
@@ -312,11 +325,13 @@ Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSetting
 Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath
 ```
 
-`PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.
+`Config\PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.
 
 If you get an error such as:\
 `Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
 then try again and keep repeating until OK, or cleanup repository and restart VSCode.
+
+There is also a script `Test\PSScriptAnalyzer.ps1` which you can run to invoke code analysis.
 
 [Table of Contents](#table-of-contents)
 
@@ -324,65 +339,69 @@ then try again and keep repeating until OK, or cleanup repository and restart VS
 
 Documentation and comments reside in 6 places as follows:
 
-1. In scripts (code comments)
+### In scripts (code comments)
 
-    Sections of code should be documented as shown in existing scripts.\
-    To comment on things that need to be done add `TODO:` + comment,
-    similarly for important notes add `NOTE:` + comment.
+Sections of code should be documented as shown in existing scripts.\
+To comment on things that need to be done add `TODO:` + comment,
+similarly for important notes add `NOTE:` + comment.
 
-    For things which are hard to resolve or require huge changes add `HACK:` + comment, and
-    optionally some links such as github issues that may help to resolve problem in the future.
+For things which are hard to resolve or require huge changes add `HACK:` + comment, and
+optionally some links such as github issues that may help to resolve problem in the future.
 
-    For any generic code comments you might want to add, use line comments (preferred) and
-    block comments only if comment spans 10 or more lines.
+For any generic code comments you might want to add, use line comments (preferred) and
+block comments only if comment spans 10 or more lines.
 
-2. In rules (rule description)
+### In rules (rule description)
 
-    It is important that each firewall rule contains good description of it's purpose,
-    when the user clicks on rule in firewall GUI he/she wants to see what this rule is about and
-    easily conclude whether to enable/disable rule or allow/block network traffic.
-
-3. In command line prompts (current execution help)
-
-    Every script that's being executed either directly or called by other script will not run
-    until the user accepts the prompt to run script.
-
-    Each of these prompts have `?` which the user can type to get more information about prompt choices.
-
-4. In comment based help (module and script main documentation source)
-
-    Functions that are part of a module or solo scripts must have comment based help.\
-    Purpose of comment based help is for the end user to learn what the codes does or to be able to
-    run `Get-Help` on target function or script.
-
-    For examples, and comment based syntax see:
-    - [About Comment-based Help][about comment based help]
-    - [Examples of Comment-Based Help][comment based help examples]
-
-    You must avoid following comment based content to avoid errors while generating online help files:
-    - .LINK entries must contains only one link and nothing else
-    - Do not use multiple dashes in comments such as `------`
-    - Use spaces instead of tabs and do not indent comments
-    - For anything else keep in mind that any markdown syntax in comments will be formatted in the
-    resulting markdown file as markdown not as plain text, which may give unexpected results.
-
-5. In module Help folder (module online documentation)
-
-    The `Scripts` folder contains `Update-HelpContent.ps1` which when run will scan comment based help and\
-    generate online documentation for `Get-Help -Online` and help content for `Update-Help` on\
-    target module.
-
-    Generated module documentation is in markdown format, meaning the 3rd purpose is that project
-    users and repository visitors can read module documentation on github site with `Get-Help -Online`
-
-6. In Readme folder (general project documentation)
-
-    The `Readme` folder in repository root contains random documentation that covers wide range of
-    aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
+It is important that each firewall rule contains good description of it's purpose,
+when the user clicks on rule in firewall GUI he/she wants to see what this rule is about and
+easily conclude whether to enable/disable rule or allow/block network traffic.
 
 In general regarding firewall rules, provide documentation and official reference for your rules
 so that it can be easy to verify that these rules don't contain mistakes, for example, for ICMP
 rules you would provide a link to [IANA][iana] with relevant reference document.
+
+### In command line prompts (current execution help)
+
+Every script that's being executed either directly or called by other script will not run
+until the user accepts the prompt to run script.\
+Similar prompts may appear at various points in code during execution.
+
+Each of these prompts have `?` which the user can type to get more information about prompt choices.
+
+### In comment based help (module and script main documentation source)
+
+Functions that are part of a module or solo scripts must have comment based help.\
+Purpose of comment based help is for the end user or developer to learn what the codes does or
+to be able to run `Get-Help` on target function or script.
+
+For examples, and comment based syntax see:
+
+- [About Comment-based Help][about comment based help]
+- [Examples of Comment-Based Help][comment based help examples]
+
+You must avoid following comment based content to avoid errors while generating online help files:
+
+- `.LINK` entries must contains only one link and nothing else
+- Do not use multiple dashes in comments such as `------`
+- Use spaces instead of tabs and do not indent comments
+- For anything else keep in mind that any markdown syntax in comments will be formatted in the
+resulting markdown file as markdown not as plain text, which may give unexpected results.
+
+### In module Help folder (module online documentation)
+
+The `Scripts` folder contains `Update-HelpContent.ps1` which when run will scan comment based
+help and generate online documentation for `Get-Help -Online` and help content for `Update-Help`
+on target module.
+
+Generated module documentation is in markdown format, meaning the 3rd purpose is that project
+users and repository visitors can read module documentation on github site either manually or
+with `Get-Help -Online`
+
+### In Readme folder (general project documentation)
+
+The `Readme` folder in repository root contains random documentation that covers wide range of
+aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
 
 Remember, documenting code and features is as important as writing it!
 
@@ -413,13 +432,13 @@ more specialized setup.
 
 There is a module called `Ruleset.Test`, which is customized for this project.\
 Tests must pass both Desktop and Core editions of PowerShell on multiple Windows editions to be
-successful
+successful.
 
-A hint to quickly run any function from any project module is to run following command in ex.
-integrated terminal in VSCode (assuming PowerShell prompt is at project root):
+A hint to quickly run any function from any module in this repository is to run following command
+in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
 
 ```powershell
-Config\ProjectSettings
+.\Modules\Import-All.ps1
 ```
 
 This will add all repository `Modules` to current session module path
@@ -428,23 +447,23 @@ This will add all repository `Modules` to current session module path
 
 ## Commits and pull requests
 
-Push small commits that solve or improve single or specific problem,
-to reduce merge conflicts and to be able to do `git revert` for specific stuff.
+Push commits that solve or improve single or specific problem, to reduce merge conflicts and
+to be able to do `git revert` easily if needed.
 
-Do not wait too much to push large commits which are then not clear enough in terms
+Do not wait too much to push changes which only contributes to less clear intentions in terms
 of what issue is supposed to be resolved or which component was improved.
 
 If you see something unrelated that could be resolved, put `TODO` comment, don't fix it.\
 Then once you commit, open `todo-tree` to review what to do next.
 
-**Please avoid making huge changes to existing code** without first attaching valid reasons,
+**Avoid making huge changes to existing code** without first attaching valid reasons,
 new code and additions is not problem though.
 
 [Table of Contents](#table-of-contents)
 
 ## Portability and other systems
 
-At the moment the focus is on Windows Firewall, if you want to extend code base to other firewalls
+At the moment focus is on Windows Firewall, if you want to extend code base to other firewalls
 go ahead, it surely won't be easy!
 
 If you decide to do so it is mandatory that these code additions are done on separate branch, which
