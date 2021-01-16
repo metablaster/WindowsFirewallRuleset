@@ -291,7 +291,9 @@
 
 			# Full names of types or type accelerators to ignore compatibility of in scripts
 			# default = @()
-			IgnoreTypes = @()
+			IgnoreTypes = @(
+				"System.DirectoryServices.AccountManagement.PrincipalContext"
+			)
 		}
 	}
 }

@@ -308,7 +308,8 @@ VSCode workspace includes static analysis settings file, so all you have to do i
 root directory and invoke analyzer as follows:
 
 ```powershell
-Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
+Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1 |
+Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath
 ```
 
 `PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.

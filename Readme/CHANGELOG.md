@@ -9,7 +9,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of contents](#table-of-contents)
-  - [v0.9.1 (develop branch)](#v091-develop-branch)
+  - [v0.10.0 (develop branch)](#v0100-develop-branch)
   - [v0.9.0 (current release)](#v090-current-release)
   - [v0.8.0](#v080)
   - [v0.7.0](#v070)
@@ -20,7 +20,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.9.1 (develop branch)
+## v0.10.0 (develop branch)
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
 
@@ -58,6 +58,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Get-PropertyType.ps1` utility script to get .NET types of properties
   - `Out-DataTable` utility function to convert object to data table
   - `Get-NetworkStatistics.ps1` utility script to run netstat remotely and parse data into object
+  - `Initialize-Development.ps1` utility script to quickly set up git, gpg and development environment
 
 - Tests
 

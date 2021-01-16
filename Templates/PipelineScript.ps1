@@ -27,9 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+# TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
 <#PSScriptInfo
-TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
-.VERSION 0.9.1
+
+.VERSION 0.10.0
 
 .GUID 66e38822-834d-4a90-b9c6-9e600a472a0a
 

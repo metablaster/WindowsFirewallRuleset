@@ -43,7 +43,7 @@ SOFTWARE.
 	RootModule = "Ruleset.ProgramInfo.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.9.1"
+	ModuleVersion = "0.10.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(
@@ -138,10 +138,10 @@ SOFTWARE.
 		"Test-FileSystemPath"
 		"Test-Service"
 		# TODO: Following exports only for unit testing
-		"Edit-Table"
-		"Initialize-Table"
-		"Show-Table"
-		"Update-Table"
+		# "Edit-Table"
+		# "Initialize-Table"
+		# "Show-Table"
+		# "Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -152,7 +152,7 @@ SOFTWARE.
 	# Wildcard characters are permitted, by default, all variables ("*") are exported.
 	VariablesToExport = @(
 		# TODO: Following exports only for unit testing
-		"InstallTable"
+		# "InstallTable"
 	)
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not

@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#PSScriptInfo
 
-.VERSION 0.9.1
+.VERSION 0.10.0
 
 .GUID d7809432-c822-4699-9244-97c8da8d64bf
 
@@ -64,6 +64,7 @@ None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Rule deployment should probably be separated into new script
+TODO: Deployment is not fully automated because of prompts to provide path to missing program
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

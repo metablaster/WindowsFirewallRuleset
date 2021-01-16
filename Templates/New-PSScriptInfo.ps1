@@ -9,7 +9,7 @@ $Params = @{
 	Guid = "66e38822-834d-4a90-b9c6-9e600a472a0a"
 
 	# Specifies the version of the script
-	Version = "0.9.1"
+	Version = "0.10.0"
 
 	# Specifies the script author
 	Author = "metablaster zebal@protonmail.com"

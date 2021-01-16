@@ -90,7 +90,6 @@ Todo's in this file are categorized into following sections:
     - Registry drilling for some programs are complex and specific, such as for NVIDIA or OneDrive,
     in these and similar cases we should return installation table which
     would be used within rule scripts to get individual paths for target programs.
-    - Change bool parameters to switch where possible
     - Finish pipeline support, use begin/process/end blocks to make functions work for pipeline as
     needed, revisit parameter arguments and aliases for this purpose
     - Some function variables such as `ComputerName` take an array of values, make sure this functionality
@@ -266,6 +265,7 @@ Todo's in this file are categorized into following sections:
     - Need a function to generate a list of files included in module and to perform comparison with
     manifest `FileList` entries
     - Use Module-Qualified Cmdlet Names to avoid name colision
+    - Add SHA signature to scripts and modules
 
 2. Scripts
 
@@ -347,6 +347,7 @@ Todo's in this file are categorized into following sections:
     using [formats][about format] for custom objects
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have dubious names
+    - Change bool parameters to switch where possible
 
 2. Scripts
 
