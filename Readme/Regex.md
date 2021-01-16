@@ -1,5 +1,5 @@
 
-# Regex expressions for quick project wide actions
+# Regex expressions for quick reference
 
 A list of regex expressions which are used to:
 
@@ -9,11 +9,11 @@ A list of regex expressions which are used to:
 For example once your regex hits, you would use `CTRL + SHIFT + L` to enter [Multi cursor][multicursor]\
 mode and manipulate all regex matches however you like.
 
-Reserved regex characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
+Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
 
 ## Table of contents
 
-- [Regex expressions for quick project wide actions](#regex-expressions-for-quick-project-wide-actions)
+- [Regex expressions for quick reference](#regex-expressions-for-quick-reference)
   - [Table of contents](#table-of-contents)
   - [Filterline](#filterline)
     - [Programs](#programs)
@@ -337,7 +337,10 @@ Relaxed version for Windows:
 
 The first character of the name must not be numeric.
 A variable name may include any of the following characters:\
+
+```none
 A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
+```
 
 ### Email validation
 

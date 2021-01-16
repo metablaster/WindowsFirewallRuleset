@@ -1,8 +1,8 @@
 
 # How to contribute
 
-Use this document to see how to contribute code or to prepare yourself to\
-extend this firewall for your personal or corporate needs.
+Use this document to see how to contribute code or to prepare yourself to extend this firewall
+for your personal or corporate needs.
 
 Here is a list of most important things to keep in mind.
 
@@ -26,7 +26,7 @@ Here is a list of most important things to keep in mind.
     - [In command line prompts (current execution help)](#in-command-line-prompts-current-execution-help)
     - [In comment based help (module and script main documentation source)](#in-comment-based-help-module-and-script-main-documentation-source)
     - [In module Help folder (module online documentation)](#in-module-help-folder-module-online-documentation)
-    - [In Readme folder (general project documentation)](#in-readme-folder-general-project-documentation)
+    - [In readme folder (general project documentation)](#in-readme-folder-general-project-documentation)
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
   - [Commits and pull requests](#commits-and-pull-requests)
@@ -40,7 +40,7 @@ Here is a list of most important things to keep in mind.
 It's recommended to read up to date version of this document which is located on "develop" branch
 [here][contributing develop]
 
-2 pages below explain general/starting guidelines regarding open source:\
+Following 2 pages below explain general/starting guidelines regarding open source:\
 [How to contribute to open source][contribute to open source]\
 [Open Source Contribution Etiquette][open source etiquette]
 
@@ -231,7 +231,7 @@ Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
 Get-Verb | Select-Object Verb, Group | Sort-Object Verb
 ```
 
-For function nouns prefer 1 word or maximum 3 (distinguished by first uppercase letter) for example:
+For function nouns prefer 1 word or maximum 3 (distinguished by uppercase letters) for example:
 
 - `Invoke-Process`
 - `Get-SqlServer`
@@ -241,7 +241,7 @@ PowerShell commandlets, in this case it's better to use 3 words rather than nami
 something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too although
 such exceptions should be rare.
 
-Noun words must be singular not plural, regardless if input or output is an array of objects.\
+Noun word must be singular not plural, regardless if input or output is an array of objects.\
 For more information about naming see [Naming Convention](/Readme/NamingConvention.md)
 
 [Table of Contents](#table-of-contents)
@@ -349,7 +349,7 @@ For things which are hard to resolve or require huge changes add `HACK:` + comme
 optionally some links such as github issues that may help to resolve problem in the future.
 
 For any generic code comments you might want to add, use line comments (preferred) and
-block comments only if comment spans 10 or more lines.
+block comments only if comment spans 5 or more lines.
 
 ### In rules (rule description)
 
@@ -398,7 +398,7 @@ Generated module documentation is in markdown format, meaning the 3rd purpose is
 users and repository visitors can read module documentation on github site either manually or
 with `Get-Help -Online`
 
-### In Readme folder (general project documentation)
+### In readme folder (general project documentation)
 
 The `Readme` folder in repository root contains random documentation that covers wide range of
 aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
@@ -427,8 +427,8 @@ unrelated to functions it should be a separate test.
 All tests reside in `Test` directory which contains subdirectories for each module,
 take a look there for examples.
 
-Pester is preferred method to write tests, however some test cases needs other ways around, or
-more specialized setup.
+Pester is preferred method to write tests, however some test cases need other ways around, or
+more customized setup.
 
 There is a module called `Ruleset.Test`, which is customized for this project.\
 Tests must pass both Desktop and Core editions of PowerShell on multiple Windows editions to be
@@ -453,7 +453,7 @@ to be able to do `git revert` easily if needed.
 Do not wait too much to push changes which only contributes to less clear intentions in terms
 of what issue is supposed to be resolved or which component was improved.
 
-If you see something unrelated that could be resolved, put `TODO` comment, don't fix it.\
+If you see something unrelated that could be resolved or improved, put `TODO` comment, don't fix it.\
 Then once you commit, open `todo-tree` to review what to do next.
 
 **Avoid making huge changes to existing code** without first attaching valid reasons,
@@ -478,7 +478,7 @@ The plan is to expand this project to manage [nftables][nftables] firewall on li
 Inside `Templates` folder there are few template scripts as a starting point.\
 Copy them to target location, update starting code and you're ready to start working.
 
-These templates are fully aligned to rule design, code and formatting style of this project.
+These templates are always up to date for current rule design, code and formatting style of this project.
 
 [Table of Contents](#table-of-contents)
 
@@ -488,12 +488,12 @@ See [Directory Structure](Readme/DirectoryStructure.md)
 
 ## Where to start
 
-Please keep in mind that large amount of existing code is not in line with all the guidelines described
+Please keep in mind that a portion of existing code is not in line with all the guidelines described
 here, significant portion of the code was written before this `CONTRIBUTING.md` file even existed.
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-I recommend you start at looking into [TODO](Readme/TODO.md) list and also use `todo-tree`
+I recommend you to take a look into [TODO](Readme/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
 
 [Table of Contents](#table-of-contents)

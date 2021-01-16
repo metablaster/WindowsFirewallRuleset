@@ -18,8 +18,8 @@
     - [Note](#note)
     - [Quick start](#quick-start)
   - [Firewall management](#firewall-management)
-    - [Manage loaded rules](#manage-loaded-rules)
-    - [Applying individual rulesets](#applying-individual-rulesets)
+    - [Manage GPO rules](#manage-gpo-rules)
+    - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
   - [Checking for updates](#checking-for-updates)
@@ -41,14 +41,14 @@ This project consists of 2 major parts, firewall rules and firewall deployment f
 
   - Rule group
   - Traffic direction (ex. inbound, outbound or IPSec)
-  - Software type
+  - Software type and publisher
   - IP version (IPv4 / IPv6)
 
 - Such as for example:
 
   - ICMP traffic
   - Browser rules
-  - Rules for Windows system
+  - Built in OS software
   - Store apps
   - Windows services
   - Multiplayer Games
@@ -69,14 +69,12 @@ used to gather environment information relevant to build specialized firewall su
   - Quick analysis of packet trace and audit logs
   - Various firewall, system, troubleshooting and network utility functions
 
-- Meaning this project is a good base to easily extend your firewall and include more rules and
+- Meaning this project is a good base to easily extend your firewall to include more rules and
 functionalities.
 - Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
 and a bunch of useful documentation.
-- You can choose which rules you want, and apply only those or apply them all with master script
+- You can choose which rules you want, and deploy only those or deploy them all with master script
 to your firewall.
-- All of the rules are loaded into GPO (Local Group Policy), giving you full power over the default
-Windows firewall.
 
 [Table of Contents](#table-of-contents)
 
@@ -105,13 +103,14 @@ easier since these rules are in scripts, you can use editor tools such as regex,
 `CTRL + F` to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond
 all pain or not possible due to interface limitations.
 
-6. Default outbound is "block" unless there is a rule to explicitly allow network traffic,
+6. Default outbound is "block" unless there is a rule to allow network traffic,
 in default Windows firewall this is not possible unless you maintain rules for every possible
 program or service, thanks to this collection of rules, setting default outbound to block
 requires very little or no additional work.
 
 7. Rules based on programs and services will have their involved executable file checked for digital
-signature, rule is not created or loaded into firewall if this verification fails. (can be forced)
+signature, for security reasons rule is not created or loaded into firewall if this verification
+fails. (can be forced)
 
 8. A good portion of code is dedicated to provide cross platform and automated solution to build and
 define firewall specialized for specific target system and users, minimizing the need to do something
@@ -123,7 +122,7 @@ manually thus saving you much valuable administration time.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 
-This project `Windows Firewall Ruleset` is licensed under `MIT` license.
+This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
 License and Copyright notices are maintained **"per file"**.
 
@@ -155,7 +154,7 @@ Following table lists currently tested operating systems
 
 - All operating systems 10.0 (Major 10, Minor 0) and above are supported,
 but only those editions listed in the table above are actively tested.\
-Build column indicates tested releases, however only latest builds continue to be tested.\
+"Build" column indicates tested releases, however only latest builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately or use
 [Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
@@ -171,7 +170,7 @@ language features.
 - To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing
 experience may behave really odd due to other project settings.
 - There are no hardware requirements but if you plan to write code recommendation is min. 8GB of
-memory and SSD drive to comfortably work on project, otherwise to just apply rules to your personal
+memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your personal
 firewall less than that will work just fine.
 
 [Table of Contents](#table-of-contents)
@@ -207,7 +206,7 @@ as rules from this ruleset, however **this does not apply to** `Scripts\Reset-Fi
 will clear GPO rules completely and leave only those in control panel.
 - If you want to be 100% sure please export your GPO rules as explained in [Export\Import rules](#exportimport-rules)
 - You will be asked which rules to load, to minimize internet connectivity trouble you should
-apply at least all generic networking and OS related rules such as "CoreNetworking", "ICMP",
+deploy at least all generic networking and OS related rules such as "CoreNetworking", "ICMP",
 "WindowsSystem", "WindowsServices", "Multicast" including all rules for which you have programs installed
 on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4 network.\
 It will be easy to delete what you don't need in GPO, rather than later digging through code finding
@@ -252,10 +251,10 @@ needed to update firewall for system changes that may happen at any time.
 ### Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
-or just download released zip file by clicking on "Releases" here on this site, and then for latest
+or just download released zip file from [Releases][release], and then for latest
 release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
-2. Extract downloaded archive somewhere, these steps assume you've extracted the zip (project root directory)
+1. Extract downloaded archive somewhere, these steps assume you've extracted the zip (project root directory)
 into `C:\` root drive directly.
 3. If you would like to use Windows PowerShell instead of PowerShell Core see:\
 [How to open Windows PowerShell](Readme/WindowsPowerShell.md)
@@ -344,7 +343,7 @@ not all rules are enabled by default or you might want to toggle default Allow/B
 Rules may not cover all programs installed on your system, in which case missing rules need to be made.
 
 16. Now go ahead and test your internet connection (ex. with a browser or some other program),
-If you're unable to connect to internet after applying these rules you have several options:
+If you're unable to connect to internet after deploying these rules you have several options:
 
     - Temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
     - Troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
@@ -361,7 +360,7 @@ startup)
 
 ## Firewall management
 
-### Manage loaded rules
+### Manage GPO rules
 
 There are 2 mothods to manage GPO rules:
 
@@ -391,9 +390,9 @@ For more information about GPO see: [Configure security policy settings][configu
 
 [Table of Contents](#table-of-contents)
 
-### Applying individual rulesets
+### Deploying individual rulesets
 
-If you want to apply only specific rules there are 2 ways to do this:
+If you want to deploy only specific rules there are 2 ways to do this:
 
 1. Execute `Scripts\Deploy-Firewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose
 `No` and hit enter to skip current ruleset.
@@ -468,8 +467,7 @@ There are at least 4 methods to be up to date with this firewall, each with it's
 ### Manual release download
 
 This method requires you to simply download released scripts which can be found in
-[Releases](https://github.com/metablaster/WindowsFirewallRuleset/releases), this is always from "master"
-branch
+[Releases][release], this is always from "master" branch
 
 ### Manual beta download
 
@@ -604,7 +602,7 @@ It might answer some of your questions, for example [Monitoring Firewall](Readme
 explains how to monitor firewall in real time.
 
 If you have random questions that don't fit anywhere else or you just want to say something then
-please open new discussion here on this site under "Discussions"
+please open new discussion in [Discussions][discrussions]
 
 [Table of Contents](#table-of-contents)
 
@@ -648,3 +646,5 @@ Following features are desired and might be available at some point in the futur
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [github desktop]: https://desktop.github.com "Download GitHub Desktop"
 [github desktop docs]: https://docs.github.com/en/free-pro-team@latest/desktop "Visit GitHub Desktop docs"
+[release]: https://github.com/metablaster/WindowsFirewallRuleset/releases
+[discrussions]: https://github.com/metablaster/WindowsFirewallRuleset/discussions
