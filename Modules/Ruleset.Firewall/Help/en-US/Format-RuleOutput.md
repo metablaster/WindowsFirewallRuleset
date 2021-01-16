@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Format firewall rule output for display
+Format output of the Net-NewFirewallRule commandlet
 
 ## SYNTAX
 

@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Invoke a ScriptBlock that runs in the compatibility runspace.
+Invoke a ScriptBlock that runs in the compatibility runspace
 
 ## SYNTAX
 
@@ -159,6 +159,7 @@ Following modifications by metablaster November 2020:
 January 2021:
 
 - Replace cast to \[void\] with Out-Null
+- Added parameter debugging stream
 
 ## RELATED LINKS
 

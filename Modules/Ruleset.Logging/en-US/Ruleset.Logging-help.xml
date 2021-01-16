@@ -20,9 +20,9 @@
         <maml:name>Update-Log</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
-            <maml:para>If specified writes logs to this location</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, writes logs to this location</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -32,9 +32,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -43,9 +43,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -57,9 +57,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
-          <maml:para>If specified writes logs to this location</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, writes logs to this location</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -69,9 +69,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -81,9 +81,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -148,7 +148,7 @@ PS&gt; Update-Log</dev:code>
       <command:verb>Write</command:verb>
       <command:noun>LogFile</command:noun>
       <maml:description>
-        <maml:para>Write to log file</maml:para>
+        <maml:para>Write a message or hash table to log file</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -162,9 +162,9 @@ PS&gt; Update-Log</dev:code>
         <maml:name>Write-LogFile</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Message</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>One or more messages from which to construct "InformationRecord" and append to log file</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -174,9 +174,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Destination directory</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -186,9 +186,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Tags</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>One or more optional message tags</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -198,9 +198,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>LogName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>{{ Fill LogName Description }}</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -210,9 +210,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Raw</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the message is written directly to log file without any formatting, by default InformationRecord object is created from the message and written to log file.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -221,9 +221,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Overwrite</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the log file is overwritten if it exists.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -235,9 +235,9 @@ PS&gt; Update-Log</dev:code>
         <maml:name>Write-LogFile</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hash</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Hash table or dictionary which to write to log file</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
           <dev:type>
             <maml:name>System.Object</maml:name>
@@ -247,9 +247,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Destination directory</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -259,9 +259,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>LogName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>{{ Fill LogName Description }}</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -271,9 +271,9 @@ PS&gt; Update-Log</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Overwrite</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the log file is overwritten if it exists.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -285,9 +285,9 @@ PS&gt; Update-Log</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Message</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>One or more messages from which to construct "InformationRecord" and append to log file</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -297,9 +297,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hash</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Hash table or dictionary which to write to log file</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
         <dev:type>
           <maml:name>System.Object</maml:name>
@@ -309,9 +309,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Destination directory</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -321,9 +321,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Tags</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>One or more optional message tags</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -333,9 +333,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>LogName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>{{ Fill LogName Description }}</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -345,9 +345,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Raw</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, the message is written directly to log file without any formatting, by default InformationRecord object is created from the message and written to log file.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -357,9 +357,9 @@ PS&gt; Update-Log</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Overwrite</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, the log file is overwritten if it exists.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>

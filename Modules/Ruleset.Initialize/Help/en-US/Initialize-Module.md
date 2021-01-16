@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Update or install specified out of date module
+Update or install specified modules
 
 ## SYNTAX
 

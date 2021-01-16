@@ -13,7 +13,6 @@ Contains following project scripts which are not part of modules
 | Restart-Network.ps1    | Restart or reset network without the need for reboot               |
 | Restore-Firewall.ps1   | Import all exported firewall rules into GPO policy store           |
 | Unblock-Project.ps1    | Unblock all files in repository (called by "Deploy-Firewall.ps1")  |
-| Update-HelpContent.ps1 | Generate new or update existing help files for all project modules |
 
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
@@ -24,7 +23,9 @@ Contains following project scripts which are not part of modules
 | Get-NetworkStatistics.ps1   | Display current TCP/IP connections for local or remote system        |
 | Get-ParameterAlias.ps1      | Gets parameter aliases of functions, commandlets, scripts or aliases |
 | Get-PropertyType.ps1        | Get .NET types for properties of one or more objects                 |
+| Initialize-Development.ps1  | Initialize development environment                                   |
 | Select-HiddenProperty.ps1   | Get a list of hidden properties for specified firewall rule group    |
+| Update-HelpContent.ps1      | Generate new or update existing help files for all project modules   |
 
 | Experimental scripts  | Description                                                          |
 | --------------------- | -------------------------------------------------------------------- |

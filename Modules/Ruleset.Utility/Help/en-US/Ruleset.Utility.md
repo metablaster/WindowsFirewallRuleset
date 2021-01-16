@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
-Help Version: 0.9.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.10.0
+Help Version: 0.10.0
 Locale: en-US
 ---
 
@@ -16,7 +16,7 @@ PowerShell utility module for Windows Firewall Ruleset project
 
 ### [Approve-Execute](Approve-Execute.md)
 
-Prompt user to continue running script
+Customized user prompt to continue
 
 ### [Build-ServiceList](Build-ServiceList.md)
 
@@ -52,7 +52,7 @@ Creates a DataTable from an object
 
 ### [Resolve-FileSystemPath](Resolve-FileSystemPath.md)
 
-Resolve file system wildcard of a directory or file location
+Resolve wildcard pattern of a directory or file location
 
 ### [Select-EnvironmentVariable](Select-EnvironmentVariable.md)
 

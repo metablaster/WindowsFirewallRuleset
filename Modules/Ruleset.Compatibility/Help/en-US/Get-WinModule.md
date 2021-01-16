@@ -21,7 +21,6 @@ Get-WinModule [[-Name] <String[]>] [-Domain <String>] [-ConfigurationName <Strin
 ## DESCRIPTION
 
 Get a list of the available modules from the compatibility session.
-
 By default, when executing, the current compatibility session is used,
 or, in the case where there is no existing session,
 a new default session will be created.
@@ -145,6 +144,10 @@ Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+January 2021:
+
+- Added parameter debugging stream
 
 ## RELATED LINKS
 

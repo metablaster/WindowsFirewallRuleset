@@ -28,6 +28,9 @@ EXAMPLES
 	Select-IPInterface
 	Select IP configuration for specified network adapters
 
+	Test-DnsName
+	Validate DNS domain name syntax
+
 	Test-NetBiosName
 	Validate NETBIOS name syntax
 

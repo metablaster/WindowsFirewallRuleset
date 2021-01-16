@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Imports firewall rules from a CSV or JSON file.
+Imports firewall rules from a CSV or JSON file
 
 ## SYNTAX
 

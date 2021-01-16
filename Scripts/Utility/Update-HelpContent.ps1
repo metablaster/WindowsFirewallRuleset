@@ -79,11 +79,12 @@ See CONTRIBUTING.md in "documentation" section for examples of comment based hel
 produce errors while generating online help and how to avoid them.
 Help version is automatically updated according to $ProjectVersion variable.
 For best results run first time with -Force switch and second time without -Force switch.
+Recommended to generate help files with Core edition because of file encoding.
 TODO: some markdown files will end up with additional blank line at the end of document for each
 update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
 help files
-TODO: Module page and about_ topic needs to be manually edited, currently we get template only
+TODO: about_ topic needs to be manually edited, currently we get template only
 To document private functions they must be exported first
 TODO: the "Module Name:" entry in help files (any maybe even "external help file:" entry),
 if not set to correct module name the command will fail
@@ -117,7 +118,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Initialize-Project -Strict
 
 if ($null -eq $Encoding)

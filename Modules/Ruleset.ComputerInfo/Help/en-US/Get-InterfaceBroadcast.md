@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get broadcast address
+Get interface broadcast address
 
 ## SYNTAX
 
@@ -110,7 +110,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [IPAddress] Broadcast addresses
+### [string] Broadcast addresses
 
 ## NOTES
 

@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get all firewall rules with LocalUser value
+Get all firewall rules with or without LocalUser value
 
 ## SYNTAX
 
@@ -35,7 +35,7 @@ Find-RulePrincipal -Empty
 
 ### -Empty
 
-If specified returns rules with no local user value
+If specified, returns rules with no local user value
 Otherwise only rules with local user are returned
 
 ```yaml

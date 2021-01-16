@@ -96,6 +96,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: A parameter to restore previous value may be useful
 
 ## RELATED LINKS

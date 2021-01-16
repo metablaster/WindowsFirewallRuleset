@@ -82,7 +82,7 @@ Accept wildcard characters: False
 
 ### -Loose
 
-if specified perform "loose" comparison:
+If specified, perform "loose" comparison:
 Does not attempt to resolve input paths, and respects wildcards all of which happens
 after input paths have been expanded off environment variables
 
@@ -100,7 +100,7 @@ Accept wildcard characters: False
 
 ### -CaseSensitive
 
-If specified performs case sensitive comparison
+If specified, performs case sensitive comparison
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

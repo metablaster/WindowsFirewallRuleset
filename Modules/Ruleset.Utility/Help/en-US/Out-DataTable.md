@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Creates a DataTable for an object
+Creates a DataTable from an object
 
 ## SYNTAX
 
@@ -97,7 +97,7 @@ v1.4  - Chad Miller - Corrected issue with DBNull
 v1.5  - Chad Miller - Updated example
 v1.6  - Chad Miller - Added column datatype logic with default to string
 v1.7  - Chad Miller - Fixed issue with IsArray
-v1.8  - ramblingcookiemonster - Removed if($Value) logic. 
+v1.8  - ramblingcookiemonster - Removed if($Value) logic.
 This would not catch empty strings, zero, $false and other non-null items
 							  - Added perhaps pointless error handling
 
@@ -111,4 +111,3 @@ Convert inner function to scriptblock
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Out-DataTable.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Out-DataTable.md)
 
 [https://github.com/RamblingCookieMonster/PowerShell](https://github.com/RamblingCookieMonster/PowerShell)
-

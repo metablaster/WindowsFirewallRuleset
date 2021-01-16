@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get installed NET Frameworks
+Get installed .NET Frameworks
 
 ## SYNTAX
 

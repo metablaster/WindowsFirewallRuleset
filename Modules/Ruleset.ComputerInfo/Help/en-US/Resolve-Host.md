@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Resolve host or IP
+Resolve host to IP or an IP to host
 
 ## SYNTAX
 
@@ -116,7 +116,7 @@ Accept wildcard characters: False
 
 ### -AddressFamily
 
-Obtain IP address specified IP version
+Obtain IP address for specified IP version
 
 ```yaml
 Type: System.String

@@ -14,7 +14,7 @@ Validate UNC path syntax
 ## SYNTAX
 
 ```powershell
-Test-UNC [-Name] <String[]> [-Strict] [-Quiet] [<CommonParameters>]
+Test-UNC [-LiteralPath] <String[]> [-Strict] [-Quiet] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,7 +60,7 @@ False
 
 ## PARAMETERS
 
-### -Name
+### -LiteralPath
 
 Universal Naming Convention path
 
@@ -95,7 +95,7 @@ Accept wildcard characters: False
 
 ### -Quiet
 
-if specified path syntax errors are not shown, only true or false is returned.
+If specified, path syntax errors are not shown, only true or false is returned.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -138,4 +138,3 @@ resource and the type of resource being accessed.
 [https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
 
 [https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dfsc/149a3039-98ce-491a-9268-2f5ddef08192](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dfsc/149a3039-98ce-491a-9268-2f5ddef08192)
-

@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get list of install locations for executables and executable names
+Get a list of install locations for executable files
 
 ## SYNTAX
 

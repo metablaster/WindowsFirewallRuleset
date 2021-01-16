@@ -9,37 +9,47 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Verify file is correctly encoded
+Verify file is encoded as expected
 
 ## SYNTAX
 
+### Path (Default)
+
 ```powershell
-Confirm-FileEncoding [-Path] <FileInfo[]> [[-Encoding] <String[]>] [-Binary] [-WhatIf] [-Confirm]
+Confirm-FileEncoding [-Path] <FileInfo[]> [-Encoding <String[]>] [-Binary] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### Literal
+
+```powershell
+Confirm-FileEncoding -LiteralPath <FileInfo[]> [-Encoding <String[]>] [-Binary] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Confirm-FileEncoding verifies target file is encoded as expected.
-Wrong encoding may return bad data resulting is unexpected behavior
+Unexpected encoding may give bad data resulting is unexpected behavior
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Confirm-FileEncoding C:\SomeFile.txt utf16
+Confirm-FileEncoding C:\SomeFile.txt -Encoding utf16
 ```
 
 ## PARAMETERS
 
 ### -Path
 
-Path to the file which to check
+Path to the file which is to be checked.
+Wildcard characters are permitted.
 
 ```yaml
 Type: System.IO.FileInfo[]
-Parameter Sets: (All)
+Parameter Sets: Path
 Aliases: FilePath
 
 Required: True
@@ -49,9 +59,51 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: True
 ```
 
+### -LiteralPath
+
+Specifies a path to one or more file locations.
+The value of LiteralPath is used exactly as it is typed.
+No characters are interpreted as wildcards
+
+```yaml
+Type: System.IO.FileInfo[]
+Parameter Sets: Literal
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Encoding
 
-Expected encoding
+Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii",
+for PS Desktop the default is "utf8" or "ascii"
+
+The acceptable values for this parameter are as follows:
+
+ascii: Encoding for the ASCII (7-bit) character set.
+bigendianunicode: UTF-16 format using the big-endian byte order.
+bigendianutf32: UTF-32 format using the big-endian byte order.
+oem: The default encoding for MS-DOS and console programs.
+unicode: UTF-16 format using the little-endian byte order.
+utf7: UTF-7 format.
+utf8: UTF-8 format.
+utf32: UTF-32 format.
+
+Following values are valid for Core edition only:
+
+utf8BOM: UTF-8 format with Byte Order Mark (BOM)
+utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)
+
+Following values are valid For Desktop edition only:
+
+byte: A sequence of bytes.
+default: Encoding that corresponds to the system's active code page (usually ANSI).
+string: Same as Unicode.
+unknown: Same as Unicode.
 
 ```yaml
 Type: System.String[]
@@ -59,15 +111,16 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: @("utf-8", "us-ascii")
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Binary
 
-If specified, handles binary files as well.
+If specified, binary files are left alone.
+By default binary files are detected as having wrong encoding.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

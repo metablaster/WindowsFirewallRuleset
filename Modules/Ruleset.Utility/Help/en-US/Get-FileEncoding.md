@@ -21,7 +21,8 @@ Get-FileEncoding [-Path] <FileInfo> [[-Encoding] <Object>] [<CommonParameters>]
 
 Gets the encoding of a file, if the encoding can't be determined, ex.
 the file
-contains unicode charaters but no BOM, then by default UTF-8 is assumed.
+contains unicode charaters but no BOM, then the default encoding is assumed which
+can be specified trough Encoding parameter.
 
 ## EXAMPLES
 
@@ -29,21 +30,28 @@ contains unicode charaters but no BOM, then by default UTF-8 is assumed.
 
 ```powershell
 Get-FileEncoding .\utf8BOM.txt
-utf-8 with BOM
+utf8BOM
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-FileEncoding .\utf32.txt
-utf-32
+Get-FileEncoding .\utf-16LE.txt
+unicode
 ```
 
 ### EXAMPLE 3
 
 ```powershell
-Get-FileEncoding .\utf32.txt
-utf-32
+Get-FileEncoding .\ascii.txt
+ascii
+```
+
+### EXAMPLE 4
+
+```powershell
+Get-FileEncoding C:\WINDOWS\regedit.exe
+binary
 ```
 
 ## PARAMETERS
@@ -55,7 +63,7 @@ The path of the file to get the encoding of
 ```yaml
 Type: System.IO.FileInfo
 Parameter Sets: (All)
-Aliases:
+Aliases: FilePath
 
 Required: True
 Position: 1
@@ -67,6 +75,8 @@ Accept wildcard characters: True
 ### -Encoding
 
 Default encoding for non ASCII files.
+This parameter can be either a string identifying an encoding that is used by PowerShell commandlets
+such as "utf8" or System.Text.Encoding object.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
 
 ```yaml
@@ -95,7 +105,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: utf-16LE detected as utf-16 with BOM
-TODO: Enumerate file encodings and implement parameter validation
+TODO: Encoding parameter should also accept code page or encoding name, Encoding class has
+static functions to convert.
+TODO: Parameter to specify output as \[System.Text.Encoding\] instead of default \[string\]
+TODO: utf8 file reported as ascii in Windows PowerShell
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1)
+
+[https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0](https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0)

@@ -92,10 +92,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: query remote computer not implemented
-TODO: multiple domains
-TODO: we should probably return custom object to be able to pipe to functions such as Get-AppSID
-TODO: see also -AllUsers and other parameters in related links
+TODO: Query remote computer not implemented
+TODO: Multiple domains
+TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
+TODO: See also -AllUsers and other parameters in related links
+TODO: Format.ps1xml not applied in Windows PowerShell
 
 ## RELATED LINKS
 

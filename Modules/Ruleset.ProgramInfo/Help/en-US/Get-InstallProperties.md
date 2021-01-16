@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Search program install properties for all users, system wide
+Search system wide program install properties
 
 ## SYNTAX
 

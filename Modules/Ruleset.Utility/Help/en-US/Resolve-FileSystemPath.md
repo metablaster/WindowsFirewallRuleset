@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Resolve wildcard directory or file location
+Resolve wildcard pattern of a directory or file location
 
 ## SYNTAX
 
@@ -25,7 +25,7 @@ this function accepts only file system paths, and produces either \[System.IO.Di
 \[System.IO.FileInfo\]
 Also unlike Resolve-Path the resultant path object is returned even if target file system item
 does not exist, as long as portion of the specified path is resolved and as long as new path
-doesn't resolve to multiple locations.
+doesn't resolve to multiple (ambiguous) locations.
 
 ## EXAMPLES
 
@@ -66,7 +66,7 @@ Accept wildcard characters: True
 
 ### -File
 
-If specified \[System.IO.FileInfo\] object is created instead of \[System.IO.DirectoryInfo\]
+If specified, \[System.IO.FileInfo\] object is created instead of \[System.IO.DirectoryInfo\]
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -113,6 +113,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Implement -Relative parameter, see Resolve-Path
-TODO: This function needs improvements according to the rest of *FileSystem* functions
 
 ## RELATED LINKS

@@ -19,7 +19,7 @@ Split-Principal [-Principal] <String[]> [-DomainName] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Split principal, either UPN or NETBIOS name to user name or domain name
+Split either UPN or NETBIOS principal name to user name or domain name.
 
 ## EXAMPLES
 

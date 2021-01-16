@@ -14,7 +14,7 @@ Initialize unit test
 ## SYNTAX
 
 ```powershell
-Enter-Test [-Private] [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enter-Test [[-Command] <String>] [-Private] [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,14 +33,37 @@ Enter-Test
 ### EXAMPLE 2
 
 ```powershell
+Enter-Test -Command "Get-Something"
+```
+
+### EXAMPLE 3
+
+```powershell
 Enter-Test -Private
 ```
 
 ## PARAMETERS
 
+### -Command
+
+Optionally specify the command which is to be tested by default.
+This value is used by Start-Test function by default unless specified in Start-Test.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Private
 
-If specified temporarily exports private module functions into global scope
+If specified, temporarily exports private module functions into global scope
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

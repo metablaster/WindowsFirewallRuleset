@@ -6,43 +6,56 @@
       <command:verb>Approve</command:verb>
       <command:noun>Execute</command:noun>
       <maml:description>
-        <maml:para>Used to prompt user to approve running script</maml:para>
+        <maml:para>Customized user prompt to continue</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>In addition to prompt, execution context is shown. Asking for approval helps to let run master script and only execute specific scripts, thus loading only needed rules.</maml:para>
+      <maml:para>Prompt user to continue running script or section of code. In addition to prompt, an optional execution context can be shown. Help messages for prompt choices can be optionally customized. Asking for approval can help to run master script and only execute specific set of scripts.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Approve-Execute</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Unsafe</maml:name>
-          <maml:Description>
-            <maml:para>If specified the command is considered unsafe, and the default action is then "No"</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Title</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompt title</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>"Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Context</maml:name>
+          <maml:description>
+            <maml:para>Optional context to append to the title. Context is automatically regenerated if the -Title parameter is empty or not set. Otherwise previous context is reused.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ContextLeaf</maml:name>
+          <maml:description>
+            <maml:para>Optional string to append to context. If not specified, context leaf is automatically generated if both the -Title and -Context parameters are not set. Otherwise if -Title is set without -Context this parameter is ignored.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Question</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompt question</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -52,9 +65,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accept</maml:name>
-          <maml:Description>
-            <maml:para>Prompt help menu for default action</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Custom help message for "Yes" choice</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -64,9 +77,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Deny</maml:name>
-          <maml:Description>
-            <maml:para>Prompt help menu for deny action</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Custom help message for "No" choice</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -76,9 +89,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>YesToAll</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Will be set to true if user selects YesToAll. If this is already true, Approve-Execute will bypass the prompt and return true.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSReference</maml:name>
@@ -88,9 +101,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoToAll</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Will be set to true if user selects NoToAll. If this is already true, Approve-Execute will bypass the prompt and return false.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSReference</maml:name>
@@ -99,10 +112,45 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>YesAllHelp</maml:name>
+          <maml:description>
+            <maml:para>Custom help message for "YesToAll" choice</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Continue with all the steps of the operation</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoAllHelp</maml:name>
+          <maml:description>
+            <maml:para>Custom help message for "NoToAll" choice</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Skip this operation and all subsequent operations</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Unsafe</maml:name>
+          <maml:description>
+            <maml:para>If specified, the command is considered unsafe and the default action is then "No"</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
-            <maml:para>If specified, this function does nothing and returns true</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, this function does nothing, ignores all other parameters and returns true</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -113,34 +161,46 @@
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Unsafe</maml:name>
-        <maml:Description>
-          <maml:para>If specified the command is considered unsafe, and the default action is then "No"</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Title</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompt title</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>"Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Context</maml:name>
+        <maml:description>
+          <maml:para>Optional context to append to the title. Context is automatically regenerated if the -Title parameter is empty or not set. Otherwise previous context is reused.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ContextLeaf</maml:name>
+        <maml:description>
+          <maml:para>Optional string to append to context. If not specified, context leaf is automatically generated if both the -Title and -Context parameters are not set. Otherwise if -Title is set without -Context this parameter is ignored.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Question</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompt question</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -150,9 +210,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Accept</maml:name>
-        <maml:Description>
-          <maml:para>Prompt help menu for default action</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Custom help message for "Yes" choice</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -162,9 +222,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Deny</maml:name>
-        <maml:Description>
-          <maml:para>Prompt help menu for deny action</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Custom help message for "No" choice</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -174,9 +234,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>YesToAll</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Will be set to true if user selects YesToAll. If this is already true, Approve-Execute will bypass the prompt and return true.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSReference</maml:name>
@@ -186,9 +246,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NoToAll</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Will be set to true if user selects NoToAll. If this is already true, Approve-Execute will bypass the prompt and return false.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSReference</maml:name>
@@ -197,10 +257,46 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>YesAllHelp</maml:name>
+        <maml:description>
+          <maml:para>Custom help message for "YesToAll" choice</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Continue with all the steps of the operation</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoAllHelp</maml:name>
+        <maml:description>
+          <maml:para>Custom help message for "NoToAll" choice</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Skip this operation and all subsequent operations</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Unsafe</maml:name>
+        <maml:description>
+          <maml:para>If specified, the command is considered unsafe and the default action is then "No"</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
-        <maml:Description>
-          <maml:para>If specified, this function does nothing and returns true</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, this function does nothing, ignores all other parameters and returns true</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -222,7 +318,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] True if the user wants to continue, false otherwise</maml:name>
+          <maml:name>[bool] True if operation should be performed, false otherwise</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -231,7 +327,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Help messages and question message needs better description to fit more scenarios TODO: Implement accepting arbitrary amount of choices, ex. [ChoiceDescription[]] parameter TODO: Implement timeout to accept default choice, ex. Host.UI.RawUI.KeyAvailable TODO: Standard parameter for help message should be -Prompt</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -276,9 +372,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         <maml:name>Build-ServiceList</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Root folder name which to scan recursively</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -288,9 +384,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Log</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the list of services is also logged.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -302,9 +398,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Root folder name which to scan recursively</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -314,9 +410,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Log</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, the list of services is also logged.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -390,9 +486,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         <maml:name>Compare-Path</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The path which to compare against the reference path</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -402,9 +498,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>ReferencePath</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The path against which to compare</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -414,9 +510,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Loose</maml:name>
-          <maml:Description>
-            <maml:para>if specified perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -425,9 +521,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CaseSensitive</maml:name>
-          <maml:Description>
-            <maml:para>If specified performs case sensitive comparison</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, performs case sensitive comparison</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -439,9 +535,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The path which to compare against the reference path</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -451,9 +547,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>ReferencePath</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The path against which to compare</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -463,9 +559,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Loose</maml:name>
-        <maml:Description>
-          <maml:para>if specified perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, perform "loose" comparison: Does not attempt to resolve input paths, and respects wildcards all of which happens after input paths have been expanded off environment variables</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -475,9 +571,9 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CaseSensitive</maml:name>
-        <maml:Description>
-          <maml:para>If specified performs case sensitive comparison</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, performs case sensitive comparison</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -550,20 +646,20 @@ False</dev:code>
       <command:verb>Confirm</command:verb>
       <command:noun>FileEncoding</command:noun>
       <maml:description>
-        <maml:para>Verify file is correctly encoded</maml:para>
+        <maml:para>Verify file is encoded as expected</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Confirm-FileEncoding verifies target file is encoded as expected. Wrong encoding may return bad data resulting is unexpected behavior</maml:para>
+      <maml:para>Confirm-FileEncoding verifies target file is encoded as expected. Unexpected encoding may give bad data resulting is unexpected behavior</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Confirm-FileEncoding</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="FilePath">
           <maml:name>Path</maml:name>
-          <maml:Description>
-            <maml:para>Path to the file which to check</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Path to the file which is to be checked. Wildcard characters are permitted.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo[]</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo[]</maml:name>
@@ -571,23 +667,29 @@ False</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Encoding</maml:name>
-          <maml:Description>
-            <maml:para>Expected encoding</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
+            <maml:para>The acceptable values for this parameter are as follows:</maml:para>
+            <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
+            <maml:para>Following values are valid for Core edition only:</maml:para>
+            <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
+            <maml:para>Following values are valid For Desktop edition only:</maml:para>
+            <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>@("utf-8", "us-ascii")</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Binary</maml:name>
-          <maml:Description>
-            <maml:para>If specified, handles binary files as well.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, binary files are left alone. By default binary files are detected as having wrong encoding.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -596,9 +698,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -607,9 +709,75 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Confirm-FileEncoding</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:description>
+            <maml:para>Specifies a path to one or more file locations. The value of LiteralPath is used exactly as it is typed. No characters are interpreted as wildcards</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.FileInfo[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.FileInfo[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:description>
+            <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
+            <maml:para>The acceptable values for this parameter are as follows:</maml:para>
+            <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
+            <maml:para>Following values are valid for Core edition only:</maml:para>
+            <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
+            <maml:para>Following values are valid For Desktop edition only:</maml:para>
+            <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Binary</maml:name>
+          <maml:description>
+            <maml:para>If specified, binary files are left alone. By default binary files are detected as having wrong encoding.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -621,9 +789,9 @@ False</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="FilePath">
         <maml:name>Path</maml:name>
-        <maml:Description>
-          <maml:para>Path to the file which to check</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Path to the file which is to be checked. Wildcard characters are permitted.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo[]</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.FileInfo[]</maml:name>
@@ -631,23 +799,41 @@ False</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:description>
+          <maml:para>Specifies a path to one or more file locations. The value of LiteralPath is used exactly as it is typed. No characters are interpreted as wildcards</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.FileInfo[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.FileInfo[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Encoding</maml:name>
-        <maml:Description>
-          <maml:para>Expected encoding</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
+          <maml:para>The acceptable values for this parameter are as follows:</maml:para>
+          <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
+          <maml:para>Following values are valid for Core edition only:</maml:para>
+          <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
+          <maml:para>Following values are valid For Desktop edition only:</maml:para>
+          <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>@("utf-8", "us-ascii")</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Binary</maml:name>
-        <maml:Description>
-          <maml:para>If specified, handles binary files as well.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, binary files are left alone. By default binary files are detected as having wrong encoding.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -657,9 +843,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -669,9 +855,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -708,7 +894,7 @@ False</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Confirm-FileEncoding C:\SomeFile.txt utf16</dev:code>
+        <dev:code>Confirm-FileEncoding C:\SomeFile.txt -Encoding utf16</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -738,9 +924,9 @@ False</dev:code>
         <maml:name>ConvertFrom-Wildcard</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Pattern</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Wildcard pattern string which is to be converted</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -750,9 +936,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AsRegex</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Construct regex object in place with specified parameters. By default regex string pattern is returned.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -761,9 +947,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Options</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optionally specify regex options. By default no options are set.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">IgnoreCase</command:parameterValue>
@@ -785,9 +971,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeSpan</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optionally specify a time-out interval. By default pattern-matching operation does not time out. This parameter has no effect if -AsRegex switch was not specified.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.TimeSpan</command:parameterValue>
           <dev:type>
             <maml:name>System.TimeSpan</maml:name>
@@ -800,9 +986,9 @@ False</dev:code>
         <maml:name>ConvertFrom-Wildcard</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Wildcard</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Wildcard pattern object which is to be converted</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.WildcardPattern</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.WildcardPattern</maml:name>
@@ -812,9 +998,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AsRegex</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Construct regex object in place with specified parameters. By default regex string pattern is returned.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -823,9 +1009,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Options</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optionally specify regex options. By default no options are set.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">IgnoreCase</command:parameterValue>
@@ -847,9 +1033,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeSpan</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optionally specify a time-out interval. By default pattern-matching operation does not time out. This parameter has no effect if -AsRegex switch was not specified.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.TimeSpan</command:parameterValue>
           <dev:type>
             <maml:name>System.TimeSpan</maml:name>
@@ -862,9 +1048,9 @@ False</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Pattern</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Wildcard pattern string which is to be converted</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -874,9 +1060,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Wildcard</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Wildcard pattern object which is to be converted</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.WildcardPattern</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.WildcardPattern</maml:name>
@@ -886,9 +1072,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AsRegex</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Construct regex object in place with specified parameters. By default regex string pattern is returned.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -898,9 +1084,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Options</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Optionally specify regex options. By default no options are set.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Text.RegularExpressions.RegexOptions</command:parameterValue>
         <dev:type>
           <maml:name>System.Text.RegularExpressions.RegexOptions</maml:name>
@@ -910,9 +1096,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeSpan</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Optionally specify a time-out interval. By default pattern-matching operation does not time out. This parameter has no effect if -AsRegex switch was not specified.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.TimeSpan</command:parameterValue>
         <dev:type>
           <maml:name>System.TimeSpan</maml:name>
@@ -1009,16 +1195,16 @@ False</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Gets the encoding of a file, if the encoding can't be determined, ex. the file contains unicode charaters but no BOM, then by default UTF-8 is assumed.</maml:para>
+      <maml:para>Gets the encoding of a file, if the encoding can't be determined, ex. the file contains unicode charaters but no BOM, then the default encoding is assumed which can be specified trough Encoding parameter.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-FileEncoding</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The path of the file to get the encoding of</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo</maml:name>
@@ -1028,9 +1214,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Encoding</maml:name>
-          <maml:Description>
-            <maml:para>Default encoding for non ASCII files. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Default encoding for non ASCII files. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
           <dev:type>
             <maml:name>System.Object</maml:name>
@@ -1041,11 +1227,11 @@ False</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The path of the file to get the encoding of</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.FileInfo</maml:name>
@@ -1055,9 +1241,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Encoding</maml:name>
-        <maml:Description>
-          <maml:para>Default encoding for non ASCII files. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Default encoding for non ASCII files. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
         <dev:type>
           <maml:name>System.Object</maml:name>
@@ -1088,30 +1274,38 @@ False</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: utf-16LE detected as utf-16 with BOM TODO: Enumerate file encodings and implement parameter validation</maml:para>
+        <maml:para>TODO: Encoding parameter should also accept code page or encoding name, Encoding class has static functions to convert. TODO: Parameter to specify output as [System.Text.Encoding] instead of default [string] TODO: utf8 file reported as ascii in Windows PowerShell</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Get-FileEncoding .\utf8BOM.txt
-utf-8 with BOM</dev:code>
+utf8BOM</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-FileEncoding .\utf32.txt
-utf-32</dev:code>
+        <dev:code>Get-FileEncoding .\utf-16LE.txt
+unicode</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Get-FileEncoding .\utf32.txt
-utf-32</dev:code>
+        <dev:code>Get-FileEncoding .\ascii.txt
+ascii</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Get-FileEncoding C:\WINDOWS\regedit.exe
+binary</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1119,8 +1313,16 @@ utf-32</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1141,9 +1343,9 @@ utf-32</dev:code>
         <maml:name>Get-TypeName</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>InputObject</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
             <maml:name>System.Object[]</maml:name>
@@ -1153,9 +1355,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
-          <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1167,9 +1369,9 @@ utf-32</dev:code>
         <maml:name>Get-TypeName</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Command</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Commandlet or function name for which to retrieve OutputType attribute value The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1179,9 +1381,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
-          <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1193,9 +1395,9 @@ utf-32</dev:code>
         <maml:name>Get-TypeName</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1205,9 +1407,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Accelerator</maml:name>
-          <maml:Description>
-            <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1219,9 +1421,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>InputObject</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
           <maml:name>System.Object[]</maml:name>
@@ -1231,9 +1433,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Command</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Commandlet or function name for which to retrieve OutputType attribute value The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1243,9 +1445,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1255,9 +1457,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Accelerator</maml:name>
-        <maml:Description>
-          <maml:para>When used converts resultant full typename to accelerator. Otherwise if specified with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1341,7 +1543,7 @@ utf-32</dev:code>
       <command:verb>Invoke</command:verb>
       <command:noun>Process</command:noun>
       <maml:description>
-        <maml:para>Run process and format captured output</maml:para>
+        <maml:para>Run process and optionally redirect captured output</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1352,9 +1554,9 @@ utf-32</dev:code>
         <maml:name>Invoke-Process</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Executable name or path to application to which to start. Wildcard characters and relative paths are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1364,9 +1566,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ArgumentList</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1376,9 +1578,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoNewWindow</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Whether to use the operating system shell to start the process</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1387,9 +1589,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Timeout</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -1399,9 +1601,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Async</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, reading process output is asynchronous. This functionality is experimental because current thread will block until timeout.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1410,9 +1612,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Raw</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, process output is returned as string. By default process output is redirected to information and error stream.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1424,9 +1626,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Executable name or path to application to which to start. Wildcard characters and relative paths are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1436,9 +1638,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ArgumentList</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1448,9 +1650,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NoNewWindow</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Whether to use the operating system shell to start the process</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1460,9 +1662,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Timeout</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
@@ -1472,9 +1674,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Async</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, reading process output is asynchronous. This functionality is experimental because current thread will block until timeout.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1484,9 +1686,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Raw</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, process output is returned as string. By default process output is redirected to information and error stream.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1569,7 +1771,7 @@ utf-32</dev:code>
       <command:verb>Out</command:verb>
       <command:noun>DataTable</command:noun>
       <maml:description>
-        <maml:para>Creates a DataTable for an object</maml:para>
+        <maml:para>Creates a DataTable from an object</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1580,9 +1782,9 @@ utf-32</dev:code>
         <maml:name>Out-DataTable</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>InputObject</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>One or more objects to convert into a DataTable</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSObject[]</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSObject[]</maml:name>
@@ -1592,9 +1794,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NonNullable</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A list of columns to set disable AllowDBNull on</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -1607,9 +1809,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>InputObject</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>One or more objects to convert into a DataTable</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSObject[]</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSObject[]</maml:name>
@@ -1619,9 +1821,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NonNullable</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A list of columns to set disable AllowDBNull on</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -1689,20 +1891,20 @@ utf-32</dev:code>
       <command:verb>Resolve</command:verb>
       <command:noun>FileSystemPath</command:noun>
       <maml:description>
-        <maml:para>Resolve wildcard directory or file location</maml:para>
+        <maml:para>Resolve wildcard pattern of a directory or file location</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Ensure directory or file name wildcard pattern resolves to single location. Unlike Resolve-Path which accepts and produces paths supported by any PowerShell provider, this function accepts only file system paths, and produces either [System.IO.DirectoryInfo] or [System.IO.FileInfo] Also unlike Resolve-Path the resultant path object is returned even if target file system item does not exist, as long as portion of the specified path is resolved and as long as new path doesn't resolve to multiple locations.</maml:para>
+      <maml:para>Ensure directory or file name wildcard pattern resolves to single location. Unlike Resolve-Path which accepts and produces paths supported by any PowerShell provider, this function accepts only file system paths, and produces either [System.IO.DirectoryInfo] or [System.IO.FileInfo] Also unlike Resolve-Path the resultant path object is returned even if target file system item does not exist, as long as portion of the specified path is resolved and as long as new path doesn't resolve to multiple (ambiguous) locations.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Resolve-FileSystemPath</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Directory or file location to target file system item. Wildcard characters and relative paths are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1712,9 +1914,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>File</maml:name>
-          <maml:Description>
-            <maml:para>If specified [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1723,9 +1925,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Create</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, target directory or file is created if it doesn't exist</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1737,9 +1939,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Directory or file location to target file system item. Wildcard characters and relative paths are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1749,9 +1951,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>File</maml:name>
-        <maml:Description>
-          <maml:para>If specified [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, [System.IO.FileInfo] object is created instead of [System.IO.DirectoryInfo]</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1761,9 +1963,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Create</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, target directory or file is created if it doesn't exist</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1802,7 +2004,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Implement -Relative parameter, see Resolve-Path TODO: This function needs improvements according to the rest of FileSystem functions</maml:para>
+        <maml:para>TODO: Implement -Relative parameter, see Resolve-Path</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1845,7 +2047,7 @@ utf-32</dev:code>
         <maml:name>Select-EnvironmentVariable</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
@@ -1854,7 +2056,7 @@ utf-32</dev:code>
             <maml:para>- Relative: Relative file system paths</maml:para>
             <maml:para>- BlackList: Variables that are not in any other group mentioned above</maml:para>
             <maml:para>- All: All system environment variables</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1864,9 +2066,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify specific environment variable which to expand to value. If there is no such environment variable the result is null. Wildcard characters are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1876,9 +2078,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Property</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name. Same applies to -Value parameter which gets variables for matches values.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1888,9 +2090,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IncludeFile</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, algorithm will include variables and/or their values that represent files, by default only directories are grouped and the rest is put into "blacklist" and "All" group.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1899,9 +2101,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, discards script scope cache and queries system for environment variables a new. By default variables are queried only once per session, each subsequent function call returns cached result.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1913,7 +2115,7 @@ utf-32</dev:code>
         <maml:name>Select-EnvironmentVariable</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
@@ -1922,7 +2124,7 @@ utf-32</dev:code>
             <maml:para>- Relative: Relative file system paths</maml:para>
             <maml:para>- BlackList: Variables that are not in any other group mentioned above</maml:para>
             <maml:para>- All: All system environment variables</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1932,9 +2134,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Value</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Get environment variable name for specified value if there is one. This is equivalent to serching environment variables that expand to specified value, the result may include multiple environment variables. Wildcard characters are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1944,9 +2146,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Property</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name. Same applies to -Value parameter which gets variables for matches values.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1956,9 +2158,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Exact</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, retrieved environment variable names are exact, meaning not surrounded with percentage '%' sign, ex: HOMEDRIVE instead of %HOMEDRIVE% If previous function call was not run with same "Exact" parameter value, then the script scope cache is updated by reformatting variable names, but the internal cache is not recreated.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1967,9 +2169,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IncludeFile</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, algorithm will include variables and/or their values that represent files, by default only directories are grouped and the rest is put into "blacklist" and "All" group.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1978,9 +2180,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, discards script scope cache and queries system for environment variables a new. By default variables are queried only once per session, each subsequent function call returns cached result.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1992,7 +2194,7 @@ utf-32</dev:code>
         <maml:name>Select-EnvironmentVariable</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
@@ -2001,7 +2203,7 @@ utf-32</dev:code>
             <maml:para>- Relative: Relative file system paths</maml:para>
             <maml:para>- BlackList: Variables that are not in any other group mentioned above</maml:para>
             <maml:para>- All: All system environment variables</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2011,9 +2213,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Property</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name. Same applies to -Value parameter which gets variables for matches values.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2023,9 +2225,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Exact</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, retrieved environment variable names are exact, meaning not surrounded with percentage '%' sign, ex: HOMEDRIVE instead of %HOMEDRIVE% If previous function call was not run with same "Exact" parameter value, then the script scope cache is updated by reformatting variable names, but the internal cache is not recreated.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2034,9 +2236,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IncludeFile</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, algorithm will include variables and/or their values that represent files, by default only directories are grouped and the rest is put into "blacklist" and "All" group.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2045,9 +2247,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, discards script scope cache and queries system for environment variables a new. By default variables are queried only once per session, each subsequent function call returns cached result.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2059,7 +2261,7 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>From</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
           <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
           <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
@@ -2068,7 +2270,7 @@ utf-32</dev:code>
           <maml:para>- Relative: Relative file system paths</maml:para>
           <maml:para>- BlackList: Variables that are not in any other group mentioned above</maml:para>
           <maml:para>- All: All system environment variables</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2078,9 +2280,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify specific environment variable which to expand to value. If there is no such environment variable the result is null. Wildcard characters are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2090,9 +2292,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Value</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Get environment variable name for specified value if there is one. This is equivalent to serching environment variables that expand to specified value, the result may include multiple environment variables. Wildcard characters are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2102,9 +2304,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Property</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify behavior of -Name or -Value parameters, for ex. -Name parameter gets values for environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name. Same applies to -Value parameter which gets variables for matches values.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2114,9 +2316,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Exact</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, retrieved environment variable names are exact, meaning not surrounded with percentage '%' sign, ex: HOMEDRIVE instead of %HOMEDRIVE% If previous function call was not run with same "Exact" parameter value, then the script scope cache is updated by reformatting variable names, but the internal cache is not recreated.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2126,9 +2328,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IncludeFile</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, algorithm will include variables and/or their values that represent files, by default only directories are grouped and the rest is put into "blacklist" and "All" group.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2138,9 +2340,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, discards script scope cache and queries system for environment variables a new. By default variables are queried only once per session, each subsequent function call returns cached result.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2261,9 +2463,9 @@ utf-32</dev:code>
         <maml:name>Set-NetworkProfile</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2272,9 +2474,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2286,9 +2488,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2298,9 +2500,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2361,15 +2563,16 @@ utf-32</dev:code>
     </command:details>
     <maml:description>
       <maml:para>Set-Permission sets permission or ownership of a filesystem or registry object such as file, folder, registry key or registry item.</maml:para>
+      <maml:para>Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing. This function also serves as replacement for takeown.exe and icacls.exe whose syntax is arcane.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-Permission</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
-          <maml:Description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2379,9 +2582,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Owner</maml:name>
-          <maml:Description>
-            <maml:para>Principal who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Principal username who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2391,9 +2594,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal domain such as computer name or authority to which username applies</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2403,9 +2606,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Recurse</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2414,9 +2617,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
-            <maml:para>If specified skips prompting for confirmation.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, skips prompting for confirmation to perform recursive action</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2425,9 +2628,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2436,9 +2639,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2450,9 +2653,9 @@ utf-32</dev:code>
         <maml:name>Set-Permission</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
-          <maml:Description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2462,9 +2665,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2474,9 +2677,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal domain such as computer name or authority to which username applies</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2486,9 +2689,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Access control type to either allow or deny specified rights</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Allow</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Deny</command:parameterValue>
@@ -2502,9 +2705,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Permission, Grant">
           <maml:name>Rights</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Defines file system access rights to use for principal when creating access and audit rules. The default includes: ReadAndExecute, ListDirectory and Traverse Where: 1. ReadAndExecute: Read and ExecuteFile 2. Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">ListDirectory</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ReadData</command:parameterValue>
@@ -2539,9 +2742,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Inheritance</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ContainerInherit</command:parameterValue>
@@ -2556,9 +2759,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Propagation</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">NoPropagateInherit</command:parameterValue>
@@ -2573,9 +2776,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2584,9 +2787,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PreserveInheritance</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2595,9 +2798,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Recurse</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2606,9 +2809,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Reset</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2617,9 +2820,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
-            <maml:para>If specified skips prompting for confirmation.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, skips prompting for confirmation to perform recursive action</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2628,9 +2831,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2639,9 +2842,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2653,9 +2856,9 @@ utf-32</dev:code>
         <maml:name>Set-Permission</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
-          <maml:Description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2665,9 +2868,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2677,9 +2880,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal domain such as computer name or authority to which username applies</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2689,9 +2892,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Access control type to either allow or deny specified rights</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Allow</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Deny</command:parameterValue>
@@ -2705,9 +2908,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RegPermission, RegGrant">
           <maml:name>RegistryRights</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Defines registry access rights to use for principal when creating access and audit rules. The default includes: ReadKey Where, ReadKey: QueryValues, Notify, EnumerateSubKeys and ReadPermissions</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">QueryValues</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SetValue</command:parameterValue>
@@ -2733,9 +2936,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Inheritance</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ContainerInherit</command:parameterValue>
@@ -2750,9 +2953,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Propagation</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">NoPropagateInherit</command:parameterValue>
@@ -2767,9 +2970,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2778,9 +2981,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PreserveInheritance</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2789,9 +2992,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Recurse</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2800,9 +3003,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Reset</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2811,9 +3014,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
-            <maml:para>If specified skips prompting for confirmation.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, skips prompting for confirmation to perform recursive action</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2822,9 +3025,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2833,9 +3036,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2847,9 +3050,9 @@ utf-32</dev:code>
         <maml:name>Set-Permission</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
-          <maml:Description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2859,9 +3062,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Principal domain such as computer name or authority to which username applies</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -2871,9 +3074,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2882,9 +3085,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PreserveInheritance</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2893,9 +3096,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Recurse</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2904,9 +3107,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Reset</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2915,9 +3118,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
-            <maml:para>If specified skips prompting for confirmation.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, skips prompting for confirmation to perform recursive action</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2926,9 +3129,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2937,9 +3140,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -2951,9 +3154,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
         <maml:name>LiteralPath</maml:name>
-        <maml:Description>
-          <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Environment variables are allowed.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2963,9 +3166,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Owner</maml:name>
-        <maml:Description>
-          <maml:para>Principal who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Principal username who will be the new owner of a resource. Using this parameter means taking ownership of a resource.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2975,9 +3178,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2987,9 +3190,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Principal domain such as computer name or authority to which username applies</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -2999,9 +3202,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Type</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Access control type to either allow or deny specified rights</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.AccessControlType</command:parameterValue>
         <dev:type>
           <maml:name>System.Security.AccessControl.AccessControlType</maml:name>
@@ -3011,9 +3214,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Permission, Grant">
         <maml:name>Rights</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Defines file system access rights to use for principal when creating access and audit rules. The default includes: ReadAndExecute, ListDirectory and Traverse Where: 1. ReadAndExecute: Read and ExecuteFile 2. Read: ReadData, ReadExtendedAttributes, ReadAttributes, and ReadPermissions.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.FileSystemRights</command:parameterValue>
         <dev:type>
           <maml:name>System.Security.AccessControl.FileSystemRights</maml:name>
@@ -3023,9 +3226,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="RegPermission, RegGrant">
         <maml:name>RegistryRights</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Defines registry access rights to use for principal when creating access and audit rules. The default includes: ReadKey Where, ReadKey: QueryValues, Notify, EnumerateSubKeys and ReadPermissions</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.RegistryRights</command:parameterValue>
         <dev:type>
           <maml:name>System.Security.AccessControl.RegistryRights</maml:name>
@@ -3035,9 +3238,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Inheritance</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Inheritance flags specify the semantics of inheritance for access control entries. This parameter is ignored for leaf objects, such as files or or registry entries. This parameter controls the "Applies to" column in advanced security dialog The default is "This folder, subfolders and files"</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.InheritanceFlags</command:parameterValue>
         <dev:type>
           <maml:name>System.Security.AccessControl.InheritanceFlags</maml:name>
@@ -3047,9 +3250,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Propagation</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies how Access Control Entries (ACEs) are propagated to child objects. These flags are significant only if inheritance flags are present, (when Inheritance is not "None") This parameter is ignored for leaf objects, such as files or or registry entries. This parameter affects the "Applies to" column in advanced security dialog</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Security.AccessControl.PropagationFlags</command:parameterValue>
         <dev:type>
           <maml:name>System.Security.AccessControl.PropagationFlags</maml:name>
@@ -3059,9 +3262,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protected</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If set, protect the specified access rules from inheritance. The default is to allow inheritance. Protected access rules cannot be modified by parent objects through inheritance. This parameter controls the "Enable/Disable Inheritance" button in advanced security dialog</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3071,9 +3274,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PreserveInheritance</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If set, preserve inherited access rules, which become explicit rules. The default is to remove inherited access rules. This parameter is ignored if Protected is not set. This parameter controls choices offered after "Enable/Disable Inheritance" button.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3083,9 +3286,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Recurse</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, applies specified operations to all subobjects. This parameter is ignored for Leaf objects, such as files or registry entries.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3095,9 +3298,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Reset</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, removes all explicit access rules and keeps only inherited. if "Protected" parameter is specified inherited rules are removed as well. If "Protected" is specified with "PreserveInheritance", then the inherited rules become explicit rules and everything else is removed.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3107,9 +3310,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
-        <maml:Description>
-          <maml:para>If specified skips prompting for confirmation.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, skips prompting for confirmation to perform recursive action</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3119,9 +3322,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3131,9 +3334,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3164,7 +3367,8 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Manage audit entries TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object" TODO: Which combination is for "Include inheritable permissions from this object's parent" Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing. This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and using these in PowerShell is usually awkward. TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/ TODO: switch to ignore errors and continue doing things, useful for recurse TODO: A bunch of other security options can be implemented TODO: Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because PowerShell process does not have high enough privileges even if run as Administrator, a fix for this is in Scripts\External\Set-Privilege.ps1 which this function must make use of.</maml:para>
+        <maml:para>Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because PowerShell process does not have high enough privileges even if run as Administrator, a fix for this is in Set-Privilege.ps1 which this function makes use of.</maml:para>
+        <maml:para>TODO: Manage audit entries TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object" TODO: Which combination is for "Include inheritable permissions from this object's parent" TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/ TODO: A switch to ignore errors and continue doing things, useful for recurse TODO: A bunch of other security options can be implemented</maml:para>
         <maml:para>Links listed below are provided for additional parameter description in order of how parameters are declared</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -3251,9 +3455,9 @@ utf-32</dev:code>
         <maml:name>Set-ScreenBuffer</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Height</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>New screen buffer height</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
           <dev:type>
             <maml:name>System.UInt16</maml:name>
@@ -3263,9 +3467,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3274,9 +3478,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3288,9 +3492,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Height</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>New screen buffer height</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
         <dev:type>
           <maml:name>System.UInt16</maml:name>
@@ -3300,9 +3504,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3312,9 +3516,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3345,7 +3549,7 @@ utf-32</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: A parameter to restore previous value may be useful</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3381,9 +3585,9 @@ utf-32</dev:code>
         <maml:name>Set-Shortcut</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The name of a schortcut file, optionally with an extension. Use the .lnk extension for a file system shortcut. Use the .url extension for an Internet shortcut.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3393,9 +3597,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -3405,9 +3609,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Source">
           <maml:name>TargetPath</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The full path and filename of the location that the shortcut file will open.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo</maml:name>
@@ -3417,9 +3621,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Icon">
           <maml:name>IconLocation</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Full pathname of the icon file to set on shortcut.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo</maml:name>
@@ -3429,9 +3633,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Index">
           <maml:name>IconIndex</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Index is the position of the icon within the file (where the first icon is 0)</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -3441,9 +3645,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Description</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify description of the shortcut</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3453,9 +3657,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hotkey</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A string value of the form "Modifier + Keyname", where Modifier is any combination of Alt, Ctrl, and Shift, and Keyname is one of A through Z or 0 through 12.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3465,9 +3669,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WindowStyle</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify how the application window will appear</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3477,9 +3681,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WorkingDirectory</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Sets the path of the shortcut's working directory</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo</maml:name>
@@ -3489,9 +3693,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ArgumentList">
           <maml:name>Arguments</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optionally set arguments to target file</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3501,9 +3705,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Admin</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the shortcut is run as Administrator</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3512,9 +3716,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3523,9 +3727,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3537,9 +3741,9 @@ utf-32</dev:code>
         <maml:name>Set-Shortcut</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The name of a schortcut file, optionally with an extension. Use the .lnk extension for a file system shortcut. Use the .url extension for an Internet shortcut.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3549,9 +3753,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -3561,9 +3765,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Link">
           <maml:name>URL</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>URL of the location that the shortcut file will open.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
           <dev:type>
             <maml:name>System.Uri</maml:name>
@@ -3573,9 +3777,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Icon">
           <maml:name>IconLocation</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Full pathname of the icon file to set on shortcut.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
             <maml:name>System.IO.FileInfo</maml:name>
@@ -3585,9 +3789,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Index">
           <maml:name>IconIndex</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Index is the position of the icon within the file (where the first icon is 0)</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -3597,9 +3801,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hotkey</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A string value of the form "Modifier + Keyname", where Modifier is any combination of Alt, Ctrl, and Shift, and Keyname is one of A through Z or 0 through 12.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -3609,9 +3813,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3620,9 +3824,9 @@ utf-32</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -3634,9 +3838,9 @@ utf-32</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The name of a schortcut file, optionally with an extension. Use the .lnk extension for a file system shortcut. Use the .url extension for an Internet shortcut.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -3646,9 +3850,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.DirectoryInfo</maml:name>
@@ -3658,9 +3862,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Source">
         <maml:name>TargetPath</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The full path and filename of the location that the shortcut file will open.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.FileInfo</maml:name>
@@ -3670,9 +3874,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Link">
         <maml:name>URL</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>URL of the location that the shortcut file will open.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
         <dev:type>
           <maml:name>System.Uri</maml:name>
@@ -3682,9 +3886,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Icon">
         <maml:name>IconLocation</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Full pathname of the icon file to set on shortcut.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.FileInfo</maml:name>
@@ -3694,9 +3898,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Index">
         <maml:name>IconIndex</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Index is the position of the icon within the file (where the first icon is 0)</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
@@ -3706,9 +3910,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Description</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify description of the shortcut</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -3718,9 +3922,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hotkey</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A string value of the form "Modifier + Keyname", where Modifier is any combination of Alt, Ctrl, and Shift, and Keyname is one of A through Z or 0 through 12.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -3730,9 +3934,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WindowStyle</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify how the application window will appear</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -3742,9 +3946,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WorkingDirectory</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Sets the path of the shortcut's working directory</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
         <dev:type>
           <maml:name>System.IO.FileInfo</maml:name>
@@ -3754,9 +3958,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ArgumentList">
         <maml:name>Arguments</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Optionally set arguments to target file</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -3766,9 +3970,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Admin</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, the shortcut is run as Administrator</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3778,9 +3982,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3790,9 +3994,9 @@ utf-32</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3846,184 +4050,6 @@ utf-32</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Shortcut.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Update-Context</command:name>
-      <command:verb>Update</command:verb>
-      <command:noun>Context</command:noun>
-      <maml:description>
-        <maml:para>Update context for Approve-Execute function</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Script scope context variable is updated. Execution context is shown in the console every time Approve-Execute is called. It helps to know the state and progress of execution.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Update-Context</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Root</maml:name>
-          <maml:Description>
-            <maml:para>First context string before . (dot)</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Section</maml:name>
-          <maml:Description>
-            <maml:para>Second context string after . (dot)</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-          <maml:name>Subsection</maml:name>
-          <maml:Description>
-            <maml:para>Additional string after -&gt; (arrow)</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
-          <maml:Description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
-          <maml:Description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Root</maml:name>
-        <maml:Description>
-          <maml:para>First context string before . (dot)</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>Section</maml:name>
-        <maml:Description>
-          <maml:para>Second context string after . (dot)</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-        <maml:name>Subsection</maml:name>
-        <maml:Description>
-          <maml:para>Additional string after -&gt; (arrow)</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
-        <maml:Description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
-        <maml:Description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Update-Context</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>None. Update-Context does not generate any output</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>None.</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Update-Context "IPv4" "Outbound" "RuleGroup"</dev:code>
-        <dev:remarks>
-          <maml:para>[IPv4.Outbound -&gt; RuleGroup]</maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Update-Context.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

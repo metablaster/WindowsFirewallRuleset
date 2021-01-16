@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Write to log file
+Write a message or hash table to log file
 
 ## SYNTAX
 

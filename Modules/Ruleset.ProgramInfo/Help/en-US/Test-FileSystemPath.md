@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Test file system path syntax and existence
+Test existence of a file system path and validate path syntax
 
 ## SYNTAX
 
@@ -176,7 +176,7 @@ Accept wildcard characters: False
 
 ### -Quiet
 
-If specified does not write any warnings or errors, only true or false is returned.
+If specified, does not write any warnings or errors, only true or false is returned.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

@@ -6,7 +6,7 @@
       <command:verb>ConvertFrom</command:verb>
       <command:noun>HexIP</command:noun>
       <maml:description>
-        <maml:para>Converts a hexadecimal IP address into a dotted decimal string.</maml:para>
+        <maml:para>Converts a hexadecimal IP address into a dotted decimal string</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -17,9 +17,9 @@
         <maml:name>ConvertFrom-HexIP</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>An IP Address to convert.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -32,9 +32,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>An IP Address to convert.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -69,6 +69,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -97,7 +100,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>BinaryIP</command:noun>
       <maml:description>
-        <maml:para>Converts a Decimal IP address into a binary format.</maml:para>
+        <maml:para>Converts a Decimal IP address into a binary format</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -108,9 +111,9 @@
         <maml:name>ConvertTo-BinaryIP</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>An IP Address to convert.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -123,9 +126,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>An IP Address to convert.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -160,6 +163,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -188,7 +194,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>DecimalIP</command:noun>
       <maml:description>
-        <maml:para>Converts a Decimal IP address into a 32-bit unsigned integer.</maml:para>
+        <maml:para>Converts a Decimal IP address into a 32-bit unsigned integer</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -199,9 +205,9 @@
         <maml:name>ConvertTo-DecimalIP</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>An IP Address to convert.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -214,9 +220,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>An IP Address to convert.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -251,6 +257,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -279,7 +288,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>DottedDecimalIP</command:noun>
       <maml:description>
-        <maml:para>Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address.</maml:para>
+        <maml:para>Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -290,9 +299,9 @@
         <maml:name>ConvertTo-DottedDecimalIP</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A string representation of an IP address from either UInt32 or dotted binary.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -305,9 +314,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A string representation of an IP address from either UInt32 or dotted binary.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -342,6 +351,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -377,7 +389,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>HexIP</command:noun>
       <maml:description>
-        <maml:para>Convert a dotted decimal IP address into a hexadecimal string.</maml:para>
+        <maml:para>Convert a dotted decimal IP address into a hexadecimal string</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -388,9 +400,9 @@
         <maml:name>ConvertTo-HexIP</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>An IP Address to convert.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -403,9 +415,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>An IP Address to convert.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -440,6 +452,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -468,7 +483,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>Mask</command:noun>
       <maml:description>
-        <maml:para>Convert a mask length to a dotted-decimal subnet mask.</maml:para>
+        <maml:para>Convert a mask length to a dotted-decimal subnet mask</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -479,9 +494,9 @@
         <maml:name>ConvertTo-Mask</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="Length">
           <maml:name>MaskLength</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The number of bits which must be masked.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Byte</command:parameterValue>
           <dev:type>
             <maml:name>System.Byte</maml:name>
@@ -494,9 +509,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="Length">
         <maml:name>MaskLength</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The number of bits which must be masked.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Byte</command:parameterValue>
         <dev:type>
           <maml:name>System.Byte</maml:name>
@@ -531,6 +546,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -559,7 +577,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>MaskLength</command:noun>
       <maml:description>
-        <maml:para>Convert a dotted-decimal subnet mask to a mask length.</maml:para>
+        <maml:para>Convert a dotted-decimal subnet mask to a mask length</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -570,9 +588,9 @@
         <maml:name>ConvertTo-MaskLength</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="Mask">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask to convert into length.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -585,9 +603,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="Mask">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask to convert into length.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -622,6 +640,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -650,7 +671,7 @@
       <command:verb>ConvertTo</command:verb>
       <command:noun>Subnet</command:noun>
       <maml:description>
-        <maml:para>Convert a start and end IP address to the closest matching subnet.</maml:para>
+        <maml:para>Convert a start and end IP address to the closest matching subnet</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -661,9 +682,9 @@
         <maml:name>ConvertTo-Subnet</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Any IP address in the subnet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -673,9 +694,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -688,9 +709,9 @@
         <maml:name>ConvertTo-Subnet</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Start</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The first IP address from a range.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -700,9 +721,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>End</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The last IP address from a range.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -715,9 +736,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Any IP address in the subnet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -727,9 +748,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -739,9 +760,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Start</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The first IP address from a range.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -751,9 +772,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>End</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The last IP address from a range.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -788,6 +809,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -837,7 +861,7 @@
       <command:verb>Get</command:verb>
       <command:noun>BroadcastAddress</command:noun>
       <maml:description>
-        <maml:para>Get the broadcast address for a network range.</maml:para>
+        <maml:para>Get the broadcast address for a network range</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -848,9 +872,9 @@
         <maml:name>Get-BroadcastAddress</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -860,9 +884,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -875,9 +899,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -887,9 +911,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -924,6 +948,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -973,7 +1000,7 @@
       <command:verb>Get</command:verb>
       <command:noun>NetworkAddress</command:noun>
       <maml:description>
-        <maml:para>Get the network address for a network range.</maml:para>
+        <maml:para>Get the network address for a network range</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -984,9 +1011,9 @@
         <maml:name>Get-NetworkAddress</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -996,9 +1023,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1011,9 +1038,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1023,9 +1050,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1060,6 +1087,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1102,7 +1132,7 @@
       <command:verb>Get</command:verb>
       <command:noun>NetworkRange</command:noun>
       <maml:description>
-        <maml:para>Get a list of IP addresses within the specified network.</maml:para>
+        <maml:para>Get a list of IP addresses within the specified network</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1113,9 +1143,9 @@
         <maml:name>Get-NetworkRange</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1125,9 +1155,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1137,9 +1167,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IncludeNetworkAndBroadcast</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Include the network and broadcast addresses when generating a network address range.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1151,9 +1181,9 @@
         <maml:name>Get-NetworkRange</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Start</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The start address of a range.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -1163,9 +1193,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>End</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The end address of a range.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress</maml:name>
@@ -1178,9 +1208,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1190,9 +1220,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1202,9 +1232,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IncludeNetworkAndBroadcast</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Include the network and broadcast addresses when generating a network address range.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1214,9 +1244,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Start</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The start address of a range.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -1226,9 +1256,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>End</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The end address of a range.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress</maml:name>
@@ -1263,6 +1293,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1309,9 +1342,9 @@
         <maml:name>Get-NetworkSummary</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1321,9 +1354,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1336,9 +1369,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1348,9 +1381,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1385,6 +1418,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1427,7 +1463,7 @@
       <command:verb>Get</command:verb>
       <command:noun>Subnet</command:noun>
       <maml:description>
-        <maml:para>Get a list of subnets of a given size within a defined supernet.</maml:para>
+        <maml:para>Get a list of subnets of a given size within a defined supernet</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1438,9 +1474,9 @@
         <maml:name>Get-Subnet</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Any address in the super-net range. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1450,9 +1486,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>SubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The subnet mask of the network to split. Mandatory if the subnet mask is not included in the IPAddress parameter.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1462,9 +1498,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NewSubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Split the existing network described by the IPAddress and subnet mask using this mask.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1477,9 +1513,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Any address in the super-net range. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1489,9 +1525,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>SubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The subnet mask of the network to split. Mandatory if the subnet mask is not included in the IPAddress parameter.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1501,9 +1537,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NewSubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Split the existing network described by the IPAddress and subnet mask using this mask.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1543,6 +1579,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1578,7 +1617,7 @@
       <command:verb>Resolve</command:verb>
       <command:noun>IPAddress</command:noun>
       <maml:description>
-        <maml:para>Resolves an IP address expression using wildcard expressions to individual IP addresses.</maml:para>
+        <maml:para>Resolves an IP address expression using wildcard expressions to individual IP addresses</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1589,9 +1628,9 @@
         <maml:name>Resolve-IPAddress</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The IPAddress expression to resolve.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1604,9 +1643,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The IPAddress expression to resolve.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1641,6 +1680,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1669,7 +1711,7 @@
       <command:verb>Test</command:verb>
       <command:noun>SubnetMember</command:noun>
       <maml:description>
-        <maml:para>Tests an IP address to determine if it falls within IP address range.</maml:para>
+        <maml:para>Tests an IP address to determine if it falls within IP address range</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1680,9 +1722,9 @@
         <maml:name>Test-SubnetMember</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>SubjectIPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A representation of the subject, the network to be tested. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1692,9 +1734,9 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>ObjectIPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A representation of the object, the network to test against. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1704,9 +1746,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SubjectSubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1716,9 +1758,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ObjectSubnetMask</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A subnet mask as an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1731,9 +1773,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>SubjectIPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A representation of the subject, the network to be tested. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1743,9 +1785,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>ObjectIPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A representation of the object, the network to test against. Either a literal IP address, a network range expressed as CIDR notation, or an IP address and subnet mask in a string.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1755,9 +1797,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SubjectSubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1767,9 +1809,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ObjectSubnetMask</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A subnet mask as an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1804,6 +1846,9 @@
         <maml:para>- Include licenses and move comment based help outside of functions</maml:para>
         <maml:para>- For code to be consistent with project code formatting and symbol casing.</maml:para>
         <maml:para>- Removed unnecessary position arguments, added default argument values explicitly.</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

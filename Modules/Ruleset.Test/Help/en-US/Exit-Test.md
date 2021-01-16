@@ -98,10 +98,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Exit-Test does not generate any output
+### [string]
 
 ## NOTES
 
-None.
+TODO: Write-Information instead of Write-Output
 
 ## RELATED LINKS

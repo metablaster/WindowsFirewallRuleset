@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Update or install specified package provider
+Update or install specified package providers
 
 ## SYNTAX
 

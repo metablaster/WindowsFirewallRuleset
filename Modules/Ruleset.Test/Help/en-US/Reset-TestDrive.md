@@ -162,7 +162,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
 TODO: Path supports wildcards
 
 ## RELATED LINKS

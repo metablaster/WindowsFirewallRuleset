@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Exports firewall rules to a CSV or JSON file.
+Exports firewall rules to a CSV or JSON file
 
 ## SYNTAX
 

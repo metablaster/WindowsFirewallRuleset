@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get SID for given user account
+Get SID for specified user account
 
 ## SYNTAX
 

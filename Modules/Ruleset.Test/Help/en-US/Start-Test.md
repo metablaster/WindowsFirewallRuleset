@@ -14,7 +14,8 @@ Start test case
 ## SYNTAX
 
 ```powershell
-Start-Test [-Message] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Start-Test [-Message] <String> [-Expected <String>] [-Command <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,18 +29,29 @@ This function must be called before single test case starts executing
 ### EXAMPLE 1
 
 ```powershell
-Start-Test "Get-Something"
+Start-Test "some test"
 ```
 
-**************************
-* Testing: Get-Something *
-**************************
+************************************
+* Testing: Get-Something some test *
+************************************
+
+### EXAMPLE 2
+
+```powershell
+Start-Test "some test" -Expected "output 123" -Command "Set-Something"
+```
+
+*****************************************************
+* Testing: Set-Something some test -\> output 123 *
+*****************************************************
 
 ## PARAMETERS
 
 ### -Message
 
-Message to format and print before test case begins
+Message to format and print before test case begins.
+This message is appended to command being tested and then printed.
 
 ```yaml
 Type: System.String
@@ -48,6 +60,40 @@ Aliases:
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Expected
+
+Expected output of a test.
+This value is appended to Message.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Command
+
+The command which is to be tested.
+This value overrides default Command parameter specified in Enter-Test.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -96,12 +142,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Start-Test does not generate any output
+### [string]
 
 ## NOTES
 
 TODO: switch for no new line, some tests will produce redundant new lines, ex.
 Format-Table in pipeline
 TODO: Doesn't work starting tests inside dynamic modules
+TODO: Write-Information instead of Write-Output
 
 ## RELATED LINKS

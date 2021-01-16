@@ -9,29 +9,31 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Used to prompt user to approve running script
+Customized user prompt to continue
 
 ## SYNTAX
 
 ### None (Default)
 
 ```powershell
-Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>] [-Force]
- [<CommonParameters>]
+Approve-Execute [-Title <String>] [-Context <String>] [-ContextLeaf <String>] [-Question <String>]
+ [-Accept <String>] [-Deny <String>] [-Unsafe] [-Force] [<CommonParameters>]
 ```
 
 ### ToAll
 
 ```powershell
-Approve-Execute [-Unsafe] [-Title <String>] [-Question <String>] [-Accept <String>] [-Deny <String>]
- -YesToAll <PSReference> -NoToAll <PSReference> [-Force] [<CommonParameters>]
+Approve-Execute [-Title <String>] [-Context <String>] [-ContextLeaf <String>] [-Question <String>]
+ [-Accept <String>] [-Deny <String>] -YesToAll <PSReference> -NoToAll <PSReference> [-YesAllHelp <String>]
+ [-NoAllHelp <String>] [-Unsafe] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-In addition to prompt, execution context is shown.
-Asking for approval helps to let run master script and only execute specific
-scripts, thus loading only needed rules.
+Prompt user to continue running script or section of code.
+In addition to prompt, an optional execution context can be shown.
+Help messages for prompt choices can be optionally customized.
+Asking for approval can help to run master script and only execute specific set of scripts.
 
 ## EXAMPLES
 
@@ -51,22 +53,6 @@ PS> Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)
 
 ## PARAMETERS
 
-### -Unsafe
-
-If specified the command is considered unsafe, and the default action is then "No"
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Title
 
 Prompt title
@@ -78,7 +64,44 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: "Executing: " + (Split-Path -Leaf $MyInvocation.ScriptName)
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Context
+
+Optional context to append to the title.
+Context is automatically regenerated if the -Title parameter is empty or not set.
+Otherwise previous context is reused.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ContextLeaf
+
+Optional string to append to context.
+If not specified, context leaf is automatically generated if both the -Title and -Context parameters
+are not set.
+Otherwise if -Title is set without -Context this parameter is ignored.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,7 +124,7 @@ Accept wildcard characters: False
 
 ### -Accept
 
-Prompt help menu for default action
+Custom help message for "Yes" choice
 
 ```yaml
 Type: System.String
@@ -117,7 +140,7 @@ Accept wildcard characters: False
 
 ### -Deny
 
-Prompt help menu for deny action
+Custom help message for "No" choice
 
 ```yaml
 Type: System.String
@@ -165,9 +188,57 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -YesAllHelp
+
+Custom help message for "YesToAll" choice
+
+```yaml
+Type: System.String
+Parameter Sets: ToAll
+Aliases:
+
+Required: False
+Position: Named
+Default value: Continue with all the steps of the operation
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoAllHelp
+
+Custom help message for "NoToAll" choice
+
+```yaml
+Type: System.String
+Parameter Sets: ToAll
+Aliases:
+
+Required: False
+Position: Named
+Default value: Skip this operation and all subsequent operations
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Unsafe
+
+If specified, the command is considered unsafe and the default action is then "No"
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 
-If specified, this function does nothing and returns true
+If specified, this function does nothing, ignores all other parameters and returns true
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -191,10 +262,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [bool] True if the user wants to continue, false otherwise
+### [bool] True if operation should be performed, false otherwise
 
 ## NOTES
 
-None.
+TODO: Help messages and question message needs better description to fit more scenarios
+TODO: Implement accepting arbitrary amount of choices, ex.
+\[ChoiceDescription\[\]\] parameter
+TODO: Implement timeout to accept default choice, ex.
+Host.UI.RawUI.KeyAvailable
+TODO: Standard parameter for help message should be -Prompt
 
 ## RELATED LINKS

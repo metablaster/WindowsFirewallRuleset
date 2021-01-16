@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Validate User Principal Name syntax
+Validate Universal Principal Name syntax
 
 ## SYNTAX
 
@@ -33,7 +33,7 @@ Test-UPN [-Name] <String[]> [-Suffix] [-Quiet] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Test if User Principal Name (UPN) has valid syntax.
+Test if Universal Principal Name (UPN) has valid syntax.
 UPN consists of user account name, also known as the logon name and
 UPN suffix, also known as the domain name.
 (or an IP address)
@@ -86,7 +86,7 @@ False
 
 ### -Name
 
-User Principal Name in form of: user@domain.com
+Universal Principal Name in form of: user@domain.com
 If Prefix is specified, domain name can be omitted.
 If Suffix is specified, logon name can be omitted.
 
@@ -136,7 +136,7 @@ Accept wildcard characters: False
 
 ### -Quiet
 
-if specified UPN syntax errors are not shown, only true or false is returned.
+If specified, UPN syntax errors are not shown, only true or false is returned.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -176,4 +176,3 @@ TODO: There is a thing such as: "MicrosoftAccount\TestUser@domain.com"
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-UPN.md)
 
 [https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats](https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats)
-

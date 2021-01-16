@@ -14,7 +14,8 @@ Get principals of specified groups on target computers
 ## SYNTAX
 
 ```powershell
-Get-GroupPrincipal [-Group] <String[]> [-Domain <String[]>] [-Disabled] [-CIM] [<CommonParameters>]
+Get-GroupPrincipal [-Group] <String[]> [-Domain <String[]>] [-Include <String>] [-Exclude <String>] [-Disabled]
+ [-CIM] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -67,6 +68,38 @@ Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
+```
+
+### -Include
+
+Specifies a username as a wildcard pattern that this function includes in the operation.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -Exclude
+
+Specifies a username as a wildcard pattern that this function excludes from operation.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
 ```
 
 ### -Disabled

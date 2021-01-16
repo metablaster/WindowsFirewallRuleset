@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-This command defines a global function that always runs in the compatibility session.
+This command defines a global function that always runs in the compatibility session
 
 ## SYNTAX
 
@@ -151,6 +151,7 @@ Following modifications by metablaster November 2020:
 January 2021:
 
 - Replace cast to \[void\] with Out-Null
+- Added parameter debugging stream
 
 ## RELATED LINKS
 

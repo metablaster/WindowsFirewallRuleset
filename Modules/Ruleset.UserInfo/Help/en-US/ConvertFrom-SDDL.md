@@ -19,17 +19,24 @@ ConvertFrom-SDDL [-SDDL] <String[]> [<CommonParameters>]
 
 ## DESCRIPTION
 
-Convert one or multiple SDDL strings to Principals
+Convert one or multiple SDDL strings to Principal, a custom object containing
+relevant information about the principal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-ConvertFrom-SDDL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+ConvertFrom-SDDL -SDDL "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 ```
 
 ### EXAMPLE 2
+
+```powershell
+ConvertFrom-SDDL $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
+```
+
+### EXAMPLE 3
 
 ```
 $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)" | ConvertFrom-SDDL
@@ -39,7 +46,7 @@ $SomeSDDL, $SDDL2, "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)" | ConvertFrom-SDDL
 
 ### -SDDL
 
-String array of one or more strings of SDDL syntax
+One or more strings of SDDL syntax
 
 ```yaml
 Type: System.String[]

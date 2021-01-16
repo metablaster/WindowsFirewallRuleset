@@ -158,7 +158,7 @@ Accept wildcard characters: False
 
 ### -Merge
 
-If specified combines resultant SDDL strings into one
+If specified, combines resultant SDDL strings into one
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

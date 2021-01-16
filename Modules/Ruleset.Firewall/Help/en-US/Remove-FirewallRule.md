@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Removes firewall rules according to a list in a CSV or JSON file.
+Removes firewall rules according to a list in a CSV or JSON file
 
 ## SYNTAX
 

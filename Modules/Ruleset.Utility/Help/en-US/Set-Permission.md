@@ -48,6 +48,9 @@ Set-Permission [-LiteralPath] <String> [-Domain <String>] [-Protected] [-Preserv
 Set-Permission sets permission or ownership of a filesystem or registry object such as file,
 folder, registry key or registry item.
 
+Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
+This function also serves as replacement for takeown.exe and icacls.exe whose syntax is arcane.
+
 ## EXAMPLES
 
 ### EXAMPLE 1
@@ -89,7 +92,6 @@ Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's co
 
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
-Environment variables are allowed.
 
 ```yaml
 Type: System.String
@@ -105,7 +107,7 @@ Accept wildcard characters: False
 
 ### -Owner
 
-Principal who will be the new owner of a resource.
+Principal username who will be the new owner of a resource.
 Using this parameter means taking ownership of a resource.
 
 ```yaml
@@ -340,7 +342,7 @@ Accept wildcard characters: False
 
 ### -Force
 
-If specified skips prompting for confirmation.
+If specified, skips prompting for confirmation to perform recursive action
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -401,18 +403,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
+PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
+is in Set-Privilege.ps1 which this function makes use of.
+
 TODO: Manage audit entries
 TODO: Which combination is for "Replace all child object permissions with inheritable permissions from this object"
 TODO: Which combination is for "Include inheritable permissions from this object's parent"
-Set-Permission function is a wrapper around *-Acl commandlets for easier ACL editing.
-This function also serves as replacement for takeown.exe and icacls.exe whose syntax is strange and
-using these in PowerShell is usually awkward.
 TODO: See https://powershellexplained.com/2020-03-15-Powershell-shouldprocess-whatif-confirm-shouldcontinue-everything/
-TODO: switch to ignore errors and continue doing things, useful for recurse
+TODO: A switch to ignore errors and continue doing things, useful for recurse
 TODO: A bunch of other security options can be implemented
-TODO: Set-Acl : Requested registry access is not allowed, unable to modify ownership happens because
-PowerShell process does not have high enough privileges even if run as Administrator, a fix for this
-is in Scripts\External\Set-Privilege.ps1 which this function must make use of.
 
 Links listed below are provided for additional parameter description in order of how parameters are declared
 

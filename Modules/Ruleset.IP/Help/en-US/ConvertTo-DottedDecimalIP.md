@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address.
+Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address
 
 ## SYNTAX
 
@@ -76,6 +76,10 @@ Modifications by metablaster year 2019, 2020:
 - Include licenses and move comment based help outside of functions
 - For code to be consistent with project code formatting and symbol casing.
 - Removed unnecessary position arguments, added default argument values explicitly.
+
+January 2021:
+
+- Added parameter debugging stream
 
 ## RELATED LINKS
 

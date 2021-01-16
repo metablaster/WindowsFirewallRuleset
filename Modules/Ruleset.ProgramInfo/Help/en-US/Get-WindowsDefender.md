@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get installed Windows Defender
+Get Windows Defender installation information
 
 ## SYNTAX
 
@@ -19,7 +19,7 @@ Get-WindowsDefender [[-Domain] <String>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Gets installation information about Windows defender.
+Gets Windows defender install location directory
 
 ## EXAMPLES
 

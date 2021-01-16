@@ -17,9 +17,9 @@
         <maml:name>ConvertFrom-OSBuild</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Build</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Operating system build number</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Decimal</command:parameterValue>
           <dev:type>
             <maml:name>System.Decimal</maml:name>
@@ -32,9 +32,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Build</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Operating system build number</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Decimal</command:parameterValue>
         <dev:type>
           <maml:name>System.Decimal</maml:name>
@@ -101,9 +101,9 @@
         <maml:name>Get-InterfaceAlias</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Obtain interface aliases configured for specific IP version</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -113,9 +113,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify wildcard options that modify the wildcard patterns found in interface alias strings. Compiled: The wildcard pattern is compiled to an assembly. This yields faster execution but increases startup time. CultureInvariant: Specifies culture-invariant matching. IgnoreCase: Specifies case-insensitive matching. None: Indicates that no special processing is required.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Compiled</command:parameterValue>
@@ -131,9 +131,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -142,9 +142,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -153,9 +153,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -167,9 +167,9 @@
         <maml:name>Get-InterfaceAlias</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Obtain interface aliases configured for specific IP version</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -179,9 +179,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify wildcard options that modify the wildcard patterns found in interface alias strings. Compiled: The wildcard pattern is compiled to an assembly. This yields faster execution but increases startup time. CultureInvariant: Specifies culture-invariant matching. IgnoreCase: Specifies case-insensitive matching. None: Indicates that no special processing is required.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">None</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Compiled</command:parameterValue>
@@ -197,9 +197,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only virtual adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -208,9 +208,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -219,9 +219,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -233,9 +233,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
         <maml:name>AddressFamily</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Obtain interface aliases configured for specific IP version</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -245,9 +245,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WildCardOption</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify wildcard options that modify the wildcard patterns found in interface alias strings. Compiled: The wildcard pattern is compiled to an assembly. This yields faster execution but increases startup time. CultureInvariant: Specifies culture-invariant matching. IgnoreCase: Specifies case-insensitive matching. None: Indicates that no special processing is required.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.WildcardOptions</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.WildcardOptions</maml:name>
@@ -257,9 +257,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only physical adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -269,9 +269,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only virtual adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -281,9 +281,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hidden</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only hidden interfaces are included</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -293,9 +293,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Connected</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -365,7 +365,7 @@
       <command:verb>Get</command:verb>
       <command:noun>InterfaceBroadcast</command:noun>
       <maml:description>
-        <maml:para>Get broadcast address</maml:para>
+        <maml:para>Get interface broadcast address</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -376,9 +376,9 @@
         <maml:name>Get-InterfaceBroadcast</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -387,9 +387,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -401,9 +401,9 @@
         <maml:name>Get-InterfaceBroadcast</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only virtual adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -412,9 +412,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -426,9 +426,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only physical adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -438,9 +438,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only virtual adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -450,9 +450,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hidden</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only hidden interfaces are included</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -474,7 +474,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[IPAddress] Broadcast addresses</maml:name>
+          <maml:name>[string] Broadcast addresses</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -526,9 +526,9 @@
         <maml:name>Get-SystemSKU</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SKU</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Operating system SKU number</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -541,9 +541,9 @@
         <maml:name>Get-SystemSKU</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>One or more computer names</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -556,9 +556,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SKU</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Operating system SKU number</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
@@ -568,9 +568,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>One or more computer names</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -648,7 +648,7 @@
       <command:verb>Resolve</command:verb>
       <command:noun>Host</command:noun>
       <maml:description>
-        <maml:para>Resolve host or IP</maml:para>
+        <maml:para>Resolve host to IP or an IP to host</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -659,9 +659,9 @@
         <maml:name>Resolve-Host</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Target host name which to resolve to an IP address.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -671,9 +671,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FlushDNS</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Flush DNS resolver cache before resolving IP or host name</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -682,9 +682,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
-            <maml:para>Obtain IP address specified IP version</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Obtain IP address for specified IP version</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -694,9 +694,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -705,9 +705,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -719,9 +719,9 @@
         <maml:name>Resolve-Host</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="none">
           <maml:name>IPAddress</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Target IP which to resolve to host name.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Net.IPAddress[]</command:parameterValue>
           <dev:type>
             <maml:name>System.Net.IPAddress[]</maml:name>
@@ -731,9 +731,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FlushDNS</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Flush DNS resolver cache before resolving IP or host name</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -742,9 +742,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -753,9 +753,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -767,9 +767,9 @@
         <maml:name>Resolve-Host</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
-            <maml:para>Obtain IP address specified IP version</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Obtain IP address for specified IP version</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -779,9 +779,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Resolve local host name to an IP of a physical adapter</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -790,9 +790,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -801,9 +801,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -812,9 +812,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -823,9 +823,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -837,9 +837,9 @@
         <maml:name>Resolve-Host</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
-            <maml:para>Obtain IP address specified IP version</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>Obtain IP address for specified IP version</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -849,9 +849,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Resolve local host name to an IP of a virtual adapter</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -860,9 +860,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -871,9 +871,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -882,9 +882,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -893,9 +893,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -907,9 +907,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Target host name which to resolve to an IP address.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -919,9 +919,9 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="none">
         <maml:name>IPAddress</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Target IP which to resolve to host name.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Net.IPAddress[]</command:parameterValue>
         <dev:type>
           <maml:name>System.Net.IPAddress[]</maml:name>
@@ -931,9 +931,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FlushDNS</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Flush DNS resolver cache before resolving IP or host name</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -943,9 +943,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
         <maml:name>AddressFamily</maml:name>
-        <maml:Description>
-          <maml:para>Obtain IP address specified IP version</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>Obtain IP address for specified IP version</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -955,9 +955,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Resolve local host name to an IP of a physical adapter</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -967,9 +967,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Resolve local host name to an IP of a virtual adapter</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -979,9 +979,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hidden</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only hidden interfaces are included</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -991,9 +991,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Connected</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1003,9 +1003,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1015,9 +1015,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1095,7 +1095,7 @@
       <command:verb>Select</command:verb>
       <command:noun>IPInterface</command:noun>
       <maml:description>
-        <maml:para>Get network adapter IP configuration</maml:para>
+        <maml:para>Select IP configuration for specified network adapters</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1106,9 +1106,9 @@
         <maml:name>Select-IPInterface</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Obtain interfaces configured for specific IP version</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1118,9 +1118,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1129,9 +1129,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1140,9 +1140,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1151,9 +1151,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CompartmentId</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies an identifier for network compartment in the protocol stack. By default, the function gets Net IP configuration in all compartments.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -1163,9 +1163,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Detailed</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Indicates that the function retrieves additional interface and computer configuration information, including the computer name, link layer address, network profile, MTU length, and DHCP status.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1177,9 +1177,9 @@
         <maml:name>Select-IPInterface</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Obtain interfaces configured for specific IP version</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1189,9 +1189,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, include only virtual adapters</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1200,9 +1200,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Hidden</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only hidden interfaces are included</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1211,9 +1211,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Connected</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1222,9 +1222,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CompartmentId</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies an identifier for network compartment in the protocol stack. By default, the function gets Net IP configuration in all compartments.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
@@ -1234,9 +1234,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Detailed</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Indicates that the function retrieves additional interface and computer configuration information, including the computer name, link layer address, network profile, MTU length, and DHCP status.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1248,9 +1248,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
         <maml:name>AddressFamily</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Obtain interfaces configured for specific IP version</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1260,9 +1260,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only physical adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1272,9 +1272,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, include only virtual adapters</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1284,9 +1284,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Hidden</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only hidden interfaces are included</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1296,9 +1296,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Connected</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, only interfaces connected to network are returned</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1308,9 +1308,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CompartmentId</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies an identifier for network compartment in the protocol stack. By default, the function gets Net IP configuration in all compartments.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
@@ -1320,9 +1320,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Detailed</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Indicates that the function retrieves additional interface and computer configuration information, including the computer name, link layer address, network profile, MTU length, and DHCP status.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1381,24 +1381,24 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Test-NetBiosName</command:name>
+      <command:name>Test-DnsName</command:name>
       <command:verb>Test</command:verb>
-      <command:noun>NetBiosName</command:noun>
+      <command:noun>DnsName</command:noun>
       <maml:description>
-        <maml:para>Validate NETBIOS name syntax</maml:para>
+        <maml:para>Validate DNS domain name syntax</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test if NETBIOS computer name has correct syntax</maml:para>
+      <maml:para>Test if DNS domain name has correct syntax. The validation is valid at Windows 2000 DNS and the Windows Server 2003 DNS and later Windows systems in Active Direcotry.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Test-NetBiosName</maml:name>
+        <maml:name>Test-DnsName</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
-            <maml:para>Computer NETBIOS name which is to be checked</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>DNS domain name which is to be checked</maml:para>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -1408,9 +1408,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Strict</maml:name>
-          <maml:Description>
-            <maml:para>If specified, name must be all uppercase and must conform to IBM specifications. By default verification conforms to Microsoft specifications and is case insensitive.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, unicode characters are not valid. By default unicode characters are valid for systems mentioned in description.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1419,9 +1419,20 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
-          <maml:Description>
-            <maml:para>if specified name syntax errors are not shown, only true or false is returned.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, syntax errors are not shown, only true or false is returned.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, domain name isn't checked against reserved words</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1433,9 +1444,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
-          <maml:para>Computer NETBIOS name which is to be checked</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>DNS domain name which is to be checked</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -1445,9 +1456,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Strict</maml:name>
-        <maml:Description>
-          <maml:para>If specified, name must be all uppercase and must conform to IBM specifications. By default verification conforms to Microsoft specifications and is case insensitive.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, unicode characters are not valid. By default unicode characters are valid for systems mentioned in description.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1457,9 +1468,21 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
-        <maml:Description>
-          <maml:para>if specified name syntax errors are not shown, only true or false is returned.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, syntax errors are not shown, only true or false is returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, domain name isn't checked against reserved words</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1490,16 +1513,218 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NetBIOS names are always converted to uppercase when sent to other systems, and may consist of any character, except: - Any character less than a space (0x20)</maml:para>
+        <maml:para>TODO: Following are syntax rules which need to be implemented: DNS names can contain only alphabetical characters (A-Z), numeric characters (0-9), the minus sign (-), and the period (.) Period characters are allowed only when they are used to delimit the components of domain style names.</maml:para>
+        <maml:para>In the Windows 2000 domain name system (DNS) and the Windows Server 2003 DNS, Unicode characters are supported. Other implementations of DNS don't support Unicode characters.</maml:para>
+        <maml:para>DNS domain names can't contain the following characters: , ~ : ! @ # $ % ^ &amp; ' . ( ) { } _ SPACE</maml:para>
+        <maml:para>The underscore has a special role. It's permitted for the first character in SRV records by RFC definition. But newer DNS servers may also allow it anywhere in a name. All characters preserve their case formatting except for ASCII characters. The first character must be alphabetical or numeric. The last character must not be a minus sign or a period. Minimum name length: 2 characters Maximum name length: 255 characters The maximum length of the host name and of the fully qualified domain name (FQDN) is 63 bytes per label and 255 characters per FQDN. The latter is based on the maximum path length possible with an Active Directory Domain name with the paths needed in SYSVOL, and it needs to obey to the 260 character MAX_PATH limitation.</maml:para>
+        <maml:para>An example path in SYSVOL contains: \\&lt;FQDN domain name&gt;\sysvol\&lt;FQDN domain name&gt;\policies\{&lt;policy GUID&gt;}\[user|machine]\&lt;CSE-specific path&gt;</maml:para>
+        <maml:para>Single-label DNS names can't be registered by using an Internet registrar. The DNS Server service may not be used to locate domain controllers in domains that have single-label DNS names. Don't use top-level Internet domain names on the intranet, such as .com, .net, and .org. TODO: There is a best practices list on MS site, for which we should generate a warning.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Test-DnsName</dev:code>
+        <dev:remarks>
+          <maml:para>Repeat ".EXAMPLE" keyword for each example.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-DnsName.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-DnsName.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/da-dk/troubleshoot/windows-server/identity/naming-conventions-for-computer-domain-site-ou</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/da-dk/troubleshoot/windows-server/identity/naming-conventions-for-computer-domain-site-ou</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Test-NetBiosName</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>NetBiosName</command:noun>
+      <maml:description>
+        <maml:para>Validate NETBIOS name syntax</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Test if NETBIOS computer name and/or user name has correct syntax The validation is valid for Windows 2000 DNS and the Windows Server 2003 DNS and later Windows systems in Active Direcotry.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-NetBiosName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Computer and/or user NETBIOS name which is to be checked</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Target</maml:name>
+          <maml:description>
+            <maml:para>Specifies the kind of name checking to perform on -Name parameter as follows:</maml:para>
+            <maml:para>- User: Name parameter is logon name</maml:para>
+            <maml:para>- Domain: Name parameter is domain name</maml:para>
+            <maml:para>- Principal: Name parameter is both, in the form of DOMAIN\USERNAME</maml:para>
+            <maml:para></maml:para>
+            <maml:para>The default is Principal.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Principal</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Strict</maml:name>
+          <maml:description>
+            <maml:para>If specified, domain name must conform to IBM specifications. By default verification conforms only to Microsoft specifications. This switch is experimental.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, name syntax errors are not shown, only true or false is returned.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, domain name isn't checked against reserved words, thus the length of domain name isn't check either since reserved words may exceed the limit.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Computer and/or user NETBIOS name which is to be checked</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Target</maml:name>
+        <maml:description>
+          <maml:para>Specifies the kind of name checking to perform on -Name parameter as follows:</maml:para>
+          <maml:para>- User: Name parameter is logon name</maml:para>
+          <maml:para>- Domain: Name parameter is domain name</maml:para>
+          <maml:para>- Principal: Name parameter is both, in the form of DOMAIN\USERNAME</maml:para>
+          <maml:para></maml:para>
+          <maml:para>The default is Principal.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Principal</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Strict</maml:name>
+        <maml:description>
+          <maml:para>If specified, domain name must conform to IBM specifications. By default verification conforms only to Microsoft specifications. This switch is experimental.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, name syntax errors are not shown, only true or false is returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, domain name isn't checked against reserved words, thus the length of domain name isn't check either since reserved words may exceed the limit.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string[]]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>According to Microsoft: NetBIOS computer names can't contain the following characters \ / : * ? " &lt; &gt; | Computers names can contain a period (.) but the name can't start with a period. Computers that are members of an AD domain can't have names that are composed completely of numbers Computer name must not be reserved word. Minimum computer name length: 1 character Maximum computer name length: 15 characters Logon names can be up to 104 characters. However, it isn't practical to use logon names that are longer than 64 characters. Logon names can't contain following characters " / \ [ ] : ; | = , + * ? &lt; &gt; Logon names can contain all other special characters, including spaces, periods, dashes, and underscores. But it's generally not a good idea to use spaces in account names.</maml:para>
+        <maml:para>TODO: The use of NetBIOS scopes in names is a legacy configuration. It shouldn't be used with Active Directory forests. TODO: There is a best practices list on MS site, for which we should generate warnings.</maml:para>
+        <maml:para>According to IBM: NetBIOS names are always converted to uppercase when sent to other systems, and may consist of any character, except: - Any character less than a space (0x20)</maml:para>
         <maml:para>- the characters " .</maml:para>
-        <maml:para>/ \ [ ] : | &lt; &gt; + = ; , The name should not start with an asterisk (*)</maml:para>
+        <maml:para>/ \ [ ] : | &lt; &gt; + = ; , The name should not start with an asterisk (*) The NetBIOS name is 16 ASCII characters, however Microsoft limits the host name to 15 characters and reserves the 16th character as a NetBIOS Suffix</maml:para>
         <maml:para>Microsoft allows the dot, while IBM does not Space character may work on Windows system as well even though it's not allowed, it may be useful for domains such as NT AUTHORITY\NETWORK SERVICE Important to understand is, the choice of name used by a higher-layer protocol or application is up to that protocol or application and not NetBIOS.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-NetBiosName "*SERVER"
+        <dev:code>Test-NetBiosName "*SERVER" -Target Domain
 False</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -1507,7 +1732,7 @@ False</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Test-NetBiosName "-SERVER-01" -Quiet
+        <dev:code>Test-NetBiosName "-SERVER-01" -Quiet -Strict -Target Domain
 True</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -1515,7 +1740,15 @@ True</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Test-NetBiosName "-Server-01" -Strict
+        <dev:code>Test-NetBiosName "-Server-01\UserName"
+True</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Test-NetBiosName "User+Name" -Target User -Strict -Quiet
 False</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -1530,6 +1763,22 @@ False</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-nbte/6f06fa0e-1dc4-4c41-accb-355aaf20546d</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>http://www.asciitable.com/</maml:linkText>
+        <maml:uri>http://www.asciitable.com/</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/da-dk/troubleshoot/windows-server/identity/naming-conventions-for-computer-domain-site-ou</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/da-dk/troubleshoot/windows-server/identity/naming-conventions-for-computer-domain-site-ou</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://en.wikipedia.org/wiki/NetBIOS</maml:linkText>
+        <maml:uri>https://en.wikipedia.org/wiki/NetBIOS</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1550,9 +1799,9 @@ False</dev:code>
         <maml:name>Test-TargetComputer</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Target computer which to test</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1562,9 +1811,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Retry</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int16</command:parameterValue>
           <dev:type>
             <maml:name>System.Int16</maml:name>
@@ -1574,9 +1823,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Timeout</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int16</command:parameterValue>
           <dev:type>
             <maml:name>System.Int16</maml:name>
@@ -1589,9 +1838,9 @@ False</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Target computer which to test</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1601,9 +1850,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Retry</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int16</command:parameterValue>
         <dev:type>
           <maml:name>System.Int16</maml:name>
@@ -1613,9 +1862,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Timeout</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int16</command:parameterValue>
         <dev:type>
           <maml:name>System.Int16</maml:name>
@@ -1688,10 +1937,10 @@ False</dev:code>
       <command:syntaxItem>
         <maml:name>Test-UNC</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-          <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:name>LiteralPath</maml:name>
+          <maml:description>
             <maml:para>Universal Naming Convention path</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -1701,9 +1950,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Strict</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, NETBIOS computer name must be all uppercase and must conform to IBM specifications. By default NETBIOS computer name verification conforms to Microsoft specifications and is case insensitive.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1712,9 +1961,9 @@ False</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
-          <maml:Description>
-            <maml:para>if specified path syntax errors are not shown, only true or false is returned.</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, path syntax errors are not shown, only true or false is returned.</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1725,10 +1974,10 @@ False</dev:code>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
-        <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:name>LiteralPath</maml:name>
+        <maml:description>
           <maml:para>Universal Naming Convention path</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -1738,9 +1987,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Strict</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, NETBIOS computer name must be all uppercase and must conform to IBM specifications. By default NETBIOS computer name verification conforms to Microsoft specifications and is case insensitive.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1750,9 +1999,9 @@ False</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
-        <maml:Description>
-          <maml:para>if specified path syntax errors are not shown, only true or false is returned.</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, path syntax errors are not shown, only true or false is returned.</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>

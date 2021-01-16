@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
-Help Version: 0.9.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.10.0
+Help Version: 0.10.0
 Locale: en-US
 ---
 
@@ -84,15 +84,15 @@ Get installed Windows SDK
 
 ### [Search-Installation](Search-Installation.md)
 
-Find installation directory of a given predefined program name
+Find installation directory for given predefined program name
 
 ### [Test-ExecutableFile](Test-ExecutableFile.md)
 
-Check if executable file exists and is trusted
+Check if executable file exists and is trusted.
 
 ### [Test-FileSystemPath](Test-FileSystemPath.md)
 
-Test file system path syntax and existence
+Test existence of a file system path and validate path syntax
 
 ### [Test-Service](Test-Service.md)
 

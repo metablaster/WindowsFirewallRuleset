@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Retrieves SQL server information from a local or remote servers.
+Get SQL server information from a local or remote servers
 
 ## SYNTAX
 

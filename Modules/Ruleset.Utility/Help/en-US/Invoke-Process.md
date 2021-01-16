@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Run process and format captured output
+Run process and optionally redirect captured output
 
 ## SYNTAX
 

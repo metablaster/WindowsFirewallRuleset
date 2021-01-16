@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Convert SID to principal user or domain name
+Convert SID to principal, user and domain name
 
 ## SYNTAX
 
@@ -19,7 +19,7 @@ ConvertFrom-SID [-SID] <String[]> [-Domain <String[]>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Convert SID to principal user or domain name, in case of pseudo and built in accounts
+Convert SID to principal, user and domain name, in case of pseudo and built in accounts
 only relevant login name is returned, not full reference name.
 In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 
@@ -57,7 +57,7 @@ Accept wildcard characters: False
 
 ### -Domain
 
-One or more computers to check if SID is not known, default is localhost
+One or more computers to check if SID is not known, the default is localhost
 
 ```yaml
 Type: System.String[]
@@ -85,14 +85,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-SID conversion for well known SIDs and display names from following links:
-1.
-http://support.microsoft.com/kb/243330
-2.
-https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab
-3.
-https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
-
 To avoid confusion, pseudo accounts ("Local Service" in the example below) can be represented as:
 1.
 SID (S-1-5-19)
@@ -117,22 +109,30 @@ This is important to understand because MSDN site (links in comment) just says "
 but we can't just use given "Name" value to refer to user when defining rules because it's
 not valid for multiple reasons such as:
 1.
-there are duplicate names, which SID do you want if "Name" is duplicate?
+There are duplicate names, which SID do you want if "Name" is duplicate?
 2.
 Some "names" are not login usernames or accounts, but we need either username or account
 3.
 Some "names" are NULL, such as capability SID's
 See also: https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers
 
-To solve the problem "Name" must be replaced with "Display Name", most "Name" values are OK,
-but those which are not are replaced with "Display Name" in the "WellKnownSIDs" variable below.
+To solve this problem "Name" must be replaced with "Display Name", most "Name" values are OK,
+but those which are not are replaced with "Display Name" in the "WellKnownSIDs" switch below.
 
 TODO: Need to implement switch parameters for UPN and NETBIOS name format in addition to display name, see:
 https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
-TODO: need to have consistent output ex.
+TODO: Need to have consistent output ex.
 domain name, principal and username, see test results,
 probably not for pseudo accounts but for built in accounts it makes sense
-TODO: need to implement CIM switch
-TODO: test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
+TODO: Need to implement CIM switch
+TODO: Test pipeline with multiple computers and SID's, probably it make no sense for multiple targets
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md)
+
+[http://support.microsoft.com/kb/243330](http://support.microsoft.com/kb/243330)
+
+[https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab)
+
+[https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers](https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers)

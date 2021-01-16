@@ -93,6 +93,10 @@ Following modifications by metablaster November 2020:
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
 
+January 2021:
+
+- Added parameter debugging stream
+
 ## RELATED LINKS
 
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WindowsPSModulePath.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Add-WindowsPSModulePath.md)

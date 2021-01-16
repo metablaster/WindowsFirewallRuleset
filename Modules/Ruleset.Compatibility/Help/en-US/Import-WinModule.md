@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Import a compatibility module.
+Import a compatibility module
 
 ## SYNTAX
 
@@ -252,6 +252,10 @@ Following modifications by metablaster November 2020:
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
 - Added HelpURI link to project location
+
+January 2021:
+
+- Added parameter debugging stream
 
 ## RELATED LINKS
 

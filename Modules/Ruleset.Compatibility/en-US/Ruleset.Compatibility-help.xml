@@ -17,9 +17,9 @@
         <maml:name>Add-WindowsPSModulePath</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -28,9 +28,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -42,9 +42,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -54,9 +54,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -91,6 +91,9 @@
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -128,7 +131,7 @@ PS&gt; Get-Module -ListAvailable</dev:code>
       <command:verb>Add</command:verb>
       <command:noun>WinFunction</command:noun>
       <maml:description>
-        <maml:para>This command defines a global function that always runs in the compatibility session.</maml:para>
+        <maml:para>This command defines a global function that always runs in the compatibility session</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -140,9 +143,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         <maml:name>Add-WinFunction</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FunctionName">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The name of the function to define</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -152,9 +155,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>ScriptBlock</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Scriptblock to use as the body of the function</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.ScriptBlock</maml:name>
@@ -164,9 +167,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -176,9 +179,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -188,9 +191,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -203,9 +206,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FunctionName">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The name of the function to define</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -215,9 +218,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>ScriptBlock</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Scriptblock to use as the body of the function</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.ScriptBlock</maml:name>
@@ -227,9 +230,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -239,9 +242,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -251,9 +254,9 @@ PS&gt; Get-Module -ListAvailable</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -292,6 +295,7 @@ PS&gt; Get-Module -ListAvailable</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Replace cast to [void] with Out-Null</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -322,7 +326,7 @@ PS&gt; myFunction Bill</dev:code>
       <command:verb>Compare</command:verb>
       <command:noun>WinModule</command:noun>
       <maml:description>
-        <maml:para>Compare the set of modules against those in the compatibility session.</maml:para>
+        <maml:para>Compare the set of modules against those in the compatibility session</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -333,9 +337,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:name>Compare-WinModule</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -345,9 +349,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -357,9 +361,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -369,9 +373,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -384,9 +388,9 @@ PS&gt; myFunction Bill</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the names or name patterns of for the modules to compare. Wildcard characters are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -396,9 +400,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -408,9 +412,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -420,9 +424,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -457,6 +461,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -492,7 +499,7 @@ PS&gt; myFunction Bill</dev:code>
       <command:verb>Copy</command:verb>
       <command:noun>WinModule</command:noun>
       <maml:description>
-        <maml:para>Copy modules from the compatibility session that are directly usable in PowerShell Core.</maml:para>
+        <maml:para>Copy modules from the compatibility session that are directly usable in PowerShell Core</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -504,9 +511,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:name>Copy-WinModule</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -516,9 +523,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -528,9 +535,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -540,9 +547,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -552,9 +559,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Destination</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The location where compatible modules should be copied to</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -567,9 +574,9 @@ PS&gt; myFunction Bill</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies names or name patterns of modules that will be copied. Wildcard characters are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -579,9 +586,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -591,9 +598,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -603,9 +610,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If needed, use this parameter to specify credentials for the compatibility session</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -615,9 +622,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Destination</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The location where compatible modules should be copied to</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -652,6 +659,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -691,17 +701,16 @@ PS&gt; myFunction Bill</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Get a list of the available modules from the compatibility session.</maml:para>
-      <maml:para>By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on this command.</maml:para>
+      <maml:para>Get a list of the available modules from the compatibility session. By default, when executing, the current compatibility session is used, or, in the case where there is no existing session, a new default session will be created. This behavior can be overridden using the additional parameters on this command.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-WinModule</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Wildcard pattern to filter module names by</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -711,9 +720,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -723,9 +732,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -735,9 +744,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -747,9 +756,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Full</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If specified, the complete deserialized module object will be returned instead of the abbreviated form returned by default.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -761,9 +770,9 @@ PS&gt; myFunction Bill</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Wildcard pattern to filter module names by</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -773,9 +782,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -785,9 +794,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -797,9 +806,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -809,9 +818,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Full</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If specified, the complete deserialized module object will be returned instead of the abbreviated form returned by default.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -846,6 +855,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -875,7 +887,7 @@ PS&gt; myFunction Bill</dev:code>
       <command:verb>Import</command:verb>
       <command:noun>WinModule</command:noun>
       <maml:description>
-        <maml:para>Import a compatibility module.</maml:para>
+        <maml:para>Import a compatibility module</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -893,9 +905,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:name>Import-WinModule</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the name of the module to be imported. Wildcard characters are supported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -905,9 +917,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Exclude</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>A list of wildcard patterns matching the names of modules that should not be imported.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -917,9 +929,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -929,9 +941,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -941,9 +953,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Prefix</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prefix to prepend to the imported command names</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -953,9 +965,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DisableNameChecking</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Disable warnings about non-standard verbs</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -964,9 +976,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoClobber</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Don't overwrite any existing function definitions</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -975,9 +987,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Force reloading the module</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -986,9 +998,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -998,9 +1010,9 @@ PS&gt; myFunction Bill</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PassThru</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1012,9 +1024,9 @@ PS&gt; myFunction Bill</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the name of the module to be imported. Wildcard characters are supported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -1024,9 +1036,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Exclude</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>A list of wildcard patterns matching the names of modules that should not be imported.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
@@ -1036,9 +1048,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1048,9 +1060,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1060,9 +1072,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Prefix</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prefix to prepend to the imported command names</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1072,9 +1084,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DisableNameChecking</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Disable warnings about non-standard verbs</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1084,9 +1096,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NoClobber</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Don't overwrite any existing function definitions</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1096,9 +1108,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Force reloading the module</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1108,9 +1120,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The credential to use when creating the compatibility session using the target machine/configuration</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -1120,9 +1132,9 @@ PS&gt; myFunction Bill</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PassThru</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If present, the ModuleInfo objects will be written to the output pipe as deserialized (PSObject) objects</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1157,6 +1169,9 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1200,7 +1215,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       <command:verb>Initialize</command:verb>
       <command:noun>WinSession</command:noun>
       <maml:description>
-        <maml:para>Initialize the connection to the compatibility session.</maml:para>
+        <maml:para>Initialize the connection to the compatibility session</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1212,9 +1227,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:name>Initialize-WinSession</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1224,9 +1239,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1236,9 +1251,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The credential to use when connecting to the target machine/configuration</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -1248,9 +1263,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PassThru</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If present, the specified session object will be returned</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -1262,9 +1277,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1274,9 +1289,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1286,9 +1301,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The credential to use when connecting to the target machine/configuration</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -1298,9 +1313,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PassThru</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If present, the specified session object will be returned</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1335,6 +1350,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
+        <maml:para></maml:para>
+        <maml:para>January 2021:</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1370,7 +1388,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       <command:verb>Invoke</command:verb>
       <command:noun>WinCommand</command:noun>
       <maml:description>
-        <maml:para>Invoke a ScriptBlock that runs in the compatibility runspace.</maml:para>
+        <maml:para>Invoke a ScriptBlock that runs in the compatibility runspace</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -1382,9 +1400,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:name>Invoke-WinCommand</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>ScriptBlock</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The scriptblock to invoke in the compatibility session</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.ScriptBlock</maml:name>
@@ -1394,9 +1412,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1406,9 +1424,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ConfigurationName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -1418,9 +1436,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The credential to use when connecting to the compatibility session.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
             <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -1430,9 +1448,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ArgumentList</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Arguments to pass to the scriptblock</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
             <maml:name>System.Object[]</maml:name>
@@ -1445,9 +1463,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>ScriptBlock</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The scriptblock to invoke in the compatibility session</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.ScriptBlock</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.ScriptBlock</maml:name>
@@ -1457,9 +1475,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If you don't want to use the default compatibility session, use this parameter to specify the name of the computer on which to create the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1469,9 +1487,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ConfigurationName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specifies the configuration to connect to when creating the compatibility session (Defaults to "Microsoft.PowerShell")</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -1481,9 +1499,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The credential to use when connecting to the compatibility session.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSCredential</maml:name>
@@ -1493,9 +1511,9 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ArgumentList</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Arguments to pass to the scriptblock</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
           <maml:name>System.Object[]</maml:name>
@@ -1533,6 +1551,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Replace cast to [void] with Out-Null</maml:para>
+        <maml:para>- Added parameter debugging stream</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

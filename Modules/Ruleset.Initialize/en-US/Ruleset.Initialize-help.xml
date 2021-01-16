@@ -6,7 +6,7 @@
       <command:verb>Initialize</command:verb>
       <command:noun>Module</command:noun>
       <maml:description>
-        <maml:para>Update or install specified out of date module</maml:para>
+        <maml:para>Update or install specified modules</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -17,9 +17,9 @@
         <maml:name>Initialize-Module</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>FullyQualifiedName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
           <dev:type>
             <maml:name>System.Collections.Hashtable</maml:name>
@@ -29,9 +29,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Repository</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Repository name from which to download module such as PSGallery, if repository is not registered user is prompted to register it</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -41,9 +41,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>URL</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Repository location associated with repository name, this parameter is used only if repository is not registered</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
           <dev:type>
             <maml:name>System.Uri</maml:name>
@@ -53,9 +53,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>InfoMessage</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Help message used for default choice in host prompt</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -65,9 +65,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Trusted</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>If the supplied repository needs to be registered Trusted specifies whether repository is trusted or not. this parameter is used only if repository is not registered</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -76,9 +76,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AllowPrerelease</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>whether to allow installing beta modules</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -87,9 +87,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Required</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Controls whether module initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -101,9 +101,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>FullyQualifiedName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Hash table with a minimum ModuleName and ModuleVersion keys, in the form of ModuleSpecification</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
         <dev:type>
           <maml:name>System.Collections.Hashtable</maml:name>
@@ -113,9 +113,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Repository</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Repository name from which to download module such as PSGallery, if repository is not registered user is prompted to register it</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -125,9 +125,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>URL</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Repository location associated with repository name, this parameter is used only if repository is not registered</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
         <dev:type>
           <maml:name>System.Uri</maml:name>
@@ -137,9 +137,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>InfoMessage</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Help message used for default choice in host prompt</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -149,9 +149,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Trusted</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>If the supplied repository needs to be registered Trusted specifies whether repository is trusted or not. this parameter is used only if repository is not registered</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -161,9 +161,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AllowPrerelease</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>whether to allow installing beta modules</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -173,9 +173,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Required</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Controls whether module initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -240,7 +240,7 @@
       <command:verb>Initialize</command:verb>
       <command:noun>Project</command:noun>
       <maml:description>
-        <maml:para>Check system requirements for this project</maml:para>
+        <maml:para>Check repository system requirements</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -251,9 +251,20 @@
         <maml:name>Initialize-Project</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Strict</maml:name>
-          <maml:Description>
-            <maml:para>If specified exit is called on failure instead of return</maml:para>
-          </maml:Description>
+          <maml:description>
+            <maml:para>If specified, exit is called on failure instead of return</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, script runs regardless of global variable that controls whether to run initialization</maml:para>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -265,9 +276,21 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Strict</maml:name>
-        <maml:Description>
-          <maml:para>If specified exit is called on failure instead of return</maml:para>
-        </maml:Description>
+        <maml:description>
+          <maml:para>If specified, exit is called on failure instead of return</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, script runs regardless of global variable that controls whether to run initialization</maml:para>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -331,7 +354,7 @@
       <command:verb>Initialize</command:verb>
       <command:noun>Provider</command:noun>
       <maml:description>
-        <maml:para>Update or install specified package provider</maml:para>
+        <maml:para>Update or install specified package providers</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -342,9 +365,9 @@
         <maml:name>Initialize-Provider</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>FullyQualifiedName</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Hash table ProviderName, Version representing minimum required module</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
           <dev:type>
             <maml:name>System.Collections.Hashtable</maml:name>
@@ -354,9 +377,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>InfoMessage</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Optional information displayable to user for choice help message</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
@@ -366,9 +389,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Required</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
@@ -380,9 +403,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>FullyQualifiedName</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Hash table ProviderName, Version representing minimum required module</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
         <dev:type>
           <maml:name>System.Collections.Hashtable</maml:name>
@@ -392,9 +415,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>InfoMessage</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Optional information displayable to user for choice help message</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
@@ -404,9 +427,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Required</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -474,9 +497,9 @@
         <maml:name>Initialize-Service</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>Name</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter one or more services to configure</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
@@ -489,9 +512,9 @@
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>Name</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter one or more services to configure</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>

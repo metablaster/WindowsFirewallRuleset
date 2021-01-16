@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get network adapter IP configuration
+Select IP configuration for specified network adapters
 
 ## SYNTAX
 

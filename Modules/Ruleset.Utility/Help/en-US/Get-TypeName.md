@@ -141,7 +141,7 @@ Accept wildcard characters: False
 ### -Accelerator
 
 When used converts resultant full typename to accelerator.
-Otherwise if specified with "Name" parameter, converts resultant accelerator to full name.
+Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name.
 No conversion is done if resultant type already is of desired format.
 
 ```yaml

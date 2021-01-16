@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ComputerInfo
 Module Guid: c68a812d-076d-47bd-a73d-8d4600bd3c51
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.9.1
-Help Version: 0.9.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.10.0
+Help Version: 0.10.0
 Locale: en-US
 ---
 
@@ -37,6 +37,10 @@ Resolve host to IP or an IP to host
 ### [Select-IPInterface](Select-IPInterface.md)
 
 Select IP configuration for specified network adapters
+
+### [Test-DnsName](Test-DnsName.md)
+
+Validate DNS domain name syntax
 
 ### [Test-NetBiosName](Test-NetBiosName.md)
 
