@@ -50,7 +50,8 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
 
 ## Filterline
 
-Filterline regexes are to be used in `.vscode\filterline.json` to filter out firewall logs
+Filterline regexes are to be used in `.vscode\filterline.json` to filter out firewall logs.\
+Note that the syntax for filterline regex expressions is java script.
 
 ### Programs
 

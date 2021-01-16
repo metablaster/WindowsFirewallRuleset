@@ -9,7 +9,7 @@ Useful if you encountered problems such as internet connectivity and you're unab
 **WARNING:** These steps will not save any GPO rules, all preferences will be gone, resetting
 Control Panel firewall leaves only default rules shipped with system and removes the rest.
 
-## Follow below steps to reset GPO firewall
+## Follow steps below to reset GPO firewall
 
 1. Press start button
 2. type: `secpol.msc`

@@ -96,9 +96,11 @@ and usually need googling out what they do.
 - `PlayToDevice` PlayTo Renderers
 - `<unknown>` Captive Portal Addresses
 
-Address sections bellow were tested with:\
-Private IP client TCP: `psping64 -4 192.168.8.104:555` and server TCP: `psping64 -4 -s 192.168.8.104:555`
-Directed broadcast, client ICMP: `psping64 -4 192.168.8.255`
+Address sections below were tested with:
+
+- Private IP client TCP: `psping64 -4 192.168.8.104:555`
+- Server TCP: `psping64 -4 -s 192.168.8.104:555`
+- Directed broadcast, client ICMP: `psping64 -4 192.168.8.255`
 
 ### LocalSubnet
 
@@ -156,9 +158,9 @@ From addresses below, only the IPv4 loopback range is valid for Windows firewall
 
 ### InterfaceAlias
 
-**NOTE:** Not fully compatible with interfaceType because interfaceType parameter has higher
-precedence over InterfaceAlias, Mixing interfaceType with InterfaceAlias doesn't make sense,
-except if InterfaceType is "Any", use just one of these two parameters.
+**NOTE:** Not fully compatible with InterfaceType because InterfaceType parameter has higher
+precedence over InterfaceAlias, mixing InterfaceType with InterfaceAlias doesn't make sense,
+except if InterfaceType is `Any`, use just one of these two parameters.
 
 ```powershell
 [WildCardPattern] ([string])
@@ -240,7 +242,7 @@ For more information see [New-NetFirewallRule][netfirewallrule]
 
 ## Application layer enforcement
 
-The meaning of this parameter value depends on which parameter it is used:
+The meaning of this parameter value depends on which parameter is it used:
 
 1. `"*"` Applies to: services only OR application packages only
 2. `Any` Applies to: all programs AND (services OR application packages)
@@ -422,23 +424,21 @@ and here is how to convert this info to other firewall/traffic contexts.
 
 ### Outbound
 
-```none
-Log         GUI               PowerShell
-src-ip      Local Address     LocalAddress
-dst-ip      Remote Address    RemoteAddress
-src-port    Local Port        LocalPort
-dst-port    Remote Port       RemotePort
-```
+| Log      | GUI             | PowerShell    |
+| -------- | --------------- | ------------- |
+| src-ip   | Local Address   | LocalAddress  |
+| dst-ip   | Remote Address  | RemoteAddress |
+| src-port | Local Port      | LocalPort     |
+| dst-port | Remote Port     | RemotePort    |
 
 ### Inbound
 
-```none
-Log         GUI               PowerShell
-src-ip      Remote Address    RemoteAddress
-dst-ip      Local Address     LocalAddress
-src-port    Remote Port       RemotePort
-dst-port    Local Port        LocalPort
-```
+| Log      | GUI             | PowerShell    |
+| -------- | --------------- | ------------- |
+| src-ip   | Remote Address  | RemoteAddress |
+| dst-ip   | Local Address   | LocalAddress  |
+| src-port | Remote Port     | RemotePort    |
+| dst-port | Local Port      | LocalPort     |
 
 ## Hidden parameters
 
@@ -513,7 +513,7 @@ If this object is retrieved from the ActiveStore, describes the current enforcem
 ### LSM
 
 One might think this has something to do with "Local Session Manager" but it's a shorthand for
-"Loose Source Mapping", the meaning is the same as "LooseSourceMapping" property.
+"Loose Source Mapping", the meaning is the same as `LooseSourceMapping` property.
 
 ### Platforms
 
@@ -534,12 +534,12 @@ UDP traffic is inferred by checking the following fields:
 
 1. local address
 2. remote address
-3. protocol,
+3. protocol
 4. local port
 5. remote port
 
 TODO: Rules which do not specify some of these fields, how does the above apply then?\
-ex. only to new connections or existing connections. (statefull/stateless filtering)
+ex. only to new connections or existing connections? (statefull/stateless filtering)
 
 ### LocalOnlyMapping
 
@@ -551,7 +551,7 @@ Sessions will be grouped based on local address, protocol, and local port.
 
 ### LooseSourceMapping
 
-Whether to group UDP packets into conversations based upon the local address, local port,
+Whether to group UDP packets into conversations based upon the local address, local port
 and remote port.
 
 If set, the rule accepts packets incoming from a host other than the one the packets were sent to.

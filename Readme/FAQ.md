@@ -135,14 +135,14 @@ this is requirement not suggestion.
 If you have to bring it online, take down the rest of network.
 
 If you don't follow this list, no firewall, anti virus or security expert is going to help much.\
-Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.\
+Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.
 
 Remember, the most common ways for hackers "getting in" and stealing data is when **YOU** make a mistake!
 (not because of their skills)
 
-If you recognize your mistakes from this list on regular basis, your system or network simply cannot
-be trusted, only hard drive reformat, network reset and clean reinstall of operating systems can regain
-trust to original value.
+If you recognize your mistakes from this list on regular basis, and would like to ensure clean state
+and fresh start then only hard drive reformat, network reset and clean reinstall of operating systems
+can regain trust to original value.
 
 ## Windows Firewall does not write logs
 
@@ -152,13 +152,14 @@ To resolve this issue ensure following:
 
 1. Verify current logging setting is enabled and is pointing to expected log file location.
 
-    To verify this, open firewall properties in GPO and select current network profile tab,
+    To verify this, open firewall properties in GPO and select current network profile tab:
+
     - Under logging section click on `Customize...` button
     - Under `Name` verify location to log file is correct
     - Under `Log dropped packet` make sure it's set to `Yes`
 
-2. Verify that both the target folder and all the logs inside that logs directory grants write
-permission for Windows Firewall service which is `"NT SERVICE\mpssvc"`
+2. Verify that both the target folder and all the logs inside that directory grant write
+permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
 3. For changes to take effect save your modifications and reboot system
 
@@ -205,11 +206,11 @@ them as follows:
     - Update PowerShell module help files (only if you enable development mode)
     - Install or update dependent PowerShell modules (only if you enable development mode)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
-    - Modify file system permissions (ex. After setting firewall to log into this repository)
+    - Modify file system permissions (ex. after setting firewall to log into this repository)
     - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer
     only)
 
-    All of these modifications in point 4 are done in following situations:
+    All of these modifications in point 5 are done in following situations:
 
     - VScode might ask you to install recommended extensions
     - Some script might ask you to confirm whether you want to do this or that, and you're free to
@@ -221,11 +222,11 @@ them as follows:
 
 6. Here is a list of scripts that may behave unexpectedly because these are either experimental,
    not intended for end user or hard to get right, therefore you should review them first to learn
-   their purpose
+   their purpose:
 
     - `Scripts\Grant-Logs.ps1`
     - `Scripts\Reset-Firewall.ps1`
-    - `Test\Ruleset.Utility\Set-Permission.ps1`
+    - `...\Set-Permission.ps1`
     - `...\Initialize-Module.ps1`
     - `...\Initialize-Provider.ps1`
     - `...\Uninstall-DuplicateModule.ps1`
@@ -234,7 +235,7 @@ them as follows:
     - `...\Ruleset.Firewall\Import-FirewallRule.ps1`
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
 
-    By default none of these scripts run on their own, except as explained in point 4.\
+    By default none of these scripts run on their own, except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 
 7. Following is a list of external executables that are run by some scripts
@@ -242,7 +243,7 @@ them as follows:
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
     - [code.cmd][vscode] (To learn VSCode version)
-    - [git.exe][git] (To learn git version)
+    - [git.exe][git] (To learn git version or to set up git)
     - [makecab.exe][makecab] (To make online help content)
 
 8. There is nothing harmful here
@@ -293,7 +294,7 @@ actually bring these options back, so here are my favorites that should fix it i
    rules and settings because once the problem is resolved importing them back will be easy and quick.
    - Next step is to reset GPO firewall to defaults by using `Scripts\Reset-Firewall.ps1`,
    but don't do anything to firewall in Control Panel.
-   - When done reboot system and see if this message was gone and also whether profile options are back.
+   - When done reboot system and see if this message has gone and also whether profile options are back.
    - If the message is still there, you can try to recall any security policies you did in GPO, it
    doesn't have to be related to firewall, ex. anti virus, network options or anything similar can
    be the cause for this message.

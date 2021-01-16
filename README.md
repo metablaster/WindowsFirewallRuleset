@@ -8,7 +8,9 @@
 - [Windows Firewall Ruleset](#windows-firewall-ruleset)
   - [Table of Contents](#table-of-contents)
   - [About Windows Firewall Ruleset](#about-windows-firewall-ruleset)
-  - [Core benefits of this firewall project](#core-benefits-of-this-firewall-project)
+    - [Firewall rules](#firewall-rules)
+    - [Firewall framework](#firewall-framework)
+  - [Core benefits of this firewall](#core-benefits-of-this-firewall)
   - [License](#license)
   - [Requirements](#requirements)
     - [Requirements details](#requirements-details)
@@ -23,42 +25,47 @@
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
   - [Checking for updates](#checking-for-updates)
+    - [Using GitHub Desktop app](#using-github-desktop-app)
     - [Manual release download](#manual-release-download)
     - [Manual beta download](#manual-beta-download)
-    - [Using GitHub Desktop app](#using-github-desktop-app)
     - [Using git command](#using-git-command)
     - [Which update method is the best](#which-update-method-is-the-best)
   - [Contributing or suggestions](#contributing-or-suggestions)
+  - [Support](#support)
   - [Customization](#customization)
-  - [More information and help](#more-information-and-help)
   - [The future](#the-future)
 
 ## About Windows Firewall Ruleset
 
-This project consists of 2 major parts, firewall rules and firewall deployment framework.
+This project consists of 2 major parts, firewall rules and firewall framework
 
-- Windows firewall rules sorted into individual PowerShell scripts according to:
+### Firewall rules
 
-  - Rule group
-  - Traffic direction (ex. inbound, outbound or IPSec)
-  - Software type and publisher
-  - IP version (IPv4 / IPv6)
+Windows firewall rules sorted into individual PowerShell scripts according to:
 
-- Such as for example:
+- Rule group
+- Traffic direction (ex. inbound, outbound or IPSec)
+- Software type and publisher
+- IP version (IPv4 / IPv6)
 
-  - ICMP traffic
-  - Browser rules
-  - Built in OS software
-  - Store apps
-  - Windows services
-  - Multiplayer Games
-  - Microsoft programs
-  - 3rd party programs
-  - broadcast traffic
-  - multicast traffic
+Such as for example:
 
-- Firewall deployment framework consists of a number of PowerShell modules, scripts and documentation
-used to gather environment information relevant to build specialized firewall such as:
+- ICMP traffic
+- Browser rules
+- Built in OS software
+- Store apps
+- Windows services
+- Multiplayer Games
+- Microsoft programs
+- 3rd party programs
+- broadcast traffic
+- multicast traffic
+
+### Firewall framework
+
+- Firewall framework consists of a number of PowerShell modules, scripts and documentation used to
+gather environment information relevant to build and deploy firewall specialized for target system
+such as:
 
   - Computers on network
   - Installed programs
@@ -69,7 +76,7 @@ used to gather environment information relevant to build specialized firewall su
   - Quick analysis of packet trace and audit logs
   - Various firewall, system, troubleshooting and network utility functions
 
-- Meaning this project is a good base to easily extend your firewall to include more rules and
+- Meaning this repository is a good base to easily extend your firewall to include more rules and
 functionalities.
 - Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
 and a bunch of useful documentation.
@@ -78,42 +85,43 @@ to your firewall.
 
 [Table of Contents](#table-of-contents)
 
-## Core benefits of this firewall project
+## Core benefits of this firewall
 
-1. System administrators would usually try to evade setting up detailed firewall because detailed
-firewall configuration is time consuming process, takes a lot of troubleshooting, changes require
+1. System administrators would usually evade setting up detailed firewall because detailed firewall
+configuration is time consuming process, takes a lot of troubleshooting, changes require
 testing and security auditing and it only gets worse if you want to deploy firewall to hundreds or
 thousands of remote computers, for example not all computers might have same software or restriction
 requirements.
 
 2. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
 (Local Group Policy), meaning system settings changes or random programs which install rules as
-part of their installation process will have no effect on firewall unless you explicitly make an exception.
+part of their installation process will have no effect on firewall unless you explicitly make an
+exception.
 
-3. Unlike default (aka predefined) Windows firewall rules, these rules are more restrictive such as,
-tied to explicit user accounts, rules apply to specific ports, network interfaces, specific executables,
-services etc. all of which is learned automatically from target system.
-
-4. Unlike in usual scenario, you will know which rules no longer have an effect or are redundant
-due to ex. uninstalled program, a missing system service which no longer exists, renamed
-executable after Windows update and similar reasons.
-
-5. Updating, filtering or sorting rules and attributes such as ports, addresses and similar is much
-easier since these rules are in scripts, you can use editor tools such as regex, multicursor or
-`CTRL + F` to perform bulk operations on your rules, doing this in Windows firewall GUI is beyond
-all pain or not possible due to interface limitations.
-
-6. Default outbound is "block" unless there is a rule to allow network traffic,
-in default Windows firewall this is not possible unless you maintain rules for every possible
-program or service, thanks to this collection of rules, setting default outbound to block
-requires very little or no additional work.
-
-7. Rules based on programs and services will have their involved executable file checked for digital
+3. Rules based on programs and services will have their involved executable file checked for digital
 signature, for security reasons rule is not created or loaded into firewall if this verification
 fails. (can be forced)
 
+4. Default outbound is "block" unless there is a rule to allow network traffic, in most firewalls
+this is not possible unless you maintain rules for every possible program or service,
+thanks to this collection of rules, setting default outbound to block requires very little or no
+additional work.
+
+5. Unlike in usual scenario, you will know which rules no longer have an effect or are redundant
+due to ex. uninstalled program, a missing system service which no longer exists, renamed
+executable after Windows update and similar reasons.
+
+6. Unlike default (predefined) Windows firewall rules, these rules are more restrictive such as,
+tied to explicit user accounts, rules apply to specific ports, network interfaces, specific
+executables, services etc. all of which is learned automatically from target system.
+
+7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is much
+easier since these rules are in scripts (serialized), you can use editor tools such as regex,
+multicursor or `CTRL + F` to perform bulk operations on your rules, doing this in any firewall GUI
+is beyond all pain or not possible due to interface limitations.
+
 8. A good portion of code is dedicated to provide cross platform and automated solution to build and
-define firewall specialized for specific target system and users, minimizing the need to do something
+define firewall specialized for target system and users, minimizing the need to do something
 manually thus saving you much valuable administration time.
 
 [Table of Contents](#table-of-contents)
@@ -254,14 +262,18 @@ needed to update firewall for system changes that may happen at any time.
 or just download released zip file from [Releases][release], and then for latest
 release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
-1. Extract downloaded archive somewhere, these steps assume you've extracted the zip (project root directory)
+
+2. Extract downloaded archive somewhere, these steps assume you've extracted the zip (project root directory)
 into `C:\` root drive directly.
+
 3. If you would like to use Windows PowerShell instead of PowerShell Core see:\
 [How to open Windows PowerShell](Readme/WindowsPowerShell.md)
+
 4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
 PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
 Core) if not open it manually.
+
 5. If you don't have PowerShell context menu then move to `C:\` root drive by executing following 2
 lines (type or copy/paste following commands and hit enter for each),
 this is where you extracted your downloaded zip file
@@ -398,7 +410,8 @@ If you want to deploy only specific rules there are 2 ways to do this:
 `No` and hit enter to skip current ruleset.
 
 2. In PowerShell console navigate `cd` to directory containing ruleset script you want and execute
-individual script.
+individual script.\
+For example `cd .\Rules\IPv4\Outbound\Software` followed by `.\Adobe.ps1` to load rules for Adobe.
 
 You might want to run `Scripts\Complete-Firewall.ps1` afterwards to apply default firewall behavior if
 it's not already set, or you can do it manually in GPO but with limited power.
@@ -464,34 +477,38 @@ and try it out, however if it produces errors, you can either fix problems or sw
 
 There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
 
+### Using GitHub Desktop app
+
+This method is similar to git command, but instead you'll use a graphical interface which
+you can get from here: [GitHub Desktop][github desktop]
+
+The benefit of using GitHub Desktop is that you easily see code changes on you desktop for each
+individual update.
+
+To use it you will need [github account][github join] and a [fork][github fork] of this repository
+in your GitHub account.
+
+To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs] or search for
+some tutorial online.
+
 ### Manual release download
 
-This method requires you to simply download released scripts which can be found in
+This method requires you to simply download released zip file which can be found in
 [Releases][release], this is always from "master" branch
 
 ### Manual beta download
 
 This method is good if you want to download from "develop" branch, to do so, use the `branch` button
-here on this site to switch to either master or develop branch, next use `Code` button and either clone
-or download zip.
-
-### Using GitHub Desktop app
-
-This method is similar to the one that follows, but instead you'll use a graphical interface which
-you can get from here: [GitHub Desktop][github desktop]
-
-To use it you will need [github account][github join] and a [fork][github fork] of this repository
-in your GitHub account.
-
-To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs]
+here on this site and switch to develop branch, next use `Code` button and either clone or download
+zip.
 
 ### Using git command
 
-This method is similar to GitHub Desktop above but good if you need to do it in console,
+This method is similar to GitHub Desktop above but good if you need specific git features.\
 In addition to 2 mentioned requirements for GitHub Desktop you will also need [git][download git]
 and optionally (but recommended) [SSH keys][github ssh]
 
-Follow steps below to check for updates once you installed git and cloned your own fork:
+Follow steps below to check for updates once you installed git and [cloned][clone] your own fork:
 
 - Right click on Start button in Windows
 - Click `Windows PowerShell` to open PowerShell
@@ -533,50 +550,62 @@ you need to save and upload your modifications to your fork, for example:
  git push
  ```
 
- Of course you can switch from one branch to another with git in PowerShell as many times as you
- want and all files will be auto updated without the need to re-download or re-setup anything.
+ You can switch from one branch to another with git in PowerShell as many times as you  want and
+ all files will be auto updated without the need to re-download or re-setup anything.
 
- For more info on how to use git see [git documentation][git docs]
+ For more information on how to use git see [git documentation][git docs]\
+ There are also many great tutorials online to learn how to use git.
 
 ### Which update method is the best
 
-If your goal is to just get updates then `GitHub Desktop` is cool, otherwise if your goal is
+If your goal is to just get updates then `GitHub Desktop` is the best, otherwise if your goal is
 firewall customization, using `git` command would be more productive because it offers specific
 functionalities that you might need.
 
 You can have both setups in same time and use them as needed in specific situation.\
-There isn't any real benefit with manual zip download in comparison with git or GitHub Desktop.
+There is no benefit with manual zip download in comparison with git or GitHub Desktop.
 
 [Table of Contents](#table-of-contents)
 
 ## Contributing or suggestions
 
-Do you want to suggest new rules, features, report problems or contribute?
+Do you want to suggest new rules, features, report problems or contribute by writing code?
 
-Below are general notes for requesting new rules or features.\
-If you would like to contribute by writing code you should read [CONTRIBUTING.md](CONTRIBUTING.md)
-instead.
+Here are brief notes for requesting new rules or features.\
+If you would like to contribute by writing code you should also read [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Feel free to suggest or contribute new rules, or improvements for existing rules or scripts.\
-Just make sure you abide to notices below:
+You are most welcome to suggest or contribute new rules or improvements for existing rules or scripts.\
+Please try to abide to notices below:
 
 1. If possible provide some documentation or links (preferably official) for your rules or design
 changes so that it can be easy to verify these rules or changes don't contain mistakes.\
 ex. for ICMP rules you would provide a link to [IANA][iana] with relevant reference document.
 
-2. To report problems, suggest new rules or various rule and code improvements, please open new issue
-here on github and provide details as outlined in "New issue".
+2. To report problems, suggest new rules or various rule and code design improvements, please open
+new [issue][issues] and provide relevant details as outlined in "Get started".
 
-3. To contribute your own rules, it is desired that each rule contains good description of it's
-purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is about
-and easily conclude whether to enable/disable rule or allow/block network traffic.
+3. To contribute your own already made rules, it is desired that each rule contains good description
+of it's purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is
+about to easily conclude whether to enable/disable rule or allow/block network traffic.\
+If possible, the rule should be specific and not generic, that means specifying protocol,
+IP addresses, ports, system user, interface type and other relevant information.
 
-4. It is also important that the rule is very specific and not generic, that means specifying protocol,
-IP addresses, ports, system user, interface type and other relevant information.\
-For example just saying: allow TCP outbound port 2891 for my new game without telling where, why
-or which user account to allow, or no explanation what this is supposed to allow or block is not acceptable.
+If you lack some of the details, no problem but please try to collect as much information as
+possible.
 
-If you lack some of the information, no problem but please try to collect some information first.
+[Table of Contents](#table-of-contents)
+
+## Support
+
+Inside [Readme](Readme) folder you will find useful information not only about this project but also
+general information on how to troubleshoot firewall and network problems, or to gather other relevant
+information.
+
+It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
+explains how to monitor firewall in real time.
+
+If you have random questions that don't fit anywhere else or you just want to say something then
+you're most welcome to open new discussion in [Discussions][discrussions]
 
 [Table of Contents](#table-of-contents)
 
@@ -592,19 +621,6 @@ this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
 
 These 2 documents are bare minimum to get you started customizing this repository.
-
-## More information and help
-
-Inside [Readme](Readme) folder you will find useful information not only about this project but also
-general information on how to troubleshoot firewall and network problems, or gather other relevant information.
-
-It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
-explains how to monitor firewall in real time.
-
-If you have random questions that don't fit anywhere else or you just want to say something then
-please open new discussion in [Discussions][discrussions]
-
-[Table of Contents](#table-of-contents)
 
 ## The future
 
@@ -646,5 +662,7 @@ Following features are desired and might be available at some point in the futur
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [github desktop]: https://desktop.github.com "Download GitHub Desktop"
 [github desktop docs]: https://docs.github.com/en/free-pro-team@latest/desktop "Visit GitHub Desktop docs"
-[release]: https://github.com/metablaster/WindowsFirewallRuleset/releases
-[discrussions]: https://github.com/metablaster/WindowsFirewallRuleset/discussions
+[release]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Firewall releases"
+[discrussions]: https://github.com/metablaster/WindowsFirewallRuleset/discussions "GitHub discussions"
+[issues]: https://github.com/metablaster/WindowsFirewallRuleset/issues "GitHub issues"
+[clone]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository "Cloning a repository"

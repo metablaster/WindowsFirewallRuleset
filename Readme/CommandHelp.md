@@ -311,13 +311,18 @@ Most useful commands for design
 ### Get approved verbs
 
 ```powershell
+# PowerShell Core
 Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
+
+# Windows PowerShell
+Get-Verb | Select-Object Verb, Group | Sort-Object Verb
 ```
 
 ### Invoke PSScriptAnalyzer
 
 ```powershell
-Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1
+Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSettings.psd1 |
+Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath
 ```
 
 ### Add or use types from .NET assembly in PowerShell

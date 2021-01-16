@@ -7,8 +7,8 @@ It is not recommended to disable firewall for security reasons except to trouble
 Keep in mind that GPO firewall and Control Panel firewall are 2 distinct "firewalls" that let you
 manage the same filtering platform behind the scene.
 
-And, GPO firewall has higher priority which makes Control Panel firewall not active except if
-explicitly merged into GPO firewall in either GUI settings or via PowerShell.
+GPO firewall has higher priority which makes Control Panel firewall not active except if
+explicitly merged into GPO firewall in either GUI settings or with PowerShell.
 
 **NOTE:** Disabling firewall does not delete rules, you can enable firewall back again by following
 same steps.

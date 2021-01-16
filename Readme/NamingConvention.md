@@ -205,6 +205,7 @@ PSTypeName = unique object type name for this module
 
 Minimum properties if possible in this order:
 
+```none
 Domain = computer name
 User = user name
 Group = group name
@@ -213,5 +214,6 @@ SID = security identifier of a principal
 SDDL = SDDL string of a principal
 [bool] LocalAccount = indicates local, roaming or MS account
 PSTypeName = unique object type name for this module
+```
 
 [parameters]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/standard-cmdlet-parameter-names-and-types "Visit Microsoft docs"

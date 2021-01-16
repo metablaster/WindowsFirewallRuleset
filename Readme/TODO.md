@@ -6,8 +6,8 @@ This is a global todo list of this repository which applies to several or all sc
 For smaller todo's local to specific scripts and files see individual files, you can use workspace\
 recommended extension `todo-tree` to navigate `TODO`, `HACK` and `NOTE` tags.
 
-Some todo's listed here are are duplicate of todo's inside individual scripts, this is\
-intentionally for important todo's to make is easier to tell where to look at while resolving this list.
+Some todo's listed here are duplicate of todo's inside individual scripts, this is intentionally
+for important todo's to make is easier to tell where to look at while resolving this list.
 
 Todo's in this file are categorized into following sections:
 
@@ -102,7 +102,7 @@ Todo's in this file are categorized into following sections:
     - null corectness, in specific cases just `if (something)` doesn't work as in other languages
     - Detect if a script was run manually, to be able to reset errors and warning status, or to
     conditionally run `gpuupdate.exe`
-    - Make it possible to deploy firewall to computers on network
+    - Make it possible to deploy firewall to remote computers
     - For remoting `ComputerName` parameters are needed, this could be also
     specified/learned with/from PolicyStore parameter
 
@@ -162,8 +162,7 @@ Todo's in this file are categorized into following sections:
 
 1. Modules
 
-    - Provide following keywords in function comments: `.DESCRIPTION` `.LINK` `.COMPONENT` `.ROLE`
-    `.FUNCTIONALITY`
+    - Provide following keywords in function comments: `.LINK` `.COMPONENT` `.ROLE` `.FUNCTIONALITY`
     - `DefaultParameterSetName` for functions with parameter sets is missing but might be desired,
     on another side many functions name default parameter set name to `None` which isn't descriptive.
     - Revisit function return statements, return keyword or Write-Output should be preferred for visibility
@@ -321,6 +320,8 @@ Todo's in this file are categorized into following sections:
    - Predefined rule list in `PredefinedRules.md` is out of date
    - Several rule scripts contain duplicate comments, need to try to keep them in one location and
    and referencing them from other related scripts or single location
+   - Markdown documentation should have shorter line width rule than scripts, ex. 80, because not
+   everybody has same monitor width and browsers will auto adjust web page.
 
 7. Other
 
@@ -328,6 +329,8 @@ Todo's in this file are categorized into following sections:
     - `mTail` coloring configuration contains gremlins (bad chars), need to test and deal with them
     - Important Promt's should probably not depend on `$InformationPreference`
     - See how, could we make use of `Plaster` for template generation
+    - Just like there is PSScriptAnalyzer to analyse code, there is also a need to develop a script
+    or module to analyze code performance.
 
 ## Done
 

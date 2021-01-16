@@ -233,7 +233,7 @@ Management (Local group policy, GPO store)
 
 ![Alternate text](Screenshots/GPOFirewall.png)
 
-To open GPO firewall follow steps bellow:
+To open GPO firewall follow steps below:
 
 1. Press Windows key and type: `secpol.msc`
 2. Right click on `secpol.msc` and click `Run as administrator`
