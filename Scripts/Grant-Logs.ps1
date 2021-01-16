@@ -106,7 +106,7 @@ Initialize-Project -Strict
 # User prompt
 $Accept = "Grant permission to read firewall log files until system reboot"
 $Deny = "Abort operation, no permission change is done on firewall logs"
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Unsafe -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"

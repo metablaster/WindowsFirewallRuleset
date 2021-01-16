@@ -46,6 +46,7 @@ Reserved regex characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
     - [File name](#file-name)
     - [NETBIOS name](#netbios-name)
     - [System environment variable](#system-environment-variable)
+    - [Email validation](#email-validation)
 
 ## Filterline
 
@@ -338,4 +339,13 @@ The first character of the name must not be numeric.
 A variable name may include any of the following characters:\
 A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 
+### Email validation
+
+2 useful links:
+
+- [Microsoft][msemail]
+- [stackoverflow][stackemail]
+
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection
+[msemail]: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN
+[stackemail]: https://stackoverflow.com/questions/5342375/regex-email-validation

@@ -104,6 +104,9 @@ function Test-ExecutableFile
 
 	$Executable = Split-Path -Path $ExpandedPath -Leaf
 
+	# NOTE: Index 0 is this function
+	$Caller = (Get-PSCallStack)[1].Command
+
 	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall)
 	{
 		if ($ExpandedPath -match "(\\\.\.\\)+")
@@ -163,7 +166,7 @@ function Test-ExecutableFile
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for: $ExpandedPath"
 
-				Write-Information -Tags "User" -MessageData "INFO: To load rules for unsigned executables run '$($MyInvocation.MyCommand)' with -Force switch"
+				Write-Information -Tags "User" -MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 				return $false
 			}
 		}
@@ -172,8 +175,6 @@ function Test-ExecutableFile
 		return $true
 	}
 
-	# NOTE: Index 0 is this function
-	$Caller = (Get-PSCallStack)[1].Command
 	Write-Information -Tags "User" -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
 
 	return $false

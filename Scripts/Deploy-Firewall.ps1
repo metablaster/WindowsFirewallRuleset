@@ -64,7 +64,6 @@ None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Rule deployment should probably be separated into new script
-TODO: OutputType attribute is correct but does not match the output due to Write-Output
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -145,6 +144,7 @@ $ExecuteParams["NoAllHelp"] = "Abort deploying rules and finish deployment"
 if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt
+	$AllCurrent = $YesToAll
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
@@ -265,7 +265,6 @@ $Destination = "$ProjectRoot\Rules\IPv4\Outbound"
 
 # Update user prompt
 $YesToAll = $Force
-$AllCurrent = $YesToAll
 $NoCurrent = $false
 
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv4 rules to deploy"
@@ -280,6 +279,7 @@ $ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish d
 if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt
+	$AllCurrent = $YesToAll
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
@@ -453,7 +453,6 @@ $Destination = "$ProjectRoot\Rules\IPv6\Inbound"
 
 # Update user prompt
 $YesToAll = $Force
-$AllCurrent = $YesToAll
 $NoCurrent = $false
 
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv6 rules to deploy"
@@ -468,6 +467,7 @@ $ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish d
 if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt
+	$AllCurrent = $YesToAll
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
@@ -494,7 +494,6 @@ $Destination = "$ProjectRoot\Rules\IPv6\Outbound"
 
 # Update user prompt
 $YesToAll = $Force
-$AllCurrent = $YesToAll
 $NoCurrent = $false
 
 $ExecuteParams["Accept"] = "Continue prompting which outbound IPv6 rules to deploy"
@@ -509,6 +508,7 @@ $ExecuteParams["NoAllHelp"] = "Abort deploying any subsequent rules and finish d
 if (Approve-Execute @ExecuteParams)
 {
 	# Update user prompt
+	$AllCurrent = $YesToAll
 	$ExecuteParams["Accept"] = "Continue prompting which core rules to deploy"
 	$ExecuteParams["Deny"] = "Skip all core rules"
 	$ExecuteParams["Title"] = "Selecting core rules"
@@ -541,31 +541,31 @@ Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectR
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)
 {
-	Write-Output ""
+	Write-Information -MessageData "" -InformationVariable ThrowAway
 	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
 	Write-Information -Tags "User" -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
 }
 
 if ($WarningLogging -and $WarningStatus)
 {
-	Write-Output ""
+	Write-Information -MessageData "" -InformationVariable ThrowAway
 	Write-Warning -Message "Warnings were generated and saved to: $("$ProjectRoot\Logs")"
 }
 
 if ($ErrorStatus)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Not all operations completed successfully"
+	Write-Warning -Message "Not all operations completed successfully"
 }
 else
 {
 	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!"
 }
 
-Write-Output ""
+Write-Information -MessageData "" -InformationVariable ThrowAway
 
 # Restore changed variables status
 Set-Variable -Name ErrorStatus -Scope Global -Value $PreviousErrorStatus
 Set-Variable -Name WarningStatus -Scope Global -Value $PreviousWarningStatus
-Set-Variable -Name ProjectCheck -Scope Global -Value $PreviousProjectCheck
+Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 
 Update-Log

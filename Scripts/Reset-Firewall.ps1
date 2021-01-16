@@ -57,6 +57,7 @@ None. Reset-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: OutputType attribute
+TODO: Implement resetting only public, private or domain profile, ShouldProcess
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

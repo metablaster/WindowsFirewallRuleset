@@ -302,7 +302,7 @@ however keep in mind, it's not completely in line with this repository best prac
 
 ## Static analysis
 
-[PSStaticAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
+[PSScriptAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
 
 VSCode workspace includes static analysis settings file, so all you have to do is cd into project
 root directory and invoke analyzer as follows:

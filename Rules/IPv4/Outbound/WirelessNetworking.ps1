@@ -97,7 +97,7 @@ $UserModeDrivers = Get-SDDL -Domain "NT AUTHORITY" -User "USER MODE DRIVERS"
 
 # NOTE: several rules below use this path
 $WUDFHost = "%SystemRoot%\System32\WUDFHost.exe"
-$WUDFHostValid = Test-ExecutableFile $WUDFHost -or $ForceLoad
+$WUDFHostValid = (Test-ExecutableFile $WUDFHost) -or $ForceLoad
 
 if ($WUDFHostValid)
 {

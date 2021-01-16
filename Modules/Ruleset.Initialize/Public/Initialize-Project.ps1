@@ -39,6 +39,9 @@ If not the function may exit and stop executing scripts.
 .PARAMETER Strict
 If specified, exit is called on failure instead of return
 
+.PARAMETER Force
+If specified, script runs regardless of global variable that controls whether to run initialization
+
 .EXAMPLE
 PS> Initialize-Project
 
@@ -80,13 +83,16 @@ function Initialize-Project
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[switch] $Strict
+		[switch] $Strict,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
-	if (!$ProjectCheck)
+	if (!$ProjectCheck -and !$Force)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
 		return

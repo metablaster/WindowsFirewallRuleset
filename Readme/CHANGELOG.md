@@ -79,7 +79,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Design
 
   - Pramenter names and aliases follow naming convention according to community development
-  guidelines (In progress...)
+  guidelines
   - 3rd party scripts from `External` directories merged into the rest of project code, there is no
   no point to separate code based on contributors involved.
   - Revisited Write-* commandlets to be consistent and more detailed.
@@ -87,7 +87,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Bugfix
 
   - Function and script outputs are formatted with the help of `Format.ps1xml` file for consistent
-  output (In progress...)
+  output
   - Running individual functions and scripts with common parameters such as `-Debug` or `-Verbose`
   switch did not respect the switch, fixed
 

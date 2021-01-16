@@ -79,7 +79,10 @@ Enter-Test "Test-Function"
 # 1. Experimental or potentially dangerous
 # 2. It should not be executed by RunAllTests.ps1 by default
 # 3. It takes too much time to complete
-if ($Force -or $PSCmdlet.ShouldContinue("Template Target", "Accept dangerous unit test"))
+[bool] $YesToAll = $false
+[bool] $NoToAll = $false
+
+if ($Force -or $PSCmdlet.ShouldContinue("Query", "Accept dangerous unit test", $true, $YesToAll, $NoToAll))
 {
 	Start-Test "Default test"
 	$Result = Test-Function

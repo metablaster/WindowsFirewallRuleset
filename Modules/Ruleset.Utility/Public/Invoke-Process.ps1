@@ -161,6 +161,7 @@ function Invoke-Process
 	{
 		# A collection of command-line arguments to use when starting the application
 		$Process.StartInfo.Arguments = $ArgumentList
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] $CommandName argument list is '$ArgumentList'"
 	}
 
 	if ($Async)

@@ -348,6 +348,7 @@ if (!$InModule)
 	# as private which will prevent propagating default parameters to functions in child scopes,
 	# In short advanced functions in child scopes and modules will receive these parameters by parent
 	# function, this is needed to avoid duplicate log entries.
+	# TODO: Could this override anything?
 	$private:PSDefaultParameterValues = @{}
 
 	if ($ErrorLogging)
@@ -379,7 +380,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -592,7 +593,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 29, 0))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 30, 0))
 	}
 
 	if ($Develop)
@@ -641,7 +642,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Load format data into session
 	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
-		Update-FormatData -AppendPath $_
+		Update-FormatData -AppendPath $_.FullName
 	}
 
 	# Default output location for unit tests that produce file system output
