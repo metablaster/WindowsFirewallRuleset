@@ -16,10 +16,10 @@ There is no support or help here for systems older than that.
 To be able to apply rules to these systems you'll need to modify code.\
 At a bare minimum you should do the modifications described here
 
-## Table of contents
+## Table of Contents
 
 - [How to make use of this project on older Windows systems](#how-to-make-use-of-this-project-on-older-windows-systems)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Initialization module](#initialization-module)
   - [Project settings](#project-settings)
   - [Target platform variable](#target-platform-variable)
@@ -87,6 +87,8 @@ To save yourself some time debugging you should also run code analysis with
 
 Visit `Test` folder and run all tests individually to confirm modules and their functions work as
 expected, any failure should be fixed before loading rules to save yourself from frustration.
+
+[Table of Contents](#table-of-contents)
 
 [os version]: https://docs.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version "Visit Microsoft docs"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"

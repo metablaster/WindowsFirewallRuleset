@@ -9,10 +9,10 @@ Explain what is what by mapping powershell parameters to GUI display equivalents
 In addition, explanation of other parameters which are not self explanatory or well documented
 and usually need googling out what they do.
 
-## Table of contents
+## Table of Contents
 
 - [Firewall Parameters](#firewall-parameters)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Port](#port)
     - [LocalPort/RemotePort](#localportremoteport)
     - [LocalPort TCP Inbound](#localport-tcp-inbound)
@@ -76,6 +76,8 @@ and usually need googling out what they do.
 ### RemotePort TCP Outbound
 
 - `IPHTTPSOut` IPHTTPS
+
+[Table of Contents](#table-of-contents)
 
 ## Address
 
@@ -142,10 +144,12 @@ Address sections below were tested with:
 From addresses below, only the IPv4 loopback range is valid for Windows firewall rule.
 
 |                     | IPv4        | IPv6    |
-|---------------------|-------------|---------|
+| ------------------- | ----------- | ------- |
 | Loopback Address    | 127.0.0.0/8 | ::1/128 |
 | Unspecified Address | 0.0.0.0/0   | ::/0    |
 |                     |             |         |
+
+[Table of Contents](#table-of-contents)
 
 ## Interface
 
@@ -167,6 +171,8 @@ except if InterfaceType is `Any`, use just one of these two parameters.
 [WildCardPattern] ([string], [System.Management.Automation.WildCardOptions])
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Users
 
 - `Localuser` Authorized local Principals
@@ -180,6 +186,8 @@ except if InterfaceType is `Any`, use just one of these two parameters.
 - `Allow` Block edge traversal
 - `DeferToUser` Defer to user / Defer allow to user
 - `DeferToApp` Defer to application / Defer allow to application
+
+[Table of Contents](#table-of-contents)
 
 ## Policy store
 
@@ -240,6 +248,8 @@ except if InterfaceType is `Any`, use just one of these two parameters.
 
 For more information see [New-NetFirewallRule][netfirewallrule]
 
+[Table of Contents](#table-of-contents)
+
 ## Application layer enforcement
 
 The meaning of this parameter value depends on which parameter is it used:
@@ -248,6 +258,8 @@ The meaning of this parameter value depends on which parameter is it used:
 2. `Any` Applies to: all programs AND (services OR application packages)
 
 Both of which are applied only if a packet meet the specified rule conditions
+
+[Table of Contents](#table-of-contents)
 
 ## Unicast response
 
@@ -269,6 +281,8 @@ override this option.
 sent by this computer.
 Windows Defender Firewall always permits those DHCP unicast responses.
 However, this policy setting can interfere with the NetBIOS messages that detect name conflicts.
+
+[Table of Contents](#table-of-contents)
 
 ## Parameter value example
 
@@ -309,6 +323,8 @@ LooseSourceMapping    = $true
 OverrideBlockRules    = $true
 Owner                 = "S-1-5-21-3337988176-3917481366-464002247-500"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Log file fields
 
@@ -415,6 +431,8 @@ but were not recorded in the log from the time of the last occurrence of this ev
 
 For more information see [Interpreting the Windows Firewall Log][firewall logs]
 
+[Table of Contents](#table-of-contents)
+
 ## Conversion of parameter direction
 
 Following are mappings between log file, firewall UI and PowerShell parameters.
@@ -424,21 +442,23 @@ and here is how to convert this info to other firewall/traffic contexts.
 
 ### Outbound
 
-| Log      | GUI             | PowerShell    |
-| -------- | --------------- | ------------- |
-| src-ip   | Local Address   | LocalAddress  |
-| dst-ip   | Remote Address  | RemoteAddress |
-| src-port | Local Port      | LocalPort     |
-| dst-port | Remote Port     | RemotePort    |
+| Log      | GUI            | PowerShell    |
+| -------- | -------------- | ------------- |
+| src-ip   | Local Address  | LocalAddress  |
+| dst-ip   | Remote Address | RemoteAddress |
+| src-port | Local Port     | LocalPort     |
+| dst-port | Remote Port    | RemotePort    |
 
 ### Inbound
 
-| Log      | GUI             | PowerShell    |
-| -------- | --------------- | ------------- |
-| src-ip   | Remote Address  | RemoteAddress |
-| dst-ip   | Local Address   | LocalAddress  |
-| src-port | Remote Port     | RemotePort    |
-| dst-port | Local Port      | LocalPort     |
+| Log      | GUI            | PowerShell    |
+| -------- | -------------- | ------------- |
+| src-ip   | Remote Address | RemoteAddress |
+| dst-ip   | Local Address  | LocalAddress  |
+| src-port | Remote Port    | RemotePort    |
+| dst-port | Local Port     | LocalPort     |
+
+[Table of Contents](#table-of-contents)
 
 ## Hidden parameters
 
@@ -527,6 +547,8 @@ If `+` is specified, then it means that the rule applies to that version or grea
 For more information see [MSFT_NetFirewallRule class][netfirewallrule cim] or
 [Second link][netfirewallrule cim alternative]
 
+[Table of Contents](#table-of-contents)
+
 ## UDP mapping
 
 Applies only to UDP.\
@@ -559,6 +581,8 @@ If set, the rule accepts packets incoming from a host other than the one the pac
 TODO: Explain why this parameter can't be specified for inbound rule
 
 For more information see [New-NetFirewallRule][netfirewallrule]
+
+[Table of Contents](#table-of-contents)
 
 [firewall logs]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10) "Visit Microsoft docs"
 [netfirewallrule]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN "Visit Microsoft docs"

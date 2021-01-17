@@ -11,10 +11,10 @@ mode and manipulate all regex matches however you like.
 
 Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
 
-## Table of contents
+## Table of Contents
 
 - [Regex expressions for quick reference](#regex-expressions-for-quick-reference)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Filterline](#filterline)
     - [Programs](#programs)
     - [DHCPv6](#dhcpv6)
@@ -76,6 +76,8 @@ Note that the syntax for filterline regex expressions is java script.
 ```regex
 "DROP UDP.*([0-9]{1,3}\\.){3}[0-9]{1,3}\\s\\d+(?<!5353)\\s5353"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Firewall rules
 
@@ -242,6 +244,8 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 -Action (Allow|Block) ?
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Random regexes
 
 ### File system path validation
@@ -349,6 +353,8 @@ A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 
 - [Microsoft][msemail]
 - [stackoverflow][stackemail]
+
+[Table of Contents](#table-of-contents)
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection
 [msemail]: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN

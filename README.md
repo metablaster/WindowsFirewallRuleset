@@ -115,8 +115,8 @@ executable after Windows update and similar reasons.
 tied to explicit user accounts, rules apply to specific ports, network interfaces, specific
 executables, services etc. all of which is learned automatically from target system.
 
-7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is much
-easier since these rules are in scripts (serialized), you can use editor tools such as regex,
+7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is
+much easier since these rules are in scripts (serialized), you can use editor tools such as regex,
 multicursor or `CTRL + F` to perform bulk operations on your rules, doing this in any firewall GUI
 is beyond all pain or not possible due to interface limitations.
 
@@ -157,6 +157,8 @@ Following table lists currently tested operating systems
 4. Visual Studio Code (Recommended) [Download VSCode][vscode]
 5. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
 6. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
+
+[Table of Contents](#table-of-contents)
 
 ### Requirements details
 
@@ -200,28 +202,31 @@ Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
 
 ## First time user
 
-Following are short warnings and notes first time user should be aware of
+Following are brief warnings and notes first time user should be aware of
 
 ### Warning
 
-- You might loose internet connectivity for some of your programs or in rare cases even lose internet
-connectivity completely, if that happens, you can either temporarily allow outbound network traffic
-or run `Scripts\Reset-Firewall.ps1`, to reset GPO firewall to system defaults and remove all rules.
+- You might loose internet connectivity for some of your programs or in rare cases even lose
+internet connectivity completely, if that happens, you can either temporarily allow outbound network
+traffic or run `Scripts\Reset-Firewall.ps1`, to reset GPO firewall to system defaults and remove all
+rules.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
 as rules from this ruleset, however **this does not apply to** `Scripts\Reset-Firewall.ps1` which
 will clear GPO rules completely and leave only those in control panel.
-- If you want to be 100% sure please export your GPO rules as explained in [Export\Import rules](#exportimport-rules)
+- If you want to be 100% sure please export your GPO rules as explained in
+[Export\Import rules](#exportimport-rules)
 - You will be asked which rules to load, to minimize internet connectivity trouble you should
 deploy at least all generic networking and OS related rules such as "CoreNetworking", "ICMP",
-"WindowsSystem", "WindowsServices", "Multicast" including all rules for which you have programs installed
-on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4 network.\
+"WindowsSystem", "WindowsServices", "Multicast" including all rules for which you have programs
+installed on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4
+network.\
 It will be easy to delete what you don't need in GPO, rather than later digging through code finding
 what you have missed.
 - Default configuration will set global firewall behavior which is not configurable in GPO,
-such as `stateful ftp` and `pptp` or global `IPSec` settings, if you need specific setup please visit
-`Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting`.\
+such as `Stateful FTP` and `PPTP` or global `IPSec` settings, if you need specific setup please
+visit `Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\Deploy-Firewall.ps1`
 - Some scripts require network adapter to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
@@ -246,10 +251,11 @@ make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Des
 otherwise doing anything may be blocked.\
 PowerShell console may need to be restarted for "Controlled folder access" changes to take effect.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
-user that is Administrator, if you're Administrator on your computer you'll have to either create standard
-user account and use that for your everyday life or modify code to allow Administrator online access.
-See [FAQ entry](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more information
-why using Administrator account is not recommended for security reasons.
+user that is Administrator, if you're Administrator on your computer you'll have to either create
+standard user account and use that for your everyday life or modify code to allow Administrator
+online access.\
+See [FAQ entry](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more
+information why using Administrator account is not recommended for security reasons.
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
 needed to update firewall for system changes that may happen at any time.
@@ -263,8 +269,8 @@ or just download released zip file from [Releases][release], and then for latest
 release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 
-2. Extract downloaded archive somewhere, these steps assume you've extracted the zip (project root directory)
-into `C:\` root drive directly.
+2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
+(project root directory) into `C:\` root drive directly.
 
 3. If you would like to use Windows PowerShell instead of PowerShell Core see:\
 [How to open Windows PowerShell](Readme/WindowsPowerShell.md)
@@ -297,8 +303,8 @@ something else:
     Get-ExecutionPolicy
     ```
 
-    Remember what is the output of the above command, note that PowerShell Core defaults to `RemoteSigned`
-    while Windows PowerShell defaults to `Restricted` on non server editions.
+    Remember what is the output of the above command, note that PowerShell Core defaults to
+    `RemoteSigned` while Windows PowerShell defaults to `Restricted` on non server editions.
 
 8. Set execution policy to unrestricted to be able to unblock project files,
 (Note that `RemoteSigned` will work only once scripts are unblocked)
@@ -310,9 +316,9 @@ something else:
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all project files first by executing the script called `Scripts\Unblock-Project.ps1`,
-btw. project files were blocked by Windows to prevent users from running untrusted script code
-downloaded from internet:
+9. At this point you should "unblock" all project files first by executing the script called
+`Scripts\Unblock-Project.ps1`, btw. project files were blocked by Windows to prevent users from
+running untrusted script code downloaded from internet:
 
     ```powershell
     .\Scripts\Unblock-Project.ps1
@@ -352,7 +358,8 @@ then re-run that specific script once again later.
 
 15. When done you might want to adjust some of the rules in Local Group Policy,
 not all rules are enabled by default or you might want to toggle default Allow/Block behavior.\
-Rules may not cover all programs installed on your system, in which case missing rules need to be made.
+Rules may not cover all programs installed on your system, in which case missing rules need to be
+made.
 
 16. Now go ahead and test your internet connection (ex. with a browser or some other program),
 If you're unable to connect to internet after deploying these rules you have several options:
@@ -362,11 +369,11 @@ If you're unable to connect to internet after deploying these rules you have sev
     - You can [Reset Firewall to previous state](Readme/ResetFirewall.md)
     - Take a look into `Readme` folder for more troubleshooting options and documentation
 
-17. As a prerequisite to deploy firewall, some system services have been started and set to automatic
-start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these services to
-default if desired.\
-For example `Windows Remote Management` service should not run if not needed (The default is "Manual"
-startup)
+17. As a prerequisite to deploy firewall, some system services have been started and set to
+automatic start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these
+services to default if desired.\
+For example `Windows Remote Management` service should not run if not needed
+(The default is "Manual" startup)
 
 [Table of Contents](#table-of-contents)
 
@@ -376,8 +383,8 @@ startup)
 
 There are 2 mothods to manage GPO rules:
 
-1. Using Local Group Policy, this method gives you limited freedom on what you can do with rules from
-this repository, such as disabling them, changing some attributes or adding new rules.\
+1. Using Local Group Policy, this method gives you limited freedom on what you can do with rules
+from this repository, such as disabling them, changing some attributes or adding new rules.\
 For more information see: [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 
 2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
@@ -398,7 +405,8 @@ open local group policy.
 6. Click on either `Inbound`, `Outbound` or `Windows Defender Firewall...` node to view and manage
 rules and settings applied with PowerShell.
 
-For more information about GPO see: [Configure security policy settings][configure security policy settings]
+For more information about GPO see:
+[Configure security policy settings][configure security policy settings]
 
 [Table of Contents](#table-of-contents)
 
@@ -413,12 +421,13 @@ If you want to deploy only specific rules there are 2 ways to do this:
 individual script.\
 For example `cd .\Rules\IPv4\Outbound\Software` followed by `.\Adobe.ps1` to load rules for Adobe.
 
-You might want to run `Scripts\Complete-Firewall.ps1` afterwards to apply default firewall behavior if
-it's not already set, or you can do it manually in GPO but with limited power.
+You might want to run `Scripts\Complete-Firewall.ps1` afterwards to apply default firewall behavior
+if it's not already set, or you can do it manually in GPO but with limited power.
 "limited power" means `Scripts\Complete-Firewall.ps1` configures some firewall parameters which
 can't be adjusted in firewall GUI.
 
-In both cases all rules that match ruleset display group will be deleted before loading rules into GPO.
+In both cases all rules that match ruleset display group will be deleted before loading rules into
+GPO.
 
 [Table of Contents](#table-of-contents)
 
@@ -472,10 +481,13 @@ The "develop" branch is where all updates directly go, so it's work in progress,
 unlike "master" branch which is updated from develop once in a while and not before all scripts
 are thoroughly tested on fresh installed systems, which is what makes master brach stable.
 
-If you want to experiment with development version to check out new stuff, switch to "develop" branch
-and try it out, however if it produces errors, you can either fix problems or switch back to "master".
+If you want to experiment with development version to check out new stuff, switch to "develop"
+branch and try it out, however if it produces errors, you can either fix problems or switch back to
+"master".
 
 There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
+
+[Table of Contents](#table-of-contents)
 
 ### Using GitHub Desktop app
 
@@ -501,6 +513,8 @@ This method requires you to simply download released zip file which can be found
 This method is good if you want to download from "develop" branch, to do so, use the `branch` button
 here on this site and switch to develop branch, next use `Code` button and either clone or download
 zip.
+
+[Table of Contents](#table-of-contents)
 
 ### Using git command
 
@@ -556,6 +570,8 @@ you need to save and upload your modifications to your fork, for example:
  For more information on how to use git see [git documentation][git docs]\
  There are also many great tutorials online to learn how to use git.
 
+[Table of Contents](#table-of-contents)
+
 ### Which update method is the best
 
 If your goal is to just get updates then `GitHub Desktop` is the best, otherwise if your goal is
@@ -574,7 +590,9 @@ Do you want to suggest new rules, features, report problems or contribute by wri
 Here are brief notes for requesting new rules or features.\
 If you would like to contribute by writing code you should also read [CONTRIBUTING.md](CONTRIBUTING.md)
 
-You are most welcome to suggest or contribute new rules or improvements for existing rules or scripts.\
+You are most welcome to suggest or contribute new rules or improvements for existing rules or
+scripts.
+
 Please try to abide to notices below:
 
 1. If possible provide some documentation or links (preferably official) for your rules or design
@@ -597,9 +615,9 @@ possible.
 
 ## Support
 
-Inside [Readme](Readme) folder you will find useful information not only about this project but also
-general information on how to troubleshoot firewall and network problems, or to gather other relevant
-information.
+Inside [Readme](Readme) folder you will find useful information not only about this project but
+also general information on how to troubleshoot firewall and network problems, or to gather other
+relevant information.
 
 It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
 explains how to monitor firewall in real time.
@@ -611,16 +629,20 @@ you're most welcome to open new discussion in [Discussions][discrussions]
 
 ## Customization
 
-If you would like to customize how scripts run, such as force loading rules and various defaults then
-visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for this.
+If you would like to customize how scripts run, such as force loading rules and various defaults
+then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for
+this.
 
-If you would like to customize project code or add more firewall rules to suit your private or corporate
-interests then first step is to set up development environment and learn about best practices used by
-this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
+If you would like to customize project code or add more firewall rules to suit your private or
+corporate interests then first step is to set up development environment and learn about best
+practices used by this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Depending on your situation and target platform you might also want to read [Legacy Support](Readme/LegacySupport.md)
+Depending on your situation and target platform you might also want to read
+[Legacy Support](Readme/LegacySupport.md)
 
 These 2 documents are bare minimum to get you started customizing this repository.
+
+[Table of Contents](#table-of-contents)
 
 ## The future
 

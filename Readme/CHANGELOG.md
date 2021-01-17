@@ -5,10 +5,10 @@ Here is a list of changes for each of the releases.\
 If you would like to see fresh changes done since last release you can do so on "develop" branch
 [HERE][changelog]
 
-## Table of contents
+## Table of Contents
 
 - [Changelog](#changelog)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [v0.10.0 (develop branch)](#v0100-develop-branch)
   - [v0.9.0 (current release)](#v090-current-release)
   - [v0.8.0](#v080)
@@ -92,6 +92,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Running individual functions and scripts with common parameters such as `-Debug` or `-Verbose`
   switch did not respect the switch, fixed
 
+[Table of Contents](#table-of-contents)
+
 ## v0.9.0 (current release)
 
 - Rules
@@ -166,6 +168,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Force loading rules for GitHub Desktop would result in error
   - Force loading rules for NVIDIA resulted in error if no drivers are installed
 
+[Table of Contents](#table-of-contents)
+
 ## v0.8.0
 
 - Rules
@@ -213,6 +217,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
   - Add `Scripts` folder to path for current session
+
+[Table of Contents](#table-of-contents)
 
 ## v0.7.0
 
@@ -270,6 +276,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Show warning instead of code error if target machine not connected to network
   - Registering PowerShell repository would fail due to unknown trust policy
 
+[Table of Contents](#table-of-contents)
+
 ## v0.6.0
 
 - New features
@@ -309,6 +317,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Reorganized module file and folder structure according to community best practices
   - Added function to convert to or query system SKU
   - Several minor module code changes
+
+[Table of Contents](#table-of-contents)
 
 ## v0.5.0
 
@@ -359,6 +369,8 @@ If you would like to see fresh changes done since last release you can do so on 
     to prevent spamming YES/NO questions while executing them.
   - Updated some informational messages to be more descriptive and less annoying.
 
+[Table of Contents](#table-of-contents)
+
 ## v0.4.1
 
 - Modules
@@ -380,6 +392,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Added `FAQ.md`
   - Updated main page `README.md`
+
+[Table of Contents](#table-of-contents)
 
 ## v0.4.0
 
@@ -415,6 +429,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated various documentation and notices about project
 
+[Table of Contents](#table-of-contents)
+
 ## v0.3.0
 
 - New features
@@ -449,6 +465,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Modules, comments, todo list, help and readme files are updated
   - All files converted to UTF-8 and Tabs-4 (CRLF), gitattributes updated few new file types
 
+[Table of Contents](#table-of-contents)
+
 ## v0.2
 
 - New features
@@ -476,6 +494,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - Expand modules to include correct comments, help and manifest files
   - A few more todo's, notes and relevant comments
   - Reorganize and split scripts with rules for multiple targets
+
+[Table of Contents](#table-of-contents)
 
 [changelog]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Readme/CHANGELOG.md "Visit latest changelog"
 [appsid-issue]: https://github.com/metablaster/WindowsFirewallRuleset/issues/6 "See issue"

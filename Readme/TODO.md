@@ -17,10 +17,10 @@ Todo's in this file are categorized into following sections:
 4. **Low priority**         Not important
 5. **Done**                 Already resolved and kept here for reference.
 
-## Table of contents
+## Table of Contents
 
 - [List of tasks that needs to be done](#list-of-tasks-that-needs-to-be-done)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Ongoing](#ongoing)
   - [High priority](#high-priority)
   - [Medium priority](#medium-priority)
@@ -80,6 +80,8 @@ Todo's in this file are categorized into following sections:
 6. Test
 
     - Test everything on Windows insider channels, hopefully catching up with new OS releases
+
+[Table of Contents](#table-of-contents)
 
 ## High priority
 
@@ -157,6 +159,8 @@ Todo's in this file are categorized into following sections:
     - Need global setting to allow more detailed warnings, which will list at a minimum function name
     where the warning was generated, or this additional data could be logged but not displayed.
     - Any function that depend on "Users" group will fail if there are no users, just Administrator
+
+[Table of Contents](#table-of-contents)
 
 ## Medium priority
 
@@ -239,6 +243,8 @@ Todo's in this file are categorized into following sections:
 7. Other
 
     - There are many places where `Write-Progress` could be useful
+
+[Table of Contents](#table-of-contents)
 
 ## Low priority
 
@@ -332,6 +338,8 @@ Todo's in this file are categorized into following sections:
     - Just like there is PSScriptAnalyzer to analyse code, there is also a need to develop a script
     or module to analyze code performance.
 
+[Table of Contents](#table-of-contents)
+
 ## Done
 
 1. Modules
@@ -407,5 +415,7 @@ Todo's in this file are categorized into following sections:
     - `HelpUri` is valid only when there are no `.LINK` entries and when there is no help content installed
     - Need document for naming convention breakdown probably with links to best practices,
     a few similar documents would be great too.
+
+[Table of Contents](#table-of-contents)
 
 [about format]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_format.ps1xml?view=powershell-7

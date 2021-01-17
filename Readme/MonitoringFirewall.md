@@ -4,10 +4,10 @@
 This document explains how to monitor Windows firewall and network activity on local system.\
 *Note: all of these programs must be run as Administrator:*
 
-## Table of contents
+## Table of Contents
 
 - [Monitoring Firewall](#monitoring-firewall)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Monitor your firewall like a pro](#monitor-your-firewall-like-a-pro)
   - [Process Monitor](#process-monitor)
   - [mTail](#mtail)
@@ -55,6 +55,8 @@ check it's user base online.
 - The alternative for mTail (described later) is a combination of VSCode extensions and predefined
 extension settings.
 
+[Table of Contents](#table-of-contents)
+
 ## Process Monitor
 
 - Process monitor will let you monitor process network activity, in addition to IP address and port
@@ -71,6 +73,8 @@ for firewall monitoring which you can import into your copy of process monitor.
 click on filter options to disable specific filters or to add new ones.
 
 [Download process monitor][ref process monitor]
+
+[Table of Contents](#table-of-contents)
 
 ## mTail
 
@@ -92,6 +96,8 @@ firewall activity for individual firewall profiles as well as number of personal
 configuration files.
 
 [Download mTail][ref mtail]
+
+[Table of Contents](#table-of-contents)
 
 ## mTail alternative
 
@@ -116,6 +122,8 @@ and press enter.
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
 - For sample filterline regexes take a look into `Readme\Regex.md`
 
+[Table of Contents](#table-of-contents)
+
 ## Tailing logs standard alternative
 
 Yet another standard and quick way to monitor logs is with PowerShell commands, ex:
@@ -123,6 +131,8 @@ Yet another standard and quick way to monitor logs is with PowerShell commands, 
 ```powershell
 Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -Last 10 -Wait | Select-String "DROP"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Event log
 
@@ -162,6 +172,8 @@ To open Event viewer to monitor configured packet filtering events follow steps 
 8. Click on individual event to see details about the event
 
 [Event logging reference][ref event log]
+
+[Table of Contents](#table-of-contents)
 
 ## WFP state and filter logs
 
@@ -209,6 +221,8 @@ default outbound action was hit.
 - [Audit Filtering Platform Connection][WFP audit connection]
 - [Audit Filtering Platform Packet Drop][WFP audit drop]
 
+[Table of Contents](#table-of-contents)
+
 ## Windows Firewall
 
 And of course we have Windows firewall.
@@ -255,6 +269,8 @@ things every time you open GPO firewall, you can customize it and re-save your p
 - [Windows Firewall reference][ref firewall]
 - [Windows Firewall Technologies][ref firewall old]
 
+[Table of Contents](#table-of-contents)
+
 ## TCP View
 
 TCP view is another tool that wil let you see which programs are listening on which ports on local system
@@ -262,6 +278,8 @@ TCP view is another tool that wil let you see which programs are listening on wh
 ![Alternate text](Screenshots/TCPView.png)
 
 [Download TCPView][ref tcpview]
+
+[Table of Contents](#table-of-contents)
 
 ## netstat
 
@@ -287,6 +305,8 @@ netstat -s -p icmp
 ```
 
 [netstat reference][ref netstat]
+
+[Table of Contents](#table-of-contents)
 
 ## Packet trace and analysis
 
@@ -314,6 +334,8 @@ Other 2 (worse) methods are described in next 2 sections.
 
 - [Windows Performance Analyzer Intro][intro wpa]
 - [Windows Performance Analyzer reference][ref wpa]
+
+[Table of Contents](#table-of-contents)
 
 ## netsh trace
 
@@ -411,6 +433,8 @@ version of the trace file is automatically overwritten.
 - [Netsh Commands for Network Trace][netsh]
 - [Netsh reference][ref netsh]
 
+[Table of Contents](#table-of-contents)
+
 ## NetEventPacketCapture
 
 NetEventPacketCapture is a PowerShell module that is a replacement for `netsh trace`
@@ -427,6 +451,8 @@ Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an
 This problem can be solved with "Windows Performance Recorder" which generates required symbols.
 
 [NetEventPacketCapture reference][ref netevent]
+
+[Table of Contents](#table-of-contents)
 
 [ref process monitor]: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 [ref WFP]: https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform "Visit Microsoft docs"

@@ -4,12 +4,12 @@
 Use this document to see how to contribute code or to prepare yourself to extend this firewall
 for your personal or corporate needs.
 
-Here is a list of most important things to keep in mind.
+Here is a list of most relevant things to keep in mind.
 
-## Table of contents
+## Table of Contents
 
 - [How to contribute](#how-to-contribute)
-  - [Table of contents](#table-of-contents)
+- [Table of Contents](#table-of-contents)
   - [General guidelines](#general-guidelines)
   - [Environment setup](#environment-setup)
   - [Code style](#code-style)
@@ -65,7 +65,7 @@ Few additional references regarding open source worth reading:\
 [Don't "Push" Your Pull Requests][dont push]\
 [Painless Bug Tracking][bug tracking]
 
-And references for tools used by this project:\
+References for tools used by this project:\
 [PowerShell documentation][powershell docs]\
 [Visual Studio Code][vscode docs]
 
@@ -73,8 +73,8 @@ And references for tools used by this project:\
 
 ## Environment setup
 
-It is highly recommended to stick with Visual Studio Code, because this project includes settings
-specific to Visual Studio Code, aka. "Workspace", these settings include:
+It is highly recommended to stick with Visual Studio Code, because this repository includes settings
+specific to Visual Studio Code, aka "Workspace", these settings include:
 
 1. Code formatting settings which are automatically enforced, and can also be manually applied
 2. List of recommended extensions which are automatically listed for installation once you open\
@@ -174,7 +174,7 @@ Then restart PowerShell and run `.\Deploy-Firewall.ps1` to deploy firewall, or a
 
 Detailed description of variables is located in `Config\ProjectSettings.ps1`
 
-Once repository was intialized `ProjectCheck` variable should be disabled, logging variables can be
+Once environment is intialized `$ProjectCheck` variable should be disabled, logging variables can be
 disabled too.
 
 If you don't have this environment setup, you'll have to do this some other way around for your
@@ -189,8 +189,9 @@ It is recommended to also enable specific development features in Windows which 
 
 ### Automatic formatting
 
-This workspace includes code formatting settings, which means you don't have to spend time formatting
-source files manually, otherwise it's enough to right click into VSCode and select "Format document".
+This workspace includes code formatting settings, which means you don't have to spend time
+formatting source files manually, otherwise it's enough to right click into VSCode and select
+"Format document".
 
 Lines should be kept within 100-120 columns, however it is not always practical, so it's not a hard
 rule, workspace settings are configured to show rulers inside code editor.
@@ -208,6 +209,12 @@ Following link explains the must know style guidelines to write functions and co
 Following link describes general rules about PowerShell code style if you like reading,
 however keep in mind, it's not completely in line with this repository best practices:\
 [The PowerShell Style Guide][powershell style]
+
+Use risk mitigation features is applicable for functions that you write, see "Remarks" sections on
+the links below to understand how to implement `ShouldProcess` and `ShouldContinue`:
+
+- [Cmdlet.ShouldContinue][should continue]
+- [Cmdlet.ShouldProcess][should process]
 
 [Table of Contents](#table-of-contents)
 
@@ -317,7 +324,7 @@ For example:
 
 [PSScriptAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
 
-VSCode workspace includes static analysis settings file, so all you have to do is cd into project
+VSCode workspace includes static analysis settings file, so all you have to do is `cd` into project
 root directory and invoke analyzer as follows:
 
 ```powershell
@@ -325,7 +332,8 @@ Invoke-ScriptAnalyzer -Path .\ -Recurse -Settings Config\PSScriptAnalyzerSetting
 Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath
 ```
 
-`Config\PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting rules.
+`Config\PSScriptAnalyzerSettings.psd1` settings file includes all rules, including code formatting
+rules.
 
 If you get an error such as:\
 `Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
@@ -369,11 +377,14 @@ Similar prompts may appear at various points in code during execution.
 
 Each of these prompts have `?` which the user can type to get more information about prompt choices.
 
+Functions `ShouldProcess` and `ShouldContinue` do not support customizing command line help, for
+that reason there is `Approve-Execute` function which allows you to customize prompt help.
+
 ### In comment based help (module and script main documentation source)
 
 Functions that are part of a module or solo scripts must have comment based help.\
-Purpose of comment based help is for the end user or developer to learn what the codes does or
-to be able to run `Get-Help` on target function or script.
+Purpose of comment based help is for the end user or developer to learn what the code does or to be
+able to run `Get-Help` on target function, script or module.
 
 For examples, and comment based syntax see:
 
@@ -397,6 +408,9 @@ on target module.
 Generated module documentation is in markdown format, meaning the 3rd purpose is that project
 users and repository visitors can read module documentation on github site either manually or
 with `Get-Help -Online`
+
+`Update-HelpContent.ps1` script is not perfect and requires additional editing of help files once
+documentation was regenerated.
 
 ### In readme folder (general project documentation)
 
@@ -428,11 +442,17 @@ All tests reside in `Test` directory which contains subdirectories for each modu
 take a look there for examples.
 
 Pester is preferred method to write tests, however some test cases need other ways around, or
-more customized setup.
+more customized setup, for example sometimes you want to see the representation of errors.
 
-There is a module called `Ruleset.Test`, which is customized for this project.\
+There is a module called `Ruleset.Test`, which is customized for this repository, the reason why
+pester isn't used as much is that I just didn't have enough time and will to learn it.
+
 Tests must pass both Desktop and Core editions of PowerShell on multiple Windows editions to be
 successful.
+
+To test code on different OS editions you should use Hyper-V and set up virtual machines, to help
+you initialize environment on target VM there is a script `Initialize-Development.ps1` which will
+set up git, similarly you would run `Initialize-Project` afterwards to finish setting up environment.
 
 A hint to quickly run any function from any module in this repository is to run following command
 in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
@@ -457,19 +477,21 @@ If you see something unrelated that could be resolved or improved, put `TODO` co
 Then once you commit, open `todo-tree` to review what to do next.
 
 **Avoid making huge changes to existing code** without first attaching valid reasons,
-new code and additions is not problem though.
+new code and additions should not problem though.
 
 [Table of Contents](#table-of-contents)
 
 ## Portability and other systems
 
 At the moment focus is on Windows Firewall, if you want to extend code base to other firewalls
-go ahead, it surely won't be easy!
+or operating systems go ahead, it surely won't be easy!
 
 If you decide to do so it is mandatory that these code additions are done on separate branch, which
-should then be regularly maintained for any changes on master branch, up until you are done.
+should then be regularly maintained and merged with develop branch for new changes, up until you are
+done.
 
-The plan is to expand this project to manage [nftables][nftables] firewall on linux and other systems.
+The plan is to expand this project to manage [nftables][nftables] firewall on linux and other
+systems.
 
 [Table of Contents](#table-of-contents)
 
@@ -478,7 +500,8 @@ The plan is to expand this project to manage [nftables][nftables] firewall on li
 Inside `Templates` folder there are few template scripts as a starting point.\
 Copy them to target location, update starting code and you're ready to start working.
 
-These templates are always up to date for current rule design, code and formatting style of this project.
+These templates are always up to date for current rule design, code and formatting style of this
+repository.
 
 [Table of Contents](#table-of-contents)
 
@@ -489,7 +512,7 @@ See [Directory Structure](Readme/DirectoryStructure.md)
 ## Where to start
 
 Please keep in mind that a portion of existing code is not in line with all the guidelines described
-here, significant portion of the code was written before this `CONTRIBUTING.md` file even existed.
+here, significant portion of code was written before this `CONTRIBUTING.md` file even existed.
 
 So it's an ongoing effort that by no means gets fulfilled.
 
@@ -526,10 +549,12 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
-[powershell style]: https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html
+[powershell style]: https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
 [about comment based help]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7 "Visit documentation"
 [comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [nftables]: https://en.wikipedia.org/wiki/Nftables "Visit nftables wiki"
 [pull requests]: https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github "Visit Marketplace"
+[should continue]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldcontinue?view=powershellsdk-7.0.0
+[should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0

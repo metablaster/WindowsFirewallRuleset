@@ -10,10 +10,10 @@ meaning you go step by step and isolating each area making it less probable to b
 
 This are the most basic troubleshooting procedures one should always perform when facing network issues.
 
-## Table of contents
+## Table of Contents
 
 - [Network troubleshooting detailed guide](#network-troubleshooting-detailed-guide)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Open up PowerShell](#open-up-powershell)
   - [First clear DNS cache to isolate that problem](#first-clear-dns-cache-to-isolate-that-problem)
   - [Perform DNS query](#perform-dns-query)
@@ -418,6 +418,8 @@ To get good support in forums make sure you provide as much details as you can, 
 3. hardware information on your network such as routers, modems, cables etc.
 4. Description of things you did prior to your problem.
 5. Make it short and to the point, nobody likes to read long posts!
+
+[Table of Contents](#table-of-contents)
 
 [update windows]: https://support.microsoft.com/en-us/help/4027667/windows-10-update
 [fix wifi]: https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues

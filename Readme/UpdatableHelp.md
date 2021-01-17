@@ -3,10 +3,10 @@
 
 Brief explanation on how to make modules support updatable and online help
 
-## Table of contents
+## Table of Contents
 
 - [Generating online help files](#generating-online-help-files)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Help info xml file](#help-info-xml-file)
     - [XML help file name syntax](#xml-help-file-name-syntax)
     - [XML file content syntax](#xml-file-content-syntax)
@@ -98,6 +98,8 @@ makecab.exe Templates\Manifest.Module\Manifest.Module.help.txt Manifest.Module_6
 1. Put cab file somewhere into repository outside module directory
 2. Push repository and take URL to online directory containing cab file
 3. Put URL into `HelpContentUri` element in the HelpInfo XML file
+
+[Table of Contents](#table-of-contents)
 
 [sample helpifo]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-sample-file?view=powershell-7
 [sample helpifo schema]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7

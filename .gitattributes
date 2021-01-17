@@ -16,7 +16,7 @@
 *.msc		binary
 *.wav		binary
 *.cab		binary
-*.ps1       text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.ps1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.psd1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.psm1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.txt		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1

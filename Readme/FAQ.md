@@ -5,10 +5,10 @@ Here are the most common problems running PowerShell scripts from this repositor
 them.\
 In addition, general questions and answers regarding this firewall.
 
-## Table of contents
+## Table of Contents
 
 - [Frequently Asked Questions](#frequently-asked-questions)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Firewall rule doesn't work, program "some_program.exe" fails to connect to internet](#firewall-rule-doesnt-work-program-some_programexe-fails-to-connect-to-internet)
   - [I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"](#i-get-an-error-network-path-not-found-unable-to-contact-computer-or-the-client-cannot-connect)
   - [Does this firewall project give me the right (or better) protection](#does-this-firewall-project-give-me-the-right-or-better-protection)
@@ -32,6 +32,8 @@ all users or both, however allowing all interfaces or users should be only a tem
 **NOTE**: In addition to interfaces shown in GPO there are some hidden network interfaces,
 until I figure out how to make rules based on those allow them all if this resolves the problem.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
+
+[Table of Contents](#table-of-contents)
 
 ## I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"
 
@@ -79,6 +81,8 @@ following is configured on **remote** machine:
 If none of this works even after reboot of all involved computers, following link might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
+
+[Table of Contents](#table-of-contents)
 
 ## Does this firewall project give me the right (or better) protection
 
@@ -144,6 +148,8 @@ If you recognize your mistakes from this list on regular basis, and would like t
 and fresh start then only hard drive reformat, network reset and clean reinstall of operating systems
 can regain trust to original value.
 
+[Table of Contents](#table-of-contents)
+
 ## Windows Firewall does not write logs
 
 This could happen if you change default log file location in Windows Firewall settings
@@ -169,6 +175,8 @@ If this doesn't resolve the problem remove all log files inside target directory
 you'll have to instruct firewall to write to different location to set your logs free, then reboot system.
 
 Btw. firewall service can't be stopped or manipulated in any way except trough UI followed by reboot.
+
+[Table of Contents](#table-of-contents)
 
 ## Can I trust scripts from this repository
 
@@ -262,6 +270,8 @@ them as follows:
    - Bugs may exist which could break things, while I do my best to avoid bugs you might want to
    report your findings to be fixed.
 
+[Table of Contents](#table-of-contents)
+
 ## Why do I get "Access is denied" errors
 
 You might see this error while loading firewall rules.
@@ -272,6 +282,8 @@ modifying settings/rules)
 
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to deploy firewall and try again.
+
+[Table of Contents](#table-of-contents)
 
 ## I'm missing network profile settings in Settings App
 
@@ -315,6 +327,8 @@ network settings as follows:
 
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
 - Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
+
+[Table of Contents](#table-of-contents)
 
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"

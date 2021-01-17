@@ -6,10 +6,10 @@ List of dropped packets, blocked programs, how to troubleshoot well known issue 
 Note that all of these resolutions here are "forced",
 meaning weakening the firewall just to fix the problem or to make firewall logs clean.
 
-## Table of contents
+## Table of Contents
 
 - [Problematic network traffic](#problematic-network-traffic)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Case 1: List of Windows services failing to connect outbound](#case-1-list-of-windows-services-failing-to-connect-outbound)
     - [Case 1: Troubleshooting](#case-1-troubleshooting)
     - [Case 1: Audit result](#case-1-audit-result)
@@ -109,6 +109,8 @@ except adding all the accounts needed to separate rule as follows:
 
 TODO: doesn't work for CryptSvc, see why
 
+[Table of Contents](#table-of-contents)
+
 ## Case 2: List of dropped outbound packets during system boot
 
 1. svchost.exe sending DNS request to configured DNS server (service unknown)
@@ -139,6 +141,8 @@ but that's not the case.
 - Additional investigation needed by allowing all ICMP and UDP explicitly.
 
 [Reference for WFP Operation][ref wfp]
+
+[Table of Contents](#table-of-contents)
 
 ## Case 3: Event log shows packet drops that are not logged into firewall log
 
@@ -175,6 +179,8 @@ for now it's safer to ignore these than defining a rule that would possibly comp
 
 [Reference for akamai][ref akamai]
 
+[Table of Contents](#table-of-contents)
+
 ## Case 4: Updating Microsoft Office fails
 
 1. Either manually or automatic,
@@ -206,6 +212,8 @@ process creates a new random folder each time where it puts the executable,
 so you end up in Cat and Mouse game.
 - What we can do however is specify protocol, ports and users allowed, which is NT AUTHORITY\SYSTEM
 
+[Table of Contents](#table-of-contents)
+
 ## Case 5: Outbound protocol 0 port 0
 
 - TODO: Investigation needed.
@@ -217,6 +225,8 @@ so you end up in Cat and Mouse game.
 ### Case 5 Audit result
 
 - TODO: Investigation needed.
+
+[Table of Contents](#table-of-contents)
 
 ## Case 6: Dropped inbound UDP from LAN
 
@@ -234,6 +244,8 @@ so you end up in Cat and Mouse game.
 1. Packets are received just fine but small portion is dropped.
 
 - TODO: additional investigation needed to figure out why.
+
+[Table of Contents](#table-of-contents)
 
 ## Case 7: IPv6 loopback rule
 
@@ -257,6 +269,8 @@ have exactly the same alias.
 restarts, however shuting down system and turning back on will reproduce the problem regardless of rules.
 - Another possible cause could be that some other hidden interface is generating this traffic.
 - Additional investigation needed by allowing all packets explicitly.
+
+[Table of Contents](#table-of-contents)
 
 ## Case 8: Connection dropped when specific network interface is assigned to rule
 
@@ -309,10 +323,14 @@ allow rules with InterfaceType Any.
 alias, this includes **ALL** rules to make sure rules loaded with `InterfaceType` parameter don't
 override those with `InterfaceAlias` parameter.
 
+[Table of Contents](#table-of-contents)
+
 ## Case 9: Epic games UDP traffic to 230.0.0.1 is blocked
 
 There is no need to troubleshoot this since Epic software uses addresses that are against IANA rules,
 they have been notified about the problem which is present for already some time.
+
+[Table of Contents](#table-of-contents)
 
 ## Case 10: Discovery and file and printer sharing issue on home networks (WORKGROUP)
 
@@ -383,6 +401,8 @@ Get-NetFirewallRule -PolicyStore SystemDefaults -DisplayGroup "Network Discovery
 ```
 
 Status: Partially resolved
+
+[Table of Contents](#table-of-contents)
 
 [ref auditing]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157
 [ref wfp]: https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation

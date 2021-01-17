@@ -9,10 +9,10 @@ In addition to the table below, see:
 
 [Windows PowerShell Cmdlets for Networking](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj717268(v=ws.11))
 
-## Table of contents
+## Table of Contents
 
 - [Command Help](#command-help)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Store Apps](#store-apps)
     - [List all system apps beginning with word "Microsoft"](#list-all-system-apps-beginning-with-word-microsoft)
     - [List all provisioned Windows apps](#list-all-provisioned-windows-apps)
@@ -128,6 +128,8 @@ Get-CimInstance -Namespace "Root\cimv2\mdm\dmmap" `
 Invoke-CimMethod -MethodName UpdateScanMethod
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Users and computers
 
 ### List all users
@@ -197,6 +199,8 @@ OR
 Get-WMIObject -class Win32_ComputerSystem | Select-Object -ExpandProperty Name
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## CIM (Common Information Model)
 
 ### CIM classes
@@ -212,6 +216,8 @@ Select-Object CimClassName
 ```powershell
 Get-Command -Module CimCmdlets
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Network interfaces
 
@@ -237,6 +243,8 @@ Loopback and probably hidden adapters are not shown
 ```powershell
 Get-NetIPConfiguration -AllCompartments -Detailed
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## git and GitHub
 
@@ -269,6 +277,8 @@ Copy SHA and paste into "Search or Jump to..." on GitHub, search "In this reposi
 
 `git repack -d -F`
 
+[Table of Contents](#table-of-contents)
+
 ## Troubleshooting
 
 Commands useful to troubleshoot random issues
@@ -297,6 +307,8 @@ $DifferenceServices = Get-Service | Where-Object -Property Status -eq "Running"
 $NewServices = Compare-Object -ReferenceObject $ReferenceServices -DifferenceObject $DifferenceServices
 $NewServices | Select-Object -ExpandProperty InputObject
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Code design and development
 
@@ -345,6 +357,8 @@ Quickly see definition of some function to learn it's implementation
 (Get-ChildItem function:Get-GitStatus).Definition
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Firewall and rule management
 
 ### Get a list of predefined rule groups
@@ -382,6 +396,8 @@ Where-Object { $_.Action -eq "Block" -and $_.Enabled -eq "True" }
 Disable-NetFirewallRule -InputObject $Rules
 Enable-NetFirewallRule -InputObject $Rules
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Package provider management
 
@@ -424,6 +440,8 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 # Install-PackageProvider -Name PowerShellGet -Verbose -Scope CurrentUser
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Module management
 
 ```powershell
@@ -432,6 +450,8 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 
 [reference app management]: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10 "Visit Microsoft docs"
 [reference appxpackage]: https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps "Visit Microsoft docs"
+
+[Table of Contents](#table-of-contents)
 
 ## Windows System
 
@@ -448,5 +468,7 @@ Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
   [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName)
 }
 ```
+
+[Table of Contents](#table-of-contents)
 
 [tenforums]: https://www.tenforums.com/tutorials/16588-clear-all-event-logs-event-viewer-windows.html

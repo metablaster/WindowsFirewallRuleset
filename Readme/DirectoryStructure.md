@@ -7,10 +7,10 @@ Most directories also contain a `README.md` with additional information
 In the following table duplicate folder names (in different trees) are excluded since
 the meaning is same or similar.
 
-## Table of contents
+## Table of Contents
 
 - [Directory Structure](#directory-structure)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [.github](#github)
   - [.vscode](#vscode)
   - [Config](#config)
@@ -201,3 +201,5 @@ Contains script and module templates with boilerplate code
 ## Test
 
 Contains test scripts sorted by module to test out individual functions and concepts
+
+[Table of Contents](#table-of-contents)

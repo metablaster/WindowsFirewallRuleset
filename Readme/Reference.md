@@ -7,10 +7,10 @@ research by using this collection of links for quick reference.
 You might find these links relevant to extend project code base and to develop firewall for
 customized scenarios.
 
-## Table of contents
+## Table of Contents
 
 - [Links and references](#links-and-references)
-  - [Table of contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [Visual Studio Code](#visual-studio-code)
   - [PowerShell](#powershell)
   - [Module help and help files](#module-help-and-help-files)
@@ -206,3 +206,5 @@ Also few commandlets from these modules:
 [Windows .msc files overview](https://www.ghacks.net/2017/06/10/windows-msc-files-overview)
 
 [Create and Save a Custom Console by Using MMC](https://social.technet.microsoft.com/wiki/contents/articles/2046.create-and-save-a-custom-console-by-using-microsoft-management-console-mmc-using-the-msc-file-extension.aspx)
+
+[Table of Contents](#table-of-contents)
