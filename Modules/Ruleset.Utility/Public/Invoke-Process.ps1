@@ -58,6 +58,16 @@ This functionality is experimental because current thread will block until timeo
 If specified, process output is returned as string.
 By default process output is redirected to information and error stream.
 
+.PARAMETER Credential
+Optionally specify user name and password to use when starting the process
+
+.PARAMETER LoadUserProfile
+Specify whether the Windows user profile is to be loaded from the registry
+
+.PARAMETER WorkingDirectory
+Set the working directory for the process to be started.
+The WorkingDirectory property must be set if UserName and Password are provided.
+
 .EXAMPLE
 PS> Invoke-Process git.exe -ArgumentList "status" -NoNewWindow -Wait 3000
 
@@ -82,10 +92,13 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process
+
+.LINK
+https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo
 #>
 function Invoke-Process
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md")]
 	[OutputType([string], [System.Threading.CancellationTokenSource], [void])]
 	Param (
@@ -94,7 +107,7 @@ function Invoke-Process
 		[Alias("FilePath")]
 		[string] $Path,
 
-		[Parameter()]
+		[Parameter(Position = 1)]
 		[string] $ArgumentList,
 
 		[Parameter()]
@@ -108,7 +121,18 @@ function Invoke-Process
 		[switch] $Async,
 
 		[Parameter()]
-		[switch] $Raw
+		[switch] $Raw,
+
+		[Parameter()]
+		[Parameter(Mandatory = $true, ParameterSetName = "Credential")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Credential")]
+		[switch] $LoadUserProfile,
+
+		[Parameter()]
+		[Parameter(Mandatory = $true, ParameterSetName = "Credential")]
+		[string] $WorkingDirectory
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -156,6 +180,27 @@ function Invoke-Process
 
 	# Whether to use the operating system shell to start the process
 	$Process.StartInfo.UseShellExecute = $false
+
+	if (![string]::IsNullOrEmpty($WorkingDirectory))
+	{
+		# When UseShellExecute property is false, sets the working directory for the process to be started.
+		# When UseShellExecute is true, sets the directory that contains the process to be started.
+		$Process.StartInfo.WorkingDirectory = $WorkingDirectory
+	}
+
+	if ($PSCmdlet.ParameterSetName -eq "Credential")
+	{
+		# The user name to use when starting the process
+		$Process.StartInfo.UserName = $Credential.UserName
+
+		# The user password to use when starting the process
+		$Process.StartInfo.Password = $Credential.Password
+
+		if ($LoadUserProfile)
+		{
+			$Process.StartInfo.LoadUserProfile = $LoadUserProfile
+		}
+	}
 
 	if ($ArgumentList)
 	{
