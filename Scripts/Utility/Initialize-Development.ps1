@@ -87,6 +87,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
@@ -128,13 +129,15 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 	$InvokeParams = [hashtable]@{
 		Credential = $Credential
 		NoNewWindow = $true
+		WorkingDirectory = $ProjectRoot
 	}
 
-	$GitParams = $InvokeParams
-	$GitParams.Add("WorkingDirectory", $ProjectRoot)
-	$GitParams.Add("Path", "git.exe")
-
-	# $PSDefaultParameterValues["Invoke-Process:NoNewWindow"] = $true
+	$GitParams = [hashtable]@{
+		Credential = $Credential
+		NoNewWindow = $true
+		WorkingDirectory = $ProjectRoot
+		Path = "git.exe"
+	}
 
 	$ScopeCommand = switch ($Scope)
 	{
@@ -143,16 +146,19 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 		"System" { "--system" }
 	}
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess($ProjectRoot, "initialize repository"))
+	if (!(Test-Path $ProjectRoot\.git -PathType Container))
 	{
-		Invoke-Process @GitParams -ArgumentList "init $ProjectRoot -b init"
-		Invoke-Process @GitParams -ArgumentList "add ."
-		Invoke-Process @GitParams -ArgumentList 'commit -m "throw away"'
-		Invoke-Process @GitParams -ArgumentList "remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git"
+		if ($YesToAll -or $PSCmdlet.ShouldProcess($ProjectRoot, "initialize repository"))
+		{
+			Invoke-Process @GitParams -ArgumentList "init $ProjectRoot -b init"
+			Invoke-Process @GitParams -ArgumentList "add ."
+			Invoke-Process @GitParams -ArgumentList 'commit -m "throw away"'
+			Invoke-Process @GitParams -ArgumentList "remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git"
 
-		Invoke-Process @GitParams -ArgumentList "fetch upstream"
-		Invoke-Process @GitParams -ArgumentList "checkout develop"
-		Invoke-Process @GitParams -ArgumentList "branch -D init"
+			Invoke-Process @GitParams -ArgumentList "fetch upstream"
+			Invoke-Process @GitParams -ArgumentList "checkout develop"
+			Invoke-Process @GitParams -ArgumentList "branch -D init"
+		}
 	}
 
 	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set ssh path"))
