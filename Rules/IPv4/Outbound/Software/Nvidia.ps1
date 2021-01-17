@@ -110,7 +110,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 	{
 		# Dummy variable, needs to be known because Confirm-Installation will return same path as nvidia root
 		$GeForceRoot = "$NvidiaRoot64\NVIDIA GeForce Experience"
-		Set-Variable -Name GeForce -Scope Script -Value (Confirm-Installation "GeForceExperience" ([ref] $GeForceRoot) -or $ForceLoad)
+		Set-Variable -Name GeForce -Scope Script -Value ((Confirm-Installation "GeForceExperience" ([ref] $GeForceRoot)) -or $ForceLoad)
 
 		# Test if GeForce experience exists on system, the path is same
 		# TODO: this is temporary measure, it should be checked with Test-ExecutableFile function

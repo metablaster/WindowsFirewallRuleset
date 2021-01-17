@@ -77,7 +77,7 @@ param (
 Initialize-Project -Strict
 
 # User prompt
-$Accept = "All firewall rules and settings will be restored to factory defaults"
+$Accept = "All GPO firewall rules will be removed and settings restored to factory defaults"
 $Deny = "Abort operation, no change will be done to firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion

@@ -39,9 +39,6 @@ If not the function may exit and stop executing scripts.
 .PARAMETER Strict
 If specified, exit is called on failure instead of return
 
-.PARAMETER Force
-If specified, script runs regardless of global variable that controls whether to run initialization
-
 .EXAMPLE
 PS> Initialize-Project
 
@@ -83,16 +80,13 @@ function Initialize-Project
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[switch] $Strict,
-
-		[Parameter()]
-		[switch] $Force
+		[switch] $Strict
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
-	if (!$ProjectCheck -and !$Force)
+	if (!$ProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
 		return
@@ -372,7 +366,7 @@ function Initialize-Project
 		{
 			# NOTE: at this point PowerShell should be restarted to avoid errors
 			# installing pester fails with signature, posh-git fails with -AllowPrerelease parameter
-			Write-Warning -Message "Please restart PowerShell for changes to take effect"
+			Write-Warning -Message "Please restart PowerShell for changes to take effect and run last command again"
 			exit
 		}
 
@@ -483,7 +477,7 @@ function Initialize-Project
 	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
 	# HACK: We don't know if it was successful, need to record errors and/or warnings
-	Write-Host "Checking project minimum requirements was successful!" -ForegroundColor Cyan
+	Write-Host "Checking minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Host ""
 	# NOTE: No 'v' prefix because of possible "Insider" string

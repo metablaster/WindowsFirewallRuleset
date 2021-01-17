@@ -111,7 +111,7 @@ if ((Confirm-Installation "HWMonitor" ([ref] $HWMonitorRoot)) -or $ForceLoad)
 }
 
 # Test if installation exists on system
-if ((Confirm-Installation "CPU-Z" ([ref] $CPUZRoot)) -or $ForceLoad)
+if ((Confirm-Installation "CPUZ" ([ref] $CPUZRoot)) -or $ForceLoad)
 {
 	$Program = "$CPUZRoot\cpuz.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)

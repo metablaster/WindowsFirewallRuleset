@@ -58,10 +58,6 @@ e-mail which to set into git config
 SSH key location which is to be copied to ~\ssh and then added to ssh-agent.
 If not specified default SSH key locations are searched.
 
-.PARAMETER Scope
-Specifies the scope of git configuration which is to be configured.
-Acceptable values are Local, Global or System.
-
 .PARAMETER Force
 If specified, skips prompt to run script and forces project initialization.
 
@@ -101,10 +97,6 @@ param (
 	[Parameter()]
 	[System.IO.FileInfo] $SshKey,
 
-	[Parameter(Mandatory = $true)]
-	[ValidateSet("Local", "Global", "System")]
-	[string] $Scope = "Local",
-
 	[Parameter()]
 	[switch] $Force
 )
@@ -116,49 +108,38 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 {
 	try
 	{
-		& $PSScriptRoot\..\Unblock-Project.ps1
-		. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+		& $PSScriptRoot\..\Unblock-Project.ps1 -ErrorAction Stop
+		. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -ErrorAction Stop
 	}
 	catch
 	{
 		return
 	}
 
-	$Credential = Get-Credential -Message "Enter credentials for computer $([System.Environment]::MachineName)" -EA Stop
+	$Credential = Get-Credential -Message "Enter credentials for user which to set up"
 
-	$InvokeParams = [hashtable]@{
+	if (!$Credential)
+	{
+		Write-Error -Category InvalidArgument -Message "Credentials are required to proceed"
+		return
+	}
+	elseif (!(Test-Credential $Credential -Context Machine -Domain ([System.Environment]::MachineName)))
+	{
+		Write-Error -Category InvalidArgument -Message "Specified credentials are not valid"
+		return
+	}
+
+	$InvokeParams = @{
 		Credential = $Credential
 		NoNewWindow = $true
 		WorkingDirectory = $ProjectRoot
 	}
 
-	$GitParams = [hashtable]@{
+	$GitParams = @{
 		Credential = $Credential
 		NoNewWindow = $true
 		WorkingDirectory = $ProjectRoot
 		Path = "git.exe"
-	}
-
-	$ScopeCommand = switch ($Scope)
-	{
-		"Local" { "--local"; break }
-		"Global" { "--global"; break }
-		"System" { "--system" }
-	}
-
-	if (!(Test-Path $ProjectRoot\.git -PathType Container))
-	{
-		if ($YesToAll -or $PSCmdlet.ShouldProcess($ProjectRoot, "initialize repository"))
-		{
-			Invoke-Process @GitParams -ArgumentList "init $ProjectRoot -b init"
-			Invoke-Process @GitParams -ArgumentList "add ."
-			Invoke-Process @GitParams -ArgumentList 'commit -m "throw away"'
-			Invoke-Process @GitParams -ArgumentList "remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git"
-
-			Invoke-Process @GitParams -ArgumentList "fetch upstream"
-			Invoke-Process @GitParams -ArgumentList "checkout develop"
-			Invoke-Process @GitParams -ArgumentList "branch -D init"
-		}
 	}
 
 	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set ssh path"))
@@ -174,7 +155,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 			Write-Verbose -Message "[$ThisScript] SSH command is '$SSH'"
 
 			# git config --global --replace-all core.sshCommand "'C:\Program Files\OpenSSH-Win64\ssh.exe'"
-			[string] $SshCommand = "config $ScopeCommand --replace-all core.sshCommand " + "'" + '"' + $SSH + '"' + "'"
+			[string] $SshCommand = "config --global --replace-all core.sshCommand " + "'" + '"' + $SSH + '"' + "'"
 
 			Write-Debug -Message "[$ThisScript] SSH command argument is '$SshCommand'"
 			Invoke-Process @GitParams -ArgumentList $SshCommand
@@ -195,7 +176,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 			Write-Verbose -Message "[$ThisScript] GPG program is '$GPG'"
 
 			# git config --global --replace-all gpg.program "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
-			[string] $GpgProgram = "config $ScopeCommand --replace-all gpg.program " + '"' + $GPG + '"'
+			[string] $GpgProgram = "config --global --replace-all gpg.program " + '"' + $GPG + '"'
 
 			Write-Debug -Message "[$ThisScript] GPG program argument is '$GpgProgram'"
 			Invoke-Process @GitParams -ArgumentList $GpgProgram
@@ -223,10 +204,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 				Write-Verbose -Message "[$ThisScript] SSH key is '$Key'"
 
 				# git config --global user.signingkey 3AA5C34371567BD2
-				Invoke-Process @GitParams -ArgumentList "config $ScopeCommand user.signingkey $Key"
+				Invoke-Process @GitParams -ArgumentList "config --global user.signingkey $Key"
 
 				# git config --global commit.gpgsign true
-				Invoke-Process @GitParams -ArgumentList "config $ScopeCommand commit.gpgsign true"
+				Invoke-Process @GitParams -ArgumentList "config --global commit.gpgsign true"
 			}
 			else
 			{
@@ -283,20 +264,38 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set username and email"))
 	{
 		# git config --global user.name "your name or username"
-		Invoke-Process @GitParams -ArgumentList "config $ScopeCommand user.name $User"
+		Invoke-Process @GitParams -ArgumentList "config --global user.name $User"
 
 		# git config --global user.email youremail@example.com
-		Invoke-Process @GitParams -ArgumentList "config $ScopeCommand user.email $($Email.Address)"
+		Invoke-Process @GitParams -ArgumentList "config --global user.email $($Email.Address)"
 	}
 
 	if ($Force -or $PSCmdlet.ShouldContinue("Open git config in default editor", "Verify git config file", $true, [ref] $null, [ref] $null))
 	{
 		# TODO: Waiting for your editor to close the file... will not be shown
-		Invoke-Process @GitParams -ArgumentList "config $ScopeCommand --edit" -Timeout -1
+		Invoke-Process @GitParams -ArgumentList "config --global --edit" -Timeout -1
 	}
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Initialize project", "Windows Firewall Ruleset", $true, [ref] $YesToAll, [ref] $NoToAll))
+	if ($Force -or $PSCmdlet.ShouldContinue("Initialize project", "Windows Firewall Ruleset"))
 	{
-		Initialize-Project -Strict -Force:$Force
+		if (!(Get-Variable -Name ProjectCheck -Scope Global -EA Ignore))
+		{
+			Write-Error -Category ObjectNotFound -Message "This action requires ProjectCheck variable to be set"
+			return
+		}
+
+		if (!(Get-Variable -Name ModulesCheck -Scope Global -EA Ignore))
+		{
+			Write-Error -Category ObjectNotFound -Message "This action requires ModulesCheck variable to be set"
+			return
+		}
+
+		if (!(Get-Variable -Name ServicesCheck -Scope Global -EA Ignore))
+		{
+			Write-Error -Category ObjectNotFound -Message "This action requires ServicesCheck variable to be set"
+			return
+		}
+
+		Initialize-Project -Strict
 	}
 }

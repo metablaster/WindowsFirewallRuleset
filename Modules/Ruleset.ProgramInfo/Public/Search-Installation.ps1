@@ -301,7 +301,7 @@ function Search-Installation
 			Update-Table -Search "HWMonitor"
 			break
 		}
-		"CPU-Z"
+		"CPUZ"
 		{
 			Update-Table -Search "CPU-Z"
 			break
