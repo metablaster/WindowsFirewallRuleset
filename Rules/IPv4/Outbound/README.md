@@ -1,4 +1,4 @@
 
 # Outbound directory
 
-Root directory for all outbound IPv4 rules
+Root directory for all outbound IPv4 firewall rules

@@ -1,7 +1,7 @@
 
 # Templates directory
 
-Contains template scripts and modules for this project
+Contains template scripts and modules for this repository
 
-In addition in helping to type less, these templates also adopt
-project code and formatting style.
+In addition in helping to type less, these templates also adopt latest
+code and formatting style used by this repository.

@@ -9,7 +9,7 @@ Here is a list of most relevant things to keep in mind.
 ## Table of Contents
 
 - [How to contribute](#how-to-contribute)
-- [Table of Contents](#table-of-contents)
+  - [Table of Contents](#table-of-contents)
   - [General guidelines](#general-guidelines)
   - [Environment setup](#environment-setup)
   - [Code style](#code-style)
@@ -259,8 +259,8 @@ All of the scripts should use the same code style and order of code, without wri
 of preferred code style it should be enough to take a look at the existing scripts and figure it
 out right away.
 
-Code in scripts is ordered into "sections" which depends script and purpose, in the following way
-and may be different if needed for what ever reason:
+Code in scripts is ordered into "sections" which depends on script and purpose, in the following
+way and may be different if needed for what ever reason:
 
 1. License notice
 2. Comment based help
@@ -451,8 +451,9 @@ Tests must pass both Desktop and Core editions of PowerShell on multiple Windows
 successful.
 
 To test code on different OS editions you should use Hyper-V and set up virtual machines, to help
-you initialize environment on target VM there is a script `Initialize-Development.ps1` which will
-set up git, similarly you would run `Initialize-Project` afterwards to finish setting up environment.
+you initialize development environment on target VM there is a script `Initialize-Development.ps1`
+which will set up git, gpg, ssh, update or install missing modules and start requires system
+services.
 
 A hint to quickly run any function from any module in this repository is to run following command
 in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
@@ -490,8 +491,8 @@ If you decide to do so it is mandatory that these code additions are done on sep
 should then be regularly maintained and merged with develop branch for new changes, up until you are
 done.
 
-The plan is to expand this project to manage [nftables][nftables] firewall on linux and other
-systems.
+It is desired to expand this project to manage [nftables][nftables] firewall on linux and other
+systems, but this likely won't happen any time soon.
 
 [Table of Contents](#table-of-contents)
 

@@ -1,7 +1,8 @@
 
 # Changelog
 
-Here is a list of changes for each of the releases.\
+Here is a list of changes for each of the releases.
+
 If you would like to see fresh changes done since last release you can do so on "develop" branch
 [HERE][changelog]
 
@@ -9,8 +10,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.10.0 (develop branch)](#v0100-develop-branch)
-  - [v0.9.0 (current release)](#v090-current-release)
+  - [v0.10.0 (current release)](#v0100-current-release)
+  - [v0.9.0](#v090)
   - [v0.8.0](#v080)
   - [v0.7.0](#v070)
   - [v0.6.0](#v060)
@@ -20,9 +21,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.10.0 (develop branch)
-
-**NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+## v0.10.0 (current release)
 
 - Modules
 
@@ -94,7 +93,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 [Table of Contents](#table-of-contents)
 
-## v0.9.0 (current release)
+## v0.9.0
 
 - Rules
 

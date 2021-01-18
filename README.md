@@ -87,11 +87,10 @@ to your firewall.
 
 ## Core benefits of this firewall
 
-1. System administrators would usually evade setting up detailed firewall because detailed firewall
-configuration is time consuming process, takes a lot of troubleshooting, changes require
-testing and security auditing and it only gets worse if you want to deploy firewall to hundreds or
-thousands of remote computers, for example not all computers might have same software or restriction
-requirements.
+1. Detailed firewall configuration is time consuming process, takes a lot of troubleshooting,
+changes require testing and security auditing and it only gets worse if you need to deploy firewall
+to hundreds or thousands of remote computers, for example not all computers might have same software
+or restriction requirements.
 
 2. Unlike firewall rules in control panel, these rules are loaded into GPO firewall
 (Local Group Policy), meaning system settings changes or random programs which install rules as
@@ -111,18 +110,18 @@ additional work.
 due to ex. uninstalled program, a missing system service which no longer exists, renamed
 executable after Windows update and similar reasons.
 
-6. Unlike default (predefined) Windows firewall rules, these rules are more restrictive such as,
+6. Unlike predefined Windows firewall rules, these rules are more restrictive such as,
 tied to explicit user accounts, rules apply to specific ports, network interfaces, specific
 executables, services etc. all of which is learned automatically from target system.
 
 7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is
-much easier since these rules are in scripts (serialized), you can use editor tools such as regex,
-multicursor or `CTRL + F` to perform bulk operations on your rules, doing this in any firewall GUI
-is beyond all pain or not possible due to interface limitations.
+much easier since these rules are in scripts, you can use editor tools such as regex, multicursor
+or `CTRL + F` to perform bulk operations on your rules, doing this in any firewall UI is not always
+possible due to interface limitations.
 
-8. A good portion of code is dedicated to provide cross platform and automated solution to build and
-define firewall specialized for target system and users, minimizing the need to do something
-manually thus saving you much valuable administration time.
+8. A good portion of code is dedicated to provide automated solution to build and define firewall
+specialized for target system and users, minimizing the need to do something manually thus saving
+you much valuable administration time.
 
 [Table of Contents](#table-of-contents)
 
@@ -134,13 +133,11 @@ This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
 License and Copyright notices are maintained **"per file"**.
 
-[Table of Contents](#table-of-contents)
-
 ## Requirements
 
 Following table lists currently tested operating systems
 
-| OS                  | Edition       | Build       | Architecture |
+| OS                  | Edition       | Version     | Architecture |
 | ------------------- | ------------- | ----------- | ------------ |
 | Windows 10          | Pro           | 1809 - 20H2 | x64          |
 | Windows 10          | Pro Education | 20H2        | x64          |
@@ -165,7 +162,7 @@ Following table lists currently tested operating systems
 
 - All operating systems 10.0 (Major 10, Minor 0) and above are supported,
 but only those editions listed in the table above are actively tested.\
-"Build" column indicates tested releases, however only latest builds continue to be tested.\
+The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately or use
 [Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
@@ -178,8 +175,8 @@ to easily switch between branches or to contribute code.
 own needs or contribution.
 - If you get VSCode, you'll also need PowerShell extension for code navigation and PowerShell
 language features.
-- To navigate and edit code with VSCode, `PSScriptAnalyzer` is recommended otherwise editing
-experience may behave really odd due to other project settings.
+- To navigate and edit code with VSCode `PSScriptAnalyzer` is requirement, otherwise editing
+experience may behave really odd due to various repository settings.
 - There are no hardware requirements but if you plan to write code recommendation is min. 8GB of
 memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your personal
 firewall less than that will work just fine.
@@ -241,7 +238,7 @@ contains rules will be significantly slower (depends on number of existing rules
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
 want to fix some problem, most warnings can be safely ignored but errors should be resolved.
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
-script again, see [FAQ.md](Readme/FAQ.md) for more information on why this may happen.
+script again, see [FAQ](Readme/FAQ.md) for more information on why this may happen.
 - If the project was manually downloaded, transferred from another computer or media then you should\
 unblock all files in project first to avoid YES/NO spam questions for every executing script,
 by running `Scripts\Unblock-Project.ps1`\
@@ -255,7 +252,7 @@ PowerShell console may need to be restarted for "Controlled folder access" chang
 user that is Administrator, if you're Administrator on your computer you'll have to either create
 standard user account and use that for your everyday life or modify code to allow Administrator
 online access.\
-See [FAQ entry](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more
+See [FAQ](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more
 information why using Administrator account is not recommended for security reasons.
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as

@@ -1,9 +1,10 @@
 
 # Readme directory
 
-Here you will find documentation and reference for things such as
+This directory contains project documentation such as:
 
-1. Firewall troubleshooting
-2. Windows firewall reference
-3. Project changelog
-4. Random firewall and project related documentation
+- Network setup guide
+- Development references
+- Firewall troubleshooting
+- Firewall reference
+- Project changelog
