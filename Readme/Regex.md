@@ -268,8 +268,36 @@ Select path up to last directory, up to 3rd directory and last item respectively
 
 ### URL validation
 
+Regex breakdown:
+
+```regex
+(
+https?:\/\/(www\.)?
+[a-zA-Z0-9@:%._\+~#=]{2,256}
+\.[a-z]{2,6}
+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+(\([^(]+\))?
+)
+```
+
 ```powershell
-"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+"https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+```
+
+Sample match:
+
+```none
+https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984
+```
+
+```powershell
+"https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\([^(]+\))?"
+```
+
+Sample match:
+
+```none
+https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)
 ```
 
 ### DACL validation

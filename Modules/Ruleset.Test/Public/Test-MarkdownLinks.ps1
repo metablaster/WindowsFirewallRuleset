@@ -31,7 +31,7 @@ SOFTWARE.
 Test links in markdown files
 
 .DESCRIPTION
-Test each link in one or multiple markdown files and report if any link is dead.
+Test each link in one or multiple markdown files and report if any link is invalid.
 You can "brute force" test links or test only unique ones.
 Links to be tested can be excluded or included by using wildcard pattern.
 Test can be customized for various TLS protocols, query timeouts and retry attempts.
@@ -107,7 +107,7 @@ For example, Depth 2 includes the Path parameter's directory, first level of sub
 second level of subdirectories.
 
 .PARAMETER Log
-If specified, dead links are logged.
+If specified, invalid links are logged.
 Log file can be found in Logs\MarkdownLinkTest_DATE.log
 
 .EXAMPLE
@@ -128,6 +128,7 @@ None. Test-MarkdownLinks does not generate any output
 .NOTES
 WebSslProtocol enum does not list Tls13
 TODO: Implement pipeline support
+TODO: Implement testing links to repository
 #>
 function Test-MarkdownLinks
 {
@@ -341,21 +342,35 @@ function Test-MarkdownLinks
 
 		[uri[]] $FileLinks = @()
 
+		# URL regex breakdown:
+		# (
+		# 	https?:\/\/(www\.)?
+		# 	[a-zA-Z0-9@:%._\+~#=]{2,256}
+		# 	\.[a-z]{2,6}
+		# 	\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+		# 	(\([^(]+\))?
+		# )
+
+		# TODO: This will capture only valid URL syntax
+		$LinkRegex = "(https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\([^(]+\))?)"
+
+		# Capture inline links
 		if (($LinkType -eq "Any") -or ($LinkType -eq "Inline"))
 		{
-			# Capture inline links
-			$FileLinks += Select-String -Path $Markdown -Pattern "(?<=\[.+\]\()(http.+?)(?=\))" -Encoding $DefaultEncoding |
+			# URL regex starts with: (?<=\[.+\]\()
+			# URL regex ends with: (?=\))
+			$FileLinks += Select-String -Path $Markdown -Encoding $DefaultEncoding -Pattern "(?<=\[.+\]\()$LinkRegex(?=\))" |
 			ForEach-Object {
 				# [Microsoft.PowerShell.Commands.MatchInfo]
 				$_.Matches.Groups[1].ToString()
 			} | Where-Object { !(& $SkipLink $_ ([ref] $TotalDiscarded)) }
 		}
 
+		# Capture reference links
 		if (($LinkType -eq "Any") -or ($LinkType -eq "Reference"))
 		{
-			# Capture reference links
-			$FileLinks += Select-String -Path $Markdown -Encoding $DefaultEncoding `
-				-Pattern "(?<=\[.+\]:\s)([(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(\(.+\))?)" |
+			# URL regex starts with: (?<=\[.+\]:\s)
+			$FileLinks += Select-String -Path $Markdown -Encoding $DefaultEncoding -Pattern "(?<=\[.+\]:\s)$LinkRegex" |
 			ForEach-Object {
 				$_.Matches.Groups[1].ToString()
 			} | Where-Object { !(& $SkipLink $_ ([ref] $TotalDiscarded)) }
@@ -440,7 +455,7 @@ function Test-MarkdownLinks
 			}
 			catch
 			{
-				Write-Warning -Message "Found dead link in '$File' -> $URL"
+				Write-Warning -Message "Found invalid link in '$File' -> $URL"
 
 				if ($Log)
 				{
@@ -484,10 +499,11 @@ function Test-MarkdownLinks
 		$HeaderStack.Pop | Out-Null
 	}
 
+	Write-Information -Tags "Test" -MessageData "**** LINK TEST STATUS REPORT ****"
+
 	if ($StatusReport.Count)
 	{
 		$RootRegex = [regex]::Escape($ProjectRoot)
-		Write-Information -Tags "Test" -MessageData "*** LINK TEST STATUS REPORT ***"
 
 		foreach ($Status in $StatusReport)
 		{
@@ -514,14 +530,14 @@ function Test-MarkdownLinks
 
 		if ($StatusReport.Count -eq 1)
 		{
-			Write-Warning -Message "Only 1 dead link found"
+			Write-Warning -Message "Only 1 invalid link found"
 		}
 		else
 		{
-			Write-Warning -Message "In total there are $($StatusReport.Count) dead links"
+			Write-Warning -Message "In total there are $($StatusReport.Count) invalid links"
 		}
 	}
 
-	Write-Information -Tags "Test" -MessageData "$TotalLinksTested links were tested in total"
-	Write-Information -Tags "Test" -MessageData "$TotalDiscarded links were discarded from test"
+	Write-Information -Tags "Test" -MessageData "INFO: $TotalLinksTested links were tested in total"
+	Write-Information -Tags "Test" -MessageData "INFO: $TotalDiscarded links were discarded from test"
 }

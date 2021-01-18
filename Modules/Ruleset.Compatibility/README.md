@@ -44,11 +44,11 @@ Import-WinModule Microsoft.PowerShell.Management
 Get-EventLog -Newest 5 -LogName "Application"
 ```
 
-View more in the [Quick Start Guide][QuickStart].
+View more in the [Quick Start Guide](./Help/QuickStart.md).
 
 ## Documentation
 
-The module documentation is located in the [Help][ModuleDocs] directory.
+The module documentation is located in the [Help](./Help) directory.
 
 ## Module maintainers
 
@@ -56,9 +56,7 @@ The module documentation is located in the [Help][ModuleDocs] directory.
 - Steve Lee ([stevel-msft][stevel-msft])
 - Bruce Payette ([brucepay][brucepay])
 
-[ModuleDocs]: ./Help
-[QuickStart]: ./Help/QuickStart.md
-[PSGallery]: https://www.powershellgallery.com/packages/WindowsCompatibility/
+[PSGallery]: https://www.powershellgallery.com/packages/WindowsCompatibility
 [feature]: https://github.com/PowerShell/PowerShell-RFC/pull/226
 [markekraus]: https://github.com/markekraus
 [stevel-msft]: https://github.com/stevel-msft
