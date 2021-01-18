@@ -122,7 +122,7 @@ function Test-Credential
 	process
 	{
 		# Validate provided credential
-		Write-Information -Tags "User" -MessageData "INFO: Validating credential for user: '$($Credential.UserName)'"
+		Write-Information -Tags "User" -MessageData "INFO: Validating credential for user '$($Credential.UserName)'"
 		$DS.ValidateCredentials($Credential.UserName, $Credential.GetNetworkCredential().password)
 	}
 	end

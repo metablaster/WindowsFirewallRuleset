@@ -12,7 +12,7 @@ modules by:
 
 ## PowerShell 7
 
-Note that there is a planned [feature](https://github.com/PowerShell/PowerShell-RFC/pull/226) in
+Note that there is a planned [feature][feature] in
 PowerShell 7 to include the capabilities of this module as part of the engine making this module
 unnecessary for PowerShell 7.
 Please review that RFC and add your feedback.
@@ -25,8 +25,6 @@ To install the module, run the following from PowerShell:
 ```powershell
 Install-Module WindowsCompatibility -Scope CurrentUser
 ```
-
-[PSGallery]: https://www.powershellgallery.com/packages/WindowsCompatibility/
 
 ## Quick Start
 
@@ -48,16 +46,20 @@ Get-EventLog -Newest 5 -LogName "Application"
 
 View more in the [Quick Start Guide][QuickStart].
 
-[QuickStart]: ./docs/QuickStart.md
-
 ## Documentation
 
-The project documentation is located in the [docs][ProjectDocs] directory.
+The module documentation is located in the [Help][ModuleDocs] directory.
 
-[ProjectDocs]: ./docs/
+## Module maintainers
 
-## Maintainers
+- Mark Kraus ([markekraus][markekraus])
+- Steve Lee ([stevel-msft][stevel-msft])
+- Bruce Payette ([brucepay][brucepay])
 
-- Mark Kraus ([markekraus](https://github.com/markekraus))
-- Steve Lee ([stevel-msft](https://github.com/stevel-msft))
-- Bruce Payette ([brucepay](https://github.com/brucepay))
+[ModuleDocs]: ./Help
+[QuickStart]: ./Help/QuickStart.md
+[PSGallery]: https://www.powershellgallery.com/packages/WindowsCompatibility/
+[feature]: https://github.com/PowerShell/PowerShell-RFC/pull/226
+[markekraus]: https://github.com/markekraus
+[stevel-msft]: https://github.com/stevel-msft
+[brucepay]: https://github.com/brucepay

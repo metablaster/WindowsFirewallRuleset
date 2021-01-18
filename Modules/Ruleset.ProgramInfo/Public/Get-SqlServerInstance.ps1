@@ -149,10 +149,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 https://github.com/RamblingCookieMonster/PowerShell
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset
-
-.LINK
-https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0
+https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0
 #>
 function Get-SqlServerInstance
 {

@@ -28,15 +28,15 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Run process and optionally redirect captured output
+Run process, format and redirect captured process output
 
 .DESCRIPTION
 Run process with or without arguments, set process timeout, capture and format output.
-If target process produces error, error message is formatted and shown in addition
+If target process produces an error, the error message is formatted and shown in addition
 to standard output if any.
 
 .PARAMETER Path
-Executable name or path to application to which to start.
+Executable name or path to application which to start.
 Wildcard characters and relative paths are supported.
 
 .PARAMETER ArgumentList
@@ -56,17 +56,19 @@ This functionality is experimental because current thread will block until timeo
 
 .PARAMETER Raw
 If specified, process output is returned as string.
-By default process output is redirected to information and error stream.
+By default process output is formatted and redirected to information and error stream.
 
 .PARAMETER Credential
-Optionally specify user name and password to use when starting the process
+Optionally specify Windows user name and password to use when starting the process
 
 .PARAMETER LoadUserProfile
 Specify whether the Windows user profile is to be loaded from the registry
+Because loading the profile can be time-consuming, it is best to use this value only if you must
+access the information in the HKEY_CURRENT_USER registry key.
 
 .PARAMETER WorkingDirectory
 Set the working directory for the process to be started.
-The WorkingDirectory property must be set if UserName and Password are provided.
+The WorkingDirectory property must be set if Credential (UserName and Password) is provided.
 
 .EXAMPLE
 PS> Invoke-Process git.exe -ArgumentList "status" -NoNewWindow -Wait 3000
@@ -138,11 +140,11 @@ function Invoke-Process
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$CommandName = Split-Path -Path $Path -Leaf
 
-	# TODO: May return unexpected application if multiple matches exist
 	# [System.Management.Automation.ApplicationInfo]
-	$Command = Get-Command -Name $CommandName -CommandType Application -ErrorAction Ignore
+	$Command = Get-Command -Name $Path -CommandType Application -ErrorAction Ignore
 
-	if (!$Command)
+	# Can be, not found or there are multiple matches
+	if (($Command | Measure-Object).Count -ne 1)
 	{
 		[System.IO.FileInfo] $FilePath = Resolve-FileSystemPath $Path -File
 
@@ -179,6 +181,7 @@ function Invoke-Process
 	$Process.StartInfo.CreateNoWindow = $NoNewWindow
 
 	# Whether to use the operating system shell to start the process
+	# If the UserName property is not null or an empty string, the UseShellExecute property must be false
 	$Process.StartInfo.UseShellExecute = $false
 
 	if (![string]::IsNullOrEmpty($WorkingDirectory))

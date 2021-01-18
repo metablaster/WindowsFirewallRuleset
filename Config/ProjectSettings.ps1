@@ -248,7 +248,7 @@ else
 
 	if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("WhatIf"))
 	{
-		# TODO: Run with true, and resolve errors
+		# HACK: Run with true, and resolve errors
 		# To prompt for confirmation before any function is run set to true
 		$WhatIfPreference = $false
 	}

@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-MarkdownLinks
+Run markdown link test
 
 .DESCRIPTION
-Test correctness of Test-MarkdownLinks function
+Run markdown link test on all repository markdown files
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Test-MarkdownLinks.ps1
+PS> .\MarkdownLinkTest.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-MarkdownLinks.ps1
+None. You cannot pipe objects to MarkdownLinkTest.ps1
 
 .OUTPUTS
-None. Test-MarkdownLinks.ps1 does not generate any output
+None. MarkdownLinkTest.ps1 does not generate any output
 
 .NOTES
 None.
@@ -57,28 +57,10 @@ param (
 	[switch] $Force
 )
 
-#region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\..\ContextSetup.ps1
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
-Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#Endregion
-
-Enter-Test
-
-Start-Test "Single file"
-$Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md -LinkType "Inline" -Exclude *microsoft.com*
-$Result | Test-Output -Command Test-MarkdownLinks
-
-Start-Test "Reference links"
-Test-MarkdownLinks $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
-
-if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))
+if (Approve-Execute -Title "Markdown links" -Question "Run markdown link test?" -Force:$Force `
+		-Accept "Run markdown link test on entry repository" -Deny "Skip link test operation")
 {
-	Start-Test "Recurse project"
-	Test-MarkdownLinks $ProjectRoot -Recurse -Log | Test-Output -Command Test-MarkdownLinks
+	Test-MarkdownLinks $ProjectRoot -Recurse -Log
 }
-
-Update-Log
-Exit-Test

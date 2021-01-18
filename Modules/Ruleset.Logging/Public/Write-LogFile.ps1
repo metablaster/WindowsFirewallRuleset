@@ -56,7 +56,7 @@ Destination directory
 .PARAMETER Tags
 One or more optional message tags
 
-.PARAMETER LogFile
+.PARAMETER LogName
 File label that is added to current date for resulting file name
 
 .PARAMETER Raw

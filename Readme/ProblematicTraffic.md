@@ -177,7 +177,7 @@ in this case SSL service runs on port 443. A client connects with a random port 
 - Additional investigation needed for possible firewall rule resolution,
 for now it's safer to ignore these than defining a rule that would possibly compromise system.
 
-[Reference for akamai][ref akamai]
+Unfortunately a link to this quote no longer exists.
 
 [Table of Contents](#table-of-contents)
 
@@ -406,7 +406,6 @@ Status: Partially resolved
 
 [ref auditing]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157
 [ref wfp]: https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation
-[ref akamai]: https://www.akamai.com/us/en/support/end-user-faq.jsp
 [issue clicktorun]: https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through
 [hyperv switch]: https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1
 [issue rule interface]: https://aidanfinn.com/?p=15222

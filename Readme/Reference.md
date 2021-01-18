@@ -81,8 +81,6 @@ Also few commandlets from these modules:
 
 ## IPv6
 
-[Do not disable IPv6](https://www.anexinet.com/blog/two-common-mistakes-windows-firewall-and-ipv6)
-
 [IPv6 in Windows](https://support.microsoft.com/en-us/help/929852/guidance-for-configuring-ipv6-in-windows-for-advanced-users)
 
 [IPv6 address space](https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xml)

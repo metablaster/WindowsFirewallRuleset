@@ -430,7 +430,7 @@ To get good support in forums make sure you provide as much details as you can, 
 [device manager]: https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
 [adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html
 [adapter eth settings]: http://techgenix.com/advanced-network-adapter-driver-settings
-[adapter eee issues]: https://www.dell.com/support/article/en-hr/sln79684/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lang=en
+[adapter eee issues]: https://www.dell.com/support/kbdoc/en-us/000134483/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lwp=rt
 [adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car
 [hotseat]: https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode) "wikipedia hotseat"
 [ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps

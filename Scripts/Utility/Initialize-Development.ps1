@@ -40,10 +40,11 @@ SOFTWARE.
 Initialize development environment
 
 .DESCRIPTION
-Configure git, gpg, set up SSH keys and initialize project.
+Configure git, gpg, set up SSH keys and finally initialize project according to options specified
+in Config\ProjectSettings.ps1
 You can choose which operations to perform by either accepting or denying specific actions.
 The purpose of this script is automated development environment setup for the purpose of
-testing code and firewall deployment in virtual machine with fresh installed operating system.
+testing code and firewall deployment inside virtual machine with fresh installed operating system.
 
 A clean OS environment is requirement for best test results, however setting up everything over and
 over again it tedious, that's where this script is going to help.
@@ -52,14 +53,14 @@ over again it tedious, that's where this script is going to help.
 User name which to set into git config
 
 .PARAMETER Email
-e-mail which to set into git config
+email which to set into git config
 
 .PARAMETER SshKey
 SSH key location which is to be copied to ~\ssh and then added to ssh-agent.
 If not specified default SSH key locations are searched.
 
 .PARAMETER Force
-If specified, skips prompt to run script and forces project initialization.
+If specified, skips prompts to run commands.
 
 .EXAMPLE
 PS> .\Initialize-Development.ps1
@@ -71,12 +72,14 @@ None. You cannot pipe objects to Initialize-Development.ps1
 None. Initialize-Development.ps1 does not generate any output
 
 .NOTES
-You might need to run this script twice or more times, ex, first time for git and gpg,
-second time to resolve errors that require Administrator privileges and third time to try again
-as standard user, each time confirming only required operations.
+This script must be run as Administrator because of initialization procedure, however you're
+prompted to enter Windows credentials for the user for which to set up git configuration, this may
+be any user.
+
 TODO: Implement generating SSH and GPG keys
 TODO: Implement copying requested keys to clipboard
 TODO: Implement creating a backup of keys
+TODO: Implement GpgKey parameter
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -104,8 +107,17 @@ param (
 [bool] $YesToAll = $false
 [bool] $NoToAll = $false
 
-if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize development environment", $true, [ref] $YesToAll, [ref] $NoToAll))
+if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and check project requirements?", "Initialize development environment", $true, [ref] $YesToAll, [ref] $NoToAll))
 {
+	$Git = Get-Command -Name git.exe -ErrorAction Ignore | Select-Object -ExpandProperty Path
+
+	if ([string]::IsNullOrEmpty($Git))
+	{
+		Write-Error -Category ObjectNotFound -Message "The command git.exe was not found"
+		Write-Information -Tags "dev" -MessageData "Please verify git is installed and specified in PATH environment variable"
+		return
+	}
+
 	try
 	{
 		& $PSScriptRoot\..\Unblock-Project.ps1 -ErrorAction Stop
@@ -113,14 +125,15 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 	}
 	catch
 	{
+		Write-Error -ErrorRecord $_
 		return
 	}
 
-	$Credential = Get-Credential -Message "Enter credentials for user which to set up"
+	$Credential = Get-Credential -Message "Please enter Windows credentials for user which to set up"
 
 	if (!$Credential)
 	{
-		Write-Error -Category InvalidArgument -Message "Credentials are required to proceed"
+		Write-Error -Category InvalidArgument -Message "Windows credentials are required to proceed"
 		return
 	}
 	elseif (!(Test-Credential $Credential -Context Machine -Domain ([System.Environment]::MachineName)))
@@ -139,10 +152,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 		Credential = $Credential
 		NoNewWindow = $true
 		WorkingDirectory = $ProjectRoot
-		Path = "git.exe"
+		Path = $Git
 	}
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set ssh path"))
+	if ($Force -or $PSCmdlet.ShouldProcess("Setting ssh command in git config", "Set ssh command?", "git config"))
 	{
 		$SSH = Get-Command -Name ssh.exe -ErrorAction Ignore | Select-Object -ExpandProperty Path
 
@@ -162,11 +175,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 		}
 	}
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set gpg path"))
+	$GPG = Get-Command -Name gpg.exe -ErrorAction Ignore | Select-Object -ExpandProperty Path
+
+	if ($Force -or $PSCmdlet.ShouldProcess("Setting gpg command in git config", "Set gpg command?", "git config"))
 	{
-
-		$GPG = Get-Command -Name gpg.exe -ErrorAction Ignore | Select-Object -ExpandProperty Path
-
 		if ([string]::IsNullOrEmpty($GPG))
 		{
 			Write-Error -Category ObjectNotFound -Message "The command gpg.exe was not found"
@@ -183,85 +195,118 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 		}
 	}
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set gpg signingkey and gpgsign"))
+	if ($Force -or $PSCmdlet.ShouldProcess("Setting gpg signing key and gpg sign", "Set gpg signing key and gpg sign?", "git config"))
 	{
-		# gpg --list-secret-keys --keyid-format LONG
-		$KeyData = Invoke-Process gpg.exe @InvokeParams -ArgumentList "--list-secret-keys --keyid-format LONG" -Raw
-
-		# 		-----------------------------------------------
-		# sec   rsa4096/3AA5C34371567BD2  2020-08-18 [SC] [expires: 2051-08-18]
-		#       42B317FD4BA89E7A2D3DB3AA5C34371567BD2
-		# uid                 [ultimate] username <44481081+username@users.noreply.github.com>
-		# ssb   rsa4096/42B317FD4BA89E7A 2020-08-18 [E] [expires: 2025-08-18]
-		$Regex = [regex]::Matches($KeyData, "sec.+(?=\/)\/(?<key>\w+)")
-
-		if ($Regex.Success)
+		if ([string]::IsNullOrEmpty($GPG))
 		{
-			$KeyGroup = $Regex.Captures.Groups["key"]
-			if ($KeyGroup.Success)
-			{
-				$Key = $KeyGroup.Value
-				Write-Verbose -Message "[$ThisScript] SSH key is '$Key'"
-
-				# git config --global user.signingkey 3AA5C34371567BD2
-				Invoke-Process @GitParams -ArgumentList "config --global user.signingkey $Key"
-
-				# git config --global commit.gpgsign true
-				Invoke-Process @GitParams -ArgumentList "config --global commit.gpgsign true"
-			}
-			else
-			{
-				Write-Error -Category ParserError -TargetObject $Regex -Message "Invalid regex capture"
-			}
+			Write-Error -Category ObjectNotFound -Message "The command gpg.exe was not found"
 		}
 		else
 		{
-			Write-Error -Category ParserError -TargetObject $Regex -Message "Invalid regex"
-		}
-	}
+			# gpg --list-secret-keys --keyid-format LONG
+			$KeyData = Invoke-Process $GPG @InvokeParams -ArgumentList "--list-secret-keys --keyid-format LONG" -Raw
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess("ssh agent", "Add SSH key to ssh agent"))
-	{
-		if (!(Get-Service -Name ssh-agent -ErrorAction Ignore))
-		{
-			Write-Error -Category ObjectNotFound -Message "sss-agent service not found"
-		}
-		elseif (Initialize-Service -Name ssh-agent)
-		{
-			if ($SshKey)
+			if ([string]::IsNullOrEmpty($KeyData))
 			{
-				if ($SshKey.Exists)
-				{
-					$SshDirectory = "$env:SystemDrive\Users\$($Credential.UserName)\.ssh"
-
-					if (!(Test-Path $SshDirectory -PathType Container))
-					{
-						New-Item $SshDirectory -ItemType Directory | Out-Null
-					}
-
-					if (!(Test-Path $SshDirectory\$($SshKey.Name)))
-					{
-						Copy-Item $SshKey -Destination $SshDirectory
-					}
-
-					Invoke-Process ssh-add.exe @InvokeParams -ArgumentList $SshDirectory\$($SshKey.Name)
-				}
-				else
-				{
-					Write-Error -Category ObjectNotFound -TargetObject $SshKey `
-						-Message "Specified SSH key could not be found '$SshKey'"
-				}
+				Write-Error -Category InvalidResult -Message "GPG agent doesn't seem to have any associated keys"
 			}
 			else
 			{
-				# NOTE: ssh-add without arguments adds the default keys ~/.ssh/id_rsa, ~/.ssh/id_dsa,
-				# ~/.ssh/id_ecdsa. ~/ssh/id_ed25519, and ~/.ssh/identity if they exist
-				Invoke-Process ssh-add.exe @InvokeParams
+				# 		-----------------------------------------------
+				# sec   rsa4096/3AA5C34371567BD2  2020-08-18 [SC] [expires: 2051-08-18]
+				#       42B317FD4BA89E7A2D3DB3AA5C34371567BD2
+				# uid                 [ultimate] username <44481081+username@users.noreply.github.com>
+				# ssb   rsa4096/42B317FD4BA89E7A 2020-08-18 [E] [expires: 2025-08-18]
+				$Regex = [regex]::Matches($KeyData, "sec.+(?=\/)\/(?<key>\w+)")
+
+				if ($Regex.Success)
+				{
+					$KeyGroup = $Regex.Captures.Groups["key"]
+					if ($KeyGroup.Success)
+					{
+						$Key = $KeyGroup.Value
+						Write-Verbose -Message "[$ThisScript] SSH key is '$Key'"
+
+						# git config --global user.signingkey 3AA5C34371567BD2
+						Invoke-Process @GitParams -ArgumentList "config --global user.signingkey $Key"
+
+						# git config --global commit.gpgsign true
+						Invoke-Process @GitParams -ArgumentList "config --global commit.gpgsign true"
+					}
+					else
+					{
+						Write-Error -Category ParserError -TargetObject $Regex -Message "Invalid regex capture"
+					}
+				}
+				else
+				{
+					Write-Error -Category ParserError -TargetObject $Regex -Message "Invalid regex"
+				}
 			}
 		}
 	}
 
-	if ($YesToAll -or $PSCmdlet.ShouldProcess("git config", "Set username and email"))
+	if ($Force -or $PSCmdlet.ShouldProcess("Adding keys to ssh agent", "Add keys to ssh agent?", "ssh agent"))
+	{
+		if (!(Get-Service -Name ssh-agent -ErrorAction Ignore))
+		{
+			Write-Error -Category ObjectNotFound -Message "ssh-agent service not found"
+		}
+		elseif (Initialize-Service -Name ssh-agent)
+		{
+			$SshAdd = Get-Command -Name ssh-add.exe -ErrorAction Ignore | Select-Object -ExpandProperty Path
+
+			if ([string]::IsNullOrEmpty($SshAdd))
+			{
+				Write-Error -Category ObjectNotFound -Message "The command ssh-add.exe was not found"
+			}
+			else
+			{
+				if ($SshKey)
+				{
+					if ($SshKey.Exists)
+					{
+						$SshDirectory = "$env:SystemDrive\Users\$($Credential.UserName)\.ssh"
+
+						if (!(Test-Path $SshDirectory -PathType Container))
+						{
+							New-Item $SshDirectory -ItemType Directory | Out-Null
+						}
+
+						if (!(Test-Path $SshDirectory\$($SshKey.Name)))
+						{
+							Copy-Item $SshKey -Destination $SshDirectory
+						}
+
+						Invoke-Process $SshAdd @InvokeParams -ArgumentList $SshDirectory\$($SshKey.Name)
+					}
+					else
+					{
+						Write-Error -Category ObjectNotFound -TargetObject $SshKey `
+							-Message "Specified SSH key could not be found '$SshKey'"
+					}
+				}
+				else
+				{
+					# NOTE: ssh-add without arguments adds the default keys ~/.ssh/id_rsa, ~/.ssh/id_dsa,
+					# ~/.ssh/id_ecdsa. ~/ssh/id_ed25519, and ~/.ssh/identity if they exist
+					Invoke-Process $SshAdd @InvokeParams
+
+					# Check if ssh agent has no keys, in which case previous command did nothing
+					$Status = Invoke-Process $SshAdd @InvokeParams -ArgumentList "-l" -Raw
+
+					# ex. The agent has no identities.
+					if ($Status -like "*no identities*")
+					{
+						Write-Error -Category ObjectNotFound -Message "No keys were found to add to ssh agent"
+						Write-Information -Tags "dev" -MessageData "INFO: Please specify -SshKey parameter and try again"
+					}
+				}
+			}
+		}
+	}
+
+	if ($Force -or $PSCmdlet.ShouldProcess("Setting git username and email", "Set username and email?", "git config"))
 	{
 		# git config --global user.name "your name or username"
 		Invoke-Process @GitParams -ArgumentList "config --global user.name $User"
@@ -270,13 +315,13 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git and SSH keys", "Initialize d
 		Invoke-Process @GitParams -ArgumentList "config --global user.email $($Email.Address)"
 	}
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Open git config in default editor", "Verify git config file", $true, [ref] $null, [ref] $null))
+	if (!$Force -and $PSCmdlet.ShouldContinue("Open git config in default code editor?", "Verify git config file", $true, [ref] $YesToAll, [ref] $NoToAll))
 	{
 		# TODO: Waiting for your editor to close the file... will not be shown
 		Invoke-Process @GitParams -ArgumentList "config --global --edit" -Timeout -1
 	}
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Initialize project", "Windows Firewall Ruleset"))
+	if ($Force -or $PSCmdlet.ShouldProcess("Checking project requirements according to existing settings", "Check project requirements according to existing settings?", "Initialize project"))
 	{
 		if (!(Get-Variable -Name ProjectCheck -Scope Global -EA Ignore))
 		{

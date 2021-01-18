@@ -665,7 +665,6 @@ Following features are desired and might be available at some point in the futur
    - Windows 10 IoT Core Blast
    - Windows 10 IoT Enterprise
    - Windows 10 S
-   - Windows Server 2019 Essentials
 
 [Table of Contents](#table-of-contents)
 

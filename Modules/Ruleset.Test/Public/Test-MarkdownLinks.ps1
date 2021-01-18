@@ -50,22 +50,32 @@ No characters are interpreted as wildcards.
 If specified, recurse in to the path specified by Path parameter
 
 .PARAMETER TimeoutSec
-Specifies (per link) how long the request can be pending before it times out
+Specifies (per link) how long the request can be pending before it times out.
+A value, 0, specifies an indefinite time-out.
+A Domain Name System (DNS) query can take up to 15 seconds to return or time out.
+
+If your request contains a host name that requires resolution, and you set TimeoutSec to a value
+greater than zero, but less than 15 seconds, it can take 15 seconds or more before the request
+times out.
+The default value is 20 seconds.
 
 .PARAMETER MaximumRetryCount
 Specifies (per link) how many times PowerShell retries a connection when a failure code between 400
 and 599, inclusive or 304 is received.
 This parameter is valid for PowerShell Core edition only.
+The default value is 2
 
 .PARAMETER RetryIntervalSec
 Specifies the interval between retries for the connection when a failure code between 400 and
 599, inclusive or 304 is received
 This parameter is valid for PowerShell Core edition only.
+The default value is 3 seconds
 
 .PARAMETER MaximumRedirection
 Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource
 Identifier (URI) before the connection fails.
 A value of 0 (zero) prevents all redirection.
+The default value is 5
 
 .PARAMETER SslProtocol
 Sets the SSL/TLS protocols that are permissible for the web request.
@@ -95,6 +105,10 @@ If specified, only unique links are tested reducing the amount of time needed fo
 The Depth parameter determines the number of subdirectory levels that are included in the recursion.
 For example, Depth 2 includes the Path parameter's directory, first level of subdirectories, and
 second level of subdirectories.
+
+.PARAMETER Log
+If specified, dead links are logged.
+Log file can be found in Logs\MarkdownLinkTest_DATE.log
 
 .EXAMPLE
 PS> Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
@@ -133,15 +147,19 @@ function Test-MarkdownLinks
 		[switch] $Recurse,
 
 		[Parameter()]
-		[int32] $TimeoutSec = 0,
+		[ValidateRange(0, [int32]::MaxValue)]
+		[int32] $TimeoutSec = 20,
 
 		[Parameter()]
-		[int32] $MaximumRetryCount = 1,
+		[ValidateRange(1, [int32]::MaxValue)]
+		[int32] $MaximumRetryCount = 2,
 
 		[Parameter()]
-		[int32] $RetryIntervalSec = 2,
+		[ValidateRange(1, [int32]::MaxValue)]
+		[int32] $RetryIntervalSec = 3,
 
 		[Parameter()]
+		[ValidateRange(0, [int32]::MaxValue)]
 		[int32] $MaximumRedirection = 5,
 
 		[Parameter()]
@@ -167,7 +185,10 @@ function Test-MarkdownLinks
 		[switch] $Unique,
 
 		[Parameter()]
-		[uint32] $Depth
+		[uint32] $Depth,
+
+		[Parameter()]
+		[switch] $Log
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -277,6 +298,11 @@ function Test-MarkdownLinks
 		return $false
 	}
 
+	if ($Log)
+	{
+		$HeaderStack.Push("Markdown link test")
+	}
+
 	# Outer progress bar setup
 	$StartTime = Get-Date
 	[timespan] $Elapsed = 0
@@ -311,14 +337,15 @@ function Test-MarkdownLinks
 		}
 
 		++$FileCounter
-		Write-Information -Tags "Project" -MessageData "INFO: Analyzing file $FullName"
+		Write-Information -Tags "Test" -MessageData "INFO: Analyzing file $FullName"
 
 		[uri[]] $FileLinks = @()
 
 		if (($LinkType -eq "Any") -or ($LinkType -eq "Inline"))
 		{
 			# Capture inline links
-			$FileLinks += Select-String -Path $Markdown -Pattern "(?<=\[.+\]\()(http.*)(?=\))" -Encoding $DefaultEncoding | ForEach-Object {
+			$FileLinks += Select-String -Path $Markdown -Pattern "(?<=\[.+\]\()(http.+?)(?=\))" -Encoding $DefaultEncoding |
+			ForEach-Object {
 				# [Microsoft.PowerShell.Commands.MatchInfo]
 				$_.Matches.Groups[1].ToString()
 			} | Where-Object { !(& $SkipLink $_ ([ref] $TotalDiscarded)) }
@@ -414,6 +441,12 @@ function Test-MarkdownLinks
 			catch
 			{
 				Write-Warning -Message "Found dead link in '$File' -> $URL"
+
+				if ($Log)
+				{
+					Write-LogFile -Message "$FullName -> $URL" -LogName "MarkdownLinkTest" -Raw
+				}
+
 				$StatusReport += [PSCustomObject]@{
 					FullName = $FullName
 					URL = $URL
@@ -446,14 +479,37 @@ function Test-MarkdownLinks
 		Write-Progress $ProgressParams -Completed
 	}
 
+	if ($Log)
+	{
+		$HeaderStack.Pop | Out-Null
+	}
+
 	if ($StatusReport.Count)
 	{
-		Write-Information -Tags "Project" -MessageData "*** LINK TEST STATUS REPORT ***"
+		$RootRegex = [regex]::Escape($ProjectRoot)
+		Write-Information -Tags "Test" -MessageData "*** LINK TEST STATUS REPORT ***"
 
 		foreach ($Status in $StatusReport)
 		{
-			Write-Error -Category ResourceUnavailable -TargetObject $Status.URL -Message "Dead link -> $($Status.URL)"
-			Write-Information -Tags "Project" -MessageData "INFO: Found in file -> $($Status.FullName)"
+			$Regex = [regex]::Match("$($Status.FullName)", "(?<=$RootRegex\\)(?<file>.+)")
+
+			if ($Regex.Success)
+			{
+				$File = $Regex.Groups["file"]
+
+				if ($File.Success)
+				{
+					Write-Information -Tags "Test" -MessageData "INFO: $($File.Value) -> $($Status.URL)"
+				}
+				else
+				{
+					Write-Error -Category ParserError -TargetObject $File -Message "Invalid regex group"
+				}
+			}
+			else
+			{
+				Write-Error -Category ParserError -TargetObject $Regex -Message "Invalid regex"
+			}
 		}
 
 		if ($StatusReport.Count -eq 1)
@@ -466,6 +522,6 @@ function Test-MarkdownLinks
 		}
 	}
 
-	Write-Information -Tags "Project" -MessageData "$TotalLinksTested links were tested in total"
-	Write-Information -Tags "Project" -MessageData "$TotalDiscarded links were discarded"
+	Write-Information -Tags "Test" -MessageData "$TotalLinksTested links were tested in total"
+	Write-Information -Tags "Test" -MessageData "$TotalDiscarded links were discarded from test"
 }

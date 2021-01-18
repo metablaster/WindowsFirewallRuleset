@@ -239,6 +239,9 @@ Todo's in this file are categorized into following sections:
     - `FirewallParameters.md` contains missing mappings
     - `FirewallParameters.md` contains no info about compartments and IPSec setup
     - Universal and quick setup to install all required modules for all hosts and all users.
+    - Modules should have a readme inside their root directory pointing to Help subdirectory, see
+    Ruleset.Compatibility for an example, however all language specific files should be inside
+    specific language directory.
 
 7. Other
 
