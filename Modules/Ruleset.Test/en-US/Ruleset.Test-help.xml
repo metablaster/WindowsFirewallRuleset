@@ -1003,31 +1003,20 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeoutSec</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how long the request can be pending before it times out</maml:para>
+            <maml:para>Specifies (per link) how long the request can be pending before it times out. A value, 0, specifies an indefinite time-out. A Domain Name System (DNS) query can take up to 15 seconds to return or time out.</maml:para>
+            <maml:para>If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before the request times out. The default value is 20 seconds.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>0</dev:defaultValue>
+          <dev:defaultValue>20</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRetryCount</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>System.Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>1</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>RetryIntervalSec</maml:name>
-          <maml:description>
-            <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only.</maml:para>
+            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -1037,9 +1026,21 @@
           <dev:defaultValue>2</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RetryIntervalSec</maml:name>
+          <maml:description>
+            <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only. The default value is 3 seconds</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>3</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRedirection</maml:name>
           <maml:description>
-            <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection.</maml:para>
+            <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection. The default value is 5</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -1130,6 +1131,17 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Log</maml:name>
+          <maml:description>
+            <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
@@ -1160,31 +1172,20 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeoutSec</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how long the request can be pending before it times out</maml:para>
+            <maml:para>Specifies (per link) how long the request can be pending before it times out. A value, 0, specifies an indefinite time-out. A Domain Name System (DNS) query can take up to 15 seconds to return or time out.</maml:para>
+            <maml:para>If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before the request times out. The default value is 20 seconds.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>0</dev:defaultValue>
+          <dev:defaultValue>20</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRetryCount</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>System.Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>1</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>RetryIntervalSec</maml:name>
-          <maml:description>
-            <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only.</maml:para>
+            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -1194,9 +1195,21 @@
           <dev:defaultValue>2</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RetryIntervalSec</maml:name>
+          <maml:description>
+            <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only. The default value is 3 seconds</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>3</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRedirection</maml:name>
           <maml:description>
-            <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection.</maml:para>
+            <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection. The default value is 5</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -1287,6 +1300,17 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Log</maml:name>
+          <maml:description>
+            <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1330,31 +1354,20 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeoutSec</maml:name>
         <maml:description>
-          <maml:para>Specifies (per link) how long the request can be pending before it times out</maml:para>
+          <maml:para>Specifies (per link) how long the request can be pending before it times out. A value, 0, specifies an indefinite time-out. A Domain Name System (DNS) query can take up to 15 seconds to return or time out.</maml:para>
+          <maml:para>If your request contains a host name that requires resolution, and you set TimeoutSec to a value greater than zero, but less than 15 seconds, it can take 15 seconds or more before the request times out. The default value is 20 seconds.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>0</dev:defaultValue>
+        <dev:defaultValue>20</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>MaximumRetryCount</maml:name>
         <maml:description>
-          <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Int32</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>1</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>RetryIntervalSec</maml:name>
-        <maml:description>
-          <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only.</maml:para>
+          <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -1364,9 +1377,21 @@
         <dev:defaultValue>2</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RetryIntervalSec</maml:name>
+        <maml:description>
+          <maml:para>Specifies the interval between retries for the connection when a failure code between 400 and 599, inclusive or 304 is received This parameter is valid for PowerShell Core edition only. The default value is 3 seconds</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>3</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>MaximumRedirection</maml:name>
         <maml:description>
-          <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection.</maml:para>
+          <maml:para>Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource Identifier (URI) before the connection fails. A value of 0 (zero) prevents all redirection. The default value is 5</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -1459,6 +1484,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>0</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Log</maml:name>
+        <maml:description>
+          <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

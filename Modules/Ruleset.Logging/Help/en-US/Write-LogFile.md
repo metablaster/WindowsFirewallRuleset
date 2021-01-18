@@ -153,7 +153,7 @@ Accept wildcard characters: False
 
 ### -LogName
 
-{{ Fill LogName Description }}
+File label that is added to current date for resulting file name
 
 ```yaml
 Type: System.String

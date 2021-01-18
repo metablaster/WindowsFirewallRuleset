@@ -97,6 +97,7 @@ Todo's in this file are categorized into following sections:
     - Some function variables such as `ComputerName` take an array of values, make sure this functionality
     actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
     - If there is `Path` parameter then also `LiteralPath` is required
+    - Run `Get-Command -Syntax` for each function and script to verify parameter set names are as expected
 
 2. Scripts
 

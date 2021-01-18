@@ -1,67 +1,72 @@
+
 # Ruleset.Test
 
 ## about_Ruleset.Test
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+PowerShell unit test module
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.Test module is designed for unit testing of "Windows Firewall Ruleset" project
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+Enter-Test
 ```
 
-# LONG DESCRIPTION
+Initialize unit test
 
-{{ Long Description Placeholder }}
+```powershell
+Exit-Test
+```
 
-## Optional Subtopics
+Un-initialize and exit unit test
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+New-Section
+```
 
-# EXAMPLES
+Print new unit test section
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+Reset-TestDrive
+```
 
-# NOTE
+Remove all items from test drive
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+Start-Test
+```
 
-# TROUBLESHOOTING NOTE
+Start test case
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+Stop-Test
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Stop test case
 
-# SEE ALSO
+```powershell
+Test-MarkdownLinks
+```
 
-{{ See also placeholder }}
+Test links in markdown files
 
-{{ You can also list related articles, blogs, and video URLs. }}
+```powershell
+Test-Output
+```
 
-# KEYWORDS
+Verify TypeName and OutputType are referring to same type
 
-{{List alternate names or titles for this topic that readers might use.}}
+## KEYWORDS
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+- Test
+- UnitTest
+- PowerShellTest
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Test/Help/en-US

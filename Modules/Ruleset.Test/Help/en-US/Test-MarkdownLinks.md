@@ -18,7 +18,8 @@ Test links in markdown files
 ```powershell
 Test-MarkdownLinks [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
- [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [<CommonParameters>]
+ [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
+ [<CommonParameters>]
 ```
 
 ### Literal
@@ -26,7 +27,8 @@ Test-MarkdownLinks [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-Maximum
 ```powershell
 Test-MarkdownLinks -LiteralPath <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
- [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [<CommonParameters>]
+ [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -112,7 +114,14 @@ Accept wildcard characters: False
 
 ### -TimeoutSec
 
-Specifies (per link) how long the request can be pending before it times out
+Specifies (per link) how long the request can be pending before it times out.
+A value, 0, specifies an indefinite time-out.
+A Domain Name System (DNS) query can take up to 15 seconds to return or time out.
+
+If your request contains a host name that requires resolution, and you set TimeoutSec to a value
+greater than zero, but less than 15 seconds, it can take 15 seconds or more before the request
+times out.
+The default value is 20 seconds.
 
 ```yaml
 Type: System.Int32
@@ -121,7 +130,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 0
+Default value: 20
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -131,24 +140,7 @@ Accept wildcard characters: False
 Specifies (per link) how many times PowerShell retries a connection when a failure code between 400
 and 599, inclusive or 304 is received.
 This parameter is valid for PowerShell Core edition only.
-
-```yaml
-Type: System.Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 1
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RetryIntervalSec
-
-Specifies the interval between retries for the connection when a failure code between 400 and
-599, inclusive or 304 is received
-This parameter is valid for PowerShell Core edition only.
+The default value is 2
 
 ```yaml
 Type: System.Int32
@@ -162,11 +154,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RetryIntervalSec
+
+Specifies the interval between retries for the connection when a failure code between 400 and
+599, inclusive or 304 is received
+This parameter is valid for PowerShell Core edition only.
+The default value is 3 seconds
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 3
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -MaximumRedirection
 
 Specifies how many times PowerShell redirects a connection to an alternate Uniform Resource
 Identifier (URI) before the connection fails.
 A value of 0 (zero) prevents all redirection.
+The default value is 5
 
 ```yaml
 Type: System.Int32
@@ -298,6 +310,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Log
+
+If specified, dead links are logged.
+Log file can be found in Logs\MarkdownLinkTest_DATE.log
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -178,6 +178,4 @@ TODO: Update examples to include DTS directory
 
 [https://github.com/RamblingCookieMonster/PowerShell](https://github.com/RamblingCookieMonster/PowerShell)
 
-[https://github.com/metablaster/WindowsFirewallRuleset](https://github.com/metablaster/WindowsFirewallRuleset)
-
-[https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0](https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0)
+[https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0](https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0)

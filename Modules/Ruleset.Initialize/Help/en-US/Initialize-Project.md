@@ -14,7 +14,7 @@ Check repository system requirements
 ## SYNTAX
 
 ```powershell
-Initialize-Project [-Strict] [-Force] [<CommonParameters>]
+Initialize-Project [-Strict] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,22 +50,6 @@ If successful environment info is shown.
 ### -Strict
 
 If specified, exit is called on failure instead of return
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-
-If specified, script runs regardless of global variable that controls whether to run initialization
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

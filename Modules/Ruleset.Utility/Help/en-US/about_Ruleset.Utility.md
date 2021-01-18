@@ -1,67 +1,133 @@
+
 # Ruleset.Utility
 
 ## about_Ruleset.Utility
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+PowerShell utility module for Windows Firewall Ruleset project
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.Utility module exposes utility functions relevant for Windows Firewall Ruleset.
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## VARIABLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+ServiceHost
 ```
 
-# LONG DESCRIPTION
+Windows service host
 
-{{ Long Description Placeholder }}
+```powershell
+CheckInitUtility
+```
 
-## Optional Subtopics
+Serves to prevent double initialization of constants
 
-{{ Optional Subtopic Placeholder }}
+## EXAMPLES
 
-# EXAMPLES
+```powershell
+Approve-Execute
+```
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+Prompt user to continue running script
 
-# NOTE
+```powershell
+Build-ServiceList
+```
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+Build a list of windows services involved in script rules
 
-# TROUBLESHOOTING NOTE
+```powershell
+Compare-Path
+```
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+Compare 2 paths for equality or similarity
 
-{{ Explains behavior that is likely to change with fixes }}
+```powershell
+Confirm-FileEncoding
+```
 
-# SEE ALSO
+Verify file is encoded as expected
 
-{{ See also placeholder }}
+```powershell
+ConvertFrom-Wildcard
+```
 
-{{ You can also list related articles, blogs, and video URLs. }}
+Convert wildcard pattern to regex
 
-# KEYWORDS
+```powershell
+Get-FileEncoding
+```
 
-{{List alternate names or titles for this topic that readers might use.}}
+Gets the encoding of a file
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+```powershell
+Get-TypeName
+```
+
+Get .NET outputs of a commandlet or convert to/from type accelerator
+
+```powershell
+Invoke-Process
+```
+
+Run process and optionally redirect captured output
+
+```powershell
+Out-DataTable
+```
+
+Creates a DataTable from an object
+
+```powershell
+Resolve-FileSystemPath
+```
+
+Resolve file system wildcard of a directory or file location
+
+```powershell
+Select-EnvironmentVariable
+```
+
+Select a group of system environment variables
+
+```powershell
+Set-NetworkProfile
+```
+
+Set network profile for physical network interfaces
+
+```powershell
+Set-Permission
+```
+
+Take ownership or set permissions on file system or registry object
+
+```powershell
+Set-ScreenBuffer
+```
+
+Set vertical screen buffer to recommended value
+
+```powershell
+Set-Shortcut
+```
+
+Create or set shortcut to file or online location
+
+## ALIASES
+
+```powershell
+gt -> Get-TypeName
+```
+
+## KEYWORDS
+
+- Utility
+- FirewallUtility
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Utility/Help/en-US

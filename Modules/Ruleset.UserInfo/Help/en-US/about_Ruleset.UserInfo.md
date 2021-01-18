@@ -1,67 +1,129 @@
+
 # Ruleset.UserInfo
 
 ## about_Ruleset.UserInfo
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Module to query information about Windows users and groups
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.UserInfo module is used to query information about users and groups on local or remote
+computers.
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## VARIABLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+UsersGroupSDDL
 ```
 
-# LONG DESCRIPTION
+SDDL string for "Users" group
 
-{{ Long Description Placeholder }}
+```powershell
+AdminGroupSDDL
+```
 
-## Optional Subtopics
+SDDL string for "Administrators" group
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+LocalSystem
+```
 
-# EXAMPLES
+SDDL string for "NT AUTHORITY\SYSTEM"
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+LocalService
+```
 
-# NOTE
+SDDL string for "NT AUTHORITY\LOCAL SERVICE"
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+NetworkService
+```
 
-# TROUBLESHOOTING NOTE
+SDDL string for "NT AUTHORITY\NETWORK SERVICE"
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+CheckInitUserInfo
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Serves to prevent double initialization of constants
 
-# SEE ALSO
+## EXAMPLES
 
-{{ See also placeholder }}
+```powershell
+ConvertFrom-SDDL
+```
 
-{{ You can also list related articles, blogs, and video URLs. }}
+Convert SDDL string to Principal
 
-# KEYWORDS
+```powershell
+ConvertFrom-SID
+```
 
-{{List alternate names or titles for this topic that readers might use.}}
+Convert SID to principal, user and domain name
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+```powershell
+Get-GroupPrincipal
+```
+
+Get principals of specified groups on target computers
+
+```powershell
+Get-GroupSID
+```
+
+Get SID of user groups on local or remote computers
+
+```powershell
+Get-PrincipalSID
+```
+
+Get SID for specified user account
+
+```powershell
+Get-SDDL
+```
+
+Get SDDL string of a user, group or from path
+
+```powershell
+Get-UserGroup
+```
+
+Get user groups on target computers
+
+```powershell
+Merge-SDDL
+```
+
+Merge 2 SDDL strings into one
+
+```powershell
+Split-Principal
+```
+
+Split principal to either user name or domain
+
+```powershell
+Test-Credential
+```
+
+Takes a PSCredential object and validates it
+
+```powershell
+Test-UPN
+```
+
+Validate Universal Principal Name syntax
+
+## KEYWORDS
+
+- Users
+- UserInfo
+- ComputerUsers
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.UserInfo/Help/en-US

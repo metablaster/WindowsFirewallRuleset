@@ -1,67 +1,115 @@
+
 # Ruleset.IP
 
 ## about_Ruleset.IP
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Module to perform IPv4 subnet math
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.IP module is used to perform binary, decimal and hex conversions on IP and netmask
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+ConvertFrom-HexIP
 ```
 
-# LONG DESCRIPTION
+Converts a hexadecimal IP address into a dotted decimal string
 
-{{ Long Description Placeholder }}
+```powershell
+ConvertTo-BinaryIP
+```
 
-## Optional Subtopics
+Converts a Decimal IP address into a binary format
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+ConvertTo-DecimalIP
+```
 
-# EXAMPLES
+Converts a Decimal IP address into a 32-bit unsigned integer
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+ConvertTo-DottedDecimalIP
+```
 
-# NOTE
+Converts either an unsigned 32-bit integer or a dotted binary string to an IP Address
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+ConvertTo-HexIP
+```
 
-# TROUBLESHOOTING NOTE
+Convert a dotted decimal IP address into a hexadecimal string
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+ConvertTo-Mask
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Convert a mask length to a dotted-decimal subnet mask
 
-# SEE ALSO
+```powershell
+ConvertTo-MaskLength
+```
 
-{{ See also placeholder }}
+Convert a dotted-decimal subnet mask to a mask length
 
-{{ You can also list related articles, blogs, and video URLs. }}
+```powershell
+ConvertTo-Subnet
+```
 
-# KEYWORDS
+Convert a start and end IP address to the closest matching subnet
 
-{{List alternate names or titles for this topic that readers might use.}}
+```powershell
+Get-BroadcastAddress
+```
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+Get the broadcast address for a network range
+
+```powershell
+Get-NetworkAddress
+```
+
+Get the network address for a network range
+
+```powershell
+Get-NetworkRange
+```
+
+Get a list of IP addresses within the specified network
+
+```powershell
+Get-NetworkSummary
+```
+
+Generates a summary describing several properties of a network range
+
+```powershell
+Get-Subnet
+```
+
+Get a list of subnets of a given size within a defined supernet
+
+```powershell
+Resolve-IPAddress
+```
+
+Resolves an IP address expression using wildcard expressions to individual IP addresses
+
+```powershell
+Test-SubnetMember
+```
+
+Tests an IP address to determine if it falls within IP address range
+
+## KEYWORDS
+
+- IPMath
+- IPCalculator
+- SubnetMath
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.IP/Help/en-US
+https://github.com/indented-automation/Indented.Net.IP

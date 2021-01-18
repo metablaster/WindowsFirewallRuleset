@@ -1,67 +1,51 @@
+
 # Ruleset.Initialize
 
 ## about_Ruleset.Initialize
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Initialize repository development environment
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.Initialize module main purpose is automated development environment setup to be able
+to perform quick setup on multiple computers and virtual operating systems, in cases such as
+frequent system restores for the purpose of testing project code for many environment scenarios
+that end users may have.
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+Initialize-Module
 ```
 
-# LONG DESCRIPTION
+Update or install specified modules
 
-{{ Long Description Placeholder }}
+```powershell
+Initialize-Project
+```
 
-## Optional Subtopics
+Check repository system requirements
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+Initialize-Provider
+```
 
-# EXAMPLES
+Update or install specified package providers
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+Initialize-Service
+```
 
-# NOTE
+Configure and start required system services
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+## KEYWORDS
 
-# TROUBLESHOOTING NOTE
+- Initialization
+- Environment
+- Development
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+## SEE ALSO
 
-{{ Explains behavior that is likely to change with fixes }}
-
-# SEE ALSO
-
-{{ See also placeholder }}
-
-{{ You can also list related articles, blogs, and video URLs. }}
-
-# KEYWORDS
-
-{{List alternate names or titles for this topic that readers might use.}}
-
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Initialize/Help/en-US

@@ -1,67 +1,86 @@
+
 # Ruleset.ComputerInfo
 
 ## about_Ruleset.ComputerInfo
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Query computer, system and network information
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.ComputerInfo module is used to query information about Windows computers,
+operating system and network configuration.
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+ConvertFrom-OSBuild
 ```
 
-# LONG DESCRIPTION
+Convert from OS build number to OS version
 
-{{ Long Description Placeholder }}
+```powershell
+Get-InterfaceAlias
+```
 
-## Optional Subtopics
+Get interface aliases of specified network adapters
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+Get-InterfaceBroadcast
+```
 
-# EXAMPLES
+Get interface broadcast address
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+Get-SystemSKU
+```
 
-# NOTE
+Get operating system SKU information
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+Resolve-Host
+```
 
-# TROUBLESHOOTING NOTE
+Resolve host to IP or an IP to host
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+Select-IPInterface
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Select IP configuration for specified network adapters
 
-# SEE ALSO
+```powershell
+Test-DnsName
+```
 
-{{ See also placeholder }}
+Validate DNS domain name syntax
 
-{{ You can also list related articles, blogs, and video URLs. }}
+```powershell
+Test-NetBiosName
+```
 
-# KEYWORDS
+Validate NETBIOS name syntax
 
-{{List alternate names or titles for this topic that readers might use.}}
+```powershell
+Test-TargetComputer
+```
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+Test target computer (policy store) to which to deploy firewall
+
+```powershell
+Test-UNC
+```
+
+Validate UNC path syntax
+
+## KEYWORDS
+
+- Computer
+- ComputerInfo
+- SystemInfo
+- NetworkInfo
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.ComputerInfo/Help/en-US

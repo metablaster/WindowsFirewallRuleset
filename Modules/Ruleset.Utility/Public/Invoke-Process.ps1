@@ -125,7 +125,6 @@ function Invoke-Process
 		[Parameter()]
 		[switch] $Raw,
 
-		[Parameter()]
 		[Parameter(Mandatory = $true, ParameterSetName = "Credential")]
 		[PSCredential] $Credential,
 

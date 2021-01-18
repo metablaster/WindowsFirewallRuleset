@@ -1179,12 +1179,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:uri>https://github.com/RamblingCookieMonster/PowerShell</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:linkText>
-        <maml:uri>https://gallery.technet.microsoft.com/scriptcenter/Get-SqlServerInstance-9a3245a0</maml:uri>
+        <maml:linkText>https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0</maml:linkText>
+        <maml:uri>https://gallery.technet.microsoft.com/scriptcenter/Get-SQLInstance-9a3245a0</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

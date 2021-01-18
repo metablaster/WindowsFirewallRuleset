@@ -1,67 +1,77 @@
+
 # Ruleset.Compatibility
 
 ## about_Ruleset.Compatibility
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Windows PowerShell Compatibility Pack
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+This module provides PowerShell Core 6 compatibility with existing Windows PowerShell scripts
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+Add-WindowsPSModulePath
 ```
 
-# LONG DESCRIPTION
+Appends the existing Windows PowerShell PSModulePath to existing PSModulePath
 
-{{ Long Description Placeholder }}
+```powershell
+Add-WinFunction
+```
 
-## Optional Subtopics
+This command defines a global function that always runs in the compatibility session
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+Compare-WinModule
+```
 
-# EXAMPLES
+Compare the set of modules against those in the compatibility session
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+Copy-WinModule
+```
 
-# NOTE
+Copy modules from the compatibility session that are directly usable in PowerShell Core
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+Get-WinModule
+```
 
-# TROUBLESHOOTING NOTE
+Get a list of the available modules from the compatibility session
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+Import-WinModule
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Import a compatibility module
 
-# SEE ALSO
+```powershell
+Initialize-WinSession
+```
 
-{{ See also placeholder }}
+Initialize the connection to the compatibility session
 
-{{ You can also list related articles, blogs, and video URLs. }}
+```powershell
+Invoke-WinCommand
+```
 
-# KEYWORDS
+Invoke a ScriptBlock that runs in the compatibility runspace
 
-{{List alternate names or titles for this topic that readers might use.}}
+## ALIASES
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+Add-WinPSModulePath -> Add-WindowsPSModulePath
+
+## KEYWORDS
+
+- Compatibility
+- WindowsPowerShell
+- Core
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.Compatibility/Help/en-US
+https://github.com/PowerShell/WindowsCompatibility

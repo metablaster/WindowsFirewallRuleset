@@ -9,19 +9,28 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Run process and optionally redirect captured output
+Run process, format and redirect captured process output
 
 ## SYNTAX
 
+### Default (Default)
+
 ```powershell
-Invoke-Process [-Path] <String> [-ArgumentList <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
- [<CommonParameters>]
+Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
+ [-WorkingDirectory <String>] [<CommonParameters>]
+```
+
+### Credential
+
+```powershell
+Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
+ -Credential <PSCredential> [-LoadUserProfile] -WorkingDirectory <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Run process with or without arguments, set process timeout, capture and format output.
-If target process produces error, error message is formatted and shown in addition
+If target process produces an error, the error message is formatted and shown in addition
 to standard output if any.
 
 ## EXAMPLES
@@ -42,7 +51,7 @@ Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Async
 
 ### -Path
 
-Executable name or path to application to which to start.
+Executable name or path to application which to start.
 Wildcard characters and relative paths are supported.
 
 ```yaml
@@ -67,7 +76,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -127,7 +136,7 @@ Accept wildcard characters: False
 ### -Raw
 
 If specified, process output is returned as string.
-By default process output is redirected to information and error stream.
+By default process output is formatted and redirected to information and error stream.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -137,6 +146,69 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Optionally specify Windows user name and password to use when starting the process
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Credential
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LoadUserProfile
+
+Specify whether the Windows user profile is to be loaded from the registry
+Because loading the profile can be time-consuming, it is best to use this value only if you must
+access the information in the HKEY_CURRENT_USER registry key.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Credential
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WorkingDirectory
+
+Set the working directory for the process to be started.
+The WorkingDirectory property must be set if Credential (UserName and Password) is provided.
+
+```yaml
+Type: System.String
+Parameter Sets: Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: System.String
+Parameter Sets: Credential
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -168,3 +240,5 @@ TODO: Domain parameter needed to invoke process remotely
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Invoke-Process.md)
 
 [https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo](https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo)

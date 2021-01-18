@@ -44,7 +44,7 @@ Get .NET outputs of a commandlet or convert to/from type accelerator
 
 ### [Invoke-Process](Invoke-Process.md)
 
-Run process and optionally redirect captured output
+Run process, format and redirect captured process output
 
 ### [Out-DataTable](Out-DataTable.md)
 

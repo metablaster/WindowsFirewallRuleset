@@ -1,67 +1,153 @@
+
 # Ruleset.ProgramInfo
 
 ## about_Ruleset.ProgramInfo
 
-```powershell
-ABOUT TOPIC NOTE:
-The first header of the about topic should be the topic name.
-The second header contains the lookup name used by the help system.
+## SHORT DESCRIPTION
 
-IE:
-# Some Help Topic Name
+Query software installed on local and remote Windows systems
 
-## SomeHelpTopicFileName
+## LONG DESCRIPTION
 
-This will be transformed into the text file
-as `about_SomeHelpTopicFileName`.
-Do not include file extensions.
-The second header should have no spaces.
-```
+Ruleset.ProgramInfo module is used to query information about software installed on local or
+remote computers, installed either system wide or per user.
+Or to query software which is built into operating system.
 
-# SHORT DESCRIPTION
-
-{{ Short Description Placeholder }}
+## EXAMPLES
 
 ```powershell
-ABOUT TOPIC NOTE:
-About topics can be no longer than 80 characters wide when rendered to text.
-Any topics greater than 80 characters will be automatically wrapped.
-The generated about topic will be encoded UTF-8.
+Confirm-Installation
 ```
 
-# LONG DESCRIPTION
+Verify or set program installation directory
 
-{{ Long Description Placeholder }}
+```powershell
+Format-Path
+```
 
-## Optional Subtopics
+Format file system path and fix syntax errors
 
-{{ Optional Subtopic Placeholder }}
+```powershell
+Get-AppCapability
+```
 
-# EXAMPLES
+Get Windows store app capabilities
 
-{{ Code or descriptive examples of how to leverage the functions described. }}
+```powershell
+Get-AppSID
+```
 
-# NOTE
+Get store app SID
 
-{{ Note Placeholder - Additional information that a user needs to know.}}
+```powershell
+Get-ExecutablePath
+```
 
-# TROUBLESHOOTING NOTE
+Get a list of install locations for executable files
 
-{{ Troubleshooting Placeholder - Warns users of bugs}}
+```powershell
+Get-InstallProperties
+```
 
-{{ Explains behavior that is likely to change with fixes }}
+Search system wide program install properties
 
-# SEE ALSO
+```powershell
+Get-NetFramework
+```
 
-{{ See also placeholder }}
+Get installed .NET Frameworks
 
-{{ You can also list related articles, blogs, and video URLs. }}
+```powershell
+Get-OneDrive
+```
 
-# KEYWORDS
+Get One Drive information for specific user
 
-{{List alternate names or titles for this topic that readers might use.}}
+```powershell
+Get-SqlManagementStudio
+```
 
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
-- {{ Keyword Placeholder }}
+Get installed Microsoft SQL Server Management Studios
+
+```powershell
+Get-SqlServerInstance
+```
+
+Get SQL server information from a local or remote servers
+
+```powershell
+Get-SystemApps
+```
+
+Get store apps installed system wide
+
+```powershell
+Get-SystemSoftware
+```
+
+Search installed programs for all users, system wide
+
+```powershell
+Get-UserApps
+```
+
+Get store apps for specific user
+
+```powershell
+Get-UserSoftware
+```
+
+Get a list of programs installed by specific user
+
+```powershell
+Get-WindowsDefender
+```
+
+Get Windows Defender installation information
+
+```powershell
+Get-WindowsKit
+```
+
+Get installed Windows Kits
+
+```powershell
+Get-WindowsSDK
+```
+
+Get installed Windows SDK
+
+```powershell
+Search-Installation
+```
+
+Find installation directory for given predefined program name
+
+```powershell
+Test-ExecutableFile
+```
+
+Check if executable file exists and is trusted
+
+```powershell
+Test-FileSystemPath
+```
+
+Test file system path syntax and existence
+
+```powershell
+Test-Service
+```
+
+Check if system service exists and is trusted
+
+## KEYWORDS
+
+- Program
+- ProgramInfo
+- Software
+- SoftwareInfo
+
+## SEE ALSO
+
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.ProgramInfo/Help/en-US

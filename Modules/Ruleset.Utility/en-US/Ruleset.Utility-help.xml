@@ -1543,11 +1543,11 @@ binary</dev:code>
       <command:verb>Invoke</command:verb>
       <command:noun>Process</command:noun>
       <maml:description>
-        <maml:para>Run process and optionally redirect captured output</maml:para>
+        <maml:para>Run process, format and redirect captured process output</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Run process with or without arguments, set process timeout, capture and format output. If target process produces error, error message is formatted and shown in addition to standard output if any.</maml:para>
+      <maml:para>Run process with or without arguments, set process timeout, capture and format output. If target process produces an error, the error message is formatted and shown in addition to standard output if any.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1555,7 +1555,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Executable name or path to application to which to start. Wildcard characters and relative paths are supported.</maml:para>
+            <maml:para>Executable name or path to application which to start. Wildcard characters and relative paths are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1564,7 +1564,7 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>ArgumentList</maml:name>
           <maml:description>
             <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
@@ -1613,7 +1613,7 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Raw</maml:name>
           <maml:description>
-            <maml:para>If specified, process output is returned as string. By default process output is redirected to information and error stream.</maml:para>
+            <maml:para>If specified, process output is returned as string. By default process output is formatted and redirected to information and error stream.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1621,13 +1621,132 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify Windows user name and password to use when starting the process</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LoadUserProfile</maml:name>
+          <maml:description>
+            <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>WorkingDirectory</maml:name>
+          <maml:description>
+            <maml:para>Set the working directory for the process to be started. The WorkingDirectory property must be set if Credential (UserName and Password) is provided.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Invoke-Process</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Executable name or path to application which to start. Wildcard characters and relative paths are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>ArgumentList</maml:name>
+          <maml:description>
+            <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoNewWindow</maml:name>
+          <maml:description>
+            <maml:para>Whether to use the operating system shell to start the process</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Timeout</maml:name>
+          <maml:description>
+            <maml:para>The amount of time, in milliseconds, to wait for the associated process to exit. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 10000 (10 seconds).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>10000</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Async</maml:name>
+          <maml:description>
+            <maml:para>If specified, reading process output is asynchronous. This functionality is experimental because current thread will block until timeout.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Raw</maml:name>
+          <maml:description>
+            <maml:para>If specified, process output is returned as string. By default process output is formatted and redirected to information and error stream.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>WorkingDirectory</maml:name>
+          <maml:description>
+            <maml:para>Set the working directory for the process to be started. The WorkingDirectory property must be set if Credential (UserName and Password) is provided.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="FilePath">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Executable name or path to application to which to start. Wildcard characters and relative paths are supported.</maml:para>
+          <maml:para>Executable name or path to application which to start. Wildcard characters and relative paths are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1636,7 +1755,7 @@ binary</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>ArgumentList</maml:name>
         <maml:description>
           <maml:para>A collection of command-line arguments to use when starting the application</maml:para>
@@ -1687,7 +1806,7 @@ binary</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Raw</maml:name>
         <maml:description>
-          <maml:para>If specified, process output is returned as string. By default process output is redirected to information and error stream.</maml:para>
+          <maml:para>If specified, process output is returned as string. By default process output is formatted and redirected to information and error stream.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1695,6 +1814,42 @@ binary</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify Windows user name and password to use when starting the process</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LoadUserProfile</maml:name>
+        <maml:description>
+          <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>WorkingDirectory</maml:name>
+        <maml:description>
+          <maml:para>Set the working directory for the process to be started. The WorkingDirectory property must be set if Credential (UserName and Password) is provided.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1762,6 +1917,10 @@ binary</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1854,7 +2013,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic.  This would not catch empty strings, zero, $false and other non-null items 							  - Added perhaps pointless error handling</maml:para>
+        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic. This would not catch empty strings, zero, $false and other non-null items 							  - Added perhaps pointless error handling</maml:para>
         <maml:para>Modifications by metablaster January 2021: Updated formatting, casing and naming according to the rest of project Updated comment based help Convert inner function to scriptblock</maml:para>
       </maml:alert>
     </maml:alertSet>
