@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for PowerShell
+Inbound firewall rules for PowerShell
 
 .DESCRIPTION
-Outbound firewall rules for PowerShell Core and Desktop editions
+Inbound firewall rules for PowerShell Core and Desktop editions
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
@@ -50,7 +50,7 @@ None. You cannot pipe objects to PowerShell.ps1
 None. PowerShell.ps1 does not generate any output
 
 .NOTES
-TODO: Rules for ISE remoting, Core x86 and Desktop x86 remoting are missing
+TODO: Rules for Core x86 remoting are missing
 #>
 
 #Requires -Version 5.1
@@ -74,8 +74,8 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft PowerShell"
-$Accept = "Outbound rules for PowerShell will be loaded, recommended if PowerShell is installed to let it access to network"
-$Deny = "Skip operation, outbound rules for PowerShell will not be loaded into firewall"
+$Accept = "Inbound rules for PowerShell are needed for remoting"
+$Deny = "Skip operation, inbound rules for PowerShell will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
@@ -95,27 +95,8 @@ $PowerShellCore64Root = "%PROGRAMFILES%\PowerShell\7"
 # Rules for PowerShell
 #
 
-# NOTE: Administrators may need PowerShell, let them add them self temporary? currently adding them for PS x64
-$PowerShellUsers = Get-SDDL -Group "Users", "Administrators" -Merge
-
-# Test if installation exists on system
 if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLoad)
 {
-	$Program = "$PowerShell64Root\powershell.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "PowerShell x64" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $PowerShellUsers `
-			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop help update" |
-		Format-RuleOutput
-	}
-
 	$Program = "$PowerShell64Root\powershell.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -125,46 +106,30 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort 5985 `
-			-LocalUser $AdminGroupSDDL `
+			-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop remoting" |
+			-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
 		Format-RuleOutput
 	}
 
 	$Program = "$PowerShell64Root\powershell_ise.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "PowerShell ISE x64" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		New-NetFirewallRule -DisplayName "PowerShell ISE x64 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort 5985 `
+			-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell ISE help update" |
+			-Description "Rule for PowerShell ISE to allow connections from remote hosts" |
 		Format-RuleOutput
 	}
 }
 
-# Test if installation exists on system
 if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or $ForceLoad)
 {
-	$Program = "$PowerShellCore64Root\pwsh.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "PowerShell Core x64" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $PowerShellUsers `
-			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Core help update" |
-		Format-RuleOutput
-	}
-
 	$Program = "$PowerShellCore64Root\pwsh.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -174,43 +139,42 @@ if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or 
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort 5985 `
-			-LocalUser $AdminGroupSDDL `
+			-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Core remoting" |
+			-Description "Rule for PowerShell Core to allow connections from remote hosts" |
 		Format-RuleOutput
 	}
 }
 
-# Test if installation exists on system
 if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLoad)
 {
 	$Program = "$PowerShell86Root\powershell.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "PowerShell x86" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		New-NetFirewallRule -DisplayName "PowerShell x86 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort 5985 `
+			-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop help update" |
+			-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
 		Format-RuleOutput
 	}
 
 	$Program = "$PowerShell86Root\powershell_ise.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "PowerShell ISE x86" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		New-NetFirewallRule -DisplayName "PowerShell ISE x86 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort 5985 `
+			-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell ISE help update" |
+			-Description "Rule for PowerShell ISE to allow connections from remote hosts" |
 		Format-RuleOutput
 	}
 }

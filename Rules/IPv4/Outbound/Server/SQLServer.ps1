@@ -89,9 +89,9 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # SQLServer installation directories
 #
-# TODO: Unknown default installation directory
-$SqlManagementStudioRoot = ""
-$SQLDTSRoot = ""
+$SqlManagementStudioRoot = "%ProgramFiles(x86)%\Microsoft SQL Server Management Studio 18"
+$SqlPathRoot = "%ProgramW6432%\Microsoft SQL Server\150\DTS"
+$SqlServerRoot = "%ProgramW6432%\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Binn"
 
 #
 # Rules for SQLServer
@@ -105,27 +105,56 @@ if ((Confirm-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)
 	$Program = "$SqlManagementStudioRoot\Common7\IDE\Ssms.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "SQL Server Management Studio" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "SQL Server Management Studio" `
+		 -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SQLUsers `
-			-Description "" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "" |
+		Format-RuleOutput
 	}
 }
 
 # Test if installation exists on system
-if ((Confirm-Installation "SQLDTS" ([ref] $SQLDTSRoot)) -or $ForceLoad)
+if ((Confirm-Installation "SqlPath" ([ref] $SqlPathRoot)) -or $ForceLoad)
 {
-	$Program = "$SQLDTSRoot\Binn\DTSWizard.exe"
+	$Program = "$SqlPathRoot\Binn\DTSWizard.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "SQL Server Import and Export Wizard" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "SQL Server Import and Export Wizard" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SQLUsers `
-			-Description "" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "" |
+		Format-RuleOutput
+	}
+}
+
+if ((Confirm-Installation "SqlServer" ([ref] $SqlServerRoot)) -or $ForceLoad)
+{
+	$Program = "$SqlServerRoot\sqlceip.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		$SqlTelemetryUser = Get-SDDL -Domain "NT SERVICE" -User "SQLTELEMETRY"
+
+		# TODO: only connections to LocalSubnet and/or over virtual adapters were seen
+		New-NetFirewallRule -DisplayName "SQL Server telemetry" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+			-Service SQLTELEMETRY -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort 1433 `
+			-LocalUser Any `
+			-InterfaceType Any `
+			-Description "SQL customer experience improvement program" |
+		Format-RuleOutput
 	}
 }
 

@@ -44,36 +44,41 @@ If specified, try to pull and correlate CIM information for SQL
 TODO: limited testing was performed in matching up the service info to registry info.
 
 .EXAMPLE
-PS> Get-SqlServerInstance -Domain Server01
+PS> Get-SqlServerInstance -Domain Server01 | Select-Object *
 
-SQLInstance   : MSSQLSERVER
-Version       : 10.0.1600.22
-IsCluster     : False
-Domain        : Server01
-FullName      : Server01
-IsClusterNode : False
-Edition       : Enterprise Edition
-ClusterName   :
-ClusterNodes  : {}
-Name          : SQL Server 2008
+Domain          : Server01
+SqlInstance     : MSSQLSERVER
+InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Binn
+SqlPath         : %ProgramW6432%\Microsoft SQL Server\150\DTS
+Version         : 15.0.2080.9
+Name            : SQL Server 2019
+IsCluster       : False
+FullName        : Server01
+IsClusterNode   : False
+Edition         : Developer Edition
+ClusterName     :
+ClusterNodes    : {}
 
-SQLInstance   : SQLSERVER
-Version       : 10.0.1600.22
-IsCluster     : False
-Domain        : Server01
-FullName      : Server01\SQLSERVER
-IsClusterNode : False
-Edition       : Enterprise Edition
-ClusterName   :
-ClusterNodes  : {}
-Name          : SQL Server 2008
+Domain          : Server01
+SqlInstance     : MSSQLSERVER
+InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL8.MSSQLSERVER\MSSQL\Binn
+SqlPath         : %ProgramW6432%\Microsoft SQL Server\80\DTS
+Version         : 10.0.1600.22
+Name            : SQL Server 2008
+IsCluster       : False
+FullName        : Server01
+IsClusterNode   : False
+Edition         : Enterprise Edition
+ClusterName     :
+ClusterNodes    : {}
 
 .EXAMPLE
 PS> Get-SqlServerInstance -Domain Server1, Server2 -CIM
 
 Domain           : Server1
-SQLInstance      : MSSQLSERVER
-SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
+SqlInstance      : MSSQLSERVER
+InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\Binn
+SqlPath          : D:\Program Files\Microsoft SQL Server\80\DTS
 Edition          : Enterprise Edition: Core-based Licensing
 Version          : 11.0.3128.0
 Name             : SQL Server 2012
@@ -88,8 +93,9 @@ ServiceAccount   : domain\Server1SQL
 ServiceStartMode : Auto
 
 Domain           : Server2
-SQLInstance      : MSSQLSERVER
-SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
+SqlInstance      : MSSQLSERVER
+InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
+SqlPath          : D:\Program Files\Microsoft SQL Server\100\DTS
 Edition          : Enterprise Edition
 Version          : 10.50.4000.0
 Name             : SQL Server 2008 R2
@@ -135,12 +141,11 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - update reported server versions
 - added more verbose and debug output, path formatting.
 - Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
-- 12 December 2020:
+
+12 December 2020:
 - Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
 See links section for original and individual versions of code
-
-TODO: Update examples to include DTS directory
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlServerInstance.md
@@ -404,10 +409,9 @@ function Get-SqlServerInstance
 
 						$AllInstances += [PSCustomObject]@{
 							Domain = $Computer
-							SQLInstance = $Instance
-							# TODO: InstallLocation property?
-							SQLBinRoot = $SQLBinRoot
-							SQLPath = $SQLPath
+							SqlInstance = $Instance
+							InstallLocation = $SQLBinRoot
+							SqlPath = $SQLPath
 							Edition = $Edition
 							Version = $Version
 
@@ -481,15 +485,15 @@ function Get-SqlServerInstance
 							Where-Object {
 								# We need to format here because Instance path is formatted, while the path from CIM query isn't
 								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
-								(Format-Path $_.PathName) -like "$($Instance.SQLBinRoot)*" -or $_.PathName -like "`"$($Instance.SQLBinRoot)*"
+								(Format-Path $_.PathName) -like "$($Instance.InstallLocation)*" -or $_.PathName -like "`"$($Instance.InstallLocation)*"
 							} | Select-Object -First 1
 
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
 
 							$AllInstancesCIM += $Instance | Select-Object -Property Domain,
-							SQLInstance,
-							SQLBinRoot,
-							SQLPath,
+							SqlInstance,
+							InstallLocation,
+							SqlPath,
 							Edition,
 							Version,
 							Name,

@@ -217,6 +217,8 @@ Todo's in this file are categorized into following sections:
     code about this, this also applies to todo's about returning installation table to rule scripts.
     - If target program does not exist conditionally disable rule and update rule description,
     insert comment into rule name that the rule has no effect, or write a list into separate log file.
+    - Rule scripts with multiple rulesets should implement parameters to specify which rulesets to
+    load. ex. rule script for PowerShell has rules for Core, Desktop and ISE.
 
 4. Test and debugging
 

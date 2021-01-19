@@ -74,12 +74,11 @@ $Instances
 Start-Test "CIM"
 Get-SqlServerInstance -CIM
 
-# TODO: Format-Wide when InstallLocation is available
-Start-Test "binn directory"
-Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
+Start-Test "binn directory - InstallLocation"
+Get-SqlServerInstance | Format-Wide
 
 Start-Test "DTS directory"
-Get-SqlServerInstance | Select-Object -ExpandProperty SQLPath
+Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
 
 Test-Output $Instances -Command Get-SqlServerInstance
 

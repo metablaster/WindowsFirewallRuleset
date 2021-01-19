@@ -31,7 +31,8 @@ enum TargetProgram
 {
 	dotnet
 	CMake
-	SQLDTS
+	SqlPath
+	SqlServer
 	SqlManagementStudio
 	WindowsDefender
 	NuGet

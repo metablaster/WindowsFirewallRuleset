@@ -10,6 +10,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
+  - [v0.10.1 (develop branch)](#v0101-develop-branch)
   - [v0.10.0 (current release)](#v0100-current-release)
   - [v0.9.0](#v090)
   - [v0.8.0](#v080)
@@ -20,6 +21,15 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.4.0](#v040)
   - [v0.3.0](#v030)
   - [v0.2](#v02)
+
+## v0.10.1 (develop branch)
+
+**NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+
+- Rules
+
+  - Updated rules for SQL server
+  - Added rules for PowerShell remoting
 
 ## v0.10.0 (current release)
 

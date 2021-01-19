@@ -35,6 +35,10 @@ Inbound firewall rules template
 Detailed descritpion of this inbound rule group and involved programs and services including
 their networking requirements.
 
+.PARAMETER Trusted
+If specified, rules will be loaded for executables with missing or invalid digital signature.
+By default an error is generated and rule isn't loaded.
+
 .PARAMETER Force
 If specified, the script runs without prompt to allow execute
 
@@ -57,6 +61,9 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Trusted,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -75,6 +82,7 @@ $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -153,6 +161,11 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 		-Owner $PrincipalSID -Package $PackageSID `
 		-Description "Inbound StoreApp TCP template description" |
 	Format-RuleOutput
+}
+
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 }
 
 Update-Log

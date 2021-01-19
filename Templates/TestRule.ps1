@@ -93,5 +93,10 @@ New-NetFirewallRule -DisplayName "Test rule" `
 	-Description "Test rule description" |
 Format-RuleOutput
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+}
+
 Update-Log
 Exit-Test

@@ -93,13 +93,23 @@ function Search-Installation
 			Update-Table -Search "CMake"
 			break
 		}
-		"SQLDTS"
+		"SqlPath"
 		{
+			# TODO: Once returning a table is implemented, SQL search should get both SQLPath and InstallLocation directories
 			# $SQLServerBinnRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
-			$SQLDTSRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SQLPath
-			if ($SQLDTSRoot)
+			$SqlPathRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
+			if ($SqlPathRoot)
 			{
-				Edit-Table $SQLDTSRoot
+				Edit-Table $SqlPathRoot
+			}
+			break
+		}
+		"SqlServer"
+		{
+			$SqlServerRoot = Get-SqlServerInstance | Select-Object -ExpandProperty InstallLocation
+			if ($SqlServerRoot)
+			{
+				Edit-Table $SqlServerRoot
 			}
 			break
 		}
