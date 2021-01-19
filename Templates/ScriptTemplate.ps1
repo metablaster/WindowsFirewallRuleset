@@ -30,7 +30,7 @@ SOFTWARE.
 # TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
 <#PSScriptInfo
 
-.VERSION 0.10.0
+.VERSION 0.10.1
 
 .GUID 66e38822-834d-4a90-b9c6-9e600a472a0a
 
