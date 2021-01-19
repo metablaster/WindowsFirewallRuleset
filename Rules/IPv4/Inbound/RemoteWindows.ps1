@@ -54,6 +54,7 @@ None. RemoteWindows.ps1 does not generate any output
 NOTE: Following rules from predefined groups are used:
 1. Remote Desktop
 2. Remote Desktop (WebSocket)
+3. Windows remote management (PowerShell remoting)
 #>
 
 #Requires -Version 5.1
@@ -209,6 +210,29 @@ New-NetFirewallRule -DisplayName "Remote desktop - WebSocket Secure" `
 	-LocalUser $LocalSystem -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
 	-Description "rule for the Remote Desktop service to allow RDP over WebSocket traffic." |
+Format-RuleOutput
+
+# TODO: PS remoting can be also IPv6
+New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 5985 -RemotePort Any `
+	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
+Format-RuleOutput
+
+New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 5985 -RemotePort Any `
+	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
 Format-RuleOutput
 
 if ($UpdateGPO)

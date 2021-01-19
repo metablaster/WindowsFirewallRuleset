@@ -323,19 +323,19 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 
 	if ($Force -or $PSCmdlet.ShouldProcess("Checking project requirements according to existing settings", "Check project requirements according to existing settings?", "Initialize project"))
 	{
-		if (!(Get-Variable -Name ProjectCheck -Scope Global -EA Ignore))
+		if (!(Get-Variable -Name ProjectCheck -Scope Global -EA Stop).Value)
 		{
 			Write-Error -Category ObjectNotFound -Message "This action requires ProjectCheck variable to be set"
 			return
 		}
 
-		if (!(Get-Variable -Name ModulesCheck -Scope Global -EA Ignore))
+		if (!(Get-Variable -Name ModulesCheck -Scope Global -EA Stop).Value)
 		{
 			Write-Error -Category ObjectNotFound -Message "This action requires ModulesCheck variable to be set"
 			return
 		}
 
-		if (!(Get-Variable -Name ServicesCheck -Scope Global -EA Ignore))
+		if (!(Get-Variable -Name ServicesCheck -Scope Global -EA Stop).Value)
 		{
 			Write-Error -Category ObjectNotFound -Message "This action requires ServicesCheck variable to be set"
 			return
