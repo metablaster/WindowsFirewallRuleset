@@ -145,14 +145,16 @@ if ((Confirm-Installation "SqlServer" ([ref] $SqlServerRoot)) -or $ForceLoad)
 		$SqlTelemetryUser = Get-SDDL -Domain "NT SERVICE" -User "SQLTELEMETRY"
 
 		# TODO: only connections to LocalSubnet and/or over virtual adapters were seen
+		# Service short name = SQLTELEMETRY
+		# TODO: This rule simply does not work
 		New-NetFirewallRule -DisplayName "SQL Server telemetry" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
-			-Service SQLTELEMETRY -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Any `
 			-LocalPort Any -RemotePort 1433 `
-			-LocalUser Any `
-			-InterfaceType Any `
+			-LocalUser $SqlTelemetryUser `
+			-InterfaceType $DefaultInterface `
 			-Description "SQL customer experience improvement program" |
 		Format-RuleOutput
 	}

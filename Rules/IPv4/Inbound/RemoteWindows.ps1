@@ -216,12 +216,23 @@ Format-RuleOutput
 New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service Any -Program System -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet4 `
 	-LocalPort 5985 -RemotePort Any `
 	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
-	-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
+	-Description "Rule for PowerShell remoting to allow connections from remote hosts" |
+Format-RuleOutput
+
+New-NetFirewallRule -DisplayName "PowerShell remoting HTTPS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service Any -Program System -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 5986 -RemotePort Any `
+	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-Description "Rule for PowerShell remoting to allow connections from remote hosts" |
 Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
@@ -232,7 +243,18 @@ New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
 	-LocalPort 5985 -RemotePort Any `
 	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
 	-InterfaceType $DefaultInterface `
-	-Description "Rule for PowerShell Desktop to allow connections from remote hosts" |
+	-Description "Rule for PowerShell remoting to allow connections from remote hosts" |
+Format-RuleOutput
+
+New-NetFirewallRule -DisplayName "PowerShell remoting HTTPS" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Public `
+	-Service Any -Program System -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress LocalSubnet4 `
+	-LocalPort 5986 -RemotePort Any `
+	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
+	-Description "Rule for PowerShell remoting to allow connections from remote hosts" |
 Format-RuleOutput
 
 if ($UpdateGPO)
