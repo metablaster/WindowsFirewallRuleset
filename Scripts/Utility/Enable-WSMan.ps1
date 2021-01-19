@@ -41,15 +41,17 @@ Configure computer for HTTPS remoting
 
 .DESCRIPTION
 Configures either remote or management machine for WS-Management via HTTPS.
+This script should be run first on remote machine and then on management machine.
 
 .PARAMETER Domain
 Target computer name which is to be managed remotely.
+This parameter should be specified on management machine.
 Certificate store is searched for certificate with DnsName entry set to this name,
-if not found new certificate is created.
+If not found, certificate specified by LiterlarPath is imported.
 
 .PARAMETER LiteralPath
 When run on remote machine, specifies location where to export certificate,
-When run on management machine, specifies certificate location to be imported.
+When run on management machine, specifies certificate location of a remote computer, to be imported.
 
 .PARAMETER Remote
 Should be specified when configuring remote computer
@@ -57,8 +59,12 @@ Should be specified when configuring remote computer
 .EXAMPLE
 PS> .\Enable-WSMan.ps1 -Domain Server01 -LiteralPath "C:\Cert\Server01.cer"
 
+Configures management machine by installing certificate of remote computer
+
 .EXAMPLE
 PS> .\Enable-WSMan.ps1 -LiteralPath "C:\Cert\Server01.cer" -Remote
+
+Configures WinRM on remote computer for HTTPS
 
 .INPUTS
 None. You cannot pipe objects to Enable-WSMan.ps1
@@ -73,6 +79,7 @@ None.
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #>
 
+#Requires -Version 5.1
 #Requires -RunAsAdministrator
 
 [CmdletBinding(DefaultParameterSetName = "Local")]
@@ -93,7 +100,80 @@ param (
 $ErrorActionPreference = "Stop"
 $InformationPreference = "Continue"
 
-if (!$Remote)
+if ($Remote)
+{
+	# Remote machine
+	$Domain = [System.Environment]::MachineName
+	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
+		$_.Subject -eq "CN=$Domain"
+	}
+
+	$Count = ($Cert | Measure-Object).Count
+
+	if ($Count -gt 1)
+	{
+		Write-Error -Category InvalidResult -TargetObject $Cert -Message "Multiple certificates match"
+		return
+	}
+	elseif ($Count -eq 0)
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Creating new certificate"
+		$Date = Get-Date
+
+		try
+		{
+			# TODO: -Signer -KeySpec -HashAlgorithm -Subject "localhost"
+			$Cert = New-SelfSignedCertificate -DnsName $Domain -CertStoreLocation "Cert:\LocalMachine\My" `
+				-FriendlyName "RemoteFirewall" -KeyAlgorithm RSA -KeyDescription "PSRemotingKey" `
+				-KeyFriendlyName "RemoteFirewall" -KeyLength 2048 -Type SSLServerAuthentication `
+				-KeyUsage DigitalSignature, KeyEncipherment -KeyExportPolicy ExportableEncrypted `
+				-NotBefore $Date -NotAfter $Date.AddMonths(6)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			return
+		}
+	}
+
+	if (!(Test-Path $LiteralPath -PathType Container -ErrorAction Ignore))
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Creating new directory $LiteralPath"
+		New-Item -Path $LiteralPath -ItemType Directory | Out-Null
+	}
+
+	# To be imported by management machine
+	Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer' thumbprint $($Cert.Thumbprint)"
+	Export-Certificate -Cert $Cert -FilePath $LiteralPath\$Domain.cer -Type CERT -NoClobber | Out-Null
+
+	# try
+	# {
+	#	Write-Information -Tags "Project" -MessageData "INFO: Enabling PowerShell remoting"
+	# 	# Enable-PSRemoting
+	# 	Set-WSManQuickConfig -UseSSL
+	# }
+	# catch
+	# {
+	# 	Write-Error -ErrorRecord $_
+	# 	return
+	# }
+
+	# Add new HTTPS listener
+	if (Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTPS")
+	{
+		Write-Warning -Message "HTTPS listener already exists"
+	}
+	else
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Adding new HTTPS listener"
+		New-Item -Path WSMan:\localhost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint
+	}
+
+	# Remove all HTTP listeners
+	Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
+	Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTP" | Remove-Item -Recurse
+}
+else
 {
 	# Management machine
 	$Cert = Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object {
@@ -115,94 +195,26 @@ if (!$Remote)
 		return
 	}
 
-	# Enter remote session
-	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service on computer '$Domain'"
-	$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
-	Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -UseSSL -Authentication Negotiate
-	# $SessionOption = New-PSSessionOption -SkipCACheck
-	# Enter-PSSession -ComputerName $Domain -UseSSL -Credential (Get-Credential) -SessionOption $SessionOption
+	Write-Information -Tags "Project" -MessageData "INFO: Contacting computer '$Domain'"
 
-	return
-}
-
-# Remote machine
-$Domain = [System.Environment]::MachineName
-$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
-	$_.Subject -eq "CN=$Domain"
-}
-
-$Count = ($Cert | Measure-Object).Count
-
-if ($Count -gt 1)
-{
-	Write-Error -Category InvalidResult -TargetObject $Cert -Message "Multiple certificates match"
-	return
-}
-elseif ($Count -eq 0)
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Creating new certificate"
-	$Date = Get-Date
-
-	try
+	if (Test-NetConnection -ComputerName $Domain -Port 5986 -InformationLevel Quiet -EA Ignore)
 	{
-		# TODO: -Signer -KeySpec -HashAlgorithm -Subject "localhost"
-		$Cert = New-SelfSignedCertificate -DnsName $Domain -CertStoreLocation "Cert:\LocalMachine\My" `
-			-FriendlyName "RemoteFirewall" -KeyAlgorithm RSA -KeyDescription "PSRemotingKey" `
-			-KeyFriendlyName "RemoteFirewall" -KeyLength 2048 -Type SSLServerAuthentication `
-			-KeyUsage DigitalSignature, KeyEncipherment -KeyExportPolicy ExportableEncrypted `
-			-NotBefore $Date -NotAfter $Date.AddMonths(6)
+		# Test remote configuration
+		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service on computer '$Domain'"
+		$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
+		Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -UseSSL -Authentication Negotiate
+
+		# Eneter remote session
+		# $SessionOptions = New-PSSessionOption -SkipCACheck
+		Enter-PSSession -ComputerName $Domain -UseSSL -Credential $RemoteCredential # -SessionOption $SessionOptions
+		# Exit-PSSession
 	}
-	catch
+	elseif (Test-Connection -ComputerName $Domain -Count 2 -Quiet -EA Ignore)
 	{
-		Write-Error -ErrorRecord $_
-		return
+		Write-Error -Category ConnectionError -TargetObject $Domain -Message "WinRM listener on computer $Domain does not respond"
+	}
+	else
+	{
+		Write-Error -Category ConnectionError -TargetObject $Domain -Message "Computer $Domain does not respond"
 	}
 }
-
-if (!(Test-Path $LiteralPath -PathType Container -ErrorAction Ignore))
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Creating new directory $LiteralPath"
-	New-Item -Path $LiteralPath -ItemType Directory | Out-Null
-}
-
-# To be imported by management machine
-Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer' thumbprint $($Cert.Thumbprint)"
-Export-Certificate -Cert $Cert -FilePath $LiteralPath\$Domain.cer -Type CERT -NoClobber | Out-Null
-
-try
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Enabling PowerShell remoting"
-	Enable-PSRemoting
-}
-catch
-{
-	Write-Error -ErrorRecord $_
-	return
-}
-
-# try
-# {
-#	Write-Information -Tags "Project" -MessageData "INFO: Enabling PowerShell remoting"
-# 	# Enable-PSRemoting
-# 	Set-WSManQuickConfig -UseSSL
-# }
-# catch
-# {
-# 	Write-Error -ErrorRecord $_
-# 	return
-# }
-
-# Add new HTTPS listener
-if (Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTPS")
-{
-	Write-Warning -Message "HTTPS listener already exists"
-}
-else
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Adding new HTTPS listener"
-	New-Item -Path WSMan:\localhost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint
-}
-
-# Remove all HTTP listeners
-Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
-Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTP" | Remove-Item -Recurse

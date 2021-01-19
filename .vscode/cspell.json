@@ -285,6 +285,7 @@
         "wfpstate",
         "wicainventory",
         "Wifi",
+        "WINRM",
         "winsock",
         "winver",
         "wisvc",
