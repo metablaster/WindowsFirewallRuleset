@@ -91,7 +91,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Pramenter names and aliases follow naming convention according to community development
   guidelines
   - 3rd party scripts from `External` directories merged into the rest of project code, there is no
-  no point to separate code based on contributors involved.
+  point to separate code based on contributors involved.
   - Revisited Write-* commandlets to be consistent and more detailed.
 
 - Bugfix

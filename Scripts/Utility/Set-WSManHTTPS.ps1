@@ -225,6 +225,7 @@ else
 
 	if (($Cert | Measure-Object).Count -gt 1)
 	{
+		# TODO: Search by thumbprint from CertFile if specified or implement parameter for Cert object
 		Write-Error -Category NotImplemented -TargetObject $Cert -Message "Multiple certificates match"
 		return
 	}

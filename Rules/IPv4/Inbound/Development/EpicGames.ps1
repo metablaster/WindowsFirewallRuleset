@@ -93,7 +93,7 @@ $EngineRoot = "%SystemDrive%\Users\$DefaultUser\source\repos\UnrealEngine\Engine
 # TODO: need to see listening ports
 
 #
-# Rules Epic games engine
+# Rules unreal engine
 #
 
 # NOTE: default rule for crash report and swarm is edge traversal: defer to user
@@ -106,54 +106,75 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 	$Program = "$EngineRoot\Binaries\Win64\CrashReportClientEditor-Win64-Development.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
+		New-NetFirewallRule -DisplayName "Unreal Engine - CrashReportClientEditor" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
 			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType Any `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - CrashReportClientEditor" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Any -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "Unreal Engine - CrashReportClientEditor" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType Any `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$EngineRoot\Binaries\DotNET\SwarmAgent.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+		New-NetFirewallRule -DisplayName "Unreal Engine - SwarmAgent" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort Any `
 			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType Any `
 			-Description "Swarm agent is used for build farm." | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - SwarmAgent" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType Any `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "Unreal Engine - SwarmAgent" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort Any `
+			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType Any `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Swarm agent is used for build farm." | Format-RuleOutput
 	}
 
 	$Program = "$EngineRoot\Binaries\Win64\UnrealInsights.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
+		New-NetFirewallRule -DisplayName "Unreal Engine - UnrealInsights" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort Any `
 			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Unreal Engine - UnrealInsights" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $LocalProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress LocalSubnet4 -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "Unreal Engine - UnrealInsights" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress LocalSubnet4 `
+			-LocalPort Any -RemotePort Any `
+			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 }
