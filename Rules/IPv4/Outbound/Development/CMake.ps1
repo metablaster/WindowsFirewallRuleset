@@ -111,6 +111,21 @@ if ((Confirm-Installation "CMake" ([ref] $CMakeRoot)) -or $ForceLoad)
 			-Description "CMake package download" |
 		Format-RuleOutput
 	}
+
+	$Program = "$CMakeRoot\bin\cmake-gui.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "CMake GUI" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "CMake package download" |
+		Format-RuleOutput
+	}
 }
 
 if ($UpdateGPO)

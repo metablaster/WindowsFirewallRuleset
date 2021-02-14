@@ -98,6 +98,7 @@ Todo's in this file are categorized into following sections:
     actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
     - If there is `Path` parameter then also `LiteralPath` is required
     - Run `Get-Command -Syntax` for each function and script to verify parameter set names are as expected
+    - Compatibility module takes long time to load, need to add streams to module
 
 2. Scripts
 
