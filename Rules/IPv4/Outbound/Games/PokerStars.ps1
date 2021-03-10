@@ -77,6 +77,9 @@ $Group = "Games - Poker Stars"
 $Accept = "Outbound rules for Poker Stars game will be loaded, recommended if Poker Stars game is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Poker Stars game will not be loaded into firewall"
 
+$UpdateAccounts = $UsersGroupSDDL
+Merge-SDDL ([ref] $UpdateAccounts) -From $AdminGroupSDDL
+
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
@@ -105,6 +108,13 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "Main game interface." | Format-RuleOutput
+
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "PokerStars - Client" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 26002 `
+			-LocalUser $AdminGroupSDDL `
+			-Description "During update with PokerStarsUpdate.exe Administrator may be needed which is explicitly blocked" | Format-RuleOutput
 	}
 
 	# NOTE: It looks like browser no longer needs any interface and any remote address
@@ -137,7 +147,7 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-DisplayName "PokerStars - Update" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalUser $UpdateAccounts `
 			-Description "Game updater" | Format-RuleOutput
 	}
 }
