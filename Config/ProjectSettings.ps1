@@ -568,7 +568,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 		# Recommended minimum posh-git version for git in PowerShell
 		# NOTE: pre-release minimum 1.0.0-beta4 will be installed
-		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(0, 7, 3))
+		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(1, 0, 0))
 
 		# Recommended minimum Pester version for code testing
 		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
@@ -610,7 +610,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 54, 1))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 54, 3))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

@@ -237,25 +237,28 @@ provider which handles the connection between the device and WNS server." |
 Format-RuleOutput
 
 # NOTE: this service's name isn't constant, need to query correct name
-$Service = Get-Service | Where-Object {
+[string[]] $WpnUserServices = Get-Service | Where-Object {
 	$_.ServiceName -like "WpnUserService*" -or
 	$_.DisplayName -like "Windows Push Notifications User Service*"
 } | Select-Object -ExpandProperty Name
 
-if ($Service)
+if ($WpnUserServices.Count)
 {
-	# TODO: Service may change it's name randomly, which makes this rule useless
-	New-NetFirewallRule -DisplayName "Windows Push Notifications User Service" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service $Service -Program $ServiceHost -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser Any `
-		-InterfaceType $DefaultInterface `
-		-Description "This service hosts Windows notification platform which provides support for
+	foreach ($Service in $WpnUserServices)
+	{
+		# NOTE: There will one wpn user service for each standard user account
+		New-NetFirewallRule -DisplayName "Windows Push Notifications User Service" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service $Service -Program $ServiceHost -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser Any `
+			-InterfaceType $DefaultInterface `
+			-Description "This service hosts Windows notification platform which provides support for
 local and push notifications. Supported notifications are tile, toast and raw." |
-	Format-RuleOutput
+		Format-RuleOutput
+	}
 }
 else
 {

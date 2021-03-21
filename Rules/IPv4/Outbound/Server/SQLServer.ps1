@@ -108,12 +108,12 @@ if ((Confirm-Installation "SqlManagementStudio" ([ref] $SqlManagementStudioRoot)
 		New-NetFirewallRule -DisplayName "SQL Server Management Studio" `
 		 -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SQLUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "" |
+			-Description "Used to check for updates" |
 		Format-RuleOutput
 	}
 }

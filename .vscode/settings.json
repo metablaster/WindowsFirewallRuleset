@@ -80,6 +80,7 @@
 		"ini" // mTail configuration
 	],
 	// extension Todo Tree
+	// TODO: New settings https://github.com/Gruntfuggly/todo-tree#markdown-support
 	"todo-tree.tree.showScanModeButton": true,
 	"todo-tree.general.tags": [
 		"TODO",

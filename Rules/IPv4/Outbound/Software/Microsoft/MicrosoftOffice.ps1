@@ -187,7 +187,7 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 	{
 		New-NetFirewallRule -Platform $Platform `
 			-DisplayName "Outlook (HTTP/S)" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-Description "" | Format-RuleOutput

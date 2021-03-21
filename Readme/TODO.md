@@ -152,7 +152,11 @@ Todo's in this file are categorized into following sections:
     - Store app rules for administrators, probably only those that break important functionalities
     - Revisit function parameters, their types, aliases, names are singular, consistent etc..
 
-7. Other
+7. Documentation
+
+    - Windows 10 is the last major version
+
+8. Other
 
     - Need convention for `Write-*` commandlets, when to use which one, and also convention for quoting
     and including local variables in the stream, some places are missing streams while others have
