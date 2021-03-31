@@ -277,4 +277,18 @@
 	],
 	"autoscroll.autoScrollAllOpenedFiles": false,
 	"autoscroll.keepLastLineInCenter": true,
+	"remote.SSH.defaultExtensions": [
+		"ms-vscode.powershell",
+		"davidanson.vscode-markdownlint",
+		"gruntfuggly.todo-tree",
+		"streetsidesoftware.code-spell-checker",
+		"nachocab.highlight-dodgy-characters",
+		"alefragnani.bookmarks",
+		"mechatroner.rainbow-csv",
+		"yzhang.markdown-all-in-one",
+		"dotjoshjohnson.xml",
+		"emilast.logfilehighlighter",
+		"pejmannikram.vscode-auto-scroll",
+		"everettjf.filter-line"
+	]
 }

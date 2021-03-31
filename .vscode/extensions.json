@@ -17,6 +17,8 @@
 		"pejmannikram.vscode-auto-scroll",
 		"everettjf.filter-line",
 		// "github.vscode-pull-request-github"
+		"ms-vscode-remote.remote-ssh",
+		"ms-vscode-remote.remote-ssh-edit"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
