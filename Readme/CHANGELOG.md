@@ -28,9 +28,24 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Rules
 
-  - Updated rules for SQL server, PokerStars, SysInternals, CMake, vcpkg, EpicGames
+  - Updated rules for:
+
+    - SQL server,
+    - PokerStars,
+    - SysInternals,
+    - CMake,
+    - vcpkg,
+    - EpicGames,
+    - Visual Studio,
+    - Store Apps,
+    - MS Office
+
   - Fixed bug with WpsPushUserService rule for multiple standard users
   - Added rules for PowerShell remoting
+
+- Scripts
+
+  - Updated `ProjectSettings\Config` with dependent program versions
 
 ## v0.10.0 (current release)
 

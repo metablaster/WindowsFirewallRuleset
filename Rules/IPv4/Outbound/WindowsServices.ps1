@@ -281,6 +281,7 @@ Format-RuleOutput
 # TODO: utcsvc was seen in "Education" edition but soon dissapeared
 # Looks like Diagnostic Tracking Service or DiagTrack
 # https://www.thewindowsclub.com/utcsvc-high-cpu-and-disk-usage
+# NOTE: Also in Pro edition, TCP receive without matching rule
 
 New-NetFirewallRule -DisplayName "Connected User Experiences and Telemetry" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

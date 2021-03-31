@@ -338,6 +338,22 @@ This rule is required to connect PC to Microsoft account" |
 	Format-RuleOutput
 }
 
+# https://docs.microsoft.com/en-us/windows/uwp/launch-resume/web-to-app-linking
+$Program = "%SystemRoot%\System32\AppHostRegistrationVerifier.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "App host registration verifier" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $ProgramsGroup `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 443 `
+		-LocalUser $UsersGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "App host registration verifier tool tests the configuration of store app and website" |
+	Format-RuleOutput
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
