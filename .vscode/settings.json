@@ -26,6 +26,9 @@
 	"editor.wordWrap": "off",
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
+	// NOTE: Work around ugly syntax highlighting:
+	// https://github.com/PowerShell/vscode-powershell/issues/3221
+	"editor.semanticHighlighting.enabled": false,
 	// "editor.codeActionsOnSave": {
 	// TODO: need to verify if useful
 	// 	"source.fixAll.markdownlint": true

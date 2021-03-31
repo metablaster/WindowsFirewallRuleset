@@ -52,6 +52,10 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Revisited few docs for clarity
 
+- Other
+
+  - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension.
+
 ## v0.10.0 (current release)
 
 - Modules
