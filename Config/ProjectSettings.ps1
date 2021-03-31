@@ -117,7 +117,7 @@ if ($MyInvocation.InvocationName -ne ".")
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {

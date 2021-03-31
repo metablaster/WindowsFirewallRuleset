@@ -780,11 +780,11 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 $Program = "%SystemRoot%\System32\OpenSSH\ssh.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	New-NetFirewallRule -DisplayName "OpenSSH" `
+	New-NetFirewallRule -DisplayName "Open SSH" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 22 `
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `

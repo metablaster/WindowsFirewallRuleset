@@ -216,7 +216,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		# & "$Destination\Server\ScriptName.ps1" -Force:$AllCurrent
+		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent
 		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "No inbound rules for server platforms or software exist"
