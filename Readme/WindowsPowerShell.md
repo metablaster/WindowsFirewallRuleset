@@ -22,7 +22,7 @@ exactly that directory, for example:
 
 Here is how:
 
-1. Go to desired directory by using Windows explorer
+1. Go to desired directory by using Windows explorer (selecting some directory does the same)
 2. Click on `File` in top left explorer window
 3. To open PowerShell as standard user click on `Open Windows PowerShell`
 4. To open it as Administrator, in step 3 hover your mouse over `Open Windows PowerShell` and then\

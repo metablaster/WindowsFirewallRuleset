@@ -46,6 +46,11 @@ If you would like to see fresh changes done since last release you can do so on 
 - Scripts
 
   - Updated `ProjectSettings\Config` with dependent program versions
+  - Updated `todo-tree` extension settings for markdown support
+
+- Documentation
+
+  - Revisited few docs for clarity
 
 ## v0.10.0 (current release)
 

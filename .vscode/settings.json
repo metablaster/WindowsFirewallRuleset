@@ -80,15 +80,19 @@
 		"ini" // mTail configuration
 	],
 	// extension Todo Tree
-	// TODO: New settings https://github.com/Gruntfuggly/todo-tree#markdown-support
 	"todo-tree.tree.showScanModeButton": true,
+	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
+	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
+	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 	"todo-tree.general.tags": [
 		"TODO",
 		"NOTE",
 		"HACK",
 		"BUG",
 		"INFO",
-		"FIX"
+		"FIX",
+		"[ ]",
+		"[x]"
 	],
 	"todo-tree.highlights.customHighlight": {
 		// Very important and hard to resolve
@@ -135,6 +139,18 @@
 			"opacity": 40,
 			// TODO: setting not working
 			"hideFromTree ": true
+		},
+		"[ ]": {
+			"foreground": "black",
+			"background": "white",
+			"iconColour": "green",
+			"opacity": 90
+		},
+		"[x]": {
+			"icon": "checklist",
+			"foreground": "white",
+			"background": "green",
+			"opacity": 40,
 		}
 	},
 	"todo-tree.general.tagGroups": {

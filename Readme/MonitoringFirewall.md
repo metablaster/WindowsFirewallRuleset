@@ -41,8 +41,8 @@ if you're serious you will need them all.
 
 Some tools are easy to use, some require learning how to use them, some have graphical interface
 some are command line programs.\
-Some tools do the same job as other tools that is they complement missing features of other programs,
-but have other drawbacks.
+Some tools do the same job as other tools but complement missing features of other programs,
+while having other drawbacks.
 
 For each program listed here you have a reference link (for tools built into Windows) and
 download link (for external programs).
@@ -52,7 +52,7 @@ All of the tools listed here are digitally signed, the only exceptions are as fo
 - mTail, to mark mTail as trusted you can verify it's behavior with process monitor or
 check it's user base online.
 
-- The alternative for mTail (described later) is a combination of VSCode extensions and predefined
+- An alternative for mTail (described later) is a combination of VSCode extensions and predefined
 extension settings.
 
 [Table of Contents](#table-of-contents)
@@ -69,8 +69,8 @@ click on image to enlarge!
 
 - Inside the `Config\sysinternals` folder you will find process monitor configuration specialized
 for firewall monitoring which you can import into your copy of process monitor.
-- Note that the configuration filters some network traffic which you might want to be able to see,
-click on filter options to disable specific filters or to add new ones.
+- Note that this configuration filters some network traffic which you might not want to see,
+click on filter button (or menu) to disable specific filters or to add new ones.
 
 [Download process monitor][ref process monitor]
 
@@ -84,16 +84,17 @@ click on filter options to disable specific filters or to add new ones.
 ![Alternate text](Screenshots/mTail.png)
 
 - Default mTail does not have special firewall coloring, those colors you see in the screenshot are
-which I made myself, you can grab this configuration from `Config\mTail` folder inside repository,
+custom made, you can get this configuration from `Config\mTail` folder inside repository,
 the config file is named `mtail_CC.ini`,
 just place it next to mTail executable, restart mTail and open firewall log,
 which is by default placed into `C:\Windows\System32\LogFiles\Firewall\pfirewall.log\`
-However `Complete-Firewall.ps1` script will instruct firewall to write separate logs for each firewall profile.
+However `Complete-Firewall.ps1` script will instruct firewall to write separate logs for each
+firewall profile.
 - There is another config file called `mtail.ini` which needs to be (re)placed into:
 `C:\Users\ADMINUSERNAME\Roaming\mtail\`, this config file contains configuration to monitor
 firewall activity for individual firewall profiles as well as number of personalized settings.
-- Please keep in mind that settings configuration for mTail is highly buggy, and requires hacking
-configuration files.
+- Please keep in mind that settings configuration for mTail is (at this time) highly buggy,
+and requires hacking configuration files.
 
 [Download mTail][ref mtail]
 
@@ -114,7 +115,7 @@ here is how it feels in VSCode.
 - Next step is to grant appropriate file system permissions to firewall logs which are now written
 to `Logs\Firewall` directory inside repository.
 - To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
-Permission is valid until system reboot, any firewall setting change, or manual permission removal.
+Permission is valid until system reboot, any firewall setting change or manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
 - To filter log contents open command palette `CTRL + SHIT + P`, type "Filter line by Config File"
 and press enter.
@@ -137,7 +138,7 @@ Get-Content "%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log" -Last 10 -Wa
 ## Event log
 
 - Event viewer is built into Windows, it will tell you specific stuff that no other program can,\
-for example with this tool you can tell if somebody is intruding your firewall from WAN.
+for example with this tool you can see inbound traffic passing or hitting firewall from WAN.
 - Note that most of data you will see isn't available in firewall logs
 (even if you enable "log ignored packets"), why is that so?
 I don't know, maybe we should ask Microsoft, anyway, at least here is how to gain this hidden
@@ -190,18 +191,18 @@ click on image to enlarge:
 is built.
 - **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in section
 "Event log" above.
-- you can access WFP logs, filter and state by executing following commands:\
+- You can access WFP logs, filter and state by executing following commands:\
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or
 allowed network packets.
 ```netsh wfp show filters``` to show current firewall filters
-(filters define firewall rules, rules by themself are just incomplete high level specifications)
+(filters define firewall rules, rules by themself are just high level representation)
 - When you execute show state, it will generate xml file in the same directory where you execute
 command, open this file with
 your code editor such VS Code.
 - What you are looking for here is an ID called "Filter Run-Time ID" and "Layer Run-Time ID",
 you can obtain these ID's from event viewer as shown in Event log (screenshot above).
 - Find and copy desired "Filter Run-Time ID" number in event log, press CTRL + C to copy, go to VS Code,\
-and open generated `wfpstate.xml` file then press CTRL + F to open "find box" and CTRL + V to paste
+open generated `wfpstate.xml` file, then press CTRL + F to open "find box" and CTRL + V to paste
 the number, and hit enter to jump to this event.
 - "Filter Run-Time ID" and all of the event data is located inside `<item></item>` node
 - Inside this "item" you are looking for `<displayData></displayData>` node which will tell what
@@ -320,17 +321,17 @@ Other times you might want to analyse firewall or network performance.
 
 To handle these and similar scenarios there is network capture and tracing solution.
 
-To actually view and analyse *.etl file you'll need to install "Windows Performance Analyzer" which
+To view and analyse an `*.etl` file you'll need to install "Windows Performance Analyzer" which
 is availabe as an optional installment of [Windows 10 SDK][windows sdk] or [Windows ADK][windwos adk]
 
 Once you install it and open ETL (Event Trace Log) file here is sample traffic analysis screenshot:
 
 ![Alternate text](Screenshots/TraceAnalyze.png)
 
-To generate an ETL file you have at least 3 options:
+To generate an ETL file use "Windows Performance Recorder" which is part of same package in either
+Windows SDK or Windows ADK.
 
-First and the best one is to use "Windows Performance Recorder" which comes with Windows SDK or ADK.\
-Other 2 (worse) methods are described in next 2 sections.
+Other two (less useful) methods are described in 2 sections that follow in this guide.
 
 - [Windows Performance Analyzer Intro][intro wpa]
 - [Windows Performance Analyzer reference][ref wpa]
@@ -441,9 +442,9 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts\Experiment` folder there are experimental `Start-PacketTrace.ps1` and `Stop-PacketTrace.ps1` scripts
-which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop packet
-capture.
+Inside `Scripts\Experiment` folder there are experimental `Start-PacketTrace.ps1` and `Stop-PacketTrace.ps1`
+scripts which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop
+packet capture.
 
 Keep in mind that both the `netsh trace` and `NetEventPacketCapture` generate an ETL file
 (Event Trace Log), problem in both cases is the lack of executable involved in traffic.

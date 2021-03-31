@@ -160,7 +160,7 @@ Following table lists currently tested operating systems
 
 ### Requirements details
 
-- All operating systems 10.0 (Major 10, Minor 0) and above are supported,
+- All Windows 10.0 systems (Major 10, Minor 0) are supported,
 but only those editions listed in the table above are actively tested.\
 The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)

@@ -152,11 +152,7 @@ Todo's in this file are categorized into following sections:
     - Store app rules for administrators, probably only those that break important functionalities
     - Revisit function parameters, their types, aliases, names are singular, consistent etc..
 
-7. Documentation
-
-    - Windows 10 is the last major version
-
-8. Other
+7. Other
 
     - Need convention for `Write-*` commandlets, when to use which one, and also convention for quoting
     and including local variables in the stream, some places are missing streams while others have
@@ -412,7 +408,8 @@ Todo's in this file are categorized into following sections:
     - Links in markdown files should be handled with reference links instead of inline links with
     relative paths, this way there is a minimum need to update them, also markdown formatting will
     be much easier.
-    - Several comment based documentation is either missing comments or comments are out of date
+    - Several comment based documentation is either missing comments or comments are out of date.
+    - Windows 10 is the last major version
 
 6. Code style and design
 
