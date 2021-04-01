@@ -17,6 +17,7 @@ Contains following project scripts which are not part of modules
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
 | Debug-FilteringPlatform.ps1 | Parse audit events from event log and write them to log file         |
+| Deploy-SshKey.ps1           | Deploy public SSH key to remote host                                 |
 | Get-CallerPreference.ps1    | Fetch preference variable values from the caller's scope.            |
 | Get-DevicePath.ps1          | Get mappings of disk volume letter and device path                   |
 | Get-ExportedType.ps1        | Get exported types in the current session                            |

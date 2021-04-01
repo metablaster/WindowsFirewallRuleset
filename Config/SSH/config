@@ -1,0 +1,11 @@
+# This is the ssh client configuration sample file
+# See ssh_config(5) for more information:
+# https://man7.org/linux/man-pages/man5/ssh_config.5.html
+# TODO: Add more hosts and other options as needed
+
+Host VM-PRO
+  HostName VM-PRO
+  User Admin
+  IdentityFile ~\\.ssh\\id_ecdsa-remote-ssh.pub
+  AddressFamily any
+  PasswordAuthentication no

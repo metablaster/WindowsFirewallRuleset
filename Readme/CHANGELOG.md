@@ -47,6 +47,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated `ProjectSettings\Config` with dependent program versions
   - Updated `todo-tree` extension settings for markdown support
+  - Script to upload and set SSH key to server for remote debugging with VSCode over SSH
 
 - Documentation
 
@@ -55,6 +56,8 @@ If you would like to see fresh changes done since last release you can do so on 
 - Other
 
   - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension.
+  - Added settings and extensions for remote SHH development
+  - Added SSH configuration files and syntax highlighting setting for *config files
 
 ## v0.10.0 (current release)
 

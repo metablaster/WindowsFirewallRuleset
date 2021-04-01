@@ -141,6 +141,15 @@ Recommended workspace extensions are as follows:
 
     Filter log files according to json config, string or regex pattern
 
+13. [Remote SSH][extension remote SSH]
+
+    Lets you use any remote machine with a SSH server as your development environment.
+
+14. [Remote SSH editing][extension remote SSH editing]
+
+    This extension complements the Remote - SSH extension with syntax colorization,
+    keyword intellisense, and simple snippets when editing SSH configuration files.
+
 Following 2 extensions are optional and will not be automatically offerred for installation:
 
 - [GitLens][extension gitlens]
@@ -549,6 +558,8 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
+[extension remote SSH]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh "Visit Marketplace"
+[extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"

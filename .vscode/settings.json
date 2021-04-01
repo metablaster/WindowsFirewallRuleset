@@ -6,6 +6,10 @@
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
+	"files.associations": {
+		"*config": "ruby",
+		"*.config": "ruby"
+	},
 	// editor
 	"editor.quickSuggestions": {
 		"other": true,
@@ -277,18 +281,18 @@
 	],
 	"autoscroll.autoScrollAllOpenedFiles": false,
 	"autoscroll.keepLastLineInCenter": true,
+	// Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
+	// TODO: Doesn't seem to work (if this setting is not on remote?)
 	"remote.SSH.defaultExtensions": [
 		"ms-vscode.powershell",
-		"davidanson.vscode-markdownlint",
-		"gruntfuggly.todo-tree",
-		"streetsidesoftware.code-spell-checker",
-		"nachocab.highlight-dodgy-characters",
-		"alefragnani.bookmarks",
-		"mechatroner.rainbow-csv",
-		"yzhang.markdown-all-in-one",
-		"dotjoshjohnson.xml",
-		"emilast.logfilehighlighter",
 		"pejmannikram.vscode-auto-scroll",
-		"everettjf.filter-line"
+		"streetsidesoftware.code-spell-checker",
+		"everettjf.filter-line",
+		"nachocab.highlight-dodgy-characters",
+		"yzhang.markdown-all-in-one",
+		"davidanson.vscode-markdownlint",
+		"mechatroner.rainbow-csv",
+		"gruntfuggly.todo-tree",
+		"dotjoshjohnson.xml"
 	]
 }
