@@ -467,9 +467,16 @@ function Initialize-Project
 	}
 
 	# TODO: CIM may not always work
+	Write-Information -Tags "Project" -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
 	$OSCaption = Get-CimInstance -Class Win32_OperatingSystem -ComputerName $PolicyStore `
 		-OperationTimeoutSec $ConnectionTimeout -Namespace "root\cimv2" |
 	Select-Object -ExpandProperty Caption
+
+	if ([string]::IsNullOrEmpty($OSCaption))
+	{
+		Write-Warning -Message "Unable to determine OS on computer '$PolicyStore'"
+		$OSCaption = "Windows"
+	}
 
 	$OSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 

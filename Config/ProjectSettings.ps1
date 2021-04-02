@@ -259,6 +259,21 @@ else
 	# To control if modules automatically load, do not modify!
 	# Values: All, ModuleQualified or None
 	$PSModuleAutoLoadingPreference = "All"
+
+	# Specifies the default session configuration that is used for PSSessions created in the current session.
+	# The default value http://schemas.microsoft.com/PowerShell/microsoft.PowerShell indicates
+	# the Microsoft.PowerShell session configuration on the remote computer.
+	# If you specify only a configuration name, the following schema URI is prepended:
+	# http://schemas.microsoft.com/PowerShell/
+	# TODO: $PSSessionConfigurationName = "FirewallSession"
+
+	# The $PSSessionApplicationName preference variable is set on the local computer,
+	# but it specifies a listener on the remote computer.
+	# The system default application name is wsman
+	$PSSessionApplicationName = wsman
+
+	# [System.Management.Automation.Remoting.PSSessionOption]
+	# $PSSessionOption = New-PSSessionOption
 }
 
 if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
@@ -380,6 +395,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name CheckReadOnlyVariables -Scope Global -Option Constant -Value $null
 
 	# Set to false to avoid checking system and environment requirements
+	# This will also disable checking for modules and required services
 	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date

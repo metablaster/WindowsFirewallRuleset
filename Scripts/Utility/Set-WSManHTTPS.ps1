@@ -89,6 +89,15 @@ TODO: This script must be part of Ruleset.Initialize module
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations?view=powershell-7.1
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configuration_files?view=powershell-7.1
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/register-pssessionconfiguration?view=powershell-7.1
 #>
 
 #Requires -Version 5.1
@@ -236,6 +245,29 @@ if ($Remote)
 	# Remove all HTTP listeners
 	Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
 	Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTP" | Remove-Item -Recurse
+
+	# Disable unused default session configurations
+	Write-Information -Tags "Project" -MessageData "INFO: Disabling unneeded default session configurations"
+	Disable-PSSessionConfiguration -Name microsoft.powershell32
+	Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
+
+	# Remove all custom made session configurations
+	Write-Information -Tags "Project" -MessageData "INFO: Removing non default session configurations"
+	Get-PSSessionConfiguration -Force |
+	Where-Object -Property Name -NotLike "Microsoft*" |
+	Unregister-PSSessionConfiguration -Force
+
+	# Register repository specific session configuration
+	Write-Information -Tags "Project" -MessageData "INFO: Registering repository specific session configuration"
+	Register-PSSessionConfiguration -Path $ProjectRoot\Config\Windows\FirewallSession.pssc `
+		-Name "FirewallSession" -ProcessorArchitecture amd64 --ThreadApartmentState Unknown `
+		-ThreadOptions UseCurrentThread -AccessMode Remote `
+		-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10
+	#-RunAsCredential $RemoteCredential -UseSharedProcess -NoServiceRestart -SecurityDescriptorSddl `
+	#-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+
+	# Show configured session configuration
+	Get-PSSessionConfiguration -Name FirewallSession
 
 	# Show configured listeners
 	Get-WSManInstance winrm/config/listener -Enumerate
