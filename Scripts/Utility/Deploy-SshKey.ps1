@@ -43,7 +43,7 @@ Deploy public SSH key to remote host using SSH
 Authorize this Windows machine to connect to SSH server host by uploading
 public SSH key to correct destination on remote host and adjust required permissions.
 for users this is ~\.ssh\authorized_keys, for administrators it's
-%ProgramData%/ssh/administrators_authorized_keys
+%ProgramData%\ssh\administrators_authorized_keys
 
 .PARAMETER User
 The user to log in as on the remote machine.
@@ -74,6 +74,7 @@ None. Deploy-SshKey.ps1 does not generate any output
 Password based authentication is needed for first time setup or
 if no existing public key is ready on remote host.
 TODO: Optionally deploy sshd_config to remote
+TODO: Make use of certificates
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -82,7 +83,10 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
 #>
 
+#Requires -Version 5.1
+
 [CmdletBinding()]
+[OutputType([void])]
 param (
 	[Parameter(Mandatory = $true)]
 	[Alias("UserName")]

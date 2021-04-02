@@ -60,16 +60,21 @@ Domain parameter.
 .PARAMETER Remote
 Should be specified when configuring remote computer
 
+.PARAMETER NoClobber
+Prevents an exported certificate file from overwriting an existing certificate file.
+Instead warning message is shown.
+
 .PARAMETER Force
-If specified, overwrites exported certificates and does not prompt to create a listener
+If specified, does not prompt to create a listener and overwrites an existing certificate file,
+even if it has the Read-only attribute set.
 
 .EXAMPLE
-PS> .\Set-WSManHTTPS.ps1 -Domain Server01 -LiteralPath "C:\Cert\Server01.cer"
+PS> .\Set-WSManHTTPS.ps1 -Domain Server01 -CertFile "C:\dev\Cert\Server01.cer"
 
-Configures management machine by installing certificate of remote computer
+Configures management machine by installing certificate of a remote computer
 
 .EXAMPLE
-PS> .\Set-WSManHTTPS.ps1 -LiteralPath "C:\Cert\Server01.cer" -Remote
+PS> .\Set-WSManHTTPS.ps1 -LiteralPath "C:\dev\Cert" -Remote -NoClobber
 
 Configures WinRM on remote computer for HTTPS
 
@@ -80,7 +85,6 @@ None. You cannot pipe objects to Set-WSManHTTPS.ps1
 None. Set-WSManHTTPS.ps1 does not generate any output
 
 .NOTES
-TODO: Credential should be tested with Test-Credential
 TODO: This script must be part of Ruleset.Initialize module
 
 .LINK
@@ -107,11 +111,17 @@ param (
 	[switch] $Remote,
 
 	[Parameter(ParameterSetName = "Remote")]
-	[switch] $Force
+	[switch] $Force,
+
+	[Parameter(ParameterSetName = "Remote")]
+	[switch] $NoClobber
 )
 
+# NOTE: Needed only for Test-Credential
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+Initialize-Project -Strict
+
 $ErrorActionPreference = "Stop"
-$InformationPreference = "Continue"
 
 if ($Remote)
 {
@@ -153,21 +163,25 @@ if ($Remote)
 			New-Item -Path $LiteralPath -ItemType Directory | Out-Null
 		}
 
-		# To be imported by management machine
-		Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer'"
-
-		$ExportParams = @{
-			Cert = $Cert
-			FilePath = "$LiteralPath\$Domain.cer"
-			Type = "CERT"
-		}
-
-		if (!$Force)
+		if ((!$Force -or $NoClobber) -and (Test-Path "$LiteralPath\$Domain.cer" -PathType Leaf -ErrorAction Ignore))
 		{
-			$ExportParams.Add("NoClobber", $true)
+			Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
 		}
+		else
+		{
+			# To be imported by management machine
+			Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer'"
 
-		Export-Certificate @ExportParams | Out-Null
+			$ExportParams = @{
+				Cert = $Cert
+				FilePath = "$LiteralPath\$Domain.cer"
+				Type = "CERT"
+				Force = $Force
+				NoClobber = $NoClobber
+			}
+
+			Export-Certificate @ExportParams | Out-Null
+		}
 	}
 
 	Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
@@ -185,8 +199,19 @@ if ($Remote)
 	Start-Service -Name WinRM
 	Get-Service -Name WinRM | Set-Service -StartupType Automatic
 
-	$HTTPS = Get-WSManInstance -ResourceURI winrm/config/listener -SelectorSet @{Address = "*"; Transport = "HTTPS" }
-	$CountHTTPS = ($HTTPS | Measure-Object).Count
+	try
+	{
+		$HTTPS = Get-WSManInstance -ResourceURI winrm/config/listener -SelectorSet @{Address = "*"; Transport = "HTTPS" }
+	}
+	catch
+	{
+		$HTTPS = $null
+		Write-Information -Tags "Project" -MessageData "INFO: No HTTPS listener exists"
+	}
+	finally
+	{
+		$CountHTTPS = ($HTTPS | Measure-Object).Count
+	}
 
 	if ($CountHTTPS -gt 1)
 	{
@@ -255,9 +280,11 @@ else
 	if (Test-NetConnection -ComputerName $Domain -Port 5986 -InformationLevel Quiet -EA Ignore)
 	{
 		# Test remote configuration
+		$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
+		Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA Stop
+
 		Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
 		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service on computer '$Domain'"
-		$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
 		Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -UseSSL -Authentication Negotiate
 
 		# Eneter remote session
