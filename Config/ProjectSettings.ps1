@@ -270,7 +270,7 @@ else
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.
 	# The system default application name is wsman
-	$PSSessionApplicationName = wsman
+	$PSSessionApplicationName = "wsman"
 
 	# [System.Management.Automation.Remoting.PSSessionOption]
 	# $PSSessionOption = New-PSSessionOption

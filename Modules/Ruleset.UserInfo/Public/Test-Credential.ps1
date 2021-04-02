@@ -71,6 +71,7 @@ Modifications by metablaster January 2021:
 Function interface reworked by removing unnecesarry parameter and changin param block
 Simplified logic to validate credential based on context type
 Added links, inputs, outputs and notes to comment based help
+TODO: Does not seem to work on LAN
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md

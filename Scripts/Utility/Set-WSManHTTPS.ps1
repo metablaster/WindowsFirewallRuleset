@@ -86,6 +86,9 @@ None. Set-WSManHTTPS.ps1 does not generate any output
 
 .NOTES
 TODO: This script must be part of Ruleset.Initialize module
+NOTE: Following will be set by something in this script, it prevents remote UAC
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy
+TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -98,6 +101,9 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/abo
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/register-pssessionconfiguration?view=powershell-7.1
+
+.LINK
+https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
 #>
 
 #Requires -Version 5.1
@@ -126,7 +132,7 @@ param (
 	[switch] $NoClobber
 )
 
-# NOTE: Needed only for Test-Credential
+# NOTE: Needed only by Test-Credential and $ProjectRoot
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Initialize-Project -Strict
 
@@ -164,7 +170,14 @@ if ($Remote)
 		Write-Information -Tags "Project" -MessageData "INFO: Using existing certificate"
 	}
 
-	if (![string]::IsNullOrEmpty($LiteralPath))
+	if ([string]::IsNullOrEmpty($LiteralPath))
+	{
+		if (($CertCount -eq 0) -and !(Test-Path "$LiteralPath\$Domain.cer" -PathType Leaf -ErrorAction Ignore))
+		{
+			Write-Warning -Message "Certificate '$Domain.cer' generated but not exported because -LiteralPath was not specified"
+		}
+	}
+	else
 	{
 		if (!(Test-Path $LiteralPath -PathType Container -ErrorAction Ignore))
 		{
@@ -196,7 +209,7 @@ if ($Remote)
 	Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
 
 	# Write-Information -Tags "Project" -MessageData "INFO: Enabling PowerShell remoting"
-	# NOTE: Configuring without Enable-PSRemoting
+	# NOTE: We do manual configuration without Enable-PSRemoting
 	# Enable-PSRemoting
 
 	# NOTE: Will not work because certificate is self signed
@@ -205,8 +218,8 @@ if ($Remote)
 	# Configure HTTPS listener
 	# NOTE: WinRM service must be running at this point
 	Write-Information -Tags "Project" -MessageData "INFO: Starting WS-Management service"
-	Start-Service -Name WinRM
 	Get-Service -Name WinRM | Set-Service -StartupType Automatic
+	Start-Service -Name WinRM
 
 	try
 	{
@@ -229,18 +242,38 @@ if ($Remote)
 	elseif ($CountHTTPS -eq 1)
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Setting existing HTTPS listener"
-		Set-WSManInstance -ResourceURI winrm/config/listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
-			-ValueSet @{ Enabled = "true"; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
+		Set-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
+			-ValueSet @{ Hostname = $Domain; Enabled = "true"; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
 	}
 	else
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Adding new HTTPS listener"
-		New-Item -Path WSMan:\localhost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint -Force:$Force | Out-Null
+		New-Item -Path WSMan:\localhost\Listener -Transport HTTPS -Address * -Hostname $Domain -CertificateThumbPrint $Cert.Thumbprint -Force:$Force | Out-Null
 	}
 
-	# TODO: Other service configuration can be confirmed here
+	# NOTE: Other service configuration can be set\confirmed here
 	Set-Item WSMan:\localhost\Service\AllowRemoteAccess -Value "true"
 	Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value "false"
+	Set-Item WSMan:\localhost\Service\Auth\Certificate -Value "true"
+
+	# Remove all custom made session configurations
+	Write-Information -Tags "Project" -MessageData "INFO: Removing non default session configurations"
+	Get-PSSessionConfiguration -Force |	Where-Object -Property Name -NotLike "Microsoft*" |
+	Unregister-PSSessionConfiguration -NoServiceRestart -Force
+
+	# Register repository specific session configuration
+	Write-Information -Tags "Project" -MessageData "INFO: Registering repository specific session configuration, please wait..."
+	# TODO: This or something earlier restarts WinRM service which is not needed at this point
+	Register-PSSessionConfiguration -Path $ProjectRoot\Config\Windows\FirewallSession.pssc `
+		-Name "FirewallSession" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
+		-ThreadOptions UseCurrentThread -AccessMode Remote -NoServiceRestart -Force `
+		-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10
+	#-RunAsCredential $RemoteCredential -UseSharedProcess -NoServiceRestart -SecurityDescriptorSddl `
+	#-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+
+	# Remove the Deny_All setting from the security descriptor of the affected session
+	Write-Information -Tags "Project" -MessageData "INFO: Enabling repository specific session configuration"
+	Enable-PSSessionConfiguration -Name FirewallSession -NoServiceRestart -Force
 
 	# Remove all HTTP listeners
 	Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
@@ -248,30 +281,56 @@ if ($Remote)
 
 	# Disable unused default session configurations
 	Write-Information -Tags "Project" -MessageData "INFO: Disabling unneeded default session configurations"
-	Disable-PSSessionConfiguration -Name microsoft.powershell32
+	# Disable-PSSessionConfiguration -Name Microsoft.PowerShell
+	Disable-PSSessionConfiguration -Name Microsoft.PowerShell32
 	Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 
-	# Remove all custom made session configurations
-	Write-Information -Tags "Project" -MessageData "INFO: Removing non default session configurations"
-	Get-PSSessionConfiguration -Force |
-	Where-Object -Property Name -NotLike "Microsoft*" |
-	Unregister-PSSessionConfiguration -Force
+	Write-Information -Tags "Project" -MessageData "INFO: Restarting WS-Management service"
+	Restart-Service -Name WinRM
 
-	# Register repository specific session configuration
-	Write-Information -Tags "Project" -MessageData "INFO: Registering repository specific session configuration"
-	Register-PSSessionConfiguration -Path $ProjectRoot\Config\Windows\FirewallSession.pssc `
-		-Name "FirewallSession" -ProcessorArchitecture amd64 --ThreadApartmentState Unknown `
-		-ThreadOptions UseCurrentThread -AccessMode Remote `
-		-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10
-	#-RunAsCredential $RemoteCredential -UseSharedProcess -NoServiceRestart -SecurityDescriptorSddl `
-	#-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+	try
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on localhost '$Domain'"
+		Test-WSMan -UseSSL -ComputerName $Domain -ErrorAction Stop
+	}
+	catch
+	{
+		Write-Warning -Message "HTTPS on localhost failed, trying again with Enter-PSSession and 'SkipCACheck'"
+		$SessionOptions = New-PSSessionOption -SkipCACheck
+		Enter-PSSession -UseSSL -ComputerName $Domain -ConfigurationName FirewallSession -SessionOption $SessionOptions
+		Exit-PSSession
+	}
 
 	# Show configured session configuration
-	Get-PSSessionConfiguration -Name FirewallSession
+	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
+	Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
+	Select-Object -Property Name, Enabled, PSVersion, Architecture, SupportsOptions, lang, AutoRestart, RunAsUser, RunAsPassword, Permission
+	# Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True | Select-Object *
 
-	# Show configured listeners
-	Get-WSManInstance winrm/config/listener -Enumerate
-	# winrm get winrm/config
+	# Show WinRM configuration
+	Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
+	Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server configuration"
+	Get-WSManInstance -ResourceURI winrm/config/Service
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
+	Get-WSManInstance -ResourceURI winrm/config/Service/Auth
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server default ports"
+	Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts
+
+	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
+	{
+		Write-Verbose -Message "Showing shell configuration"
+		Get-Item WSMan:\localhost\Shell\*
+
+		Write-Verbose -Message "Showing plugin configuration"
+		Get-Item WSMan:\localhost\Plugin\*
+
+		# All in one alternative
+		# winrm get winrm/config
+	}
 }
 else
 {
@@ -287,25 +346,33 @@ else
 		return
 	}
 
-	if ($Cert)
+	if ($Cert) # if (Cert -eq 1)
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Certificate for computer '$Domain' already exists"
 	}
-	elseif ([string]::IsNullOrEmpty($CertFile))
-	{
-		Write-Error -Category InvalidOperation -Message "Certificate does not exist for computer '$Domain'"
-		return
-	}
-	elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Importing certificate '$CertFile'"
-		$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation "Cert:\LocalMachine\Root"
-	}
 	else
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
-		return
+		if ([string]::IsNullOrEmpty($LiteralPath))
+		{
+			Write-Error -Category InvalidOperation -Message "Certificate does not exist for computer '$Domain', please specify -LiteralPath"
+			return
+		}
+
+		$CertFile = "$LiteralPath\$Domain.cer"
+		if (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Importing certificate '$CertFile'"
+			$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation "Cert:\LocalMachine\Root"
+		}
+		else
+		{
+			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
+			return
+		}
 	}
+
+	# NOTE: Other client configuration can be set\confirmed here
+	Set-Item WSMan:\localhost\Client\Auth\Certificate -Value "true"
 
 	Write-Information -Tags "Project" -MessageData "INFO: Contacting computer '$Domain'"
 
@@ -313,16 +380,24 @@ else
 	{
 		# Test remote configuration
 		$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
-		Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA Stop
+		Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA "Continue"
 
-		Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service on computer '$Domain'"
-		Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -UseSSL -Authentication Negotiate
-
-		# Eneter remote session
-		# $SessionOptions = New-PSSessionOption -SkipCACheck
-		Enter-PSSession -ComputerName $Domain -UseSSL -Credential $RemoteCredential # -SessionOption $SessionOptions
-		# Exit-PSSession
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
+			Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
+			Test-WSMan -UseSSL -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default"
+			# -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
+		}
+		catch
+		{
+			# Eneter remote session
+			Write-Warning -Message "HTTPS on '$Domain' failed, trying again with Enter-PSSession"
+			# $SessionOptions = New-PSSessionOption -SkipCACheck
+			Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential `
+				-ConfigurationName FirewallSession # -SessionOption $SessionOptions
+			Exit-PSSession
+		}
 	}
 	elseif (Test-Connection -ComputerName $Domain -Count 2 -Quiet -EA Ignore)
 	{
@@ -332,6 +407,31 @@ else
 	{
 		Write-Error -Category ConnectionError -TargetObject $Domain -Message "Computer $Domain does not respond"
 	}
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
+	Get-WSManInstance -ResourceURI winrm/config/Client
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
+	Get-WSManInstance -ResourceURI winrm/config/Client/Auth
+
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
+	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts
+
+	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
+	{
+		Write-Verbose -Message "Showing shell configuration"
+		Get-Item WSMan:\localhost\Shell\*
+
+		Write-Verbose -Message "Showing plugin configuration"
+		Get-Item WSMan:\localhost\Plugin\*
+
+		# All in one alternative
+		# winrm get winrm/config
+	}
+
+	# Client setting
+	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
+	# Get-Item WSMan:\localhost\ClientCertificate\*
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: All operation completed successfully"
