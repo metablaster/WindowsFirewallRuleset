@@ -273,6 +273,8 @@ else
 	$PSSessionApplicationName = "wsman"
 
 	# Advanced options for  a user-managed remote session in a remote session.
+	# HACK: These options don't seem to be respected in regard to timeouts
+	# TODO: Document used PSSessionOption options
 	# [System.Management.Automation.Remoting.PSSessionOption]
 	$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
 		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 360000

@@ -89,6 +89,7 @@ Parameter names and aliases
 - [array] `State` (specify the Keyword names of states)
 - [switch] `Trusted` (trust levels are supported when the parameter is specified)
 - [string] `TempLocation` (specify the location of temporary data that is used during operation)
+- [string] `CertFile` (Name of a file that contains (PKCS) #12 or (DER) x.509 certificate and key)
 
 `*` Used by most commandlets as primary parameter but should be alias instead
 `PSPath` is alias of both the Path and LiteralPath of most commandlets

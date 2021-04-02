@@ -48,9 +48,9 @@ Computer name which is to be managed remotely.
 Certificate store is searched for certificate with CN entry set to this name,
 If not found, certificate specified by CertFile is imported.
 
-.PARAMETER LiteralPath
-Specifies directory location where to\from optionally export\import certificate.
-The exported\importing certificate name is\(must be) equal to remote computer name.
+.PARAMETER CertFile
+Optionally specify custom certificate file.
+By default new self signed certifcate is made if none exists.
 
 .PARAMETER Remote
 Should be specified when configuring remote computer
@@ -64,12 +64,12 @@ If specified, does not prompt to create a listener and overwrites an existing ce
 even if it has the Read-only attribute set.
 
 .EXAMPLE
-PS> .\Set-WSManHTTPS.ps1 -Domain Server01 -CertFile "C:\dev\Cert\Server01.cer"
+PS> .\Set-WSManHTTPS.ps1 -Domain Server01
 
 Configures management machine by installing certificate of a remote computer
 
 .EXAMPLE
-PS> .\Set-WSManHTTPS.ps1 -LiteralPath "C:\dev\Cert" -Remote -NoClobber
+PS> .\Set-WSManHTTPS.ps1 -Remote -NoClobber
 
 Configures WinRM on remote computer for HTTPS
 
@@ -85,7 +85,8 @@ NOTE: Following will be set by something in this script, it prevents remote UAC
 Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
-TODO: Optional HTTPS configuration
+TODO: Optional HTTP configuration
+HACK: Remote HTTPS with localhost in addition to local machine name
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -112,9 +113,8 @@ param (
 	[Alias("ComputerName", "CN")]
 	[string] $Domain,
 
-	[Parameter(ParameterSetName = "Remote")]
-	[Alias("LP")]
-	[string] $LiteralPath,
+	[Parameter()]
+	[string] $CertFile,
 
 	[Parameter(ParameterSetName = "Remote")]
 	[switch] $Remote,
@@ -131,6 +131,7 @@ param (
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
+$CertPath = "$ProjectRoot\Exports"
 
 if ($Remote)
 {
@@ -164,40 +165,35 @@ if ($Remote)
 		Write-Information -Tags "Project" -MessageData "INFO: Using existing certificate"
 	}
 
-	if ([string]::IsNullOrEmpty($LiteralPath))
+	# TODO: Search entry path for CN entries instead
+	if ([string]::IsNullOrEmpty($CertFile))
 	{
-		if (($CertCount -eq 0) -and !(Test-Path "$LiteralPath\$Domain.cer" -PathType Leaf -ErrorAction Ignore))
-		{
-			Write-Warning -Message "Certificate '$Domain.cer' generated but not exported because -LiteralPath was not specified"
-		}
+		$CertFile = "$CertPath\$Domain.cer"
+	}
+
+	$ExportParams = @{
+		Cert = $Cert
+		FilePath = $CertFile
+		Type = "CERT"
+		Force = $Force
+		NoClobber = $NoClobber
+	}
+
+	if ((!$NoClobber -or $Force) -or !(Test-Path $CertFile -PathType Leaf -ErrorAction Ignore))
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer'"
+		Export-Certificate @ExportParams | Out-Null
 	}
 	else
 	{
-		if (!(Test-Path $LiteralPath -PathType Container -ErrorAction Ignore))
-		{
-			Write-Information -Tags "Project" -MessageData "INFO: Creating new directory $LiteralPath"
-			New-Item -Path $LiteralPath -ItemType Directory | Out-Null
-		}
+		Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
+	}
 
-		if ((!$Force -or $NoClobber) -and (Test-Path "$LiteralPath\$Domain.cer" -PathType Leaf -ErrorAction Ignore))
-		{
-			Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
-		}
-		else
-		{
-			# To be imported by management machine
-			Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer'"
-
-			$ExportParams = @{
-				Cert = $Cert
-				FilePath = "$LiteralPath\$Domain.cer"
-				Type = "CERT"
-				Force = $Force
-				NoClobber = $NoClobber
-			}
-
-			Export-Certificate @ExportParams | Out-Null
-		}
+	# Add public key to trusted root to trust this certificate locally, if it's not already there
+	if (!(Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object { $_.Subject -eq "CN=$Domain" }))
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Trusting certificate '$Domain.cer' locally"
+		Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
 	}
 
 	Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
@@ -329,6 +325,11 @@ if ($Remote)
 else
 {
 	# Management machine
+	if ([string]::IsNullOrEmpty($CertFile))
+	{
+		$CertFile = "$CertPath\$Domain.cer"
+	}
+
 	$Cert = Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object {
 		$_.Subject -eq "CN=$Domain"
 	}
@@ -344,25 +345,15 @@ else
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Certificate for computer '$Domain' already exists"
 	}
+	elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Importing certificate '$CertFile'"
+		$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation "Cert:\LocalMachine\Root"
+	}
 	else
 	{
-		if ([string]::IsNullOrEmpty($LiteralPath))
-		{
-			Write-Error -Category InvalidOperation -Message "Certificate does not exist for computer '$Domain', please specify -LiteralPath"
-			return
-		}
-
-		$CertFile = "$LiteralPath\$Domain.cer"
-		if (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
-		{
-			Write-Information -Tags "Project" -MessageData "INFO: Importing certificate '$CertFile'"
-			$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation "Cert:\LocalMachine\Root"
-		}
-		else
-		{
-			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
-			return
-		}
+		Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
+		return
 	}
 
 	# NOTE: Other client configuration can be set\confirmed here
@@ -377,7 +368,8 @@ else
 	if (Test-NetConnection -ComputerName $Domain -Port 5986 -InformationLevel Quiet -EA Ignore)
 	{
 		# Test remote configuration
-		$RemoteCredential = Get-Credential -Message "Please provide credentials for computer $Domain"
+		$RemoteCredential = Get-Credential -Message "Credentials are required to access computer '$Domain'"
+		# NOTE: This fails, see commend in Test-Credential.ps1 module script
 		Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA "Continue"
 
 		try

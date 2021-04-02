@@ -75,6 +75,7 @@ Enter-Test "Test-Function"
 if ($Force -or $PSCmdlet.ShouldContinue("Query", "Accept remote session unit test", $true, [ref] $YesToAll, [ref] $NoToAll))
 {
 	Start-Test "Enter-PSSession localhost"
+	# NOTE: localhost won't work with HTTPS due to CN entry in certificate
 	$Cred = Get-Credential -Message "Credentials are required to access localhost'"
 	Enter-PSSession -UseSSL -ComputerName ([Environment]::MachineName) -Credential $Cred
 	Exit-PSSession
