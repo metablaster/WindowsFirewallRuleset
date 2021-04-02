@@ -265,15 +265,17 @@ else
 	# the Microsoft.PowerShell session configuration on the remote computer.
 	# If you specify only a configuration name, the following schema URI is prepended:
 	# http://schemas.microsoft.com/PowerShell/
-	# TODO: $PSSessionConfigurationName = "FirewallSession"
+	$PSSessionConfigurationName = "FirewallSession"
 
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.
 	# The system default application name is wsman
 	$PSSessionApplicationName = "wsman"
 
+	# Advanced options for  a user-managed remote session in a remote session.
 	# [System.Management.Automation.Remoting.PSSessionOption]
-	# $PSSessionOption = New-PSSessionOption
+	$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
+		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 360000
 }
 
 if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
@@ -480,6 +482,9 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 
 	# Standard user account name which will perform unit testing
 	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
+
+	# Remote test computer which will perform unit testing
+	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
 }
 #endregion
 

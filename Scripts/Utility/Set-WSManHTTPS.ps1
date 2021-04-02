@@ -49,13 +49,8 @@ Certificate store is searched for certificate with CN entry set to this name,
 If not found, certificate specified by CertFile is imported.
 
 .PARAMETER LiteralPath
-Specifies directory location where to optionally export certificate.
-The exported certificate name is equal to remote computer name.
-
-.PARAMETER CertFile
-Optionally specify certificate file location of a remote computer.
-In both cases, local store is searched for certificate that matches computer specified by
-Domain parameter.
+Specifies directory location where to\from optionally export\import certificate.
+The exported\importing certificate name is\(must be) equal to remote computer name.
 
 .PARAMETER Remote
 Should be specified when configuring remote computer
@@ -88,7 +83,9 @@ None. Set-WSManHTTPS.ps1 does not generate any output
 TODO: This script must be part of Ruleset.Initialize module
 NOTE: Following will be set by something in this script, it prevents remote UAC
 Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy
-TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang
+TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
+TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
+TODO: Optional HTTPS configuration
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -118,9 +115,6 @@ param (
 	[Parameter(ParameterSetName = "Remote")]
 	[Alias("LP")]
 	[string] $LiteralPath,
-
-	[Parameter(ParameterSetName = "Local")]
-	[string] $CertFile,
 
 	[Parameter(ParameterSetName = "Remote")]
 	[switch] $Remote,
@@ -252,9 +246,9 @@ if ($Remote)
 	}
 
 	# NOTE: Other service configuration can be set\confirmed here
-	Set-Item WSMan:\localhost\Service\AllowRemoteAccess -Value "true"
 	Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value "false"
 	Set-Item WSMan:\localhost\Service\Auth\Certificate -Value "true"
+	Set-Item WSMan:\localhost\Service\AllowRemoteAccess -Value "true"
 
 	# Remove all custom made session configurations
 	Write-Information -Tags "Project" -MessageData "INFO: Removing non default session configurations"
@@ -373,6 +367,10 @@ else
 
 	# NOTE: Other client configuration can be set\confirmed here
 	Set-Item WSMan:\localhost\Client\Auth\Certificate -Value "true"
+	Set-Item WSMan:\localhost\Client\AllowUnencrypted -Value "false"
+
+	# TODO: WinRM protocol options (one of your networks is public)
+	# Set-WSManInstance -ResourceURI winrm/config -ValueSet @{ MaxTimeoutms = 3000 }
 
 	Write-Information -Tags "Project" -MessageData "INFO: Contacting computer '$Domain'"
 
