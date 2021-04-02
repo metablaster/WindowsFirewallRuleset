@@ -52,6 +52,9 @@ If not found, certificate specified by CertFile is imported.
 Optionally specify custom certificate file.
 By default new self signed certifcate is made if none exists.
 
+.PARAMETER Protocol
+Experimental parameter to fine tune listener protocols
+
 .PARAMETER Remote
 Should be specified when configuring remote computer
 
@@ -87,6 +90,10 @@ TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan
 TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
 TODO: Optional HTTP configuration
 HACK: Remote HTTPS with localhost in addition to local machine name
+TODO: Authenticate users using certificates instead of or optionally in addition to credential object
+TODO: Test-Certificate before importing, mandatory if -CertFile is specified
+TODO: Needs testing with PS Core
+TODO: Risk mitigation
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -115,6 +122,10 @@ param (
 
 	[Parameter()]
 	[string] $CertFile,
+
+	[Parameter()]
+	[ValidateSet("HTTP", "HTTPS", "Any")]
+	[string] $Protocol = "Any",
 
 	[Parameter(ParameterSetName = "Remote")]
 	[switch] $Remote,
@@ -242,9 +253,42 @@ if ($Remote)
 	}
 
 	# NOTE: Other service configuration can be set\confirmed here
-	Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value "false"
+	# Basic authentication cannot be used with domain accounts
+	Set-Item WSMan:\localhost\Service\Auth\Basic -Value "true"
+
+	# TODO: Test registry fix for cases when Negotiate is disabled
+	# An alternative to Basic Authentication over HTTPS is Negotiate.
+	# This results in NTLM authentication between the client and server and payload is encrypted over HTTP.
+	# NTLM authentication is used by default whenever you specify an IP address.
+	# Use the Credential parameter in all remote commands.
+	Set-Item WSMan:\localhost\Service\Auth\Negotiate -Value "true"
+
+	# TODO: Doesn't get disabled
+	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
+	Set-Item WSMan:\localhost\Service\Auth\Kerberos -Value "false"
+
+	# The date of the computer falls between the Valid from: to the To: date on the General tab.
+	# Host name matches the Issued to: on the General tab, or it matches one of the
+	# Subject Alternative Name exactly as displayed on the Details tab.
+	# That the Enhanced Key Usage on the Details tab contains Server authentication.
+	# On the Certification Path tab that the Current Status is This certificate is OK.
 	Set-Item WSMan:\localhost\Service\Auth\Certificate -Value "true"
+	Set-Item WSMan:\localhost\Service\Auth\CredSSP -Value "false"
+
+	if ($Protocol -eq "HTTPS")
+	{
+		Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value "false"
+	}
+	else
+	{
+		Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value "true"
+	}
+
 	Set-Item WSMan:\localhost\Service\AllowRemoteAccess -Value "true"
+
+	# Enabling PS remoting includes starting the WinRM service,
+	# setting the startup type for the WinRM service to Automatic,
+	# creating listeners for HTTP and HTTPS connections, and creating default session configurations.
 
 	# Remove all custom made session configurations
 	Write-Information -Tags "Project" -MessageData "INFO: Removing non default session configurations"
@@ -265,48 +309,71 @@ if ($Remote)
 	Write-Information -Tags "Project" -MessageData "INFO: Enabling repository specific session configuration"
 	Enable-PSSessionConfiguration -Name FirewallSession -NoServiceRestart -Force
 
-	# Remove all HTTP listeners
-	Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
-	Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTP" | Remove-Item -Recurse
+	if ($Protocol -eq "HTTPS")
+	{
+		# Disable all HTTP listeners
+		# Write-Information -Tags "Project" -MessageData "INFO: Disabling all HTTP listeners"
+		# Set-WSManInstance -ResourceURI winrm/config/listener -SelectorSet @{ Address = "*"; Transport = "HTTP" } -ValueSet @{ Enabled = "false" }
+
+		# Remove all HTTP listeners
+		Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
+		Get-ChildItem WSMan:\localhost\Listener | Where-Object -Property Keys -EQ "Transport=HTTP" | Remove-Item -Recurse
+	}
 
 	# Disable unused default session configurations
 	Write-Information -Tags "Project" -MessageData "INFO: Disabling unneeded default session configurations"
-	# Disable-PSSessionConfiguration -Name Microsoft.PowerShell
+	# The local computer must include session configurations for remote commands.
+	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
+	Enable-PSSessionConfiguration -Name Microsoft.PowerShell
 	Disable-PSSessionConfiguration -Name Microsoft.PowerShell32
 	Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 
 	Write-Information -Tags "Project" -MessageData "INFO: Restarting WS-Management service"
 	Restart-Service -Name WinRM
 
-	try
+	if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on localhost '$Domain'"
-		Test-WSMan -UseSSL -ComputerName $Domain -ErrorAction Stop
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on localhost '$Domain'"
+			Test-WSMan -UseSSL -ComputerName $Domain -ErrorAction Stop
+		}
+		catch
+		{
+			Write-Warning -Message "HTTPS on localhost failed, trying again with Enter-PSSession and 'SkipCACheck'"
+			$SessionOptions = New-PSSessionOption -SkipCACheck
+			Enter-PSSession -UseSSL -ComputerName $Domain -ConfigurationName FirewallSession -SessionOption $SessionOptions
+			Exit-PSSession
+		}
 	}
-	catch
+
+	if (($Protocol -eq "HTTP") -or ($Protocol -eq "Any"))
 	{
-		Write-Warning -Message "HTTPS on localhost failed, trying again with Enter-PSSession and 'SkipCACheck'"
-		$SessionOptions = New-PSSessionOption -SkipCACheck
-		Enter-PSSession -UseSSL -ComputerName $Domain -ConfigurationName FirewallSession -SessionOption $SessionOptions
-		Exit-PSSession
+		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on localhost '$Domain'"
+		Test-WSMan -ComputerName $Domain
 	}
 
 	# Show configured session configuration
+	# winrm get winrm/config
 	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
 	Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
 	Select-Object -Property Name, Enabled, PSVersion, Architecture, SupportsOptions, lang, AutoRestart, RunAsUser, RunAsPassword, Permission
 	# Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True | Select-Object *
 
 	# Show WinRM configuration
+	# winrm enumerate winrm/config/listener
 	Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
 	Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate
 
+	# winrm get winrm/config/service
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server configuration"
 	Get-WSManInstance -ResourceURI winrm/config/Service
 
+	# winrm get winrm/config/service/auth
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
 	Get-WSManInstance -ResourceURI winrm/config/Service/Auth
 
+	# winrm get winrm/config/service/defaultports
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server default ports"
 	Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts
 
@@ -315,11 +382,9 @@ if ($Remote)
 		Write-Verbose -Message "Showing shell configuration"
 		Get-Item WSMan:\localhost\Shell\*
 
+		# winrm enumerate winrm/config/plugin
 		Write-Verbose -Message "Showing plugin configuration"
 		Get-Item WSMan:\localhost\Plugin\*
-
-		# All in one alternative
-		# winrm get winrm/config
 	}
 }
 else
@@ -357,36 +422,85 @@ else
 	}
 
 	# NOTE: Other client configuration can be set\confirmed here
-	Set-Item WSMan:\localhost\Client\Auth\Certificate -Value "true"
-	Set-Item WSMan:\localhost\Client\AllowUnencrypted -Value "false"
+	try
+	{
+		# NOTE: If this fails, registry fix must precede all other authentication edits
+		Set-Item WSMan:\localhost\Client\Auth\Negotiate -Value "true"
+	}
+	catch
+	{
+		Write-Warning -Message "Enabling 'Negotiate' authentication failed, enabling trough registry"
+		Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value 1
 
-	# TODO: WinRM protocol options (one of your networks is public)
+		Write-Information -Tags "Project" -MessageData "INFO: Restarting service WinRM to apply registry changes"
+		Restart-Service -Name WinRM
+	}
+
+	Set-Item WSMan:\localhost\Client\Auth\Basic -Value "true"
+	Set-Item WSMan:\localhost\Client\Auth\Digest -Value "true"
+	Set-Item WSMan:\localhost\Client\Auth\Kerberos -Value "false"
+
+	Set-Item WSMan:\localhost\Client\Auth\Certificate -Value "true"
+	Set-Item WSMan:\localhost\Client\Auth\CredSSP -Value "false"
+
+	if ($Protocol -eq "HTTPS")
+	{
+		Set-Item WSMan:\localhost\Client\AllowUnencrypted -Value "false"
+	}
+	else
+	{
+		Set-Item WSMan:\localhost\Client\AllowUnencrypted -Value "true"
+		# The TrustedHosts item can contain a comma-separated list of computer names,
+		# IP addresses, and fully-qualified domain names. Wildcards are permitted.
+		# Affects all users of the computer.
+		Set-Item WSMan:\localhost\Client\TrustedHosts -Value $Domain -Force
+	}
+
+	# TODO: WinRM protocol options (one of your networks is public) -SkipNetworkCheck?
 	# Set-WSManInstance -ResourceURI winrm/config -ValueSet @{ MaxTimeoutms = 3000 }
 
-	Write-Information -Tags "Project" -MessageData "INFO: Contacting computer '$Domain'"
+	Write-Information -Tags "Project" -MessageData "INFO: Restarting WS-Management service"
+	Restart-Service -Name WinRM
 
-	if (Test-NetConnection -ComputerName $Domain -Port 5986 -InformationLevel Quiet -EA Ignore)
+	Write-Information -Tags "Project" -MessageData "INFO: Contacting computer '$Domain'"
+	if ($Protocol -eq "HTTPS") { $ServerPort = 5986 }
+	else { $ServerPort = 5985 }
+
+	if (Test-NetConnection -ComputerName $Domain -Port $ServerPort -InformationLevel Quiet -EA Ignore)
 	{
 		# Test remote configuration
+		# TODO: Already defined in ProjectSettings.ps1
 		$RemoteCredential = Get-Credential -Message "Credentials are required to access computer '$Domain'"
 		# NOTE: This fails, see commend in Test-Credential.ps1 module script
-		Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA "Continue"
+		# Test-Credential $RemoteCredential -Context Machine -Domain $Domain -EA "Continue"
 
-		try
+		if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
-			Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
-			Test-WSMan -UseSSL -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default"
-			# -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
+			try
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: Using certificate with thumbprint $($Cert.Thumbprint)"
+				Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
+				Test-WSMan -UseSSL -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default"
+				# -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
+			}
+			catch
+			{
+				# Eneter remote session
+				Write-Warning -Message "HTTPS on '$Domain' failed, trying again with Enter-PSSession"
+				# $SessionOptions = New-PSSessionOption -SkipCACheck
+				Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential
+				# -ConfigurationName FirewallSession -SessionOption $SessionOptions
+				Exit-PSSession
+			}
 		}
-		catch
+
+		if (($Protocol -eq "HTTP") -or ($Protocol -eq "Any"))
 		{
-			# Eneter remote session
-			Write-Warning -Message "HTTPS on '$Domain' failed, trying again with Enter-PSSession"
-			# $SessionOptions = New-PSSessionOption -SkipCACheck
-			Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential `
-				-ConfigurationName FirewallSession # -SessionOption $SessionOptions
-			Exit-PSSession
+			Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on computer '$Domain'"
+			Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default"
+
+			# Enter-PSSession -ComputerName $Domain -Credential $Cred # -ConfigurationName FirewallSession
+			# Exit-PSSession
 		}
 	}
 	elseif (Test-Connection -ComputerName $Domain -Count 2 -Quiet -EA Ignore)
@@ -398,12 +512,15 @@ else
 		Write-Error -Category ConnectionError -TargetObject $Domain -Message "Computer $Domain does not respond"
 	}
 
+	# winrm get winrm/config/client
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
 	Get-WSManInstance -ResourceURI winrm/config/Client
 
+	# winrm get winrm/config/client/auth
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
 	Get-WSManInstance -ResourceURI winrm/config/Client/Auth
 
+	# winrm get winrm/config/client/defaultports
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
 	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts
 
@@ -414,12 +531,9 @@ else
 
 		Write-Verbose -Message "Showing plugin configuration"
 		Get-Item WSMan:\localhost\Plugin\*
-
-		# All in one alternative
-		# winrm get winrm/config
 	}
 
-	# Client setting
+	# User authentication certificate
 	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
 	# Get-Item WSMan:\localhost\ClientCertificate\*
 }

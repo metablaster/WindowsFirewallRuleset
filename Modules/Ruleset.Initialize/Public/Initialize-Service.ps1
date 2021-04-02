@@ -92,7 +92,13 @@ function Initialize-Service
 		foreach ($InputService in $Name)
 		{
 			$StatusGood = $true
-			$Service = Get-Service -Name $InputService
+			$Service = Get-Service -Name $InputService -ErrorAction Ignore
+
+			if (!$Service)
+			{
+				Write-Warning -Message "Service '$Service' not found, ignored"
+				continue
+			}
 
 			$ServiceOldStatus = $Service.Status
 			if ($ServiceOldStatus -ne "Running")

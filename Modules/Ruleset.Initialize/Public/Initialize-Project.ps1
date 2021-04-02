@@ -85,7 +85,7 @@ function Initialize-Project
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
+	# Disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
 	if (!$ProjectCheck)
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Project initialization skipped"
@@ -195,31 +195,18 @@ function Initialize-Project
 			# 2. For PowerShell Core 7.1+ this service is required for compatibility module
 			# 3. Required for CIM functions
 			"WinRM" # Windows Remote Management (WS-Management)
+			# NOTE: ssh-agent recommended for:
+			# 1. Remote SSH in VSCode
+			# 2. git over SSH
+			"ssh-agent" # OpenSSH Authentication Agent
+			# NOTE: sshd recommended to host remote SSH and VSCode server
+			"sshd" # OpenSSH SSH Server
 		)
 
 		if (!(Initialize-Service $RequiredServices))
 		{
 			if ($Strict) { exit }
 			return
-		}
-	}
-
-	# If PolicyStore variable doesn't point to localhost, but the project is not yet ready for remote administration
-	if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
-	{
-		Write-Warning -Message "Remote firewall administration is not implemented"
-
-		try
-		{
-			Write-Information -Tags "Project" -MessageData "Testing Windows remote management service on computer: '$PolicyStore'"
-			# TODO: https://stackoverflow.com/questions/18284132/winrm-cannot-process-the-request-fails-only-over-a-specific-domain
-			Test-WSMan -ComputerName $PolicyStore -Credential $RemoteCredential
-		}
-		catch
-		{
-			Write-Error -Category ConnectionError -TargetObject $RemoteCredential `
-				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
-			exit
 		}
 	}
 

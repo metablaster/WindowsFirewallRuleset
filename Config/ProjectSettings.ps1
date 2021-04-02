@@ -86,8 +86,67 @@ param (
 	[switch] $ListPreference
 )
 
+#region Remote session initialization:
+if (!(Get-Variable -Name CheckRemoteInit -Scope Global -ErrorAction Ignore))
+{
+	# check if removable variables already initialized, do not modify!
+	New-Variable -Name CheckRemoteInit -Scope Global -Option Constant $null
+
+	# Machine where to apply rules (default: Local Group Policy)
+	New-Variable -Name PolicyStore -Scope Global -Option Constant "VM-PRO" # ([System.Environment]::MachineName)
+
+	# Policy stores on local computer
+	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
+		([System.Environment]::MachineName)
+		"PersistentStore"
+		"ActiveStore"
+		"RSOP"
+		"SystemDefaults"
+		"StaticServiceStore"
+		"ConfigurableServiceStore"
+	)
+
+	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
+	if ($PolicyStore -notin $LocalStores)
+	{
+		Write-Warning -Message "Remote firewall administration is not implemented" -WA "Continue"
+
+		# Credentials for remote machine
+		New-Variable -Name RemoteCredential -Scope Global -Option Constant -Value (
+			Get-Credential -Message "Credentials are required to access $PolicyStore")
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "Testing Windows remote management service on computer: '$PolicyStore'" -INFA "Continue"
+			Test-WSMan -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential -Authentication "Default" -EA Stop | Out-Null
+		}
+		catch
+		{
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore -EA "Continue" `
+				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+
+			return
+		}
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "Entering remote session to computer: '$PolicyStore'" -INFA "Continue"
+			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
+				-ConfigurationName FirewallSession -EA Stop
+		}
+		catch
+		{
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore -EA "Continue" `
+				-Message "Entering remote session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+
+			return
+		}
+	}
+}
+#endregion
+
 #region Initialization
-# Name of this script for debugging messages, do not modify!.
+# Name of this script for debugging messages, do not modify!
 Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
 
 # Calling script name, to be used for Write-* operations
@@ -400,7 +459,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -424,9 +483,6 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 
 	# Windows 10, Windows Server 2019 and above
 	Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
-
-	# Machine where to apply rules (default: Local Group Policy)
-	Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value ([System.Environment]::MachineName)
 
 	# Default network interface card to use if not locally specified
 	# TODO: We can learn this value programatically but, problem is the same as with specifying local IP
@@ -523,25 +579,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
 	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
-
-	# Policy stores on local computer
-	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
-		([System.Environment]::MachineName)
-		"PersistentStore"
-		"ActiveStore"
-		"RSOP"
-		"SystemDefaults"
-		"StaticServiceStore"
-		"ConfigurableServiceStore"
-	)
-
-	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($PolicyStore -notin $LocalStores)
-	{
-		# Credentials for remote machine
-		New-Variable -Name RemoteCredential -Scope Global -Option Constant -Value (
-			Get-Credential -Message "Credentials are required to access $PolicyStore")
-	}
 
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{

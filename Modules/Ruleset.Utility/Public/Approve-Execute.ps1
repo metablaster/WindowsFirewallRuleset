@@ -156,7 +156,15 @@ function Approve-Execute
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title message"
 		$Leaf = Split-Path -Path $MyInvocation.ScriptName -Leaf
-		$Title = "Executing: $Leaf"
+
+		if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
+		{
+			$Title = "[$($RemoteCredential.UserName)@$($PolicyStore)] Executing: $Leaf"
+		}
+		else
+		{
+			$Title = "[localhost] Executing: $Leaf"
+		}
 
 		if ([string]::IsNullOrEmpty($Context))
 		{
