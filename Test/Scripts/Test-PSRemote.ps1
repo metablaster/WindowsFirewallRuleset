@@ -82,7 +82,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Query", "Accept remote session unit tes
 
 	Start-Test "Enter-PSSession $TestDomain"
 	$Cred = Get-Credential -Message "Credentials are required to access '$TestDomain'"
-	Enter-PSSession -UseSSL -ComputerName $TestDomain -Credential $Cred -ConfigurationName FirewallSession
+	Enter-PSSession -UseSSL -ComputerName $TestDomain -Credential $Cred -ConfigurationName RemoteFirewall
 	Exit-PSSession
 }
 

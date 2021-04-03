@@ -132,7 +132,7 @@ if (!(Get-Variable -Name CheckRemoteInit -Scope Global -ErrorAction Ignore))
 		{
 			Write-Information -Tags "Project" -MessageData "Entering remote session to computer: '$PolicyStore'" -INFA "Continue"
 			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
-				-ConfigurationName FirewallSession -EA Stop
+				-ConfigurationName RemoteFirewall -EA Stop
 		}
 		catch
 		{
@@ -324,7 +324,7 @@ else
 	# the Microsoft.PowerShell session configuration on the remote computer.
 	# If you specify only a configuration name, the following schema URI is prepended:
 	# http://schemas.microsoft.com/PowerShell/
-	$PSSessionConfigurationName = "FirewallSession"
+	$PSSessionConfigurationName = "RemoteFirewall"
 
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.

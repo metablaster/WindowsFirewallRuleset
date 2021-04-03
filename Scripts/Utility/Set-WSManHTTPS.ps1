@@ -298,8 +298,8 @@ if ($Remote)
 	# Register repository specific session configuration
 	Write-Information -Tags "Project" -MessageData "INFO: Registering repository specific session configuration, please wait..."
 	# TODO: This or something earlier restarts WinRM service which is not needed at this point
-	Register-PSSessionConfiguration -Path $ProjectRoot\Config\Windows\FirewallSession.pssc `
-		-Name "FirewallSession" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
+	Register-PSSessionConfiguration -Path $ProjectRoot\Config\RemoteFirewall.pssc `
+		-Name "RemoteFirewall" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
 		-ThreadOptions UseCurrentThread -AccessMode Remote -NoServiceRestart -Force `
 		-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10
 	#-RunAsCredential $RemoteCredential -UseSharedProcess -NoServiceRestart -SecurityDescriptorSddl `
@@ -307,7 +307,7 @@ if ($Remote)
 
 	# Remove the Deny_All setting from the security descriptor of the affected session
 	Write-Information -Tags "Project" -MessageData "INFO: Enabling repository specific session configuration"
-	Enable-PSSessionConfiguration -Name FirewallSession -NoServiceRestart -Force
+	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force
 
 	if ($Protocol -eq "HTTPS")
 	{
@@ -342,7 +342,7 @@ if ($Remote)
 		{
 			Write-Warning -Message "HTTPS on localhost failed, trying again with Enter-PSSession and 'SkipCACheck'"
 			$SessionOptions = New-PSSessionOption -SkipCACheck
-			Enter-PSSession -UseSSL -ComputerName $Domain -ConfigurationName FirewallSession -SessionOption $SessionOptions
+			Enter-PSSession -UseSSL -ComputerName $Domain -ConfigurationName RemoteFirewall -SessionOption $SessionOptions
 			Exit-PSSession
 		}
 	}
@@ -489,7 +489,7 @@ else
 				Write-Warning -Message "HTTPS on '$Domain' failed, trying again with Enter-PSSession"
 				# $SessionOptions = New-PSSessionOption -SkipCACheck
 				Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential
-				# -ConfigurationName FirewallSession -SessionOption $SessionOptions
+				# -ConfigurationName RemoteFirewall -SessionOption $SessionOptions
 				Exit-PSSession
 			}
 		}
@@ -499,7 +499,7 @@ else
 			Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on computer '$Domain'"
 			Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default"
 
-			# Enter-PSSession -ComputerName $Domain -Credential $Cred # -ConfigurationName FirewallSession
+			# Enter-PSSession -ComputerName $Domain -Credential $Cred # -ConfigurationName RemoteFirewall
 			# Exit-PSSession
 		}
 	}

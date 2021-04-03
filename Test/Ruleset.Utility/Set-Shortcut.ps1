@@ -77,9 +77,9 @@ if (!(Test-Path -Path $TestDrive -PathType Container))
 
 Start-Test "LNK"
 Set-Shortcut -Name "Test.url" -Path $TestDrive -IconIndex -19 -Hotkey "ALT+CTRL+F" `
-	-TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" `
+	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -ArgumentList "/test /args" `
-	-WorkingDirectory "$ProjectRoot\Config\Windows" -WindowStyle "Maximized" `
+	-WorkingDirectory "$ProjectRoot\Config\System" -WindowStyle "Maximized" `
 	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" -Admin -Confirm:$false
 
 Start-Test "URL"
@@ -112,7 +112,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Windows folder", "Test elevation"))
 	}
 
 	Set-Shortcut -Name "Test.lnk" -Path $Restricted `
-		-TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Confirm:$false
+		-TargetPath "$ProjectRoot\Config\System\Firewall.msc" -Confirm:$false
 }
 
 Test-Output $Result -Command Set-Shortcut

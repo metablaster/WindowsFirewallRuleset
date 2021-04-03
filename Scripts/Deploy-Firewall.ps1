@@ -536,7 +536,7 @@ Write-Information -Tags "User" -MessageData "INFO: Deployment of firewall rules 
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 
 # Set desktop shortcut to custom management console
-Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\Windows\Firewall.msc" -Admin `
+Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\System\Firewall.msc" -Admin `
 	-Description "View and modify GPO firewall" -IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -IconIndex -19
 
 # Show execution status

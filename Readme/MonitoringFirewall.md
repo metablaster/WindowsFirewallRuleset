@@ -67,7 +67,7 @@ click on image to enlarge!
 
 ![Alternate text](Screenshots/ProcessMonitor.png)
 
-- Inside the `Config\sysinternals` folder you will find process monitor configuration specialized
+- Inside the `Config\procmon` folder you will find process monitor configuration specialized
 for firewall monitoring which you can import into your copy of process monitor.
 - Note that this configuration filters some network traffic which you might not want to see,
 click on filter button (or menu) to disable specific filters or to add new ones.
@@ -264,7 +264,7 @@ visible and remove those which are useless and only waste space, for example add
 - InterfaceType
 - Edge Traversal
 
-Inside `Config\Windows` there is a `Firewall.msc` settings file, which saves you from doing these
+Inside `Config\System` there is a `Firewall.msc` settings file, which saves you from doing these
 things every time you open GPO firewall, you can customize it and re-save your preferences.
 
 - [Windows Firewall reference][ref firewall]

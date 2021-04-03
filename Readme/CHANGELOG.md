@@ -42,10 +42,11 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Fixed bug with WpsPushUserService rule for multiple standard users
   - Added rules for PowerShell remoting
+  - Added rules for VSCode remote SSH
 
 - Scripts
 
-  - Updated `ProjectSettings\Config` with dependent program versions
+  - Updated `ProjectSettings\Config` with updated program versions and remoting
   - Script to upload and set SSH key to server for remote debugging with VSCode over SSH
   - Script to configure PowerShell remoting over HTTPS
 
@@ -55,10 +56,11 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Other
 
-  - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension.
+  - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension
   - Added settings and extensions for remote SHH development
   - Added SSH configuration files and syntax highlighting setting for *config files
   - Updated `todo-tree` extension settings for markdown support
+  - Improved process monitor configuration files for network activity optionally for TCP or UDP
 
 ## v0.10.0 (current release)
 
