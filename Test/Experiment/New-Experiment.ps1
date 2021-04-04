@@ -73,8 +73,13 @@ process
 {
 	Write-Debug -Message "INFO: Run script function"
 
-	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" | Select-Object CSName, Caption | Format-Table
-	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" -CimSession $RemoteCIM | Select-Object CSName, Caption | Format-Table
+	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
+	Select-Object CSName, Caption | Format-Table
+
+	Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" -Class Win32_OperatingSystem |
+	Select-Object CSName, Caption | Format-Table
+
+	Get-PrincipalSID -User "User" -Domain $Domain -CIM
 }
 
 end

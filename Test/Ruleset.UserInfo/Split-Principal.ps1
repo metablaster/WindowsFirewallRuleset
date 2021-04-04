@@ -95,6 +95,9 @@ Start-Test "FAIL"
 $BadAccount = "\ac", "$TestUser@email"
 Split-Principal $BadAccount
 
+Start-Test "User"
+Split-Principal "User"
+
 Test-Output $UserNames -Command Split-Principal
 
 Update-Log

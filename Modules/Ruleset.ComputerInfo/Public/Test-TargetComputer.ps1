@@ -39,10 +39,15 @@ for both PowerShell editions.
 Target computer which to test
 
 .PARAMETER Retry
-Valid only for PowerShell Core. Specifies the number of echo requests to send. The default value is 4
+Specifies the number of echo requests to send.
+The default value is 4.
+Valid only for PowerShell Core
+The default value is defined in $PSSessionOption preference variable
 
 .PARAMETER Timeout
-Valid only for PowerShell Core. The test fails if a response isn't received before the timeout expires
+The test fails if a response isn't received before the timeout expires.
+Valid only for PowerShell Core.
+The default value is 2 seconds.
 
 .EXAMPLE
 PS> Test-TargetComputer "COMPUTERNAME"
@@ -73,7 +78,7 @@ function Test-TargetComputer
 
 		[Parameter()]
 		[ValidateRange(1, [int16]::MaxValue)]
-		[int16] $Retry = $RetryCount,
+		[int16] $Retry = $PSSessionOption.OperationTimeout.MaxConnectionRetryCount,
 
 		[Parameter()]
 		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" } )]
@@ -90,14 +95,16 @@ function Test-TargetComputer
 	}
 
 	# Test parameters depend on PowerShell edition
-	# TODO: changes not reflected in calling code
+	# TODO: Changes not reflected in calling code
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		# TODO: It will be set to 0
 		if (!$Timeout)
 		{
 			# TODO: Can't modify Timeout parameter
-			$Timeout = $ConnectionTimeout
+			# TODO: Use $PSSessionOption to control this
+			# NOTE: The default value for Test-Connection is 5 seconds
+			$Timeout = 2
 		}
 
 		if ($ConnectionIPv4)

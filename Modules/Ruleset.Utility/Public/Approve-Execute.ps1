@@ -159,7 +159,7 @@ function Approve-Execute
 
 		if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
 		{
-			$Title = "[$($RemoteCredential.UserName)@$($PolicyStore)] Executing: $Leaf"
+			$Title = "[$([Environment]::MachineName)\$([Environment]::UserName)] Executing: $Leaf"
 		}
 		else
 		{

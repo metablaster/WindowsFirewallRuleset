@@ -37,8 +37,8 @@ UPN suffix, also known as the domain name. (or an IP address)
 
 .PARAMETER Name
 Universal Principal Name in form of: user@domain.com
-If Prefix is specified, domain name can be omitted.
-If Suffix is specified, logon name can be omitted.
+If -Prefix is specified, domain name can be omitted.
+If -Suffix is specified, logon name can be omitted.
 
 .PARAMETER Prefix
 If specified, validate only the user name portion of a User Principal Name

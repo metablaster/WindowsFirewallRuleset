@@ -103,7 +103,8 @@ function Test-Service
 			else
 			{
 				# TODO: This should probably be updated for remote computer
-				$BinaryPath = Get-CimInstance Win32_Service -Filter "Name = '$($Service.Name)'" |
+				$BinaryPath = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+					-Class Win32_Service -Property Name, PathName -Filter "Name = '$($Service.Name)'" |
 				Select-Object -ExpandProperty PathName
 			}
 

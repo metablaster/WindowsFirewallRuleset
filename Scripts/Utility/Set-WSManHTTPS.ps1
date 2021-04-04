@@ -104,6 +104,8 @@ TODO: Risk mitigation
 TODO: Needs polish and converting some info streams into verbose or debug
 TODO: Check parameter naming convention
 TODO: CIM test
+TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
+TODO: Some options not applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -305,6 +307,19 @@ if ($Remote)
 
 	Set-Item WSMan:\localhost\Service\AllowRemoteAccess -Value "true"
 
+	# TODO: optionset hashtable
+	# Specifies the maximum length of time, in seconds, the WinRM service takes to retrieve a packet.
+	# The default is 120 seconds.
+	# Set-WSManInstance -ResourceURI winrm/config/service -ValueSet @{
+	# 	MaxPacketRetrievalTimeSeconds = 10
+	# } | Out-Null
+
+	# Specifies the idle time-out in milliseconds between Pull messages.
+	# The default is 60000.
+	# Set-WSManInstance -ResourceURI winrm/config/service -ValueSet @{
+	# 	EnumerationTimeoutms = 10
+	# } | Out-Null
+
 	# Enabling PS remoting includes starting the WinRM service,
 	# setting the startup type for the WinRM service to Automatic,
 	# creating listeners for HTTP and HTTPS connections, and creating default session configurations.
@@ -326,14 +341,16 @@ if ($Remote)
 	Write-Information -Tags "Project" -MessageData "INFO: Session configuration '$($WSManEntry.Name)' registered successfully"
 
 	# Remove the Deny_All setting from the security descriptor of the affected session
-	Write-Information -Tags "Project" -MessageData "INFO: Enabling repository specific session configuration"
+	Write-Information -Tags "Project" -MessageData "INFO: Enabling session configurations"
 	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force
+	Enable-PSSessionConfiguration -Name Microsoft.PowerShell
 
 	if ($Protocol -eq "HTTPS")
 	{
 		# Disable all HTTP listeners
 		Write-Information -Tags "Project" -MessageData "INFO: Disabling all HTTP listeners"
-		Set-WSManInstance -ResourceURI winrm/config/listener -SelectorSet @{ Address = "*"; Transport = "HTTP" } -ValueSet @{ Enabled = "false" }
+		Set-WSManInstance -ResourceURI winrm/config/listener -ValueSet @{ Enabled = "false" } `
+			-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 
 		# Remove all HTTP listeners
 		# Write-Information -Tags "Project" -MessageData "INFO: Removing all HTTP listeners"
@@ -344,7 +361,6 @@ if ($Remote)
 	Write-Information -Tags "Project" -MessageData "INFO: Disabling unneeded default session configurations"
 	# The local computer must include session configurations for remote commands.
 	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
-	Enable-PSSessionConfiguration -Name Microsoft.PowerShell
 	Disable-PSSessionConfiguration -Name Microsoft.PowerShell32
 	Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 
@@ -483,11 +499,22 @@ else
 		# The TrustedHosts item can contain a comma-separated list of computer names,
 		# IP addresses, and fully-qualified domain names. Wildcards are permitted.
 		# Affects all users of the computer.
+		# TODO: Add instead of set
 		Set-Item WSMan:\localhost\Client\TrustedHosts -Value $Domain -Force
 	}
 
 	# TODO: WinRM protocol options (one of your networks is public) -SkipNetworkCheck?
-	# Set-WSManInstance -ResourceURI winrm/config -ValueSet @{ MaxTimeoutms = 3000 }
+	# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
+	# The default is 60000.
+	# Set-WSManInstance -ResourceURI winrm/config -ValueSet @{
+	# 	MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds
+	# } -SkipNetworkCheck | Out-Null
+
+	# # Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
+	# # The default is 5000 milliseconds.
+	# Set-WSManInstance -ResourceURI winrm/config -ValueSet @{
+	# 	NetworkDelayms = 1000
+	# } | Out-Null
 
 	Write-Information -Tags "Project" -MessageData "INFO: Restarting WS-Management service"
 	Restart-Service -Name WinRM

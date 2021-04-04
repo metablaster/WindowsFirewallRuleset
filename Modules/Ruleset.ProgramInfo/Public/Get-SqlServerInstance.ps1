@@ -466,8 +466,7 @@ function Get-SqlServerInstance
 					# Get the CIM info we care about.
 					$SQLServices = $null # TODO: what does this mean?
 					$SQLServices = @(
-						Get-CimInstance -ComputerName $Computer -Namespace "root\cimv2" `
-							-OperationTimeoutSec $ConnectionTimeout -ErrorAction stop `
+						Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" -QueryDialect WQL -ErrorAction stop `
 							-Query "SELECT DisplayName, Name, PathName, StartName, StartMode, State from win32_service where Name LIKE 'MSSQL%'" |
 						# This regex matches MSSQLServer and MSSQL$*
 						Where-Object { $_.Name -match "^MSSQL(Server$|\$)" } |

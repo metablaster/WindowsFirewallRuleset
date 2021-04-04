@@ -78,20 +78,33 @@ function Split-Principal
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for principal: $Account"
 
-			if (Test-NetBiosName $Account -Force -Quiet)
+			if ($Account.Contains("\"))
 			{
-				if ($DomainName) { $Index = 0 }
-				else { $Index = 1 }
+				if (Test-NetBiosName $Account -Force)
+				{
+					if ($DomainName) { $Index = 0 }
+					else { $Index = 1 }
 
-				$Account.Split("\")[$Index]
+					$Account.Split("\")[$Index]
+					continue
+				}
 			}
-			elseif (Test-UPN $Account -Quiet)
+			elseif ($Account.Contains("@"))
 			{
-				if ($DomainName) { $Index = 1 }
-				else { $Index = 0 }
+				if (Test-UPN $Account)
+				{
+					if ($DomainName) { $Index = 1 }
+					else { $Index = 0 }
 
-				# https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
-				$Account.Split("@")[$Index]
+					# https://docs.microsoft.com/en-us/windows/win32/secauthn/user-name-formats
+					$Account.Split("@")[$Index]
+					continue
+				}
+			}
+			elseif ((Test-NetBiosName $Account -Target User -Force -Quiet) -or (Test-UPN $Account -Prefix -Quiet))
+			{
+				$Account
+				continue
 			}
 			else
 			{

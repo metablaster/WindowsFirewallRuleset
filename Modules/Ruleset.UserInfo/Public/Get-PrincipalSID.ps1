@@ -97,8 +97,8 @@ function Get-PrincipalSID
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"
 
-					$PrincipalSID = Get-CimInstance -Class Win32_UserAccount -Namespace "root\cimv2" `
-						-ComputerName $Domain -OperationTimeoutSec $ConnectionTimeout |
+					$PrincipalSID = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+						-Class Win32_UserAccount -Property Name |
 					Where-Object -Property Name -EQ $UserName | Select-Object -ExpandProperty SID
 				}
 				else

@@ -63,7 +63,7 @@ The default value is 20 seconds.
 Specifies (per link) how many times PowerShell retries a connection when a failure code between 400
 and 599, inclusive or 304 is received.
 This parameter is valid for PowerShell Core edition only.
-The default value is 2
+The default value is defined in $PSSessionOption preference variable
 
 .PARAMETER RetryIntervalSec
 Specifies the interval between retries for the connection when a failure code between 400 and
@@ -153,7 +153,7 @@ function Test-MarkdownLinks
 
 		[Parameter()]
 		[ValidateRange(1, [int32]::MaxValue)]
-		[int32] $MaximumRetryCount = 2,
+		[int32] $MaximumRetryCount = $PSSessionOption.OperationTimeout.MaxConnectionRetryCount,
 
 		[Parameter()]
 		[ValidateRange(1, [int32]::MaxValue)]

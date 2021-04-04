@@ -80,13 +80,13 @@ function Get-UserGroup
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
-				# Core: -TimeoutSeconds $ConnectionTimeout -IPv4
+				# Core: -TimeoutSeconds -IPv4
 				if (Test-TargetComputer $Computer)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-					$RemoteGroups = Get-CimInstance -Class Win32_Group -Namespace "root\cimv2" `
-						-OperationTimeoutSec $ConnectionTimeout -ComputerName $Computer |
+					$RemoteGroups = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+						-Class Win32_Group -Property LocalAccount |
 					Where-Object -Property LocalAccount -EQ "True"
 
 					if ([string]::IsNullOrEmpty($RemoteGroups))

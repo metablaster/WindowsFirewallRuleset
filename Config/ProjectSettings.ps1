@@ -74,6 +74,7 @@ TODO: Define OutputType attribute
 TODO: Set up try/catch or trap for this script only
 TODO: Deploy rules to different PolicyStore on remote host
 TODO: Check parameter naming convention
+TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -239,13 +240,27 @@ else
 	# The system default application name is wsman
 	$PSSessionApplicationName = "wsman"
 
-	# Advanced options for  a user-managed remote session in a remote session.
+	# Advanced options for a user-managed remote session
 	# HACK: These options don't seem to be respected in regard to timeouts
-	# TODO: Document used PSSessionOption options
-	# TODO: -OperationTimeout, there is global variable for this
+	# NOTE: OperationTimeout (in milliseconds), affects both the PS and CIM sessions.
+	# The maximum time that any operation in the session can run.
+	# When the interval expires, the operation fails.
+	# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out for PS sessions,
+	# for CIM sessions it means use the default timeout value for the server (usually 3 minutes)
+	# NOTE: CancelTimeout (in milliseconds), affects only PS sessions
+	# Determines how long PowerShell waits for a cancel operation (CTRL+C) to finish before ending it.
+	# The default value is 60000 (one minute). A value of 0 (zero) means no time-out.
+	# NOTE: OpenTimeout (in milliseconds), affects only PS sessions
+	# Determines how long the client computer waits for the session connection to be established.
+	# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out.
+	# NOTE: MaxConnectionRetryCount, affects PS session, Test-NetConnection and Invoke-WebRequest
+	# Specifies count of attempts to make a connection to a target host if the current attempt
+	# fails due to network issues.
+	# The default value is 5 for PS session.
+	# The default value is 4 for Test-NetConnection which specifies echo requests
 	# [System.Management.Automation.Remoting.PSSessionOption]
 	$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
-		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 360000
+		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 }
 
 if ($Develop)
@@ -358,6 +373,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			"StaticServiceStore"
 			"ConfigurableServiceStore"
 		)
+
+		# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
+		# There is global variable that controls encoding, see if it can be used
+		Set-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
+			New-CimSessionOption -Encoding "Default" -UICulture en-US -Culture en-US)
 	}
 
 	# TODO: Temporarily for debugging
@@ -372,19 +392,50 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 	}
 
-	if ($PolicyStore -notin $LocalStores)
+	$OldErrorAction = $ErrorActionPreference
+	$ErrorActionPreference = "Stop"
+
+	if ($PolicyStore -in $LocalStores)
+	{
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Creating CIM session to localhost"
+
+			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
+			if (Get-CimSession -Name LocalFirewall -ErrorAction Ignore)
+			{
+				Remove-CimSession -Name LocalFirewall
+			}
+
+			$CimOptions.UseSsl = $false
+
+			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+			# verification is accomplished using a standard WS-Identity operation.
+			# TODO: OperationTimeoutSec specified in 2 places
+			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
+				New-CimSession -ComputerName ([System.Environment]::MachineName) `
+					-SessionOption $CimOptions -Name "LocalFirewall" `
+					-OperationTimeoutSec $PSSessionOption.OperationTimeout.TotalSeconds)
+		}
+		catch
+		{
+			Remove-CimSession -Name LocalFirewall
+			Remove-Variable -Name RemoteCim -Scope Global -Force
+
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
+				-Message "Creating CIM session to localhost failed with: $($_.Exception.Message)"
+		}
+	}
+	else
 	{
 		Write-Warning -Message "Remote firewall administration is not implemented"
-
-		$OldErrorAction = $ErrorActionPreference
-		$ErrorActionPreference = "Stop"
 
 		if ($Develop)
 		{
 			# Credentials for remote machine
 			Set-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Force -Value (
 				New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-					"$PolicyStore\Admin", (Read-Host -AsSecureString -Prompt "Password")))
+					"$PolicyStore\Admin", (Read-Host -AsSecureString -Prompt "Enter password for $PolicyStore\Admin")))
 		}
 		else
 		{
@@ -420,27 +471,25 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		try
 		{
 			Write-Information -Tags "Project" -MessageData "INFO: Creating CIM session to computer '$PolicyStore'"
-			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 
 			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
 			if (Get-CimSession -Name RemoteFirewall -ErrorAction Ignore)
 			{
+				# TODO: Removing this when working on multiple computers will affect all connections
 				Remove-CimSession -Name RemoteFirewall
 			}
+
+			$CimOptions.UseSsl = $true
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
 			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
 				New-CimSession -ComputerName $PolicyStore -SessionOption $CimOptions `
-					-Credential $RemoteCredential -Name "RemoteFirewall")
-			# TODO: -OperationTimeoutSec, there is global variable for this
-
-			Remove-Variable -Name CimOptions
+					-Credential $RemoteCredential -Name "RemoteFirewall" `
+					-OperationTimeoutSec $PSSessionOption.OperationTimeout.TotalSeconds)
 		}
 		catch
 		{
-			Remove-Variable -Name CimOptions
 			Remove-CimSession -Name RemoteFirewall
 			Remove-Variable -Name RemoteCim -Scope Global -Force
 
@@ -450,6 +499,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		try
 		{
+			# TODO: For VM without external switch use -VMName
 			Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$PolicyStore'"
 			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
 				-ConfigurationName RemoteFirewall
@@ -459,10 +509,10 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 				-Message "Entering remote session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
 		}
-
-		$ErrorActionPreference = $OldErrorAction
-		Remove-Variable -Name OldErrorAction
 	}
+
+	$ErrorActionPreference = $OldErrorAction
+	Remove-Variable -Name OldErrorAction
 }
 #endregion
 
@@ -582,19 +632,11 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# The purpose of this is to test loading rules that would otherwise be skipped
 	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
 
-	# Amount of connection tests toward target policy store
-	Set-Variable -Name RetryCount -Scope Global -Option ReadOnly -Force -Value 2
-
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
 		Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
 	}
-
-	# Specifies the amount of time that the cmdlet waits for a response from target computer, where applicable
-	# the default for "Test-Connection" is 5 seconds,
-	# for Get-CimInstance the value of 0 means use the default timeout value for the server.
-	Set-Variable -Name ConnectionTimeout -Scope Global -Option ReadOnly -Force -Value 1
 
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user

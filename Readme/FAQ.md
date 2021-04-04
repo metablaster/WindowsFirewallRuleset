@@ -16,6 +16,7 @@ In addition, general questions and answers regarding this firewall.
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
+  - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
 
 ## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
 
@@ -328,6 +329,27 @@ network settings as follows:
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
 - Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
 
+## WS-Management service does not support the specified polymorphism mode
+
+Error description example:
+
+> Get-CimInstance: The WS-Management service does not support the specified polymorphism mode.
+> Try changing the polymorphism mode specified, and try again.
+
+Error resolution:
+
+> The Web Services Management Protocol Extensions for Windows Vista service MUST return instances of
+> both base and derived classes.
+> Each returned instance MUST contain the properties of the base class.
+> Each returned instance MAY omit the properties from the derived classes and MAY set the instance
+> type of derived classes to the base class.
+
+[PolymorphismMode][winrm polymorphism]
+
+Hint:
+
+Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
+
 [Table of Contents](#table-of-contents)
 
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
@@ -339,3 +361,4 @@ network settings as follows:
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
 [psremoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1 "Visit Microsoft docs"
 [remote commands]: https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands?view=powershell-7.1 "Visit Microsoft docs"
+[winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
