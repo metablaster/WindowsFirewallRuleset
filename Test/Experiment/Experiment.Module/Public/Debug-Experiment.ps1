@@ -59,7 +59,11 @@ function Debug-Experiment
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Test message $Param"
+	$DebugPreference = "Continue"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Script module test"
+
+	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" | Select-Object CSName, Caption | Format-Table
+	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" -CimSession $RemoteCIM | Select-Object CSName, Caption | Format-Table
 }
 
 # Template variable

@@ -77,12 +77,16 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 [OutputType([void])]
 param (
 	[Parameter()]
-	[switch] $Force
+	[switch] $Force,
+
+	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain
 )
 
 #region Initialization
 & $PSScriptRoot\Unblock-Project.ps1
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore $Domain
 
 Initialize-Project -Strict
 

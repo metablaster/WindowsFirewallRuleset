@@ -21,7 +21,8 @@
 		120
 	],
 	"workbench.colorCustomizations": {
-		"editorRuler.foreground": "#4063ff"
+		"editorRuler.foreground": "#4063ff",
+		"tab.activeBorder": "#ff0000"
 	},
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,

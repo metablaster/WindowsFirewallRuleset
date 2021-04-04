@@ -54,26 +54,33 @@ param (
 	[Parameter()]
 	[switch] $Force,
 
-	[Parameter(ValueFromPipeline = $true)]
-	[string] $Param
+	[Parameter()]
+	[Alias("ComputerName", "CN", "PolicyStore")]
+	[string] $Domain
 )
 
 begin
 {
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore $Domain
 	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
-	Write-Debug -Message "[$ThisScript] Test message"
-	Debug-Experiment -Debug
+	$DebugPreference = "Continue"
+	Write-Debug -Message "[$ThisScript] Run module function"
+	Debug-Experiment # -Debug
 }
 
 process
 {
-	$InformationPreference = "Continue"
-	Write-Information -Tags "Test" -MessageData "INFO: $Param"
+	Write-Debug -Message "INFO: Run script function"
+
+	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" | Select-Object CSName, Caption | Format-Table
+	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" -CimSession $RemoteCIM | Select-Object CSName, Caption | Format-Table
 }
 
 end
 {
+	Exit-PSSession
+	Remove-CimSession -Name RemoteFirewall
+
 	Update-Log
 }

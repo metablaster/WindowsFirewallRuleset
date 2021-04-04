@@ -71,7 +71,8 @@ Modifications by metablaster January 2021:
 Function interface reworked by removing unnecesarry parameter and changin param block
 Simplified logic to validate credential based on context type
 Added links, inputs, outputs and notes to comment based help
-TODO: Does not seem to work on LAN
+TODO: Does not seem to work on LAN, try with Domain\User + pwd and:
+https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/create-inbound-rules-to-support-rpc
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md

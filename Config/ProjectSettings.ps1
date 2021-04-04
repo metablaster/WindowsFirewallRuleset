@@ -40,6 +40,9 @@ In this file project settings and preferences are set, these are grouped into
 .PARAMETER Cmdlet
 PSCmdlet object of the calling script
 
+.PARAMETER TargetHost
+Target host of policy store name
+
 .PARAMETER InModule
 Script modules must call this script with this parameter
 
@@ -69,6 +72,17 @@ TODO: Some version variables enabled for module initialization are needed in sev
 such as PS edition, PS version etc. and should be always available
 TODO: Define OutputType attribute
 TODO: Set up try/catch or trap for this script only
+TODO: Deploy rules to different PolicyStore on remote host
+TODO: Check parameter naming convention
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsession
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance
 #>
 
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive")]
@@ -78,6 +92,10 @@ param (
 	[ValidateScript( { $_.GetType().FullName -eq "System.Management.Automation.PSScriptCmdlet" })]
 	[System.Management.Automation.PSCmdlet]	$Cmdlet,
 
+	[Parameter(ParameterSetName = "Script")]
+	[Alias("ComputerName", "CN", "Domain", "PolicyStore")]
+	[string] $TargetHost,
+
 	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
 	[ValidateScript( { $_ -eq $true } )]
 	[switch] $InModule,
@@ -85,116 +103,6 @@ param (
 	[Parameter()]
 	[switch] $ListPreference
 )
-
-#region Remote session initialization:
-if (!(Get-Variable -Name CheckRemoteInit -Scope Global -ErrorAction Ignore))
-{
-	# check if removable variables already initialized, do not modify!
-	New-Variable -Name CheckRemoteInit -Scope Global -Option Constant $null
-
-	# Machine where to apply rules (default: Local Group Policy)
-	New-Variable -Name PolicyStore -Scope Global -Option Constant "VM-PRO" # ([System.Environment]::MachineName)
-
-	# Policy stores on local computer
-	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
-		([System.Environment]::MachineName)
-		"PersistentStore"
-		"ActiveStore"
-		"RSOP"
-		"SystemDefaults"
-		"StaticServiceStore"
-		"ConfigurableServiceStore"
-	)
-
-	# If you changed PolicyStore variable, but the project is not yet ready for remote administration
-	if ($PolicyStore -notin $LocalStores)
-	{
-		Write-Warning -Message "Remote firewall administration is not implemented" -WA "Continue"
-
-		# Credentials for remote machine
-		New-Variable -Name RemoteCredential -Scope Global -Option Constant -Value (
-			Get-Credential -Message "Credentials are required to access $PolicyStore")
-
-		try
-		{
-			Write-Information -Tags "Project" -MessageData "Testing Windows remote management service on computer: '$PolicyStore'" -INFA "Continue"
-			Test-WSMan -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential -Authentication "Default" -EA Stop | Out-Null
-		}
-		catch
-		{
-			Write-Error -Category ConnectionError -TargetObject $PolicyStore -EA "Continue" `
-				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
-
-			return
-		}
-
-		try
-		{
-			Write-Information -Tags "Project" -MessageData "Entering remote session to computer: '$PolicyStore'" -INFA "Continue"
-			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
-				-ConfigurationName RemoteFirewall -EA Stop
-		}
-		catch
-		{
-			Write-Error -Category ConnectionError -TargetObject $PolicyStore -EA "Continue" `
-				-Message "Entering remote session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
-
-			return
-		}
-	}
-}
-#endregion
-
-#region Initialization
-# Name of this script for debugging messages, do not modify!
-Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
-
-# Calling script name, to be used for Write-* operations
-if ($PSCmdlet.ParameterSetName -eq "Module")
-{
-	New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Split-Path -Path (Get-PSCallStack)[1].ScriptName -Leaf) -replace "\.\w{2,3}1$") -EA Stop
-	Write-Debug -Message "[$SettingsScript] Caller = $ThisModule ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-}
-else
-{
-	# Not constant because of scripts which dot source format files more than once per session, and for unit testing
-	New-Variable -Name ThisScript -Scope Private -Option ReadOnly -Force -Value ($Cmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$") -EA Stop
-	Write-Debug -Message "[$SettingsScript] Caller = $ThisScript ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-}
-
-if ($MyInvocation.InvocationName -ne ".")
-{
-	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
-		-Message "$SettingsScript script must be dot sourced"
-	exit
-}
-
-# Set to true to enable development features, it does following at a minimum:
-# 1. Forces reloading modules and removable variables.
-# 2. Loads troubleshooting rules defined in Temporary.ps1
-# 3. Performs additional requirements checks needed or recommended for development
-# 4. Enables some disabled unit tests and disables logging
-# 5. Enables setting preference variables for modules
-# NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
-
-if ($Develop)
-{
-	# The Set-PSDebug cmdlet turns script debugging features on and off, sets the trace level, and toggles strict mode.
-	# Strict: Turns on strict mode for the global scope, this is equivalent to Set-StrictMode -Version 1
-	# Trace 0: Turn script tracing off.
-	# Trace 1: each line of script is traced as it runs.
-	# Trace 2: variable assignments, function calls, and script calls are also traced.
-	# Step: You're prompted before each line of the script runs.
-	Set-PSDebug -Strict -Trace 0
-}
-
-# Overrides version set by Set-PSDebug
-# The Set-StrictMode configures strict mode for the current scope and all child scopes
-# Use it in a script or function to override the setting inherited from the global scope.
-# NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
-Set-StrictMode -Version Latest
-#endregion
 
 #region Preference variables
 
@@ -334,16 +242,10 @@ else
 	# Advanced options for  a user-managed remote session in a remote session.
 	# HACK: These options don't seem to be respected in regard to timeouts
 	# TODO: Document used PSSessionOption options
+	# TODO: -OperationTimeout, there is global variable for this
 	# [System.Management.Automation.Remoting.PSSessionOption]
 	$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
 		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 360000
-}
-
-if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
-{
-	# Repository root directory, reallocating scripts should be easy if root directory is constant
-	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 }
 
 if ($Develop)
@@ -377,18 +279,202 @@ if ($Develop)
 
 	# Logs command errors
 	$LogCommandHealthEvent = $false
+}
+#endregion
 
-	if (!$InModule)
+#region Initialization
+# Name of this script for debugging messages, do not modify!
+Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+
+# Calling script name, to be used for Write-* operations
+if ($PSCmdlet.ParameterSetName -eq "Module")
+{
+	New-Variable -Name ThisModule -Scope Script -Option ReadOnly -Force -Value ((Split-Path -Path (Get-PSCallStack)[1].ScriptName -Leaf) -replace "\.\w{2,3}1$")
+	Write-Debug -Message "[$SettingsScript] Caller = $ThisModule ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+}
+else
+{
+	# Not constant because of scripts which dot source format files more than once per session, and for unit testing
+	New-Variable -Name ThisScript -Scope Private -Option ReadOnly -Force -Value ($Cmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$")
+	Write-Debug -Message "[$SettingsScript] Caller = $ThisScript ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+}
+
+if ($MyInvocation.InvocationName -ne ".")
+{
+	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
+		-Message "$SettingsScript script must be dot sourced"
+}
+
+# Set to true to enable development features, it does following at a minimum:
+# 1. Forces reloading modules and removable variables.
+# 2. Loads troubleshooting rules defined in Temporary.ps1
+# 3. Performs additional requirements checks needed or recommended for development
+# 4. Enables some disabled unit tests and disables logging
+# 5. Enables setting preference variables for modules
+# NOTE: If changed to $true, the change requires PowerShell restart
+Set-Variable -Name Develop -Scope Global -Value $true
+
+if ($Develop)
+{
+	# The Set-PSDebug cmdlet turns script debugging features on and off, sets the trace level, and toggles strict mode.
+	# Strict: Turns on strict mode for the global scope, this is equivalent to Set-StrictMode -Version 1
+	# Trace 0: Turn script tracing off.
+	# Trace 1: each line of script is traced as it runs.
+	# Trace 2: variable assignments, function calls, and script calls are also traced.
+	# Step: You're prompted before each line of the script runs.
+	Set-PSDebug -Strict -Trace 0
+}
+
+# Overrides version set by Set-PSDebug
+# The Set-StrictMode configures strict mode for the current scope and all child scopes
+# Use it in a script or function to override the setting inherited from the global scope.
+# NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
+Set-StrictMode -Version Latest
+#endregion
+
+#region Remote session initialization
+if ($PSCmdlet.ParameterSetName -eq "Script")
+{
+	if (!(Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore))
 	{
-		# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
-		# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
-		Get-Module -Name Ruleset.* | ForEach-Object {
-			Write-Debug -Message "[$SettingsScript] Removing module $_"
-			Remove-Module -Name $_ -ErrorAction Stop
+		# Target machine onto which to deploy firewall (default: Local Group Policy)
+		if ([string]::IsNullOrEmpty($TargetHost))
+		{
+			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 		}
+		else
+		{
+			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $TargetHost
+			$Cmdlet.MyInvocation.BoundParameters.Remove("TargetHost") | Out-Null
+		}
+
+		# Policy stores on local computer
+		New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
+			([System.Environment]::MachineName)
+			"PersistentStore"
+			"ActiveStore"
+			"RSOP"
+			"SystemDefaults"
+			"StaticServiceStore"
+			"ConfigurableServiceStore"
+		)
+	}
+
+	# TODO: Temporarily for debugging
+	if ($Cmdlet.MyInvocation.BoundParameters.Keys -and
+		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("TargetHost"))
+	{
+		Write-Debug -Message "Parameter TargetHost not removed '$TargetHost'" -Debug
+
+		if ($Cmdlet.MyInvocation.BoundParameters["TargetHost"] -ne $PolicyStore)
+		{
+			Write-Debug -Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'" -Debug
+		}
+	}
+
+	if ($PolicyStore -notin $LocalStores)
+	{
+		Write-Warning -Message "Remote firewall administration is not implemented"
+
+		$OldErrorAction = $ErrorActionPreference
+		$ErrorActionPreference = "Stop"
+
+		if ($Develop)
+		{
+			# Credentials for remote machine
+			Set-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Force -Value (
+				New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
+					"$PolicyStore\Admin", (Read-Host -AsSecureString -Prompt "Password")))
+		}
+		else
+		{
+			# Credentials for remote machine
+			# TODO: -Credential param, specify SERVER\UserName
+			Set-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Force -Value (
+				Get-Credential -Message "Credentials are required to access host '$PolicyStore'")
+		}
+
+		if (!$RemoteCredential)
+		{
+			# Will happen if credential request was dismissed using ESC key.
+			Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$PolicyStore'"
+		}
+		elseif ($RemoteCredential.Password.Length -eq 0)
+		{
+			# HACK: Will ask for password but won't be recorded
+			Write-Error -Category InvalidData -Message "User '$($RemoteCredential.UserName)' must have a password"
+			Remove-Variable -Name RemoteCredential -Scope Global -Force
+		}
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Testing Windows remote management service on computer '$PolicyStore'"
+			Test-WSMan -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential -Authentication "Default" | Out-Null
+		}
+		catch
+		{
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
+				-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+		}
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Creating CIM session to computer '$PolicyStore'"
+			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
+			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+
+			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
+			if (Get-CimSession -Name RemoteFirewall -ErrorAction Ignore)
+			{
+				Remove-CimSession -Name RemoteFirewall
+			}
+
+			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+			# verification is accomplished using a standard WS-Identity operation.
+			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
+				New-CimSession -ComputerName $PolicyStore -SessionOption $CimOptions `
+					-Credential $RemoteCredential -Name "RemoteFirewall")
+			# TODO: -OperationTimeoutSec, there is global variable for this
+
+			Remove-Variable -Name CimOptions
+		}
+		catch
+		{
+			Remove-Variable -Name CimOptions
+			Remove-CimSession -Name RemoteFirewall
+			Remove-Variable -Name RemoteCim -Scope Global -Force
+
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
+				-Message "Creating CIM session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+		}
+
+		try
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$PolicyStore'"
+			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
+				-ConfigurationName RemoteFirewall
+		}
+		catch
+		{
+			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
+				-Message "Entering remote session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+		}
+
+		$ErrorActionPreference = $OldErrorAction
+		Remove-Variable -Name OldErrorAction
 	}
 }
 #endregion
+
+if ($Develop -and !$InModule)
+{
+	# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
+	# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
+	Get-Module -Name Ruleset.* | ForEach-Object {
+		Write-Debug -Message "[$SettingsScript] Removing module $_"
+		Remove-Module -Name $_ -ErrorAction Stop
+	}
+}
 
 #region Removable variables, these can be modified as follows:
 # 1. By project code at any time
@@ -399,7 +485,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 {
 	Write-Debug -Message "[$SettingsScript] Setting up removable variables"
 
-	# check if removable variables already initialized, do not modify!
+	# Check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckRemovableVariables -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Set to false to disable logging errors
@@ -459,7 +545,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -553,6 +639,10 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setting up constant variables"
+
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
 	# check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
