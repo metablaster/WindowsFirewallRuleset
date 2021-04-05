@@ -28,15 +28,33 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Test target computer (policy store) to which to deploy firewall
+Test target computer (policy store) on which to deploy firewall
 
 .DESCRIPTION
-The purpose of this function is to reduce checks, depending on whether PowerShell
-Core or Desktop edition is used, since parameters for Test-Connection are not the same
-for both PowerShell editions.
+The purpose of this function is network test consistency, depending on whether PowerShell
+Core or Desktop edition is used and depending on kind of test needed, since parameters are
+different for Test-Connection, Test-NetConnection, Test-WSMan, PS edition etc.
 
 .PARAMETER Domain
-Target computer which to test
+Target computer which to test for connectivity
+
+.PARAMETER Protocol
+Specify the kind of a test to perform.
+Acceptable values are WSMan and Ping
+The default is WSMan.
+
+.PARAMETER Credential
+Specify credentials required for authentication
+
+.PARAMETER Authentication
+Specify Authentication kind:
+None, no authentication is performed, request is anonymous.
+Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
+Default, use the authentication method implemented by the WS-Management protocol.
+Digest, a challenge-response scheme that uses a server-specified data string for the challenge.
+Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
+Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
+CredSSP, use Credential Security Support Provider (CredSSP) authentication.
 
 .PARAMETER Retry
 Specifies the number of echo requests to send.
@@ -50,25 +68,28 @@ Valid only for PowerShell Core.
 The default value is 2 seconds.
 
 .EXAMPLE
-PS> Test-TargetComputer "COMPUTERNAME"
+PS> Test-TargetComputer "Server1" -Credential (Get-Credential)
 
 .EXAMPLE
-PS> Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
+PS> Test-TargetComputer "Server2" -Count 2 -Timeout 1 -Protocol Ping
+
+.EXAMPLE
+PS> Test-TargetComputer "Server3" -Count 2 -Timeout 1
 
 .INPUTS
 None. You cannot pipe objects to Test-TargetComputer
 
 .OUTPUTS
-[bool] false or true if target host is responsive
+[bool] True if target host is responsive, false otherwise
 
 .NOTES
-TODO: partially avoiding error messages, check all references which handle errors (code bloat)
+TODO: Partially avoiding error messages, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)
-TODO: Credential request for remote policy store should be initialized here
+TODO: Test CIM and DCOM
 #>
 function Test-TargetComputer
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Desktop",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "WSMan",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-TargetComputer.md")]
 	[OutputType([bool])]
 	param (
@@ -77,10 +98,21 @@ function Test-TargetComputer
 		[string] $Domain,
 
 		[Parameter()]
-		[ValidateRange(1, [int16]::MaxValue)]
-		[int16] $Retry = $PSSessionOption.OperationTimeout.MaxConnectionRetryCount,
+		[ValidateSet("WSMan", "Ping")]
+		[string] $Protocol = "WSMan",
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "WSMan")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "WSMan")]
+		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
+		[string] $Authentication = "Default",
+
+		[Parameter(ParameterSetName = "Ping")]
+		[ValidateRange(1, [int16]::MaxValue)]
+		[int16] $Retry = $PSSessionOption.MaxConnectionRetryCount,
+
+		[Parameter(ParameterSetName = "Ping")]
 		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" } )]
 		[ValidateRange(1, [int16]::MaxValue)]
 		[int16] $Timeout = $null
@@ -88,37 +120,75 @@ function Test-TargetComputer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Be quiet for localhost
-	if ($Domain -ne [System.Environment]::MachineName)
+	if ($Protocol -eq "WSMan")
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Contacting computer $Domain"
-	}
-
-	# Test parameters depend on PowerShell edition
-	# TODO: Changes not reflected in calling code
-	if ($PSVersionTable.PSEdition -eq "Core")
-	{
-		# TODO: It will be set to 0
-		if (!$Timeout)
-		{
-			# TODO: Can't modify Timeout parameter
-			# TODO: Use $PSSessionOption to control this
-			# NOTE: The default value for Test-Connection is 5 seconds
-			$Timeout = 2
+		$Params = @{
+			UseSSL = $CimOptions.UseSsl
+			ComputerName = $Domain
+			ErrorAction = "SilentlyContinue"
 		}
 
-		if ($ConnectionIPv4)
+		if ($Authentication -ne "None")
 		{
-			$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv4 -EA Stop
+			# NOTE: Otherwise request is sent to the remote computer anonymously,
+			# without using authentication, it returns no information that is specific to
+			# the operating-system version
+			$Params["Authentication"] = $Authentication
 		}
-		else
+
+		if ($Credential)
 		{
-			$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv6 -EA Stop
+			$Params["Credential"] = $Credential
 		}
+		elseif ($Domain -ne [System.Environment]::MachineName)
+		{
+			$Params["Credential"] = $RemoteCredential
+		}
+
+		# [System.Xml.XmlElement]
+		$Status = Test-WSMan @Params
 	}
 	else
 	{
-		$Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
+		# Be quiet for localhost
+		if ($Domain -ne [System.Environment]::MachineName)
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Contacting computer $Domain"
+		}
+
+		# Test parameters depend on PowerShell edition
+		# TODO: Changes not reflected in calling code
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: It will be set to 0
+			if (!$Timeout)
+			{
+				# TODO: Can't modify Timeout parameter
+				# TODO: Use $PSSessionOption to control this
+				# NOTE: The default value for Test-Connection is 5 seconds
+				$Timeout = 2
+			}
+
+			if ($ConnectionIPv4)
+			{
+				# [ManagementObject]
+				$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv4 -EA Stop
+			}
+			else
+			{
+				$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv6 -EA Stop
+			}
+		}
+		else
+		{
+			# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
+			# if you test NetBios name it will fail because NetBios works only over IPv4
+			# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
+
+			# [NetConnectionResults]
+			$Status = Test-NetConnection -ComputerName $Domain |
+			Select-Object -ExpandProperty PingSucceeded
+		}
 	}
 
 	if (!$Status -and ($Domain -ne [System.Environment]::MachineName))
@@ -126,5 +196,5 @@ function Test-TargetComputer
 		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer: $Domain"
 	}
 
-	return $Status
+	return $null -ne $Status
 }

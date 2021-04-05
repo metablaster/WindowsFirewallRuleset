@@ -1,7 +1,7 @@
 
 # Scripts directory
 
-Contains following project scripts which are not part of modules
+Contains scripts which are not part of modules as follows:
 
 | Core scripts           | Description                                                        |
 | ---------------------- | ------------------------------------------------------------------ |
@@ -13,6 +13,17 @@ Contains following project scripts which are not part of modules
 | Restart-Network.ps1    | Restart or reset network without the need for reboot               |
 | Restore-Firewall.ps1   | Import all exported firewall rules into GPO policy store           |
 | Unblock-Project.ps1    | Unblock all files in repository (called by "Deploy-Firewall.ps1")  |
+
+---
+
+| Remoting scripts            | Description                                                   |
+| --------------------------- | ------------------------------------------------------------- |
+| Deploy-SshKey.ps1           | Deploy public SSH key to remote host using SSH                |
+| Enable-WinRMServer.ps1      | Configure WinRM server for CIM and PowerShell remoting        |
+| Install-SslCertificate.ps1  | Install SSL certificate for PowerShell and CIM remoting       |
+| Set-WinRMClient.ps1         | Configure client computer for WinRM remoting                  |
+
+---
 
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
@@ -28,10 +39,13 @@ Contains following project scripts which are not part of modules
 | Select-HiddenProperty.ps1   | Get a list of hidden properties for specified firewall rule group    |
 | Update-HelpContent.ps1      | Generate new or update existing help files for all project modules   |
 
+---
 | Experimental scripts  | Description                                                          |
 | --------------------- | -------------------------------------------------------------------- |
 | Start-PacketTrace.ps1 | Start capturing network traffic into an *.etl file for analysis      |
 | Stop-PacketTrace.ps1  | Stop capturing traffic previously started with Start-PacketTrace.ps1 |
+
+---
 
 **Warning:**\
 Export\Import of firewall rules might take a lot of time, it is recommended to either customize these\

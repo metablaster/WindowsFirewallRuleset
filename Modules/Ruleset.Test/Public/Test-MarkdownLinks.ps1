@@ -153,7 +153,7 @@ function Test-MarkdownLinks
 
 		[Parameter()]
 		[ValidateRange(1, [int32]::MaxValue)]
-		[int32] $MaximumRetryCount = $PSSessionOption.OperationTimeout.MaxConnectionRetryCount,
+		[int32] $MaximumRetryCount = $PSSessionOption.MaxConnectionRetryCount,
 
 		[Parameter()]
 		[ValidateRange(1, [int32]::MaxValue)]

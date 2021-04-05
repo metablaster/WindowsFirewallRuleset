@@ -44,7 +44,7 @@ Configures local machine to accept remote CIM and PowerShell requests using WS-M
 Enabling PS remoting includes starting the WinRM service
 Setting the startup type for the WinRM service to Automatic
 Creating default and custom session configurations
-Creating listeners for HTTP and\or HTTPS connections
+Creating listeners for HTTPS or\and HTTPS connections
 
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
@@ -53,7 +53,7 @@ By default only HTTPS is configured.
 .PARAMETER CertFile
 Optionally specify custom certificate file.
 By default new self signed certifcate is made and trusted if no suitable certificate exists.
-For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
+This must be PFX file.
 
 .PARAMETER CertThumbPrint
 Optionally specify certificate thumbprint which is to be used for SSL.
@@ -110,6 +110,7 @@ TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 TODO: Client settings are missing for server
+TODO: Not all optional settings are configured
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

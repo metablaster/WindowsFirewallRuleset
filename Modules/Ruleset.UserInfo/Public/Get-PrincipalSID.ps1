@@ -98,7 +98,7 @@ function Get-PrincipalSID
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"
 
 					$PrincipalSID = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
-						-Class Win32_UserAccount -Property Name |
+						-Class Win32_UserAccount -Property Name, SID |
 					Where-Object -Property Name -EQ $UserName | Select-Object -ExpandProperty SID
 				}
 				else
@@ -106,7 +106,7 @@ function Get-PrincipalSID
 					return
 				}
 			}
-			elseif ($Domain -eq [System.Environment]::MachineName -or $IsKnownDomain)
+			elseif (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 

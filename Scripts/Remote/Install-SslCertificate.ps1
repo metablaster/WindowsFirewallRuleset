@@ -30,14 +30,14 @@ SOFTWARE.
 
 .VERSION 0.10.1
 
-.GUID 4c91358a-6a2e-424a-85a7-7b0419284216
+.GUID 40002e43-f0b1-4afa-b0fb-904896d28af5
 
 .AUTHOR metablaster zebal@protonmail.com
 #>
 
 <#
 .SYNOPSIS
-Install SSL certificate for PS and CIM remoting
+Install SSL certificate for CIM and PowerShell remoting
 
 .DESCRIPTION
 Install SSL certificate to be used for encrypted PowerShell remoting.
@@ -52,7 +52,7 @@ and used for client authentication.
 .PARAMETER Domain
 Specify host name which is to be managed remotely from this machine.
 This parameter is required only when setting up client computer.
-For server -Target this default to server NetBios host name.
+For server -Target this defaults to server NetBios host name.
 
 .PARAMETER Target
 Specify current system role which controls script behavior .
@@ -83,7 +83,7 @@ PS> .\Install-SslCertificate.ps1 -Target Client -CertFile C:\Cert\Server.cer
 Installs specified SSL certificate on client computer.
 
 .EXAMPLE
-PS> .\Install-SslCertificate.ps1 -Target Server -CertThumbPrint
+PS> .\Install-SslCertificate.ps1 -Target Server -CertThumbPrint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
 
 Installs existing SSL certificate with specified thumbprint on the server computer,
 public key is exported to be used on client computer.

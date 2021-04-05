@@ -54,14 +54,18 @@ param (
 	[Parameter()]
 	[switch] $Force,
 
+	[Parameter(Mandatory = $true)]
+	[Alias("UserName")]
+	[string[]] $User,
+
 	[Parameter()]
 	[Alias("ComputerName", "CN", "PolicyStore")]
-	[string] $Domain
+	[string] $Domain = [System.Environment]::MachineName
 )
 
 begin
 {
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore $Domain
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
 	$DebugPreference = "Continue"
@@ -79,13 +83,19 @@ process
 	Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" -Class Win32_OperatingSystem |
 	Select-Object CSName, Caption | Format-Table
 
-	Get-PrincipalSID -User "User" -Domain $Domain -CIM
+	if ($Domain -eq ([System.Environment]::MachineName))
+	{
+		Get-PrincipalSID -User $User -Domain $Domain
+	}
+
+	Get-PrincipalSID -User $User -Domain $Domain -CIM
 }
 
 end
 {
 	Exit-PSSession
-	Remove-CimSession -Name RemoteFirewall
+	Get-CimSession -Name RemoteFirewall -EA Ignore | Remove-CimSession
+	Get-CimSession -Name LocalFirewall -EA Ignore | Remove-CimSession
 
 	Update-Log
 }

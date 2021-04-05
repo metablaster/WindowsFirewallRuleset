@@ -165,6 +165,8 @@ Also few commandlets from these modules:
 
 [UNC Path](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dfsc/149a3039-98ce-491a-9268-2f5ddef08192)
 
+[NetBIOS over TCP/IP](https://docs.microsoft.com/en-us/previous-versions//bb727013(v=technet.10))
+
 ## Troubleshooting
 
 [Advanced troubleshooting for TCP/IP issues](https://docs.microsoft.com/en-us/windows/client-management/troubleshoot-tcpip)

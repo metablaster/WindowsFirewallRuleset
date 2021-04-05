@@ -40,19 +40,33 @@ If you would like to see fresh changes done since last release you can do so on 
     - Store Apps,
     - MS Office
 
-  - Fixed bug with WpsPushUserService rule for multiple standard users
   - Added rules for PowerShell remoting
   - Added rules for VSCode remote SSH
 
 - Scripts
 
-  - Updated `ProjectSettings\Config` with updated program versions and remoting
-  - Script to upload and set SSH key to server for remote debugging with VSCode over SSH
-  - Script to configure PowerShell remoting over HTTPS
+  - Reworked `ProjectSettings\Config` for remoting
+
+- New features
+
+  - `Deploy-SshKey.ps1` script to upload and set SSH key to server for remote debugging with VSCode
+    over SSH
+  - `Enable-WinRMServer.ps1` script to configure WinRM server for remoting
+  - `Set-WinRMClient.ps1` script to configure client for remoting
+  - `Install-SslCertificate.ps1` script to install, create and export SSL certificate for remoting
+
+- Modules
+
+  - `Test-TargetComputer` function now does WSMan test by default and ping test optinally
 
 - Documentation
 
   - Revisited few docs for clarity
+
+- Bugfix
+
+  - Fixed bug with WpsPushUserService rule for multiple standard users
+  - Fixed issue with `Test-TargetComputer` when used in Windows PowerShell for NetBIOS name resolution
 
 - Other
 

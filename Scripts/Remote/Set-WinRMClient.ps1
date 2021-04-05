@@ -48,15 +48,13 @@ By default only HTTPS is configured.
 
 .PARAMETER Domain
 Computer name which is to be managed remotely.
-Certificate store is searched for certificate with CN entry set to this name,
-If not found, default repository location (\Exports) is searched for DER encoded CER file,
-named same as -Domain value.
-Otherwise specify CertFile to location of custom certificate.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
-By default new self signed certifcate is made and trusted if no suitable certificate exists.
-For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
+By default certificate store is searched for certificate with CN entry set to value specified by
+-Domain parameter.
+If not found, default repository location (\Exports) is searched for DER encoded CER file,
+Certificate file must be DER encoded CER file
 
 .PARAMETER CertThumbPrint
 Optionally specify certificate thumbprint which is to be used for SSL.
@@ -111,6 +109,7 @@ TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 TODO: Server settings are missing for client
+TODO: Not all optional settings are configured
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

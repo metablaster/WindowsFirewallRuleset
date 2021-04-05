@@ -40,8 +40,8 @@ In this file project settings and preferences are set, these are grouped into
 .PARAMETER Cmdlet
 PSCmdlet object of the calling script
 
-.PARAMETER TargetHost
-Target host of policy store name
+.PARAMETER Domain
+Target host or policy store name
 
 .PARAMETER InModule
 Script modules must call this script with this parameter
@@ -76,6 +76,7 @@ TODO: Deploy rules to different PolicyStore on remote host
 TODO: Check parameter naming convention
 TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
 HACK: This script become too big and too depending, move non variable code somewhere else
+TODO: Domain parameter potentially dangerous because of dot sourcing
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -95,8 +96,7 @@ param (
 	[System.Management.Automation.PSCmdlet]	$Cmdlet,
 
 	[Parameter(ParameterSetName = "Script")]
-	[Alias("ComputerName", "CN", "Domain", "PolicyStore")]
-	[string] $TargetHost,
+	[string] $Domain,
 
 	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
 	[ValidateScript( { $_ -eq $true } )]
@@ -355,14 +355,14 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	if (!(Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore))
 	{
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
-		if ([string]::IsNullOrEmpty($TargetHost))
+		if ([string]::IsNullOrEmpty($Domain))
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 		}
 		else
 		{
-			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $TargetHost
-			$Cmdlet.MyInvocation.BoundParameters.Remove("TargetHost") | Out-Null
+			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $Domain
+			$Cmdlet.MyInvocation.BoundParameters.Remove("Domain") | Out-Null
 		}
 
 		# Policy stores on local computer
@@ -395,20 +395,21 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		Remove-Variable -Name WinRMService
 
 		# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-		# There is global variable that controls encoding, see if it can be used
+		# There is global variable that controls encoding, see if it can be used here
 		New-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
 			New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US)
 	}
 
 	# TODO: Temporarily for debugging
 	if ($Cmdlet.MyInvocation.BoundParameters.Keys -and
-		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("TargetHost"))
+		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Domain"))
 	{
-		Write-Debug -Message "Parameter TargetHost not removed '$TargetHost'" -Debug
+		# Can be issue with dot sourcing
+		Write-Warning -Message "Parameter Domain not removed '$Domain'"
 
-		if ($Cmdlet.MyInvocation.BoundParameters["TargetHost"] -ne $PolicyStore)
+		if ($Cmdlet.MyInvocation.BoundParameters["Domain"] -ne $PolicyStore)
 		{
-			Write-Debug -Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'" -Debug
+			Write-Debug -Message "Unexpected computer name '$Domain', remote already set to '$PolicyStore'" -Debug
 		}
 	}
 
@@ -417,6 +418,12 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 	if ($PolicyStore -in $LocalStores)
 	{
+		if ($PolicyStore -ne ([System.Environment]::MachineName))
+		{
+			Write-Error -Category NotImplemented -TargetObject $PolicyStore `
+				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
+		}
+
 		try
 		{
 			Write-Verbose -Message "[$SettingsScript] Creating CIM session to localhost"
@@ -427,9 +434,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				Remove-CimSession -Name LocalFirewall
 			}
 
+			# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
+			$CimOptions.UseSsl = $false
+
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
-			# TODO: OperationTimeoutSec specified in 2 places
 			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
 				New-CimSession -ComputerName ([System.Environment]::MachineName) `
 					-SessionOption $CimOptions -Name "LocalFirewall" `
@@ -657,6 +666,8 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
 		# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
+		# NOTE: Requests for Comments (RFCs) 1001 and 1002 define NetBIOS operation over IPv4.
+		# NetBT is not defined for IPv6.
 		Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
 	}
 
