@@ -49,7 +49,18 @@ By default only HTTPS is configured.
 .PARAMETER Domain
 Computer name which is to be managed remotely.
 Certificate store is searched for certificate with CN entry set to this name,
-If not found, certificate specified by CertFile is imported.
+If not found, default repository location (\Exports) is searched for DER encoded CER file,
+named same as -Domain value.
+Otherwise specify CertFile to location of custom certificate.
+
+.PARAMETER CertFile
+Optionally specify custom certificate file.
+By default new self signed certifcate is made and trusted if no suitable certificate exists.
+For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
+
+.PARAMETER CertThumbPrint
+Optionally specify certificate thumbprint which is to be used for SSL.
+Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER SkipTestConnection
 Skip testing configuration on completion.
@@ -120,7 +131,7 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter()]
@@ -131,6 +142,12 @@ param (
 	[Alias("ComputerName", "CN")]
 	[string] $Domain,
 
+	[Parameter(ParameterSetName = "File")]
+	[string] $CertFile,
+
+	[Parameter(ParameterSetName = "CertThumbPrint")]
+	[string] $CertThumbPrint,
+
 	[Parameter()]
 	[switch] $SkipTestConnection,
 
@@ -138,7 +155,7 @@ param (
 	[switch] $ShowConfig
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore ([System.Environment]::MachineName)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
@@ -198,7 +215,7 @@ Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 	CredSSP = $false
 }
 
-# Write-Verbose -Message "[$ThisScript] Configuring WinRM protocol options"
+# Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
 
 # TODO: WinRM protocol options (one of your networks is public) -SkipNetworkProfileCheck?
 [hashtable] $ConfigOptions = @{
@@ -209,7 +226,7 @@ Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 # Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
 
-Write-Verbose -Message "[$ThisScript] Configuring WinRM client authentication options"
+Write-Verbose -Message "[$ThisModule] Configuring WinRM client authentication options"
 
 # NOTE: Not assuming WinRM responds, contact localhost
 if (Get-CimInstance -Namespace "root\cimv2" `
@@ -235,7 +252,7 @@ catch
 
 Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
 
-Write-Verbose -Message "[$ThisScript] Configuring WinRM client options"
+Write-Verbose -Message "[$ThisModule] Configuring WinRM client options"
 [hashtable] $ClientOptions = @{
 	# Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
 	# The default value is 5000 milliseconds.
@@ -262,6 +279,16 @@ else
 }
 
 Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
+
+# SSL certificate
+[hashtable] $SSLCertParams = @{
+	Target = "Client"
+	Domain = $Domain
+}
+
+if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
+& $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams | Out-Null
 
 if (!$SkipTestConnection)
 {
@@ -305,10 +332,10 @@ if ($ShowConfig)
 
 	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
 	{
-		Write-Verbose -Message "[$ThisScript] Showing shell configuration"
+		Write-Verbose -Message "[$ThisModule] Showing shell configuration"
 		Get-Item WSMan:\localhost\Shell\*
 
-		Write-Verbose -Message "[$ThisScript] Showing plugin configuration"
+		Write-Verbose -Message "[$ThisModule] Showing plugin configuration"
 		Get-Item WSMan:\localhost\Plugin\*
 	}
 

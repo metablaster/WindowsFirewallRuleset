@@ -82,11 +82,33 @@ param (
 	[switch] $Force
 )
 
+DynamicParam
+{
+	if ($PSCmdlet.ParameterSetName -ne "ExistingParamSet")
+	{
+		$ThumbPrintAttributes = New-Object -TypeName System.Management.Automation.ParameterAttribute
+		$ThumbPrintAttributes.ParameterSetName = "DynamicParamSet"
+		$ThumbPrintAttributes.Mandatory = $false
+
+		$AttributeCollection = New-Object -Type System.Collections.ObjectModel.Collection[System.Attribute]
+		$AttributeCollection.Add($ThumbPrintAttributes)
+
+		$ThumbPrintDynamic = New-Object -TypeName System.Management.Automation.RuntimeDefinedParameter(
+			"DynamicParamName", [string], $AttributeCollection)
+
+		$ParamDictionary = New-Object -Type System.Management.Automation.RuntimeDefinedParameterDictionary
+		$ParamDictionary.Add("DynamicParamName", $ThumbPrintDynamic)
+
+		return $ParamDictionary
+	}
+}
+
 begin
 {
 	#region Initialization
 	# TODO: Adjust path to project settings
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Initialize-Project -Strict
 
 	# User prompt
@@ -118,6 +140,10 @@ process
 		# "Template MESSAGE"
 
 		$TemplateVariable
+		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("CertThumbPrint"))
+		{
+			$PSBoundParameters["DynamicParamName"]
+		}
 	}
 }
 

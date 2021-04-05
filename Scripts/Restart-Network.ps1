@@ -126,6 +126,7 @@ param (
 
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
 # User prompt
@@ -193,7 +194,7 @@ function Select-AdapterAlias
 		[string[]] $InterfaceAlias
 	)
 
-	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[CimInstance[]] $TargetAdapter = @()
 	if ($InterfaceAlias)
@@ -372,7 +373,7 @@ function Wait-Adapter
 		[uint32] $Seconds = 10
 	)
 
-	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	for ($Time = 2; $Time -le ($Seconds - $Time + 2); $Time += 2)
 	{

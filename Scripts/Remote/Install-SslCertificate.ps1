@@ -97,6 +97,7 @@ None. You cannot pipe objects to Install-SslCertificate.ps1
 .NOTES
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
+HACK: What happens when exporting a certificate that is already installed? (no error is shown)
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -129,11 +130,11 @@ param (
 	[switch] $Force
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore ([System.Environment]::MachineName)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-$CertPath = "$ProjectRoot\Exports"
+$ExportPath = "$ProjectRoot\Exports"
 
 if ($Target -eq "Server")
 {
@@ -155,12 +156,12 @@ if ([string]::IsNullOrEmpty($CertFile))
 	# Search default file name location
 	if ($Target -eq "Server")
 	{
-		$CertFile = "$CertPath\$Domain.pfx"
-		$ExportFile = "$CertPath\$Domain.cer"
+		$CertFile = "$ExportPath\$Domain.pfx"
+		$ExportFile = "$ExportPath\$Domain.cer"
 	}
 	else
 	{
-		$CertFile = "$CertPath\$Domain.cer"
+		$CertFile = "$ExportPath\$Domain.cer"
 		$ExportFile = $CertFile
 	}
 
@@ -195,7 +196,8 @@ if ([string]::IsNullOrEmpty($CertFile))
 		{
 			if (($Target -eq "Server") -and (!$Cert.HasPrivateKey))
 			{
-				Write-Error -Category OperationStopped -TargetObject $Cert -Message "Private key missing, please specify thumbprint"
+				Write-Error -Category OperationStopped -TargetObject $Cert `
+					-Message "Private key is missing for existing certificate '$Domain.cer', please specify thumbprint to select another certificate"
 			}
 			else
 			{
@@ -217,7 +219,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 		if ($Target -eq "Server")
 		{
 			$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-				"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter certificate password"))
+				"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter password for certificate $Domain.pfx"))
 
 			$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
 				-Password $CertPassword.Password -Exportable
@@ -252,7 +254,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 			-KeyUsage DigitalSignature, KeyEncipherment -KeyExportPolicy ExportableEncrypted `
 			-NotBefore $Date -NotAfter $Date.AddMonths(6)
 
-		Write-Information -Tags "Project" -MessageData "INFO: Using new certificate '$($Cert.thumbprint)'"
+		Write-Information -Tags "Project" -MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 	}
 	else
 	{
@@ -264,6 +266,8 @@ elseif (Test-Path -Path $CertFile -PathType Leaf -ErrorAction Ignore)
 	# Import certificate file from custom location
 	if ($Target -eq "Server")
 	{
+		$ExportFile = "$ExportPath\$((Split-Path -Path $CertFile -Leaf) -replace '\.pfx$').cer"
+
 		if ($CertFile.EndsWith(".pfx"))
 		{
 			$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
@@ -327,12 +331,12 @@ if ($Target -eq "Server")
 }
 
 # TODO: Should be verified or singed by custom key instead of having many trusted self signed certs
-if (!(Test-Certificate -Cert $Cert -Policy SSL))
+if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore))
 {
 	# Add public key to trusted root to trust this certificate locally
-	if ($PSCmdlet.ShouldContinue("Certificate not trusted", "Add certificate to trusted root store"))
+	if ($PSCmdlet.ShouldContinue("Add certificate to trusted root store?", "Certificate not trusted"))
 	{
-		Write-Information -Tags "Project" -MessageData "Trusting certificate '$Domain.cer'"
+		Write-Information -Tags "Project" -MessageData "Trusting certificate '$Domain.cer' with thumbprint '$($Cert.thumbprint)'"
 		Import-Certificate -FilePath $ExportFile -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
 	}
 	else

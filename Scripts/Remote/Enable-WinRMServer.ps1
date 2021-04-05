@@ -50,6 +50,15 @@ Creating listeners for HTTP and\or HTTPS connections
 Specifies listener protocol to HTTP, HTTPS or both.
 By default only HTTPS is configured.
 
+.PARAMETER CertFile
+Optionally specify custom certificate file.
+By default new self signed certifcate is made and trusted if no suitable certificate exists.
+For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
+
+.PARAMETER CertThumbPrint
+Optionally specify certificate thumbprint which is to be used for SSL.
+Use this parameter when there are multiple certificates with same DNS entries.
+
 .PARAMETER SkipTestConnection
 Skip testing configuration on completion.
 By default connection and authentication request on local WinRM server is performed.
@@ -121,12 +130,18 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter()]
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
+
+	[Parameter(ParameterSetName = "File")]
+	[string] $CertFile,
+
+	[Parameter(ParameterSetName = "ThumbPrint")]
+	[string] $CertThumbPrint,
 
 	[Parameter()]
 	[switch] $SkipTestConnection,
@@ -135,7 +150,7 @@ param (
 	[switch] $ShowConfig
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore ([System.Environment]::MachineName)
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
@@ -202,25 +217,32 @@ if (Get-CimInstance -Namespace "root\cimv2" `
 }
 
 # Remove all custom made session configurations
-Write-Verbose -Message "[$ThisScript] Removing non default session configurations"
+Write-Verbose -Message "[$ThisModule] Removing non default session configurations"
 Get-PSSessionConfiguration -Force |	Where-Object -Property Name -NotLike "Microsoft*" |
 Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
 # Disable unused built in session configurations
-Write-Verbose -Message "[$ThisScript] Disabling unneeded default session configurations"
+Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
 Disable-PSSessionConfiguration -Name Microsoft.PowerShell32
 Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 
 # Enable default configuration
-Write-Verbose -Message "[$ThisScript] Configuring WinRM server listener and session options"
+Write-Verbose -Message "[$ThisModule] Configuring WinRM server listener and session options"
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force | Out-Null
 
 if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 {
-	$Cert = & $PSScriptRoot\Install-SslCertificate.ps1 -Target Server
-	Write-Verbose -Message "[$ThisScript] Enabling session configurations"
+	# SSL certificate
+	[hashtable] $SSLCertParams = @{
+		Target = "Server"
+	}
 
+	if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+	elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
+	$Cert = & $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams
+
+	Write-Verbose -Message "[$ThisModule] Enabling session configurations"
 	# Register repository specific session configuration
 	# [Microsoft.WSMan.Management.WSManConfigContainerElement]
 	$WSManEntry = Register-PSSessionConfiguration -Path $ProjectRoot\Config\RemoteFirewall.pssc `
@@ -230,14 +252,14 @@ if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 	#-RunAsCredential $RemoteCredential -UseSharedProcess `
 	#-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 
-	Write-Verbose -Message "[$ThisScript] Session configuration '$($WSManEntry.Name)' registered successfully"
+	Write-Verbose -Message "[$ThisModule] Session configuration '$($WSManEntry.Name)' registered successfully"
 
 	# Remove the Deny_All setting from the security descriptor of the affected session
 	# The local computer must include session configurations for remote commands.
 	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
 	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force | Out-Null
 
-	Write-Verbose -Message "[$ThisScript] Configuring WinRM HTTPS server listener options"
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM HTTPS server listener options"
 
 	# Add new HTTPS listener
 	New-Item -Path WSMan:\localhost\listener -Transport HTTPS -Address * -Hostname $Domain `
@@ -249,18 +271,18 @@ if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 		# 	-ValueSet @{ Hostname = $Domain; Enabled = "true"; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
 
 		# Disable HTTP listener created by Microsoft.PowerShell session configuration
-		Write-Verbose -Message "[$ThisScript] Disabling all HTTP listeners"
+		Write-Verbose -Message "[$ThisModule] Disabling all HTTP listeners"
 		Set-WSManInstance -ResourceURI winrm/config/listener -ValueSet @{ Enabled = $false } `
 			-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 	}
 }
 
-Write-Verbose -Message "[$ThisScript] Configuring WinRM server authentication options"
+Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 
 # TODO: Test registry fix for cases when Negotiate is disabled
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
-Write-Verbose -Message "[$ThisScript] Configuring WinRM server options"
+Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 [hashtable] $ServerOptions = @{
 	AllowRemoteAccess = $true
 
@@ -286,7 +308,7 @@ else
 
 Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
-Write-Verbose -Message "[$ThisScript] Restarting WS-Management service"
+Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
 Restart-Service -Name WinRM
 
 if (!$SkipTestConnection)

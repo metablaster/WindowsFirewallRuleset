@@ -160,6 +160,7 @@ $MaximumVariableCount	4096
 
 if ($PSCmdlet.ParameterSetName -eq "Module")
 {
+	# TODO: If a script uses this parameter, it's bound common parameters wont work as expected
 	# Modifying these preferences applies to all module scopes, only common parameters bound to
 	# module functions and preferences set in module scope can override preference variables set here.
 
@@ -396,7 +397,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 		# There is global variable that controls encoding, see if it can be used
 		New-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
-			New-CimSessionOption -Encoding "Default" -UICulture en-US -Culture en-US)
+			New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US)
 	}
 
 	# TODO: Temporarily for debugging
@@ -425,8 +426,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			{
 				Remove-CimSession -Name LocalFirewall
 			}
-
-			$CimOptions.UseSsl = $false
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
@@ -500,8 +499,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				# TODO: Removing this when working on multiple computers will affect all connections
 				Remove-CimSession -Name RemoteFirewall
 			}
-
-			$CimOptions.UseSsl = $true
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.

@@ -87,7 +87,7 @@ param (
 #region Initialization
 & $PSScriptRoot\Unblock-Project.ps1
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore $Domain
-
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
 # User prompt

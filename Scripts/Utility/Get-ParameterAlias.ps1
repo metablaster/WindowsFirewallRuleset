@@ -179,6 +179,7 @@ param (
 begin
 {
 	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$InformationPreference = "Continue"
 
 	if ($Cleanup)
