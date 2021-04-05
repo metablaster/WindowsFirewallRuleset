@@ -75,6 +75,7 @@ TODO: Set up try/catch or trap for this script only
 TODO: Deploy rules to different PolicyStore on remote host
 TODO: Check parameter naming convention
 TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
+HACK: This script become too big and too depending, move non variable code somewhere else
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -374,9 +375,27 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			"ConfigurableServiceStore"
 		)
 
+		# WinRM service must be running at this point
+		$WinRMService = Get-Service -Name WinRM
+
+		if ($WinRMService.Status -ne "Running")
+		{
+			Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
+
+			# NOTE: Unable to start if it's disabled
+			if ($WinRMService.StartType -eq "Disabled")
+			{
+				Set-Service -InputObject $WinRMService -StartupType Automatic
+			}
+
+			Start-Service -InputObject $WinRMService
+		}
+
+		Remove-Variable -Name WinRMService
+
 		# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 		# There is global variable that controls encoding, see if it can be used
-		Set-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
+		New-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
 			New-CimSessionOption -Encoding "Default" -UICulture en-US -Culture en-US)
 	}
 
@@ -392,7 +411,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 	}
 
-	$OldErrorAction = $ErrorActionPreference
+	$OldSettingsScriptEA = $ErrorActionPreference
 	$ErrorActionPreference = "Stop"
 
 	if ($PolicyStore -in $LocalStores)
@@ -419,14 +438,17 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		catch
 		{
-			Remove-CimSession -Name LocalFirewall
-			Remove-Variable -Name RemoteCim -Scope Global -Force
+			Get-CimSession -Name LocalFirewall -EA Ignore | Remove-CimSession
+			if (Get-Variable -Name RemoteCim -Scope Global -ErrorAction Ignore)
+			{
+				Remove-Variable -Name RemoteCim -Scope Global -Force
+			}
 
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 				-Message "Creating CIM session to localhost failed with: $($_.Exception.Message)"
 		}
 	}
-	else
+	else # Remote firewall deployment
 	{
 		Write-Warning -Message "Remote firewall administration is not implemented"
 
@@ -490,8 +512,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		catch
 		{
-			Remove-CimSession -Name RemoteFirewall
-			Remove-Variable -Name RemoteCim -Scope Global -Force
+			Get-CimSession -Name RemoteFirewall -EA Ignore | Remove-CimSession
+			if (Get-Variable -Name RemoteCim -Scope Global -ErrorAction Ignore)
+			{
+				Remove-Variable -Name RemoteCim -Scope Global -Force
+			}
 
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 				-Message "Creating CIM session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
@@ -511,8 +536,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 	}
 
-	$ErrorActionPreference = $OldErrorAction
-	Remove-Variable -Name OldErrorAction
+	$ErrorActionPreference = $OldSettingsScriptEA
+	Remove-Variable -Name OldSettingsScriptEA
 }
 #endregion
 

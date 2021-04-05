@@ -51,15 +51,6 @@ Computer name which is to be managed remotely.
 Certificate store is searched for certificate with CN entry set to this name,
 If not found, certificate specified by CertFile is imported.
 
-.PARAMETER CertFile
-Optionally specify custom certificate file.
-By default local certificate store is searched for public key of a remote server.
-If not found "Exports" directory in this repository is searched to import server certificate.
-
-.PARAMETER CertThumbPrint
-Optionally specify certificate thumbprint which is to be used for SSL.
-Use this parameter when there are multiple certificates with same DNS entries.
-
 .PARAMETER SkipTestConnection
 Skip testing configuration on completion.
 By default connection and authentication request on remote WinRM server is performed.
@@ -68,25 +59,25 @@ By default connection and authentication request on remote WinRM server is perfo
 Display WSMan server configuration on completion
 
 .EXAMPLE
-PS> .\Set-WSManClient.ps1 -Domain Server1
+PS> .\Set-WinRMClient.ps1 -Domain Server1
 
 Configures client machine to run commands remotely on computer Server1 using SSL,
 by installing Server1 certificate into trusted root.
 
 .EXAMPLE
-PS> .\Set-WSManClient.ps1 -Domain Server2 -CertFile C:\Cert\Server2.cer
+PS> .\Set-WinRMClient.ps1 -Domain Server2 -CertFile C:\Cert\Server2.cer
 
 Configures client machine to run commands remotely on computer Server2, using SSL
 by installing specific certificate into trusted root
 
 .EXAMPLE
-PS> .\Set-WSManClient.ps1 -Domain Server3 -Protocol HTTP -ShowConfig -SkipTestConnection
+PS> .\Set-WinRMClient.ps1 -Domain Server3 -Protocol HTTP -ShowConfig -SkipTestConnection
 
 Configures client machine to run commands remotely on computer Server3 using HTTP,
 when done client configuration is shown and WinRM test is not performed.
 
 .INPUTS
-None. You cannot pipe objects to Set-WSManClient.ps1
+None. You cannot pipe objects to Set-WinRMClient.ps1
 
 .OUTPUTS
 [void]
@@ -101,7 +92,6 @@ TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan
 TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
 HACK: Remote HTTPS with localhost name possibility in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
-TODO: Test-Certificate before importing, mandatory if -CertFile is specified
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Needs polish and converting some info streams into verbose or debug
@@ -130,7 +120,7 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter()]
@@ -140,13 +130,6 @@ param (
 	[Parameter(Mandatory = $true)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain,
-
-	[Parameter(ParameterSetName = "File")]
-	[ValidateScript( { $_.EndsWith(".cer") } )]
-	[string] $CertFile,
-
-	[Parameter(ParameterSetName = "ThumbPrint")]
-	[string] $CertThumbPrint,
 
 	[Parameter()]
 	[switch] $SkipTestConnection,
@@ -159,106 +142,23 @@ param (
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-$CertPath = "$ProjectRoot\Exports"
 
-if ([string]::IsNullOrEmpty($CertFile))
+$WinRMService = Get-Service -Name WinRM
+# NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
+
+if ($WinRMService.StartType -ne "Automatic")
 {
-	# Search default file name location
-	$CertFile = "$CertPath\$Domain.cer"
-
-	# Search personal store for certificate first
-	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
-		$_.Subject -eq "CN=$Domain"
-	}
-
-	if (!$Cert)
-	{
-		$Cert = Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object {
-			$_.Subject -eq "CN=$Domain"
-		}
-	}
-
-	if ($CertThumbPrint)
-	{
-		if ($Cert)
-		{
-			$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbPrint
-		}
-
-		if (!$Cert)
-		{
-			Write-Error -Category NotImplemented -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbPrint'"
-		}
-	}
-
-	if (($Cert | Measure-Object).Count -eq 1)
-	{
-		if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
-		{
-			Write-Verbose -Message "[$ThisScript] Using existing certificate '$($Cert.thumbprint)'"
-		}
-		else
-		{
-			Write-Error -Category SecurityError -TargetObject $Cert -Message "Verification failed for certificate '$($Cert.thumbprint)'"
-		}
-	}
-	elseif ($Cert)
-	{
-		Write-Error -Category NotImplemented -TargetObject $Cert -Message "Multiple certificates exist for host '$Domain', please specify thumbprint"
-	}
-	elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
-	{
-		# Import certificate file from default location
-		$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\Root
-
-		if (($Cert.Subject -ne "CN=$Domain") -or
-			($CertThumbPrint -and ($Cert.thumbprint -ne $CertThumbPrint)) -or
-			!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
-		{
-			# Undo import operation
-			Get-ChildItem Cert:\LocalMachine\My |
-			Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-			Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default location failed"
-		}
-		elseif (!$Cert.Verify())
-		{
-			# TODO: Should be verified or singed by custom key
-			# Add public key to trusted root to trust this certificate locally
-			Write-Warning -Message "Trusting certificate '$Domain.cer'"
-			Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
-		}
-
-		Write-Information -Tags "Project" -MessageData "INFO: Using certificate from default location '$($Cert.thumbprint)'"
-	}
-	else
-	{
-		Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "No certificate was not found in default location"
-	}
+	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
+	Set-Service -InputObject $WinRMService -StartupType Automatic
 }
-elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
+
+if ($WinRMService.Status -ne "Running")
 {
-	# Import certificate file from custom location
-	$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
-
-	# Custom external certificate should be not self signed
-	if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain)
-	{
-		Write-Verbose -Message "[$ThisScript] Using certificate from custom location '$($Cert.thumbprint)'"
-	}
-	else
-	{
-		# Undo import operation
-		Get-ChildItem Cert:\LocalMachine\My |
-		Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-		Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from custom location failed"
-	}
-
-	Write-Information -Tags "Project" -MessageData "INFO: Using certificate from custom location '$($Cert.thumbprint)'"
+	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
+	Start-Service -InputObject $WinRMService
 }
-else
-{
-	Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
-}
+
+Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 # Valid authentication for both client and server
 [hashtable] $AuthenticationOptions = @{
@@ -362,7 +262,6 @@ else
 }
 
 Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
-$ErrorActionPreference = "Continue"
 
 if (!$SkipTestConnection)
 {
@@ -371,7 +270,6 @@ if (!$SkipTestConnection)
 
 	if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 	{
-		Write-Debug -Message "Using certificate with thumbprint $($Cert.Thumbprint)"
 		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
 		Test-WSMan -UseSSL -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default" |
 		Select-Object ProductVendor, ProductVersion | Format-List
@@ -385,6 +283,8 @@ if (!$SkipTestConnection)
 		Select-Object ProductVendor, ProductVersion | Format-List
 	}
 }
+
+Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
 
 if ($ShowConfig)
 {

@@ -37,7 +37,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Configure WinRM server
+Configure WinRM server for CIM and PowerShell remoting
 
 .DESCRIPTION
 Configures local machine to accept remote CIM and PowerShell requests using WS-Management.
@@ -50,14 +50,6 @@ Creating listeners for HTTP and\or HTTPS connections
 Specifies listener protocol to HTTP, HTTPS or both.
 By default only HTTPS is configured.
 
-.PARAMETER CertFile
-Optionally specify custom certificate file.
-By default new self signed certifcate is made if none exists.
-
-.PARAMETER CertThumbPrint
-Optionally specify certificate thumbprint which is to be used for SSL.
-Use this parameter when there are multiple certificates with same DNS entries.
-
 .PARAMETER SkipTestConnection
 Skip testing configuration on completion.
 By default connection and authentication request on local WinRM server is performed.
@@ -65,30 +57,26 @@ By default connection and authentication request on local WinRM server is perfor
 .PARAMETER ShowConfig
 Display WSMan server configuration on completion
 
-.PARAMETER Force
-If specified, overwrites an existing certificate file,
-unless it has the Read-only attribute set.
-
 .EXAMPLE
-PS> .\Enable-WSManServer.ps1
+PS> .\Enable-WinRMServer.ps1
 
 Configures server machine to accept remote commands using using SSL.
 If there is no server certificate a new one self signed is made and put into trusted root.
 
 .EXAMPLE
-PS> .\Enable-WSManServer.ps1 -CertFile C:\Cert\Server2.pfx -Protocol Any
+PS> .\Enable-WinRMServer.ps1 -CertFile C:\Cert\Server2.pfx -Protocol Any
 
 Configures server machine to accept remote commands using using either HTTPS or HTTP.
 Client will authenticate with specified certificate for HTTPS.
 
 .EXAMPLE
-PS> .\Enable-WSManServer.ps1 -Protocol HTTP -ShowConfig -SkipTestConnection
+PS> .\Enable-WinRMServer.ps1 -Protocol HTTP -ShowConfig -SkipTestConnection
 
 Configures server machine to accept remote commands using HTTP,
 when done WinRM server configuration is shown and WinRM test is not performed.
 
 .INPUTS
-None. You cannot pipe objects to Enable-WSManServer.ps1
+None. You cannot pipe objects to Enable-WinRMServer.ps1
 
 .OUTPUTS
 [void]
@@ -105,7 +93,6 @@ TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan
 TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
 HACK: Remote HTTPS with localhost name possibility in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
-TODO: Test-Certificate before importing, mandatory if -CertFile is specified
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Needs polish and converting some info streams into verbose or debug
@@ -134,36 +121,42 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter()]
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
 
-	[Parameter(ParameterSetName = "File")]
-	[ValidateScript( { $_.EndsWith(".pfx") } )]
-	[string] $CertFile,
-
-	[Parameter(ParameterSetName = "ThumbPrint")]
-	[string] $CertThumbPrint,
-
 	[Parameter()]
 	[switch] $SkipTestConnection,
 
 	[Parameter()]
-	[switch] $ShowConfig,
-
-	[Parameter()]
-	[switch] $Force
+	[switch] $ShowConfig
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -PolicyStore ([System.Environment]::MachineName)
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-$CertPath = "$ProjectRoot\Exports"
 $Domain = [System.Environment]::MachineName
+
+$WinRMService = Get-Service -Name WinRM
+# NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
+
+if ($WinRMService.StartType -ne "Automatic")
+{
+	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
+	Set-Service -InputObject $WinRMService -StartupType Automatic
+}
+
+if ($WinRMService.Status -ne "Running")
+{
+	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
+	Start-Service -InputObject $WinRMService
+}
+
+Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 # Specify acceptable client authentication methods
 [hashtable] $AuthenticationOptions = @{
@@ -198,155 +191,6 @@ $Domain = [System.Environment]::MachineName
 	CredSSP = $false
 }
 
-if ([string]::IsNullOrEmpty($CertFile))
-{
-	# Search default file name location
-	$CertFile = "$CertPath\$Domain.pfx"
-	$ExportFile = "$CertPath\$Domain.cer"
-
-	# Search personal store for certificate first
-	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
-		$_.Subject -eq "CN=$Domain"
-	}
-
-	if (!$Cert)
-	{
-		$Cert = Get-ChildItem -Path Cert:\LocalMachine\Root | Where-Object {
-			$_.Subject -eq "CN=$Domain"
-		}
-	}
-
-	if ($CertThumbPrint)
-	{
-		if ($Cert)
-		{
-			$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbPrint
-		}
-
-		if (!$Cert)
-		{
-			Write-Error -Category NotImplemented -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbPrint'"
-		}
-	}
-
-	if (($Cert | Measure-Object).Count -eq 1)
-	{
-		if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
-		{
-			if ($Cert.HasPrivateKey)
-			{
-				Write-Verbose -Message "[$ThisScript] Using existing certificate '$($Cert.thumbprint)'"
-			}
-			else
-			{
-				Write-Error -Category OperationStopped -TargetObject $Cert -Message "Private key missing, please specify thumbprint"
-			}
-		}
-		else
-		{
-			Write-Error -Category SecurityError -TargetObject $Cert -Message "Verification failed for certificate '$($Cert.thumbprint)'"
-		}
-	}
-	elseif ($Cert)
-	{
-		Write-Error -Category NotImplemented -TargetObject $Cert -Message "Multiple certificates exist for host '$Domain', please specify thumbprint"
-	}
-	elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
-	{
-		# Import certificate file from default location
-		$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-			"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter certificate password"))
-
-		$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
-			-Password $CertPassword.Password -Exportable
-
-		if (($Cert.Subject -ne "CN=$Domain") -or
-			($CertThumbPrint -and ($Cert.thumbprint -ne $CertThumbPrint)) -or
-			!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
-		{
-			# Undo import operation
-			Get-ChildItem Cert:\LocalMachine\My |
-			Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-			Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default location failed"
-		}
-
-		Write-Verbose -Message "[$ThisScript] Using certificate from default location '$($Cert.thumbprint)'"
-	}
-	else
-	{
-		$Date = Get-Date
-		Write-Information -Tags "Project" -MessageData "INFO: Creating new certificate"
-
-		# TODO: -Signer -KeySpec -HashAlgorithm -Subject "localhost"
-		$Cert = New-SelfSignedCertificate -DnsName $Domain -CertStoreLocation Cert:\LocalMachine\My `
-			-FriendlyName "RemoteFirewall" -KeyAlgorithm RSA -KeyDescription "PSRemotingKey" `
-			-KeyFriendlyName "RemoteFirewall" -KeyLength 2048 -Type SSLServerAuthentication `
-			-KeyUsage DigitalSignature, KeyEncipherment -KeyExportPolicy ExportableEncrypted `
-			-NotBefore $Date -NotAfter $Date.AddMonths(6)
-
-		Write-Verbose -Message "[$ThisScript] Using new certificate '$($Cert.thumbprint)'"
-	}
-}
-elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
-{
-	# Import certificate file from custom location
-	$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-		"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter certificate password"))
-
-	$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
-		-Password $CertPassword.Password -Exportable
-
-	# Custom external certificate should be not self signed
-	if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain)
-	{
-		Write-Verbose -Message "[$ThisScript] Using certificate from custom location '$($Cert.thumbprint)'"
-	}
-	else
-	{
-		# Undo import operation
-		Get-ChildItem Cert:\LocalMachine\My |
-		Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-		Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from custom location failed"
-	}
-}
-else
-{
-	Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
-}
-
-# Export self signed, existing certificate from store or imported PFX
-if (Test-Path $ExportFile -PathType Leaf -ErrorAction Ignore)
-{
-	if ($Force)
-	{
-		# TODO: Test, it should fail for readonly file
-		Write-Warning -Message "Overriding certificate file '$ExportFile'"
-		Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT -Force | Out-Null
-	}
-	else
-	{
-		Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
-	}
-}
-else
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Exporting certificate '$Domain.cer'"
-	Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT | Out-Null
-}
-
-if (!$Cert.Verify())
-{
-	# TODO: Should be verified or singed by custom key
-	# Add public key to trusted root to trust this certificate locally
-	Write-Warning -Message "Trusting certificate '$Domain.cer'"
-	Import-Certificate -FilePath $ExportFile -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
-}
-
-# WinRM service must be running at this point
-Write-Verbose -Message "[$ThisScript] Starting WS-Management service"
-Get-Service -Name WinRM | Set-Service -StartupType Automatic
-Start-Service -Name WinRM
-
 # NOTE: Not assuming WinRM responds, contact localhost
 if (Get-CimInstance -Namespace "root\cimv2" `
 		-Class Win32_ComputerSystem -Property PartOfDomain |
@@ -370,10 +214,11 @@ Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 # Enable default configuration
 Write-Verbose -Message "[$ThisScript] Configuring WinRM server listener and session options"
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
-Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force
+Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force | Out-Null
 
 if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 {
+	$Cert = & $PSScriptRoot\Install-SslCertificate.ps1 -Target Server
 	Write-Verbose -Message "[$ThisScript] Enabling session configurations"
 
 	# Register repository specific session configuration
@@ -385,12 +230,12 @@ if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 	#-RunAsCredential $RemoteCredential -UseSharedProcess `
 	#-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 
-	Write-Information -Tags "Project" -MessageData "INFO: Session configuration '$($WSManEntry.Name)' registered successfully"
+	Write-Verbose -Message "[$ThisScript] Session configuration '$($WSManEntry.Name)' registered successfully"
 
 	# Remove the Deny_All setting from the security descriptor of the affected session
 	# The local computer must include session configurations for remote commands.
 	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
-	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force
+	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force | Out-Null
 
 	Write-Verbose -Message "[$ThisScript] Configuring WinRM HTTPS server listener options"
 
@@ -444,8 +289,6 @@ Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | O
 Write-Verbose -Message "[$ThisScript] Restarting WS-Management service"
 Restart-Service -Name WinRM
 
-$ErrorActionPreference = "Continue"
-
 if (!$SkipTestConnection)
 {
 	if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
@@ -462,6 +305,8 @@ if (!$SkipTestConnection)
 		Select-Object ProductVendor, ProductVersion | Format-List
 	}
 }
+
+Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"
 
 if ($ShowConfig)
 {
