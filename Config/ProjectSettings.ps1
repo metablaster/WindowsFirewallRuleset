@@ -399,7 +399,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	{
 		try
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Creating CIM session to localhost"
+			Write-Verbose -Message "[$SettingsScript] Creating CIM session to localhost"
 
 			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
 			if (Get-CimSession -Name LocalFirewall -ErrorAction Ignore)

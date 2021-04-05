@@ -193,7 +193,7 @@ function Select-AdapterAlias
 		[string[]] $InterfaceAlias
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[CimInstance[]] $TargetAdapter = @()
 	if ($InterfaceAlias)
@@ -253,7 +253,7 @@ function Select-AdapterAlias
 	foreach ($Item in $TargetAdapter)
 	{
 		$ifAlias = $Item.InterfaceAlias
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing '$ifAlias' adapter with '$($Item.Status)' status"
+		Write-Debug -Message "[$ThisScript] Processing '$ifAlias' adapter with '$($Item.Status)' status"
 
 		# NOTE: Adapter "Status" values:
 		# Not Present - adapter is not present
@@ -372,7 +372,7 @@ function Wait-Adapter
 		[uint32] $Seconds = 10
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	for ($Time = 2; $Time -le ($Seconds - $Time + 2); $Time += 2)
 	{
@@ -384,7 +384,7 @@ function Wait-Adapter
 			return
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Waiting adapters for '$State' state"
+		Write-Verbose -Message "[$ThisScript] Waiting adapters for '$State' state"
 		Start-Sleep -Seconds $Time
 	}
 

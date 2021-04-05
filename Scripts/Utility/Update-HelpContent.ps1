@@ -172,7 +172,7 @@ function Format-Document
 		[string] $FileName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$MarkdownFile = Split-Path -Path $FileName -Leaf
 	Write-Information -Tags "Project" -MessageData "INFO: Formatting document $MarkdownFile"
