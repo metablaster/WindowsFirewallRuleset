@@ -402,12 +402,12 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 	# TODO: Temporarily for debugging
 	if ($Cmdlet.MyInvocation.BoundParameters.Keys -and
-		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Domain"))
+		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("TargetHost"))
 	{
 		# Can be issue with dot sourcing
-		Write-Warning -Message "Parameter Domain not removed '$TargetHost'"
+		Write-Warning -Message "Parameter TargetHost not removed '$TargetHost'"
 
-		if ($Cmdlet.MyInvocation.BoundParameters["Domain"] -ne $PolicyStore)
+		if ($Cmdlet.MyInvocation.BoundParameters["TargetHost"] -ne $PolicyStore)
 		{
 			Write-Debug -Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'" -Debug
 		}
@@ -472,7 +472,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			# Credentials for remote machine
 			# TODO: -Credential param, specify SERVER\UserName
 			Set-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Force -Value (
-				Get-Credential -Message "Credentials are required to access host '$PolicyStore'")
+				Get-Credential -Message "Administrative credentials are required to access host '$PolicyStore'")
 		}
 
 		if (!$RemoteCredential)
@@ -526,6 +526,23 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 				-Message "Creating CIM session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
+		}
+
+		try
+		{
+			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
+			{
+				Write-Information -Tags "Project" -MessageData "INFO: Performing user authentication to computer '$PolicyStore'"
+
+				# Authentication is required to access remote registry
+				New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
+					-Root \\$PolicyStore\c$ -Description "Remote registry authentication" | Out-Null
+			}
+		}
+		catch
+		{
+			Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
+				-Message "Registry authentication with '$PolicyStore' failed with: $($_.Exception.Message)"
 		}
 
 		try
@@ -714,6 +731,30 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setting up constant variables"
+
+	# Default remote registry permissions are:
+	# MSDN: Security checks are not performed when accessing subkeys or values
+	# A security check is performed when trying to open the current key
+	# NOTE: Specific scripts override this permission as needed locally
+	New-Variable -Name RegistryPermission -Scope Global -Option Constant -Value (
+		[Microsoft.Win32.RegistryKeyPermissionCheck]::ReadSubTree)
+
+	# Default remote registry permissions are:
+	# MSDN: The right to list the subkeys of a registry key
+	# The right to query the name/value pairs in a registry key
+	# NOTE: Specific scripts add or remove rights as needed locally
+	New-Variable -Name RegistryRights -Scope Global -Option Constant -Value (
+		[System.Security.AccessControl.RegistryRights] "EnumerateSubKeys, QueryValues")
+
+	# Default registry view
+	# MSDN: On the 64-bit versions of Windows, portions of the registry are stored separately
+	# for 32-bit and 64-bit applications.
+	# There is a 32-bit view for 32-bit applications and a 64-bit view for 64-bit applications.
+	# If view is Registry64 but the remote machine is running a 32-bit operating system,
+	# the returned key will use the Registry32 view.
+	# NOTE: Specific scripts may modify this to Registry32 locally, in order to access 32 bit values
+	New-Variable -Name RegistryView -Scope Global -Option Constant -Value (
+		[Microsoft.Win32.RegistryView]::Registry64)
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (

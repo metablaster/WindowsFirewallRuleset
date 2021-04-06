@@ -71,17 +71,26 @@ Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
 ```
 
 Otherwise if you're trying to deploy or manage firewall remotely, make sure at a minimum
-following is configured on **remote** machine:
+following is configured on computers mentioned below:
 
 1. WinRM - `Windows Remote Management (WS-Management)` service is `Running` and optionally set to
-`Automatic` startup.
+`Automatic` startup on both client and server computers.
 2. "PowerShell remoting" is configured and enabled, for more information about PowerShell remoting see:
     - [Enable-PSRemoting][psremoting]
     - [Running Remote Commands][remote commands]
+3. Remote Registry service is service is `Running` and set to `Automatic` startup on both client
+and server computers.
+4. Remote computer must allow inbound connections, at a minimum `File and Printer sharing` and
+`Network Discovery` **predefined** (not custom) firewall rules.
+5. All involved computers must be on `Private` network profile.
+6. You must authenticate to remote computer, this depends on protocol in use, for `WSMan` and `CIM`
+this is handled by PowerShell remoting, for `DCOM` and `RPC` use `New-PSDrive` to open default
+remote share.
 
-If none of this works even after reboot of all involved computers, following link might help:
+If none of this works even after reboot of all involved computers, following links might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
+- [Troubleshooting Remote Registry][remote registry]
 
 [Table of Contents](#table-of-contents)
 
@@ -362,3 +371,4 @@ Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
 [psremoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1 "Visit Microsoft docs"
 [remote commands]: https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands?view=powershell-7.1 "Visit Microsoft docs"
 [winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
+[remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552)

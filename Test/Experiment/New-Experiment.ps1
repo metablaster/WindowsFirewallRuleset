@@ -66,12 +66,12 @@ param (
 begin
 {
 	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -TargetHost $Domain
-	# Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
+	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
 	$DebugPreference = "Continue"
 	$VerbosePreference = "Continue"
-	# Write-Debug -Message "[$ThisScript] Run module function"
-	# Debug-Experiment # -Debug
+	Write-Debug -Message "[$ThisScript] Run module function"
+	Debug-Experiment # -Debug
 }
 
 process
@@ -79,7 +79,6 @@ process
 	Write-Debug -Message "INFO: Run script function"
 
 	Get-WindowsDefender -Domain $Domain
-	return
 
 	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
 	Select-Object CSName, Caption | Format-Table
@@ -100,6 +99,7 @@ end
 	Exit-PSSession
 	Get-CimSession -Name RemoteFirewall -EA Ignore | Remove-CimSession
 	Get-CimSession -Name LocalFirewall -EA Ignore | Remove-CimSession
+	Get-PSDrive -Name RemoteRegistry -EA Ignore | Remove-PSDrive
 
 	Update-Log
 }

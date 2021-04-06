@@ -65,20 +65,11 @@ function Get-WindowsDefender
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if ($true) #Test-TargetComputer $Domain)
+	if (Test-TargetComputer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
-
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$Permission = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadSubTree
-		$Rights = [System.Security.AccessControl.RegistryRights] "ReadKey"
-
-		# MSDN: On the 64-bit versions of Windows, portions of the registry are stored separately
-		# for 32-bit and 64-bit applications.
-		# There is a 32-bit view for 32-bit applications and a 64-bit view for 64-bit applications.
-		# If view is Registry64 but the remote machine is running a 32-bit operating system,
-		# the returned key will use the Registry32 view.
-		$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
+		$LocalRights = [System.Security.AccessControl.RegistryRights]::QueryValues
 
 		try
 		{
@@ -88,7 +79,12 @@ function Get-WindowsDefender
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-			$RootKey = $RemoteKey.OpenSubkey($HKLM, $Permission, $Rights)
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $LocalRights)
+		}
+		catch [System.UnauthorizedAccessException]
+		{
+			Write-Error -Message "Remote registry access was denied for $([Environment]::MachineName)\$([Environment]::UserName) by $Domain system"
+			return
 		}
 		catch
 		{
@@ -96,33 +92,31 @@ function Get-WindowsDefender
 			return
 		}
 
-		if (!$RootKey)
+		$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
+		$InstallLocation = $RootKey.GetValue("InstallLocation")
+
+		if ([string]::IsNullOrEmpty($InstallLocation))
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:$HKLM"
+			Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
 		}
 		else
 		{
-			$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
-			$InstallLocation = $RootKey.GetValue("InstallLocation")
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
 
-			if ([string]::IsNullOrEmpty($InstallLocation))
-			{
-				Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
-
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = "Windows Defender"
-					Version = (Split-Path $InstallLocation -Leaf)
-					Publisher = "Microsoft Corporation"
-					InstallLocation = Format-Path $InstallLocation
-					RegistryKey = $RootKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = "Windows Defender"
+				Version = (Split-Path $InstallLocation -Leaf)
+				Publisher = "Microsoft Corporation"
+				InstallLocation = Format-Path $InstallLocation
+				RegistryKey = $RootKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		# MSDN: When you have finished using the type, you should dispose of it either directly or indirectly.
+		# To dispose of the type directly, call its Dispose method in a try/catch block.
+		# To dispose of it indirectly, use a language construct such as using (in C#)
+		$RemoteKey.Dispose()
 	}
 }

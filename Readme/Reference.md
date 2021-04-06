@@ -4,7 +4,7 @@
 For anything that isn't covered by documentation in this repository you can perform additional\
 research by using this collection of links for quick reference.
 
-You might find these links relevant to extend project code base and to develop firewall for
+You might find these links relevant to extend repository code base and to develop firewall for
 customized scenarios.
 
 ## Table of Contents
