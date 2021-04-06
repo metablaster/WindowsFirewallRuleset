@@ -378,3 +378,5 @@ if ($ShowConfig)
 		Get-Item WSMan:\localhost\Plugin\*
 	}
 }
+
+Update-Log

@@ -57,7 +57,9 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - `Test-TargetComputer` function now does WSMan test by default and ping test optinally
+  - `Test-TargetComputer` function now does WSMan test by default and ping test optionally
+  - `Resolve-Host` function improved, removed deprecated API, duplicate code etc.
+  - Registry drilling functions updated for remote registry
 
 - Documentation
 

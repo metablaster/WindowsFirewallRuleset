@@ -150,8 +150,16 @@ function Select-IPInterface
 
 	if (!$ConfiguredInterface)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
-			-Message "None of the adapters is configured for $AddressFamily"
+		if ($AddressFamily -eq "Any")
+		{
+			Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
+				-Message "None of the adapters are configured connect to network"
+		}
+		else
+		{
+			Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
+				-Message "None of the adapters is configured for $AddressFamily"
+		}
 		return $null
 	}
 
@@ -201,7 +209,16 @@ function Select-IPInterface
 	$Count = ($SelectedInterface | Measure-Object).Count
 	if ($Count -eq 0)
 	{
-		Write-Error -Category ObjectNotFound -Message "None of the adapters is configured for $AddressFamily and the specified parameter set"
+		if ($AddressFamily -eq "Any")
+		{
+			Write-Error -Category ObjectNotFound `
+				-Message "None of the adapters are configured to connect to network with the specified parameter set"
+		}
+		else
+		{
+			Write-Error -Category ObjectNotFound `
+				-Message "None of the adapters is configured for '$AddressFamily' address family and the specified parameter set"
+		}
 		return $null
 	}
 	elseif ($Count -gt 1)

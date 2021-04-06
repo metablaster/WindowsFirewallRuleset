@@ -365,7 +365,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			$Cmdlet.MyInvocation.BoundParameters.Remove("TargetHost") | Out-Null
 		}
 
-		# Policy stores on local computer
+		# Valid policy stores
 		New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
 			([System.Environment]::MachineName)
 			"PersistentStore"
@@ -436,7 +436,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			}
 
 			# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
-			$CimOptions.UseSsl = $false
+			$CimOptions.UseSsl = $true
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.

@@ -396,3 +396,4 @@ if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore))
 }
 
 Write-Output $Cert
+Update-Log

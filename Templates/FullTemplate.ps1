@@ -28,6 +28,7 @@ SOFTWARE.
 #>
 
 # TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
+# NOTE: Run [guid]::NewGuid() to generate new guid
 <#PSScriptInfo
 
 .VERSION 0.10.1

@@ -47,6 +47,8 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
     - [NETBIOS name](#netbios-name)
     - [System environment variable](#system-environment-variable)
     - [Email validation](#email-validation)
+    - [IPv6 validation](#ipv6-validation)
+    - [IPv4 validation](#ipv4-validation)
 
 ## Filterline
 
@@ -369,7 +371,7 @@ Relaxed version for Windows:
 ### System environment variable
 
 The first character of the name must not be numeric.
-A variable name may include any of the following characters:\
+A variable name may include any of the following characters:
 
 ```none
 A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
@@ -382,8 +384,34 @@ A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 - [Microsoft][msemail]
 - [stackoverflow][stackemail]
 
+### IPv6 validation
+
+Simple version:
+
+```none
+([a-f0-9:]+:)+[a-f0-9]+
+```
+
+For more complex examples see [Regular expression that matches valid IPv6 addresses][ipv6 regex]
+
+### IPv4 validation
+
+Simple version:
+
+```none
+([0-9]{1,3}\.){3}[0-9]{1,3}
+```
+
+For regex below all credits to [Validating IPv4 addresses with regexp][ipv4 regex]
+
+```none
+\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b
+```
+
 [Table of Contents](#table-of-contents)
 
-[multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection
-[msemail]: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN
-[stackemail]: https://stackoverflow.com/questions/5342375/regex-email-validation
+[multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection "Visit VSCode docs"
+[msemail]: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format?redirectedfrom=MSDN "Visit Microsoft docs"
+[stackemail]: https://stackoverflow.com/questions/5342375/regex-email-validation "Visit stackoverflow"
+[ipv4 regex]: https://stackoverflow.com/questions/5284147/validating-ipv4-addresses-with-regexp "Visit stackoverflow"
+[ipv6 regex]: https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses "Visit stackoverflow"

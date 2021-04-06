@@ -226,6 +226,7 @@ elseif ($Registry)
 
 		try
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry"
 			$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView)
 		}
 		catch
@@ -236,32 +237,32 @@ elseif ($Registry)
 			return
 		}
 
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKCU"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: HKCU\:$TestKey"
+			[Microsoft.Win32.RegistryKey] $SubKey = $RootKey.OpenSubkey($TestKey, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			[Microsoft.Win32.RegistryKey] $SubKey = $RootKey.OpenSubkey($TestKey)
-
-			if ($SubKey)
-			{
-				# TODO: Return value is 'HKEY_CURRENT_USER\TestKey'
-				$KeyLocation = $SubKey.Name # "HKCU:\TestKey" #
-
-				# Take ownership and set full control
-				# NOTE: setting other owner (except current user) will not work for HKCU
-				Set-Permission -User "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
-				Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation
-
-				Set-Permission -User $TestUser -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
-				Set-Permission -Owner $TestUser -LiteralPath $KeyLocation
-			}
-			else
-			{
-				Write-Warning -Message "Failed to open registry sub key: HKCU:$TestKey"
-			}
+			$RootKey.Dispose()
+			Write-Error -ErrorRecord $_
+			Update-Log
+			Exit-Test
+			return
 		}
+
+		# TODO: Return value is 'HKEY_CURRENT_USER\TestKey'
+		$KeyLocation = $SubKey.Name # "HKCU:\TestKey" #
+
+		# Take ownership and set full control
+		# NOTE: setting other owner (except current user) will not work for HKCU
+		Set-Permission -User "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
+		Set-Permission -Owner "TrustedInstaller" -Domain "NT SERVICE" -LiteralPath $KeyLocation
+
+		Set-Permission -User $TestUser -LiteralPath $KeyLocation -Reset -RegistryRight "ReadKey"
+		Set-Permission -Owner $TestUser -LiteralPath $KeyLocation
+
+		$RootKey.Dispose()
 	}
 }
 

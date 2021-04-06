@@ -28,17 +28,18 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Resolve host to IP or an IP to host
+Resolve host to IP or IP to host
 
 .DESCRIPTION
-Resolve host to IP or an IP to host.
-For localhost select virtual, hidden or connected adapters.
+Resolve host name to IP address or IP address to host name.
+For localhost process virtual or hidden, connected or disconnected adapter address.
+By default only physical adapters are processed
 
 .PARAMETER Domain
-Target host name which to resolve to an IP address.
+Target host name which to resolve to IP address
 
 .PARAMETER IPAddress
-Target IP which to resolve to host name.
+Target IP which to resolve to host name
 
 .PARAMETER FlushDNS
 Flush DNS resolver cache before resolving IP or host name
@@ -47,16 +48,13 @@ Flush DNS resolver cache before resolving IP or host name
 Obtain IP address for specified IP version
 
 .PARAMETER Physical
-Resolve local host name to an IP of a physical adapter
+Resolve local host name to IP of a physical adapter
 
 .PARAMETER Virtual
-Resolve local host name to an IP of a virtual adapter
-
-.PARAMETER Hidden
-If specified, only hidden interfaces are included
+Resolve local host name to IP of a virtual adapter
 
 .PARAMETER Connected
-If specified, only interfaces connected to network are returned
+If specified, only interfaces connected to network are considered
 
 .EXAMPLE
 PS> Resolve-Host -AddressFamily IPv4 -IPAddress "40.112.72.205"
@@ -65,7 +63,7 @@ PS> Resolve-Host -AddressFamily IPv4 -IPAddress "40.112.72.205"
 PS> Resolve-Host -FlushDNS -Domain "microsoft.com"
 
 .EXAMPLE
-PS> Resolve-Host -LocalHost -AddressFamily IPv4 -Connected
+PS> Resolve-Host -AddressFamily IPv4 -Connected
 
 .INPUTS
 [IPAddress[]]
@@ -76,6 +74,7 @@ PS> Resolve-Host -LocalHost -AddressFamily IPv4 -Connected
 
 .NOTES
 TODO: Single IP is selected for result, maybe we should return all IP addresses
+TODO: AddressFamily could be 2 switches, -IPv4 and IPv6
 #>
 function Resolve-Host
 {
@@ -83,12 +82,14 @@ function Resolve-Host
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Resolve-Host.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter(ParameterSetName = "Host", Mandatory = $true, HelpMessage = "Enter target domain name",
+		[Parameter(ParameterSetName = "Host", Mandatory = $true,
+			HelpMessage = "Enter host name which is to be resolved",
 			ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("ComputerName", "CN")]
 		[string[]] $Domain,
 
-		[Parameter(ParameterSetName = "IP", Mandatory = $true, HelpMessage = "Enter target IP address",
+		[Parameter(ParameterSetName = "IP", Mandatory = $true,
+			HelpMessage = "Enter IP address which is to be resolved",
 			ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[IPAddress[]] $IPAddress,
 
@@ -108,10 +109,6 @@ function Resolve-Host
 
 		[Parameter(ParameterSetName = "Virtual")]
 		[switch] $Virtual,
-
-		[Parameter(ParameterSetName = "Physical")]
-		[Parameter(ParameterSetName = "Virtual")]
-		[switch] $Hidden,
 
 		[Parameter(ParameterSetName = "Physical")]
 		[Parameter(ParameterSetName = "Virtual")]
@@ -135,41 +132,114 @@ function Resolve-Host
 		{
 			foreach ($IP in $IPAddress)
 			{
-				$Domain = $null
+				[string] $HostName = $null
+
 				try
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving IP: $IP"
 					# https://docs.microsoft.com/en-us/dotnet/api/system.net.dns?view=net-5.0
-					[System.Net.IPHostEntry] $HostEntry = [System.Net.Dns]::GetHostByAddress($IP)
+					[System.Net.IPHostEntry] $HostEntry = [System.Net.Dns]::GetHostEntry($IP)
 
-					# TODO: Domain name may end up inside { }
-					$Domain = $HostEntry.HostName
+					$HostName = $HostEntry.HostName
 				}
 				catch [System.Net.Sockets.SocketException]
 				{
 					Write-Warning -Message "Socket exception resolving address: $IP"
 				}
+				catch
+				{
+					Write-Warning -Message $_.Exception.Message
+				}
 
 				[PSCustomObject] @{
-					Domain = $Domain
+					Domain = $HostName
 					IPAddress = $IP
 					PSTypeName = "Ruleset.HostInfo"
 				}
 			}
 		}
-		elseif ($Physical -or $Virtual)
+		elseif ($Domain)
+		{
+			# TODO: For localhost with multiple interfaces fine tune selection
+			foreach ($HostName in $Domain)
+			{
+				[IPAddress] $IP = $null
+				[regex] $IPv4Regex = "([0-9]{1,3}\.){3}[0-9]{1,3}"
+				[regex] $IPv6Regex = "([a-f0-9:]+:)+[a-f0-9]+"
+
+				try
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving host '$HostName' to '$AddressFamily' address"
+
+					# [Microsoft.DnsClient.Commands.DnsRecord]
+					$DNSRecord = Resolve-DnsName -Name $HostName -NetbiosFallback -Server 8.8.8.8 -EA Stop
+
+					if ($DNSRecord)
+					{
+						if ($AddressFamily -eq "IPv4")
+						{
+							$Match = $IPv4Regex.Matches($DNSRecord.IPAddress)
+							if ($Match.Success)
+							{
+								$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+							}
+						}
+						elseif ($AddressFamily -eq "IPv6")
+						{
+							$Match = $IPv6Regex.Matches($DNSRecord.IPAddress)
+							if ($Match.Success)
+							{
+								$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+							}
+						}
+						else
+						{
+							$IP = $DNSRecord | Select-Object -ExpandProperty IPAddress -Last 1
+						}
+					}
+				}
+				catch
+				{
+					Write-Warning -Message $_.Exception.Message
+				}
+
+				if (!$IP)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Pinging host '$HostName' to '$AddressFamily' address"
+					$Ping = New-Object System.Net.NetworkInformation.Ping
+
+					try
+					{
+						$IP = ($Ping.Send($HostName).Address).IPAddressToString
+					}
+					catch
+					{
+						Write-Warning -Message "Unable to resolve host $HostName"
+					}
+				}
+
+				[PSCustomObject] @{
+					Domain = $HostName
+					IPAddress = $IP
+					PSTypeName = "Ruleset.HostInfo"
+				}
+			}
+		}
+		else
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting local host $AddressFamily address for domain: $([System.Environment]::MachineName)"
+
+			[IPAddress] $IP = $null
 
 			if ($Virtual)
 			{
 				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-					-Connected:$Connected -Hidden:$Hidden -Virtual:$Virtual
+					-Connected:$Connected -Virtual
 			}
 			else # Physical
 			{
 				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-					-Connected:$Connected -Hidden:$Hidden -Physical
+					-Connected:$Connected -Physical
 			}
 
 			if ($ConfiguredInterfaces)
@@ -189,71 +259,13 @@ function Resolve-Host
 					$NetIPAddress = $ConfiguredInterfaces | Select-Object -ExpandProperty ($AddressFamily + "Address")
 				}
 
-				[IPAddress] $IPAddress = $NetIPAddress | Select-Object -ExpandProperty IPAddress -Last 1
-
-				[PSCustomObject] @{
-					Domain = [System.Environment]::MachineName
-					IPAddress = $IPAddress
-					PSTypeName = "Ruleset.HostInfo"
-				}
+				$IP = $NetIPAddress | Select-Object -ExpandProperty IPAddress -First 1
 			}
 
-			# NOTE: else error should be generated and shown by Select-IPInterface
-		}
-		else
-		{
-			foreach ($HostName in $Domain)
-			{
-				[IPAddress] $IPAddress = $null
-
-				# For localhost with multiple interfaces fine tune selection
-				try
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting remote host $AddressFamily address for domain: $HostName"
-
-					[System.Net.IPHostEntry] $HostEntry = [System.Net.Dns]::GetHostByName($HostName)
-					$IPAddress = $HostEntry.AddressList.IPAddressToString | Select-Object -Last 1
-				}
-				catch [System.Net.Sockets.SocketException]
-				{
-					Write-Warning -Message "Socket exception resolving host: $HostName"
-				}
-				catch
-				{
-					Write-Error -ErrorRecord $_
-				}
-
-				if (!$IPAddress)
-				{
-					# [Microsoft.DnsClient.Commands.DnsRecord]
-					$DNSRecord = Resolve-DnsName -Name $HostName -NetbiosFallback -Server 8.8.8.8
-					if ($AddressFamily -eq "IPv4")
-					{
-						$IPAddress = $DNSRecord.IPAddress -match "([0-9]{1,3}\.){3}[0-9]{1,3}" |
-						Select-Object -ExpandProperty IPAddress -Last 1
-					}
-					elseif ($AddressFamily -eq "IPv6")
-					{
-						$IPAddress = $DNSRecord.IPAddress -match "([a-f0-9:]+:)+[a-f0-9]+" |
-						Select-Object -ExpandProperty IPAddress -Last 1
-					}
-					else
-					{
-						$IPAddress = $DNSRecord.IPAddress | Select-Object -ExpandProperty IPAddress -Last 1
-					}
-				}
-
-				if (!$IPAddress)
-				{
-					$Ping = New-Object System.Net.NetworkInformation.Ping
-					$IPAddress = ($Ping.Send($HostName).Address).IPAddressToString
-				}
-
-				[PSCustomObject] @{
-					Domain = $HostName
-					IPAddress = $IPAddress
-					PSTypeName = "Ruleset.HostInfo"
-				}
+			[PSCustomObject] @{
+				Domain = [System.Environment]::MachineName
+				IPAddress = $IP
+				PSTypeName = "Ruleset.HostInfo"
 			}
 		}
 	}

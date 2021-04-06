@@ -342,3 +342,5 @@ if ($ShowConfig)
 	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
 	# Get-Item WSMan:\localhost\ClientCertificate\*
 }
+
+Update-Log

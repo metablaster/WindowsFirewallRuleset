@@ -77,6 +77,9 @@ if ($Regex.Count)
 	Write-Information -Tags "Test" -MessageData "INFO: Google IP is $($GoogleIP.IPAddressToString)"
 }
 
+Start-Test "IPv4 WORKGROUP host"
+Resolve-Host -Domain $TestDomain -AddressFamily IPv4
+
 Start-Test "IPv4 LocalHost"
 Resolve-Host -AddressFamily IPv4 -Physical
 
@@ -87,7 +90,7 @@ Start-Test "LocalHost"
 Resolve-Host -Domain ([System.Environment]::MachineName)
 
 Start-Test "pipeline FlushDNS"
-Select-IPInterface -Physical | Resolve-Host -FlushDNS
+Select-IPInterface | Resolve-Host -FlushDNS
 
 Start-Test "IPv4 microsoft.com"
 Resolve-Host -AddressFamily IPv4 -Domain "microsoft.com"
