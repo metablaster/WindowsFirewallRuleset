@@ -65,20 +65,40 @@ function Get-WindowsDefender
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if ($true) #Test-TargetComputer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+		$Permission = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadSubTree
+		$Rights = [System.Security.AccessControl.RegistryRights] "ReadKey"
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
+		# MSDN: On the 64-bit versions of Windows, portions of the registry are stored separately
+		# for 32-bit and 64-bit applications.
+		# There is a 32-bit view for 32-bit applications and a 64-bit view for 64-bit applications.
+		# If view is Registry64 but the remote machine is running a 32-bit operating system,
+		# the returned key will use the Registry32 view.
+		$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
+
+		try
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			# MSDN: In order for a key to be opened remotely, both the server and client machines
+			# must be running the remote registry service, and have remote administration enabled.
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $Permission, $Rights)
+		}
+		catch
+		{
+			Write-Error -Message $_
+			return
+		}
 
 		if (!$RootKey)
 		{
-			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:$HKLM"
 		}
 		else
 		{

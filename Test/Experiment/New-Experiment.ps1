@@ -52,30 +52,34 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[switch] $Force,
+	[Alias("ComputerName", "CN", "PolicyStore")]
+	[string] $Domain = [System.Environment]::MachineName,
 
 	[Parameter(Mandatory = $true)]
 	[Alias("UserName")]
 	[string[]] $User,
 
 	[Parameter()]
-	[Alias("ComputerName", "CN", "PolicyStore")]
-	[string] $Domain = [System.Environment]::MachineName
+	[switch] $Force
 )
 
 begin
 {
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
-	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -TargetHost $Domain
+	# Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
 	$DebugPreference = "Continue"
-	Write-Debug -Message "[$ThisScript] Run module function"
-	Debug-Experiment # -Debug
+	$VerbosePreference = "Continue"
+	# Write-Debug -Message "[$ThisScript] Run module function"
+	# Debug-Experiment # -Debug
 }
 
 process
 {
 	Write-Debug -Message "INFO: Run script function"
+
+	Get-WindowsDefender -Domain $Domain
+	return
 
 	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
 	Select-Object CSName, Caption | Format-Table

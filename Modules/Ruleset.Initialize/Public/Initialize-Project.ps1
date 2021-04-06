@@ -190,17 +190,19 @@ function Initialize-Project
 			"lmhosts" # TCP/IP NetBIOS Helper
 			"LanmanWorkstation" # Workstation
 			"LanmanServer" # Server
-			# NOTE: WinRM required for:
+			# WinRM required for:
 			# 1. Remote firewall administration, see Enable-PSRemoting cmdlet, or when localhost is specified instad of NETBIOS name
 			# 2. For PowerShell Core 7.1+ this service is required for compatibility module
 			# 3. Required for CIM functions
 			"WinRM" # Windows Remote Management (WS-Management)
-			# NOTE: ssh-agent recommended for:
+			# ssh-agent recommended for:
 			# 1. Remote SSH in VSCode
 			# 2. git over SSH
 			"ssh-agent" # OpenSSH Authentication Agent
-			# NOTE: sshd recommended to host remote SSH and VSCode server
+			# sshd recommended to host remote SSH and VSCode server
 			"sshd" # OpenSSH SSH Server
+			# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
+			"RemoteRegistry"
 		)
 
 		if (!(Initialize-Service $RequiredServices))

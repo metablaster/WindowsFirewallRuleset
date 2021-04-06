@@ -93,12 +93,12 @@
 	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
 	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 	"todo-tree.general.tags": [
+		"HACK",
 		"TODO",
 		"NOTE",
-		"HACK",
+		"MSDN",
+		"ALERT",
 		"BUG",
-		"INFO",
-		"FIX",
 		"[ ]",
 		"[x]"
 	],
@@ -106,6 +106,8 @@
 		// Very important and hard to resolve
 		"HACK": {
 			// used to set a different icon in the tree view
+			// consider: info, bookmark, markdown, alert, bug, question, mark-github,
+			// issue-opened, check-circle, checklist, report, beaker
 			// icons and names: https://primer.style/octicons/
 			"icon": "alert",
 			// used to control how much is highlighted in the editor. Valid values are:
@@ -118,6 +120,7 @@
 			"type": "tag",
 			// used to set the foreground colour of the highlight in the editor and the marker in the ruler
 			// Foreground and background can be: "red", "green", "blue", "yellow", "magenta", "cyan", "grey", "white" or "black"
+			// See also: https://en.wikipedia.org/wiki/Web_colors
 			"foreground": "white",
 			// used to set the background colour of the highlight in the editor.
 			"background": "red",
@@ -134,9 +137,10 @@
 		},
 		// Needs additional work
 		"TODO": {
+			"icon": "check-circle",
 			"foreground": "black",
 			"background": "white",
-			"iconColour": "green",
+			"iconColour": "ForestGreen",
 			"opacity": 90
 		},
 		// Important comment(s)
@@ -148,16 +152,39 @@
 			// TODO: setting not working
 			"hideFromTree ": true
 		},
+		"MSDN": {
+			"icon": "info",
+			"foreground": "Cornsilk",
+			"background": "DarkCyan",
+			"iconColour": "DeepSkyBlue",
+			"opacity": 70
+		},
+		"ALERT": {
+			"icon": "alert",
+			"foreground": "black",
+			"background": "Gold",
+			"iconColour": "Gold",
+			"opacity": 70
+		},
+		"BUG": {
+			"icon": "bug",
+			"foreground": "Cornsilk",
+			"background": "DeepSkyBlue",
+			"iconColour": "DeepSkyBlue",
+			"opacity": 70
+		},
 		"[ ]": {
+			"icon": "markdown",
 			"foreground": "black",
 			"background": "white",
-			"iconColour": "green",
+			"iconColour": "white",
 			"opacity": 90
 		},
 		"[x]": {
-			"icon": "checklist",
+			"icon": "markdown",
 			"foreground": "white",
 			"background": "green",
+			"iconColour": "green",
 			"opacity": 40,
 		}
 	},

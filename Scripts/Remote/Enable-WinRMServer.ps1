@@ -93,8 +93,9 @@ None. You cannot pipe objects to Enable-WinRMServer.ps1
 [Selected.System.Xml.XmlElement]
 
 .NOTES
-Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
-Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
+HACK: Set-WSManInstance may fail with public profile, probably default switch, Set-WSManQuickConfig
+is run, rerun script twice refusing Set-WSManQuickConfig prompt as a workaround
+NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: This script must be part of Ruleset.Initialize module
 NOTE: Following will be set by something in this script, it prevents remote UAC
 Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy
@@ -179,7 +180,7 @@ Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 	# The user name and password are sent in clear text.
 	# Basic authentication cannot be used with domain accounts
 	# The default value is true.
-	Basic = $true
+	Basic = $false
 	# Authentication by using Kerberos certificates.
 	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
 	# The default value is true.
@@ -230,7 +231,7 @@ Disable-PSSessionConfiguration -Name Microsoft.PowerShell.Workflow
 # Enable default configuration
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server listener and session options"
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
-Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force | Out-Null
+Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force -SkipNetworkProfileCheck | Out-Null
 
 if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 {
@@ -258,7 +259,7 @@ if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
 	# Remove the Deny_All setting from the security descriptor of the affected session
 	# The local computer must include session configurations for remote commands.
 	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
-	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force | Out-Null
+	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force -SkipNetworkProfileCheck | Out-Null
 
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM HTTPS server listener options"
 
@@ -307,7 +308,16 @@ else
 	$ServerOptions["AllowUnencrypted"] = $true
 }
 
-Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+try
+{
+	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+}
+catch
+{
+	# TODO: Try with winrm command
+	Write-Warning -Message "Setting server options failed, using Set-WSManQuickConfig, please rerun script and refuse WSManQuickConfig next time"
+	Set-WSManQuickConfig -SkipNetworkProfileCheck
+}
 
 Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
 Restart-Service -Name WinRM
@@ -333,7 +343,7 @@ Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration
 
 if ($ShowConfig)
 {
-	# NOTE: Beginning in PowerShell 6, it is no longer required to include the Property parameter for ExcludeProperty to work.
+	# MSDN: Beginning in PowerShell 6, it is no longer required to include the Property parameter for ExcludeProperty to work.
 
 	# winrm get winrm/config
 	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"

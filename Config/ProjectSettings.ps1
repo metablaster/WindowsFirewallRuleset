@@ -76,7 +76,7 @@ TODO: Deploy rules to different PolicyStore on remote host
 TODO: Check parameter naming convention
 TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
 HACK: This script become too big and too depending, move non variable code somewhere else
-TODO: Domain parameter potentially dangerous because of dot sourcing
+HACK: -Domain parameter would override because of dot sourcing
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -96,7 +96,7 @@ param (
 	[System.Management.Automation.PSCmdlet]	$Cmdlet,
 
 	[Parameter(ParameterSetName = "Script")]
-	[string] $Domain,
+	[string] $TargetHost,
 
 	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
 	[ValidateScript( { $_ -eq $true } )]
@@ -355,14 +355,14 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	if (!(Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore))
 	{
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
-		if ([string]::IsNullOrEmpty($Domain))
+		if ([string]::IsNullOrEmpty($TargetHost))
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
 		}
 		else
 		{
-			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $Domain
-			$Cmdlet.MyInvocation.BoundParameters.Remove("Domain") | Out-Null
+			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $TargetHost
+			$Cmdlet.MyInvocation.BoundParameters.Remove("TargetHost") | Out-Null
 		}
 
 		# Policy stores on local computer
@@ -405,11 +405,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Domain"))
 	{
 		# Can be issue with dot sourcing
-		Write-Warning -Message "Parameter Domain not removed '$Domain'"
+		Write-Warning -Message "Parameter Domain not removed '$TargetHost'"
 
 		if ($Cmdlet.MyInvocation.BoundParameters["Domain"] -ne $PolicyStore)
 		{
-			Write-Debug -Message "Unexpected computer name '$Domain', remote already set to '$PolicyStore'" -Debug
+			Write-Debug -Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'" -Debug
 		}
 	}
 

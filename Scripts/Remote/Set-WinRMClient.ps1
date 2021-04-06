@@ -181,7 +181,7 @@ Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 	# The user name and password are sent in clear text.
 	# Basic authentication cannot be used with domain accounts
 	# The default value is true.
-	Basic = $true
+	Basic = $false
 	# Challenge-response scheme that uses a server-specified data string for the challenge.
 	# Supported by both HTTP and HTTPS
 	# The WinRM service does not accept Digest authentication.
