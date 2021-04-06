@@ -218,7 +218,7 @@ function Get-SystemSKU
 				{
 					try
 					{
-						$CimSKU = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+						$CimSKU = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 							-Class Win32_OperatingSystem -Property OperatingSystemSku |
 						Select-Object -ExpandProperty OperatingSystemSku
 

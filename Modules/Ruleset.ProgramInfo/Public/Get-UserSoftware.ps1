@@ -76,56 +76,64 @@ function Get-UserSoftware
 	{
 		$HKU = Get-PrincipalSID $User -Domain $Domain
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
-		$UserKey = $RemoteKey.OpenSubkey($HKU)
-
-		if (!$UserKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
+			$UserKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($HKUSubKey in $UserKey.GetSubKeyNames())
+			if ($RemoteKey)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKUSubKey"
-				$SubKey = $UserKey.OpenSubkey($HKUSubKey)
+				$RemoteKey.Dispose()
+			}
 
-				if (!$SubKey)
-				{
-					Write-Warning -Message "Failed to open registry sub Key: $HKUSubKey"
-					continue
-				}
+			Write-Error -ErrorRecord $_
+			return
+		}
 
-				$InstallLocation = $SubKey.GetValue("InstallLocation")
+		foreach ($HKUSubKey in $UserKey.GetSubKeyNames())
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKUSubKey"
+			$SubKey = $UserKey.OpenSubkey($HKUSubKey)
 
-				if ([string]::IsNullOrEmpty($InstallLocation))
-				{
-					Write-Warning -Message "Failed to read registry entry $HKUSubKey\InstallLocation"
-					continue
-				}
+			if (!$SubKey)
+			{
+				Write-Warning -Message "Failed to open registry sub Key: $HKUSubKey"
+				continue
+			}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKUSubKey"
+			$InstallLocation = $SubKey.GetValue("InstallLocation")
 
-				# TODO: move all instances to directly format (first call above)
-				# NOTE: Avoid spamming
-				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
+			if ([string]::IsNullOrEmpty($InstallLocation))
+			{
+				Write-Warning -Message "Failed to read registry entry $HKUSubKey\InstallLocation"
+				continue
+			}
 
-				# Get more key entries as needed
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = $SubKey.GetValue("DisplayName")
-					Version = $SubKey.GetValue("DisplayVersion")
-					Publisher = $SubKey.GetValue("Publisher")
-					InstallLocation = $InstallLocation
-					RegistryKey = "HKU:\$HKU"
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKUSubKey"
+
+			# TODO: move all instances to directly format (first call above)
+			# NOTE: Avoid spamming
+			$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
+
+			# Get more key entries as needed
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = $SubKey.GetValue("DisplayName")
+				Version = $SubKey.GetValue("DisplayVersion")
+				Publisher = $SubKey.GetValue("Publisher")
+				InstallLocation = $InstallLocation
+				RegistryKey = "HKU:\$HKU"
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

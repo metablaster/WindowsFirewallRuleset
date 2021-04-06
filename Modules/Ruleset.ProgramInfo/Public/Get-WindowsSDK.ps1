@@ -67,9 +67,11 @@ function Get-WindowsSDK
 
 	if (Test-TargetComputer $Domain)
 	{
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
+			# TODO: Not using RegistryView here
 			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Microsoft SDKs\Windows"
 		}
 		else
@@ -78,51 +80,58 @@ function Get-WindowsSDK
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SDKs\Windows"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
-
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			if ($RemoteKey)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
-				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
+				$RemoteKey.Dispose()
+			}
 
-				if (!$SubKey)
-				{
-					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
-					continue
-				}
+			Write-Error -ErrorRecord $_
+			return
+		}
 
-				$InstallLocation = $SubKey.GetValue("InstallationFolder")
+		foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+			$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
-				if ([string]::IsNullOrEmpty($InstallLocation))
-				{
-					Write-Warning -Message "Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
-					continue
-				}
+			if (!$SubKey)
+			{
+				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				continue
+			}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
-				$InstallLocation = Format-Path $InstallLocation
+			$InstallLocation = $SubKey.GetValue("InstallationFolder")
 
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = $SubKey.GetValue("ProductName")
-					Version = $SubKey.GetValue("ProductVersion")
-					Publisher = "Microsoft Corporation"
-					InstallLocation = $InstallLocation
-					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
+			if ([string]::IsNullOrEmpty($InstallLocation))
+			{
+				Write-Warning -Message "Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
+				continue
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+			$InstallLocation = Format-Path $InstallLocation
+
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = $SubKey.GetValue("ProductName")
+				Version = $SubKey.GetValue("ProductVersion")
+				Publisher = "Microsoft Corporation"
+				InstallLocation = $InstallLocation
+				RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

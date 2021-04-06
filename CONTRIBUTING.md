@@ -219,6 +219,11 @@ Following link describes general rules about PowerShell code style if you like r
 however keep in mind, it's not completely in line with this repository best practices:\
 [The PowerShell Style Guide][powershell style]
 
+Following links may help with exception and error handling:
+
+- [Everything you wanted to know about exceptions][exceptions everything]
+- [Our Error Handling - GitHub][exceptions handling]
+
 Use risk mitigation features is applicable for functions that you write, see "Remarks" sections on
 the links below to understand how to implement `ShouldProcess` and `ShouldContinue`:
 
@@ -570,3 +575,5 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [pull requests]: https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github "Visit Marketplace"
 [should continue]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldcontinue?view=powershellsdk-7.0.0
 [should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0
+[exceptions everything]: https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know "Visit blog"
+[exceptions handling]: https://github.com/MicrosoftDocs/PowerShell-Docs/issues/1583 "Visit GitHub"

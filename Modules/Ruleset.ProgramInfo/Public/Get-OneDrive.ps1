@@ -78,10 +78,18 @@ function Get-OneDrive
 	if (Test-TargetComputer $Domain)
 	{
 		$UserSID = Get-PrincipalSID $User -Domain $Domain
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+
+		try
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			return
+		}
 
 		# Check if target user is logged in (has it's reg hive loaded)
 		[bool] $ReleaseHive = $false
@@ -112,6 +120,7 @@ function Get-OneDrive
 			}
 			else
 			{
+				$RemoteKey.Dispose()
 				Write-Warning -Message "Failed to locate user registry config: $UserRegConfig"
 				return
 			}
@@ -119,8 +128,9 @@ function Get-OneDrive
 
 		try
 		{
+			$LocalRights = [System.Security.AccessControl.RegistryRights]::QueryValues
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
-			$OneDriveKey = $RemoteKey.OpenSubkey($HKU)
+			$OneDriveKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $LocalRights)
 		}
 		catch
 		{
@@ -128,58 +138,58 @@ function Get-OneDrive
 			if ($ReleaseHive)
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"
+
 				[gc]::collect()
 				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
+
+			$RemoteKey.Dispose()
+			Write-Error -ErrorRecord $_
+			return
 		}
 
-		if (!$OneDriveKey)
+		$OneDrivePath = $OneDriveKey.GetValue("OneDriveTrigger")
+
+		if ([string]::IsNullOrEmpty($OneDrivePath))
 		{
-			Write-Warning -Message "Failed to open registry root key: HKU:$HKU"
+			Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
 		}
 		else
 		{
-			$OneDrivePath = $OneDriveKey.GetValue("OneDriveTrigger")
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $OneDriveKey"
 
-			if ([string]::IsNullOrEmpty($OneDrivePath))
-			{
-				Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
-			}
-			else
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $OneDriveKey"
+			# NOTE: remove executable file name
+			$InstallLocation = Split-Path -Path $OneDrivePath -Parent
 
-				# NOTE: remove executable file name
-				$InstallLocation = Split-Path -Path $OneDrivePath -Parent
+			# NOTE: Avoid spamming
+			$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
 
-				# NOTE: Avoid spamming
-				$InstallLocation = Format-Path $InstallLocation #-Verbose:$false -Debug:$false
-
-				# Get more key entries as needed
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = "OneDrive"
-					Version = $OneDriveKey.GetValue("Version")
-					Publisher = "Microsoft Corporation"
-					InstallLocation = $InstallLocation
-					UserFolder = $OneDriveKey.GetValue("UserFolder")
-					RegistryKey = "HKU:\$UserSID\Software\Microsoft\OneDrive"
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
-			}
-
-			# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access is denied"
-			# TODO: We close the key regardless, other functions using registry should also implement closing keys
-			$OneDriveKey.Close()
-
-			if ($ReleaseHive)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
-				[gc]::collect()
-				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
+			# Get more key entries as needed
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = "OneDrive"
+				Version = $OneDriveKey.GetValue("Version")
+				Publisher = "Microsoft Corporation"
+				InstallLocation = $InstallLocation
+				UserFolder = $OneDriveKey.GetValue("UserFolder")
+				RegistryKey = "HKU:\$UserSID\Software\Microsoft\OneDrive"
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access is denied"
+		# TODO: We close the key regardless, other functions using registry should also implement closing keys
+		$OneDriveKey.Close()
+
+		if ($ReleaseHive)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
+			[gc]::collect()
+			$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
+		}
+
+		$RemoteKey.Dispose()
 	}
 }

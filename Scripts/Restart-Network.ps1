@@ -480,7 +480,7 @@ else
 
 			foreach ($Name in $Description)
 			{
-				$Adapter = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" -QueryDialect "WQL" `
+				$Adapter = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -QueryDialect "WQL" `
 					-Query "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE Description LIKE '$Name'"
 
 				# NOTE: Error code 72: An error occurred while accessing the registry for the requested information.

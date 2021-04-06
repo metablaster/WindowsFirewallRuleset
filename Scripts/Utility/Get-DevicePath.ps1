@@ -115,7 +115,7 @@ if ($DriveLetter)
 }
 
 # TODO: test query with property param
-$ResultTable = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+$ResultTable = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 	-ClassName Win32_Volume -Property DriveLetter |
 Where-Object { $_.DriveLetter } | ForEach-Object {
 	$ReturnLength = $Kernel32::QueryDosDevice($_.DriveLetter, $StringBuilder, $Max)

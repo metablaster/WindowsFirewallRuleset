@@ -244,15 +244,65 @@ if ([string]::IsNullOrEmpty($CertFile))
 	elseif ($Target -eq "Server")
 	{
 		# Create new self signed server certificate
-		$Date = Get-Date
 		Write-Information -Tags "Project" -MessageData "INFO: Creating new certificate"
 
-		# TODO: -Signer -KeySpec -HashAlgorithm -Subject "localhost"
-		$Cert = New-SelfSignedCertificate -DnsName $Domain -CertStoreLocation Cert:\LocalMachine\My `
-			-FriendlyName "RemoteFirewall" -KeyAlgorithm RSA -KeyDescription "PSRemotingKey" `
-			-KeyFriendlyName "RemoteFirewall" -KeyLength 2048 -Type SSLServerAuthentication `
-			-KeyUsage DigitalSignature, KeyEncipherment -KeyExportPolicy ExportableEncrypted `
-			-NotBefore $Date -NotAfter $Date.AddMonths(6)
+		# NOTE: Yellow exclamation mark on "Key Usage" means following:
+		# The key usage extension defines the purpose (e.g., encipherment,
+		# signature, certificate signing) of the key contained in the certificate.
+		# The usage restriction might be employed when a key that could be used for more than one
+		# operation is to be restricted.
+		# Conforming CAs MUST include this extension in certificates that contain public keys that
+		# are used to validate digital signatures on other public key certificates or CRLs.
+		# When present, conforming CAs SHOULD mark this extension as critical.
+		# https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+
+		# Each extension in a certificate is designated as either critical or non-critical.
+		# A certificate-using system MUST reject the certificate if it encounters a critical
+		# extension it does not recognize or a critical extension that contains information that
+		# it cannot process.
+		# A non-critical extension MAY be ignored if it is not recognized,
+		# but MUST be processed if it is recognized.
+		# https://tools.ietf.org/html/rfc5280#section-4.1.2.9
+		$Date = Get-Date
+		$CertParams = @{
+			# Install certificate into "Personal" store
+			# https://docs.microsoft.com/en-us/windows/win32/seccrypto/system-store-locations
+			CertStoreLocation = "Cert:\LocalMachine\My"
+			# Specifies a friendly name for the new certificate (Friendly name field)
+			FriendlyName = "Remote WinRM $Domain"
+			# Specifies a friendly name for the private key
+			KeyFriendlyName = "WinRM and CIM remoting key"
+			# Specifies a description for the private key
+			KeyDescription = "WinRM remoting Key"
+			# The type of certificate that this cmdlet creates
+			Type = "SSLServerAuthentication"
+			# Allow password protected private key export
+			KeyExportPolicy = "ExportableEncrypted"
+			# Valid from now for the next 1 year
+			NotBefore = $Date
+			NotAfter = $Date.AddYears(1)
+			# MSDN: The first DNS name is also saved as the Subject Name.
+			# If no signing certificate is specified, the first DNS name is also saved as the Issuer Name.
+			DnsName = $Domain
+			Subject = $Domain
+			# The key can be used for key encryption
+			# https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509keyusageflags?view=net-5.0
+			KeyUsage = "None"
+			# MSDN: Specifies whether the private key associated with the new certificate can be used for signing, encryption, or both
+			# None uses the default value from the underlying CSP.
+			# If the key is managed by a Cryptography Next Generation (CNG) KSP, the value is None
+			# TODO: To set to "KeyExchange" another Provider is needed that supports it
+			# The key usages for the key usages property of the private key
+			KeyUsageProperty = "None"
+			KeySpec = "None"
+			KeyAlgorithm = "RSA"
+			KeyLength = "2048"
+			# https://docs.microsoft.com/en-us/windows/win32/seccrypto/microsoft-cryptographic-service-providers
+			Provider = "Microsoft Software Key Storage Provider"
+		}
+
+		# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
+		$Cert = New-SelfSignedCertificate @CertParams
 
 		Write-Information -Tags "Project" -MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 	}

@@ -69,37 +69,83 @@ function Get-NetFramework
 	if (Test-TargetComputer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
-
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			if ($RemoteKey)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
-				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
+				$RemoteKey.Dispose()
+			}
 
-				if (!$SubKey)
+			Write-Error -ErrorRecord $_
+			return
+		}
+
+		foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+			$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
+
+			if (!$SubKey)
+			{
+				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				continue
+			}
+
+			$Version = $SubKey.GetValue("Version")
+			if (![string]::IsNullOrEmpty($Version))
+			{
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+
+				$InstallLocation = $SubKey.GetValue("InstallPath")
+
+				# else not warning because some versions are built in
+				if (![string]::IsNullOrEmpty($InstallLocation))
 				{
-					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
-					continue
+					$InstallLocation = Format-Path $InstallLocation
 				}
 
-				$Version = $SubKey.GetValue("Version")
-				if (![string]::IsNullOrEmpty($Version))
+				# we add entry regardless of presence of install path
+				[PSCustomObject]@{
+					Domain = $Domain
+					Version = $Version
+					InstallLocation = $InstallLocation
+					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					PSTypeName = "Ruleset.ProgramInfo"
+				}
+			}
+			else # go one key down
+			{
+				foreach ($HKLMKey in $SubKey.GetSubKeyNames())
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey"
+					$Key = $SubKey.OpenSubkey($HKLMKey)
 
-					$InstallLocation = $SubKey.GetValue("InstallPath")
+					if (!$Key)
+					{
+						Write-Warning -Message "Failed to open registry sub Key: $HKLMKey"
+						continue
+					}
+
+					$Version = $Key.GetValue("Version")
+					if ([string]::IsNullOrEmpty($Version))
+					{
+						Write-Warning -Message "Failed to read registry key entry: $HKLMKey\Version"
+						continue
+					}
+
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey"
+
+					$InstallLocation = $Key.GetValue("InstallPath")
 
 					# else not warning because some versions are built in
 					if (![string]::IsNullOrEmpty($InstallLocation))
@@ -110,55 +156,17 @@ function Get-NetFramework
 					# we add entry regardless of presence of install path
 					[PSCustomObject]@{
 						Domain = $Domain
+						Name = ".NET Framework"
 						Version = $Version
+						Publisher = "Microsoft Corporation"
 						InstallLocation = $InstallLocation
-						RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+						RegistryKey = $Key.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
 						PSTypeName = "Ruleset.ProgramInfo"
-					}
-				}
-				else # go one key down
-				{
-					foreach ($HKLMKey in $SubKey.GetSubKeyNames())
-					{
-						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey"
-						$Key = $SubKey.OpenSubkey($HKLMKey)
-
-						if (!$Key)
-						{
-							Write-Warning -Message "Failed to open registry sub Key: $HKLMKey"
-							continue
-						}
-
-						$Version = $Key.GetValue("Version")
-						if ([string]::IsNullOrEmpty($Version))
-						{
-							Write-Warning -Message "Failed to read registry key entry: $HKLMKey\Version"
-							continue
-						}
-
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey"
-
-						$InstallLocation = $Key.GetValue("InstallPath")
-
-						# else not warning because some versions are built in
-						if (![string]::IsNullOrEmpty($InstallLocation))
-						{
-							$InstallLocation = Format-Path $InstallLocation
-						}
-
-						# we add entry regardless of presence of install path
-						[PSCustomObject]@{
-							Domain = $Domain
-							Name = ".NET Framework"
-							Version = $Version
-							Publisher = "Microsoft Corporation"
-							InstallLocation = $InstallLocation
-							RegistryKey = $Key.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-							PSTypeName = "Ruleset.ProgramInfo"
-						}
 					}
 				}
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

@@ -67,9 +67,11 @@ function Get-WindowsKit
 
 	if (Test-TargetComputer $Domain)
 	{
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
+			# TODO: Not using RegistryView here
 			$HKLM = "SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
 		}
 		else
@@ -78,75 +80,81 @@ function Get-WindowsKit
 			$HKLM = "SOFTWARE\Microsoft\Windows Kits\Installed Roots"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-		# TODO: try catch for remote registry access
-		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
-
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($RootKeyEntry in $RootKey.GetValueNames())
+			if ($RemoteKey)
 			{
-				$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
-				$InstallLocation = $RootKey.GetValue($RootKeyEntry)
+				$RemoteKey.Dispose()
+			}
 
-				if ([string]::IsNullOrEmpty($InstallLocation))
+			Write-Error -ErrorRecord $_
+			return
+		}
+
+		foreach ($RootKeyEntry in $RootKey.GetValueNames())
+		{
+			$RootKeyLeaf = Split-Path $RootKey.ToString() -Leaf
+			$InstallLocation = $RootKey.GetValue($RootKeyEntry)
+
+			if ([string]::IsNullOrEmpty($InstallLocation))
+			{
+				Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
+				continue
+			}
+			elseif ($InstallLocation -notmatch "^[A-Za-z]:\\.*")
+			{
+				# NOTE: Avoid spamming
+				# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key entry: $RootKeyLeaf\$RootKeyEntry"
+				continue
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
+			$InstallLocation = Format-Path $InstallLocation
+
+			$AllVersions = @()
+
+			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			{
+				$VersionKey = $RootKey.OpenSubKey($HKLMSubKey)
+
+				if ($InstallLocation -like "WindowsDebuggersRoot*")
 				{
-					Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
-					continue
-				}
-				elseif ($InstallLocation -notmatch "^[A-Za-z]:\\.*")
-				{
-					# NOTE: Avoid spamming
-					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key entry: $RootKeyLeaf\$RootKeyEntry"
-					continue
-				}
+					$SubKey = $VersionKey.OpenSubKey("Installed Options")
+					$Value = $SubKey.GetValue("OptionId.WindowsDesktopDebuggers")
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key entry: $RootKeyLeaf\$RootKeyEntry"
-				$InstallLocation = Format-Path $InstallLocation
-
-				$AllVersions = @()
-
-				foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
-				{
-					$VersionKey = $RootKey.OpenSubKey($HKLMSubKey)
-
-					if ($InstallLocation -like "WindowsDebuggersRoot*")
+					# For DebuggersRoot process version only if debuggers are installed
+					if (!($Value -and ($Value -eq 1)))
 					{
-						$SubKey = $VersionKey.OpenSubKey("Installed Options")
-						$Value = $SubKey.GetValue("OptionId.WindowsDesktopDebuggers")
-
-						# For DebuggersRoot process version only if debuggers are installed
-						if (!($Value -and ($Value -eq 1)))
-						{
-							continue
-						}
+						continue
 					}
-
-					$AllVersions += $VersionKey.ToString() | Split-Path -Leaf
 				}
 
-				# TODO: This version is just an estimate, selecting latest one
-				$Version = $AllVersions | Select-Object -Last 1
+				$AllVersions += $VersionKey.ToString() | Split-Path -Leaf
+			}
 
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = "Windows Kits"
-					Version = $Version
-					Publisher = "Microsoft Corporation"
-					InstallLocation = $InstallLocation
-					RegistryKey = "$($RootKey.ToString())\$RootKeyEntry" -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-					Product = $RootKeyEntry
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
+			# TODO: This version is just an estimate, selecting latest one
+			$Version = $AllVersions | Select-Object -Last 1
+
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = "Windows Kits"
+				Version = $Version
+				Publisher = "Microsoft Corporation"
+				InstallLocation = $InstallLocation
+				RegistryKey = "$($RootKey.ToString())\$RootKeyEntry" -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+				Product = $RootKeyEntry
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

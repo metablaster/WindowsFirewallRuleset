@@ -134,7 +134,7 @@ function Get-GroupPrincipal
 						# Get all users that belong to requested group,
 						# this includes non local principal source and non "user" users
 						# it is also missing SID
-						$GroupUsers = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+						$GroupUsers = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 							-Class Win32_GroupUser -Property GroupComponent, PartComponent |
 						Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
 						Select-Object -ExpandProperty PartComponent
@@ -146,7 +146,7 @@ function Get-GroupPrincipal
 						}
 
 						# Get either enabled or disabled users, these include SID but also non group users
-						$EnabledAccounts = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+						$EnabledAccounts = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 							-Class Win32_UserAccount -Property LocalAccount, Disabled -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
 

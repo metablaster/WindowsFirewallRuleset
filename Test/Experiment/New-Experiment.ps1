@@ -83,7 +83,7 @@ process
 	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
 	Select-Object CSName, Caption | Format-Table
 
-	Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" -Class Win32_OperatingSystem |
+	Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -Class Win32_OperatingSystem |
 	Select-Object CSName, Caption | Format-Table
 
 	if ($Domain -eq ([System.Environment]::MachineName))
@@ -97,8 +97,8 @@ process
 end
 {
 	Exit-PSSession
-	Get-CimSession -Name RemoteFirewall -EA Ignore | Remove-CimSession
-	Get-CimSession -Name LocalFirewall -EA Ignore | Remove-CimSession
+	Get-CimSession -Name RemoteCim -EA Ignore | Remove-CimSession
+	Get-CimSession -Name LocalCim -EA Ignore | Remove-CimSession
 	Get-PSDrive -Name RemoteRegistry -EA Ignore | Remove-PSDrive
 
 	Update-Log

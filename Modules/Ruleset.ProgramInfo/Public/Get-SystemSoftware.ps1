@@ -68,12 +68,15 @@ function Get-SystemSoftware
 
 	if (Test-TargetComputer $Domain)
 	{
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+
 		# TODO: Test-Path those keys first?
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
 			$HKLM = @(
 				"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+				# TODO: Registry view not used in this script
 				"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
 			)
 		}
@@ -83,18 +86,27 @@ function Get-SystemSoftware
 			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+		try
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			return
+		}
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
-			$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey)
-
-			if (!$RootKey)
+			try
 			{
-				Write-Warning -Message "Failed to open registry root key: HKLM:$HKLMRootKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+				$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey, $RegistryPermission, $RegistryRights)
+			}
+			catch
+			{
+				Write-Warning -Message "Failed to open registry root key: HKLM:\$HKLMRootKey"
 				continue
 			}
 
@@ -156,5 +168,7 @@ function Get-SystemSoftware
 				}
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

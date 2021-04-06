@@ -11,6 +11,7 @@ used accross code in this repository.
     - [Registry functions](#registry-functions)
     - [Return types](#return-types)
     - [Exceptions](#exceptions)
+    - [Sample exception handling](#sample-exception-handling)
   - [Custom objects](#custom-objects)
     - [Ruleset.ProgramInfo](#rulesetprograminfo)
     - [Ruleset.UserInfo](#rulesetuserinfo)
@@ -168,12 +169,9 @@ ObjectDisposedException
 
 - `1, 2, 4, 5` The RegistryKey is closed (closed keys cannot be accessed).
 
-SecurityException
+[SecurityException][SecurityException]
 
 - `1` The user does not have the permissions required to access the registry key in the specified mode.
-
-SecurityException
-
 - `2, 5` The user does not have the permissions required to read from the registry key.
 - `3` The user does not have the proper permissions to perform this operation.
 - `4` The user does not have the permissions required to read from the key.
@@ -184,11 +182,41 @@ IOException
 - `3` MachineName is not found.
 - `4, 5` A system error occurred, for example the current key has been deleted.
 
-UnauthorizedAccessException
+[UnauthorizedAccessException][UnauthorizedAccessException]
 
 - `2, 3, 4, 5` The user does not have the necessary registry rights.
 
 [Table of Contents](#table-of-contents)
+
+### Sample exception handling
+
+This is an example to get detailed problem description, it's not used in this repository except
+for initial registry authentication and access to avoid code bloat
+
+```powershell
+try
+{
+    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+    $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $LocalRegistryView)
+}
+catch [System.UnauthorizedAccessException]
+{
+    Write-Error -Category AuthenticationError -TargetObject $RegistryHive -Message $_.Exception.Message
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry access was denied for $([Environment]::MachineName)\$([Environment]::UserName) by $Domain system"
+    return
+}
+catch [System.Security.SecurityException]
+{
+    Write-Error -Category SecurityError -TargetObject $RegistryHive -Message $_.Exception.Message
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
+    return
+}
+catch
+{
+    Write-Error -ErrorRecord $_
+    return
+}
+```
 
 ## Custom objects
 
@@ -226,3 +254,5 @@ PSTypeName = unique object type name for this module
 [Table of Contents](#table-of-contents)
 
 [parameters]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/standard-cmdlet-parameter-names-and-types "Visit Microsoft docs"
+[UnauthorizedAccessException]: https://docs.microsoft.com/en-us/dotnet/api/system.unauthorizedaccessexception?view=net-5.0 "Visit Microsoft docs"
+[SecurityException]: https://docs.microsoft.com/en-us/dotnet/api/system.security.securityexception?view=net-5.0 "Visit Microsoft docs"

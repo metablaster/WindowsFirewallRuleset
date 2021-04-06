@@ -428,10 +428,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			Write-Verbose -Message "[$SettingsScript] Creating CIM session to localhost"
 
-			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
-			if (Get-CimSession -Name LocalFirewall -ErrorAction Ignore)
+			# TODO: Cim session name should be the same for local and remote host
+			# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
+			if (Get-CimSession -Name LocalCim -ErrorAction Ignore)
 			{
-				Remove-CimSession -Name LocalFirewall
+				Remove-CimSession -Name LocalCim
 			}
 
 			# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
@@ -439,17 +440,17 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
-			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
+			Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (
 				New-CimSession -ComputerName ([System.Environment]::MachineName) `
-					-SessionOption $CimOptions -Name "LocalFirewall" `
+					-SessionOption $CimOptions -Name "LocalCim" `
 					-OperationTimeoutSec $PSSessionOption.OperationTimeout.TotalSeconds)
 		}
 		catch
 		{
-			Get-CimSession -Name LocalFirewall -EA Ignore | Remove-CimSession
-			if (Get-Variable -Name RemoteCim -Scope Global -ErrorAction Ignore)
+			Get-CimSession -Name LocalCim -EA Ignore | Remove-CimSession
+			if (Get-Variable -Name CimServer -Scope Global -ErrorAction Ignore)
 			{
-				Remove-Variable -Name RemoteCim -Scope Global -Force
+				Remove-Variable -Name CimServer -Scope Global -Force
 			}
 
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
@@ -503,25 +504,25 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			Write-Information -Tags "Project" -MessageData "INFO: Creating CIM session to computer '$PolicyStore'"
 
 			# A CIM session is a client-side object representing a connection to a local computer or a remote computer.
-			if (Get-CimSession -Name RemoteFirewall -ErrorAction Ignore)
+			if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 			{
 				# TODO: Removing this when working on multiple computers will affect all connections
-				Remove-CimSession -Name RemoteFirewall
+				Remove-CimSession -Name RemoteCim
 			}
 
 			# NOTE: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
-			Set-Variable -Name RemoteCim -Scope Global -Option ReadOnly -Force -Value (
+			Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (
 				New-CimSession -ComputerName $PolicyStore -SessionOption $CimOptions `
-					-Credential $RemoteCredential -Name "RemoteFirewall" `
+					-Credential $RemoteCredential -Name "RemoteCim" `
 					-OperationTimeoutSec $PSSessionOption.OperationTimeout.TotalSeconds)
 		}
 		catch
 		{
-			Get-CimSession -Name RemoteFirewall -EA Ignore | Remove-CimSession
-			if (Get-Variable -Name RemoteCim -Scope Global -ErrorAction Ignore)
+			Get-CimSession -Name RemoteCim -EA Ignore | Remove-CimSession
+			if (Get-Variable -Name CimServer -Scope Global -ErrorAction Ignore)
 			{
-				Remove-Variable -Name RemoteCim -Scope Global -Force
+				Remove-Variable -Name CimServer -Scope Global -Force
 			}
 
 			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
@@ -535,8 +536,9 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				Write-Information -Tags "Project" -MessageData "INFO: Performing user authentication to computer '$PolicyStore'"
 
 				# Authentication is required to access remote registry
+				# NOTE: Registry provider does not support credentials
 				New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
-					-Root \\$PolicyStore\c$ -Description "Remote registry authentication" | Out-Null
+					-Root \\$PolicyStore\C$ -Description "Remote registry authentication" | Out-Null
 			}
 		}
 		catch
@@ -549,8 +551,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			# TODO: For VM without external switch use -VMName
 			Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$PolicyStore'"
-			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential `
-				-ConfigurationName RemoteFirewall
+			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential
 		}
 		catch
 		{
@@ -732,6 +733,9 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 {
 	Write-Debug -Message "[$SettingsScript] Setting up constant variables"
 
+	# Check if constants already initialized, used for module reloading, do not modify!
+	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
+
 	# Default remote registry permissions are:
 	# MSDN: Security checks are not performed when accessing subkeys or values
 	# A security check is performed when trying to open the current key
@@ -746,7 +750,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	New-Variable -Name RegistryRights -Scope Global -Option Constant -Value (
 		[System.Security.AccessControl.RegistryRights] "EnumerateSubKeys, QueryValues")
 
-	# Default registry view
+	# Default registry view:
 	# MSDN: On the 64-bit versions of Windows, portions of the registry are stored separately
 	# for 32-bit and 64-bit applications.
 	# There is a 32-bit view for 32-bit applications and a 64-bit view for 64-bit applications.
@@ -759,9 +763,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
-
-	# check if constants already initialized, used for module reloading, do not modify!
-	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
 	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 10, 1))

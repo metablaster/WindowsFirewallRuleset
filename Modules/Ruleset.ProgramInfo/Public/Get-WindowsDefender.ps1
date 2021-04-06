@@ -81,14 +81,14 @@ function Get-WindowsDefender
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $LocalRights)
 		}
-		catch [System.UnauthorizedAccessException]
-		{
-			Write-Error -Message "Remote registry access was denied for $([Environment]::MachineName)\$([Environment]::UserName) by $Domain system"
-			return
-		}
 		catch
 		{
-			Write-Error -Message $_
+			if ($RemoteKey)
+			{
+				$RemoteKey.Dispose()
+			}
+
+			Write-Error -ErrorRecord $_
 			return
 		}
 
@@ -116,7 +116,7 @@ function Get-WindowsDefender
 
 		# MSDN: When you have finished using the type, you should dispose of it either directly or indirectly.
 		# To dispose of the type directly, call its Dispose method in a try/catch block.
-		# To dispose of it indirectly, use a language construct such as using (in C#)
+		# TODO: To dispose of it indirectly, use a language construct such as using (in C#)
 		$RemoteKey.Dispose()
 	}
 }

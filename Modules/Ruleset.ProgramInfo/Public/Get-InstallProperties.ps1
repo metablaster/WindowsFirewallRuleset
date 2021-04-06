@@ -69,71 +69,79 @@ function Get-InstallProperties
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
-
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($HKLSubMKey in $RootKey.GetSubKeyNames())
+			if ($RemoteKey)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLSubMKey\Products"
-				$UserProducts = $RootKey.OpenSubkey("$HKLSubMKey\Products")
+				$RemoteKey.Dispose()
+			}
 
-				if (!$UserProducts)
+			Write-Error -ErrorRecord $_
+			return
+		}
+
+		foreach ($HKLSubMKey in $RootKey.GetSubKeyNames())
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLSubMKey\Products"
+			$UserProducts = $RootKey.OpenSubkey("$HKLSubMKey\Products")
+
+			if (!$UserProducts)
+			{
+				Write-Warning -Message "Failed to open UserKey: $HKLSubMKey\Products"
+				continue
+			}
+
+			foreach ($HKLMKey in $UserProducts.GetSubKeyNames())
+			{
+				# NOTE: Avoid spamming (set to debug from verbose)
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey\InstallProperties"
+				$ProductKey = $UserProducts.OpenSubkey("$HKLMKey\InstallProperties")
+
+				if (!$ProductKey)
 				{
-					Write-Warning -Message "Failed to open UserKey: $HKLSubMKey\Products"
+					Write-Warning -Message "Failed to open ProductKey: $HKLMKey\InstallProperties"
 					continue
 				}
 
-				foreach ($HKLMKey in $UserProducts.GetSubKeyNames())
+				$InstallLocation = $ProductKey.GetValue("InstallLocation")
+
+				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
-					# NOTE: Avoid spamming (set to debug from verbose)
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey\InstallProperties"
-					$ProductKey = $UserProducts.OpenSubkey("$HKLMKey\InstallProperties")
-
-					if (!$ProductKey)
-					{
-						Write-Warning -Message "Failed to open ProductKey: $HKLMKey\InstallProperties"
-						continue
-					}
-
-					$InstallLocation = $ProductKey.GetValue("InstallLocation")
-
-					if ([string]::IsNullOrEmpty($InstallLocation))
-					{
-						# NOTE: Avoid spamming
-						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMKey\InstallProperties"
-						continue
-					}
-
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey\InstallProperties"
-
 					# NOTE: Avoid spamming
-					$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMKey\InstallProperties"
+					continue
+				}
 
-					# TODO: generate Principal entry in all registry functions
-					# Get more key entries as needed
-					[PSCustomObject]@{
-						Domain = $Domain
-						Name = $ProductKey.GetValue("DisplayName")
-						Version = $ProductKey.GetValue("DisplayVersion")
-						Publisher = $ProductKey.GetValue("Publisher")
-						InstallLocation = $InstallLocation
-						RegistryKey = $ProductKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-						# SIDKey = $HKLSubMKey
-						PSTypeName = "Ruleset.ProgramInfo"
-					}
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey\InstallProperties"
+
+				# NOTE: Avoid spamming
+				$InstallLocation = Format-Path $InstallLocation -Verbose:$false -Debug:$false
+
+				# TODO: generate Principal entry in all registry functions
+				# Get more key entries as needed
+				[PSCustomObject]@{
+					Domain = $Domain
+					Name = $ProductKey.GetValue("DisplayName")
+					Version = $ProductKey.GetValue("DisplayVersion")
+					Publisher = $ProductKey.GetValue("Publisher")
+					InstallLocation = $InstallLocation
+					RegistryKey = $ProductKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					# SIDKey = $HKLSubMKey
+					PSTypeName = "Ruleset.ProgramInfo"
 				}
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

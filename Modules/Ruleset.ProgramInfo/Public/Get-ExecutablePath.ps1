@@ -68,6 +68,7 @@ function Get-ExecutablePath
 
 	if (Test-TargetComputer $Domain)
 	{
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
@@ -75,6 +76,7 @@ function Get-ExecutablePath
 				# https://docs.microsoft.com/en-us/windows/win32/shell/app-registration
 				"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
 				# TODO: It looks like WOW6432Node key contains exact duplicate, maybe -Unique sort?
+				# TODO: Not clear whether we need Registry32 view for this key?
 				# "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths"
 			)
 		}
@@ -84,16 +86,25 @@ function Get-ExecutablePath
 			$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
+		try
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			return
+		}
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
-			$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey)
-
-			if (!$RootKey)
+			try
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+				$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey, $RegistryPermission, $RegistryRights)
+			}
+			catch
 			{
 				Write-Warning -Message "Failed to open registry root key: HKLM:$HKLMRootKey"
 				continue
@@ -103,12 +114,6 @@ function Get-ExecutablePath
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
 				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
-
-				if (!$SubKey)
-				{
-					Write-Warning -Message "Failed to open registry sub Key: $HKLMSubKey"
-					continue
-				}
 
 				# Default key can be empty
 				[string] $FilePath = $SubKey.GetValue("")
@@ -162,5 +167,7 @@ function Get-ExecutablePath
 				}
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

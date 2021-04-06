@@ -69,6 +69,7 @@ function Get-SqlManagementStudio
 
 	if (Test-TargetComputer $Domain)
 	{
+		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# 64 bit system
@@ -81,50 +82,57 @@ function Get-SqlManagementStudio
 			$HKLM = "SOFTWARE\Microsoft\Microsoft SQL Server Management Studio"
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
-		$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
-
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM)
-
-		if (!$RootKey)
+		try
 		{
-			Write-Warning -Message "Failed to open registry root key: $HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 		}
-		else
+		catch
 		{
-			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+			if ($RemoteKey)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
-				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
+				$RemoteKey.Dispose()
+			}
 
-				if (!$SubKey)
-				{
-					Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
-					continue
-				}
+			Write-Error -ErrorRecord $_
+			return
+		}
 
-				$InstallLocation = $SubKey.GetValue("SSMSInstallRoot")
+		foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+			$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
-				if ([string]::IsNullOrEmpty($InstallLocation))
-				{
-					Write-Warning -Message "Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
-					continue
-				}
+			if (!$SubKey)
+			{
+				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				continue
+			}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
+			$InstallLocation = $SubKey.GetValue("SSMSInstallRoot")
 
-				[PSCustomObject]@{
-					Domain = $Domain
-					Name = "Microsoft SQL Server Management Studio"
-					Version = $SubKey.GetValue("Version")
-					Publisher = "Microsoft Corporation"
-					InstallLocation = Format-Path $InstallLocation
-					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-					PSTypeName = "Ruleset.ProgramInfo"
-				}
+			if ([string]::IsNullOrEmpty($InstallLocation))
+			{
+				Write-Warning -Message "Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
+				continue
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
+
+			[PSCustomObject]@{
+				Domain = $Domain
+				Name = "Microsoft SQL Server Management Studio"
+				Version = $SubKey.GetValue("Version")
+				Publisher = "Microsoft Corporation"
+				InstallLocation = Format-Path $InstallLocation
+				RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+				PSTypeName = "Ruleset.ProgramInfo"
 			}
 		}
+
+		$RemoteKey.Dispose()
 	}
 }

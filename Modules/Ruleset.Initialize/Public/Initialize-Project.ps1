@@ -457,7 +457,7 @@ function Initialize-Project
 
 	# TODO: CIM may not always work
 	Write-Information -Tags "Project" -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
-	$OSCaption = Get-CimInstance -CimSession $RemoteCIM -Namespace "root\cimv2" `
+	$OSCaption = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 		-Class Win32_OperatingSystem -Property Caption | Select-Object -ExpandProperty Caption
 
 	if ([string]::IsNullOrEmpty($OSCaption))
