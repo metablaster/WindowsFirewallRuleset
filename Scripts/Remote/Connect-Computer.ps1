@@ -40,7 +40,7 @@ SOFTWARE.
 Connect to remote computer
 
 .DESCRIPTION
-Connect to computer to which firewall should be deployed
+Connect to remote computer onto which to deploy firewall
 
 .EXAMPLE
 PS> .\Connect-Computer.ps1
@@ -63,10 +63,142 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 [CmdletBinding()]
 [OutputType([void])]
-param ()
+param (
+	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+	[Parameter()]
+	[System.Management.Automation.Remoting.PSSessionOption]
+	$SessionOption = $PSSessionOption,
+
+	[Parameter()]
+	[string] $ConfigurationName = $PSSessionConfigurationName,
+
+	[Parameter()]
+	[Microsoft.Management.Infrastructure.Options.CimSessionOptions]
+	$CimSessionOption
+)
+
+Set-Variable -Name ThisScript -Scope Private -Option ReadOnly -Force -Value ($PSCmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$")
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
 
-Update-Log
+$OldSettingsScriptEA = $ErrorActionPreference
+$ErrorActionPreference = "Stop"
+
+$WSManParams = @{
+	Authentication = "Default"
+}
+
+$CimParams = @{
+	# SessionOption = $CimSessionOption
+	OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
+	Name = "RemoteCim"
+}
+
+if (($Domain -eq ([System.Environment]::MachineName)) -or ($Domain -eq "localhost"))
+{
+	# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
+	$CimSessionOption.UseSsl = $false
+	Set-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value ($CimSessionOption)
+	$CimParams["SessionOption"] = $CimOptions
+	$Domain = $Domain #"localhost"
+}
+else # Remote computer
+{
+	if (!(Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore))
+	{
+		# Credentials for remote machine
+		# TODO: -Credential param, specify SERVER\UserName
+		New-Variable -Name RemoteCredential -Scope Global -Option Constant (
+			Get-Credential -Message "Administrative credentials are required to access host '$Domain'")
+
+		if (!$RemoteCredential)
+		{
+			# Will happen if credential request was dismissed using ESC key.
+			Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
+		}
+		elseif ($RemoteCredential.Password.Length -eq 0)
+		{
+			# HACK: Will ask for password but won't be recorded
+			Write-Error -Category InvalidData -Message "User '$($RemoteCredential.UserName)' must have a password"
+			Remove-Variable -Name Credential -Scope Global -Force
+		}
+	}
+
+	$WSManParams["UseSSL"] = $true
+	$WSManParams["ComputerName"] = $Domain
+	$WSManParams["Credential"] = $RemoteCredential
+	$CimParams["Credential"] = $RemoteCredential
+	$CimParams["SessionOption"] = $CimSessionOption
+}
+
+$CimParams["SessionOption"] = $CimSessionOption
+$CimParams["ComputerName"] = $Domain
+
+try
+{
+	Write-Information -Tags "Project" -MessageData "INFO: Checking Windows remote management service on computer '$Domain'"
+	Test-WSMan @WSManParams | Out-Null
+}
+catch
+{
+	Write-Error -Category ConnectionError -TargetObject $Domain `
+		-Message "Remote management test to computer '$Domain' failed with: $($_.Exception.Message)"
+}
+
+try
+{
+	# TODO: Cim session name should be the same for local and remote host
+	# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
+	if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
+	{
+		Write-Verbose -Message "[$ThisScript] Creating new CIM session to $Domain"
+
+		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+		# verification is accomplished using a standard WS-Identity operation.
+		# NOTE: Specifying computer name may fail if WinRM listens on loopback only
+		Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (New-CimSession @CimParams)
+	}
+}
+catch
+{
+	Write-Error -Category ConnectionError -TargetObject $Domain `
+		-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
+}
+
+if ($Domain -ne "localhost")
+{
+	try
+	{
+		if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
+		{
+			Write-Information -Tags "Project" -MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
+
+			# Authentication is required to access remote registry
+			# NOTE: Registry provider does not support credentials
+			New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
+				-Root \\$Domain\C$ -Description "Remote registry authentication" | Out-Null
+		}
+	}
+	catch
+	{
+		Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
+			-Message "User authentication with '$Domain' failed with: $($_.Exception.Message)"
+	}
+
+	try
+	{
+		# TODO: For VM without external switch use -VMName
+		Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$Domain'"
+		Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential -ConfigurationName $ConfigurationName
+	}
+	catch
+	{
+		Write-Error -Category ConnectionError -TargetObject $Domain `
+			-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"
+	}
+}
+
+$ErrorActionPreference = $OldSettingsScriptEA
+Remove-Variable -Name OldSettingsScriptEA

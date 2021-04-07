@@ -198,6 +198,7 @@ Todo's in this file are categorized into following sections:
     - Rules for services, need to check services are networking services, if not write warning,
     could be implemented in `Test-Service` function
     - Parameter HelpMessage for mandatory parameters
+    - `Scripts\Remoting` scripts must be part of Ruleset.Initialize module
 
 3. Rules
 

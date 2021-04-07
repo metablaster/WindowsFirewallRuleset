@@ -269,11 +269,11 @@ if ([string]::IsNullOrEmpty($CertFile))
 			# https://docs.microsoft.com/en-us/windows/win32/seccrypto/system-store-locations
 			CertStoreLocation = "Cert:\LocalMachine\My"
 			# Specifies a friendly name for the new certificate (Friendly name field)
-			FriendlyName = "Remote WinRM $Domain"
+			FriendlyName = "WinRM Server"
+			# Specifies a description for the private key
+			KeyDescription = "WinRM remoting key"
 			# Specifies a friendly name for the private key
 			KeyFriendlyName = "WinRM and CIM remoting key"
-			# Specifies a description for the private key
-			KeyDescription = "WinRM remoting Key"
 			# The type of certificate that this cmdlet creates
 			Type = "SSLServerAuthentication"
 			# Allow password protected private key export
@@ -284,25 +284,25 @@ if ([string]::IsNullOrEmpty($CertFile))
 			# MSDN: The first DNS name is also saved as the Subject Name.
 			# If no signing certificate is specified, the first DNS name is also saved as the Issuer Name.
 			DnsName = $Domain
-			Subject = $Domain
+			Subject = $Domain # [ ]
 			# The key can be used for key encryption
 			# https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509keyusageflags?view=net-5.0
-			KeyUsage = "None"
+			KeyUsage = "None" # [ ] "DigitalSignature, KeyEncipherment"
 			# MSDN: Specifies whether the private key associated with the new certificate can be used for signing, encryption, or both
 			# None uses the default value from the underlying CSP.
 			# If the key is managed by a Cryptography Next Generation (CNG) KSP, the value is None
 			# TODO: To set to "KeyExchange" another Provider is needed that supports it
 			# The key usages for the key usages property of the private key
-			KeyUsageProperty = "None"
-			KeySpec = "None"
+			KeyUsageProperty = "None" # [ ]
+			KeySpec = "None" # [ ]
 			KeyAlgorithm = "RSA"
 			KeyLength = "2048"
 			# https://docs.microsoft.com/en-us/windows/win32/seccrypto/microsoft-cryptographic-service-providers
-			Provider = "Microsoft Software Key Storage Provider"
+			Provider = "Microsoft Software Key Storage Provider" # [ ]
 		}
 
 		# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
-		$Cert = New-SelfSignedCertificate @CertParams
+		$Cert = New-SelfSignedCertificate @CertParams -KeyUsage DigitalSignature, KeyEncipherment
 
 		Write-Information -Tags "Project" -MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 	}
@@ -381,7 +381,7 @@ if ($Target -eq "Server")
 }
 
 # TODO: Should be verified or singed by custom key instead of having many trusted self signed certs
-if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore))
+if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore -WarningAction Ignore))
 {
 	# Add public key to trusted root to trust this certificate locally
 	if ($PSCmdlet.ShouldContinue("Add certificate to trusted root store?", "Certificate not trusted"))

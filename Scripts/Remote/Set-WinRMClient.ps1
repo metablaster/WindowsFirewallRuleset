@@ -94,16 +94,12 @@ None. You cannot pipe objects to Set-WinRMClient.ps1
 [Selected.System.Xml.XmlElement]
 
 .NOTES
-TODO: This script must be part of Ruleset.Initialize module
-NOTE: Following will be set by something in this script, it prevents remote UAC
-Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: To test, configure or query remote use Connect-WSMan and New-WSManSessionOption
-HACK: Remote HTTPS with localhost name possibility in addition to local machine name
+TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
+HACK: Remote HTTPS with "localhost" name in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
-TODO: Needs polish and converting some info streams into verbose or debug
 TODO: Check parameter naming convention
 TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
@@ -115,16 +111,13 @@ TODO: Not all optional settings are configured
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations?view=powershell-7.1
-
-.LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configuration_files?view=powershell-7.1
-
-.LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/register-pssessionconfiguration?view=powershell-7.1
+https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management
 
 .LINK
 https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
+
+.LINK
+winrm help config
 #>
 
 #Requires -Version 5.1
@@ -158,6 +151,28 @@ param (
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
+# $VerbosePreference = "Continue"
+
+# NOTE: if needed for troubleshooting set "Any" to RemoteAddress parameter
+if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
+{
+	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
+
+	# "Windows Remote Management" predefined rules must be present to continue
+	# To remove use -Name WINRM-HTTP-In*
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30267" `
+		-Direction Inbound -NewPolicyStore PersistentStore | Enable-NetFirewallRule
+}
+
+if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore))
+{
+	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
+
+	# "Windows Remote Management - Compatibility Mode" must be present to be able to modify service settings
+	# To remove use -Name WINRM-HTTP-Compat*
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30252" `
+		-Direction Inbound -NewPolicyStore PersistentStore | Enable-NetFirewallRule
+}
 
 $WinRMService = Get-Service -Name WinRM
 # NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
@@ -176,7 +191,10 @@ if ($WinRMService.Status -ne "Running")
 
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
+Write-Verbose -Message "[$ThisModule] Configuring WinRM client authentication options"
+
 # Valid authentication for both client and server
+# NOTE: HTTP traffic by default only allows messages encrypted with the Negotiate or Kerberos SSP
 [hashtable] $AuthenticationOptions = @{
 	# The user name and password are sent in clear text.
 	# Basic authentication cannot be used with domain accounts
@@ -214,27 +232,15 @@ Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 	CredSSP = $false
 }
 
-# Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-
-# TODO: WinRM protocol options (one of your networks is public) -SkipNetworkProfileCheck?
-[hashtable] $ConfigOptions = @{
-	# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
-	# The default value is 60000.
-	MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds
+# NOTE: Not assuming WinRM responds, contact localhost
+if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
+{
+	$AuthenticationOptions["Kerberos"] = $true
 }
 
-# Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
-
-Write-Verbose -Message "[$ThisModule] Configuring WinRM client authentication options"
-
-# NOTE: Not assuming WinRM responds, contact localhost
-if (Get-CimInstance -Namespace "root\cimv2" `
-		-Class Win32_ComputerSystem -Property PartOfDomain |
-	Select-Object -ExpandProperty PartOfDomain)
+if ($Protocol -eq "HTTP")
 {
-	# TODO: Adjust authentication method if computer in domain
-	$AuthenticationOptions["Basic"] = $false
-	$AuthenticationOptions["Kerberos"] = $true
+	$AuthenticationOptions["Certificate"] = $false
 }
 
 try
@@ -244,7 +250,7 @@ try
 }
 catch
 {
-	Write-Warning -Message "Enabling 'Negotiate' authentication failed, enabling trough registry"
+	Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry..."
 	Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
 		[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
 }
@@ -270,51 +276,135 @@ else
 	# The default value is false
 	$ClientOptions["AllowUnencrypted"] = $true
 
-	# The TrustedHosts item can contain a comma-separated list of computer names,
-	# IP addresses, and fully-qualified domain names. Wildcards are permitted.
-	# Affects all users of the computer.
-	# TODO: Add instead of set
-	$ClientOptions["TrustedHosts"] = $Domain
+	if ($Domain -ne ([System.Environment]::MachineName))
+	{
+		# The TrustedHosts item can contain a comma-separated list of computer names,
+		# IP addresses, and fully-qualified domain names. Wildcards are permitted.
+		# Affects all users of the computer.
+		# TODO: Add instead of set
+		$ClientOptions["TrustedHosts"] = $Domain
+	}
+	else
+	{
+		$ClientOptions["TrustedHosts"] = ""
+	}
 }
 
 Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
 
-# SSL certificate
-[hashtable] $SSLCertParams = @{
-	Target = "Client"
-	Domain = $Domain
+Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
+
+# TODO: WinRM protocol options (one of your networks is public) -SkipNetworkProfileCheck?
+[hashtable] $ConfigOptions = @{
+	# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
+	# The default value is 60000.
+	MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds
 }
 
-if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
-& $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams | Out-Null
+try
+{
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
+}
+catch [System.InvalidOperationException]
+{
+	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
+	{
+		Write-Error -Category InvalidOperation -TargetObject $ConfigOptions -ErrorAction "Continue" `
+			-Message "Configuring WinRM client failed because one of the network connection types on this machine is set to 'Public'"
+
+		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
+		{
+			$HyperV = $null -ne (Get-WindowsFeature -Name Hyper-V |
+				Where-Object { $_.InstallState -eq "Installed" })
+		}
+		else
+		{
+			$HyperV = (Get-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V-All -Online |
+				Select-Object -ExpandProperty State) -eq "Enabled"
+		}
+
+		if ($HyperV)
+		{
+			# TODO: Prompt to disable Hyper-V here and Stop-Computer
+			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
+		}
+
+		# TODO: Else prompt to disable virtual switches
+	}
+	else
+	{
+		Write-Warning -Message "Configuring WinRM protocol options failed"
+	}
+}
+catch
+{
+	Write-Warning -Message "Configuring WinRM protocol options failed"
+}
+
+if ($Protocol -eq "HTTPS")
+{
+	# SSL certificate
+	[hashtable] $SSLCertParams = @{
+		Target = "Client"
+		Domain = $Domain
+	}
+
+	if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+	elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
+	& $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams | Out-Null
+}
+
+Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
+Restart-Service -Name WinRM
 
 if (!$SkipTestConnection)
 {
-	# TODO: Already defined in ProjectSettings.ps1
-	$RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
+	$WSManParams = @{
+		Authentication = "Default"
+	}
 
-	if (($Protocol -eq "HTTPS") -or ($Protocol -eq "Any"))
+	if (($Domain -ne ([System.Environment]::MachineName)) -or ($Protocol -ne "HTTP"))
+	{
+		$WSManParams["ComputerName"] = $Domain
+		# TODO: Already defined in ProjectSettings.ps1
+		$WSManParams["Credential"] = Get-Credential -Message "Credentials are required to access host '$Domain'"
+	}
+
+	if ($Protocol -ne "HTTP")
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
-		Test-WSMan -UseSSL -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default" |
-		Select-Object ProductVendor, ProductVersion | Format-List
 		# TODO: -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
+		Test-WSMan -UseSSL @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 	}
 
-	if (($Protocol -eq "HTTP") -or ($Protocol -eq "Any"))
+	if ($Protocol -ne "HTTPS")
 	{
 		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on computer '$Domain'"
-		Test-WSMan -ComputerName $Domain -Credential $RemoteCredential -Authentication "Default" |
-		Select-Object ProductVendor, ProductVersion | Format-List
+		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 	}
 }
+
+# Remove WinRM predefined compatibility rules
+# Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
 
 if ($ShowConfig)
 {
-	# NOTE: Beginning in PowerShell 6, it is no longer required to include the Property parameter for ExcludeProperty to work.
+	# MSDN: Select-Object, beginning in PowerShell 6,
+	# it is no longer required to include the Property parameter for ExcludeProperty to work.
+
+	# winrm get winrm/config
+	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
+	Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
+	Select-Object -Property Name, Enabled, PSVersion, Architecture, SupportsOptions, lang, AutoRestart, RunAsUser, RunAsPassword, Permission
+
+	# winrm enumerate winrm/config/listener
+	Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
+	Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate |
+	Select-Object -ExcludeProperty cfg, xsi
+
+
 
 	# winrm get winrm/config/client
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
@@ -343,4 +433,4 @@ if ($ShowConfig)
 	# Get-Item WSMan:\localhost\ClientCertificate\*
 }
 
-Update-Log
+# Update-Log

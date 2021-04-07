@@ -18,7 +18,9 @@ Contains scripts which are not part of modules as follows:
 
 | Remoting scripts            | Description                                                   |
 | --------------------------- | ------------------------------------------------------------- |
+| Connect-Computer.ps1        | Connect to remote computer onto which to deploy firewall      |
 | Deploy-SshKey.ps1           | Deploy public SSH key to remote host using SSH                |
+| Disable-WinRMServer.ps1     | Disable WinRM server previously enabled by Enable-WinRMServer |
 | Enable-WinRMServer.ps1      | Configure WinRM server for CIM and PowerShell remoting        |
 | Install-SslCertificate.ps1  | Install SSL certificate for PowerShell and CIM remoting       |
 | Set-WinRMClient.ps1         | Configure client computer for WinRM remoting                  |

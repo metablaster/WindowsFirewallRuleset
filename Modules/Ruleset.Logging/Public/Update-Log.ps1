@@ -65,6 +65,7 @@ None. Update-Log does not generate any output
 
 .NOTES
 TODO: when strict mode is on, errors captured by strict mode are not captured into log buffers
+TODO: It takes a lot of time when called from script, reproduce with Disable-WinRMServer.ps1
 #>
 function Update-Log
 {

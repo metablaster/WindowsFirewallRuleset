@@ -52,8 +52,10 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Deploy-SshKey.ps1` script to upload and set SSH key to server for remote debugging with VSCode
     over SSH
   - `Enable-WinRMServer.ps1` script to configure WinRM server for remoting
+  - `Disable-WinRMServer.ps1` script to disable WinRM remoting
   - `Set-WinRMClient.ps1` script to configure client for remoting
   - `Install-SslCertificate.ps1` script to install, create and export SSL certificate for remoting
+  - `Connect-Computer.ps1` script to initialize connection to remote computer
 
 - Modules
 
