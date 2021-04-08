@@ -1,8 +1,8 @@
 
 # Naming convention
 
-This file contains an incomplete naming convention rules for symbols such as parameters and variables
-used accross code in this repository.
+This file contains an incomplete naming convention rules for symbols such as parameters and
+variables used accross code in this repository.
 
 - [Naming convention](#naming-convention)
   - [Parameters](#parameters)
@@ -11,7 +11,6 @@ used accross code in this repository.
     - [Registry functions](#registry-functions)
     - [Return types](#return-types)
     - [Exceptions](#exceptions)
-    - [Sample exception handling](#sample-exception-handling)
   - [Custom objects](#custom-objects)
     - [Ruleset.ProgramInfo](#rulesetprograminfo)
     - [Ruleset.UserInfo](#rulesetuserinfo)
@@ -187,36 +186,6 @@ IOException
 - `2, 3, 4, 5` The user does not have the necessary registry rights.
 
 [Table of Contents](#table-of-contents)
-
-### Sample exception handling
-
-This is an example to get detailed problem description, it's not used in this repository except
-for initial registry authentication and access to avoid code bloat
-
-```powershell
-try
-{
-    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
-    $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $LocalRegistryView)
-}
-catch [System.UnauthorizedAccessException]
-{
-    Write-Error -Category AuthenticationError -TargetObject $RegistryHive -Message $_.Exception.Message
-    Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry access was denied for $([Environment]::MachineName)\$([Environment]::UserName) by $Domain system"
-    return
-}
-catch [System.Security.SecurityException]
-{
-    Write-Error -Category SecurityError -TargetObject $RegistryHive -Message $_.Exception.Message
-    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
-    return
-}
-catch
-{
-    Write-Error -ErrorRecord $_
-    return
-}
-```
 
 ## Custom objects
 

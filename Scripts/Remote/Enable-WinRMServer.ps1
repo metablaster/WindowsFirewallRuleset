@@ -176,7 +176,8 @@ if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore Persiste
 	# "Windows Remote Management" predefined rules must be present to continue
 	# To remove use -Name WINRM-HTTP-In*
 	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30267" `
-		-Direction Inbound -NewPolicyStore PersistentStore | Enable-NetFirewallRule
+		-Direction Inbound -NewPolicyStore PersistentStore |
+	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
 if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore))
@@ -186,7 +187,8 @@ if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore Persiste
 	# "Windows Remote Management - Compatibility Mode" must be present to be able to modify service settings
 	# To remove use -Name WINRM-HTTP-Compat*
 	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30252" `
-		-Direction Inbound -NewPolicyStore PersistentStore | Enable-NetFirewallRule
+		-Direction Inbound -NewPolicyStore PersistentStore |
+	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
 $WinRMService = Get-Service -Name WinRM

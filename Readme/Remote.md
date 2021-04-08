@@ -1,0 +1,281 @@
+
+# Remoting help
+
+This document briefly describes remoting commandlets, requirements, help notices and
+design used in this repository.
+
+- [Remoting help](#remoting-help)
+  - [Commandlets breakdown](#commandlets-breakdown)
+    - [Set-WSManQuickConfig](#set-wsmanquickconfig)
+    - [Enable-PSRemoting](#enable-psremoting)
+    - [Enable-PSSessionConfiguration](#enable-pssessionconfiguration)
+    - [Disable-PSRemoting](#disable-psremoting)
+    - [WinRM on loopback](#winrm-on-loopback)
+    - [Security descriptor flags](#security-descriptor-flags)
+    - [SkipNetworkProfileCheck commandlets](#skipnetworkprofilecheck-commandlets)
+  - [Remote registry](#remote-registry)
+    - [Remote registry requirements in PowerShell](#remote-registry-requirements-in-powershell)
+    - [Exception handling](#exception-handling)
+  - [Troubleshooting](#troubleshooting)
+    - [Troubleshooting WinRM](#troubleshooting-winrm)
+    - [Troubleshooting CIM](#troubleshooting-cim)
+      - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
+    - [Troubleshooting remote registry](#troubleshooting-remote-registry)
+
+## Commandlets breakdown
+
+A brief breakdown that is of interest, according to Microsoft docs.
+
+### Set-WSManQuickConfig
+
+- Starts the WinRM service and sets startup type to automatic.
+- Creates a listener to accept requests on any IP address, HTTP by default.
+- Adds `Windows Remote Management` firewall rules to PersistentStore (required by WinRM)
+
+[Reference][Set-WSManQuickConfig]
+
+`Set-WSManQuickConfig -UseSSL` will not work if your certificate is self signed
+
+### Enable-PSRemoting
+
+- Runs the `Set-WSManQuickConfig`
+- Creates (or recreates) the default session configurations.
+- Enables all session configurations, see [Enable-PSSessionConfiguration](#enable-pssessionconfiguration)
+- Changes the security descriptor of all session configurations to allow remote access.
+  - Removes the `Deny_All`
+  - Removes the `Network_Deny_All`
+- Sets the following registry key to `1`
+`HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy`
+- Restarts the WinRM service
+
+This provides remote access to session configurations that were reserved for local use.
+`LocalAccountTokenFilterPolicy = 1` allows remote access to members of the Administrators group.
+
+[Reference][Enable-PSRemoting]
+
+### Enable-PSSessionConfiguration
+
+- Removes the `Deny_All` setting from the security descriptor
+- Turns on the listener that accepts requests on any IP address
+- Restarts the WinRM service
+- Sets the value of the Enabled property of the session configuration in
+`WSMan:\<computer>\PlugIn\<SessionConfigurationName>\Enabled` to True.
+
+Does not remove or change the `Network_Deny_All`
+
+[Reference][Enable-PSSessionConfiguration]
+
+### Disable-PSRemoting
+
+- Changes the security descriptor of all session configurations to block remote access.
+  - Adds the `Network_Deny_All`
+
+Will **not** undo the following:
+
+- Stop and disable the WinRM service
+- Delete the listener that accepts requests on any IP address
+- Disable and remove  `Windows Remote Management` firewall rules (including compatibility rules)
+- Add `Deny_All` if it was present previously
+- Restore the following registry value to `0`:
+`HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy`
+
+`LocalAccountTokenFilterPolicy = 0` blocks remote access to members of the Administrators group.
+
+Because `Deny_All` was not added, loopback connections are still allowed, for requirements see
+[WinRM on loopback](#winrm-on-loopback)
+
+[Reference][Disable-PSRemoting]
+
+### WinRM on loopback
+
+A loopback connection is created when the following conditions are met:
+
+- The computer name to connect to is `localhost`
+- No credentials are passed in
+- Current logged in user (implicit credentials) is used for the connection
+- The `-EnableNetworkAccess` switch parameter is used with `New-PSSession`
+
+For loopback remoting reference see [Disable-PSRemoting][Disable-PSRemoting]
+
+### Security descriptor flags
+
+- `Deny_All` block all users from using session configuration, both remote and local
+- `Network_Deny_All` allow only users of the local computer to use the session configuration,
+either loopback or trough network stack
+
+For details see `-AccessMode` parameter description here [AccessMode][descriptor flags]
+
+To add or remove these flags to configurations manually use [Set-PSSessionConfiguration][set descriptor]
+
+### SkipNetworkProfileCheck commandlets
+
+`-SkipNetworkProfileCheck` switch parameter is available only by the following commandlets:
+
+- `Set-WSManQuickConfig`
+- `Enable-PSRemoting`
+- `Enable-PSSessionConfiguration`
+
+If you have Hyper-V installed that means some virtual switches will operate on public network even
+if you're on private network profile, which means you won't be able to configure all possible WinRM
+service options, except only with those commandlets listed above.
+
+Disabling those virtual switches is required in that case, uninstalling Hyper-V is alternative
+solution if disabling does not work.
+
+Of course any remaining network adapters must operate on private network profile.
+
+For reference see `-SkipNetworkProfileCheck` parameter description.
+
+[Table of Contents](#table-of-contents)
+
+## Remote registry
+
+In this repository for PowerShell `[Microsoft.Win32.RegistryKey]` class is used for remote registry.
+
+For reference see [RegistryKey][RegistryKey]
+
+### Remote registry requirements in PowerShell
+
+Following requirements apply to both endpoints involved (client and server computers):
+
+- `RemoteRegistry` service is `Running` and set to `Automatic` startup
+- Enable at a minimum following **predefined** (not custom) firewall rules:
+  - `File and Printer sharing`
+  - `Network Discovery`
+- Network adapter is on `Private` or `Domain` network profile.
+
+To initiate remote registry connection you must authenticate to remote computer with username and
+password of the user account on remote computer that belongs to `Administrators` group.
+
+`[Microsoft.Win32.RegistryKey]` does not provide any authentication methods, therefore to use it in
+PowerShell the solution is to open network drive as follows:
+
+```powershell
+$RemoteComputer = "COMPUTERNAME"
+$RemoteCredential = Get-Credential
+
+New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Name RemoteRegistry `
+    -Root \\$RemoteComputer\C$ -Description "Remote registry authentication" | Out-Null
+```
+
+Note that Registry provider (`-PSProvider Registry`) does not support specifying credentials but
+specifying `FileSystem` does the trick
+
+### Exception handling
+
+Methods of the `[Microsoft.Win32.RegistryKey]` class may throw various exceptions but not all are
+handled in this repository except for initial registry authentication and root key access to avoid
+code bloat.
+
+At a minimum you should handle `OpenRemoteBaseKey` and opening root key (but not subsequent subkeys)
+with `OpenSubkey` exceptions.
+
+Following is an example that you can copy\paste to problem script to get detailed problem description.
+
+```powershell
+try
+{
+    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $RemoteComputer"
+    $RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $RemoteComputer, $RegistryView)
+}
+catch [System.UnauthorizedAccessException]
+{
+    Write-Error -Category AuthenticationError -TargetObject $RegistryHive -Message $_.Exception.Message
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry access was denied for $([Environment]::MachineName)\$([Environment]::UserName) by $RemoteComputer system"
+    return
+}
+catch [System.Security.SecurityException]
+{
+    Write-Error -Category SecurityError -TargetObject $RegistryHive -Message $_.Exception.Message
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
+    return
+}
+catch
+{
+    Write-Error -ErrorRecord $_
+    return
+}
+
+try
+{
+    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+    $RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
+}
+catch [System.Security.SecurityException]
+{
+    Write-Error -Category SecurityError -TargetObject $HKLM -Message $_.Exception.Message
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $HKLM key"
+}
+catch
+{
+    Write-Error -ErrorRecord $_
+}
+finally
+{
+    if ($RemoteKey)
+    {
+        $RemoteKey.Dispose()
+    }
+
+    Write-Error -ErrorRecord $_
+    return
+}
+```
+
+For additional breakdown of registry key naming convention and exceptions see [NamingConvention.md](/Readme/NamingConvention.md)
+
+[Table of Contents](#table-of-contents)
+
+## Troubleshooting
+
+Following link lists common troubleshooting with remoting [About Remote Troubleshooting][troubleshooting]
+
+Following section lists other not so common problems and how to resolve them.
+
+### Troubleshooting WinRM
+
+TODO: missing resolutions for the following known problems:
+
+- SSL internal library error
+- service was configured to deny access
+- system cannot find file because it does not exist
+
+### Troubleshooting CIM
+
+#### WS-Management service does not support the specified polymorphism mode
+
+Error description example:
+
+> Get-CimInstance: The WS-Management service does not support the specified polymorphism mode.
+> Try changing the polymorphism mode specified, and try again.
+
+Error resolution:
+
+> The Web Services Management Protocol Extensions for Windows Vista service MUST return instances of
+> both base and derived classes.
+> Each returned instance MUST contain the properties of the base class.
+> Each returned instance MAY omit the properties from the derived classes and MAY set the instance
+> type of derived classes to the base class.
+
+[PolymorphismMode][winrm polymorphism]
+
+Hint:
+
+Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
+
+### Troubleshooting remote registry
+
+See following link [Troubleshooting Remote Registry][remote registry]
+
+[Table of Contents](#table-of-contents)
+
+[Enable-PSRemoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting "Visit Microsoft docs"
+[Set-WSManQuickConfig]: https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management/set-wsmanquickconfig  "Visit Microsoft docs"
+[Enable-PSSessionConfiguration]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-pssessionconfiguration "Visit Microsoft docs"
+[descriptor flags]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/register-pssessionconfiguration#parameters "Visit Microsoft docs"
+[set descriptor]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/set-pssessionconfiguration "Visit Microsoft docs"
+[Disable-PSRemoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/disable-psremoting "Visit Microsoft docs"
+[winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
+[troubleshooting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting "Visit Microsoft docs"
+[remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552)
+[RegistryKey]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey "Visit Microsoft docs"

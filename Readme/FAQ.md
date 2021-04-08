@@ -16,7 +16,6 @@ In addition, general questions and answers regarding this firewall.
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
-  - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
 
 ## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
 
@@ -70,27 +69,11 @@ In this example to fix the problem modify bad command to the following and it sh
 Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
 ```
 
-Otherwise if you're trying to deploy or manage firewall remotely, make sure at a minimum
-following is configured on computers mentioned below:
-
-1. WinRM - `Windows Remote Management (WS-Management)` service is `Running` and optionally set to
-`Automatic` startup on both client and server computers.
-2. "PowerShell remoting" is configured and enabled, for more information about PowerShell remoting see:
-    - [Enable-PSRemoting][psremoting]
-    - [Running Remote Commands][remote commands]
-3. Remote Registry service is service is `Running` and set to `Automatic` startup on both client
-and server computers.
-4. Remote computer must allow inbound connections, at a minimum `File and Printer sharing` and
-`Network Discovery` **predefined** (not custom) firewall rules.
-5. All involved computers must be on `Private` network profile.
-6. You must authenticate to remote computer, this depends on protocol in use, for `WSMan` and `CIM`
-this is handled by PowerShell remoting, for `DCOM` and `RPC` use `New-PSDrive` to open default
-remote share.
+If you're trying to deploy or manage firewall remotely see this document [Remote.md](/Readme/Remote.md)
 
 If none of this works even after reboot of all involved computers, following links might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
-- [Troubleshooting Remote Registry][remote registry]
 
 [Table of Contents](#table-of-contents)
 
@@ -338,27 +321,6 @@ network settings as follows:
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
 - Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
 
-## WS-Management service does not support the specified polymorphism mode
-
-Error description example:
-
-> Get-CimInstance: The WS-Management service does not support the specified polymorphism mode.
-> Try changing the polymorphism mode specified, and try again.
-
-Error resolution:
-
-> The Web Services Management Protocol Extensions for Windows Vista service MUST return instances of
-> both base and derived classes.
-> Each returned instance MUST contain the properties of the base class.
-> Each returned instance MAY omit the properties from the derived classes and MAY set the instance
-> type of derived classes to the base class.
-
-[PolymorphismMode][winrm polymorphism]
-
-Hint:
-
-Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
-
 [Table of Contents](#table-of-contents)
 
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
@@ -368,7 +330,3 @@ Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
 [vscode]: https://code.visualstudio.com "Visual Studio Code"
 [git]: https://git-scm.com "Visit git homepage"
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
-[psremoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1 "Visit Microsoft docs"
-[remote commands]: https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/running-remote-commands?view=powershell-7.1 "Visit Microsoft docs"
-[winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
-[remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552)
