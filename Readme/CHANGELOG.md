@@ -66,6 +66,7 @@ If you would like to see fresh changes done since last release you can do so on 
 - Documentation
 
   - Revisited few docs for clarity
+  - Added document `Remote.md` for remoting
 
 - Bugfix
 

@@ -1,0 +1,190 @@
+
+<#
+MIT License
+
+This file is part of "Windows Firewall Ruleset" project
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
+Copyright (C) 2021 metablaster zebal@protonmail.ch
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+<#PSScriptInfo
+
+.VERSION 0.10.1
+
+.GUID df474ceb-d6d3-45fc-bb05-68d45bb26b3b
+
+.AUTHOR metablaster zebal@protonmail.com
+#>
+
+<#
+.SYNOPSIS
+Show WinRM service configuration
+
+.DESCRIPTION
+Command winrm get winrm/config will show all the data, including containers and you need
+to run different commands to get different data.
+This scripts does all this and excludes containers by specifying switches.
+
+.PARAMETER Server
+Display WinRM service configuration
+
+.PARAMETER Client
+Display WinRM client configuration
+
+.PARAMETER Detailed
+Display detailed WinRM configuration not handled by Server and Client switches
+
+.EXAMPLE
+PS> .\Show-WinRMConfig.ps1
+
+.EXAMPLE
+PS> .\Show-WinRMConfig.ps1 -Server -Detailed
+
+.EXAMPLE
+PS> .\Show-WinRMConfig.ps1 -Client
+
+.INPUTS
+None. You cannot pipe objects to Show-WinRMConfig.ps1
+
+.OUTPUTS
+[System.Xml.XmlElement]
+[Selected.System.Xml.XmlElement]
+[Microsoft.WSMan.Management.WSManConfigLeafElement]
+
+.NOTES
+None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management
+
+.LINK
+winrm get winrm/config
+#>
+
+#Requires -Version 5.1
+#Requires -RunAsAdministrator
+
+[CmdletBinding()]
+[OutputType([System.Xml.XmlElement], [Microsoft.WSMan.Management.WSManConfigLeafElement])]
+param (
+	[Parameter()]
+	[switch] $Server,
+
+	[Parameter()]
+	[switch] $Client,
+
+	[Parameter()]
+	[switch] $Detailed
+)
+
+$ErrorActionPreference = "Stop"
+$InformationPreference = "Continue"
+
+$WinRMService = Get-Service -Name WinRM
+Write-Information -Tags "User" -MessageData "INFO: WinRM service status=$($WinRMService.Status) startup=$($WinRMService.StartType)"
+
+$Present = $false
+$Enabled = $false
+$Rules = Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore
+
+if ($Rules)
+{
+	$Present = $true
+	$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
+}
+
+Write-Information -Tags "User" -MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
+
+$Present = $false
+$Enabled = $false
+$Rules = Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore
+
+if ($Rules)
+{
+	$Present = $true
+	$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
+}
+
+Write-Information -Tags "User" -MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
+
+# MSDN: Select-Object, beginning in PowerShell 6,
+# it is no longer required to include the Property parameter for ExcludeProperty to work.
+
+# winrm get winrm/config
+Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
+Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
+Select-Object -Property Name, Enabled, PSVersion, Architecture, SupportsOptions, lang, AutoRestart, RunAsUser, RunAsPassword, Permission
+
+# winrm enumerate winrm/config/listener
+Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
+Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate |
+Select-Object -ExcludeProperty cfg, xsi
+
+if ($Server)
+{
+	# winrm get winrm/config/service
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server configuration"
+	Get-WSManInstance -ResourceURI winrm/config/Service |
+	Select-Object -ExcludeProperty cfg, Auth, DefaultPorts
+
+	# winrm get winrm/config/service/auth
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
+	Get-WSManInstance -ResourceURI winrm/config/Service/Auth | Select-Object -ExcludeProperty cfg
+
+	# winrm get winrm/config/service/defaultports
+	Write-Information -Tags "Project" -MessageData "INFO: Showing server default ports"
+	Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts | Select-Object -ExcludeProperty cfg
+}
+
+if ($Client)
+{
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
+	Get-WSManInstance -ResourceURI winrm/config/Client |
+	Select-Object -ExcludeProperty cfg, Auth, DefaultPorts
+
+	# winrm get winrm/config/client/auth
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
+	Get-WSManInstance -ResourceURI winrm/config/Client/Auth | Select-Object -ExcludeProperty cfg
+
+	# winrm get winrm/config/client/defaultports
+	Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
+	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts | Select-Object -ExcludeProperty cfg
+
+	# TODO: User authentication certificate
+	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
+	# Get-Item WSMan:\localhost\ClientCertificate\*
+}
+
+if ($Detailed)
+{
+	Write-Verbose -Message "Showing shell configuration"
+	Get-Item WSMan:\localhost\Shell\*
+
+	# winrm enumerate winrm/config/plugin
+	Write-Verbose -Message "Showing plugin configuration"
+	Get-Item WSMan:\localhost\Plugin\*
+}
+
+# Update-Log

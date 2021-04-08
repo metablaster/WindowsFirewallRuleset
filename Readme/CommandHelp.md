@@ -43,6 +43,7 @@ In addition to the table below, see:
   - [Troubleshooting](#troubleshooting)
     - [Get rule special properties](#get-rule-special-properties)
     - [Get new services](#get-new-services)
+    - [Gpg agent does not work](#gpg-agent-does-not-work)
   - [Code design and development](#code-design-and-development)
     - [Get type accelerators](#get-type-accelerators)
     - [Get approved verbs](#get-approved-verbs)
@@ -307,6 +308,30 @@ $DifferenceServices = Get-Service | Where-Object -Property Status -eq "Running"
 $NewServices = Compare-Object -ReferenceObject $ReferenceServices -DifferenceObject $DifferenceServices
 $NewServices | Select-Object -ExpandProperty InputObject
 ```
+
+### Gpg agent does not work
+
+Problem:
+
+```none
+gpg: can't connect to the agent
+```
+
+Fix:
+
+```none
+gpgconf --kill gpg-agent
+gpgconf --launch gpg-agent
+```
+
+If not working:
+
+```none
+gpgconf: error running 'C:\Program Files (x86)\GnuPG\bin\gpg-connect-agent.exe'
+```
+
+Then close down all programs, open new PowerShell or CMD console instance and run the fix again
+but with pause of at least 5 seconds between each command.
 
 [Table of Contents](#table-of-contents)
 

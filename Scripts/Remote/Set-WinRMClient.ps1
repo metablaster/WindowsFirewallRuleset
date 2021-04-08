@@ -357,7 +357,21 @@ if ($Protocol -eq "HTTPS")
 }
 
 Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
-Restart-Service -Name WinRM
+Restart-Service -InputObject $WinRMService
+$Seconds = 4
+
+for ($Repeat = 1; $Repeat -le 10; ++$Repeat)
+{
+	Write-Verbose -Message "[$ThisScript] Waiting $Seconds seconds for WinRM service to restart" -Verbose
+	Start-Sleep -Seconds $Seconds
+
+	if ((Get-Service -Name WinRM).Status -eq "Running")
+	{
+		break
+	}
+
+	$Seconds = 2
+}
 
 if (!$SkipTestConnection)
 {
@@ -387,52 +401,7 @@ if (!$SkipTestConnection)
 }
 
 # Remove WinRM predefined compatibility rules
-# Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
-
+Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
 Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
-
-if ($ShowConfig)
-{
-	# MSDN: Select-Object, beginning in PowerShell 6,
-	# it is no longer required to include the Property parameter for ExcludeProperty to work.
-
-	# winrm get winrm/config
-	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
-	Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
-	Select-Object -Property Name, Enabled, PSVersion, Architecture, SupportsOptions, lang, AutoRestart, RunAsUser, RunAsPassword, Permission
-
-	# winrm enumerate winrm/config/listener
-	Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
-	Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate |
-	Select-Object -ExcludeProperty cfg, xsi
-
-
-
-	# winrm get winrm/config/client
-	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
-	Get-WSManInstance -ResourceURI winrm/config/Client |
-	Select-Object -ExcludeProperty cfg, Auth, DefaultPorts
-
-	# winrm get winrm/config/client/auth
-	Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
-	Get-WSManInstance -ResourceURI winrm/config/Client/Auth | Select-Object -ExcludeProperty cfg
-
-	# winrm get winrm/config/client/defaultports
-	Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
-	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts | Select-Object -ExcludeProperty cfg
-
-	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Verbose"))
-	{
-		Write-Verbose -Message "[$ThisModule] Showing shell configuration"
-		Get-Item WSMan:\localhost\Shell\*
-
-		Write-Verbose -Message "[$ThisModule] Showing plugin configuration"
-		Get-Item WSMan:\localhost\Plugin\*
-	}
-
-	# TODO: User authentication certificate
-	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
-	# Get-Item WSMan:\localhost\ClientCertificate\*
-}
 
 # Update-Log
