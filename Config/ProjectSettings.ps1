@@ -390,19 +390,21 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		# TODO: This does not belong here
 		# WinRM service must be running at this point
-		$WinRMService = Get-Service -Name WinRM
+		$WinRM = Get-Service -Name WinRM
 
-		if ($WinRMService.Status -ne "Running")
+		if ($WinRM.Status -ne "Running")
 		{
 			Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
 
 			# NOTE: Unable to start if it's disabled
-			if ($WinRMService.StartType -eq "Disabled")
+			if ($WinRM.StartType -eq "Disabled")
 			{
-				Set-Service -InputObject $WinRMService -StartupType Automatic
+				Set-Service -InputObject $WinRM -StartupType Automatic
 			}
 
-			Start-Service -InputObject $WinRMService
+			$WinRM.Start()
+			# TODO: Default wait time
+			$WinRM.WaitForStatus("Running", "00:00:30")
 		}
 
 		Remove-Variable -Name WinRMService

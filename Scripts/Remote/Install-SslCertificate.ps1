@@ -134,7 +134,10 @@ param (
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
+$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 $ExportPath = "$ProjectRoot\Exports"
+
+Write-Verbose -Message "[$ThisModule] Configuring SSL certificate"
 
 if ($Target -eq "Server")
 {
@@ -166,6 +169,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 	}
 
 	# Search personal store for certificate first
+	Write-Verbose -Message "[$ThisModule] Searching personal store SSL certificate"
 	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
 		$_.Subject -eq "CN=$Domain"
 	}
@@ -179,6 +183,8 @@ if ([string]::IsNullOrEmpty($CertFile))
 
 	if ($CertThumbPrint)
 	{
+		Write-Verbose -Message "[$ThisModule] Validating SSL thumbprint"
+
 		if ($Cert)
 		{
 			$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbPrint
@@ -216,6 +222,8 @@ if ([string]::IsNullOrEmpty($CertFile))
 	elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
 	{
 		# Import certificate file from default repository location
+		Write-Verbose -Message "[$ThisModule] Searching default repository location for SSL certificate"
+
 		if ($Target -eq "Server")
 		{
 			$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
@@ -244,7 +252,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 	elseif ($Target -eq "Server")
 	{
 		# Create new self signed server certificate
-		Write-Information -Tags "Project" -MessageData "INFO: Creating new certificate"
+		Write-Information -Tags "Project" -MessageData "INFO: Creating new SSL certificate"
 
 		# NOTE: Yellow exclamation mark on "Key Usage" means following:
 		# The key usage extension defines the purpose (e.g., encipherment,
@@ -314,6 +322,8 @@ if ([string]::IsNullOrEmpty($CertFile))
 elseif (Test-Path -Path $CertFile -PathType Leaf -ErrorAction Ignore)
 {
 	# Import certificate file from custom location
+	Write-Verbose -Message "[$ThisModule] Using specified file as SSL certificate"
+
 	if ($Target -eq "Server")
 	{
 		$ExportFile = "$ExportPath\$((Split-Path -Path $CertFile -Leaf) -replace '\.pfx$').cer"

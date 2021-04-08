@@ -43,9 +43,6 @@ Disable WinRM server for CIM and PowerShell remoting
 Disable WinRM server for remoting previously enabled by Enable-WinRMServer.
 Configures local machine to accept loopback HTTP.
 
-.PARAMETER ShowConfig
-Display WSMan server configuration on completion
-
 .EXAMPLE
 PS> .\Disable-WinRMServer.ps1
 
@@ -59,8 +56,7 @@ None. You cannot pipe objects to Disable-WinRMServer.ps1
 None. Disable-WinRMServer.ps1 does not generate any output
 
 .NOTES
-HACK: Set-WSManInstance may fail with public profile, as a workaround use Set-WSManQuickConfig,
-rerun script twice refusing Set-WSManQuickConfig prompt next time.
+HACK: Set-WSManInstance may fail with public profile, as a workaround try use Set-WSManQuickConfig.
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
@@ -89,18 +85,27 @@ winrm help config
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding()]
 [OutputType([void])]
-param (
-	[Parameter()]
-	[switch] $ShowConfig
-)
+param ()
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
+. $PSScriptRoot\WinRMSettings.ps1 -Server
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-# $VerbosePreference = "Continue"
+$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+
+<# MSDN: Disabling the session configurations does not undo all the changes made by the
+Enable-PSRemoting or Enable-PSSessionConfiguration cmdlet.
+You might have to manually undo the changes by following these steps:
+1. Stop and disable the WinRM service.
+2. Delete the listener that accepts requests on any IP address.
+3. Disable the firewall exceptions for WS-Management communications.
+4. Restore the value of the LocalAccountTokenFilterPolicy to 0, which restricts remote access to
+members of the Administrators group on the computer.
+#>
+Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
 {
@@ -124,110 +129,54 @@ if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore Persiste
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-# NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
-$WinRMService = Get-Service -Name WinRM
+# NOTE: WinRM service must be running at this point
+$WinRM = Get-Service -Name WinRM
 
-if ($WinRMService.StartType -ne "Manual")
+# To start it, it must not be disabled
+if ($WinRM.StartType -ne "Automatic")
 {
-	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to manual startup"
-	Set-Service -InputObject $WinRMService -StartupType Manual
+	Write-Information -Tags "User" -MessageData "INFO: Setting WinRM service to automatic startup"
+	Set-Service -InputObject $WinRM -StartupType Automatic
 }
 
-if ($WinRMService.Status -ne "Running")
+if ($WinRM.Status -ne "Running")
 {
-	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
-	Start-Service -InputObject $WinRMService
+	Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
+	$WinRM.Start()
+	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
 
-<# MSDN: Disabling the session configurations does not undo all the changes made by the
-Enable-PSRemoting or Enable-PSSessionConfiguration cmdlet.
-You might have to manually undo the changes by following these steps:
-1. Stop and disable the WinRM service.
-2. Delete the listener that accepts requests on any IP address.
-3. Disable the firewall exceptions for WS-Management communications.
-4. Restore the value of the LocalAccountTokenFilterPolicy to 0, which restricts remote access to
-members of the Administrators group on the computer.
-#>
-Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
+# Remove all non default session configurations
+Write-Verbose -Message "[$ThisModule] Removing default session configurations"
+Get-PSSessionConfiguration | Where-Object {
+	$_.Name -notlike "Microsoft*" -and
+	$_.Name -ne "RemoteFirewall"
+} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
-# Remove all custom made session configurations
-Write-Verbose -Message "[$ThisModule] Removing non default session configurations"
-Get-PSSessionConfiguration -Force |	Where-Object -Property Name -NotLike "Microsoft*" |
-Unregister-PSSessionConfiguration -NoServiceRestart -Force
-
-# Disable all session configurations
+# Disable all default session configurations
 Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
-Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
+Disable-PSSessionConfiguration -Name Microsoft* -NoServiceRestart -Force
 
 # Enable only localhost or loopback
 Write-Verbose -Message "[$ThisModule] Configuring WinRM localhost"
-# Set-WSManQuickConfig -SkipNetworkProfileCheck -Force | Out-Null
-Enable-PSSessionConfiguration -Name Microsoft.PowerShell -SkipNetworkProfileCheck -NoServiceRestart -Force | Out-Null
+Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
 
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
-New-WSManInstance -SelectorSet @{Address = "*"; Transport = "http" } `
-	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
+	-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 
-# New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "http" } `
+# New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
 # 	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
-# New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "http" } `
+# New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
 # 	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
-# Specify acceptable client authentication methods
-# NOTE: HTTP traffic by default only allows messages encrypted with the Negotiate or Kerberos SSP
-[hashtable] $AuthenticationOptions = @{
-	# The user name and password are sent in clear text.
-	# Basic authentication cannot be used with domain accounts
-	# The default value is true.
-	Basic = $false
-	# Authentication by using Kerberos certificates.
-	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
-	# The default value is true.
-	Kerberos = $false
-	# An alternative to Basic Authentication over HTTPS is Negotiate.
-	# The server determines whether to use the Kerberos protocol or NTLM.
-	# This results in NTLM authentication between the client and server and payload is encrypted over HTTP.
-	# NTLM authentication is used by default whenever you specify an IP address.
-	# Use the Credential parameter in all remote commands.
-	# The Kerberos protocol is selected to authenticate a domain account, and NTLM is selected for local computer accounts.
-	# The default value is true.
-	Negotiate = $true
-	# Certificate-based authentication is a scheme in which the server authenticates a client
-	# identified by an X509 certificate.
-	# Certificate requirements:
-	# The date of the computer falls between the Valid from: to the To: date on the General tab.
-	# Host name matches the Issued to: on the General tab, or it matches one of the
-	# Subject Alternative Name exactly as displayed on the Details tab.
-	# That the Enhanced Key Usage on the Details tab contains Server authentication.
-	# On the Certification Path tab that the Current Status is This certificate is OK.
-	# The default value is true.
-	Certificate = $false
-	# Allows the client to use Credential Security Support Provider (CredSSP) authentication.
-	# The default value is false.
-	CredSSP = $false
-}
 
 # TODO: Test registry fix for cases when Negotiate is disabled
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
-[hashtable] $ServerOptions = @{
-	# NOTE:	AllowRemoteAccess is read only
-
-	# Specifies the maximum length of time, in seconds, the WinRM service takes to retrieve a packet.
-	# The default is 120 seconds.
-	MaxPacketRetrievalTimeSeconds = 10
-
-	# Specifies the idle time-out in milliseconds between Pull messages.
-	# The default is 60000.
-	EnumerationTimeoutms = 6000
-
-	# Allows the client computer to request unencrypted traffic.
-	# The default value is false
-	AllowUnencrypted = $true
-}
 
 try
 {
@@ -235,6 +184,9 @@ try
 	# Using winrm gives same result:
 	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
 }
 catch [System.InvalidOperationException]
 {
@@ -256,11 +208,11 @@ catch [System.InvalidOperationException]
 
 		if ($HyperV)
 		{
-			# TODO: Prompt to disable Hyper-V here and Stop-Computer
+			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		# TODO: Else prompt to disable virtual switches
+		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
 	}
 	else
 	{
@@ -278,15 +230,19 @@ finally
 	# UAC and allows remote access to members of the Administrators group on the computer.
 	Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
 		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-	Write-Warning -Message "Please reboot system"
 
-	Write-Information -Tags "Project" -MessageData "INFO: Stopping WS-Management service"
-	Stop-Service -Name WinRM
-	Set-Service -Name WinRM -StartupType Manual
+	if (!$Develop)
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Stopping WinRM service"
+		Set-Service -Name WinRM -StartupType Manual
+		$WinRM.Stop()
+		$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+	}
 
 	# Remove all WinRM predefined rules (including compatibility)
 	Get-NetFirewallRule -Name "WINRM*" -PolicyStore PersistentStore | Remove-NetFirewallRule
 
-	Write-Information -Tags "Project" -MessageData "INFO: Disabling WinRM server is complete"
-	# Update-Log
+	Update-Log
 }
+
+Write-Information -Tags "Project" -MessageData "INFO: Disabling WinRM server is complete"

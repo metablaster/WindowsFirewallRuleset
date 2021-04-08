@@ -63,9 +63,6 @@ Use this parameter when there are multiple certificates with same DNS entries.
 Skip testing configuration on completion.
 By default connection and authentication request on local WinRM server is performed.
 
-.PARAMETER ShowConfig
-Display WSMan server configuration on completion
-
 .PARAMETER Force
 If specified, overwrites an existing exported certificate file,
 unless it has the Read-only attribute set.
@@ -98,8 +95,7 @@ None. You cannot pipe objects to Enable-WinRMServer.ps1
 [Selected.System.Xml.XmlElement]
 
 .NOTES
-HACK: Set-WSManInstance may fail with public profile, as a workaround use Set-WSManQuickConfig,
-rerun script twice refusing Set-WSManQuickConfig prompt next time.
+HACK: Set-WSManInstance may fail with public profile, as a workaround try use Set-WSManQuickConfig.
 NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
@@ -142,7 +138,7 @@ winrm help config
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
 
@@ -156,18 +152,29 @@ param (
 	[switch] $SkipTestConnection,
 
 	[Parameter()]
-	[switch] $ShowConfig,
-
-	[Parameter()]
 	[switch] $Force
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
+. $PSScriptRoot\WinRMSettings.ps1 -Server
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-# $VerbosePreference = "Continue"
+$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 $Domain = [System.Environment]::MachineName
+
+<# MSDN: The Enable-PSRemoting cmdlet performs the following operations:
+Runs the Set-WSManQuickConfig cmdlet, which performs the following tasks:
+1. Starts the WinRM service.
+2. Sets the startup type on the WinRM service to Automatic.
+3. Creates a listener to accept requests on any IP address.
+4. Enables a firewall exception for WS-Management communications.
+5. Creates the simple and long name session endpoint configurations if needed.
+6. Enables all session configurations.
+7. Changes the security descriptor of all session configurations to allow remote access.
+Restarts the WinRM service to make the preceding changes effective.
+#>
+Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
 {
@@ -191,58 +198,62 @@ if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore Persiste
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-$WinRMService = Get-Service -Name WinRM
-# NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
+# NOTE: WinRM service must be running at this point
+$WinRM = Get-Service -Name WinRM
 
-if ($WinRMService.StartType -ne "Automatic")
+# To start it, it must not be disabled
+if ($WinRM.StartType -ne "Automatic")
 {
-	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
-	Set-Service -InputObject $WinRMService -StartupType Automatic
+	Write-Information -Tags "User" -MessageData "INFO: Setting WinRM service to automatic startup"
+	Set-Service -InputObject $WinRM -StartupType Automatic
 }
 
-if ($WinRMService.Status -ne "Running")
+if ($WinRM.Status -ne "Running")
 {
-	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
-	Start-Service -InputObject $WinRMService
+	Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
+	$WinRM.Start()
+	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
 
-<# MSDN: The Enable-PSRemoting cmdlet performs the following operations:
-Runs the Set-WSManQuickConfig cmdlet, which performs the following tasks:
-1. Starts the WinRM service.
-2. Sets the startup type on the WinRM service to Automatic.
-3. Creates a listener to accept requests on any IP address.
-4. Enables a firewall exception for WS-Management communications.
-5. Creates the simple and long name session endpoint configurations if needed.
-6. Enables all session configurations.
-7. Changes the security descriptor of all session configurations to allow remote access.
-Restarts the WinRM service to make the preceding changes effective.
-#>
-Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
+# Remove all default and repository specifc session configurations
+Write-Verbose -Message "[$ThisModule] Removing default session configurations"
+Get-PSSessionConfiguration | Where-Object {
+	$_.Name -like "Microsoft*" -or
+	$_.Name -eq "RemoteFirewall"
+} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
-# Remove all custom made session configurations
-Write-Verbose -Message "[$ThisModule] Removing non default session configurations"
-Get-PSSessionConfiguration -Force |	Where-Object -Property Name -NotLike "Microsoft*" |
-Unregister-PSSessionConfiguration -NoServiceRestart -Force
+Write-Verbose -Message "[$ThisModule] Registering custom session configuration"
+# NOTE: Register-PSSessionConfiguration will fail in Windows PowerShell otherwise
+Set-StrictMode -Off
 
-# Disable unused built in session configurations
-Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
-Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
+# [Microsoft.WSMan.Management.WSManConfigContainerElement]
+Register-PSSessionConfiguration -Path $ProjectRoot\Config\RemoteFirewall.pssc `
+	-Name "RemoteFirewall" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
+	-ThreadOptions UseCurrentThread -AccessMode Remote -NoServiceRestart -Force `
+	-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10 | Out-Null
+# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess `
+# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+Set-StrictMode -Version Latest
+
+# Register repository specific session configuration
+Write-Verbose -Message "[$ThisModule] Recreating default session configurations"
+Enable-PSRemoting -SkipNetworkProfileCheck -Force | Out-Null
 
 # Enable default configuration
-Write-Verbose -Message "[$ThisModule] Configuring WinRM server listener and session options"
-Set-WSManQuickConfig -SkipNetworkProfileCheck -Force | Out-Null
-# TODO: Set security descriptor or run Enable-PSRemoting
-Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force -SkipNetworkProfileCheck | Out-Null
-
+Write-Verbose -Message "[$ThisModule] Configuring WinRM server listener"
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 if ($Protocol -ne "HTTPS")
 {
-	New-WSManInstance -SelectorSet @{Address = "*"; Transport = "HTTP" } `
-		-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+	# Add new HTTP listener
+	Write-Verbose -Message "[$ThisModule] Configuring HTTP listener options"
+	New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
+		-SelectorSet @{Address = "*"; Transport = "HTTP" } | Out-Null
 }
 
 if ($Protocol -ne "HTTP")
 {
+	Write-Verbose -Message "[$ThisModule] Configuring HTTPS listener options"
+
 	# SSL certificate
 	[hashtable] $SSLCertParams = @{
 		Target = "Server"
@@ -253,124 +264,51 @@ if ($Protocol -ne "HTTP")
 	elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
 	$Cert = & $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams
 
-	Write-Verbose -Message "[$ThisModule] Enabling session configurations"
-	# Register repository specific session configuration
-	# [Microsoft.WSMan.Management.WSManConfigContainerElement]
-	$WSManEntry = Register-PSSessionConfiguration -Path $ProjectRoot\Config\RemoteFirewall.pssc `
-		-Name "RemoteFirewall" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
-		-ThreadOptions UseCurrentThread -AccessMode Remote -NoServiceRestart -Force `
-		-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10
-	# -RunAsCredential $RemoteCredential -UseSharedProcess `
-	# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
-
-	Write-Verbose -Message "[$ThisModule] Session configuration '$($WSManEntry.Name)' registered successfully"
-
-	# Remove the Deny_All setting from the security descriptor of the affected session
-	# The local computer must include session configurations for remote commands.
-	# Remote users use these session configurations whenever a remote command does not include the ConfigurationName parameter
-	Enable-PSSessionConfiguration -Name RemoteFirewall -NoServiceRestart -Force -SkipNetworkProfileCheck | Out-Null
-
-	Write-Verbose -Message "[$ThisModule] Configuring WinRM HTTPS server listener options"
-
 	# Add new HTTPS listener
 	New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
 		-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
-
-	if ($Protocol -eq "HTTPS")
-	{
-		# Disable HTTP listener created by Microsoft.PowerShell session configuration
-		Write-Verbose -Message "[$ThisModule] Disabling all HTTP listeners"
-		Set-WSManInstance -ResourceURI winrm/config/listener -ValueSet @{ Enabled = $false } `
-			-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
-	}
 }
 
 # Specify acceptable client authentication methods
-# NOTE: HTTP traffic by default only allows messages encrypted with the Negotiate or Kerberos SSP
-[hashtable] $AuthenticationOptions = @{
-	# The user name and password are sent in clear text.
-	# Basic authentication cannot be used with domain accounts
-	# The default value is true.
-	Basic = $false
-	# Authentication by using Kerberos certificates.
-	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
-	# The default value is true.
-	Kerberos = $false
-	# An alternative to Basic Authentication over HTTPS is Negotiate.
-	# The server determines whether to use the Kerberos protocol or NTLM.
-	# This results in NTLM authentication between the client and server and payload is encrypted over HTTP.
-	# NTLM authentication is used by default whenever you specify an IP address.
-	# Use the Credential parameter in all remote commands.
-	# The Kerberos protocol is selected to authenticate a domain account, and NTLM is selected for local computer accounts.
-	# The default value is true.
-	Negotiate = $true
-	# Certificate-based authentication is a scheme in which the server authenticates a client
-	# identified by an X509 certificate.
-	# Certificate requirements:
-	# The date of the computer falls between the Valid from: to the To: date on the General tab.
-	# Host name matches the Issued to: on the General tab, or it matches one of the
-	# Subject Alternative Name exactly as displayed on the Details tab.
-	# That the Enhanced Key Usage on the Details tab contains Server authentication.
-	# On the Certification Path tab that the Current Status is This certificate is OK.
-	# The default value is true.
-	Certificate = $true
-	# Allows the client to use Credential Security Support Provider (CredSSP) authentication.
-	# The default value is false.
-	CredSSP = $false
-}
+Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 
 # NOTE: Not assuming WinRM responds, contact localhost
 if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
 {
 	$AuthenticationOptions["Kerberos"] = $true
 }
-if ($Protocol -eq "HTTP")
+
+if ($Protocol -ne "HTTP")
 {
-	$AuthenticationOptions["Certificate"] = $false
+	$AuthenticationOptions["Certificate"] = $true
 }
 
-Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 # TODO: Test registry fix for cases when Negotiate is disabled
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
-[hashtable] $ServerOptions = @{
-	# NOTE:	AllowRemoteAccess is read only
-
-	# Specifies the maximum length of time, in seconds, the WinRM service takes to retrieve a packet.
-	# The default is 120 seconds.
-	MaxPacketRetrievalTimeSeconds = 10
-
-	# Specifies the idle time-out in milliseconds between Pull messages.
-	# The default is 60000.
-	EnumerationTimeoutms = 6000
-}
 
 if ($Protocol -eq "HTTPS")
 {
 	$ServerOptions["AllowUnencrypted"] = $false
 }
-else
-{
-	# MSDN: Allows the client computer to request unencrypted traffic.
-	# The default value is false
-	$ServerOptions["AllowUnencrypted"] = $true
-}
 
 try
 {
-	# NOTE: This will fail if any adapter is on public network, ex. Hyper-V default switch
+	# NOTE: This will fail if any adapter is on public network
 	# Using winrm gives same result:
 	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
 }
 catch [System.InvalidOperationException]
 {
 	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
 	{
-		# HACK: Need to handle this somehow
 		Write-Error -Category InvalidOperation -TargetObject $ServerOptions -ErrorAction "Continue" `
-			-Message "Enabling WinRM server failed because one of the network connection types on this machine is set to 'Public'"
+			-Message "Setting WinRM service options failed because one of the network connection types on this machine is set to 'Public'"
 
 		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
 		{
@@ -385,35 +323,31 @@ catch [System.InvalidOperationException]
 
 		if ($HyperV)
 		{
+			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		return
+		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
 	}
 	else
 	{
 		Write-Error -ErrorRecord $_ -EA Stop
 	}
 }
-
-# Remove WinRM predefined compatibility rules
-Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
-
-Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
-Restart-Service -InputObject $WinRMService
-$Seconds = 4
-
-for ($Repeat = 1; $Repeat -le 10; ++$Repeat)
+catch
 {
-	Write-Verbose -Message "[$ThisScript] Waiting $Seconds seconds for WinRM service to restart" -Verbose
-	Start-Sleep -Seconds $Seconds
+	Write-Error -ErrorRecord $_ -EA Stop
+}
+finally
+{
+	# Remove WinRM predefined compatibility rules
+	Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
 
-	if ((Get-Service -Name WinRM).Status -eq "Running")
-	{
-		break
-	}
-
-	$Seconds = 2
+	Write-Verbose -Message "[$ThisModule] Restarting WinRM service"
+	$WinRM.Stop()
+	$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+	$WinRM.Start()
+	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"
@@ -425,7 +359,7 @@ if (!$SkipTestConnection)
 	}
 
 	# NOTE: If using SSL on localhost, it would go trough network stack and for this we need authentication
-	# Otherwise error is "The server certificate on the destination computer (localhost) has the
+	# Otherwise error is: "The server certificate on the destination computer (localhost) has the
 	# following errors: Encountered an internal error in the SSL library.
 	if (($Domain -ne ([System.Environment]::MachineName)) -or ($Protocol -ne "HTTP"))
 	{
@@ -447,4 +381,4 @@ if (!$SkipTestConnection)
 	}
 }
 
-# Update-Log
+Update-Log

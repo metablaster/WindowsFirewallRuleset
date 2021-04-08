@@ -102,8 +102,8 @@ param (
 $ErrorActionPreference = "Stop"
 $InformationPreference = "Continue"
 
-$WinRMService = Get-Service -Name WinRM
-Write-Information -Tags "User" -MessageData "INFO: WinRM service status=$($WinRMService.Status) startup=$($WinRMService.StartType)"
+$WinRM = Get-Service -Name WinRM
+Write-Information -Tags "User" -MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
 
 $Present = $false
 $Enabled = $false
@@ -128,6 +128,20 @@ if ($Rules)
 }
 
 Write-Information -Tags "User" -MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
+
+# To start it, it must not be disabled
+if ($WinRM.StartType -eq "Disabled")
+{
+	Write-Information -Tags "User" -MessageData "INFO: Setting WinRM service to manual startup"
+	Set-Service -InputObject $WinRM -StartupType Manual
+}
+
+if ($WinRM.Status -ne "Running")
+{
+	Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
+	$WinRM.Start()
+	$WinRM.WaitForStatus("Running", "00:00:30")
+}
 
 # MSDN: Select-Object, beginning in PowerShell 6,
 # it is no longer required to include the Property parameter for ExcludeProperty to work.
@@ -179,12 +193,12 @@ if ($Client)
 
 if ($Detailed)
 {
-	Write-Verbose -Message "Showing shell configuration"
+	Write-Verbose -Message "Showing shell configuration" -Verbose
 	Get-Item WSMan:\localhost\Shell\*
 
 	# winrm enumerate winrm/config/plugin
-	Write-Verbose -Message "Showing plugin configuration"
+	Write-Verbose -Message "Showing plugin configuration" -Verbose
 	Get-Item WSMan:\localhost\Plugin\*
 }
 
-# Update-Log
+Update-Log

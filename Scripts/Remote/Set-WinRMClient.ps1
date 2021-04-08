@@ -64,9 +64,6 @@ Use this parameter when there are multiple certificates with same DNS entries.
 Skip testing configuration on completion.
 By default connection and authentication request on remote WinRM server is performed.
 
-.PARAMETER ShowConfig
-Display WSMan server configuration on completion
-
 .EXAMPLE
 PS> .\Set-WinRMClient.ps1 -Domain Server1
 
@@ -126,7 +123,7 @@ winrm help config
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
 
@@ -141,17 +138,16 @@ param (
 	[string] $CertThumbPrint,
 
 	[Parameter()]
-	[switch] $SkipTestConnection,
-
-	[Parameter()]
-	[switch] $ShowConfig
+	[switch] $SkipTestConnection
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
+. $PSScriptRoot\WinRMSettings.ps1 -Client
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
-# $VerbosePreference = "Continue"
+$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 # NOTE: if needed for troubleshooting set "Any" to RemoteAddress parameter
 if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
@@ -176,63 +172,23 @@ if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore Persiste
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-$WinRMService = Get-Service -Name WinRM
 # NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
+$WinRM = Get-Service -Name WinRM
 
-if ($WinRMService.StartType -ne "Automatic")
+if ($WinRM.StartType -ne "Automatic")
 {
 	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
-	Set-Service -InputObject $WinRMService -StartupType Automatic
+	Set-Service -InputObject $WinRM -StartType Automatic
 }
 
-if ($WinRMService.Status -ne "Running")
+if ($WinRM.Status -ne "Running")
 {
 	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
-	Start-Service -InputObject $WinRMService
+	$WinRM.Start()
+	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
-
-Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM client authentication options"
-
-# Valid authentication for both client and server
-# NOTE: HTTP traffic by default only allows messages encrypted with the Negotiate or Kerberos SSP
-[hashtable] $AuthenticationOptions = @{
-	# The user name and password are sent in clear text.
-	# Basic authentication cannot be used with domain accounts
-	# The default value is true.
-	Basic = $false
-	# Challenge-response scheme that uses a server-specified data string for the challenge.
-	# Supported by both HTTP and HTTPS
-	# The WinRM service does not accept Digest authentication.
-	# The default value is true.
-	Digest = $false
-	# Authentication by using Kerberos certificates.
-	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
-	# The default value is true.
-	Kerberos = $false
-	# An alternative to Basic Authentication over HTTPS is Negotiate.
-	# The server determines whether to use the Kerberos protocol or NTLM.
-	# This results in NTLM authentication between the client and server and payload is encrypted over HTTP.
-	# NTLM authentication is used by default whenever you specify an IP address.
-	# Use the Credential parameter in all remote commands.
-	# The Kerberos protocol is selected to authenticate a domain account, and NTLM is selected for local computer accounts.
-	# The default value is true.
-	Negotiate = $true
-	# Certificate-based authentication is a scheme in which the server authenticates a client
-	# identified by an X509 certificate.
-	# Certificate requirements:
-	# The date of the computer falls between the Valid from: to the To: date on the General tab.
-	# Host name matches the Issued to: on the General tab, or it matches one of the
-	# Subject Alternative Name exactly as displayed on the Details tab.
-	# That the Enhanced Key Usage on the Details tab contains Server authentication.
-	# On the Certification Path tab that the Current Status is This certificate is OK.
-	# The default value is true.
-	Certificate = $true
-	# Allows the client to use Credential Security Support Provider (CredSSP) authentication.
-	# The default value is false.
-	CredSSP = $false
-}
 
 # NOTE: Not assuming WinRM responds, contact localhost
 if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
@@ -240,9 +196,9 @@ if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty 
 	$AuthenticationOptions["Kerberos"] = $true
 }
 
-if ($Protocol -eq "HTTP")
+if ($Protocol -ne "HTTP")
 {
-	$AuthenticationOptions["Certificate"] = $false
+	$AuthenticationOptions["Certificate"] = $true
 }
 
 try
@@ -260,48 +216,16 @@ catch
 Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM client options"
-[hashtable] $ClientOptions = @{
-	# Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
-	# The default value is 5000 milliseconds.
-	NetworkDelayms = 1000
-}
 
-if ($Protocol -eq "HTTPS")
+if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName)))
 {
-	$ClientOptions["AllowUnencrypted"] = $false
-
-	$ClientOptions["TrustedHosts"] = ""
-}
-else
-{
-	# Allows the client computer to request unencrypted traffic.
-	# The default value is false
-	$ClientOptions["AllowUnencrypted"] = $true
-
-	if ($Domain -ne ([System.Environment]::MachineName))
-	{
-		# The TrustedHosts item can contain a comma-separated list of computer names,
-		# IP addresses, and fully-qualified domain names. Wildcards are permitted.
-		# Affects all users of the computer.
-		# TODO: Add instead of set
-		$ClientOptions["TrustedHosts"] = $Domain
-	}
-	else
-	{
-		$ClientOptions["TrustedHosts"] = ""
-	}
+	# TODO: Add instead of set
+	$ClientOptions["TrustedHosts"] = $Domain
 }
 
 Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-
-# TODO: WinRM protocol options (one of your networks is public) -SkipNetworkProfileCheck?
-[hashtable] $ConfigOptions = @{
-	# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
-	# The default value is 60000.
-	MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds
-}
 
 try
 {
@@ -327,11 +251,11 @@ catch [System.InvalidOperationException]
 
 		if ($HyperV)
 		{
-			# TODO: Prompt to disable Hyper-V here and Stop-Computer
+			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		# TODO: Else prompt to disable virtual switches
+		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
 	}
 	else
 	{
@@ -357,21 +281,10 @@ if ($Protocol -eq "HTTPS")
 }
 
 Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
-Restart-Service -InputObject $WinRMService
-$Seconds = 4
-
-for ($Repeat = 1; $Repeat -le 10; ++$Repeat)
-{
-	Write-Verbose -Message "[$ThisScript] Waiting $Seconds seconds for WinRM service to restart" -Verbose
-	Start-Sleep -Seconds $Seconds
-
-	if ((Get-Service -Name WinRM).Status -eq "Running")
-	{
-		break
-	}
-
-	$Seconds = 2
-}
+$WinRM.Stop()
+$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+$WinRM.Start()
+$WinRM.WaitForStatus("Running", $ServiceTimeout)
 
 if (!$SkipTestConnection)
 {
@@ -404,4 +317,4 @@ if (!$SkipTestConnection)
 Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
 Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
 
-# Update-Log
+Update-Log

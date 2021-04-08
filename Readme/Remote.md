@@ -10,6 +10,7 @@ design used in this repository.
     - [Enable-PSRemoting](#enable-psremoting)
     - [Enable-PSSessionConfiguration](#enable-pssessionconfiguration)
     - [Disable-PSRemoting](#disable-psremoting)
+    - [Disable-PSSessionConfiguration](#disable-pssessionconfiguration)
     - [WinRM on loopback](#winrm-on-loopback)
     - [Security descriptor flags](#security-descriptor-flags)
     - [SkipNetworkProfileCheck commandlets](#skipnetworkprofilecheck-commandlets)
@@ -18,6 +19,7 @@ design used in this repository.
     - [Exception handling](#exception-handling)
   - [Troubleshooting](#troubleshooting)
     - [Troubleshooting WinRM](#troubleshooting-winrm)
+      - [Encountered an internal error in the SSL library](#encountered-an-internal-error-in-the-ssl-library)
     - [Troubleshooting CIM](#troubleshooting-cim)
       - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
     - [Troubleshooting remote registry](#troubleshooting-remote-registry)
@@ -44,11 +46,11 @@ A brief breakdown that is of interest, according to Microsoft docs.
 - Changes the security descriptor of all session configurations to allow remote access.
   - Removes the `Deny_All`
   - Removes the `Network_Deny_All`
-- Sets the following registry key to `1`
+- Sets the following registry key to `1`\
 `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy`
 - Restarts the WinRM service
 
-This provides remote access to session configurations that were reserved for local use.
+This provides remote access to session configurations that were reserved for local use.\
 `LocalAccountTokenFilterPolicy = 1` allows remote access to members of the Administrators group.
 
 [Reference][Enable-PSRemoting]
@@ -58,7 +60,7 @@ This provides remote access to session configurations that were reserved for loc
 - Removes the `Deny_All` setting from the security descriptor
 - Turns on the listener that accepts requests on any IP address
 - Restarts the WinRM service
-- Sets the value of the Enabled property of the session configuration in
+- Sets the value of the Enabled property of the session configuration in\
 `WSMan:\<computer>\PlugIn\<SessionConfigurationName>\Enabled` to True.
 
 Does not remove or change the `Network_Deny_All`
@@ -67,8 +69,9 @@ Does not remove or change the `Network_Deny_All`
 
 ### Disable-PSRemoting
 
-- Changes the security descriptor of all session configurations to block remote access.
-  - Adds the `Network_Deny_All`
+Changes the security descriptor of all session configurations to block remote access
+
+- Adds the `Network_Deny_All`
 
 Will **not** undo the following:
 
@@ -76,7 +79,7 @@ Will **not** undo the following:
 - Delete the listener that accepts requests on any IP address
 - Disable and remove  `Windows Remote Management` firewall rules (including compatibility rules)
 - Add `Deny_All` if it was present previously
-- Restore the following registry value to `0`:
+- Restore the following registry value to `0`\
 `HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy`
 
 `LocalAccountTokenFilterPolicy = 0` blocks remote access to members of the Administrators group.
@@ -85,6 +88,12 @@ Because `Deny_All` was not added, loopback connections are still allowed, for re
 [WinRM on loopback](#winrm-on-loopback)
 
 [Reference][Disable-PSRemoting]
+
+### Disable-PSSessionConfiguration
+
+- Adds the `Deny_All` setting to the security descriptor
+- Sets the value of the Enabled property of the session configuration in\
+`WSMan:\<computer>\PlugIn\<SessionConfigurationName>\Enabled` to False.
 
 ### WinRM on loopback
 
@@ -158,7 +167,7 @@ New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Name RemoteReg
     -Root \\$RemoteComputer\C$ -Description "Remote registry authentication" | Out-Null
 ```
 
-Note that Registry provider (`-PSProvider Registry`) does not support specifying credentials but
+Note that Registry provider `-PSProvider Registry` does not support specifying credentials but
 specifying `FileSystem` does the trick
 
 ### Exception handling
@@ -236,9 +245,16 @@ Following section lists other not so common problems and how to resolve them.
 
 TODO: missing resolutions for the following known problems:
 
-- SSL internal library error
 - service was configured to deny access
 - system cannot find file because it does not exist
+
+#### Encountered an internal error in the SSL library
+
+> The server certificate on the destination computer (localhost) has the following errors:
+> Encountered an internal error in the SSL library.
+
+If using SSL on localhost, it would go trough network stack and for this you need authentication,
+which means specifying host name, user name and password.
 
 ### Troubleshooting CIM
 

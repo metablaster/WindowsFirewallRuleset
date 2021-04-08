@@ -24,6 +24,7 @@ Contains scripts which are not part of modules as follows:
 | Enable-WinRMServer.ps1      | Configure WinRM server for CIM and PowerShell remoting        |
 | Install-SslCertificate.ps1  | Install SSL certificate for PowerShell and CIM remoting       |
 | Set-WinRMClient.ps1         | Configure client computer for WinRM remoting                  |
+| Show-WinRMConfig.ps1        | Show WinRM service configuration                              |
 
 ---
 
