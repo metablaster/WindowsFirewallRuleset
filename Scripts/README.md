@@ -22,9 +22,11 @@ Contains scripts which are not part of modules as follows:
 | Deploy-SshKey.ps1           | Deploy public SSH key to remote host using SSH                |
 | Disable-WinRMServer.ps1     | Disable WinRM server previously enabled by Enable-WinRMServer |
 | Enable-WinRMServer.ps1      | Configure WinRM server for CIM and PowerShell remoting        |
-| Install-SslCertificate.ps1  | Install SSL certificate for PowerShell and CIM remoting       |
+| Register-SslCertificate.ps1 | Install SSL certificate for PowerShell and CIM remoting       |
 | Set-WinRMClient.ps1         | Configure client computer for WinRM remoting                  |
 | Show-WinRMConfig.ps1        | Show WinRM service configuration                              |
+| Test-WinRM.ps1              | Test WinRM service configuration                              |
+| WinRMSettings.ps1           | WinRM service configuration settings                          |
 
 ---
 

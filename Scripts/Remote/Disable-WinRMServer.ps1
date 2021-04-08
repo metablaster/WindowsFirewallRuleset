@@ -62,9 +62,7 @@ TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Check parameter naming convention
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Client settings are missing
-TODO: Not all optional settings are configured
+TODO: Remote registry disable
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -107,24 +105,21 @@ members of the Administrators group on the computer.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
+if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
 
 	# "Windows Remote Management" predefined rules must be present to continue
-	# To remove use -Name WINRM-HTTP-In*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30267" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore))
+if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
 
-	# "Windows Remote Management - Compatibility Mode" must be present to be able to modify service settings
-	# To remove use -Name WINRM-HTTP-Compat*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30252" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
@@ -180,13 +175,12 @@ Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 
 try
 {
-	# NOTE: This will fail if any adapter is on public network, ex. Hyper-V default switch
-	# Using winrm gives same result:
+	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
 	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 }
 catch [System.InvalidOperationException]
 {
@@ -233,16 +227,19 @@ finally
 
 	if (!$Develop)
 	{
+		# TODO: We still need local host functionality
 		Write-Information -Tags "Project" -MessageData "INFO: Stopping WinRM service"
 		Set-Service -Name WinRM -StartupType Manual
 		$WinRM.Stop()
 		$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
 	}
 
-	# Remove all WinRM predefined rules (including compatibility)
-	Get-NetFirewallRule -Name "WINRM*" -PolicyStore PersistentStore | Remove-NetFirewallRule
+	# Remove all WinRM predefined rules
+	Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
+		-Direction Inbound -PolicyStore PersistentStore
 
 	Update-Log
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: Disabling WinRM server is complete"
+Update-Log

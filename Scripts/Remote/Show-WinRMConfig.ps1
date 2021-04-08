@@ -107,7 +107,7 @@ Write-Information -Tags "User" -MessageData "INFO: WinRM service status=$($WinRM
 
 $Present = $false
 $Enabled = $false
-$Rules = Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore
+$Rules = Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore
 
 if ($Rules)
 {
@@ -119,7 +119,7 @@ Write-Information -Tags "User" -MessageData "INFO: Service firewall rules presen
 
 $Present = $false
 $Enabled = $false
-$Rules = Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore
+$Rules = Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore
 
 if ($Rules)
 {
@@ -140,7 +140,7 @@ if ($WinRM.Status -ne "Running")
 {
 	Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
 	$WinRM.Start()
-	$WinRM.WaitForStatus("Running", "00:00:30")
+	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
 
 # MSDN: Select-Object, beginning in PowerShell 6,

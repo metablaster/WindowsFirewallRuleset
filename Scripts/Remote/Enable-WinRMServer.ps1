@@ -59,10 +59,6 @@ This must be PFX file.
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
-.PARAMETER SkipTestConnection
-Skip testing configuration on completion.
-By default connection and authentication request on local WinRM server is performed.
-
 .PARAMETER Force
 If specified, overwrites an existing exported certificate file,
 unless it has the Read-only attribute set.
@@ -81,10 +77,10 @@ Configures server machine to accept remote commands using using either HTTPS or 
 Client will authenticate with specified certificate for HTTPS.
 
 .EXAMPLE
-PS> .\Enable-WinRMServer.ps1 -Protocol HTTP -ShowConfig -SkipTestConnection
+PS> .\Enable-WinRMServer.ps1 -Protocol HTTP -ShowConfig
 
 Configures server machine to accept remote commands using HTTP,
-when done WinRM server configuration is shown and WinRM test is not performed.
+when done WinRM server configuration.
 
 .INPUTS
 None. You cannot pipe objects to Enable-WinRMServer.ps1
@@ -98,7 +94,6 @@ None. You cannot pipe objects to Enable-WinRMServer.ps1
 HACK: Set-WSManInstance may fail with public profile, as a workaround try use Set-WSManQuickConfig.
 NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
 HACK: Remote HTTPS with "localhost" name in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
 TODO: Needs testing with PS Core
@@ -106,9 +101,7 @@ TODO: Risk mitigation
 TODO: Check parameter naming convention
 TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Client settings are missing for server
-TODO: Not all optional settings are configured
+TODO: Remote registry setup
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -149,9 +142,6 @@ param (
 	[string] $CertThumbPrint,
 
 	[Parameter()]
-	[switch] $SkipTestConnection,
-
-	[Parameter()]
 	[switch] $Force
 )
 
@@ -176,24 +166,21 @@ Restarts the WinRM service to make the preceding changes effective.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
+# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
+if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
 
-	# "Windows Remote Management" predefined rules must be present to continue
-	# To remove use -Name WINRM-HTTP-In*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30267" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore))
+if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
 
-	# "Windows Remote Management - Compatibility Mode" must be present to be able to modify service settings
-	# To remove use -Name WINRM-HTTP-Compat*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30252" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
@@ -295,13 +282,12 @@ if ($Protocol -eq "HTTPS")
 
 try
 {
-	# NOTE: This will fail if any adapter is on public network
-	# Using winrm gives same result:
+	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
 	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 }
 catch [System.InvalidOperationException]
 {
@@ -341,7 +327,13 @@ catch
 finally
 {
 	# Remove WinRM predefined compatibility rules
-	Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
+	Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
+		-PolicyStore PersistentStore
+
+	# Restore public profile rules to local subnet which is the default
+	Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+		$_.Profile -like "*Public*"
+	} | Set-NetFirewallRule -RemoteAddress LocalSubnet
 
 	Write-Verbose -Message "[$ThisModule] Restarting WinRM service"
 	$WinRM.Stop()
@@ -351,34 +343,4 @@ finally
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"
-
-if (!$SkipTestConnection)
-{
-	$WSManParams = @{
-		Authentication = "Default"
-	}
-
-	# NOTE: If using SSL on localhost, it would go trough network stack and for this we need authentication
-	# Otherwise error is: "The server certificate on the destination computer (localhost) has the
-	# following errors: Encountered an internal error in the SSL library.
-	if (($Domain -ne ([System.Environment]::MachineName)) -or ($Protocol -ne "HTTP"))
-	{
-		$WSManParams["ComputerName"] = $Domain
-		# TODO: Already defined in ProjectSettings.ps1
-		$WSManParams["Credential"] = Get-Credential -Message "Credentials are required to access host '$Domain'"
-	}
-
-	if ($Protocol -ne "HTTP")
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on localhost '$Domain'"
-		Test-WSMan -UseSSL @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
-	}
-
-	if ($Protocol -ne "HTTPS")
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on localhost '$Domain'"
-		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
-	}
-}
-
 Update-Log

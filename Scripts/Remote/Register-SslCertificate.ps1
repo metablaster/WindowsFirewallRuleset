@@ -37,7 +37,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Install SSL certificate for CIM and PowerShell remoting
+Register SSL certificate for CIM and PowerShell remoting
 
 .DESCRIPTION
 Install SSL certificate to be used for encrypted PowerShell remoting.
@@ -72,24 +72,24 @@ If specified, overwrites an existing exported certificate file,
 unless it has the Read-only attribute set.
 
 .EXAMPLE
-PS> .\Install-SslCertificate.ps1 -Target Server
+PS> .\Register-SslCertificate.ps1 -Target Server
 
 Installs existing or new SSL certificate on server computer,
 public key is exported to be used on client computer.
 
 .EXAMPLE
-PS> .\Install-SslCertificate.ps1 -Target Client -CertFile C:\Cert\Server.cer
+PS> .\Register-SslCertificate.ps1 -Target Client -CertFile C:\Cert\Server.cer
 
 Installs specified SSL certificate on client computer.
 
 .EXAMPLE
-PS> .\Install-SslCertificate.ps1 -Target Server -CertThumbPrint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
+PS> .\Register-SslCertificate.ps1 -Target Server -CertThumbPrint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
 
 Installs existing SSL certificate with specified thumbprint on the server computer,
 public key is exported to be used on client computer.
 
 .INPUTS
-None. You cannot pipe objects to Install-SslCertificate.ps1
+None. You cannot pipe objects to Register-SslCertificate.ps1
 
 .OUTPUTS
 [System.Security.Cryptography.X509Certificates.X509Certificate2]

@@ -4,7 +4,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,10 @@ SOFTWARE.
 
 #Requires -Version 5.1
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
+param ()
+
 # Utility or settings scripts don't do anything on their own
 if ($MyInvocation.InvocationName -ne '.')
 {
@@ -34,80 +38,4 @@ if ($MyInvocation.InvocationName -ne '.')
 		-Message "This is settings script and must be dot sourced where needed" -EA Stop
 }
 
-# Firewall rules exist for programs listed here
-# Services and store apps are not part of this enumeration
-enum TargetProgram
-{
-	dotnet
-	CMake
-	SqlPath
-	SqlServer
-	SqlManagementStudio
-	WindowsDefender
-	NuGet
-	NETFramework
-	vcpkg
-	SysInternals
-	WindowsKits
-	WebPlatform
-	XTU
-	Chocolatey
-	ArenaChess
-	GoogleDrive
-	RivaTuner
-	Incredibuild
-	MetaTrader
-	RealWorld
-	qBittorrent
-	OpenTTD
-	EveOnline
-	DemiseOfNations
-	CounterStrikeGO
-	PinballArcade
-	JavaUpdate
-	JavaRuntime
-	AdobeARM
-	AdobeReader
-	AdobeAcrobat
-	LoLGame
-	FileZilla
-	PathOfExile
-	HWMonitor
-	CPUZ
-	MSIAfterburner
-	GPG
-	OBSStudio
-	PasswordSafe
-	Greenshot
-	DnsCrypt
-	OpenSSH
-	PowerShellCore64
-	PowerShell64
-	PowerShell86
-	OneDrive
-	HelpViewer
-	VSCode
-	MicrosoftOffice
-	TeamViewer
-	EdgeChromium
-	Chrome
-	Firefox
-	Yandex
-	Tor
-	uTorrent
-	Thuderbird
-	Steam
-	Nvidia64
-	Nvidia86
-	GeForceExperience
-	WarThunder
-	PokerStars
-	VisualStudio
-	VisualStudioInstaller
-	MSYS2
-	Git
-	GitHubDesktop
-	EpicGames
-	UnrealEngine
-	BingWallpaper
-}
+# TODO: Define settings here

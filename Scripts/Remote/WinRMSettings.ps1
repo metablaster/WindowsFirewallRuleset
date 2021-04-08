@@ -26,6 +26,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+.SYNOPSIS
+WinRM service options
+
+.DESCRIPTION
+WinRM service options include, protocol, service, client and winrs settings
+
+.PARAMETER Client
+Include setting that apply to client configuration
+
+.PARAMETER Server
+Include setting that apply to service configuration
+
+.EXAMPLE
+PS> .\WinRMSettings.ps1
+
+.INPUTS
+None. You cannot pipe objects to WinRMSettings.ps1
+
+.OUTPUTS
+None. WinRMSettings.ps1 does not generate any output
+
+.NOTES
+TODO: Default options, "Reset" switch
+TODO: Not all optional settings are configured
+TODO: Client settings are missing for server
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
+https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
+#>
+
 #Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
@@ -38,10 +72,21 @@ param (
 	[switch] $Server
 )
 
+# Utility or settings scripts don't do anything on their own
+if ($MyInvocation.InvocationName -ne '.')
+{
+	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
+		-Message "This is settings script and must be dot sourced where needed" -EA Stop
+}
+
 # Timeout to start and stop WinRM service
 $ServiceTimeout = "00:00:30"
 
-[hashtable] $ConfigOptions = @{
+# Firewall rules needed to be present to configure some of the WinRM options
+$WinRMRules = "@FirewallAPI.dll,-30267"
+$WinRMCompatibilityRules = "@FirewallAPI.dll,-30252"
+
+[hashtable] $ProtocolOptions = @{
 	# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
 	# The default value is 60000.
 	MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds

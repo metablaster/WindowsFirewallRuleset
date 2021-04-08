@@ -48,6 +48,7 @@ By default only HTTPS is configured.
 
 .PARAMETER Domain
 Computer name which is to be managed remotely.
+If not specified local machine is the default.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -59,10 +60,6 @@ Certificate file must be DER encoded CER file
 .PARAMETER CertThumbPrint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
-
-.PARAMETER SkipTestConnection
-Skip testing configuration on completion.
-By default connection and authentication request on remote WinRM server is performed.
 
 .EXAMPLE
 PS> .\Set-WinRMClient.ps1 -Domain Server1
@@ -100,9 +97,7 @@ TODO: Risk mitigation
 TODO: Check parameter naming convention
 TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Server settings are missing for client
-TODO: Not all optional settings are configured
+TODO: Remote registry setup and test
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -127,18 +122,15 @@ param (
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
 
-	[Parameter(Mandatory = $true)]
+	[Parameter()]
 	[Alias("ComputerName", "CN")]
-	[string] $Domain,
+	[string] $Domain = [System.Environment]::MachineName,
 
 	[Parameter(ParameterSetName = "File")]
 	[string] $CertFile,
 
 	[Parameter(ParameterSetName = "CertThumbPrint")]
-	[string] $CertThumbPrint,
-
-	[Parameter()]
-	[switch] $SkipTestConnection
+	[string] $CertThumbPrint
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
@@ -149,25 +141,21 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# NOTE: if needed for troubleshooting set "Any" to RemoteAddress parameter
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30267" -PolicyStore PersistentStore -EA Ignore))
+if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
 
 	# "Windows Remote Management" predefined rules must be present to continue
-	# To remove use -Name WINRM-HTTP-In*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30267" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
 
-if (!(Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore -EA Ignore))
+if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
 
-	# "Windows Remote Management - Compatibility Mode" must be present to be able to modify service settings
-	# To remove use -Name WINRM-HTTP-Compat*
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group "@FirewallAPI.dll,-30252" `
+	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 }
@@ -229,13 +217,15 @@ Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
 
 try
 {
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ConfigOptions | Out-Null
+	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+	# cmd.exe /C 'winrm set winrm/config @{MaxTimeoutms=10}'
+	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 }
 catch [System.InvalidOperationException]
 {
 	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
 	{
-		Write-Error -Category InvalidOperation -TargetObject $ConfigOptions -ErrorAction "Continue" `
+		Write-Error -Category InvalidOperation -TargetObject $ProtocolOptions -ErrorAction "Continue" `
 			-Message "Configuring WinRM client failed because one of the network connection types on this machine is set to 'Public'"
 
 		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
@@ -286,35 +276,14 @@ $WinRM.WaitForStatus("Stopped", $ServiceTimeout)
 $WinRM.Start()
 $WinRM.WaitForStatus("Running", $ServiceTimeout)
 
-if (!$SkipTestConnection)
-{
-	$WSManParams = @{
-		Authentication = "Default"
-	}
-
-	if (($Domain -ne ([System.Environment]::MachineName)) -or ($Protocol -ne "HTTP"))
-	{
-		$WSManParams["ComputerName"] = $Domain
-		# TODO: Already defined in ProjectSettings.ps1
-		$WSManParams["Credential"] = Get-Credential -Message "Credentials are required to access host '$Domain'"
-	}
-
-	if ($Protocol -ne "HTTP")
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on computer '$Domain'"
-		# TODO: -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
-		Test-WSMan -UseSSL @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
-	}
-
-	if ($Protocol -ne "HTTPS")
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on computer '$Domain'"
-		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
-	}
-}
-
 # Remove WinRM predefined compatibility rules
-Get-NetFirewallRule -Group "@FirewallAPI.dll,-30252" -PolicyStore PersistentStore | Remove-NetFirewallRule
-Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
+Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
+	-PolicyStore PersistentStore
 
+# Restore public profile rules to local subnet which is the default
+Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+	$_.Profile -like "*Public*"
+} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+
+Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
 Update-Log
