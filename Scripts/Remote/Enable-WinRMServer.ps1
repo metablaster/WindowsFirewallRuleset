@@ -255,7 +255,7 @@ $SessionConfigParams = @{
 
 	# The specified script runs in the new session that uses the session configuration.
 	# If the script generates an error, even a non-terminating error, the session is not created.
-	# TODO: Following path is created by "MountUserDrive" option in RemoteFirewall.pssc
+	# TODO: Following path is created by "MountUserDrive" option in RemoteFirewall.pssc (another option is: ScriptsToProcess in *.pssc)
 	# StartupScript = "$env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME\ProjectSettings.ps1"
 
 	# The default value is UseCurrentThread.
@@ -270,9 +270,9 @@ $SessionConfigParams = @{
 	# RunAsCredential = Get-Credential
 }
 
-Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
 # TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
 # -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
 Set-StrictMode -Version Latest
 
 Write-Verbose -Message "[$ThisModule] Recreating default session configurations"
@@ -291,7 +291,7 @@ if ($Protocol -ne "HTTPS")
 	# Add new HTTP listener
 	Write-Verbose -Message "[$ThisModule] Configuring HTTP listener options"
 	New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
-		-SelectorSet @{Address = "*"; Transport = "HTTP" } | Out-Null
+		-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 }
 
 if ($Protocol -ne "HTTP")
@@ -329,6 +329,9 @@ if ($Protocol -ne "HTTP")
 
 # TODO: Test registry fix for cases when Negotiate is disabled
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+
+Write-Verbose -Message "[$ThisModule] Configuring WinRM default server ports"
+Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 
@@ -397,6 +400,16 @@ finally
 	$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
 	$WinRM.Start()
 	$WinRM.WaitForStatus("Running", $ServiceTimeout)
+
+	$TokenValue = Get-ItemProperty -Name LocalAccountTokenFilterPolicy `
+		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" |
+	Select-Object -ExpandProperty LocalAccountTokenFilterPolicy
+
+	if ($TokenValue -eq 0)
+	{
+		Write-Error -Category InvalidResult -TargetObject $TokenValue `
+			-Message "LocalAccountTokenFilterPolicy was not set to 1"
+	}
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"

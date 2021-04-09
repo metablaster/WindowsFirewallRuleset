@@ -216,7 +216,7 @@ Format-RuleOutput
 New-NetFirewallRule -DisplayName "PowerShell remoting HTTP" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 	-Service Any -Program System -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 	-LocalAddress Any -RemoteAddress LocalSubnet `
 	-LocalPort 5985 -RemotePort Any `
 	-LocalUser $AdminGroupSDDL -EdgeTraversalPolicy Block `

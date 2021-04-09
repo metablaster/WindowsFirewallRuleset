@@ -202,6 +202,9 @@ catch
 
 Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
 
+Write-Verbose -Message "[$ThisModule] Configuring WinRM default client ports"
+Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+
 Write-Verbose -Message "[$ThisModule] Configuring WinRM client options"
 
 if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName)))
@@ -217,7 +220,7 @@ Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
 try
 {
 	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config @{MaxTimeoutms=10}'
+	# cmd.exe /C 'winrm set winrm/config @{ MaxTimeoutms = 10 }'
 	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 }
 catch [System.InvalidOperationException]

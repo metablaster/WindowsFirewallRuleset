@@ -149,59 +149,87 @@ if ($WinRM.Status -ne "Running")
 
 if ($Server)
 {
+	# TODO: Custom object and numbered Permission.Split(",")
 	# winrm get winrm/config
 	Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
 	Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
-	Select-Object -Property Name, Enabled, PSVersion, SDKVersion, Architecture,
-	lang, Capability, SupportsOptions, AutoRestart, RunAsUser, RunAsPassword,
+	Select-Object -Property Name, lang, Enabled, PSVersion, SDKVersion, Architecture,
+	Capability, SupportsOptions, AutoRestart, OutputBufferingMode, RunAsUser, RunAsPassword,
 	RunAsVirtualAccount, RunAsVirtualAccountGroups, Permission
 
 	# winrm enumerate winrm/config/listener
 	Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
 	Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate |
-	Select-Object -ExcludeProperty cfg, xsi
+	Select-Object -Property LocalName, lang, Address, Transport, Port, Hostname, Enabled,
+	URLPrefix, CertificateThumbprint, ListeningOn, IsReadOnly, IsEmpty, HasChildNodes
 
 	# winrm get winrm/config/service
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server configuration"
 	Get-WSManInstance -ResourceURI winrm/config/Service |
-	Select-Object -ExcludeProperty cfg, Auth, DefaultPorts
+	Select-Object -Property LocalName, RootSDDL, MaxConcurrentOperations,
+	MaxConcurrentOperationsPerUser, EnumerationTimeoutms, MaxConnections,
+	MaxPacketRetrievalTimeSeconds, AllowUnencrypted, IPv4Filter, IPv6Filter,
+	EnableCompatibilityHttpListener, EnableCompatibilityHttpsListener, CertificateThumbprint,
+	AllowRemoteAccess, IsReadOnly, IsEmpty, HasChildNodes
+
+	$TokenValue = Get-ItemProperty -Name LocalAccountTokenFilterPolicy `
+		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" |
+	Select-Object -ExpandProperty LocalAccountTokenFilterPolicy
+	Write-Information -Tags "Project" -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
 
 	# winrm get winrm/config/service/auth
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
-	Get-WSManInstance -ResourceURI winrm/config/Service/Auth | Select-Object -ExcludeProperty cfg
+	Get-WSManInstance -ResourceURI winrm/config/Service/Auth |
+	Select-Object -Property LocalName, lang, Basic, Kerberos, Negotiate, Certificate, CredSSP,
+	CbtHardeningLevel, IsReadOnly, IsEmpty, HasChildNodes
 
 	# winrm get winrm/config/service/defaultports
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server default ports"
-	Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts | Select-Object -ExcludeProperty cfg
+	Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts |
+	Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
 }
 
 if ($Client)
 {
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
 	Get-WSManInstance -ResourceURI winrm/config/Client |
-	Select-Object -ExcludeProperty cfg, Auth, DefaultPorts
+	Select-Object -Property LocalName, lang, NetworkDelayms, URLPrefix, AllowUnencrypted,
+	TrustedHosts, IsReadOnly, IsEmpty, HasChildNodes
 
 	# winrm get winrm/config/client/auth
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
-	Get-WSManInstance -ResourceURI winrm/config/Client/Auth | Select-Object -ExcludeProperty cfg
+	Get-WSManInstance -ResourceURI winrm/config/Client/Auth |
+	Select-Object -Property LocalName, lang, Basic, Digest, Kerberos, Negotiate, Certificate,
+	CredSSP, IsReadOnly, IsEmpty, HasChildNodes
 
 	# winrm get winrm/config/client/defaultports
 	Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
-	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts | Select-Object -ExcludeProperty cfg
+	Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts |
+	Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
 
-	# TODO: User authentication certificate
-	# Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
-	# Get-Item WSMan:\localhost\ClientCertificate\*
+	$ClientCertificate = Get-Item WSMan:\localhost\ClientCertificate\*
+	if ($ClientCertificate)
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
+		$ClientCertificate
+	}
 }
 
 if ($Detailed)
 {
 	Write-Verbose -Message "Showing shell configuration" -Verbose
-	Get-Item WSMan:\localhost\Shell\*
+	Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value
 
 	# winrm enumerate winrm/config/plugin
 	Write-Verbose -Message "Showing plugin configuration" -Verbose
-	Get-Item WSMan:\localhost\Plugin\*
-}
+	Get-Item WSMan:\localhost\Plugin\* | ForEach-Object {
+		$Enabled = Get-Item "WSMan:\localhost\Plugin\$($_.Name)\Enabled" |
+		Select-Object -ExpandProperty Value
 
-Update-Log
+		[PSCustomObject] @{
+			Name = $_.Name
+			Enabled = $Enabled
+			PSPath = $_.PSPath
+		}
+	} | Sort-Object -Property Enabled -Descending
+}

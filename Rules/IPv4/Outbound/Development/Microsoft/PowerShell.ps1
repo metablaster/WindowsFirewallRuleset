@@ -119,7 +119,7 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 		New-NetFirewallRule -DisplayName "PowerShell x64 remoting HTTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet `
 			-LocalPort Any -RemotePort 5985 `
 			-LocalUser $AdminGroupSDDL `
@@ -176,7 +176,7 @@ if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or 
 		New-NetFirewallRule -DisplayName "PowerShell Core x64 remoting HTTP" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet `
 			-LocalPort Any -RemotePort 5985 `
 			-LocalUser $AdminGroupSDDL `

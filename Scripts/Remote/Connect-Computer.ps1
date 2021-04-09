@@ -201,4 +201,3 @@ if ($Domain -ne "localhost")
 }
 
 $ErrorActionPreference = $OldSettingsScriptEA
-Remove-Variable -Name OldSettingsScriptEA
