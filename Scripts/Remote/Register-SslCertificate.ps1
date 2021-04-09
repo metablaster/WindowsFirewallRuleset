@@ -288,14 +288,14 @@ if ([string]::IsNullOrEmpty($CertFile))
 			KeyExportPolicy = "ExportableEncrypted"
 			# Valid from now for the next 1 year
 			NotBefore = $Date
-			NotAfter = $Date.AddYears(1)
+			NotAfter = $Date.AddMonths(12)
 			# MSDN: The first DNS name is also saved as the Subject Name.
 			# If no signing certificate is specified, the first DNS name is also saved as the Issuer Name.
 			DnsName = $Domain
-			Subject = $Domain # [ ]
+			Subject = $Domain # [x]
 			# The key can be used for key encryption
 			# https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509keyusageflags?view=net-5.0
-			KeyUsage = "None" # [ ] "DigitalSignature, KeyEncipherment"
+			KeyUsage = "None" # [x] "DigitalSignature, KeyEncipherment"
 			# MSDN: Specifies whether the private key associated with the new certificate can be used for signing, encryption, or both
 			# None uses the default value from the underlying CSP.
 			# If the key is managed by a Cryptography Next Generation (CNG) KSP, the value is None
@@ -310,7 +310,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 		}
 
 		# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
-		$Cert = New-SelfSignedCertificate @CertParams -KeyUsage DigitalSignature, KeyEncipherment
+		$Cert = New-SelfSignedCertificate @CertParams
 
 		Write-Information -Tags "Project" -MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 	}

@@ -103,18 +103,18 @@ $WSManParams = @{
 	ApplicationName = $PSSessionApplicationName # "wsman"
 }
 
-# NOTE: If using SSL on localhost, it would go trough network stack and for this we need authentication
-# Otherwise the error is: "The server certificate on the destination computer (localhost) has the
-# following errors: Encountered an internal error in the SSL library.
-if (($Domain -ne ([System.Environment]::MachineName) -and ($Domain -ne "localhost")) -or ($Protocol -ne "HTTP"))
-{
-	$RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
-	$WSManParams["ComputerName"] = $Domain
-	$WSManParams["Credential"] = $RemoteCredential
-}
-
 if ($Protocol -ne "HTTP")
 {
+	if (($Domain -ne ([System.Environment]::MachineName) -or ($Domain -ne "localhost")))
+	{
+		# NOTE: If using SSL on localhost, it would go trough network stack for which we need authentication
+		# Otherwise the error is: "The server certificate on the destination computer (localhost) has the
+		# following errors: Encountered an internal error in the SSL library.
+		$RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
+		$WSManParams["ComputerName"] = $Domain
+		$WSManParams["Credential"] = $RemoteCredential
+	}
+
 	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
 	$WSManParams["Port"] = 5986
 
@@ -137,22 +137,14 @@ $CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US 
 
 $CimParams = @{
 	Name = "RemoteCim"
+	Authentication = "Default"
 	OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
-
-	# Authentication = "Default"
 }
 
-if (($Domain -eq ([System.Environment]::MachineName)) -or ($Domain -eq "localhost"))
+if ($RemoteCredential)
 {
-	# $RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
-	# $CimParams["Authentication"] = "Basic"
-	# $CimParams["ComputerName"] = $Domain
-	# $CimParams["Credential"] = $RemoteCredential
-}
-else
-{
-	$CimParams["Credential"] = $RemoteCredential
 	$CimParams["ComputerName"] = $Domain
+	$CimParams["Credential"] = $RemoteCredential
 }
 
 $CimOptions.UseSsl = $Protocol -ne "HTTP"
@@ -168,16 +160,13 @@ if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 # NOTE: Specifying computer name may fail if WinRM listens on loopback only
 $CimServer = New-CimSession @CimParams
 
-# NOTE: Get-CimInstance, if the InputObject parameter is not specified then:
-
+# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 # Works on local Windows Management Instrumentation (WMI) using a Component Object Model (COM) session
 Write-Information -Tags "Project" -MessageData "INFO: Testing CIM server on localhost"
 Get-CimInstance -Class Win32_OperatingSystem |
 Select-Object CSName, Caption | Format-Table
 
-# Works against the CIM server specified by either the ComputerName parameter or the CimSession parameter
-# HACK: localhost HTTP, The WS-Management service cannot process the request.
-# The service is configured to reject remote connection requests for this plugin
+# Works against the CIM server specified by either the ComputerName or the CimSession parameter
 Write-Information -Tags "Project" -MessageData "INFO: Testing CIM server on '$Domain'"
 Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 Select-Object CSName, Caption | Format-Table

@@ -88,7 +88,7 @@ winrm help config
 param ()
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\WinRMSettings.ps1 -Server
+. $PSScriptRoot\WinRMSettings.ps1 -IncludeServer
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"

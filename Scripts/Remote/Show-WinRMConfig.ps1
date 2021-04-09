@@ -218,7 +218,7 @@ if ($Client)
 if ($Detailed)
 {
 	Write-Verbose -Message "Showing shell configuration" -Verbose
-	Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value
+	Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value | Format-Table -AutoSize
 
 	# winrm enumerate winrm/config/plugin
 	Write-Verbose -Message "Showing plugin configuration" -Verbose
@@ -231,5 +231,5 @@ if ($Detailed)
 			Enabled = $Enabled
 			PSPath = $_.PSPath
 		}
-	} | Sort-Object -Property Enabled -Descending
+	} | Sort-Object -Property Enabled -Descending | Format-Table -AutoSize
 }

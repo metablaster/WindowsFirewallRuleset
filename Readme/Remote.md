@@ -22,6 +22,7 @@ design used in this repository.
       - [Encountered an internal error in the SSL library](#encountered-an-internal-error-in-the-ssl-library)
     - [Troubleshooting CIM](#troubleshooting-cim)
       - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
+      - [The service is configured to reject remote connection requests for this plugin](#the-service-is-configured-to-reject-remote-connection-requests-for-this-plugin)
     - [Troubleshooting remote registry](#troubleshooting-remote-registry)
 
 ## Commandlets breakdown
@@ -245,7 +246,6 @@ Following section lists other not so common problems and how to resolve them.
 
 TODO: missing resolutions for the following known problems:
 
-- service was configured to deny access
 - system cannot find file because it does not exist
 
 #### Encountered an internal error in the SSL library
@@ -279,6 +279,56 @@ Hint:
 
 Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
 
+#### The service is configured to reject remote connection requests for this plugin
+
+> The WS-Management service cannot process the request.
+> The service is configured to reject remote connection requests for this plugin
+
+You get this error when running `Get-CimInstance -CimSession $CimServer` where `$CimServer` is
+your already established remote CIM session.
+
+First step is to harvest plugin status as follows:
+
+```powershell
+Get-Item WSMan:\localhost\Plugin\* | ForEach-Object {
+  $Enabled = Get-Item "WSMan:\localhost\Plugin\$($_.Name)\Enabled" |
+  Select-Object -ExpandProperty Value
+
+  [PSCustomObject] @{
+    Name = $_.Name
+    Enabled = $Enabled
+    PSPath = $_.PSPath
+  }
+} | Sort-Object -Property Enabled -Descending | Format-Table -AutoSize
+```
+
+Sample output may look like this:
+
+```none
+Name                          Enabled PSPath
+----                          ------- ------
+RemoteFirewall                True    Microsoft.WSMan.Management\WSMan::localhost\Plugin\RemoteFirewall
+Microsoft.PowerShell          True    Microsoft.WSMan.Management\WSMan::localhost\Plugin\Microsoft.PowerShell
+WMI Provider                  False   Microsoft.WSMan.Management\WSMan::localhost\Plugin\WMI Provider
+Microsoft.PowerShell32        False   Microsoft.WSMan.Management\WSMan::localhost\Plugin\Microsoft.PowerShell32
+Event Forwarding Plugin       False   Microsoft.WSMan.Management\WSMan::localhost\Plugin\Event Forwarding Plugin
+Microsoft.Powershell.Workflow False   Microsoft.WSMan.Management\WSMan::localhost\Plugin\Microsoft.Powershell.Workflow
+```
+
+As you can see `WMI Provider` plugin is not enabled in this example which does the following:
+
+> WMI allows you to manage local and remote computers and models computer and network objects using
+> an extension of the Common Information Model (CIM) standard
+
+Since this plugin is required to run CIM commands against remote computer you enable it like this:
+
+```powershell
+Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true
+Restart-Service -Name WinRM
+```
+
+For more information see [WMI plug-in configuration notes][WMI plugin]
+
 ### Troubleshooting remote registry
 
 See following link [Troubleshooting Remote Registry][remote registry]
@@ -295,3 +345,4 @@ See following link [Troubleshooting Remote Registry][remote registry]
 [troubleshooting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting "Visit Microsoft docs"
 [remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552)
 [RegistryKey]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey "Visit Microsoft docs"
+[WMI plugin]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management#wmi-plug-in-configuration-notes "Visit Microsoft docs"

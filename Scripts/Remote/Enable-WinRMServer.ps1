@@ -211,8 +211,6 @@ Get-PSSessionConfiguration | Where-Object {
 
 # Register repository specific session configuration
 Write-Verbose -Message "[$ThisModule] Registering custom session configuration"
-# NOTE: Register-PSSessionConfiguration will fail in Windows PowerShell otherwise
-Set-StrictMode -Off
 
 # A null value does not affect the session configuration.
 # https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pstransportoption
@@ -231,16 +229,20 @@ $TransportConfig = @{
 $SessionConfigParams = @{
 	Name = "RemoteFirewall"
 	Path = "$ProjectRoot\Config\RemoteFirewall.pssc"
+
 	# Determines whether a 32-bit or 64-bit version of the PowerShell process is started in sessions
 	# x86 or amd64,
 	# The default value is determined by the processor architecture of the computer that hosts the session configuration.
 	ProcessorArchitecture = "amd64"
+
 	# Maximum amount of data that can be sent to this computer in any single remote command.
 	# The default is 50 MB
 	MaximumReceivedDataSizePerCommandMB = 50
+
 	# Maximum amount of data that can be sent to this computer in any single object.
 	# The default is 10 MB
 	MaximumReceivedObjectSizeMB = 10
+
 	# Disabled. This configuration cannot be used for remote or local access to the computer.
 	# Local. Allows users of the local computer to create a loopback session on the same computer.
 	# Remote. Allows local and remote users to create sessions and run commands on this computer.
@@ -269,6 +271,9 @@ $SessionConfigParams = @{
 	# By default, commands run with the permissions of the current user.
 	# RunAsCredential = Get-Credential
 }
+
+# NOTE: Register-PSSessionConfiguration will fail in Windows PowerShell otherwise
+Set-StrictMode -Off
 
 # TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
 # -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
@@ -332,6 +337,14 @@ Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $Authenticati
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM default server ports"
 Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+
+# NOTE: If this plugin of disabled remote CIM commands will not work
+$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
+if ($WmiPlugin.Value -ne $true)
+{
+	Write-Information -Tags "Project" -MessageData "INFO: Enabling WMI Provider plugin"
+	Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+}
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 
@@ -408,7 +421,7 @@ finally
 	if ($TokenValue -eq 0)
 	{
 		Write-Error -Category InvalidResult -TargetObject $TokenValue `
-			-Message "LocalAccountTokenFilterPolicy was not set to 1"
+			-Message "LocalAccountTokenFilterPolicy is not enabled"
 	}
 }
 
