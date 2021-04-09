@@ -31,7 +31,13 @@ SOFTWARE.
 WinRM service options
 
 .DESCRIPTION
-WinRM service options include, protocol, service, client and winrs settings
+WinRM service options include protocol, service, client and winrs settings.
+Some of which have sub options stored inside "containers".
+This script lists all of these by documenting their purpose and defaults.
+Main purpose is quick centralized configuration to mimimize the chance of
+misconfiguration.
+This script is automatically picked up by other WinRM remoting scripts in
+same directory.
 
 .PARAMETER IncludeClient
 Include setting that apply to client configuration
@@ -40,7 +46,15 @@ Include setting that apply to client configuration
 Include setting that apply to service configuration
 
 .EXAMPLE
-PS> .\WinRMSettings.ps1
+PS> . .\WinRMSettings.ps1
+
+Picks up only global options.
+Note that it must be dot sourced to pick up modifications.
+
+.EXAMPLE
+PS> . .\WinRMSettings.ps1 -IncludeClient
+
+Picks up global options and client specific options.
 
 .INPUTS
 None. You cannot pipe objects to WinRMSettings.ps1
@@ -49,10 +63,9 @@ None. You cannot pipe objects to WinRMSettings.ps1
 None. WinRMSettings.ps1 does not generate any output
 
 .NOTES
-TODO: Default options, "Reset" switch
+TODO: Default options, "Reset" or "Default" switch
 TODO: Not all optional settings are configured
 TODO: Client settings are missing for server and vice versa
-TODO: WinRS options description
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -245,6 +258,7 @@ if ($IncludeServer)
 	HTTPS = 5986
 }
 
+# TODO: Document options and default values
 [hashtable] $WinRSOptions = @{
 	AllowRemoteShellAccess = $false
 	IdleTimeout = 180000

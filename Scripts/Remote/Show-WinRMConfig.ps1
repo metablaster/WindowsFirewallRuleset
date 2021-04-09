@@ -40,9 +40,14 @@ SOFTWARE.
 Show WinRM service configuration
 
 .DESCRIPTION
-Command winrm get winrm/config will show all the data, including containers and you need
-to run different commands to get different data.
-This scripts does all this and excludes containers by specifying switches.
+Command winrm get winrm/config will show all the data but will also include containers,
+WSMan provider is also not universal, and you need to run different commands to get desired
+results or values from sub containers.
+Some of the WinRM options are advanced and not easily discoverable, but are known to cause
+isssues really hard to debug due to misconfiguration.
+This scripts does all this, by harvesting all important and relevant information and
+excludes\includes containers by specifying switches, all of which is then sorted so that it
+can be compared with other working configurations to quickly discover problem.
 
 .PARAMETER Server
 Display WinRM service configuration
@@ -51,7 +56,8 @@ Display WinRM service configuration
 Display WinRM client configuration
 
 .PARAMETER Detailed
-Display detailed WinRM configuration not handled by Server and Client switches
+Display detailed WinRM configuration not handled by Server and Client switches.
+This switch does not imply Client and Server switches.
 
 .EXAMPLE
 PS> .\Show-WinRMConfig.ps1
@@ -146,7 +152,6 @@ if ($WinRM.Status -ne "Running")
 
 # MSDN: Select-Object, beginning in PowerShell 6,
 # it is no longer required to include the Property parameter for ExcludeProperty to work.
-
 if ($Server)
 {
 	# TODO: Custom object and numbered Permission.Split(",")
@@ -217,6 +222,7 @@ if ($Client)
 
 if ($Detailed)
 {
+	# TODO: More configuration data can be harvested here
 	Write-Verbose -Message "Showing shell configuration" -Verbose
 	Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value | Format-Table -AutoSize
 

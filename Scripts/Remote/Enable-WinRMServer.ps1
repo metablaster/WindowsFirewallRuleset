@@ -41,10 +41,8 @@ Configure WinRM server for CIM and PowerShell remoting
 
 .DESCRIPTION
 Configures local machine to accept remote CIM and PowerShell requests using WS-Management.
-Enabling PS remoting includes starting the WinRM service
-Setting the startup type for the WinRM service to Automatic
-Creating default and custom session configurations
-Creating listeners for HTTPS or\and HTTPS connections
+In addition it initializes specialized remoting session configuration as well as most common
+issues are handled and attempted to be resolved automatically.
 
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
@@ -67,7 +65,7 @@ TODO: see other places where -Force is used too.
 .EXAMPLE
 PS> .\Enable-WinRMServer.ps1
 
-Configures server machine to accept remote commands using using SSL.
+Configures server machine to accept remote commands using SSL.
 If there is no server certificate a new one self signed is made and put into trusted root.
 
 .EXAMPLE
@@ -77,10 +75,9 @@ Configures server machine to accept remote commands using using either HTTPS or 
 Client will authenticate with specified certificate for HTTPS.
 
 .EXAMPLE
-PS> .\Enable-WinRMServer.ps1 -Protocol HTTP -ShowConfig
+PS> .\Enable-WinRMServer.ps1 -Protocol HTTP
 
-Configures server machine to accept remote commands using HTTP,
-when done WinRM server configuration.
+Configures server machine to accept remoting commands trough HTTP.
 
 .INPUTS
 None. You cannot pipe objects to Enable-WinRMServer.ps1
@@ -91,10 +88,8 @@ None. You cannot pipe objects to Enable-WinRMServer.ps1
 [Selected.System.Xml.XmlElement]
 
 .NOTES
-HACK: Set-WSManInstance may fail with public profile, as a workaround try use Set-WSManQuickConfig.
 NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-HACK: Remote HTTPS with "localhost" name in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
@@ -209,7 +204,7 @@ Get-PSSessionConfiguration | Where-Object {
 	$_.Name -eq "RemoteFirewall"
 } | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
-# Register repository specific session configuration
+# Re-register repository specific session configuration
 Write-Verbose -Message "[$ThisModule] Registering custom session configuration"
 
 # A null value does not affect the session configuration.
@@ -332,13 +327,13 @@ if ($Protocol -ne "HTTP")
 	$AuthenticationOptions["Certificate"] = $true
 }
 
-# TODO: Test registry fix for cases when Negotiate is disabled
+# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM default server ports"
 Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
 
-# NOTE: If this plugin of disabled remote CIM commands will not work
+# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
 $WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
 if ($WmiPlugin.Value -ne $true)
 {
@@ -356,7 +351,7 @@ if ($Protocol -eq "HTTPS")
 try
 {
 	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
+	# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
@@ -386,7 +381,7 @@ catch [System.InvalidOperationException]
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
+		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
 	}
 	else
 	{
@@ -421,8 +416,10 @@ finally
 	if ($TokenValue -eq 0)
 	{
 		Write-Error -Category InvalidResult -TargetObject $TokenValue `
-			-Message "LocalAccountTokenFilterPolicy is not enabled"
+			-Message "LocalAccountTokenFilterPolicy was not enabled"
 	}
+
+	Update-Log
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"

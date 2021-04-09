@@ -40,10 +40,12 @@ SOFTWARE.
 Connect to remote computer
 
 .DESCRIPTION
-Connect to remote computer onto which to deploy firewall
+Connect to remote computer onto which to deploy firewall.
+This script will initialize necessary global variables and initialization needed
+to run commands against remote CIM server and remote registry.
 
 .EXAMPLE
-PS> .\Connect-Computer.ps1
+PS> .\Connect-Computer.ps1 COMPUTERNAME
 
 .INPUTS
 None. You cannot pipe objects to Connect-Computer.ps1
@@ -61,10 +63,10 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([void])]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
 
@@ -77,7 +79,7 @@ param (
 
 	[Parameter()]
 	[Microsoft.Management.Infrastructure.Options.CimSessionOptions]
-	$CimSessionOption
+	$CimOptions = (New-CimSessionOption -UseSsl)
 )
 
 Set-Variable -Name ThisScript -Scope Private -Option ReadOnly -Force -Value ($PSCmdlet.MyInvocation.MyCommand -replace "\.\w{2,3}1$")
@@ -86,32 +88,39 @@ Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName)
 $OldSettingsScriptEA = $ErrorActionPreference
 $ErrorActionPreference = "Stop"
 
+if ($MyInvocation.InvocationName -eq '.')
+{
+	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
+		-Message "This script must be called, not dot sourced"
+}
+
 $WSManParams = @{
+	UseSSL = $Domain -ne ([System.Environment]::MachineName)
 	Authentication = "Default"
+	# ApplicationName = $PSSessionApplicationName
 }
 
 $CimParams = @{
-	# SessionOption = $CimSessionOption
-	OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	Name = "RemoteCim"
+	SessionOption = $CimOptions
+	# Authentication = "Default"
+	OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
 }
 
-if (($Domain -eq ([System.Environment]::MachineName)) -or ($Domain -eq "localhost"))
+if ($Domain -eq ([System.Environment]::MachineName))# -or ($Domain -eq "localhost"))
 {
 	# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
-	$CimSessionOption.UseSsl = $false
-	Set-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value ($CimSessionOption)
+	$CimOptions.UseSsl = $false
 	$CimParams["SessionOption"] = $CimOptions
-	$Domain = $Domain #"localhost"
+	# $Domain = $Domain #"localhost"
 }
 else # Remote computer
 {
 	if (!(Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore))
 	{
-		# Credentials for remote machine
 		# TODO: -Credential param, specify SERVER\UserName
 		New-Variable -Name RemoteCredential -Scope Global -Option Constant (
-			Get-Credential -Message "Administrative credentials are required to access host '$Domain'")
+			Get-Credential -Message "Administrative credentials are required to access '$Domain'")
 
 		if (!$RemoteCredential)
 		{
@@ -126,15 +135,12 @@ else # Remote computer
 		}
 	}
 
-	$WSManParams["UseSSL"] = $true
+	$CimParams["ComputerName"] = $Domain
+	$CimParams["Credential"] = $RemoteCredential
+
 	$WSManParams["ComputerName"] = $Domain
 	$WSManParams["Credential"] = $RemoteCredential
-	$CimParams["Credential"] = $RemoteCredential
-	$CimParams["SessionOption"] = $CimSessionOption
 }
-
-$CimParams["SessionOption"] = $CimSessionOption
-$CimParams["ComputerName"] = $Domain
 
 try
 {
@@ -149,7 +155,6 @@ catch
 
 try
 {
-	# TODO: Cim session name should be the same for local and remote host
 	# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
 	if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
 	{
@@ -167,7 +172,7 @@ catch
 		-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
 }
 
-if ($Domain -ne "localhost")
+if ($Domain -ne ([System.Environment]::MachineName))#"localhost")
 {
 	try
 	{
@@ -184,14 +189,14 @@ if ($Domain -ne "localhost")
 	catch
 	{
 		Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
-			-Message "User authentication with '$Domain' failed with: $($_.Exception.Message)"
+			-Message "Authenticating $($RemoteCredential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
 	}
 
 	try
 	{
 		# TODO: For VM without external switch use -VMName
 		Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$Domain'"
-		Enter-PSSession -UseSSL -ComputerName $Domain -Credential $RemoteCredential -ConfigurationName $ConfigurationName
+		Enter-PSSession @WSManParams # -UseSSL -ComputerName $Domain -Credential $RemoteCredential -ConfigurationName $PSSessionConfigurationName
 	}
 	catch
 	{
@@ -201,3 +206,4 @@ if ($Domain -ne "localhost")
 }
 
 $ErrorActionPreference = $OldSettingsScriptEA
+Remove-Variable -Name OldSettingsScriptEA

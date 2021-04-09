@@ -41,7 +41,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - MS Office
 
   - Added rules for PowerShell remoting
-  - Added rules for VSCode remote SSH
+  - Added rules for VSCode remote debugging trough SSH
 
 - Scripts
 
@@ -54,8 +54,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Enable-WinRMServer.ps1` script to configure WinRM server for remoting
   - `Disable-WinRMServer.ps1` script to disable WinRM remoting
   - `Set-WinRMClient.ps1` script to configure client for remoting
-  - `Register-SslCertificate.ps1` script to install, create and export SSL certificate for remoting
+  - `Register-SslCertificate.ps1` script to create, install and export SSL certificate for remoting
   - `Connect-Computer.ps1` script to initialize connection to remote computer
+  - `Show-WinRMConfig.ps1` script to list detailed WinRM configuration
+  - `Test-WinRM.ps1` script to test and discover issues with remoting configuration
+  - `WinRMSettings.ps1` settings script that declares and documents all WinRM options
 
 - Modules
 
@@ -66,18 +69,18 @@ If you would like to see fresh changes done since last release you can do so on 
 - Documentation
 
   - Revisited few docs for clarity
-  - Added document `Remote.md` for remoting
+  - Added document `Remote.md` to breakdown remoting functionality used by this repository
 
 - Bugfix
 
-  - Fixed bug with WpsPushUserService rule for multiple standard users
+  - Fixed bug with `WpsPushUserService` rule when applied to multiple standard users
   - Fixed issue with `Test-TargetComputer` when used in Windows PowerShell for NetBIOS name resolution
 
 - Other
 
   - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension
-  - Added settings and extensions for remote SHH development
-  - Added SSH configuration files and syntax highlighting setting for *config files
+  - Added settings and extensions for remote SSH development
+  - Added SSH configuration files and syntax highlighting setting for `*config` files
   - Updated `todo-tree` extension settings for markdown support
   - Improved process monitor configuration files for network activity optionally for TCP or UDP
 

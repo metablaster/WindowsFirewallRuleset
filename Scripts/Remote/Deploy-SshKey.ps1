@@ -53,7 +53,7 @@ Target computer or host name
 
 .PARAMETER Admin
 If specified, the key is added to system wide configuration.
-Valid only if User parameter belongs to Administrators group on remote host.
+Valid only if the User parameter belongs to Administrators group on remote host.
 
 .PARAMETER Overwrite
 Overwrite file on remote host instead of appending key to existing file

@@ -40,14 +40,14 @@ SOFTWARE.
 Register SSL certificate for CIM and PowerShell remoting
 
 .DESCRIPTION
-Install SSL certificate to be used for encrypted PowerShell remoting.
-By default certificate store is searched for existing certificate,
-if not found default repository location (\Exports) is searched for certificate file which must have
-same name as -Domain parameter value.
+Install SSL certificate to be used for encrypted PowerShell remoting session.
+By default certificate store is searched for existing certificate that matches CN entry,
+if not found default repository location (\Exports) is searched for certificate file which must
+have same name as -Domain parameter value.
 Otherwise you can specify your own custom certificate file location.
 The script will always attempt to export public key (DER encoded CER file) on server computer
-to default repository location, which you should then copy to client machine to be searched for
-and used for client authentication.
+to default repository location, which you should then copy to client machine to be picked up by
+Set-WinRMClient.ps1 and used for client authentication.
 
 .PARAMETER Domain
 Specify host name which is to be managed remotely from this machine.
@@ -55,8 +55,8 @@ This parameter is required only when setting up client computer.
 For server -Target this defaults to server NetBios host name.
 
 .PARAMETER Target
-Specify current system role which controls script behavior .
-This is either Client or Server.
+Specify current system role which controls script behavior.
+This is either Client (management computer) or Server (managed computer).
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.

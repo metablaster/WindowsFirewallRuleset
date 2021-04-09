@@ -96,6 +96,7 @@ param (
 	[System.Management.Automation.PSCmdlet]	$Cmdlet,
 
 	[Parameter(ParameterSetName = "Script")]
+	[Alias("ComputerName", "CN", "Domain")]
 	[string] $TargetHost,
 
 	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
@@ -349,18 +350,23 @@ if ($Develop)
 Set-StrictMode -Version Latest
 #endregion
 
-if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
-{
-	# Repository root directory, reallocating scripts should be easy if root directory is constant
-	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
-}
-
 #region Remote session initialization
 if ($PSCmdlet.ParameterSetName -eq "Script")
 {
-	if (!(Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore))
+	if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
 	{
+		if ($TargetHost -and ($TargetHost -ne $PolicyStore))
+		{
+			Write-Error -Category InvalidArgument -TargetObject $TargetHost -EA Stop `
+				-Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'"
+		}
+	}
+	else
+	{
+		# Repository root directory, reallocating scripts should be easy if root directory is constant
+		New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+			Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
 		if ([string]::IsNullOrEmpty($TargetHost)) # -or ($TargetHost -eq "localhost"))
 		{
@@ -369,7 +375,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		else
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $TargetHost
-			$Cmdlet.MyInvocation.BoundParameters.Remove("TargetHost") | Out-Null
 		}
 
 		# Valid policy stores
@@ -407,152 +412,21 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			$WinRM.WaitForStatus("Running", "00:00:30")
 		}
 
-		Remove-Variable -Name WinRMService
-	}
+		Remove-Variable -Name WinRM
 
-	# TODO: Temporarily for debugging
-	if ($Cmdlet.MyInvocation.BoundParameters.Keys -and
-		$Cmdlet.MyInvocation.BoundParameters.ContainsKey("TargetHost"))
-	{
-		# Can be issue with dot sourcing
-		Write-Warning -Message "Parameter TargetHost not removed '$TargetHost'"
-
-		if ($Cmdlet.MyInvocation.BoundParameters["TargetHost"] -ne $PolicyStore)
+		if ($PolicyStore -notin $LocalStores)
 		{
-			Write-Debug -Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'" -Debug
+			$PSSessionConfigurationName = "RemoteFirewall"
 		}
-	}
-
-	if ($PolicyStore -notin $LocalStores)
-	{
-		$PSSessionConfigurationName = "RemoteFirewall"
-	}
-	elseif ($PolicyStore -ne ([System.Environment]::MachineName))
-	{
-		Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
-			-Message "Deployment to specified policy store not implemented '$PolicyStore'"
-	}
-
-	$OldSettingsScriptEA = $ErrorActionPreference
-	$ErrorActionPreference = "Stop"
-
-	$WSManParams = @{
-		Authentication = "Default"
-	}
-
-	$CimParams = @{
-		SessionOption = $CimOptions
-		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
-		Name = "RemoteCim"
-	}
-
-	if ($PolicyStore -eq ([System.Environment]::MachineName))# -or ($PolicyStore -eq "localhost"))
-	{
-		# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
-		$CimOptions.UseSsl = $false
-		$CimParams["SessionOption"] = $CimOptions
-		$PolicyStore = $PolicyStore #"localhost"
-	}
-	else # Remote computer
-	{
-		if (!(Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore))
+		elseif ($PolicyStore -ne ([System.Environment]::MachineName))
 		{
-			# Credentials for remote machine
-			# TODO: -Credential param, specify SERVER\UserName
-			New-Variable -Name RemoteCredential -Scope Global -Option Constant (
-				Get-Credential -Message "Administrative credentials are required to access host '$PolicyStore'")
-
-			if (!$RemoteCredential)
-			{
-				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$PolicyStore'"
-			}
-			elseif ($RemoteCredential.Password.Length -eq 0)
-			{
-				# HACK: Will ask for password but won't be recorded
-				Write-Error -Category InvalidData -Message "User '$($RemoteCredential.UserName)' must have a password"
-				Remove-Variable -Name Credential -Scope Global -Force
-			}
+			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
+				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
 
-		$WSManParams["UseSSL"] = $true
-		$WSManParams["ComputerName"] = $PolicyStore
-		$WSManParams["Credential"] = $RemoteCredential
-		$CimParams["Credential"] = $RemoteCredential
-		$CimParams["SessionOption"] = $CimOptions
-
-		$CimParams["ComputerName"] = $PolicyStore
+		& $ProjectRoot\Scripts\Remote\Connect-Computer.ps1 -ConfigurationName $PSSessionConfigurationName `
+			-Domain $PolicyStore -SessionOption $PSSessionOption -CimOptions $CimOptions
 	}
-
-	try
-	{
-		Write-Information -Tags "Project" -MessageData "INFO: Checking Windows remote management service on computer '$PolicyStore'"
-		Test-WSMan @WSManParams | Out-Null
-	}
-	catch
-	{
-		Write-Error -Category ConnectionError -TargetObject $PolicyStore `
-			-Message "Remote management test to computer '$PolicyStore' failed with: $($_.Exception.Message)"
-	}
-
-	try
-	{
-		# TODO: Cim session name should be the same for local and remote host
-		# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
-		if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
-		{
-			Write-Verbose -Message "[$ThisScript] Creating new CIM session to $PolicyStore"
-
-			# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
-			# verification is accomplished using a standard WS-Identity operation.
-			# NOTE: Specifying computer name may fail if WinRM listens on loopback only
-			Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (New-CimSession @CimParams)
-		}
-	}
-	catch
-	{
-		Write-Error -Category ConnectionError -TargetObject $PolicyStore `
-			-Message "Creating CIM session to '$PolicyStore' failed with: $($_.Exception.Message)"
-	}
-
-	if ($PolicyStore -ne ([System.Environment]::MachineName))#"localhost")
-	{
-		try
-		{
-			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
-			{
-				Write-Information -Tags "Project" -MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$PolicyStore'"
-
-				# Authentication is required to access remote registry
-				# NOTE: Registry provider does not support credentials
-				New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
-					-Root \\$PolicyStore\C$ -Description "Remote registry authentication" | Out-Null
-			}
-		}
-		catch
-		{
-			Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
-				-Message "User authentication with '$PolicyStore' failed with: $($_.Exception.Message)"
-		}
-
-		try
-		{
-			# TODO: For VM without external switch use -VMName
-			Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$PolicyStore'"
-			Enter-PSSession -UseSSL -ComputerName $PolicyStore -Credential $RemoteCredential -ConfigurationName $ConfigurationName
-		}
-		catch
-		{
-			Write-Error -Category ConnectionError -TargetObject $PolicyStore `
-				-Message "Entering remote session to computer '$PolicyStore' failed with: $($_.Exception.Message)"
-		}
-	}
-
-	$ErrorActionPreference = $OldSettingsScriptEA
-	Remove-Variable -Name OldSettingsScriptEA
-
-	# & $ProjectRoot\Scripts\Remote\Connect-Computer.ps1 -ConfigurationName $PSSessionConfigurationName `
-	# 	-Domain $PolicyStore -SessionOption $PSSessionOption -CimSessionOption $CimOptions
 }
 #endregion
 

@@ -40,10 +40,11 @@ SOFTWARE.
 Configure client computer for WinRM remoting
 
 .DESCRIPTION
-Configures client machine to send CIM and PowerShell commands to remote server using WS-Management
+Configures client machine to send CIM and PowerShell commands to remote server using WS-Management.
+This functionality is most useful when setting up WinRM with SSL.
 
 .PARAMETER Protocol
-Specifies listener protocol to HTTP, HTTPS or both.
+Specifies protocol to HTTP, HTTPS or both.
 By default only HTTPS is configured.
 
 .PARAMETER Domain
@@ -54,8 +55,7 @@ If not specified local machine is the default.
 Optionally specify custom certificate file.
 By default certificate store is searched for certificate with CN entry set to value specified by
 -Domain parameter.
-If not found, default repository location (\Exports) is searched for DER encoded CER file,
-Certificate file must be DER encoded CER file
+If not found, default repository location (\Exports) is searched for DER encoded CER file.
 
 .PARAMETER CertThumbPrint
 Optionally specify certificate thumbprint which is to be used for SSL.
@@ -71,13 +71,12 @@ by installing Server1 certificate into trusted root.
 PS> .\Set-WinRMClient.ps1 -Domain Server2 -CertFile C:\Cert\Server2.cer
 
 Configures client machine to run commands remotely on computer Server2, using SSL
-by installing specific certificate into trusted root
+by installing specified certificate file into trusted root store.
 
 .EXAMPLE
-PS> .\Set-WinRMClient.ps1 -Domain Server3 -Protocol HTTP -ShowConfig -SkipTestConnection
+PS> .\Set-WinRMClient.ps1 -Domain Server3 -Protocol HTTP
 
-Configures client machine to run commands remotely on computer Server3 using HTTP,
-when done client configuration is shown and WinRM test is not performed.
+Configures client machine to run commands remotely on computer Server3 using HTTP
 
 .INPUTS
 None. You cannot pipe objects to Set-WinRMClient.ps1
@@ -90,7 +89,6 @@ None. You cannot pipe objects to Set-WinRMClient.ps1
 .NOTES
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
-HACK: Remote HTTPS with "localhost" name in addition to local machine name
 TODO: Authenticate users using certificates instead of or optionally in addition to credential object
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
@@ -140,11 +138,11 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
+# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
 if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
 
-	# "Windows Remote Management" predefined rules must be present to continue
 	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
@@ -195,6 +193,7 @@ try
 }
 catch
 {
+	# TODO: WinRM service should be restarted to pick up our fix?
 	Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry..."
 	Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
 		[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
@@ -209,7 +208,7 @@ Write-Verbose -Message "[$ThisModule] Configuring WinRM client options"
 
 if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName)))
 {
-	# TODO: Add instead of set
+	# TODO: Add instead of replace
 	$ClientOptions["TrustedHosts"] = $Domain
 }
 
@@ -247,7 +246,7 @@ catch [System.InvalidOperationException]
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
+		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
 	}
 	else
 	{

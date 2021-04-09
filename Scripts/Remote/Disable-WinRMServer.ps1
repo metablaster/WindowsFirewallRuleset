@@ -46,9 +46,6 @@ Configures local machine to accept loopback HTTP.
 .EXAMPLE
 PS> .\Disable-WinRMServer.ps1
 
-.EXAMPLE
-PS> .\Disable-WinRMServer.ps1 -ShowConfig
-
 .INPUTS
 None. You cannot pipe objects to Disable-WinRMServer.ps1
 
@@ -56,7 +53,6 @@ None. You cannot pipe objects to Disable-WinRMServer.ps1
 None. Disable-WinRMServer.ps1 does not generate any output
 
 .NOTES
-HACK: Set-WSManInstance may fail with public profile, as a workaround try use Set-WSManQuickConfig.
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
@@ -105,11 +101,11 @@ members of the Administrators group on the computer.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
+# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
 if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
 
-	# "Windows Remote Management" predefined rules must be present to continue
 	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 		-Direction Inbound -NewPolicyStore PersistentStore |
 	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
@@ -152,7 +148,7 @@ Get-PSSessionConfiguration | Where-Object {
 Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
 Disable-PSSessionConfiguration -Name Microsoft* -NoServiceRestart -Force
 
-# Enable only localhost or loopback
+# Enable only localhost on loopback
 Write-Verbose -Message "[$ThisModule] Configuring WinRM localhost"
 Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
 
@@ -160,6 +156,7 @@ Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
 	-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 
+# TODO: Only loopback listeners
 # New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
 # 	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
@@ -168,7 +165,7 @@ New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $tru
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 
-# TODO: Test registry fix for cases when Negotiate is disabled
+# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
 Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
@@ -176,7 +173,7 @@ Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 try
 {
 	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config/service @{AllowRemoteAccess="false"}'
+	# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
 	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
@@ -206,7 +203,7 @@ catch [System.InvalidOperationException]
 			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
 		}
 
-		# TODO: Else prompt to uninstall Hyper-V and again disable virtual switches
+		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
 	}
 	else
 	{
