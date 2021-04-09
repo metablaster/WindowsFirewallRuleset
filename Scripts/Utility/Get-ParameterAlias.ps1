@@ -114,7 +114,7 @@ PS> Get-parameterAlias -Parameter "Computer*" -Unique
 
 .NOTES
 The intended purpose of this function is to help name your parameters and their aliases.
-For example if you want your function parameters to bind to pipeline by property name for
+For example if you want your function parameters to bind on pipeline by property name for
 any 3rd party function that conforms to community development guidelines.
 The end result is of course greater reusability of your code.
 TODO: Some parameter aliases are not retrieved and it's not clear if this is a bug ex:

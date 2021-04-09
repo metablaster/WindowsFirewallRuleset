@@ -3,22 +3,22 @@
 	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
-		"ms-vscode.powershell",
-		"davidanson.vscode-markdownlint",
-		"gruntfuggly.todo-tree",
-		"streetsidesoftware.code-spell-checker",
-		"nachocab.highlight-dodgy-characters",
-		// "eamodio.gitlens",
-		"alefragnani.bookmarks",
-		"mechatroner.rainbow-csv",
-		"yzhang.markdown-all-in-one",
-		"dotjoshjohnson.xml",
-		"emilast.logfilehighlighter",
 		"pejmannikram.vscode-auto-scroll",
+		"alefragnani.bookmarks",
+		"streetsidesoftware.code-spell-checker",
 		"everettjf.filter-line",
+		"nachocab.highlight-dodgy-characters",
+		"emilast.logfilehighlighter",
+		"yzhang.markdown-all-in-one",
+		"davidanson.vscode-markdownlint",
+		"ms-vscode.powershell",
+		"mechatroner.rainbow-csv",
+		// "eamodio.gitlens",
 		// "github.vscode-pull-request-github"
 		"ms-vscode-remote.remote-ssh",
-		"ms-vscode-remote.remote-ssh-edit"
+		"ms-vscode-remote.remote-ssh-edit",
+		"gruntfuggly.todo-tree",
+		"dotjoshjohnson.xml"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

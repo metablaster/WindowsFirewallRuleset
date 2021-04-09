@@ -1,4 +1,5 @@
 {
+	// TODO: From time to time remove words and paths temporarily
     "version": "0.1",
     "language": "en-US",
     "maxNumberOfProblems": 20,
@@ -17,6 +18,7 @@
     "ignoreWords": [],
     "ignorePaths": [
         "/.vscode/extensions.json",
+		"/.vscode/settings.json",
         "Encoding",
         ".git",
         "*.dll",

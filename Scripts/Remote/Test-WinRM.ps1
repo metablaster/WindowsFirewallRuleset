@@ -83,35 +83,44 @@ param (
 )
 
 $ErrorActionPreference = "Stop"
+$InformationPreference = "Continue"
 $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 
 $WSManParams = @{
 	Authentication = "Default"
 }
 
 # NOTE: If using SSL on localhost, it would go trough network stack and for this we need authentication
-# Otherwise error is: "The server certificate on the destination computer (localhost) has the
+# Otherwise the error is: "The server certificate on the destination computer (localhost) has the
 # following errors: Encountered an internal error in the SSL library.
 if (($Domain -ne ([System.Environment]::MachineName)) -or ($Protocol -ne "HTTP"))
 {
+	$RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
 	$WSManParams["ComputerName"] = $Domain
-	$WSManParams["Credential"] = Get-Credential -Message "Credentials are required to access host '$Domain'"
+	$WSManParams["Credential"] = $RemoteCredential
 }
 
 if ($Protocol -ne "HTTP")
 {
-	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on localhost '$Domain'"
+	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
 	# TODO: -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
 	Test-WSMan -UseSSL @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 }
 
 if ($Protocol -ne "HTTPS")
 {
-	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on localhost '$Domain'"
+	Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
 	Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 }
 
+Write-Verbose -Message "[$ThisScript] Creating new CIM session to $Domain"
 $CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+
+if ($Protocol -eq "HTTP")
+{
+	$CimOptions.UseSsl = $false
+}
 
 $CimParams = @{
 	SessionOption = $CimOptions
@@ -131,15 +140,15 @@ else
 	$CimParams["ComputerName"] = $Domain
 }
 
-if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
+if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 {
-	Write-Verbose -Message "[$ThisScript] Creating new CIM session to $Domain"
-
-	# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
-	# verification is accomplished using a standard WS-Identity operation.
-	# NOTE: Specifying computer name may fail if WinRM listens on loopback only
-	$CimServer = New-CimSession @CimParams
+	Remove-CimSession -Name RemoteCim
 }
+
+# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+# verification is accomplished using a standard WS-Identity operation.
+# NOTE: Specifying computer name may fail if WinRM listens on loopback only
+$CimServer = New-CimSession @CimParams
 
 Write-Information -Tags "Project" -MessageData "INFO: Testing CIM server on localhost"
 Get-CimInstance -Class Win32_OperatingSystem |

@@ -32,9 +32,9 @@ SOFTWARE.
 #
 # Generated on: 2.4.2021.
 #
-# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pssessionconfigurationfile?view=powershell-7.1
-# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configuration_files?view=powershell-7.1
-#
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pssessionconfigurationfile
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configuration_files
 
 @{
 
@@ -57,9 +57,11 @@ SOFTWARE.
 	# Copyright statement for this document
 	Copyright = "Copyright (C) 2019-2021 metablaster zebal@protonmail.ch"
 
-	# Session type defaults to apply for this session configuration.
-	# Can be 'RestrictedRemoteServer' (recommended), 'Empty', or 'Default'
-	# Default adds the Microsoft.PowerShell.Core module to the session.
+	# Session type defaults to apply for this session configuration:
+	# "RestrictedRemoteServer", Includes only the following proxy functions:
+	# Exit-PSSession, Get-Command, Get-FormatData, Get-Help, Measure-Object, Out-Default, and Select-Object
+	# "Empty", No modules are added to session by default.
+	# "Default" adds the Microsoft.PowerShell.Core module to the session.
 	# This module includes the Import-Module cmdlet that users can use to import other modules
 	SessionType = "Default"
 
@@ -67,33 +69,55 @@ SOFTWARE.
 	# TranscriptDirectory = 'C:\Transcripts\'
 
 	# Whether to run this session configuration as the machine's (virtual) administrator account
-	# RunAsVirtualAccount = $true
+	# cannot be used with the GroupManagedServiceAccount
+	RunAsVirtualAccount = $true
 
 	# Groups associated with machine's (virtual) administrator account
-	# RunAsVirtualAccountGroups = 'Remote Desktop Users', 'Remote Management Users'
+	# If omitted, the virtual account belongs to Domain Admins on domain controllers and
+	# Administrators on all other computers.
+	# ex: RunAsVirtualAccountGroups = "Remote Desktop Users", "Remote Management Users"
+	RunAsVirtualAccountGroups = "Administrators"
 
 	# Creates a "User" PSDrive in the session for use with Copy-Item when File System provider is not visible.
-	# MountUserDrive = $true
+	# TODO: Test if could be used for remote registry authentication instead of using New-PSDrive manually
+	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
+	MountUserDrive = $true
 
 	# Optional maximum size in bytes of user drive created with MountUserDrive parameter.
 	# Default maximum size for User drive is 50MB.
 	# UserDriveMaximumSize = 50000000
 
-	# Group managed service account name under which the configuration will run
+	# Group managed service account name under which the configuration will run.
+	# The machine where this session configuration is registered must have permission to request
+	# the gMSA password in order for sessions to be created successfully.
 	# GroupManagedServiceAccount = 'CONTOSO\GroupManagedServiceAccount'
 
-	# Scripts to run when applied to a session
-	# ScriptsToProcess = 'C:\ConfigData\InitScript1.ps1', 'C:\ConfigData\InitScript2.ps1'
-
 	# User roles (security groups), and the role capabilities that should be applied to them when applied to a session
-	# RoleDefinitions = @{ 'CONTOSO\SqlAdmins' = @{ RoleCapabilities = 'SqlAdministration' }; 'CONTOSO\SqlManaged' = @{ RoleCapabilityFiles = 'C:\RoleCapability\SqlManaged.psrc' }; 'CONTOSO\ServerMonitors' = @{ VisibleCmdlets = 'Get-Process' } }
+	# RoleDefinitions = @{ 'CONTOSO\SqlAdmins' = @{ RoleCapabilities = 'SqlAdministration' };
+	# 'CONTOSO\SqlManaged' = @{ RoleCapabilityFiles = 'C:\RoleCapability\SqlManaged.psrc' };
+	# 'CONTOSO\ServerMonitors' = @{ VisibleCmdlets = 'Get-Process' } }
 
 	# Group accounts for which membership is required to use the session.
-	RequiredGroups = @{ Or = "Administrators", "Remote Management Users" }
+	# And = Connecting users to be members of a single group
+	# Requiring users must to belong to group A, or both groups B and C:
+	# @{ Or = 'GroupA', @{ And = 'GroupB', 'GroupC' } }
+	RequiredGroups = @{ And = "Administrators" }
 
-	# Language mode to apply when applied to a session.
-	# Can be "NoLanguage" (recommended), "RestrictedLanguage", "ConstrainedLanguage", or "FullLanguage"
+	# Language mode to apply when applied to a session:
 	# FullLanguage - All language elements are permitted.
+	# "ConstrainedLanguage" - Commands that contain scripts to be evaluated are not allowed.
+	# restricts user access to Microsoft .NET Framework types, objects, or methods.
+	# "NoLanguage" - Users may run cmdlets and functions, but are not permitted to use any language
+	# elements, such as script blocks, variables, or operators.
+	# "RestrictedLanguage" - Users may run cmdlets and functions, but are not permitted to use
+	# script blocks or variables except for the following permitted variables:
+	# $PSCulture, $PSUICulture, $True, $False, and $Null.
+	# Users may use only the basic comparison operators ( -eq , -gt , -lt ).
+	# Assignment statements, property references, and method calls are not permitted.
+	# The default value depends on the value of the SessionType parameter:
+	# Empty - NoLanguage
+	# RestrictedRemoteServer - NoLanguage
+	# Default - FullLanguage
 	LanguageMode = "FullLanguage"
 
 	# Execution policy to apply when applied to a session
@@ -106,6 +130,9 @@ SOFTWARE.
 	# precedence over the value of the PowerShellVersion key in the session configuration file.
 	# PowerShellVersion = '7.1.3'
 
+	# Scripts to run when applied to a session
+	# ScriptsToProcess = 'C:\ConfigData\InitScript1.ps1', 'C:\ConfigData\InitScript2.ps1'
+
 	# Modules to import when applied to a session
 	# ModulesToImport = 'MyCustomModule', @{ ModuleName = 'MyCustomModule'; ModuleVersion = '1.0.0.0'; GUID = '4d30d5f0-cb16-4898-812d-f20a6c596bdf' }
 
@@ -113,10 +140,12 @@ SOFTWARE.
 	# VisibleAliases = 'Item1', 'Item2'
 
 	# Cmdlets to make visible when applied to a session
-	# VisibleCmdlets = 'Invoke-Cmdlet1', @{ Name = 'Invoke-Cmdlet2'; Parameters = @{ Name = 'Parameter1'; ValidateSet = 'Item1', 'Item2' }, @{ Name = 'Parameter2'; ValidatePattern = 'L*' } }
+	# VisibleCmdlets = 'Invoke-Cmdlet1', @{ Name = 'Invoke-Cmdlet2';
+	# Parameters = @{ Name = 'Parameter1'; ValidateSet = 'Item1', 'Item2' }, @{ Name = 'Parameter2'; ValidatePattern = 'L*' } }
 
 	# Functions to make visible when applied to a session
-	# VisibleFunctions = 'Invoke-Function1', @{ Name = 'Invoke-Function2'; Parameters = @{ Name = 'Parameter1'; ValidateSet = 'Item1', 'Item2' }, @{ Name = 'Parameter2'; ValidatePattern = 'L*' } }
+	# VisibleFunctions = 'Invoke-Function1', @{ Name = 'Invoke-Function2'; Parameters = @{ Name = 'Parameter1';
+	# ValidateSet = 'Item1', 'Item2' }, @{ Name = 'Parameter2'; ValidatePattern = 'L*' } }
 
 	# External commands (scripts and applications) to make visible when applied to a session
 	# VisibleExternalCommands = 'Item1', 'Item2'
@@ -133,7 +162,8 @@ SOFTWARE.
 	# FunctionDefinitions = @{ Name = 'MyFunction'; ScriptBlock = { param($MyInput) $MyInput } }
 
 	# Variables to define when applied to a session
-	# VariableDefinitions = @{ Name = 'Variable1'; Value = { 'Dynamic' + 'InitialValue' } }, @{ Name = 'Variable2'; Value = 'StaticInitialValue' }
+	# VariableDefinitions = @{ Name = 'Variable1'; Value = { 'Dynamic' + 'InitialValue' } },
+	# @{ Name = 'Variable2'; Value = 'StaticInitialValue' }
 
 	# Environment variables to define when applied to a session
 	# EnvironmentVariables = @{ Variable1 = 'Value1'; Variable2 = 'Value2' }

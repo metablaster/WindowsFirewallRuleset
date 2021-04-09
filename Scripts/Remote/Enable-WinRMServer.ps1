@@ -99,9 +99,9 @@ TODO: Authenticate users using certificates instead of or optionally in addition
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Check parameter naming convention
-TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Remote registry setup
+TODO: Configure server remotely either with WSMan or trough SSH
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -146,7 +146,7 @@ param (
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\WinRMSettings.ps1 -Server
+. $PSScriptRoot\WinRMSettings.ps1 -IncludeServer
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
@@ -209,26 +209,83 @@ Get-PSSessionConfiguration | Where-Object {
 	$_.Name -eq "RemoteFirewall"
 } | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
+# Register repository specific session configuration
 Write-Verbose -Message "[$ThisModule] Registering custom session configuration"
 # NOTE: Register-PSSessionConfiguration will fail in Windows PowerShell otherwise
 Set-StrictMode -Off
 
+# A null value does not affect the session configuration.
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pstransportoption
+$TransportConfig = @{
+	# Limits the number of sessions that use the session configuration.
+	# The MaxSessions parameter corresponds to the MaxShells property of a session configuration.
+	# The default value is 25.
+	MaxSessions = 1
+
+	# Determines how command output is managed in disconnected sessions when the output buffer becomes full
+	# "Block", When the output buffer is full, execution is suspended until the buffer is clear
+	OutputBufferingMode = "Block"
+}
+
 # [Microsoft.WSMan.Management.WSManConfigContainerElement]
-Register-PSSessionConfiguration -Path $ProjectRoot\Config\RemoteFirewall.pssc `
-	-Name "RemoteFirewall" -ProcessorArchitecture amd64 -ThreadApartmentState Unknown `
-	-ThreadOptions UseCurrentThread -AccessMode Remote -NoServiceRestart -Force `
-	-MaximumReceivedDataSizePerCommandMB 50 -MaximumReceivedObjectSizeMB 10 | Out-Null
-# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess `
+$SessionConfigParams = @{
+	Name = "RemoteFirewall"
+	Path = "$ProjectRoot\Config\RemoteFirewall.pssc"
+	# Determines whether a 32-bit or 64-bit version of the PowerShell process is started in sessions
+	# x86 or amd64,
+	# The default value is determined by the processor architecture of the computer that hosts the session configuration.
+	ProcessorArchitecture = "amd64"
+	# Maximum amount of data that can be sent to this computer in any single remote command.
+	# The default is 50 MB
+	MaximumReceivedDataSizePerCommandMB = 50
+	# Maximum amount of data that can be sent to this computer in any single object.
+	# The default is 10 MB
+	MaximumReceivedObjectSizeMB = 10
+	# Disabled. This configuration cannot be used for remote or local access to the computer.
+	# Local. Allows users of the local computer to create a loopback session on the same computer.
+	# Remote. Allows local and remote users to create sessions and run commands on this computer.
+	AccessMode = "Remote"
+
+	# The apartment state of the threading module to be used:
+	# MTA: The Thread will create and enter a multithreaded apartment.
+	# STA: The Thread will create and enter a single-threaded apartment.
+	# Unknown: The ApartmentState property has not been set.
+	# https://docs.microsoft.com/en-us/dotnet/api/system.threading.apartmentstate
+	ThreadApartmentState = "Unknown"
+
+	# The specified script runs in the new session that uses the session configuration.
+	# If the script generates an error, even a non-terminating error, the session is not created.
+	# TODO: Following path is created by "MountUserDrive" option in RemoteFirewall.pssc
+	# StartupScript = "$env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME\ProjectSettings.ps1"
+
+	# The default value is UseCurrentThread.
+	# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.psthreadoptions
+	ThreadOptions = "UseCurrentThread"
+
+	# Advanced options for a session configuration
+	TransportOption = New-PSTransportOption @TransportConfig
+
+	# Specifies credentials for commands in the session.
+	# By default, commands run with the permissions of the current user.
+	# RunAsCredential = Get-Credential
+}
+
+Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
+# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
 # -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 Set-StrictMode -Version Latest
 
-# Register repository specific session configuration
 Write-Verbose -Message "[$ThisModule] Recreating default session configurations"
 Enable-PSRemoting -SkipNetworkProfileCheck -Force | Out-Null
 
-# Enable default configuration
+# Disable unused built in session configurations
+Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
+Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
+Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
+
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server listener"
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+
 if ($Protocol -ne "HTTPS")
 {
 	# Add new HTTP listener
@@ -249,7 +306,7 @@ if ($Protocol -ne "HTTP")
 
 	if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
 	elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
-	$Cert = & $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams
+	$Cert = & $PSScriptRoot\Register-SslCertificate.ps1 @SSLCertParams
 
 	# Add new HTTPS listener
 	New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `

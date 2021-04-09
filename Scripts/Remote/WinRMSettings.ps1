@@ -33,10 +33,10 @@ WinRM service options
 .DESCRIPTION
 WinRM service options include, protocol, service, client and winrs settings
 
-.PARAMETER Client
+.PARAMETER IncludeClient
 Include setting that apply to client configuration
 
-.PARAMETER Server
+.PARAMETER IncludeServer
 Include setting that apply to service configuration
 
 .EXAMPLE
@@ -66,10 +66,10 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
 param (
 	[Parameter()]
-	[switch] $Client,
+	[switch] $IncludeClient,
 
 	[Parameter()]
-	[switch] $Server
+	[switch] $IncludeServer
 )
 
 # Utility or settings scripts don't do anything on their own
@@ -125,7 +125,7 @@ $WinRMCompatibilityRules = "@FirewallAPI.dll,-30252"
 	CredSSP = $false
 }
 
-if ($Client)
+if ($IncludeClient)
 {
 	# Challenge-response scheme that uses a server-specified data string for the challenge.
 	# Supported by both HTTP and HTTPS
@@ -134,7 +134,7 @@ if ($Client)
 	$AuthenticationOptions["Digest"] = $false
 }
 
-if ($Client)
+if ($IncludeClient)
 {
 	[hashtable] $ClientOptions = @{
 		# Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
@@ -152,7 +152,7 @@ if ($Client)
 	}
 }
 
-if ($Server)
+if ($IncludeServer)
 {
 	[hashtable] $ServerOptions = @{
 		# NOTE:	AllowRemoteAccess is read only

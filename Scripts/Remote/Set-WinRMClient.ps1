@@ -95,7 +95,6 @@ TODO: Authenticate users using certificates instead of or optionally in addition
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Check parameter naming convention
-TODO: CIM testing
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Remote registry setup and test
 
@@ -134,7 +133,7 @@ param (
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
-. $PSScriptRoot\WinRMSettings.ps1 -Client
+. $PSScriptRoot\WinRMSettings.ps1 -IncludeClient
 Initialize-Project -Strict
 
 $ErrorActionPreference = "Stop"
@@ -267,7 +266,7 @@ if ($Protocol -eq "HTTPS")
 
 	if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
 	elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
-	& $PSScriptRoot\Install-SslCertificate.ps1 @SSLCertParams | Out-Null
+	& $PSScriptRoot\Register-SslCertificate.ps1 @SSLCertParams | Out-Null
 }
 
 Write-Verbose -Message "[$ThisModule] Restarting WS-Management service"
