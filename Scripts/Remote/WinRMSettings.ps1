@@ -123,7 +123,7 @@ $WinRMCompatibilityRules = "@FirewallAPI.dll,-30252"
 [hashtable] $AuthenticationOptions = @{
 	# The user name and password are sent in clear text.
 	# Basic authentication cannot be used with domain accounts
-	# The default value is true.
+	# The default value is true according to docs, false according to fresh system.
 	Basic = $false
 	# Authentication by using Kerberos certificates.
 	# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
@@ -200,7 +200,8 @@ if ($IncludeServer)
 		# NOTE:	AllowRemoteAccess is read only
 
 		# Specifies the security descriptor that controls remote access to the listener.
-		# The default is "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)".
+		# The default according to docs is "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)".
+		# Default on fresh server system: "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 		# RootSDDL = "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)"
 
 		# The maximum number of concurrent operations.

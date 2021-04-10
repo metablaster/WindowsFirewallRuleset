@@ -41,7 +41,20 @@ Disable WinRM server for CIM and PowerShell remoting
 
 .DESCRIPTION
 Disable WinRM server for remoting previously enabled by Enable-WinRMServer.
-Configures local machine to accept loopback HTTP.
+WinRM service will continue to run but will accept only loopback HTTP and only if
+using "RemoteFirewall" session configuration.
+
+In addition unlike Disable-PSRemoting, it will also remove default firewall rules
+and restore registry setting which restricts remote access to members of the
+Administrators group on the computer.
+
+.PARAMETER All
+If specified, will disable WinRM service completely, remove all listeners and
+disable all session configurations.
+
+.PARAMETER Force
+If specified, does not prompt to set connected network adapters to private profile,
+and does not prompt to temporarily disable any non connected network adapter if needed.
 
 .EXAMPLE
 PS> .\Disable-WinRMServer.ps1
@@ -79,9 +92,15 @@ winrm help config
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = "Default")]
 [OutputType([void])]
-param ()
+param (
+	[Parameter(ParameterSetName = "All")]
+	[switch] $All,
+
+	[Parameter(ParameterSetName = "Default")]
+	[switch] $Force
+)
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 . $PSScriptRoot\WinRMSettings.ps1 -IncludeServer
@@ -101,7 +120,8 @@ members of the Administrators group on the computer.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
+# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
+# present may cause issues adjusting some of the WinRM options
 if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
@@ -137,106 +157,128 @@ if ($WinRM.Status -ne "Running")
 	$WinRM.WaitForStatus("Running", $ServiceTimeout)
 }
 
-# Remove all non default session configurations
-Write-Verbose -Message "[$ThisModule] Removing default session configurations"
-Get-PSSessionConfiguration | Where-Object {
-	$_.Name -notlike "Microsoft*" -and
-	$_.Name -ne "RemoteFirewall"
-} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
-
-# Disable all default session configurations
-Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
-Disable-PSSessionConfiguration -Name Microsoft* -NoServiceRestart -Force
-
-# Enable only localhost on loopback
-Write-Verbose -Message "[$ThisModule] Configuring WinRM localhost"
-Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
-
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
-New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
-	-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 
-# TODO: Only loopback listeners
-# New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
-# 	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
-
-# New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
-# 	-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
-
-Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
-
-# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
-Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
-
-Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
-
-try
+if ($All)
 {
-	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+	Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
 
-	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+	Write-Information -Tags "Project" -MessageData "INFO: Stopping WinRM service"
+	Set-Service -Name WinRM -StartupType Disabled
+	$WinRM.Stop()
+	$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
 }
-catch [System.InvalidOperationException]
+else
 {
-	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
+	# Disable all session configurations except what's needed for local firewall management
+	Write-Verbose -Message "[$ThisModule] Disabling session configurations"
+	Get-PSSessionConfiguration | Where-Object {
+		$_.Name -ne "RemoteFirewall"
+	} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+
+	# Enable only localhost on loopback
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM localhost"
+	Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
+
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM server loopback listener"
+	New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
+		-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+
+	New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
+		-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
+	# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
+	Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+
+	# Work Station (1)
+	# Domain Controller (2)
+	# Server (3)
+	$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem |
+		Select-Object -ExpandProperty ProductType) -eq 1
+
+	[array] $VirtualAdapter = $null
+
+	try
 	{
-		Write-Error -Category InvalidOperation -TargetObject $ServerOptions -ErrorAction "Continue" `
-			-Message "Disabling WinRM server failed because one of the network connection types on this machine is set to 'Public'"
-
-		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
+		if ($Workstation)
 		{
-			$HyperV = $null -ne (Get-WindowsFeature -Name Hyper-V |
-				Where-Object { $_.InstallState -eq "Installed" })
-		}
-		else
-		{
-			$HyperV = (Get-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V-All -Online |
-				Select-Object -ExpandProperty State) -eq "Enabled"
+			[array] $PublicAdapter = Get-NetConnectionProfile |
+			Where-Object -Property NetworkCategory -NE Private
+
+			if ($PublicAdapter)
+			{
+				Write-Warning -Message "Following network adapters need to be set to private network profile to continue"
+				foreach ($Alias in $PublicAdapter.InterfaceAlias)
+				{
+					if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Set adapter to private network profile"))
+					{
+						Set-NetConnectionProfile -InterfaceAlias $Alias -NetworkCategory Private -Force
+					}
+					else
+					{
+						throw [System.OperationCanceledException]::new("not all connected network adapters are not operating on private profile")
+					}
+				}
+			}
+
+			$VirtualAdapter = Get-NetIPConfiguration | Where-Object { !$_.NetProfile }
+
+			if ($VirtualAdapter)
+			{
+				Write-Warning -Message "Following network adapters need to be temporarily disabled to continue"
+				foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+				{
+					if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Temporarily disable network adapter"))
+					{
+						Disable-NetAdapter -InterfaceAlias $Alias -Confirm:$false
+					}
+					else
+					{
+						throw [System.OperationCanceledException]::new("not all configured network adapters are not operating on private profile")
+					}
+				}
+			}
 		}
 
-		if ($HyperV)
-		{
-			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
-			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
-		}
+		Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
+		# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+		# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+		Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
-		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
+		Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
+		Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 	}
-	else
+	catch [System.OperationCanceledException]
+	{
+		Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+	}
+	catch
 	{
 		Write-Error -ErrorRecord $_ -ErrorAction "Continue"
 	}
-}
-catch
-{
-	Write-Error -ErrorRecord $_ -ErrorAction "Continue"
-}
-finally
-{
-	Write-Verbose -Message "[$ThisModule] Disabling remote access to members of the Administrators group"
-	# NOTE: Following is set by Set-WSManQuickConfig and Enable-PSSessionConfiguration, it prevents
-	# UAC and allows remote access to members of the Administrators group on the computer.
-	Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 
-	if (!$Develop)
+	if ($Workstation -and $VirtualAdapter)
 	{
-		# TODO: We still need local host functionality
-		Write-Information -Tags "Project" -MessageData "INFO: Stopping WinRM service"
-		Set-Service -Name WinRM -StartupType Manual
-		$WinRM.Stop()
-		$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+		foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+		{
+			if ($Force -or $PSCmdlet.ShouldProcess($Alias, "Re-enable network adapter"))
+			{
+				Enable-NetAdapter -InterfaceAlias $Alias
+			}
+		}
 	}
-
-	# Remove all WinRM predefined rules
-	Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
-		-Direction Inbound -PolicyStore PersistentStore
-
-	Update-Log
 }
+
+Write-Verbose -Message "[$ThisModule] Disabling remote access to members of the Administrators group"
+# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+# allows remote access to members of the Administrators group on the computer.
+Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+	-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+
+# Remove all WinRM predefined rules
+Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
+	-Direction Inbound -PolicyStore PersistentStore
 
 Write-Information -Tags "Project" -MessageData "INFO: Disabling WinRM server is complete"
 Update-Log

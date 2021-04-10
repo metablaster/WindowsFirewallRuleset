@@ -103,7 +103,8 @@ Todo's in this file are categorized into following sections:
 2. Scripts
 
     - Auto detect interfaces, ex. to be used with InterfaceAlias parameter
-    - null corectness, in specific cases just `if (something)` doesn't work as in other languages
+    - null corectness, in specific cases just `if (something)` doesn't work as in other languages,
+    ex. `$RegKey.GetValue("name")` may return 0 or "" which is `$false` but valid value.
     - Detect if a script was run manually, to be able to reset errors and warning status, or to
     conditionally run `gpuupdate.exe`
     - Make it possible to deploy firewall to remote computers
@@ -189,6 +190,8 @@ Todo's in this file are categorized into following sections:
     - A few functions (or module) for export/import of configuration into variety of file formats
     - Several module functions and scripts use nested functions, consider converting to either
     scriptblocks or filters.
+    - Test each module function as if module only is used, to make sure it's self sufficient, ex.
+    `Initialize-Service` function will fail.
 
 2. Scripts
 

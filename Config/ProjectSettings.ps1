@@ -348,6 +348,13 @@ if ($Develop)
 # Use it in a script or function to override the setting inherited from the global scope.
 # NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
 Set-StrictMode -Version Latest
+
+if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+{
+	# Repository root directory, reallocating scripts should be easy if root directory is constant
+	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
+		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+}
 #endregion
 
 #region Remote session initialization
@@ -357,16 +364,13 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	{
 		if ($TargetHost -and ($TargetHost -ne $PolicyStore))
 		{
+			# TODO: Temporarily while working on remoting
 			Write-Error -Category InvalidArgument -TargetObject $TargetHost -EA Stop `
 				-Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'"
 		}
 	}
 	else
 	{
-		# Repository root directory, reallocating scripts should be easy if root directory is constant
-		New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
-			Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
-
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
 		if ([string]::IsNullOrEmpty($TargetHost)) # -or ($TargetHost -eq "localhost"))
 		{

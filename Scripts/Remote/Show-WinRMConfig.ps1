@@ -40,27 +40,32 @@ SOFTWARE.
 Show WinRM service configuration
 
 .DESCRIPTION
-Command winrm get winrm/config will show all the data but will also include containers,
-WSMan provider is also not universal, and you need to run different commands to get desired
-results or values from sub containers.
-Some of the WinRM options are advanced and not easily discoverable, but are known to cause
-isssues really hard to debug due to misconfiguration.
+Various commands such as "winrm get winrm/config" will show all the data but will also include
+containers, WSMan provider is also not universal, and you need to run different commands to get
+desired results or values from sub containers.
+
+Some of the WinRM options are advanced and not easily discoverable or often used, as such these
+can cause isssues hard to debug due to WinRM service misconfiguration.
+
 This scripts does all this, by harvesting all important and relevant information and
-excludes\includes containers by specifying switches, all of which is then sorted so that it
+excludes\includes containers by specifying few switches, all of which is then sorted so that it
 can be compared with other working configurations to quickly discover problem.
 
 .PARAMETER Server
-Display WinRM service configuration
+Display WinRM service configuration.
+This includes configuration that is essential to accept remote commands.
 
 .PARAMETER Client
-Display WinRM client configuration
+Display WinRM client configuration.
+This includes configuration that is essential to send remote commands.
 
 .PARAMETER Detailed
-Display detailed WinRM configuration not handled by Server and Client switches.
-This switch does not imply Client and Server switches.
+Display additional WinRM configuration not handled by -Server and -Client switches.
 
 .EXAMPLE
 PS> .\Show-WinRMConfig.ps1
+
+Without any switches it will show only status of the WinRM service status and firewall rules
 
 .EXAMPLE
 PS> .\Show-WinRMConfig.ps1 -Server -Detailed
@@ -77,7 +82,7 @@ None. You cannot pipe objects to Show-WinRMConfig.ps1
 [Microsoft.WSMan.Management.WSManConfigLeafElement]
 
 .NOTES
-None.
+TODO: Add-Type -AssemblyName "Microsoft.WSMan.Management"
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -177,10 +182,18 @@ if ($Server)
 	EnableCompatibilityHttpListener, EnableCompatibilityHttpsListener, CertificateThumbprint,
 	AllowRemoteAccess, IsReadOnly, IsEmpty, HasChildNodes
 
-	$TokenValue = Get-ItemProperty -Name LocalAccountTokenFilterPolicy `
-		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" |
-	Select-Object -ExpandProperty LocalAccountTokenFilterPolicy
-	Write-Information -Tags "Project" -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
+	$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+	$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
+
+	if ($null -ne $TokenValue)
+	{
+		Write-Information -Tags "Project" -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
+	}
+	else
+	{
+		# For example on fresh installed system
+		Write-Warning -Message "LocalAccountTokenFilterPolicy value is not present in the registry"
+	}
 
 	# winrm get winrm/config/service/auth
 	Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
@@ -227,7 +240,7 @@ if ($Detailed)
 	Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value | Format-Table -AutoSize
 
 	# winrm enumerate winrm/config/plugin
-	Write-Verbose -Message "Showing plugin configuration" -Verbose
+	Write-Verbose -Message "Showing plugin status" -Verbose
 	Get-Item WSMan:\localhost\Plugin\* | ForEach-Object {
 		$Enabled = Get-Item "WSMan:\localhost\Plugin\$($_.Name)\Enabled" |
 		Select-Object -ExpandProperty Value
@@ -238,4 +251,6 @@ if ($Detailed)
 			PSPath = $_.PSPath
 		}
 	} | Sort-Object -Property Enabled -Descending | Format-Table -AutoSize
+
+	# TODO: WinRS configuration
 }

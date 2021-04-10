@@ -42,7 +42,11 @@ Configure WinRM server for CIM and PowerShell remoting
 .DESCRIPTION
 Configures local machine to accept remote CIM and PowerShell requests using WS-Management.
 In addition it initializes specialized remoting session configuration as well as most common
-issues are handled and attempted to be resolved automatically.
+issues are handled and attempted to be resolved or bypassed automatically.
+
+If specified -Protocol is set to HTTPS, it will export public key (DER encoded CER file)
+to default repository location (\Exports), which you should then copy to client machine
+to be picked up by Set-WinRMClient.ps1 and used for client SSL authentication.
 
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
@@ -58,9 +62,10 @@ Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER Force
-If specified, overwrites an existing exported certificate file,
+If specified, overwrites an existing exported certificate (*.cer) file,
 unless it has the Read-only attribute set.
-TODO: see other places where -Force is used too.
+Also it does not prompt to set connected network adapters to private profile,
+and does not prompt to temporarily disable any non connected network adapter if needed.
 
 .EXAMPLE
 PS> .\Enable-WinRMServer.ps1
@@ -126,7 +131,7 @@ winrm help config
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([void], [System.Xml.XmlElement])]
 param (
-	[Parameter(Position = 0)]
+	[Parameter()]
 	[ValidateSet("HTTP", "HTTPS", "Any")]
 	[string] $Protocol = "HTTPS",
 
@@ -161,7 +166,56 @@ Restarts the WinRM service to make the preceding changes effective.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
+# Work Station (1)
+# Domain Controller (2)
+# Server (3)
+$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem |
+	Select-Object -ExpandProperty ProductType) -eq 1
+
+if ($Workstation)
+{
+	[array] $PublicAdapter = Get-NetConnectionProfile |
+	Where-Object -Property NetworkCategory -NE Private
+
+	if ($PublicAdapter)
+	{
+		Write-Warning -Message "Following network adapters need to be set to private network profile to continue"
+		foreach ($Alias in $PublicAdapter.InterfaceAlias)
+		{
+			if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Set adapter to private network profile"))
+			{
+				Set-NetConnectionProfile -InterfaceAlias $Alias -NetworkCategory Private -Force
+			}
+			else
+			{
+				Write-Error -Category OperationStopped -TargetObject $Alias `
+					-Message "Setting WinRM service options was canceled"
+			}
+		}
+	}
+
+	[array] $VirtualAdapter = Get-NetIPConfiguration | Where-Object { !$_.NetProfile }
+
+	if ($VirtualAdapter)
+	{
+		Write-Warning -Message "Following network adapters need to be temporarily disabled to continue"
+		foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+		{
+			if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Temporarily disable network adapter"))
+			{
+				Disable-NetAdapter -InterfaceAlias $Alias -Confirm:$false
+			}
+			else
+			{
+				Write-Error -Category OperationStopped -TargetObject $Alias `
+					-Message "Setting WinRM service options was canceled"
+			}
+		}
+	}
+}
+
+# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
+# present may cause issues adjusting some of the WinRM options
 if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
@@ -238,9 +292,9 @@ $SessionConfigParams = @{
 	# The default is 10 MB
 	MaximumReceivedObjectSizeMB = 10
 
-	# Disabled. This configuration cannot be used for remote or local access to the computer.
-	# Local. Allows users of the local computer to create a loopback session on the same computer.
-	# Remote. Allows local and remote users to create sessions and run commands on this computer.
+	# Disabled, this configuration cannot be used for remote or local access to the computer.
+	# Local, allows users of the local computer to create a loopback session on the same computer.
+	# Remote, allows local and remote users to create sessions and run commands on this computer.
 	AccessMode = "Remote"
 
 	# The apartment state of the threading module to be used:
@@ -267,7 +321,7 @@ $SessionConfigParams = @{
 	# RunAsCredential = Get-Credential
 }
 
-# NOTE: Register-PSSessionConfiguration will fail in Windows PowerShell otherwise
+# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
 Set-StrictMode -Off
 
 # TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
@@ -276,7 +330,7 @@ Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | 
 Set-StrictMode -Version Latest
 
 Write-Verbose -Message "[$ThisModule] Recreating default session configurations"
-Enable-PSRemoting -SkipNetworkProfileCheck -Force | Out-Null
+Enable-PSRemoting -Force | Out-Null
 
 # Disable unused built in session configurations
 Write-Verbose -Message "[$ThisModule] Disabling unneeded default session configurations"
@@ -313,6 +367,14 @@ if ($Protocol -ne "HTTP")
 		-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
 }
 
+# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
+$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
+if ($WmiPlugin.Value -ne $true)
+{
+	Write-Information -Tags "Project" -MessageData "INFO: Enabling WMI Provider plugin"
+	Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+}
+
 # Specify acceptable client authentication methods
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 
@@ -333,14 +395,6 @@ Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $Authenticati
 Write-Verbose -Message "[$ThisModule] Configuring WinRM default server ports"
 Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
 
-# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
-$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-if ($WmiPlugin.Value -ne $true)
-{
-	Write-Information -Tags "Project" -MessageData "INFO: Enabling WMI Provider plugin"
-	Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
-}
-
 Write-Verbose -Message "[$ThisModule] Configuring WinRM server options"
 
 if ($Protocol -eq "HTTPS")
@@ -348,78 +402,46 @@ if ($Protocol -eq "HTTPS")
 	$ServerOptions["AllowUnencrypted"] = $false
 }
 
-try
+# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+
+Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
+Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+
+if ($Workstation -and $VirtualAdapter)
 {
-	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
-
-	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
-}
-catch [System.InvalidOperationException]
-{
-	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
+	foreach ($Alias in $VirtualAdapter.InterfaceAlias)
 	{
-		Write-Error -Category InvalidOperation -TargetObject $ServerOptions -ErrorAction "Continue" `
-			-Message "Setting WinRM service options failed because one of the network connection types on this machine is set to 'Public'"
-
-		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
+		if ($Force -or $PSCmdlet.ShouldProcess($Alias, "Re-enable network adapter"))
 		{
-			$HyperV = $null -ne (Get-WindowsFeature -Name Hyper-V |
-				Where-Object { $_.InstallState -eq "Installed" })
+			Enable-NetAdapter -InterfaceAlias $Alias
 		}
-		else
-		{
-			$HyperV = (Get-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V-All -Online |
-				Select-Object -ExpandProperty State) -eq "Enabled"
-		}
-
-		if ($HyperV)
-		{
-			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
-			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
-		}
-
-		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
-	}
-	else
-	{
-		Write-Error -ErrorRecord $_ -EA Stop
 	}
 }
-catch
+
+# Remove WinRM predefined compatibility rules
+Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
+	-PolicyStore PersistentStore
+
+# Restore public profile rules to local subnet which is the default
+Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+	$_.Profile -like "*Public*"
+} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+
+Write-Verbose -Message "[$ThisModule] Restarting WinRM service"
+$WinRM.Stop()
+$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+$WinRM.Start()
+$WinRM.WaitForStatus("Running", $ServiceTimeout)
+
+$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
+
+if ($TokenValue -ne 1)
 {
-	Write-Error -ErrorRecord $_ -EA Stop
-}
-finally
-{
-	# Remove WinRM predefined compatibility rules
-	Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
-		-PolicyStore PersistentStore
-
-	# Restore public profile rules to local subnet which is the default
-	Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
-		$_.Profile -like "*Public*"
-	} | Set-NetFirewallRule -RemoteAddress LocalSubnet
-
-	Write-Verbose -Message "[$ThisModule] Restarting WinRM service"
-	$WinRM.Stop()
-	$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
-	$WinRM.Start()
-	$WinRM.WaitForStatus("Running", $ServiceTimeout)
-
-	$TokenValue = Get-ItemProperty -Name LocalAccountTokenFilterPolicy `
-		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" |
-	Select-Object -ExpandProperty LocalAccountTokenFilterPolicy
-
-	if ($TokenValue -eq 0)
-	{
-		Write-Error -Category InvalidResult -TargetObject $TokenValue `
-			-Message "LocalAccountTokenFilterPolicy was not enabled"
-	}
-
-	Update-Log
+	Write-Error -Category InvalidResult -TargetObject $TokenValue `
+		-Message "LocalAccountTokenFilterPolicy was not enabled"
 }
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"

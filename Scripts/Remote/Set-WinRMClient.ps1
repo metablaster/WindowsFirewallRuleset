@@ -43,13 +43,13 @@ Configure client computer for WinRM remoting
 Configures client machine to send CIM and PowerShell commands to remote server using WS-Management.
 This functionality is most useful when setting up WinRM with SSL.
 
+.PARAMETER Domain
+Computer name which is to be managed remotely from this machine.
+If not specified local machine is the default.
+
 .PARAMETER Protocol
 Specifies protocol to HTTP, HTTPS or both.
 By default only HTTPS is configured.
-
-.PARAMETER Domain
-Computer name which is to be managed remotely.
-If not specified local machine is the default.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -60,6 +60,10 @@ If not found, default repository location (\Exports) is searched for DER encoded
 .PARAMETER CertThumbPrint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
+
+.PARAMETER Force
+Also it does not prompt to set connected network adapters to private profile,
+and does not prompt to temporarily disable any non connected network adapter if needed.
 
 .EXAMPLE
 PS> .\Set-WinRMClient.ps1 -Domain Server1
@@ -116,18 +120,21 @@ winrm help config
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter(Position = 0)]
-	[ValidateSet("HTTP", "HTTPS", "Any")]
-	[string] $Protocol = "HTTPS",
-
-	[Parameter()]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[ValidateSet("HTTP", "HTTPS", "Any")]
+	[string] $Protocol = "HTTPS",
 
 	[Parameter(ParameterSetName = "File")]
 	[string] $CertFile,
 
 	[Parameter(ParameterSetName = "CertThumbPrint")]
-	[string] $CertThumbPrint
+	[string] $CertThumbPrint,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
@@ -138,7 +145,8 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# "Windows Remote Management" predefined rules (including compatibility rules) must be present to continue
+# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
+# present may cause issues adjusting some of the WinRM options
 if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 {
 	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
@@ -202,7 +210,7 @@ catch
 Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM default client ports"
-Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+Set-WSManInstance -ResourceURI winrm/config/client/DefaultPorts -ValueSet $PortOptions | Out-Null
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM client options"
 
@@ -214,48 +222,77 @@ if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName
 
 Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
 
-Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
-
 try
 {
+	# Work Station (1)
+	# Domain Controller (2)
+	# Server (3)
+	$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem |
+		Select-Object -ExpandProperty ProductType) -eq 1
+
+	if ($Workstation)
+	{
+		[array] $PublicAdapter = Get-NetConnectionProfile |
+		Where-Object -Property NetworkCategory -NE Private
+
+		if ($PublicAdapter)
+		{
+			Write-Warning -Message "Following network adapters need to be set to private network profile to continue"
+			foreach ($Alias in $PublicAdapter.InterfaceAlias)
+			{
+				if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Set adapter to private network profile"))
+				{
+					Set-NetConnectionProfile -InterfaceAlias $Alias -NetworkCategory Private -Force
+				}
+				else
+				{
+					throw [System.OperationCanceledException]::new("not all connected network adapters are not operating on private profile")
+				}
+			}
+		}
+
+		$VirtualAdapter = Get-NetIPConfiguration | Where-Object { !$_.NetProfile }
+
+		if ($VirtualAdapter)
+		{
+			Write-Warning -Message "Following network adapters need to be temporarily disabled to continue"
+			foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+			{
+				if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Temporarily disable network adapter"))
+				{
+					Disable-NetAdapter -InterfaceAlias $Alias -Confirm:$false
+				}
+				else
+				{
+					throw [System.OperationCanceledException]::new("not all configured network adapters are not operating on private profile")
+				}
+			}
+		}
+	}
+
+	Write-Verbose -Message "[$ThisModule] Configuring WinRM protocol options"
 	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
 	# cmd.exe /C 'winrm set winrm/config @{ MaxTimeoutms = 10 }'
 	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+
+	if ($Workstation -and $VirtualAdapter)
+	{
+		foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+		{
+			if ($Force -or $PSCmdlet.ShouldProcess($Alias, "Re-enable network adapter"))
+			{
+				Enable-NetAdapter -InterfaceAlias $Alias
+			}
+		}
+	}
 }
-catch [System.InvalidOperationException]
+catch [System.OperationCanceledException]
 {
-	if ([regex]::IsMatch($_.Exception.Message, "either Domain or Private"))
-	{
-		Write-Error -Category InvalidOperation -TargetObject $ProtocolOptions -ErrorAction "Continue" `
-			-Message "Configuring WinRM client failed because one of the network connection types on this machine is set to 'Public'"
-
-		if ((Get-CimInstance Win32_OperatingSystem).Caption -like "*Server*")
-		{
-			$HyperV = $null -ne (Get-WindowsFeature -Name Hyper-V |
-				Where-Object { $_.InstallState -eq "Installed" })
-		}
-		else
-		{
-			$HyperV = (Get-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V-All -Online |
-				Select-Object -ExpandProperty State) -eq "Enabled"
-		}
-
-		if ($HyperV)
-		{
-			# TODO: Need to handle this, first check if any VM is running and prompt to disable virtual switches
-			Write-Warning -Message "To resolve this problem, uninstall Hyper-V or disable unneeded virtual switches and try again"
-		}
-
-		# TODO: Else if not working, prompt to uninstall Hyper-V and prompt for reboot to again disable virtual switches
-	}
-	else
-	{
-		Write-Warning -Message "Configuring WinRM protocol options failed"
-	}
+	Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
 }
 catch
 {
-	Write-Warning -Message "Configuring WinRM protocol options failed"
+	Write-Error -ErrorRecord $_ -ErrorAction "Continue"
 }
 
 if ($Protocol -eq "HTTPS")

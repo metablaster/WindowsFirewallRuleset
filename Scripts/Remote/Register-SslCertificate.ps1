@@ -44,10 +44,11 @@ Install SSL certificate to be used for encrypted PowerShell remoting session.
 By default certificate store is searched for existing certificate that matches CN entry,
 if not found default repository location (\Exports) is searched for certificate file which must
 have same name as -Domain parameter value.
+
 Otherwise you can specify your own custom certificate file location.
 The script will always attempt to export public key (DER encoded CER file) on server computer
-to default repository location, which you should then copy to client machine to be picked up by
-Set-WinRMClient.ps1 and used for client authentication.
+to default repository location (\Exports), which you should then copy to client machine to be
+picked up by Set-WinRMClient.ps1 and used for client authentication.
 
 .PARAMETER Domain
 Specify host name which is to be managed remotely from this machine.
@@ -95,6 +96,7 @@ None. You cannot pipe objects to Register-SslCertificate.ps1
 [System.Security.Cryptography.X509Certificates.X509Certificate2]
 
 .NOTES
+This script is called by Enable-WinRMServer.ps1 and doesn't need to be run on it's own.
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 HACK: What happens when exporting a certificate that is already installed? (no error is shown)
@@ -169,7 +171,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 	}
 
 	# Search personal store for certificate first
-	Write-Verbose -Message "[$ThisModule] Searching personal store SSL certificate"
+	Write-Verbose -Message "[$ThisModule] Searching personal store for SSL certificate"
 	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
 		$_.Subject -eq "CN=$Domain"
 	}

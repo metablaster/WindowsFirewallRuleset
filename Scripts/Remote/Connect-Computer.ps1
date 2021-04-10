@@ -41,8 +41,29 @@ Connect to remote computer
 
 .DESCRIPTION
 Connect to remote computer onto which to deploy firewall.
-This script will initialize necessary global variables and initialization needed
-to run commands against remote CIM server and remote registry.
+This script will perform necessary initialization to enter PS session to remote computer,
+in addition required authentication is made to use remote registry service and to run commands
+against remote CIM server.
+
+Following global variables are created:
+RemoteCredential, to be used by commands that require credentials.
+CimServer, to be used by CIM commandlets to specify cim session to use.
+
+.PARAMETER Domain
+Computer name with to which to connect for remoting
+
+.PARAMETER SessionOption
+Specify custom PSSessionOption object to use for remoting.
+By default this is PSSessionOption preference variable
+
+.PARAMETER ConfigurationName
+Specify session configuration to use for remoting, this session configuration must
+be registered and enabled on remote computer.
+By default this is PSSessionConfigurationName preference variable
+
+.PARAMETER CimOptions
+Specify custom CIM session object to fine tune CIM sessions.
+By default new blank CIM options object is made and set to use SSL
 
 .EXAMPLE
 PS> .\Connect-Computer.ps1 COMPUTERNAME

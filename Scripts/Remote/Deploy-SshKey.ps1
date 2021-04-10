@@ -41,15 +41,20 @@ Deploy public SSH key to remote host using SSH
 
 .DESCRIPTION
 Authorize this Windows machine to connect to SSH server host by uploading
-public SSH key to correct destination on remote host and adjust required permissions.
-for users this is ~\.ssh\authorized_keys, for administrators it's
+public SSH key to default location on remote host and adjust required permissions.
+
+For standard users this is ~\.ssh\authorized_keys, for administrators it's
 %ProgramData%\ssh\administrators_authorized_keys
 
 .PARAMETER User
-The user to log in as on the remote machine.
+The user to log in as, on the remote machine.
 
 .PARAMETER Domain
 Target computer or host name
+
+.PARAMETER Key
+Specify public SSH key with is to be transferred.
+By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub
 
 .PARAMETER Admin
 If specified, the key is added to system wide configuration.
@@ -72,9 +77,11 @@ None. Deploy-SshKey.ps1 does not generate any output
 
 .NOTES
 Password based authentication is needed for first time setup or
-if no existing public key is ready on remote host.
+if no existing public SSH key is ready on remote host.
+
 TODO: Optionally deploy sshd_config to remote
 TODO: Make use of certificates
+TODO: Test SSH connectivity prior to key transfer
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

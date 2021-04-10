@@ -376,7 +376,7 @@ function Initialize-Project
 				-InfoMessage "posh-git >= v$RequirePoshGitVersion is recommended for better git experience in PowerShell" ) { }
 
 		if (Initialize-Module @{ ModuleName = "PSReadLine"; ModuleVersion = $RequirePSReadlineVersion } `
-				-InfoMessage "PSReadLine >= v$RequirePSReadlineVersion is recommended for command line editing experience of PowerShell" ) { }
+				-InfoMessage "PSReadLine >= v$RequirePSReadlineVersion is recommended for command line editing experience in PowerShell" ) { }
 
 		if (Initialize-Module @{ ModuleName = "platyPS"; ModuleVersion = $RequirePlatyPSVersion } `
 				-InfoMessage "platyPS >= v$RequirePlatyPSVersion is recommended to generate online help files for modules" ) { }

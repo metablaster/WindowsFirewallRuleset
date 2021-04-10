@@ -41,7 +41,7 @@ Test WinRM service configuration
 
 .DESCRIPTION
 Test WinRM service configuration on either client or server computer.
-WinRM service is then tested for functioning connectivity which includes
+WinRM service is tested for functioning connectivity which includes
 PowerShell remoting and remoting with CIM commandlets.
 
 .PARAMETER Protocol
@@ -97,8 +97,7 @@ $PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
 
 if ($PSSessionConfigurationName -ne "RemoteFirewall")
 {
-	$PSSessionConfigurationName = "RemoteFirewall"
-	Write-Warning -Message "Unexpected session configuration, switching to 'RemoteFirewall' configuration"
+	Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
 }
 
 ################################################
@@ -146,7 +145,7 @@ $CimParams = @{
 	OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
 }
 
-if ($RemoteCredential)
+if (Get-Variable -Name RemoteCredential -EA Ignore)
 {
 	$CimParams["ComputerName"] = $Domain
 	$CimParams["Credential"] = $RemoteCredential
