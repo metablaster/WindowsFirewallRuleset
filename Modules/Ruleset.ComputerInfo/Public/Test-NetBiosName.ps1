@@ -38,7 +38,7 @@ systems in Active Direcotry.
 .PARAMETER Name
 Computer and/or user NETBIOS name which is to be checked
 
-.PARAMETER Target
+.PARAMETER Operation
 Specifies the kind of name checking to perform on -Name parameter as follows:
 
 - User: Name parameter is logon name
@@ -60,11 +60,11 @@ If specified, domain name isn't checked against reserved words, thus the length 
 name isn't check either since reserved words may exceed the limit.
 
 .EXAMPLE
-PS> Test-NetBiosName "*SERVER" -Target Domain
+PS> Test-NetBiosName "*SERVER" -Operation Domain
 False
 
 .EXAMPLE
-PS> Test-NetBiosName "-SERVER-01" -Quiet -Strict -Target Domain
+PS> Test-NetBiosName "-SERVER-01" -Quiet -Strict -Operation Domain
 True
 
 .EXAMPLE
@@ -72,7 +72,7 @@ PS> Test-NetBiosName "-Server-01\UserName"
 True
 
 .EXAMPLE
-PS> Test-NetBiosName "User+Name" -Target User -Strict -Quiet
+PS> Test-NetBiosName "User+Name" -Operation User -Strict -Quiet
 False
 
 .INPUTS
@@ -143,7 +143,7 @@ function Test-NetBiosName
 
 		[Parameter()]
 		[ValidateSet("Domain", "User", "Principal")]
-		[string] $Target = "Principal",
+		[string] $Operation = "Principal",
 
 		[Parameter()]
 		[switch] $Strict,
@@ -191,7 +191,7 @@ function Test-NetBiosName
 			[string] $UserName = $null
 			[string] $DomainName = $null
 
-			if ($Target -eq "Principal")
+			if ($Operation -eq "Principal")
 			{
 				$FullName = $NameRegex.Match($NameEntry)
 
@@ -212,7 +212,7 @@ function Test-NetBiosName
 				$UserName = $User.Value
 				$DomainName = $Domain.Value
 			}
-			elseif ($Target -eq "Domain")
+			elseif ($Operation -eq "Domain")
 			{
 				$DomainName = $NameEntry
 			}
@@ -221,7 +221,7 @@ function Test-NetBiosName
 				$UserName = $NameEntry
 			}
 
-			if ($Target -ne "User")
+			if ($Operation -ne "User")
 			{
 				if ($DomainName.StartsWith("."))
 				{
@@ -287,7 +287,7 @@ function Test-NetBiosName
 				}
 			}
 
-			if ($Target -ne "Domain")
+			if ($Operation -ne "Domain")
 			{
 				$BadMatch = $BadLogon.Match($UserName)
 				if ($BadMatch.Success)

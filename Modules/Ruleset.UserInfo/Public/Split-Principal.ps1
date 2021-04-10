@@ -101,7 +101,7 @@ function Split-Principal
 					continue
 				}
 			}
-			elseif ((Test-NetBiosName $Account -Target User -Force -Quiet) -or (Test-UPN $Account -Prefix -Quiet))
+			elseif ((Test-NetBiosName $Account -Operation User -Force -Quiet) -or (Test-UPN $Account -Prefix -Quiet))
 			{
 				$Account
 				continue

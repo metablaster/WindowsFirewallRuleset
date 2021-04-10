@@ -166,7 +166,7 @@ function Test-UNC
 			}
 
 			# Test-NetBiosName will report errors otherwise
-			if (Test-NetBiosName $PathSplit[0] -Target Domain -Strict:$Strict -Quiet:$Quiet)
+			if (Test-NetBiosName $PathSplit[0] -Operation Domain -Strict:$Strict -Quiet:$Quiet)
 			{
 				# ex: \ShareName\Directory Name\FileName.exe
 				$RemainingPath = "\" + [string]::Join("\", $PathSplit, 1, $PathSplit.Length - 1)

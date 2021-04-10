@@ -55,7 +55,7 @@ Specify host name which is to be managed remotely from this machine.
 This parameter is required only when setting up client computer.
 For server -Target this defaults to server NetBios host name.
 
-.PARAMETER Target
+.PARAMETER ProductType
 Specify current system role which controls script behavior.
 This is either Client (management computer) or Server (managed computer).
 
@@ -120,7 +120,7 @@ param (
 
 	[Parameter(Mandatory = $true)]
 	[ValidateSet("Client", "Server")]
-	[string] $Target,
+	[string] $ProductType,
 
 	[Parameter(ParameterSetName = "File")]
 	[string] $CertFile,
@@ -141,7 +141,7 @@ $ExportPath = "$ProjectRoot\Exports"
 
 Write-Verbose -Message "[$ThisModule] Configuring SSL certificate"
 
-if ($Target -eq "Server")
+if ($ProductType -eq "Server")
 {
 	if ($Domain -and ($Domain -ne ([System.Environment]::MachineName)))
 	{
@@ -159,7 +159,7 @@ elseif ([string]::IsNullOrEmpty($Domain))
 if ([string]::IsNullOrEmpty($CertFile))
 {
 	# Search default file name location
-	if ($Target -eq "Server")
+	if ($ProductType -eq "Server")
 	{
 		$CertFile = "$ExportPath\$Domain.pfx"
 		$ExportFile = "$ExportPath\$Domain.cer"
@@ -202,7 +202,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 	{
 		if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
 		{
-			if (($Target -eq "Server") -and (!$Cert.HasPrivateKey))
+			if (($ProductType -eq "Server") -and (!$Cert.HasPrivateKey))
 			{
 				Write-Error -Category OperationStopped -TargetObject $Cert `
 					-Message "Private key is missing for existing certificate '$Domain.cer', please specify thumbprint to select another certificate"
@@ -226,7 +226,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 		# Import certificate file from default repository location
 		Write-Verbose -Message "[$ThisModule] Searching default repository location for SSL certificate"
 
-		if ($Target -eq "Server")
+		if ($ProductType -eq "Server")
 		{
 			$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
 				"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter password for certificate $Domain.pfx"))
@@ -251,7 +251,7 @@ if ([string]::IsNullOrEmpty($CertFile))
 
 		Write-Information -Tags "Project" -MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
 	}
-	elseif ($Target -eq "Server")
+	elseif ($ProductType -eq "Server")
 	{
 		# Create new self signed server certificate
 		Write-Information -Tags "Project" -MessageData "INFO: Creating new SSL certificate"
@@ -326,7 +326,7 @@ elseif (Test-Path -Path $CertFile -PathType Leaf -ErrorAction Ignore)
 	# Import certificate file from custom location
 	Write-Verbose -Message "[$ThisModule] Using specified file as SSL certificate"
 
-	if ($Target -eq "Server")
+	if ($ProductType -eq "Server")
 	{
 		$ExportFile = "$ExportPath\$((Split-Path -Path $CertFile -Leaf) -replace '\.pfx$').cer"
 
@@ -369,7 +369,7 @@ else
 	Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
 }
 
-if ($Target -eq "Server")
+if ($ProductType -eq "Server")
 {
 	# Export self signed, existing certificate from store or imported PFX
 	if (Test-Path $ExportFile -PathType Leaf -ErrorAction Ignore)

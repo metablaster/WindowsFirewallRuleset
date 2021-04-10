@@ -44,13 +44,13 @@ Test WinRM service configuration on either client or server computer.
 WinRM service is tested for functioning connectivity which includes
 PowerShell remoting and remoting with CIM commandlets.
 
-.PARAMETER Protocol
-Specify protocol to use for test, HTTP, HTTPS or both.
-By default only HTTPS is tested.
-
 .PARAMETER Domain
 Target host which is to be tested.
 If not specified, local machine is the default
+
+.PARAMETER Protocol
+Specify protocol to use for test, HTTP, HTTPS or both.
+By default only HTTPS is tested.
 
 .EXAMPLE
 PS> .\Test-WinRM.ps1 HTTP
@@ -66,7 +66,6 @@ None. Test-WinRM.ps1 does not generate any output
 
 .NOTES
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
 TODO: Remote registry test
 
 .LINK
@@ -79,12 +78,12 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 [OutputType([void], [System.Xml.XmlElement])]
 param (
 	[Parameter(Position = 0)]
-	[ValidateSet("HTTP", "HTTPS", "Any")]
-	[string] $Protocol = "HTTPS",
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
 
 	[Parameter()]
-	[Alias("ComputerName", "CN")]
-	[string] $Domain = [System.Environment]::MachineName
+	[ValidateSet("HTTP", "HTTPS", "Any")]
+	[string] $Protocol = "HTTPS"
 )
 
 $ErrorActionPreference = "Stop"

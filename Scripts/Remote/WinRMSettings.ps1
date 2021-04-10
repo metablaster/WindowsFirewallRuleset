@@ -93,8 +93,14 @@ if ($MyInvocation.InvocationName -ne '.')
 		-Message "This is settings script and must be dot sourced where needed" -EA Stop
 }
 
+# Work Station (1)
+# Domain Controller (2)
+# Server (3)
+$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
+	Select-Object -ExpandProperty ProductType) -eq 1
+
 # Timeout to start and stop WinRM service
-$ServiceTimeout = "00:00:30"
+$ServiceTimeout = "00:00:20"
 
 # Firewall rules needed to be present to configure some of the WinRM options
 $WinRMRules = "@FirewallAPI.dll,-30267"

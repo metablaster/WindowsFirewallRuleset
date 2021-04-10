@@ -382,6 +382,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 
 		# Valid policy stores
+		# TODO: Move CimOptions and LocalStores to WinRM scripts when part of module
 		New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
 			([System.Environment]::MachineName)
 			"PersistentStore"
@@ -742,7 +743,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 55, 0))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 55, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

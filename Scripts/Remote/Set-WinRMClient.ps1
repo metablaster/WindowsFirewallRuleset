@@ -91,12 +91,12 @@ None. You cannot pipe objects to Set-WinRMClient.ps1
 [Selected.System.Xml.XmlElement]
 
 .NOTES
-TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
+TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
+WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
-TODO: Authenticate users using certificates instead of or optionally in addition to credential object
+TODO: Authenticate users using certificates optionally or instead of credential object
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
-TODO: Check parameter naming convention
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Remote registry setup and test
 
@@ -145,41 +145,7 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
-# present may cause issues adjusting some of the WinRM options
-if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
-{
-	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
-
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
-		-Direction Inbound -NewPolicyStore PersistentStore |
-	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
-}
-
-if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
-{
-	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
-
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
-		-Direction Inbound -NewPolicyStore PersistentStore |
-	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
-}
-
-# NOTE: WinRM service must be running at this point, handled by ProjectSettings.ps1
-$WinRM = Get-Service -Name WinRM
-
-if ($WinRM.StartType -ne "Automatic")
-{
-	Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
-	Set-Service -InputObject $WinRM -StartType Automatic
-}
-
-if ($WinRM.Status -ne "Running")
-{
-	Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
-	$WinRM.Start()
-	$WinRM.WaitForStatus("Running", $ServiceTimeout)
-}
+& $PSScriptRoot\Initialize-WinRM.ps1 -EA Stop -Force
 
 Write-Verbose -Message "[$ThisModule] Configuring WinRM client authentication options"
 
@@ -224,12 +190,6 @@ Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Ou
 
 try
 {
-	# Work Station (1)
-	# Domain Controller (2)
-	# Server (3)
-	$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem |
-		Select-Object -ExpandProperty ProductType) -eq 1
-
 	if ($Workstation)
 	{
 		[array] $PublicAdapter = Get-NetConnectionProfile |
@@ -299,7 +259,7 @@ if ($Protocol -eq "HTTPS")
 {
 	# SSL certificate
 	[hashtable] $SSLCertParams = @{
-		Target = "Client"
+		ProductType = "Client"
 		Domain = $Domain
 	}
 
@@ -318,10 +278,13 @@ $WinRM.WaitForStatus("Running", $ServiceTimeout)
 Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
 	-PolicyStore PersistentStore
 
-# Restore public profile rules to local subnet which is the default
-Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
-	$_.Profile -like "*Public*"
-} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+if ($Workstation)
+{
+	# Restore public profile rules to local subnet which is the default
+	Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+		$_.Profile -like "*Public*"
+	} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+}
 
 Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
 Update-Log

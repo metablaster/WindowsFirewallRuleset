@@ -66,10 +66,10 @@ None. You cannot pipe objects to Disable-WinRMServer.ps1
 None. Disable-WinRMServer.ps1 does not generate any output
 
 .NOTES
-TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
+TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
+WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
-TODO: Check parameter naming convention
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Remote registry disable
 
@@ -120,43 +120,7 @@ members of the Administrators group on the computer.
 #>
 Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
 
-# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
-# present may cause issues adjusting some of the WinRM options
-if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
-{
-	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management'"
-
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
-		-Direction Inbound -NewPolicyStore PersistentStore |
-	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
-}
-
-if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
-{
-	Write-Verbose -Message "[$ThisModule] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
-
-	Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
-		-Direction Inbound -NewPolicyStore PersistentStore |
-	Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
-}
-
-# NOTE: WinRM service must be running at this point
-$WinRM = Get-Service -Name WinRM
-
-# To start it, it must not be disabled
-if ($WinRM.StartType -ne "Automatic")
-{
-	Write-Information -Tags "User" -MessageData "INFO: Setting WinRM service to automatic startup"
-	Set-Service -InputObject $WinRM -StartupType Automatic
-}
-
-if ($WinRM.Status -ne "Running")
-{
-	Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
-	$WinRM.Start()
-	$WinRM.WaitForStatus("Running", $ServiceTimeout)
-}
-
+& $PSScriptRoot\Initialize-WinRM.ps1 -EA Stop -Force
 Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
 if ($All)
@@ -190,12 +154,6 @@ else
 	Write-Verbose -Message "[$ThisModule] Configuring WinRM server authentication options"
 	# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
 	Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
-
-	# Work Station (1)
-	# Domain Controller (2)
-	# Server (3)
-	$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem |
-		Select-Object -ExpandProperty ProductType) -eq 1
 
 	[array] $VirtualAdapter = $null
 

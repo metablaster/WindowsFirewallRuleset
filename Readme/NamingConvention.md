@@ -91,6 +91,9 @@ Parameter names and aliases
 - [string] `TempLocation` (specify the location of temporary data that is used during operation)
 - [string] `CertFile` (Name of a file that contains (PKCS) #12 or (DER) x.509 certificate and key)
 - [string[]] `Include` (Implement this parameter so that the user can include something in an activity)
+- [bool] `All` (true indicates that all resources should be acted upon instead of a default subset of resources)
+- [string] `Type` (the user can specify the type of resource on which to operate)
+- [string] `Operation` (the user can specify an action that can be performed on a protected object)
 
 `*` Used by most commandlets as primary parameter but should be alias instead
 `PSPath` is alias of both the Path and LiteralPath of most commandlets

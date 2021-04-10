@@ -46,11 +46,11 @@ public SSH key to default location on remote host and adjust required permission
 For standard users this is ~\.ssh\authorized_keys, for administrators it's
 %ProgramData%\ssh\administrators_authorized_keys
 
-.PARAMETER User
-The user to log in as, on the remote machine.
-
 .PARAMETER Domain
 Target computer or host name
+
+.PARAMETER User
+The user to log in as, on the remote machine.
 
 .PARAMETER Key
 Specify public SSH key with is to be transferred.
@@ -92,16 +92,16 @@ https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based
 
 #Requires -Version 5.1
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([void])]
 param (
+	[Parameter(Mandatory = $true, Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain,
+
 	[Parameter(Mandatory = $true)]
 	[Alias("UserName")]
 	[string] $User,
-
-	[Parameter(Mandatory = $true)]
-	[Alias("ComputerName", "CN")]
-	[string] $Domain,
 
 	[Parameter()]
 	[string] $Key = "$HOME\.ssh\id_ecdsa-remote-ssh.pub",
