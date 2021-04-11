@@ -1,4 +1,4 @@
 
 # Outbound directory
 
-Root directory for all outbound IPv6 firewall rules
+Root directory of all outbound IPv6 firewall rules

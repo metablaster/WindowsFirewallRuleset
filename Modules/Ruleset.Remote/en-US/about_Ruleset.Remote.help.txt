@@ -6,7 +6,9 @@ SHORT DESCRIPTION
 	Module used for remoting configuration of WinRM, CIM and remote registry
 
 LONG DESCRIPTION
-	A detailed, full description of the subject or purpose of the module.
+	Ruleset.Remote module provides several functions to help configure, manage and test
+	configuration used for remoting using WinRM (WS Management) service, remote registry
+	service and CIM (Common Information Model)
 
 EXAMPLES
 	Connect-Computer

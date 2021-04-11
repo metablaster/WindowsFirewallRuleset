@@ -1,4 +1,4 @@
 
 # IPv4 directory
 
-Root directory for all IPv4 firewall rules
+Root directory of all IPv4 firewall rules

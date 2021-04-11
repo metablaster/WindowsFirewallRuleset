@@ -25,13 +25,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Utility or settings scripts don't do anything on their own
-if ($MyInvocation.InvocationName -ne '.')
-{
-	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
-		-Message "This is settings script and must be dot sourced where needed" -EA Stop
-}
-
 # Appx module must be imported in compatibility mode for PowerShell version 7.1+
 if ($PSVersionTable.PSVersion -ge "7.1")
 {

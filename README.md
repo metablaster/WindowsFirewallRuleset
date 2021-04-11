@@ -24,6 +24,7 @@
     - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
+  - [Remote deployment](#remote-deployment)
   - [Checking for updates](#checking-for-updates)
     - [Using GitHub Desktop app](#using-github-desktop-app)
     - [Manual release download](#manual-release-download)
@@ -37,7 +38,7 @@
 
 ## About Windows Firewall Ruleset
 
-[![MIT license](https://img.shields.io/badge/Status-Alpha-red)](/LICENSE)
+[![Alpha release][badge status]][alpha]
 
 This project consists of 2 major parts, firewall rules and firewall framework as follows:
 
@@ -89,6 +90,9 @@ to your firewall.
 
 ## Core benefits of this firewall
 
+[![Managed in VSCode][badge vscode]][vscode]
+[![PowerShell][badge language]][powershell]
+
 1. Detailed firewall configuration is time consuming process, takes a lot of troubleshooting,
 changes require testing and security auditing and it only gets worse if you need to deploy firewall
 to hundreds or thousands of remote computers, for example not all computers might have same software
@@ -129,13 +133,15 @@ you much valuable administration time.
 
 ## License
 
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](/LICENSE)
+[![MIT license][badge license]](/LICENSE)
 
 This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
 License and Copyright notices are maintained **"per file"**.
 
 ## Requirements
+
+[![Windows][badge system]][windows]
 
 Following table lists currently tested operating systems
 
@@ -471,6 +477,16 @@ which is where you'll find description on how to use export\import module functi
 
 [Table of Contents](#table-of-contents)
 
+## Remote deployment
+
+This section is under construction
+
+![Under construction](Screenshots/UnderConstructionAlpha.gif)
+
+![Under construction](Screenshots/UnderConstructionWhite.gif)
+
+![Under construction](Screenshots/UnderConstructionBlack.gif)
+
 ## Checking for updates
 
 Just like any other software on your computer, this firewall will go out of date as well,
@@ -491,6 +507,8 @@ There are at least 4 methods to be up to date with this firewall, each with it's
 
 ### Using GitHub Desktop app
 
+[![GitHub Desktop][badge github desktop]][github desktop]
+
 This method is similar to git command, but instead you'll use a graphical interface which
 you can get from here: [GitHub Desktop][github desktop]
 
@@ -505,6 +523,8 @@ some tutorial online.
 
 ### Manual release download
 
+[![Releases][badge github]][releases]
+
 This method requires you to simply download released zip file which can be found in
 [Releases][release], this is always from "master" branch
 
@@ -517,6 +537,8 @@ zip.
 [Table of Contents](#table-of-contents)
 
 ### Using git command
+
+[![Download Git][badge git]][download git]
 
 This method is similar to GitHub Desktop above but good if you need specific git features.\
 In addition to 2 mentioned requirements for GitHub Desktop you will also need [git][download git]
@@ -558,7 +580,7 @@ Next 2 sets of commands are typed each time you want to check for updates:
 For this to work, you need to make sure your working tree is "clean", which means
 you need to save and upload your modifications to your fork, for example:
 
- ```powershell
+ ```cpp
  git add .
  git commit -m "my changes"
  git push
@@ -670,8 +692,8 @@ Following features are desired and might be available at some point in the futur
 [corporate firewall]: https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg "Corporate Firewall"
 [download core]: https://github.com/PowerShell/PowerShell "Download PowerShell Core"
 [download .net]: https://dotnet.microsoft.com/download/dotnet-framework "Download .NET Framework"
-[download git]: https://git-scm.com/downloads "Download git"
-[vscode]: https://code.visualstudio.com "Visual Studio Code"
+[download git]: https://git-scm.com/downloads/win "Visit Git for Windows download page"
+[vscode]: https://code.visualstudio.com "Visit Visual Studio Code home page"
 [download powershell extension]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
 [about execution policies]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7 "About Execution Policies"
@@ -681,9 +703,21 @@ Following features are desired and might be available at some point in the futur
 [github ssh]: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
 [git docs]: https://git-scm.com/doc "Git Documentation"
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
-[github desktop]: https://desktop.github.com "Download GitHub Desktop"
+[github desktop]: https://desktop.github.com "Visit GitHub Desktop download page"
 [github desktop docs]: https://docs.github.com/en/free-pro-team@latest/desktop "Visit GitHub Desktop docs"
-[release]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Firewall releases"
+[releases]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Visit releases page now"
 [discrussions]: https://github.com/metablaster/WindowsFirewallRuleset/discussions "GitHub discussions"
 [issues]: https://github.com/metablaster/WindowsFirewallRuleset/issues "GitHub issues"
 [clone]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository "Cloning a repository"
+[powershell]: https://docs.microsoft.com/en-us/powershell/scripting/overview "What is PowerShell anyway?"
+[windows]: https://docs.microsoft.com/en-us/windows/windows-10 "Windows 10 for IT Pros"
+[alpha]: https://stackoverflow.com/questions/40067469/what-is-the-difference-between-alpha-and-beta-release "What is alpha software?"
+
+[badge status]: https://img.shields.io/static/v1?label=Status&message=Alpha&color=red&style=plastic
+[badge system]: https://img.shields.io/static/v1?label=OS&message=Windows&color=informational&style=plastic&logo=Windows
+[badge language]: https://img.shields.io/static/v1?label=Language&message=PowerShell&color=informational&style=plastic&logo=PowerShell
+[badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
+[badge github]: https://img.shields.io/static/v1?label=Releases%20on&message=GitHub&color=white&style=plastic&logo=GitHub
+[badge github desktop]: https://img.shields.io/static/v1?label=Download&message=GitHub%20Desktop&color=purple&style=plastic&logo=GitHub
+[badge git]: https://img.shields.io/static/v1?label=Download&message=Git&color=red&style=plastic&logo=Git
+[badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code

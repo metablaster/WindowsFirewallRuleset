@@ -65,6 +65,11 @@ Few additional references regarding open source worth reading:\
 [Don't "Push" Your Pull Requests][dont push]\
 [Painless Bug Tracking][bug tracking]
 
+For quick markdown referencesee:\
+[Mastering Markdown][markdown mastering]\
+[Markdown Style Guide][markdown style]\
+[Markdown tables generator][markdown tables]
+
 References for tools used by this project:\
 [PowerShell documentation][powershell docs]\
 [Visual Studio Code][vscode docs]
@@ -72,6 +77,8 @@ References for tools used by this project:\
 [Table of Contents](#table-of-contents)
 
 ## Environment setup
+
+[![Made for VSCode][badge vscode]][badge vscode link]
 
 It is highly recommended to stick with Visual Studio Code, because this repository includes settings
 specific to Visual Studio Code, aka "Workspace", these settings include:
@@ -577,3 +584,8 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0
 [exceptions everything]: https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know "Visit blog"
 [exceptions handling]: https://github.com/MicrosoftDocs/PowerShell-Docs/issues/1583 "Visit GitHub"
+[markdown mastering]: https://guides.github.com/features/mastering-markdown "Visit GitHub"
+[markdown style]: https://cirosantilli.com/markdown-style-guide "Visit markdown guide"
+[markdown tables]: https://www.tablesgenerator.com/markdown_tables "Visit table generator site"
+[badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
+[badge vscode link]: https://code.visualstudio.com

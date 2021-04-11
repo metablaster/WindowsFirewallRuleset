@@ -57,7 +57,7 @@ SOFTWARE.
 	)
 
 	# ID used to uniquely identify this module
-	# TODO: generate new GUID with [guid]::NewGuid()
+	# TODO: generate new GUID with [guid]::NewGuid() there are 4 places in total mentioning this GUID
 	GUID = "66e38822-834d-4a90-b9c6-9e600a472a0a"
 
 	# Author of this module

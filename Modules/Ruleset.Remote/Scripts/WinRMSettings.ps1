@@ -36,8 +36,8 @@ Some of which have sub options stored inside "containers".
 This script lists all of these by documenting their purpose and defaults.
 Main purpose is quick centralized configuration to mimimize the chance of
 misconfiguration.
-This script is automatically picked up by other WinRM remoting scripts in
-same directory.
+This script is automatically picked up by other WinRM remoting scripts within
+this module.
 
 .PARAMETER IncludeClient
 Include setting that apply to client configuration
@@ -140,17 +140,7 @@ if ($IncludeClient)
 	# The WinRM service does not accept Digest authentication.
 	# The default value is true.
 	$AuthenticationOptions["Digest"] = $false
-}
 
-if ($IncludeServer)
-{
-	# Sets the policy for channel-binding token requirements in authentication requests.
-	# The default is Relaxed.
-	$AuthenticationOptions["CbtHardeningLevel"] = "Relaxed"
-}
-
-if ($IncludeClient)
-{
 	[hashtable] $ClientOptions = @{
 		# Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
 		# The default value is 5000 milliseconds.
@@ -177,6 +167,10 @@ if ($IncludeClient)
 
 if ($IncludeServer)
 {
+	# Sets the policy for channel-binding token requirements in authentication requests.
+	# The default is Relaxed.
+	$AuthenticationOptions["CbtHardeningLevel"] = "Relaxed"
+
 	[hashtable] $ServerOptions = @{
 		# NOTE:	AllowRemoteAccess is read only
 
@@ -187,8 +181,8 @@ if ($IncludeServer)
 
 		# The maximum number of concurrent operations.
 		# The default is 100.
-		# WinRM 2.0: The MaxConcurrentOperations setting is deprecated
-		# NOTE: MaxConcurrentOperations = 100
+		# NOTE: WinRM 2.0: The MaxConcurrentOperations setting is deprecated
+		# MaxConcurrentOperations = 100
 
 		# Specifies the maximum number of concurrent operations that any user can remotely open on the same system.
 		# The default is 1500.

@@ -1,4 +1,4 @@
 
 # IPv6 directory
 
-Root directory for all IPv6 firewall rules
+Root directory of all IPv6 firewall rules
