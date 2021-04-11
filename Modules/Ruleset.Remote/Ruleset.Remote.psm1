@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +26,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# TODO: If this is based on 3rd party module, include *.psm1 file changes here
-
 #region Initialization
 param (
 	[Parameter()]
 	[switch] $ListPreference
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
 
 if ($ListPreference)
 {
@@ -47,14 +44,14 @@ if ($ListPreference)
 }
 #endregion
 
-# TODO: Remove unneeded template code
-
 #
 # Script imports
 #
-Write-Debug -Message "[$ThisModule] Importing module scripts"
 
 $PrivateScripts = @(
+	"Initialize-WinRM"
+	"Restore-NetProfile"
+	"Unblock-NetProfile"
 )
 
 foreach ($Script in $PrivateScripts)
@@ -71,7 +68,14 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
-	"New-Function"
+	"Connect-Computer"
+	"Deploy-SshKey"
+	"Disable-WinRMServer"
+	"Enable-WinRMServer"
+	"Register-SslCertificate"
+	"Set-WinRMClient"
+	"Show-WinRMConfig"
+	"Test-WinRM"
 )
 
 foreach ($Script in $PublicScripts)
@@ -93,15 +97,18 @@ foreach ($Script in $PublicScripts)
 
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
-# Template variable
-New-Variable -Name TemplateModuleVariable -Scope Global -Value $null
+# Timeout to start and stop WinRM service
+New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:20"
 
-#
-# Module cleanup
-#
+# Firewall rules needed to be present to configure some of the WinRM options
+New-Variable -Name WinRMRules -Scope Script -Value "@FirewallAPI.dll,-30267"
+New-Variable -Name WinRMCompatibilityRules -Scope Script -Value "@FirewallAPI.dll,-30252"
 
-$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
+# Work Station (1)
+# Domain Controller (2)
+# Server (3)
+New-Variable -Name Workstation -Scope Script -Option Constant -Value (
+	(Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
+		Select-Object -ExpandProperty ProductType) -eq 1)
 
-	Remove-Variable -Name TemplateModuleVariable -Scope Global
-}
+New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)

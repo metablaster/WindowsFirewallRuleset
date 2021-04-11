@@ -16,21 +16,6 @@ Contains scripts which are not part of modules as follows:
 
 ---
 
-| Remoting scripts            | Description                                                   |
-| --------------------------- | ------------------------------------------------------------- |
-| Connect-Computer.ps1        | Connect to remote computer onto which to deploy firewall      |
-| Deploy-SshKey.ps1           | Deploy public SSH key to remote host using SSH                |
-| Disable-WinRMServer.ps1     | Disable WinRM server previously enabled by Enable-WinRMServer |
-| Enable-WinRMServer.ps1      | Configure WinRM server for CIM and PowerShell remoting        |
-| Initialize-WinRM.ps1        | Utility script to initialize WinRM service                    |
-| Register-SslCertificate.ps1 | Install SSL certificate for PowerShell and CIM remoting       |
-| Set-WinRMClient.ps1         | Configure client computer for WinRM remoting                  |
-| Show-WinRMConfig.ps1        | Show WinRM service configuration                              |
-| Test-WinRM.ps1              | Test WinRM service configuration                              |
-| WinRMSettings.ps1           | WinRM service configuration settings                          |
-
----
-
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
 | Debug-FilteringPlatform.ps1 | Parse audit events from event log and write them to log file         |

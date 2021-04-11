@@ -49,16 +49,17 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - New features
 
-  - `Deploy-SshKey.ps1` script to upload and set SSH key to server for remote debugging with VSCode
+  - A new module used for remoting configuration of WinRM, CIM and remote registry with the
+  following functions:
+  - `Connect-Computer` function to initialize connection to remote computer
+  - `Deploy-SshKey` function to upload and set SSH key to server for remote debugging with VSCode
     over SSH
-  - `Enable-WinRMServer.ps1` script to configure WinRM server for remoting
-  - `Disable-WinRMServer.ps1` script to disable WinRM remoting
-  - `Set-WinRMClient.ps1` script to configure client for remoting
-  - `Register-SslCertificate.ps1` script to create, install and export SSL certificate for remoting
-  - `Connect-Computer.ps1` script to initialize connection to remote computer
-  - `Show-WinRMConfig.ps1` script to list detailed WinRM configuration
-  - `Test-WinRM.ps1` script to test and discover issues with remoting configuration
-  - `WinRMSettings.ps1` settings script that declares and documents all WinRM options
+  - `Disable-WinRMServer` function to disable WinRM remoting
+  - `Enable-WinRMServer` function to configure WinRM server for remoting
+  - `Register-SslCertificate` function to create, install and export SSL certificate for remoting
+  - `Set-WinRMClient` function to configure client for remoting
+  - `Show-WinRMConfig` function to list detailed WinRM configuration
+  - `Test-WinRM` function to test and discover issues with remoting configuration
 
 - Modules
 

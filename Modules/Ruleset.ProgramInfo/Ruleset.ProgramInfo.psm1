@@ -54,23 +54,6 @@ if ($ListPreference)
 # Script imports
 #
 
-$ScriptsToProcess = @(
-	"TargetProgram"
-)
-
-foreach ($Script in $ScriptsToProcess)
-{
-	try
-	{
-		. "$PSScriptRoot\Scripts\$Script.ps1"
-	}
-	catch
-	{
-		Write-Error -Category ReadError -TargetObject $Script `
-			-Message "Failed to import script '$ThisModule\Scripts\$Script.ps1' $($_.Exception.Message)"
-	}
-}
-
 $PrivateScripts = @(
 	"Edit-Table"
 	"Initialize-Table"

@@ -1,10 +1,12 @@
+
 <#
 MIT License
 
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2021 metablaster zebal@protonmail.ch
+TODO: Update Copyright date and author
+Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +27,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# Utility or settings scripts don't do anything on their own
-if ($MyInvocation.InvocationName -ne '.')
-{
-	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
-		-Message "This is settings script and must be dot sourced where needed" -EA Stop
-}
+<#
+.SYNOPSIS
+Re-enable any disabled virtual adapters
 
-# Appx module must be imported in compatibility mode for PowerShell version 7.1+
-if ($PSVersionTable.PSVersion -ge "7.1")
+.DESCRIPTION
+Re-enable any disabled virtual adapters previously disabled by Unblock-NetProfile
+
+.PARAMETER Force
+The description of Force parameter.
+
+.EXAMPLE
+PS> Restore-NetProfile
+
+.INPUTS
+None. You cannot pipe objects to Restore-NetProfile
+
+.OUTPUTS
+None. Restore-NetProfile does not generate any output
+
+.NOTES
+TODO: Handle restoring network profile
+TODO: Handle restoring only modified adapters
+#>
+function Restore-NetProfile
 {
-	Import-WinModule -Name Appx -ErrorAction Stop
+	[CmdletBinding()]
+	[OutputType([void])]
+	param (
+		[Parameter()]
+		[switch] $Force
+	)
+
+	if ($script:Workstation -and $script:VirtualAdapter)
+	{
+		foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+		{
+			if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Re-enable network adapter"))
+			{
+				Enable-NetAdapter -InterfaceAlias $Alias
+			}
+		}
+
+		Set-Variable -Name VirtualAdapter -Scope Script -Value $null
+	}
 }

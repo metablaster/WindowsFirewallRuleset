@@ -46,13 +46,13 @@ Include setting that apply to client configuration
 Include setting that apply to service configuration
 
 .EXAMPLE
-PS> . .\WinRMSettings.ps1
+PS> .\WinRMSettings.ps1
 
 Picks up only global options.
 Note that it must be dot sourced to pick up modifications.
 
 .EXAMPLE
-PS> . .\WinRMSettings.ps1 -IncludeClient
+PS> .\WinRMSettings.ps1 -IncludeClient
 
 Picks up global options and client specific options.
 
@@ -68,13 +68,8 @@ TODO: Not all optional settings are configured
 TODO: Client settings are missing for server and vice versa
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
-
-.LINK
 https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
 #>
-
-#Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
@@ -85,26 +80,6 @@ param (
 	[Parameter()]
 	[switch] $IncludeServer
 )
-
-# Utility or settings scripts don't do anything on their own
-if ($MyInvocation.InvocationName -ne '.')
-{
-	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
-		-Message "This is settings script and must be dot sourced where needed" -EA Stop
-}
-
-# Work Station (1)
-# Domain Controller (2)
-# Server (3)
-$Workstation = (Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
-	Select-Object -ExpandProperty ProductType) -eq 1
-
-# Timeout to start and stop WinRM service
-$ServiceTimeout = "00:00:20"
-
-# Firewall rules needed to be present to configure some of the WinRM options
-$WinRMRules = "@FirewallAPI.dll,-30267"
-$WinRMCompatibilityRules = "@FirewallAPI.dll,-30252"
 
 [hashtable] $ProtocolOptions = @{
 	# Specifies the maximum Simple Object Access Protocol (SOAP) data in kilobytes.

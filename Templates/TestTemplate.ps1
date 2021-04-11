@@ -82,6 +82,9 @@ Enter-Test "Test-Function"
 [bool] $YesToAll = $false
 [bool] $NoToAll = $false
 
+# query, caption,
+# hasSecurityImpact, If specified or true, the default option in the selection menu is "No"
+# yesToAll, noToAll
 if ($Force -or $PSCmdlet.ShouldContinue("Query", "Accept dangerous unit test", $true, [ref] $YesToAll, [ref] $NoToAll))
 {
 	Start-Test "Default test"

@@ -37,7 +37,7 @@
 
 ## About Windows Firewall Ruleset
 
-[![MIT license](https://img.shields.io/badge/Status-beta-red)](/LICENSE)
+[![MIT license](https://img.shields.io/badge/Status-Alpha-red)](/LICENSE)
 
 This project consists of 2 major parts, firewall rules and firewall framework as follows:
 

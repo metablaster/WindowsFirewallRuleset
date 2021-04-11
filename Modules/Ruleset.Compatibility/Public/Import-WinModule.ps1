@@ -107,6 +107,8 @@ None. You cannot pipe objects to Import-WinModule
 [PSObject]
 
 .NOTES
+TODO: Implement -Scope Parameter
+
 Following modifications by metablaster November 2020:
 
 - Added comment based help based on original comments

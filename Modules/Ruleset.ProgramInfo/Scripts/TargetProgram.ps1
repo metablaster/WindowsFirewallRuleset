@@ -25,8 +25,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-#Requires -Version 5.1
-
 # Utility or settings scripts don't do anything on their own
 if ($MyInvocation.InvocationName -ne '.')
 {
