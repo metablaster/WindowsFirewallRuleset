@@ -192,7 +192,8 @@ SOFTWARE.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"
 
 			# A URL to an icon representing this module.
-			# IconUri = ""
+			# The specified icon is displayed on the gallery webpage for the module
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""

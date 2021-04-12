@@ -24,7 +24,7 @@
     - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
-  - [Remote deployment](#remote-deployment)
+  - [Remote firewall deployment](#remote-firewall-deployment)
   - [Checking for updates](#checking-for-updates)
     - [Using GitHub Desktop app](#using-github-desktop-app)
     - [Manual release download](#manual-release-download)
@@ -133,7 +133,7 @@ you much valuable administration time.
 
 ## License
 
-[![MIT license][badge license]](/LICENSE)
+[![MIT license][badge license]](/LICENSE "View license")
 
 This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
@@ -271,7 +271,7 @@ needed to update firewall for system changes that may happen at any time.
 ### Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
-or just download released zip file from [Releases][release], and then for latest
+or just download released zip file from [Releases][releases], and then for latest
 release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 
@@ -477,9 +477,9 @@ which is where you'll find description on how to use export\import module functi
 
 [Table of Contents](#table-of-contents)
 
-## Remote deployment
+## Remote firewall deployment
 
-This section and functionality is under construction
+This section and functionality is currently under construction
 
 ![Under construction](Readme/Screenshots/UnderConstruction.gif)
 
@@ -522,7 +522,7 @@ some tutorial online.
 [![Releases][badge github]][releases]
 
 This method requires you to simply download released zip file which can be found in
-[Releases][release], this is always from "master" branch
+[Releases][releases], this is always from "master" branch
 
 ### Manual beta download
 
@@ -688,7 +688,7 @@ Following features are desired and might be available at some point in the futur
 [corporate firewall]: https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg "Corporate Firewall"
 [download core]: https://github.com/PowerShell/PowerShell "Download PowerShell Core"
 [download .net]: https://dotnet.microsoft.com/download/dotnet-framework "Download .NET Framework"
-[download git]: https://git-scm.com/downloads "Visit Git for Windows download page"
+[download git]: https://git-scm.com/downloads "Visit Git downloads page"
 [vscode]: https://code.visualstudio.com "Visit Visual Studio Code home page"
 [download powershell extension]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
