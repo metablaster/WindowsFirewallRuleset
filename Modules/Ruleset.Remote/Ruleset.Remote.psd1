@@ -163,7 +163,6 @@ SOFTWARE.
 		"Scripts\README.md"
 		"Scripts\WinRMSettings.ps1"
 		"Ruleset.Remote_28ed593c-ae6e-4067-8a50-28f0d32d2edd_HelpInfo.xml"
-		"Ruleset.Remote.Format.ps1xml"
 		"Ruleset.Remote.psd1"
 		"Ruleset.Remote.psm1"
 	)

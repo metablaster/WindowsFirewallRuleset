@@ -1,4 +1,10 @@
 
+#
+# All the metadata properties to create a new script file info
+#
+# https://docs.microsoft.com/en-us/powershell/module/powershellget/new-scriptfileinfo
+#
+
 $Params = @{
 	# Specifies the location where the script file is saved
 	# TODO: Update script file path

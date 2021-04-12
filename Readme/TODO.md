@@ -47,6 +47,8 @@ Todo's in this file are categorized into following sections:
 4. Release checklist
 
     - Module manifests, comment out unit test exports (currently only Ruleset.ProgramInfo)
+    - Run each module individually in clean shell with `-Verbose -Debug` and also with
+    `Import-Module -Name *.psd1` to ensure expected module load behavior
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck

@@ -41,7 +41,7 @@ Restart and optionally reset network
 
 .DESCRIPTION
 Restart or reset all physical network adapters to their default values
-Without the need to reboot system.
+without needing to reboot system.
 Reset few esoteric default options
 Set network profile to private
 Apply computer group policy settings

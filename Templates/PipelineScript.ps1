@@ -87,6 +87,7 @@ DynamicParam
 {
 	if ($PSCmdlet.ParameterSetName -ne "ExistingParamSet")
 	{
+		# NOTE: For additional dynamic params add new attribute, add it to collection and to dictionary
 		$ThumbPrintAttributes = New-Object -TypeName System.Management.Automation.ParameterAttribute
 		$ThumbPrintAttributes.ParameterSetName = "DynamicParamSet"
 		$ThumbPrintAttributes.Mandatory = $false
@@ -141,7 +142,7 @@ process
 		# "Template MESSAGE"
 
 		$TemplateVariable
-		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("CertThumbPrint"))
+		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("DynamicParamName"))
 		{
 			$PSBoundParameters["DynamicParamName"]
 		}

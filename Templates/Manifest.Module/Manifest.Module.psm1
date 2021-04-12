@@ -54,6 +54,23 @@ if ($ListPreference)
 #
 Write-Debug -Message "[$ThisModule] Importing module scripts"
 
+# NOTE: For scripts which should be private to this module
+$ScriptsToProcess = @(
+)
+
+foreach ($Script in $ScriptsToProcess)
+{
+	try
+	{
+		. "$PSScriptRoot\Scripts\$Script.ps1"
+	}
+	catch
+	{
+		Write-Error -Category ReadError -TargetObject $Script `
+			-Message "Failed to import script '$ThisModule\Scripts\$Script.ps1' $($_.Exception.Message)"
+	}
+}
+
 $PrivateScripts = @(
 )
 

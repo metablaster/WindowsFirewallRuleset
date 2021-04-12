@@ -105,6 +105,8 @@ SOFTWARE.
 	# RequiredAssemblies = @()
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
+	# NOTE: Custom types such as enums defined in these scripts must also be dot sourced in *.psm1
+	# file to be available in module scope, otherwise "using modulename" is required.
 	# ScriptsToProcess = @()
 
 	# Type files (.ps1xml) to be loaded when importing this module

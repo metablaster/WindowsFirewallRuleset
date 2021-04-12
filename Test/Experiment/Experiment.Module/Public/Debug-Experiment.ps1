@@ -61,12 +61,6 @@ function Debug-Experiment
 
 	$DebugPreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Script module test"
-
-	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
-	Select-Object CSName, Caption | Format-Table
-
-	Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -Class Win32_OperatingSystem |
-	Select-Object CSName, Caption | Format-Table
 }
 
 # Template variable

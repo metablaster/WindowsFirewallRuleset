@@ -138,6 +138,7 @@ SOFTWARE.
 		"Test-FileSystemPath"
 		"Test-Service"
 		# TODO: Following exports only for unit testing
+		# NOTE: Control import with if ($Develop) { Export-ModuleMember ... }
 		# "Edit-Table"
 		# "Initialize-Table"
 		# "Show-Table"

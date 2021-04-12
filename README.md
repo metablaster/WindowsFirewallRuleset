@@ -488,7 +488,7 @@ This section and functionality is currently under construction
 Just like any other software on your computer, this firewall will go out of date as well,
 become obsolete, and may no longer function properly.
 
-This repository consists of 2 branches, `master` (stable) and `develop` (beta, possibly unstable).\
+This repository consists of 2 branches, `master` (stable) and `develop` (possibly unstable).\
 The "develop" branch is where all updates directly go, so it's work in progress,
 unlike "master" branch which is updated from develop once in a while and not before all scripts
 are thoroughly tested on fresh installed systems, which is what makes master brach stable.

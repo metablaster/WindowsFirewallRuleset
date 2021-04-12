@@ -48,7 +48,7 @@ Optionally specify custom certificate file.
 By default new self signed certifcate is made and trusted if no suitable certificate exists.
 This must be PFX file.
 
-.PARAMETER CertThumbPrint
+.PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
@@ -130,7 +130,7 @@ function Enable-WinRMServer
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "ThumbPrint")]
-		[string] $CertThumbPrint,
+		[string] $CertThumbprint,
 
 		[Parameter()]
 		[switch] $Force
@@ -267,7 +267,7 @@ function Enable-WinRMServer
 		}
 
 		if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-		elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
+		elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
 		$Cert = & Register-SslCertificate @SSLCertParams
 
 		# Add new HTTPS listener

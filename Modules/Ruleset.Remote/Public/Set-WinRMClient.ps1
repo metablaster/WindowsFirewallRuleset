@@ -48,7 +48,7 @@ By default certificate store is searched for certificate with CN entry set to va
 -Domain parameter.
 If not found, default repository location (\Exports) is searched for DER encoded CER file.
 
-.PARAMETER CertThumbPrint
+.PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
@@ -122,8 +122,8 @@ function Set-WinRMClient
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
 
-		[Parameter(ParameterSetName = "CertThumbPrint")]
-		[string] $CertThumbPrint,
+		[Parameter(ParameterSetName = "CertThumbprint")]
+		[string] $CertThumbprint,
 
 		[Parameter()]
 		[switch] $Force
@@ -206,7 +206,7 @@ function Set-WinRMClient
 		}
 
 		if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-		elseif (![string]::IsNullOrEmpty($CertThumbPrint)) { $SSLCertParams["CertThumbPrint"] = $CertThumbPrint }
+		elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
 		& Register-SslCertificate @SSLCertParams | Out-Null
 	}
 

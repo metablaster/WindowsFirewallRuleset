@@ -55,7 +55,7 @@ Optionally specify custom certificate file.
 By default new self signed certifcate is made and trusted if no suitable certificate exists.
 For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
 
-.PARAMETER CertThumbPrint
+.PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
@@ -75,7 +75,7 @@ PS> Register-SslCertificate -Target Client -CertFile C:\Cert\Server.cer
 Installs specified SSL certificate on client computer.
 
 .EXAMPLE
-PS> Register-SslCertificate -Target Server -CertThumbPrint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
+PS> Register-SslCertificate -Target Server -CertThumbprint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
 
 Installs existing SSL certificate with specified thumbprint on the server computer,
 public key is exported to be used on client computer.
@@ -116,7 +116,7 @@ function Register-SslCertificate
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "ThumbPrint")]
-		[string] $CertThumbPrint,
+		[string] $CertThumbprint,
 
 		[Parameter()]
 		[switch] $Force
@@ -171,18 +171,18 @@ function Register-SslCertificate
 			}
 		}
 
-		if ($CertThumbPrint)
+		if ($CertThumbprint)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating SSL thumbprint"
 
 			if ($Cert)
 			{
-				$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbPrint
+				$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbprint
 			}
 
 			if (!$Cert)
 			{
-				Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbPrint'"
+				Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbprint'"
 			}
 		}
 
@@ -228,7 +228,7 @@ function Register-SslCertificate
 			}
 
 			if (($Cert.Subject -ne "CN=$Domain") -or
-				($CertThumbPrint -and ($Cert.thumbprint -ne $CertThumbPrint)) -or
+				($CertThumbprint -and ($Cert.thumbprint -ne $CertThumbprint)) -or
 				!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
 			{
 				# Undo import operation

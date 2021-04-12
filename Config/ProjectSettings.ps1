@@ -429,8 +429,9 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
 
-		& $ProjectRoot\Scripts\Remote\Connect-Computer.ps1 -ConfigurationName $PSSessionConfigurationName `
-			-Domain $PolicyStore -SessionOption $PSSessionOption -CimOptions $CimOptions
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+		Connect-Computer -ConfigurationName $PSSessionConfigurationName -Domain $PolicyStore `
+			-SessionOption $PSSessionOption -CimOptions $CimOptions -ErrorAction Stop
 	}
 }
 #endregion

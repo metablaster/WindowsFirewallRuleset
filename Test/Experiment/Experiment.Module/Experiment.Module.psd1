@@ -46,7 +46,10 @@ SOFTWARE.
 	ModuleVersion = "0.10.1"
 
 	# Supported PSEditions
-	CompatiblePSEditions = @("Core", "Desktop")
+	CompatiblePSEditions = @(
+		"Core",
+		"Desktop"
+	)
 
 	# ID used to uniquely identify this module
 	GUID = "79aca004-fe6f-43a4-85c6-03e416b9d71c"
@@ -94,7 +97,7 @@ SOFTWARE.
 	# RequiredAssemblies = @()
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
-	# ScriptsToProcess = @()
+	ScriptsToProcess = @("Scripts\NewScript.ps1")
 
 	# Type files (.ps1xml) to be loaded when importing this module
 	# TypesToProcess = @()

@@ -120,6 +120,13 @@ function Test-TargetComputer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	return $true
+	if (Get-Variable -Name LastConnectionTest -Scope Script)
+	{
+		# Doing only initial test to confirm working connection
+		if ($LastConnectionTest) { return $LastConnectionTest }
+	}
+
 	if ($Protocol -eq "WSMan")
 	{
 		$Params = @{
@@ -191,10 +198,11 @@ function Test-TargetComputer
 		}
 	}
 
-	if (!$Status -and ($Domain -ne [System.Environment]::MachineName))
+	if (!$Status) # -and ($Domain -ne [System.Environment]::MachineName))
 	{
 		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer: $Domain"
 	}
 
-	return $null -ne $Status
+	Set-Variable -Name LastConnectionTest -Scope Script -Value ($null -ne $Status)
+	return $LastConnectionTest
 }

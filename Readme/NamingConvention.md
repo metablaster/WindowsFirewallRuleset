@@ -115,7 +115,7 @@ Parameter names and aliases
 - `Difference*`
 - [uint32] Seconds, Minutes, Hours...
 - [switch] `Disable` (disable or remove setting)
-- [string] `CertThumbPrint`
+- [string] `CertThumbprint`
 
 [Table of Contents](#table-of-contents)
 
