@@ -144,7 +144,7 @@ function Test-ExecutableFile
 				Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
 					-Message "File extension '$Extension' is blacklisted executable file: $ExpandedPath"
 
-				Write-Information -Tags "User" -MessageData "INFO: Blocked file '$Executable' is $ExtensionInfo"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Blocked file '$Executable' is $ExtensionInfo"
 			}
 
 			return $false
@@ -159,14 +159,14 @@ function Test-ExecutableFile
 			{
 				Write-Warning -Message "Digital signature verification failed for: $ExpandedPath"
 				# NOTE: StatusMessage seems to be unrelated to problem
-				# Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 			}
 			else
 			{
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for: $ExpandedPath"
 
-				Write-Information -Tags "User" -MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 				return $false
 			}
 		}
@@ -175,7 +175,7 @@ function Test-ExecutableFile
 		return $true
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
 
 	return $false
 }

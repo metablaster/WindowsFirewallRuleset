@@ -151,7 +151,7 @@ function Test-FileSystemPath
 				Write-Warning -Message $Message
 			}
 
-			Write-Information -Tags "Project" -MessageData "INFO: Path '$LiteralPath'"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
 

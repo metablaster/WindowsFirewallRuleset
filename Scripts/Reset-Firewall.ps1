@@ -89,7 +89,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Resetting domain firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting domain firewall profile..."
 
 # NOTE: LogMaxSizeKilobytes: The default setting when managing a computer is 4096.
 # When managing a GPO, the default setting is NotConfigured.
@@ -104,7 +104,7 @@ Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfig
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting private firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting private firewall profile..."
 
 Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -115,7 +115,7 @@ Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfi
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting public firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting public firewall profile..."
 
 Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -126,7 +126,7 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags "User" -MessageData "INFO: Resetting global firewall settings..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting global firewall settings..."
 
 # NOTE: MaxSAIdleTimeSeconds: The default value when managing a local computer is 300 seconds (5 minutes).
 # When managing a GPO, the default value is NotConfigured.
@@ -148,7 +148,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 
 # TODO: we need to check if there are rules present to avoid errors about "no object found"
 # Needed also to log actual rule removal errors
-Write-Information -Tags "User" -MessageData "INFO: Removing outbound rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing outbound rules..."
 $OutboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($OutboundCount -gt 0)
@@ -156,7 +156,7 @@ if ($OutboundCount -gt 0)
 	Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Removing inbound rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing inbound rules..."
 $InboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($InboundCount -gt 0)
@@ -164,13 +164,13 @@ if ($InboundCount -gt 0)
 	Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Removing IPSec rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing IPSec rules..."
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 
 # Update Local Group Policy for changes to take effect
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
-Write-Information -Tags "User" -MessageData "INFO: Firewall reset is done!"
-Write-Information -Tags "User" -MessageData "INFO: If internet connectivity problem remains, please reboot system"
+Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
+Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"
 
 Update-Log

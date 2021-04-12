@@ -103,15 +103,15 @@ function Test-Output
 		$TypeName = $AllTypeName | Select-Object -Unique
 		$OutputType = $AllOutputType | Select-Object -Unique
 
-		Write-Information -Tags "Test" -MessageData "INFO: TypeName:`t`t$TypeName"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: TypeName:`t`t$TypeName"
 		$OutputType | ForEach-Object {
-			Write-Information -Tags "Test" -MessageData "INFO: OutputType:`t$_"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: OutputType:`t$_"
 		}
 
 		if (!$OutputType)
 		{
 			# This is for completeness, otherwise info message won't be shown, OR only "TypeName:" would be shown
-			Write-Information -Tags "Test" -MessageData "INFO: OutputType:"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: OutputType:"
 		}
 
 		if ([string]::IsNullOrEmpty($TypeName))

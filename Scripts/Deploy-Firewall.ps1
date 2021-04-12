@@ -98,7 +98,7 @@ $ExecuteParams = @{
 }
 
 if (!(Approve-Execute @ExecuteParams)) { exit }
-Write-Information -Tags "User" -MessageData "INFO: Initializing deployment..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Initializing deployment..."
 
 # Save the state of global variables
 $PreviousProjectCheck = (Get-Variable -Name ProjectCheck -Scope Global).Value
@@ -533,7 +533,7 @@ if (Approve-Execute @ExecuteParams)
 	}
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Deployment of firewall rules is complete"
+Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall rules is complete"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
@@ -548,7 +548,7 @@ if ($ErrorLogging -and $ErrorStatus)
 {
 	Write-Information -MessageData "" -InformationVariable ThrowAway
 	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags "User" -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
+	Write-Information -Tags $ThisScript -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
 }
 
 if ($WarningLogging -and $WarningStatus)
@@ -563,7 +563,7 @@ if ($ErrorStatus)
 }
 else
 {
-	Write-Information -Tags "User" -MessageData "INFO: All operations completed successfully!"
+	Write-Information -Tags $ThisScript -MessageData "INFO: All operations completed successfully!"
 }
 
 Write-Information -MessageData "" -InformationVariable ThrowAway

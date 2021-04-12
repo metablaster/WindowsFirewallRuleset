@@ -114,7 +114,7 @@ if (!$Pester)
 	}
 }
 
-Write-Information -Tags "Project" -MessageData "INFO: Starting pester tests"
+Write-Information -Tags "Test" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
 # TODO: Tests from Private folder excluded because out of date
@@ -148,6 +148,6 @@ if (!$Pester)
 }
 
 Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
-Write-Information -Tags "Project" -MessageData "INFO: Running all tests done"
+Write-Information -Tags "Test" -MessageData "INFO: Running all tests done"
 
 Update-Log

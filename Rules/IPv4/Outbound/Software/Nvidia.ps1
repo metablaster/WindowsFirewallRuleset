@@ -158,7 +158,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		# $Program = "%SystemRoot%\System32\DriverStore\FileRepository\nv_dispi.inf_amd64_90685a092bcf58c7\Display.NvContainer\NVDisplay.Container.exe"
 
 		# This may take several seconds, tell user what is going on
-		Write-Information -Tags "User" -MessageData "INFO: Querying driver store for NVDisplay Container..."
+		Write-Information -Tags $ThisScript -MessageData "INFO: Querying driver store for NVDisplay Container..."
 
 		# TODO: we need to query drivers for all such programs in DriverStore, ex Get-DriverPath function
 		# TODO: might not work for DCH drivers, for difference with "standard" drivers see:
@@ -174,8 +174,8 @@ if ([System.Environment]::Is64BitOperatingSystem)
 			$NVDisplayExe = "NVDisplay.Container.exe"
 			Write-Warning -Message "Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
 
-			Write-Information -Tags "User" -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
-			Write-Information -Tags "User" -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and re-run the script"
+			Write-Information -Tags $ThisScript -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
+			Write-Information -Tags $ThisScript -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and re-run the script"
 		}
 		else
 		{

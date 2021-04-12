@@ -103,7 +103,7 @@ function Get-InterfaceBroadcast
 			Select-Object -ExpandProperty IPAddressToString
 		}
 
-		Write-Information -Tags "Result" -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
 		Write-Output $BroadcastAddress
 	}
 

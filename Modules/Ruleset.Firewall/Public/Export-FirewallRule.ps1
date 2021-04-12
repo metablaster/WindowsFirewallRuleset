@@ -251,7 +251,7 @@ function Export-FirewallRule
 	if (!$FirewallRules)
 	{
 		Write-Warning -Message "No rules were retrieved from firewall to export"
-		Write-Information -Tags "User" -MessageData "INFO: possible cause is either no match or an error ocurred"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: possible cause is either no match or an error ocurred"
 		return
 	}
 
@@ -395,5 +395,5 @@ function Export-FirewallRule
 		Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Exporting firewall rules into: '$FileName' done"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules into: '$FileName' done"
 }

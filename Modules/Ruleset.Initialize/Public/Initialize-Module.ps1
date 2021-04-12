@@ -164,7 +164,7 @@ function Initialize-Module
 
 			# Up to date
 			# TODO: for AllowPrerelease we should check for prerelease, example required posh-git 0.7.3 if met, no prerelease will be installed
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
 			return $true
 		}
 
@@ -181,7 +181,7 @@ function Initialize-Module
 
 		if ($script:GitInstance)
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Checking if git.exe is in PATH, required by $ModuleName was success"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if git.exe is in PATH, required by $ModuleName was success"
 		}
 		else
 		{
@@ -290,7 +290,7 @@ function Initialize-Module
 
 		if ($Decision -eq $Default)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Registering repository $Repository"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Registering repository $Repository"
 
 			$IsTrusted = "Untrusted"
 			if ($Trusted)
@@ -356,7 +356,7 @@ function Initialize-Module
 	}
 
 	# No need to specify type of repository, it's explained by user action
-	Write-Information -Tags "User" -MessageData "INFO: Using following repositories: $RepositoryList"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using following repositories: $RepositoryList"
 
 	# Check if module could be downloaded
 	[PSCustomObject] $FoundModule = $null
@@ -398,7 +398,7 @@ function Initialize-Module
 
 		if ($FoundModule)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName v$($FoundModule.Version.ToString()) is selected for download"
 			break
 		}
 		# else error should be displayed
@@ -444,7 +444,7 @@ function Initialize-Module
 			# Check if older version is user installed
 			if (Get-InstalledModule -Name $ModuleName -ErrorAction Ignore)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Updating module $($FoundModule.Name) to v$($FoundModule.Version)"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Updating module $($FoundModule.Name) to v$($FoundModule.Version)"
 
 				if ($TargetPowerShellGet -ge $Version2)
 				{
@@ -457,7 +457,7 @@ function Initialize-Module
 			}
 			else # Shipped with system
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version) side by side"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version) side by side"
 
 				# Need force to install side by side, update not possible
 				if ($TargetPowerShellGet -ge $Version2)
@@ -483,7 +483,7 @@ function Initialize-Module
 
 		if ($Decision -eq $Default)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Installing module $($FoundModule.Name) v$($FoundModule.Version)"
 
 			if ($TargetPowerShellGet -ge $Version2)
 			{
@@ -505,7 +505,7 @@ function Initialize-Module
 
 		if ($ModuleInfo)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName v$RequireVersion was installed/updated"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName v$RequireVersion was installed/updated"
 
 			# Remove old module if it exists and is loaded
 			# TODO: It looks like this method doesn't solve the problem and we need to restart PowerShell anyway
@@ -524,7 +524,7 @@ function Initialize-Module
 				Set-Variable -Name Restart -Scope Script -Value $true
 			}
 
-			Write-Information -Tags "User" -MessageData "INFO: Loading module $ModuleName v$RequireVersion into session"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Loading module $ModuleName v$RequireVersion into session"
 
 			# Load new module into current session
 			# TODO: In case of PowerShellGet this should load PackageManagement too?
@@ -544,7 +544,7 @@ function Initialize-Module
 			{
 				# TODO: shortened prompt, is valid only for user home path
 				# TODO: last test did not execute Add-PoshGitToProfile after failed and second attempt
-				Write-Information -Tags "User" -MessageData "INFO: Adding $ModuleName v$RequireVersion to profile"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Adding $ModuleName v$RequireVersion to profile"
 				Add-PoshGitToProfile -AllHosts
 			}
 

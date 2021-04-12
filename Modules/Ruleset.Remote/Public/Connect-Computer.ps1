@@ -142,7 +142,7 @@ function Connect-Computer
 
 	try
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Checking Windows remote management service on computer '$Domain'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking Windows remote management service on computer '$Domain'"
 		Test-WSMan @WSManParams | Out-Null
 	}
 	catch
@@ -176,7 +176,7 @@ function Connect-Computer
 		{
 			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
 
 				# Authentication is required to access remote registry
 				# NOTE: Registry provider does not support credentials
@@ -193,7 +193,7 @@ function Connect-Computer
 		try
 		{
 			# TODO: For VM without external switch use -VMName
-			Write-Information -Tags "Project" -MessageData "INFO: Entering remote session to computer '$Domain'"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
 			Enter-PSSession @WSManParams # -UseSSL -ComputerName $Domain -Credential $RemoteCredential -ConfigurationName $PSSessionConfigurationName
 		}
 		catch

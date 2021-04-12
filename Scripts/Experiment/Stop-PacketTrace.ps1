@@ -97,7 +97,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 {
 	try
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Stopping session '$Name'"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Stopping session '$Name'"
 		Stop-NetEventSession -Name $Name -EA Stop
 	}
 	catch
@@ -109,7 +109,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 	{
 		if ($WFP)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Removing WFP capture provider"
+			Write-Information -Tags $ThisScript -MessageData "INFO: Removing WFP capture provider"
 
 			if (Get-NetEventWFPCaptureProvider -SessionName $Name -EA Stop)
 			{
@@ -118,7 +118,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 		}
 		else
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Removing packet capture provider"
+			Write-Information -Tags $ThisScript -MessageData "INFO: Removing packet capture provider"
 
 			if (Get-NetEventPacketCaptureProvider -SessionName $Name -EA Stop)
 			{
@@ -131,7 +131,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 		Write-Warning -Message "Capture provider for session '$Name' could not be removed"
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Removing session '$Name'"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Removing session '$Name'"
 	Remove-NetEventSession -Name $Name
 }
 else

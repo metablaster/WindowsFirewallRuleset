@@ -688,7 +688,7 @@ Following features are desired and might be available at some point in the futur
 [corporate firewall]: https://bitbucket.org/SuperAAAAA/shack/raw/60508e0e23d73aeb8f9a4fdc75b13ea94e56e62b/corporate.jpg "Corporate Firewall"
 [download core]: https://github.com/PowerShell/PowerShell "Download PowerShell Core"
 [download .net]: https://dotnet.microsoft.com/download/dotnet-framework "Download .NET Framework"
-[download git]: https://git-scm.com/downloads/win "Visit Git for Windows download page"
+[download git]: https://git-scm.com/downloads "Visit Git for Windows download page"
 [vscode]: https://code.visualstudio.com "Visit Visual Studio Code home page"
 [download powershell extension]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
@@ -707,7 +707,7 @@ Following features are desired and might be available at some point in the futur
 [clone]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository "Cloning a repository"
 [powershell]: https://docs.microsoft.com/en-us/powershell/scripting/overview "What is PowerShell anyway?"
 [windows]: https://docs.microsoft.com/en-us/windows/windows-10 "Windows 10 for IT Pros"
-[alpha]: https://stackoverflow.com/questions/40067469/what-is-the-difference-between-alpha-and-beta-release "What is alpha software?"
+[alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
 
 [badge status]: https://img.shields.io/static/v1?label=Status&message=Alpha&color=red&style=plastic
 [badge system]: https://img.shields.io/static/v1?label=OS&message=Windows&color=informational&style=plastic&logo=Windows

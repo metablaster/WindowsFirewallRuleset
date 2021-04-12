@@ -123,7 +123,7 @@ function Deploy-SshKey
 	}
 
 	$InformationPreference = "Continue"
-	Write-Information -Tags "User" -MessageData "INFO: Upload key to $Domain"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Upload key to $Domain"
 
 	# Upload key
 	if ($Overwrite)
@@ -136,15 +136,15 @@ function Deploy-SshKey
 	}
 
 	# Adjust permissions
-	Write-Information -Tags "User" -MessageData "INFO: Set ownership of file to user $User"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Set ownership of file to user $User"
 	ssh $User@$Domain "cmd.exe /C icacls $FilePath /setowner $User"
 
-	Write-Information -Tags "User" -MessageData "INFO: Remove file inherited permissions"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Remove file inherited permissions"
 	ssh $User@$Domain "cmd.exe /C icacls $FilePath /inheritancelevel:r"
 
-	Write-Information -Tags "User" -MessageData "INFO: Grant permissions on file for user $User"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user $User"
 	ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant "$User":F"
 
-	Write-Information -Tags "User" -MessageData "INFO: Grant permissions on file for user SYSTEM"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user SYSTEM"
 	ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant SYSTEM:F"
 }

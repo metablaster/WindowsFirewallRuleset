@@ -250,7 +250,7 @@ function Import-FirewallRule
 		}
 		else
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Replacing existing rule"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Replacing existing rule"
 		}
 
 		# generate new firewall rule, parameters are assigned with splatting
@@ -258,5 +258,5 @@ function Import-FirewallRule
 		New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Importing firewall rules from '$FileName' done"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall rules from '$FileName' done"
 }

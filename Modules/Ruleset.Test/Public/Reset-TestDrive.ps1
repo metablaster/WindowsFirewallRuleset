@@ -128,7 +128,7 @@ function Reset-TestDrive
 			{
 				try
 				{
-					Write-Information -Tags "Test" -MessageData "INFO: Resetting test drive"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting test drive"
 
 					Get-ChildItem -Path $Path -File | ForEach-Object {
 						Remove-Item -Path $_.FullName -ErrorAction Stop
@@ -166,7 +166,7 @@ function Reset-TestDrive
 		}
 		else
 		{
-			Write-Information -Tags "Test" -MessageData "INFO: Generating new test drive"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Generating new test drive"
 
 			New-Item -Path $Path -ItemType Directory | Out-Null
 		}

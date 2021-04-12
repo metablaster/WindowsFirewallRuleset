@@ -99,7 +99,7 @@ function Initialize-Project
 	Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
 	Write-Host ""
 
-	Write-Information -Tags "User" -MessageData "INFO: Checking operating system"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking operating system"
 
 	# Check operating system, for possible values see [System.PlatformID]::
 	$OSPlatform = [System.Environment]::OSVersion.Platform
@@ -127,7 +127,7 @@ function Initialize-Project
 	}
 
 	# Check if in elevated PowerShell
-	Write-Information -Tags "User" -MessageData "INFO: Checking user account elevation"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking user account elevation"
 	$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 
 	if (!$Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
@@ -141,7 +141,7 @@ function Initialize-Project
 
 	# Check OS is not Home edition
 	# NOTE: Get-WindowsEdition requires elevation
-	Write-Information -Tags "User" -MessageData "INFO: Checking OS edition"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking OS edition"
 	$OSEdition = Get-WindowsEdition -Online | Select-Object -ExpandProperty Edition
 
 	# TODO: instead of comparing string we should probably compare numbers
@@ -165,12 +165,12 @@ function Initialize-Project
 	}
 
 	# Check PowerShell edition
-	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell edition"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking PowerShell edition"
 	$PowerShellEdition = $PSVersionTable.PSEdition
 
 	# Check PowerShell version
 	[version] $TargetPSVersion = $PSVersionTable.PSVersion
-	Write-Information -Tags "User" -MessageData "INFO: Checking PowerShell version"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking PowerShell version"
 
 	if ($TargetPSVersion -lt $RequirePSVersion)
 	{
@@ -183,7 +183,7 @@ function Initialize-Project
 
 	if ($ServicesCheck)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Checking system services"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking system services"
 
 		# These services are minimum required
 		$RequiredServices = @(
@@ -229,7 +229,7 @@ function Initialize-Project
 		# NOTE: This prerequisite is valid for the PowerShell Desktop edition only
 		if ($PowerShellEdition -eq "Desktop")
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Checking .NET version"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking .NET version"
 
 			[version] $TargetNETVersion = Get-NetFramework |
 			Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
@@ -248,7 +248,7 @@ function Initialize-Project
 			{
 				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
 					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
-				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
 
 				if ($Strict) { exit }
 				return
@@ -267,20 +267,20 @@ function Initialize-Project
 			}
 			else
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
 			}
 		}
 		else
 		{
 			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
-			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
 		}
 	}
 
 	# Modules and git is required only for development and editing scripts
 	if ($ModulesCheck -or $Develop)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Checking git"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking git"
 
 		# Git is recommended for version control and by posh-git module
 		# NOTE: Other module scripts require this variable
@@ -295,24 +295,24 @@ function Initialize-Project
 			if ($TargetGit -lt $RequireGitVersion)
 			{
 				Write-Warning -Message "Git v$TargetGit is out of date, recommended is git v$RequireGitVersion"
-				Write-Information -Tags "Project" -MessageData "INFO: Please visit https://git-scm.com to download and update"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please visit https://git-scm.com to download and update"
 			}
 			else
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: git v$TargetGit meets >= v$RequireGitVersion"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: git v$TargetGit meets >= v$RequireGitVersion"
 			}
 		}
 		else
 		{
 			Write-Warning -Message "Git in the PATH minimum v$RequireGitVersion is recommended but missing"
-			Write-Information -Tags "User" -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 		}
 	}
 
 	# NOTE: Result value should be equivalent to $Develop
 	if ($ModulesCheck)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Checking package providers"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking package providers"
 
 		# Check if PowerShell needs to restart
 		Set-Variable -Name Restart -Scope Script -Value $false
@@ -329,7 +329,7 @@ function Initialize-Project
 			return
 		}
 
-		Write-Information -Tags "User" -MessageData "INFO: Checking modules"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking modules"
 
 		# NOTE: This is default for Initialize-Module -Repository
 		# [string] $Repository = "PSGallery"
@@ -401,7 +401,7 @@ function Initialize-Project
 
 			if ($Decision -ne $Default)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Please wait, checking online for help updates..."
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please wait, checking online for help updates..."
 
 				$CultureNames = "en-US"
 
@@ -452,11 +452,11 @@ function Initialize-Project
 	else
 	{
 		Write-Warning -Message "3rd party modules may be missing or outdated which could result in unexpected behavior"
-		Write-Information -Tags "Project" -MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 	}
 
 	# TODO: CIM may not always work
-	Write-Information -Tags "Project" -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
 	$OSCaption = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 		-Class Win32_OperatingSystem -Property Caption | Select-Object -ExpandProperty Caption
 

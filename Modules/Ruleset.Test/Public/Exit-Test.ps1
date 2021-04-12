@@ -71,7 +71,7 @@ function Exit-Test
 
 		# NOTE: Write-Host would mess up test case outputs
 		Write-Output ""
-		Write-Information -Tags "Test" -MessageData "INFO: Exiting unit test '$UnitTest'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exiting unit test '$UnitTest'"
 		Remove-Variable -Name UnitTest -Scope Global -Force
 
 		if (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)

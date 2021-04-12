@@ -171,7 +171,7 @@ $EventDescription = switch ($EventID)
 	5159 { "The Windows Filtering Platform has blocked a bind to a local port"; break }
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Parsing '$EventDescription'"
+Write-Information -Tags $ThisScript -MessageData "INFO: Parsing '$EventDescription'"
 
 # Log file header to use for this audit log
 $HeaderStack.Push($EventDescription)

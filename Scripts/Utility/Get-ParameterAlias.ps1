@@ -187,7 +187,7 @@ begin
 		if (Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore)
 		{
 			$global:ImportedModules | ForEach-Object {
-				Write-Information -Tags "Project" -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
+				Write-Information -Tags $ThisScript -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
 				Remove-Module -FullyQualifiedName $_
 			}
 
@@ -258,7 +258,7 @@ process
 
 				if ($ModuleInfo)
 				{
-					Write-Information -Tags "Project" -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
+					Write-Information -Tags $ThisScript -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
 					$global:ImportedModules += @{ ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
 				}
 				else

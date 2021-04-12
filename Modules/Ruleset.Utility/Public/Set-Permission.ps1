@@ -486,7 +486,7 @@ function Set-Permission
 	if ($Recurse)
 	{
 		# TODO: Will fail with "-Reset -Recurse -Protected"
-		Write-Information -Tags "Project" -MessageData "INFO: Performing recursive action"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Performing recursive action"
 
 		try
 		{

@@ -131,7 +131,7 @@ function Initialize-Provider
 					Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
 				}
 
-				Write-Information -Tags "User" -MessageData "INFO: Provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Provider $ProviderName v$TargetVersion meets >= v$RequireVersion"
 				return $true
 			}
 
@@ -170,7 +170,7 @@ function Initialize-Provider
 				Write-Warning -Message "Found multiple sources for provider $($FoundProvider.Name), selecting first one"
 			}
 
-			Write-Information -Tags "User" -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString()) is selected for download"
 
 			# TODO: If PowerShell asks to install NuGet during "Find-PackageProvider" and if that fails
 			# it may return package source anyway (test with "Desktop" edition)
@@ -206,14 +206,14 @@ function Initialize-Provider
 				}
 			}
 
-			Write-Information -Tags "User" -MessageData "INFO: Using following package sources: $($PackageSource.ProviderName)"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using following package sources: $($PackageSource.ProviderName)"
 		}
 		else
 		{
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				Write-Warning -Message "Provider $ProviderName was not found because of a known issue with PowerShell Core"
-				Write-Information -Tags "User" -MessageData "INFO: see https://github.com/OneGet/oneget/issues/360"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: see https://github.com/OneGet/oneget/issues/360"
 
 				return !$Required
 			}
@@ -259,7 +259,7 @@ function Initialize-Provider
 
 		if ($Decision -eq $Default)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Installing provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString())"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Installing provider $($FoundProvider.Name) v$($FoundProvider.Version.ToString())"
 			# TODO: Use InputObject? after ensuring there aren't multiple provider names
 			Install-PackageProvider -Name $FoundProvider.Name -Source $FoundProvider.Source
 
@@ -268,7 +268,7 @@ function Initialize-Provider
 
 			if ($NewVersion -and ($NewVersion -gt $TargetVersion))
 			{
-				Write-Information -Tags "User" -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $ProviderName provider v$NewVersion is installed"
 
 				# Force, don't ask for confirmation
 				Import-PackageProvider -Name $ProviderName -RequiredVersion $NewVersion -Force

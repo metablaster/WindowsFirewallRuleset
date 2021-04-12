@@ -74,7 +74,7 @@ function Set-ScreenBuffer
 		{
 			$NewSize.Height = $Height
 			$psWindow.BufferSize = $NewSize
-			Write-Information -Tags "User" -MessageData "INFO: Screen buffer changed to $Height"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Screen buffer changed to $Height"
 			return
 		}
 

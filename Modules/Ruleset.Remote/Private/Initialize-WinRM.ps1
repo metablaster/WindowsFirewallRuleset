@@ -91,13 +91,13 @@ function Initialize-WinRM
 		# TODO: Handled by ProjectSettings.ps1
 		if ($WinRM.StartType -ne "Automatic")
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Setting WS-Management service to automatic startup"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting WS-Management service to automatic startup"
 			Set-Service -InputObject $WinRM -StartType Automatic
 		}
 
 		if ($WinRM.Status -ne "Running")
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Starting WS-Management service"
 			$WinRM.Start()
 			$WinRM.WaitForStatus("Running", $ServiceTimeout)
 		}

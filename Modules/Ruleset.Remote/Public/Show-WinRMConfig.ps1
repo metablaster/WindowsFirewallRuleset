@@ -102,7 +102,7 @@ function Show-WinRMConfig
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Information -Tags "User" -MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
 
 	$Present = $false
 	$Enabled = $false
@@ -114,7 +114,7 @@ function Show-WinRMConfig
 		$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
 
 	$Present = $false
 	$Enabled = $false
@@ -126,18 +126,18 @@ function Show-WinRMConfig
 		$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
 
 	# To start it, it must not be disabled
 	if ($WinRM.StartType -eq "Disabled")
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Setting WinRM service to manual startup"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting WinRM service to manual startup"
 		Set-Service -InputObject $WinRM -StartupType Manual
 	}
 
 	if ($WinRM.Status -ne "Running")
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Starting WinRM service"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Starting WinRM service"
 		$WinRM.Start()
 		$WinRM.WaitForStatus("Running", $ServiceTimeout)
 	}
@@ -148,20 +148,20 @@ function Show-WinRMConfig
 	{
 		# TODO: Custom object and numbered Permission.Split(",")
 		# winrm get winrm/config
-		Write-Information -Tags "Project" -MessageData "INFO: Showing all enabled session configurations (short version)"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing all enabled session configurations (short version)"
 		Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
 		Select-Object -Property Name, lang, Enabled, PSVersion, SDKVersion, Architecture,
 		Capability, SupportsOptions, AutoRestart, OutputBufferingMode, RunAsUser, RunAsPassword,
 		RunAsVirtualAccount, RunAsVirtualAccountGroups, Permission
 
 		# winrm enumerate winrm/config/listener
-		Write-Information -Tags "Project" -MessageData "INFO: Showing configured listeners"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing configured listeners"
 		Get-WSManInstance -ResourceURI winrm/config/Listener -Enumerate |
 		Select-Object -Property LocalName, lang, Address, Transport, Port, Hostname, Enabled,
 		URLPrefix, CertificateThumbprint, ListeningOn, IsReadOnly, IsEmpty, HasChildNodes
 
 		# winrm get winrm/config/service
-		Write-Information -Tags "Project" -MessageData "INFO: Showing server configuration"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server configuration"
 		Get-WSManInstance -ResourceURI winrm/config/Service |
 		Select-Object -Property LocalName, RootSDDL, MaxConcurrentOperations,
 		MaxConcurrentOperationsPerUser, EnumerationTimeoutms, MaxConnections,
@@ -174,7 +174,7 @@ function Show-WinRMConfig
 
 		if ($null -ne $TokenValue)
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
 		}
 		else
 		{
@@ -183,39 +183,39 @@ function Show-WinRMConfig
 		}
 
 		# winrm get winrm/config/service/auth
-		Write-Information -Tags "Project" -MessageData "INFO: Showing server authentication"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server authentication"
 		Get-WSManInstance -ResourceURI winrm/config/Service/Auth |
 		Select-Object -Property LocalName, lang, Basic, Kerberos, Negotiate, Certificate, CredSSP,
 		CbtHardeningLevel, IsReadOnly, IsEmpty, HasChildNodes
 
 		# winrm get winrm/config/service/defaultports
-		Write-Information -Tags "Project" -MessageData "INFO: Showing server default ports"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server default ports"
 		Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts |
 		Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
 	}
 
 	if ($Client)
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Showing client configuration"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing client configuration"
 		Get-WSManInstance -ResourceURI winrm/config/Client |
 		Select-Object -Property LocalName, lang, NetworkDelayms, URLPrefix, AllowUnencrypted,
 		TrustedHosts, IsReadOnly, IsEmpty, HasChildNodes
 
 		# winrm get winrm/config/client/auth
-		Write-Information -Tags "Project" -MessageData "INFO: Showing client authentication"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing client authentication"
 		Get-WSManInstance -ResourceURI winrm/config/Client/Auth |
 		Select-Object -Property LocalName, lang, Basic, Digest, Kerberos, Negotiate, Certificate,
 		CredSSP, IsReadOnly, IsEmpty, HasChildNodes
 
 		# winrm get winrm/config/client/defaultports
-		Write-Information -Tags "Project" -MessageData "INFO: Showing client default ports"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing client default ports"
 		Get-WSManInstance -ResourceURI winrm/config/Client/DefaultPorts |
 		Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
 
 		$ClientCertificate = Get-Item WSMan:\localhost\ClientCertificate\*
 		if ($ClientCertificate)
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Showing client certificate configuration"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing client certificate configuration"
 			$ClientCertificate
 		}
 	}

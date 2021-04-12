@@ -354,11 +354,11 @@ function Set-Shortcut
 
 		if ($FilePath.Exists)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Updating shortcut '$FilePath'"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Updating shortcut '$FilePath'"
 		}
 		else
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Creating shortcut '$FilePath'"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating shortcut '$FilePath'"
 		}
 
 		# Create or update shortcut file

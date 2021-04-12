@@ -124,6 +124,6 @@ function Build-ServiceList
 		$HeaderStack.Pop() | Out-Null
 	}
 
-	Write-Information -Tags "Project" -MessageData "INFO: $($Services.Count) services involved in firewall rules"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Services.Count) services involved in firewall rules"
 	Write-Output $Services
 }

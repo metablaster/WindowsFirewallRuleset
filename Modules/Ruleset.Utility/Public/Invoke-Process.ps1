@@ -255,7 +255,7 @@ function Invoke-Process
 				{
 					# NOTE: Explicit -Debug or INFA is needed inside event
 					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($OutLine.Data)" # -Debug
-					Write-Information -Tags "Project" -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
 				}
 			}
 
@@ -403,7 +403,7 @@ function Invoke-Process
 	{
 		if ($Timeout -ge 0)
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish ..."
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish ..."
 			if ($Async)
 			{
 				# true if the Task completed execution within the allotted time, otherwise false
@@ -423,7 +423,7 @@ function Invoke-Process
 		else
 		{
 			$StatusWait = $true
-			Write-Information -Tags "User" -MessageData "INFO: Waiting infinitely for process '$CommandName' to finish ..."
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Waiting infinitely for process '$CommandName' to finish ..."
 
 			if ($Async)
 			{
@@ -532,7 +532,7 @@ function Invoke-Process
 
 				if (![string]::IsNullOrEmpty($StreamLine))
 				{
-					Write-Information -Tags "User" -MessageData "INFO: $StreamLine"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
 				}
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."

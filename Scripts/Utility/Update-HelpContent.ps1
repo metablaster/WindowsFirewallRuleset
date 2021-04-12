@@ -173,19 +173,19 @@ function Format-Document
 		[string] $FileName
 	)
 
-	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$MarkdownFile = Split-Path -Path $FileName -Leaf
-	Write-Information -Tags "Project" -MessageData "INFO: Formatting document $MarkdownFile"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Formatting document $MarkdownFile"
 	$FileData = Get-Content -Path $FileName -Encoding $Encoding -Raw
 
 	# Blank line after heading
-	Write-Verbose -Message "[$ThisScript] Setting blank lines around headings in $MarkdownFile"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting blank lines around headings in $MarkdownFile"
 	$FileData = $FileData -replace '(?m)(?<heading>^#+\s.+$\n)(?=\S)', "`${heading}`r`n"
 
 	# Empty code fences
 	# NOTE: module page has no code fences
-	Write-Verbose -Message "[$ThisScript] Setting explicit code fences in $MarkdownFile"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting explicit code fences in $MarkdownFile"
 	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}powershell"
 
 	# TODO: new line is inserted in module page, NoNewline ignored
@@ -279,7 +279,7 @@ specific subfolders
 
 			if ([string]::IsNullOrEmpty($FileData -match "^Download Help Link: $DownloadLink$"))
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Updating download link in $ModuleName.md"
+				Write-Information -Tags $ThisScript -MessageData "INFO: Updating download link in $ModuleName.md"
 				$FileData -replace "(?<=Download Help Link:).*", " $DownloadLink" |
 				Set-Content -Path $ModulePage -Encoding $Encoding
 			}
@@ -298,7 +298,7 @@ specific subfolders
 
 			if ([string]::IsNullOrEmpty($FileData -match "Help Version:\s$ProjectVersion"))
 			{
-				Write-Information -Tags "Project" -MessageData "INFO: Updating module page version"
+				Write-Information -Tags $ThisScript -MessageData "INFO: Updating module page version"
 				$FileData = $FileData -replace "(?<=Help Version:).*", " $ProjectVersion"
 				Set-Content -Path $ModulePage -Value $FileData -Encoding $Encoding
 			}
@@ -324,7 +324,7 @@ specific subfolders
 
 		foreach ($Command in $ModuleFunctions)
 		{
-			Write-Information -Tags "Project" -MessageData "INFO: Formatting document $Command.md"
+			Write-Information -Tags $ThisScript -MessageData "INFO: Formatting document $Command.md"
 
 			# Read file and single line string preserving line break characters
 			$FileData = Get-Content -Path $OnlineHelp\$Command.md -Encoding $Encoding -Raw
@@ -383,7 +383,7 @@ specific subfolders
 		# -IncrementHelpVersion
 
 		# TODO: maybe moving files instead of copying
-		Write-Information -Tags "Project" -MessageData "INFO: Copying generated help files to default location"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Copying generated help files to default location"
 
 		# Copy HelpInfo file to default destination
 		Copy-Item -Path $OnlineHelp\Content\* -Filter *.xml -Destination $ModuleRoot

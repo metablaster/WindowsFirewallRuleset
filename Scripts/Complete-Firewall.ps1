@@ -92,7 +92,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 $LogSize = 1024
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up public firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up public firewall profile..."
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -105,7 +105,7 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 )
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up private firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up private firewall profile..."
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -118,7 +118,7 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 )
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags "User" -MessageData "INFO: Setting up domain firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up domain firewall profile..."
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -130,7 +130,7 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	# Exclude interfaces for domain profile here
 )
 
-Write-Information -Tags "User" -MessageData "INFO: Setting up global firewall settings..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up global firewall settings..."
 
 # Modify the global firewall settings of the target computer.
 # Configures properties that apply to the firewall and IPsec settings,

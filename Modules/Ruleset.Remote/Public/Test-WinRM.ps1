@@ -108,7 +108,7 @@ function Test-WinRM
 			$WSManParams["Credential"] = $RemoteCredential
 		}
 
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
 		$WSManParams["Port"] = 5986
 
 		# TODO: -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
@@ -117,7 +117,7 @@ function Test-WinRM
 
 	if ($Protocol -ne "HTTPS")
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
 		$WSManParams["Port"] = 5985
 
 		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
@@ -155,12 +155,12 @@ function Test-WinRM
 
 	# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 	# Works on local Windows Management Instrumentation (WMI) using a Component Object Model (COM) session
-	Write-Information -Tags "Project" -MessageData "INFO: Testing CIM server on localhost"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server on localhost"
 	Get-CimInstance -Class Win32_OperatingSystem |
 	Select-Object CSName, Caption | Format-Table
 
 	# Works against the CIM server specified by either the ComputerName or the CimSession parameter
-	Write-Information -Tags "Project" -MessageData "INFO: Testing CIM server on '$Domain'"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server on '$Domain'"
 	Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 	Select-Object CSName, Caption | Format-Table
 }

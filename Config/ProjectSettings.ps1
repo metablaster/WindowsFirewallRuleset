@@ -404,7 +404,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		if ($WinRM.Status -ne "Running")
 		{
-			Write-Information -Tags "User" -MessageData "INFO: Starting WS-Management service"
+			Write-Information -Tags $SettingsScript -MessageData "INFO: Starting WS-Management service"
 
 			# NOTE: Unable to start if it's disabled
 			if ($WinRM.StartType -eq "Disabled")

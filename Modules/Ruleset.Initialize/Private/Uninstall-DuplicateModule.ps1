@@ -180,7 +180,7 @@ function Uninstall-DuplicateModule
 					if ($Scope.Length -gt 1)
 					{
 						Write-Warning -Message "System wide modules might be removed in favor of user specific installation"
-						Write-Information -Tags "User" -MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
 
 						if (!($Force -or $PSCmdlet.ShouldContinue($Scope, "Accept dangerous comparison on all specified module locations")))
 						{
@@ -203,17 +203,17 @@ function Uninstall-DuplicateModule
 				# Default sort, from lowest to highest version, to process oldest modules first
 				$TargetModule = $TargetModule | Sort-Object Version # -Descending = from highest to lowest
 
-				Write-Information -Tags "User" -MessageData "INFO: Following module $ModuleName is the most recent one and will be kept"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Following module $ModuleName is the most recent one and will be kept"
 				$TargetModule[$RemoveCount] | Select-Object -Property Name, ModuleBase, Version | Format-List
 
 				# Select all but most recent one
 				$Module += $TargetModule | Select-Object -First $RemoveCount
 				$TotalRemoveCount += $RemoveCount
 
-				Write-Information -Tags "User" -MessageData "INFO: The count of outdated $ModuleName modules selected for removal is $RemoveCount"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: The count of outdated $ModuleName modules selected for removal is $RemoveCount"
 			} # foreach
 
-			Write-Information -Tags "User" -MessageData "INFO: Total count of outdated modules selected for removal is $TotalRemoveCount as follows"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Total count of outdated modules selected for removal is $TotalRemoveCount as follows"
 			$Module | Select-Object -Property Name, ModuleBase, Version | Format-List
 		} # if Name
 	}
@@ -229,10 +229,10 @@ function Uninstall-DuplicateModule
 			{
 				if (Test-Path -Path $ModuleRoot -PathType Container)
 				{
-					Write-Information -Tags "User" -MessageData "INFO: Taking ownership of $ModuleName $ModuleVersion"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Taking ownership of $ModuleName $ModuleVersion"
 					if (Set-Permission -Owner "Administrators" -Path $ModuleRoot -Recurse -Confirm:$false -Force)
 					{
-						Write-Information -Tags "User" -MessageData "INFO: Granting permissions to Administrators group for $ModuleName $ModuleVersion"
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Granting permissions to Administrators group for $ModuleName $ModuleVersion"
 						if (Set-Permission -Principal "Administrators" -Path $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
 						{
 							try
@@ -250,18 +250,18 @@ function Uninstall-DuplicateModule
 
 								# Remove all folders and files of a target module
 								# TODO: This may fail if some files such as DLL's are in use by current session.
-								Write-Information -Tags "User" -MessageData "INFO: Removing recursively $ModuleName $ModuleVersion"
+								Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Removing recursively $ModuleName $ModuleVersion"
 								Remove-Item -Path $ModuleRoot -Recurse -Confirm:$false -Force -ErrorAction Stop
 							}
 							catch
 							{
 								Write-Error -ErrorRecord $_
 								Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
-								Write-Information -Tags "User" -MessageData "INFO: If this session is inside module path, the session must be restarted"
+								Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: If this session is inside module path, the session must be restarted"
 								continue
 							}
 
-							Write-Information -Tags "User" -MessageData "INFO: Module $ModuleName was removed"
+							Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName was removed"
 							continue
 						}
 					}

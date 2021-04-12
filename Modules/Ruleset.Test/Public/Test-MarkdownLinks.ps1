@@ -338,7 +338,7 @@ function Test-MarkdownLinks
 		}
 
 		++$FileCounter
-		Write-Information -Tags "Test" -MessageData "INFO: Analyzing file $FullName"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Analyzing file $FullName"
 
 		[uri[]] $FileLinks = @()
 
@@ -499,7 +499,7 @@ function Test-MarkdownLinks
 		$HeaderStack.Pop | Out-Null
 	}
 
-	Write-Information -Tags "Test" -MessageData "**** LINK TEST STATUS REPORT ****"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "**** LINK TEST STATUS REPORT ****"
 
 	if ($StatusReport.Count)
 	{
@@ -515,7 +515,7 @@ function Test-MarkdownLinks
 
 				if ($File.Success)
 				{
-					Write-Information -Tags "Test" -MessageData "INFO: $($File.Value) -> $($Status.URL)"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($File.Value) -> $($Status.URL)"
 				}
 				else
 				{
@@ -538,6 +538,6 @@ function Test-MarkdownLinks
 		}
 	}
 
-	Write-Information -Tags "Test" -MessageData "INFO: $TotalLinksTested links were tested in total"
-	Write-Information -Tags "Test" -MessageData "INFO: $TotalDiscarded links were discarded from test"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $TotalLinksTested links were tested in total"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $TotalDiscarded links were discarded from test"
 }

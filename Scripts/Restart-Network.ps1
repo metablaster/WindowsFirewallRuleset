@@ -219,7 +219,7 @@ function Select-AdapterAlias
 
 			if ($VirtualAdapter)
 			{
-				Write-Information -Tags "User" -MessageData "INFO: Setting up virtual switch"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting up virtual switch"
 
 				$ExternalSwitch = @()
 				foreach ($Item in $TargetAdapter.InterfaceAlias)
@@ -318,7 +318,7 @@ function Select-AdapterAlias
 			$AdapterAlias += $ifAlias
 		}
 
-		Write-Information -Tags "User" -MessageData "INFO: '$ifAlias' adapter status is '$ifStatus'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: '$ifAlias' adapter status is '$ifStatus'"
 	}
 
 	Write-Output $AdapterAlias
@@ -397,7 +397,7 @@ function Wait-Adapter
 
 if ($AdapterAlias)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Attempt to bring up disabled adapters"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Attempt to bring up disabled adapters"
 
 	Enable-NetAdapter -InterfaceAlias $AdapterAlias
 	Wait-Adapter Enabled -InterfaceAlias $AdapterAlias
@@ -427,7 +427,7 @@ else
 
 	if ($KeepIP -or $KeepDNS)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Saving IP configuration"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Saving IP configuration"
 
 		# NOTE: IPv4DefaultGateway not used, Get-NetRoute is simpler
 		# TypeName: Selected.NetIPConfiguration
@@ -447,7 +447,7 @@ else
 
 	if ($Reset)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Reseting adapter properties"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Reseting adapter properties"
 
 		# Reset the advanced properties of a network adapter to their factory default values
 		Start-Job -Name "AdvancedProperties" -ArgumentList $AdapterAlias -ScriptBlock {
@@ -507,12 +507,12 @@ else
 	# NOTE: To set specific power saving options use Set-NetAdapterPowerManagement
 	if ($Performance)
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Setting adapters for maximum performance"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Setting adapters for maximum performance"
 		Disable-NetAdapterPowerManagement -Name $AdapterAlias -NoRestart
 	}
 	else
 	{
-		Write-Information -Tags "User" -MessageData "INFO: Setting adapters for maximum power saving"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Setting adapters for maximum power saving"
 		Enable-NetAdapterPowerManagement -Name $AdapterAlias -NoRestart
 	}
 
@@ -567,16 +567,16 @@ else
 	Receive-Job -Name "InterfaceIPv4" -Wait -AutoRemoveJob
 
 	# Restart adapters for changes to take effect
-	Write-Information -Tags "User" -MessageData "INFO: Disabling network adapters"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Disabling network adapters"
 
 	# NOTE: Need to wait until registry is updated for IP removal
 	Disable-NetAdapter -InterfaceAlias $AdapterAlias -Confirm:$false
 	Wait-Adapter Disabled -InterfaceAlias $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
-	Write-Information -Tags "User" -MessageData "INFO: Network stop time is $NetworkTime"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Network stop time is $NetworkTime"
 
-	Write-Information -Tags "User" -MessageData "INFO: Waiting 10 seconds to silence network"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Waiting 10 seconds to silence network"
 	Start-Sleep -Seconds 10
 
 	# Clears the contents of the DNS client cache
@@ -589,7 +589,7 @@ else
 	# Make changes done to GPO firewall effective
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
-	Write-Information -Tags "User" -MessageData "INFO: Enabling network adapters"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Enabling network adapters"
 
 	# NOTE: Need to wait for firewall service to set up file system permissions for logs in final step
 	# Setting IP and DNS also requires enabled adapter
@@ -597,12 +597,12 @@ else
 	Wait-Adapter Operational -InterfaceAlias $AdapterAlias
 
 	$NetworkTime = Get-Date -DisplayHint Time | Select-Object -ExpandProperty DateTime
-	Write-Information -Tags "User" -MessageData "INFO: Network start time is $NetworkTime"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Network start time is $NetworkTime"
 
 	if ($KeepIP)
 	{
 		# Restore previous IP configuration
-		Write-Information -Tags "User" -MessageData "INFO: Restoring old IP configuration"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Restoring old IP configuration"
 
 		# -Physical
 		foreach ($Adapter in (Get-NetAdapter -InterfaceAlias $AdapterAlias))
@@ -648,7 +648,7 @@ else
 	if ($KeepIP -or $KeepDNS)
 	{
 		# Restore previous DNS servers
-		Write-Information -Tags "User" -MessageData "INFO: Restoring old DNS server addresses"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Restoring old DNS server addresses"
 
 		# -Physical
 		foreach ($Adapter in (Get-NetAdapter -InterfaceAlias $AdapterAlias))

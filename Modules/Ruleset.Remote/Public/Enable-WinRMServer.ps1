@@ -153,7 +153,7 @@ function Enable-WinRMServer
 	7. Changes the security descriptor of all session configurations to allow remote access.
 	Restarts the WinRM service to make the preceding changes effective.
 	#>
-	Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
 	Unblock-NetProfile -Force:$Force
 	Initialize-WinRM -Force:$Force
@@ -279,7 +279,7 @@ function Enable-WinRMServer
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
 	if ($WmiPlugin.Value -ne $true)
 	{
-		Write-Information -Tags "Project" -MessageData "INFO: Enabling WMI Provider plugin"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WMI Provider plugin"
 		Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
 	}
 
@@ -344,5 +344,5 @@ function Enable-WinRMServer
 			-Message "LocalAccountTokenFilterPolicy was not enabled"
 	}
 
-	Write-Information -Tags "Project" -MessageData "INFO: WinRM server configuration was successful"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM server configuration was successful"
 }

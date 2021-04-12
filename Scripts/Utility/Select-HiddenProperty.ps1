@@ -91,6 +91,7 @@ param (
 	[string] $PolicyStore = [System.Environment]::MachineName
 )
 
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 $PredefinedRules = Get-NetFirewallRule -PolicyStore $PolicyStore -DisplayGroup $DisplayGroup -Direction $Direction
 $RuleCount = ($PredefinedRules | Measure-Object).Count
 
@@ -100,7 +101,7 @@ $PredefinedHidden = $PredefinedRules | Select-Object -Property DisplayName, Stat
 
 for ($Index = 0; $Index -lt $RuleCount; ++$Index)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'" -INFA "Continue"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Assembling rule output for '$($PredefinedHidden[$Index].DisplayName)'" -INFA "Continue"
 
 	# NOTE: We can't apply filter on all rules at once, because the result won't be sorted the same way
 	$Program = (Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $PredefinedRules[$Index]).Program

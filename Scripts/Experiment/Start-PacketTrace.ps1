@@ -184,11 +184,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 if (!(Test-Path -Path $LogsFolder\Audit -PathType Container))
 {
-	Write-Information -Tags "User" -MessageData "INFO: Creating output folder"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Creating output folder"
 	New-Item -Path $LogsFolder\Audit -ItemType Container | Out-Null
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Creating new session '$Name'"
+Write-Information -Tags $ThisScript -MessageData "INFO: Creating new session '$Name'"
 
 # File size in megabytes, buffer (memory) size in kilobytes
 New-NetEventSession -Name $Name -CaptureMode SaveToFile -LocalFilePath $LogsFolder\Audit\$Name.etl `
@@ -198,7 +198,7 @@ New-NetEventSession -Name $Name -CaptureMode SaveToFile -LocalFilePath $LogsFold
 
 if ($null -ne $LayerSet)
 {
-	Write-Information -Tags "User" -MessageData "INFO: Adding WFP capture provider"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Adding WFP capture provider"
 
 	if ($LayerSet -eq "All")
 	{
@@ -233,7 +233,7 @@ if ($null -ne $LayerSet)
 }
 else
 {
-	Write-Information -Tags "User" -MessageData "INFO: Adding packet capture provider"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Adding packet capture provider"
 
 	Add-NetEventProvider -Name "Microsoft-Windows-TCPIP" @Params
 
@@ -248,7 +248,7 @@ else
 	Add-NetEventPacketCaptureProvider -IpProtocols $Protocol -TruncationLength 128 @Params
 }
 
-Write-Information -Tags "User" -MessageData "INFO: Starting session '$Name'"
+Write-Information -Tags $ThisScript -MessageData "INFO: Starting session '$Name'"
 
 Start-NetEventSession -Name $Name
 

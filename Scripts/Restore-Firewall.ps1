@@ -105,7 +105,7 @@ else
 	$StopWatch.Stop()
 
 	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	Write-Information -Tags "User" -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes"
 }
 
 $StopWatch.Reset()
@@ -124,7 +124,7 @@ else
 	$StopWatch.Stop()
 
 	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	Write-Information -Tags "User" -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes"
 }
 
 if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name InboundMinutes -EA Ignore))
@@ -144,7 +144,7 @@ if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name Inbo
 		$TotalMinutes += $InboundMinutes
 	}
 
-	Write-Information -Tags "User" -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
 }
 
 Update-Log

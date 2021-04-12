@@ -104,6 +104,8 @@ param (
 	[switch] $Force
 )
 
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+
 [bool] $YesToAll = $false
 [bool] $NoToAll = $false
 
@@ -114,7 +116,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 	if ([string]::IsNullOrEmpty($Git))
 	{
 		Write-Error -Category ObjectNotFound -Message "The command git.exe was not found"
-		Write-Information -Tags "dev" -MessageData "Please verify git is installed and specified in PATH environment variable"
+		Write-Information -Tags $ThisScript -MessageData "Please verify git is installed and specified in PATH environment variable"
 		return
 	}
 
@@ -299,7 +301,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 					if ($Status -like "*no identities*")
 					{
 						Write-Error -Category ObjectNotFound -Message "No keys were found to add to ssh agent"
-						Write-Information -Tags "dev" -MessageData "INFO: Please specify -SshKey parameter and try again"
+						Write-Information -Tags $ThisScript -MessageData "INFO: Please specify -SshKey parameter and try again"
 					}
 				}
 			}

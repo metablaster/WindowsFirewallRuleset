@@ -133,7 +133,7 @@ function Set-WinRMClient
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient
 	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
-	Write-Information -Tags "Project" -MessageData "INFO: Configuring WinRM service"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
 	Initialize-WinRM -EA Stop -Force:$Force
 
@@ -228,5 +228,5 @@ function Set-WinRMClient
 		} | Set-NetFirewallRule -RemoteAddress LocalSubnet
 	}
 
-	Write-Information -Tags "Project" -MessageData "INFO: WinRM client configuration was successful"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM client configuration was successful"
 }

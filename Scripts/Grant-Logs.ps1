@@ -129,7 +129,7 @@ if (!(Test-Path -Path $TargetFolder -PathType Container))
 }
 
 # Change in logs location will require system reboot
-Write-Information -Tags "Project" -MessageData "INFO: Verifying if there is change in log location"
+Write-Information -Tags $ThisScript -MessageData "INFO: Verifying if there is change in log location"
 # TODO: Get-NetFirewallProfile: "An unexpected network error occurred",
 # happens proably if network is down or adapter not configured?
 $OldLogFiles = Get-NetFirewallProfile -PolicyStore $PolicyStore -All |
@@ -146,7 +146,7 @@ $UserControl = [AccessControl.FileSystemRights] "ReadAndExecute, WriteData, Writ
 $FullControl = [AccessControl.FileSystemRights]::FullControl
 
 # Grant "FullControl" to firewall service for logs folder
-Write-Information -Tags "User" -MessageData "INFO: Granting full control to firewall service for log directory"
+Write-Information -Tags $ThisScript -MessageData "INFO: Granting full control to firewall service for log directory"
 
 Set-Permission $TargetFolder -Owner "System" -Force:$Force | Out-Null
 Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected -Force:$Force | Out-Null
@@ -167,7 +167,7 @@ foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain)
 if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
-	Write-Information -Tags "User" -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
 	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl -Force:$Force)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents

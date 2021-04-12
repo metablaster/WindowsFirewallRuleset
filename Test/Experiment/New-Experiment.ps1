@@ -34,7 +34,7 @@ Script experiment
 Use New-Experiment.ps1 to write temporary tests
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+Implement this switch to override default behavior
 
 .EXAMPLE
 PS> .\New-Experiment.ps1
@@ -97,7 +97,6 @@ process
 end
 {
 	Exit-PSSession
-	# Get-CimSession -Name RemoteCim -EA Ignore | Remove-CimSession
 	Get-PSDrive -Name RemoteRegistry -EA Ignore | Remove-PSDrive
 
 	Update-Log

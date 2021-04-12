@@ -62,19 +62,19 @@ function Find-RulePrincipal
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Information -Tags "User" -MessageData "INFO: Getting rules from GPO..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Getting rules from GPO..."
 	$GPORules = Get-NetFirewallProfile -All -PolicyStore $PolicyStore |
 	Get-NetFirewallRule | Where-Object -Property Owner -EQ $null
 
-	Write-Information -Tags "User" -MessageData "INFO: Applying security filter..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Applying security filter..."
 	$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
 	Where-Object -Property LocalUser -EQ Any
 
-	Write-Information -Tags "User" -MessageData "INFO: Applying service filter..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Applying service filter..."
 	$ServiceFilter = $UserFilter | Get-NetFirewallRule |
 	Get-NetFirewallServiceFilter | Where-Object -Property Service -EQ Any
 
-	Write-Information -Tags "User" -MessageData "INFO: Selecting properties..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Selecting properties..."
 	$TargetRules = $ServiceFilter | Get-NetFirewallRule |
 	Select-Object -Property DisplayName, DisplayGroup, Direction
 

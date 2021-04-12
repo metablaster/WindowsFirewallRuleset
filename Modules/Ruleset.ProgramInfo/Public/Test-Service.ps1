@@ -88,7 +88,7 @@ function Test-Service
 		if (!$Services)
 		{
 			Write-Warning -Message "Service '$Name' was not found, rules for '$Name' service won't have any effect"
-			Write-Information -Tags "User" -MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Name' service"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Name' service"
 			return $false
 		}
 
@@ -135,7 +135,7 @@ function Test-Service
 					if ($Signature.Status -ne "Valid")
 					{
 						Write-Warning -Message "Digital signature verification failed for service '$($Service.Name)'"
-						Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 					}
 					else
 					{
@@ -150,7 +150,7 @@ function Test-Service
 				{
 					Write-Error -Category SecurityError -TargetObject $LiteralPath `
 						-Message "Digital signature verification failed for service '$($Service.Name)'"
-					Write-Information -Tags "User" -MessageData "INFO: $($Signature.StatusMessage)"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 				}
 			}
 			elseif ($Signature) # else Get-AuthenticodeSignature should show the error (ex. file not found)

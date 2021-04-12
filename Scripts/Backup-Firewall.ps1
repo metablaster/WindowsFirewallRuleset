@@ -96,7 +96,7 @@ $StopWatch.Stop()
 
 $OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes"
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes"
 
 $StopWatch.Reset()
 $StopWatch.Start()
@@ -106,12 +106,12 @@ $StopWatch.Stop()
 
 $InboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags "User" -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and  $InboundMinutes minutes"
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and  $InboundMinutes minutes"
 
 $TotalMinutes = $OutboundMinutes + $InboundMinutes
 $TotalMinutes += $OutboundHours * 60
 $TotalMinutes += $InboundHours * 60
-Write-Information -Tags "User" -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"
+Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"
 
 Update-Log
 

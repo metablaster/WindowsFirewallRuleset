@@ -100,7 +100,7 @@ function Enter-Test
 			New-Variable -Name UnitTest -Scope Global -Option ReadOnly -Value ((Get-PSCallStack)[1].Command -replace "\.\w{2,3}1$")
 		}
 
-		Write-Information -Tags "Test" -MessageData "INFO: Entering unit test '$UnitTest'"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering unit test '$UnitTest'"
 
 		if (![string]::IsNullOrEmpty($Command))
 		{
