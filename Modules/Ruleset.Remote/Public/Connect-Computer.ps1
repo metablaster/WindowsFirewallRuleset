@@ -43,18 +43,36 @@ CimServer, to be used by CIM commandlets to specify cim session to use.
 .PARAMETER Domain
 Computer name with to which to connect for remoting
 
+.PARAMETER Protocol
+Specify protocol to use for test, HTTP, HTTPS or both.
+The default value is "Any" which means HTTPS is used for connection to remote computer
+and HTTP for local machine.
+
+.PARAMETER Port
+Optionally specify port number if the WinRM server specified by
+-Domain parameter listens on non default port
+
+.PARAMETER CertThumbprint
+Optionally specify certificate thumbprint which is to be used for SSL.
+Use this parameter when there are multiple certificates with same DNS entries.
+
 .PARAMETER SessionOption
 Specify custom PSSessionOption object to use for remoting.
-By default this is PSSessionOption preference variable
+The default value is controlled with PSSessionOption preference variable
 
 .PARAMETER ConfigurationName
 Specify session configuration to use for remoting, this session configuration must
 be registered and enabled on remote computer.
-By default this is PSSessionConfigurationName preference variable
+The default value is controlled with PSSessionConfigurationName preference variable
+
+.PARAMETER ApplicationName
+Specify application name use for remote connection,
+Currently only "wsman" is supported.
+The default value is controlled with PSSessionApplicationName preference variable
 
 .PARAMETER CimOptions
 Specify custom CIM session object to fine tune CIM sessions.
-By default new blank CIM options object is made and set to use SSL
+By default new blank CIM options object is made and set to use SSL if protocol is HTTPS
 
 .EXAMPLE
 PS> Connect-Computer COMPUTERNAME
@@ -66,7 +84,8 @@ None. You cannot pipe objects to Connect-Computer
 None. Connect-Computer does not generate any output
 
 .NOTES
-None.
+TODO: When localhost is specified it should be treated as localhost which means localhost
+requirements must be met.
 #>
 function Connect-Computer
 {
@@ -79,6 +98,17 @@ function Connect-Computer
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
+		[ValidateSet("HTTP", "HTTPS", "Any")]
+		[string] $Protocol = "Any",
+
+		[Parameter()]
+		[ValidateRange(1, 65535)]
+		[int32] $Port,
+
+		[Parameter(ParameterSetName = "ThumbPrint")]
+		[string] $CertThumbprint,
+
+		[Parameter()]
 		[System.Management.Automation.Remoting.PSSessionOption]
 		$SessionOption = $PSSessionOption,
 
@@ -86,39 +116,99 @@ function Connect-Computer
 		[string] $ConfigurationName = $PSSessionConfigurationName,
 
 		[Parameter()]
+		[string] $ApplicationName = $PSSessionApplicationName,
+
+		[Parameter()]
 		[Microsoft.Management.Infrastructure.Options.CimSessionOptions]
-		$CimOptions = (New-CimSessionOption -UseSsl)
+		$CimOptions
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# WinRM service must be running at this point
+	$WinRM = Get-Service -Name WinRM
+
+	if ($WinRM.Status -ne "Running")
+	{
+		Write-Information -Tags $SettingsScript -MessageData "INFO: Starting WS-Management service"
+
+		# NOTE: Unable to start if it's disabled
+		if ($WinRM.StartType -eq "Disabled")
+		{
+			Set-Service -InputObject $WinRM -StartupType Automatic
+		}
+
+		$WinRM.Start()
+		$WinRM.WaitForStatus("Running", $ServiceTimeout)
+	}
+
 	$WSManParams = @{
-		UseSSL = $Domain -ne ([System.Environment]::MachineName)
+		Port = $Port
 		Authentication = "Default"
-		# ApplicationName = $PSSessionApplicationName
+		ApplicationName = $ApplicationName
+		SessionOption = $SessionOption
+	}
+
+	if ($CertThumbprint)
+	{
+		$WSManParams["CertificateThumbprint"] = $CertThumbprint
+	}
+
+	if ($Protocol -eq "Any")
+	{
+		$WSManParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
+	}
+	else
+	{
+		$WSManParams["UseSSL"] = $Protocol -eq "HTTPS"
+	}
+
+	if ($WSManParams["UseSSL"])
+	{
+		if (!$Port)
+		{
+			$WSManParams["Port"] = 5986
+		}
+
+		if (!$CimOptions)
+		{
+			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+		}
+	}
+	else
+	{
+		if (!$Port)
+		{
+			$WSManParams["Port"] = 5985
+		}
+
+		if (!$CimOptions)
+		{
+			$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+		}
 	}
 
 	$CimParams = @{
 		Name = "RemoteCim"
+		Authentication = "Default"
+		Port = $WSManParams["Port"]
 		SessionOption = $CimOptions
-		# Authentication = "Default"
-		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
+		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	}
 
-	if ($Domain -eq ([System.Environment]::MachineName))# -or ($Domain -eq "localhost"))
+	if ($CertThumbprint)
 	{
-		# NOTE: If localhost does not accept HTTP (ex. HTTPS configured WinRM server), then change this to true
-		$CimOptions.UseSsl = $false
-		$CimParams["SessionOption"] = $CimOptions
-		# $Domain = $Domain #"localhost"
+		$CimParams["CertificateThumbprint"] = $CertThumbprint
 	}
-	else # Remote computer
+
+	# Remote computer or localhost over SSL
+	if (($Domain -ne ([System.Environment]::MachineName)) -or ($WSManParams["UseSSL"]))
 	{
 		if (!(Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore))
 		{
 			# TODO: -Credential param, specify SERVER\UserName
-			New-Variable -Name RemoteCredential -Scope Global -Option Constant (
-				Get-Credential -Message "Administrative credentials are required to access '$Domain'")
+			New-Variable -Name RemoteCredential -Scope Global -Option ReadOnly (
+				Get-Credential -Message "Credentials are required to access '$Domain'")
 
 			if (!$RemoteCredential)
 			{
@@ -129,7 +219,7 @@ function Connect-Computer
 			{
 				# HACK: Will ask for password but won't be recorded
 				Write-Error -Category InvalidData -Message "User '$($RemoteCredential.UserName)' must have a password"
-				Remove-Variable -Name Credential -Scope Global -Force
+				Remove-Variable -Name RemoteCredential -Scope Global -Force
 			}
 		}
 
@@ -142,21 +232,10 @@ function Connect-Computer
 
 	try
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking Windows remote management service on computer '$Domain'"
-		Test-WSMan @WSManParams | Out-Null
-	}
-	catch
-	{
-		Write-Error -Category ConnectionError -TargetObject $Domain `
-			-Message "Remote management test to computer '$Domain' failed with: $($_.Exception.Message)"
-	}
-
-	try
-	{
 		# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
 		if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating a new CIM session to $Domain"
 
 			# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
@@ -166,11 +245,12 @@ function Connect-Computer
 	}
 	catch
 	{
+		Remove-Variable -Name RemoteCredential -Scope Global -Force
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
 	}
 
-	if ($Domain -ne ([System.Environment]::MachineName))#"localhost")
+	if ($Domain -ne ([System.Environment]::MachineName))
 	{
 		try
 		{
@@ -186,6 +266,7 @@ function Connect-Computer
 		}
 		catch
 		{
+			Remove-Variable -Name RemoteCredential -Scope Global -Force
 			Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
 				-Message "Authenticating $($RemoteCredential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
 		}
@@ -194,10 +275,13 @@ function Connect-Computer
 		{
 			# TODO: For VM without external switch use -VMName
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
-			Enter-PSSession @WSManParams # -UseSSL -ComputerName $Domain -Credential $RemoteCredential -ConfigurationName $PSSessionConfigurationName
+			Enter-PSSession @WSManParams
 		}
 		catch
 		{
+			Remove-PSDrive -Name RemoteRegistry -Scope Global
+			Remove-Variable -Name RemoteCredential -Scope Global -Force
+
 			Write-Error -Category ConnectionError -TargetObject $Domain `
 				-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"
 		}

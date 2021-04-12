@@ -36,8 +36,14 @@ param ()
 # Import all modules into current session, useful to quickly load module functions into session
 #
 
-Get-ChildItem -Name -Path "$ProjectRoot\Modules" -Directory | ForEach-Object {
-	Import-Module -Name $_ -Scope Global -Force
+if ($PSVersionTable.PSEdition -eq "Desktop")
+{
+	$Modules = Get-ChildItem -Name Ruleset.* -Path "$ProjectRoot\Modules" -Directory -Exclude Ruleset.Compatibility
+}
+else
+{
+	$Modules = Get-ChildItem -Name Ruleset.* -Path "$ProjectRoot\Modules" -Directory
 }
 
+Import-Module -Name $Modules -Scope Global -Force
 Update-Log

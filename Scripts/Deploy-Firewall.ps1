@@ -73,15 +73,15 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 [OutputType([void])]
 param (
-	[Parameter()]
-	[switch] $Force,
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain,
 
 	[Parameter()]
-	[Alias("ComputerName", "CN")]
-	[string] $Domain
+	[switch] $Force
 )
 
 #region Initialization

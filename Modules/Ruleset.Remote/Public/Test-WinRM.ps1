@@ -43,6 +43,24 @@ If not specified, local machine is the default
 Specify protocol to use for test, HTTP, HTTPS or both.
 By default only HTTPS is tested.
 
+.PARAMETER Port
+Optionally specify port number if the WinRM server specified by
+-Domain parameter listens on non default port
+
+.PARAMETER CertThumbprint
+Optionally specify certificate thumbprint which is to be used for SSL.
+Use this parameter when there are multiple certificates with same DNS entries.
+
+.PARAMETER UICulture
+Specifies the user interface culture to use for the CIM session,
+in Windows this setting is known as "Windows display language"
+The default value is en-US, current value can be obtained with Get-UICulture
+
+.PARAMETER Culture
+Controls the formats used to represent numbers, currency values, and date/time values,
+in Windows this setting is known as "Region and regional format"
+The default value is en-US, current value can be obtained with Get-Culture
+
 .EXAMPLE
 PS> Test-WinRM HTTP
 
@@ -75,92 +93,153 @@ function Test-WinRM
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "HTTPS"
+		[string] $Protocol = "HTTPS",
+
+		[Parameter()]
+		[ValidateRange(1, 65535)]
+		[int32] $Port,
+
+		[Parameter(ParameterSetName = "ThumbPrint")]
+		[string] $CertThumbprint,
+
+		[Parameter()]
+		[System.Globalization.CultureInfo] $UICulture =
+		[System.Globalization.CultureInfo]::new("en-US", $false),
+
+		[Parameter()]
+		[System.Globalization.CultureInfo] $Culture =
+		[System.Globalization.CultureInfo]::new("en-US", $false)
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
-	$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
-		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 
 	if ($PSSessionConfigurationName -ne "RemoteFirewall")
 	{
 		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
 	}
 
-	################################################
+	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+	$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
+	$PSSessionOption = New-PSSessionOption -UICulture $UICulture -Culture $Culture `
+		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 
 	$WSManParams = @{
+		Port = $Port
+		UseSsl = $true
 		Authentication = "Default"
-		ApplicationName = $PSSessionApplicationName # "wsman"
+		ApplicationName = "wsman"
+		# NOTE: Only valid for Enter-PSSession
+		# SessionOption = $PSSessionOption
+	}
+
+	$CimParams = @{
+		Name = "TestCim"
+		Authentication = "Default"
+		Port = $WSManParams["Port"]
+		SessionOption = $CimOptions
+		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
+		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+		# verification is accomplished using a standard WS-Identity operation.
 	}
 
 	if ($Protocol -ne "HTTP")
 	{
-		if (($Domain -ne ([System.Environment]::MachineName) -or ($Domain -ne "localhost")))
+		if ($CertThumbprint)
 		{
-			# NOTE: If using SSL on localhost, it would go trough network stack for which we need authentication
-			# Otherwise the error is: "The server certificate on the destination computer (localhost) has the
-			# following errors: Encountered an internal error in the SSL library.
-			$RemoteCredential = Get-Credential -Message "Credentials are required to access host '$Domain'"
-			$WSManParams["ComputerName"] = $Domain
-			$WSManParams["Credential"] = $RemoteCredential
+			$WSManParams["CertificateThumbprint"] = $CertThumbprint
+			$CimParams["CertificateThumbprint"] = $CertThumbprint
 		}
 
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
-		$WSManParams["Port"] = 5986
+		if (!$Port)
+		{
+			$WSManParams["Port"] = 5986
+			$CimParams["Port"] = $WSManParams["Port"]
+		}
 
-		# TODO: -CertificateThumbprint $Cert.Thumbprint -ApplicationName -Port
-		Test-WSMan -UseSSL @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
+		# authentication otherwise the error is:
+		# "The server certificate on the destination computer (localhost) has the following errors:
+		# Encountered an internal error in the SSL library"
+		$RemoteCredential = Get-Credential -Message "Credentials are required to access '$Domain'"
+
+		$WSManParams["ComputerName"] = $Domain
+		$WSManParams["Credential"] = $RemoteCredential
+
+		$CimParams["ComputerName"] = $Domain
+		$CimParams["Credential"] = $RemoteCredential
+
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
+		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
+		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
+		{
+			Remove-CimSession -Name $CimParams["Name"]
+		}
+
+		$CimServer = New-CimSession @CimParams
+
+		if ($CimServer)
+		{
+			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
+			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTPS on '$Domain'"
+			Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
+			Select-Object CSName, Caption | Format-Table
+
+			Remove-CimSession -Name $CimParams["Name"]
+		}
 	}
+
+	$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
 
 	if ($Protocol -ne "HTTPS")
 	{
+		$WSManParams["UseSsl"] = $false
+		$CimParams["SessionOption"] = $CimOptions
+
+		if ($CertThumbprint)
+		{
+			$WSManParams.Remove("CertificateThumbprint")
+			$CimParams.Remove("CertificateThumbprint")
+		}
+
+		if (!$Port)
+		{
+			$WSManParams["Port"] = 5985
+			$CimParams["Port"] = $WSManParams["Port"]
+		}
+
+		if (($Domain -eq ([System.Environment]::MachineName)) -or ($Domain -eq "localhost"))
+		{
+			# Test to local machine with implicit credentials
+			$WSManParams.Remove("ComputerName")
+			$WSManParams.Remove("Credential")
+
+			$CimParams.Remove("ComputerName")
+			$CimParams.Remove("Credential")
+		}
+
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
-		$WSManParams["Port"] = 5985
-
 		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
+		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
+		{
+			Remove-CimSession -Name $CimParams["Name"]
+		}
+
+		$CimServer = New-CimSession @CimParams
+
+		if ($CimServer)
+		{
+			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
+			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTP on '$Domain'"
+			Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
+			Select-Object CSName, Caption | Format-Table
+
+			Remove-CimSession -Name $CimParams["Name"]
+		}
 	}
-
-	##################################################
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
-	$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
-
-	$CimParams = @{
-		Name = "RemoteCim"
-		Authentication = "Default"
-		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
-	}
-
-	if (Get-Variable -Name RemoteCredential -EA Ignore)
-	{
-		$CimParams["ComputerName"] = $Domain
-		$CimParams["Credential"] = $RemoteCredential
-	}
-
-	$CimOptions.UseSsl = $Protocol -ne "HTTP"
-	$CimParams["SessionOption"] = $CimOptions
-
-	if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
-	{
-		Remove-CimSession -Name RemoteCim
-	}
-
-	# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
-	# verification is accomplished using a standard WS-Identity operation.
-	# NOTE: Specifying computer name may fail if WinRM listens on loopback only
-	$CimServer = New-CimSession @CimParams
-
-	# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
-	# Works on local Windows Management Instrumentation (WMI) using a Component Object Model (COM) session
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server on localhost"
-	Get-CimInstance -Class Win32_OperatingSystem |
-	Select-Object CSName, Caption | Format-Table
-
-	# Works against the CIM server specified by either the ComputerName or the CimSession parameter
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server on '$Domain'"
-	Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
-	Select-Object CSName, Caption | Format-Table
 }

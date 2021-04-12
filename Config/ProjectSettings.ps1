@@ -355,6 +355,16 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 }
+
+if ($Develop -and !$InModule)
+{
+	# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
+	# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
+	Get-Module -Name Ruleset.* | ForEach-Object {
+		Write-Debug -Message "[$SettingsScript] Removing module $_"
+		Remove-Module -Name $_ -ErrorAction Stop
+	}
+}
 #endregion
 
 #region Remote session initialization
@@ -374,16 +384,16 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
 		if ([string]::IsNullOrEmpty($TargetHost)) # -or ($TargetHost -eq "localhost"))
 		{
-			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value ([System.Environment]::MachineName)
+			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value ([System.Environment]::MachineName)
 		}
 		else
 		{
-			New-Variable -Name PolicyStore -Scope Global -Option Constant -Value $TargetHost
+			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value $TargetHost
 		}
 
 		# Valid policy stores
 		# TODO: Move CimOptions and LocalStores to WinRM scripts when part of module
-		New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
+		Set-Variable -Name LocalStores -Scope Global -Option ReadOnly -Force -Value @(
 			([System.Environment]::MachineName)
 			"PersistentStore"
 			"ActiveStore"
@@ -393,58 +403,50 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			"ConfigurableServiceStore"
 		)
 
-		# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-		# There is global variable that controls encoding, see if it can be used here
-		New-Variable -Name CimOptions -Scope Global -Option ReadOnly -Force -Value (
-			New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US)
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
-		# TODO: This does not belong here
-		# WinRM service must be running at this point
-		$WinRM = Get-Service -Name WinRM
-
-		if ($WinRM.Status -ne "Running")
-		{
-			Write-Information -Tags $SettingsScript -MessageData "INFO: Starting WS-Management service"
-
-			# NOTE: Unable to start if it's disabled
-			if ($WinRM.StartType -eq "Disabled")
-			{
-				Set-Service -InputObject $WinRM -StartupType Automatic
-			}
-
-			$WinRM.Start()
-			# TODO: Default wait time
-			$WinRM.WaitForStatus("Running", "00:00:30")
+		$ConnectParams = @{
+			SessionOption = $PSSessionOption
+			ErrorAction = "Stop"
+			Domain = $PolicyStore
+			Protocol = "HTTPS"
+			ApplicationName = $PSSessionApplicationName
 		}
-
-		Remove-Variable -Name WinRM
 
 		if ($PolicyStore -notin $LocalStores)
 		{
 			$PSSessionConfigurationName = "RemoteFirewall"
+
+			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
+			# There is global variable that controls encoding, see if it can be used here
+			$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 		}
 		elseif ($PolicyStore -ne ([System.Environment]::MachineName))
 		{
 			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
+		else
+		{
+			$ConnectParams["Protocol"] = "HTTP"
+			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+		}
 
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
-		Connect-Computer -ConfigurationName $PSSessionConfigurationName -Domain $PolicyStore `
-			-SessionOption $PSSessionOption -CimOptions $CimOptions -ErrorAction Stop
+		$ConnectParams["ConfigurationName"] = $PSSessionConfigurationName
+
+		try
+		{
+			Connect-Computer @ConnectParams
+			Remove-Variable -Name ConnectParams
+		}
+		catch
+		{
+			Remove-Variable -Name PolicyStore -Scope Global -Force
+			Write-Error -ErrorRecord $_ -ErrorAction Stop
+		}
 	}
 }
 #endregion
-
-if ($Develop -and !$InModule)
-{
-	# Remove loaded modules, useful for module debugging and to avoid restarting powershell every time.
-	# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
-	Get-Module -Name Ruleset.* | ForEach-Object {
-		Write-Debug -Message "[$SettingsScript] Removing module $_"
-		Remove-Module -Name $_ -ErrorAction Stop
-	}
-}
 
 #region Removable variables, these can be modified as follows:
 # 1. By project code at any time
