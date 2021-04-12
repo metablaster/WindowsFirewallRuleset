@@ -479,13 +479,9 @@ which is where you'll find description on how to use export\import module functi
 
 ## Remote deployment
 
-This section is under construction
+This section and functionality is under construction
 
-![Under construction](Screenshots/UnderConstructionAlpha.gif)
-
-![Under construction](Screenshots/UnderConstructionWhite.gif)
-
-![Under construction](Screenshots/UnderConstructionBlack.gif)
+![Under construction](Readme/Screenshots/UnderConstruction.gif)
 
 ## Checking for updates
 
