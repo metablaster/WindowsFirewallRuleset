@@ -91,8 +91,9 @@ function Get-OneDrive
 			return
 		}
 
-		# Check if target user is logged in (has it's reg hive loaded)
+		# Check if target user is logged in (user reg hive is loaded)
 		[bool] $ReleaseHive = $false
+
 		if ([array]::Find($RemoteKey.GetSubKeyNames(), [System.Predicate[string]] { $UserSID -eq $args[0] }))
 		{
 			$HKU = "$UserSID\Software\Microsoft\OneDrive"
@@ -130,6 +131,7 @@ function Get-OneDrive
 		{
 			$LocalRights = [System.Security.AccessControl.RegistryRights]::QueryValues
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
+			# TODO: Will not throw if $HKU path does not exist
 			$OneDriveKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $LocalRights)
 		}
 		catch

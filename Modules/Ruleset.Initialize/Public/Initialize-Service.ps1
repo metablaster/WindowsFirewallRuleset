@@ -96,7 +96,7 @@ function Initialize-Service
 
 			if (!$Service)
 			{
-				Write-Warning -Message "Service '$Service' not found, ignored"
+				Write-Warning -Message "Service '$InputService' not found, starting this service was ignored"
 				continue
 			}
 
@@ -123,7 +123,22 @@ function Initialize-Service
 					}
 					"WinRM"
 					{
-						"Required for non 'Core' module compatibility and remote firewall administration"
+						"Required for non 'Core' module compatibility, local and remote firewall administration"
+						break
+					}
+					"RemoteRegistry"
+					{
+						"Required to drill registry on remote computers"
+						break
+					}
+					"ssh-agent"
+					{
+						"Required if remote VSCode debugging trough SSH is desired"
+						break
+					}
+					"sshd"
+					{
+						"Required if setting VSCode server for remote debugging trough SSH"
 						break
 					}
 					default
@@ -217,14 +232,14 @@ function Initialize-Service
 					if ($Status -ne "Running")
 					{
 						$StatusGood = $false
-						Write-Warning -Message "Start '$($Service.Name)' service failed, please start manually and try again"
+						Write-Warning -Message "Starting '$($Service.Name)' service failed, please start manually and try again"
 					}
 					else
 					{
 						# Write log for service status change
 						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
 						Write-Information -Tags $MyInvocation.InvocationName `
-							-MessageData "INFO: Start '$($Service.Name)' service succeeded"
+							-MessageData "INFO: Starting '$($Service.Name)' service succeeded"
 					}
 				}
 				else

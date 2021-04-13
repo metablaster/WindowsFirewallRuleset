@@ -55,12 +55,13 @@ function Disconnect-Computer
 	[CmdletBinding()]
 	[OutputType([void])]
 	param (
-		[Parameter()]
+		[Parameter(Mandatory = $true)]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disconnecting host '$Domain'"
 
 	if (Get-Variable -Name RemoteCredential -Scope Global -EA Ignore)
 	{

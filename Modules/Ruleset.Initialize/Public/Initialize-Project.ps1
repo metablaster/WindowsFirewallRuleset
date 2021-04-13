@@ -270,7 +270,7 @@ function Initialize-Project
 
 			if ($TargetVSCode -lt $RequireVSCodeVersion)
 			{
-				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion)"
+				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion"
 			}
 			else
 			{

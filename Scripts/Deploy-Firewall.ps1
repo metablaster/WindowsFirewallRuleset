@@ -45,6 +45,10 @@ remote computers.
 In addition to deployment of rules, target GPO firewall is configured, desktop shortcut to
 management console is set and optionally custom firewall log location is set.
 
+.PARAMETER Domain
+Specify computer name onto which to deploy firewall.
+The default value is this machine (localhost)
+
 .PARAMETER Force
 If specified, firewall deployment is automated and no prompt for confirmation is shown to perform
 actions.
@@ -78,7 +82,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 param (
 	[Parameter(Position = 0)]
 	[Alias("ComputerName", "CN")]
-	[string] $Domain,
+	[string] $Domain = [System.Environment]::MachineName,
 
 	[Parameter()]
 	[switch] $Force
@@ -117,7 +121,7 @@ Set-Variable -Name WarningStatus -Scope Global -Value $false
 Set-Variable -Name UpdateGPO -Scope Global -Value $false
 
 # Prompt to set screen buffer to recommended value
-Set-ScreenBuffer 4000
+Set-ScreenBuffer 3000
 
 # Check all rules which apply to windows services
 Build-ServiceList $ProjectRoot\Rules -Log | Test-Service | Out-Null

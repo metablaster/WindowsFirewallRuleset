@@ -127,6 +127,7 @@ function Connect-Computer
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# WinRM service must be running at this point
+	# TODO: does not belong here, move to requirements secion
 	$WinRM = Get-Service -Name WinRM
 
 	if ($WinRM.Status -ne "Running")
@@ -237,7 +238,7 @@ function Connect-Computer
 		# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
 		if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating a new CIM session to $Domain"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new CIM session to $Domain"
 
 			# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 			# verification is accomplished using a standard WS-Identity operation.
@@ -247,7 +248,7 @@ function Connect-Computer
 	}
 	catch
 	{
-		Remove-Variable -Name RemoteCredential -Scope Global -Force
+		Remove-Variable -Name RemoteCredential -Scope Global -Force -ErrorAction Ignore
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
 	}

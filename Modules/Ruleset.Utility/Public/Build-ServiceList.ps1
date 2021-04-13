@@ -54,7 +54,7 @@ None. You cannot pipe objects to Build-ServiceList
 [string]
 
 .NOTES
-TODO: -Log parameter should be accompanied -LogName parameter
+TODO: -Log parameter should be accompanied with -LogName parameter
 #>
 function Build-ServiceList
 {
@@ -109,7 +109,9 @@ function Build-ServiceList
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rid of duplicate matches and known bad values"
-	$Services = $Services | Select-Object -Unique | Where-Object { $_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"' } | Sort-Object
+	$Services = $Services | Select-Object -Unique | Where-Object {
+		$_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"'
+	} | Sort-Object
 
 	if (!$Services)
 	{

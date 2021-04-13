@@ -233,11 +233,10 @@ else
 
 	# Specifies the default session configuration that is used for PSSessions created in the current session.
 	# The default value http://schemas.microsoft.com/PowerShell/microsoft.PowerShell indicates
-	# the Microsoft.PowerShell session configuration on the remote computer.
+	# the "Microsoft.PowerShell" session configuration on the remote computer.
 	# If you specify only a configuration name, the following schema URI is prepended:
 	# http://schemas.microsoft.com/PowerShell/
-	# NOTE: Controlled later
-	# $PSSessionConfigurationName = "Microsoft.PowerShell"
+	$PSSessionConfigurationName = "RemoteFirewall"
 
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.
@@ -408,12 +407,16 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
 			Protocol = "HTTPS"
+			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
 		}
 
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+
 		if ($PolicyStore -notin $LocalStores)
 		{
-			$ConnectParams["ConfigurationName"] = "RemoteFirewall"
+			# Configure this machine for remote session over SSL
+			Set-WinRMClient
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
@@ -421,8 +424,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		elseif ($PolicyStore -eq ([System.Environment]::MachineName))
 		{
-			$ConnectParams["ConfigurationName"] = "Microsoft.PowerShell"
+			# Enable loopback only HTTP
+			Disable-WinRMServer
+
 			$ConnectParams["Protocol"] = "HTTP"
+			# TODO: Culture default values project wide
 			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
 		}
 		else
@@ -432,7 +438,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 
 		Set-Variable -Name PSSessionConfigurationName -Scope Global -Value $ConnectParams["ConfigurationName"]
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
 		try
 		{
@@ -518,7 +523,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

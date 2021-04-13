@@ -176,6 +176,7 @@
         "ntdll",
         "NTLM",
         "NTSTATUS",
+        "NTUSER",
         "Nuget",
         "omadmclient",
         "onedrive",
