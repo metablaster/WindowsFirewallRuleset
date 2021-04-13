@@ -71,6 +71,8 @@ $PublicScripts = @(
 	"Connect-Computer"
 	"Deploy-SshKey"
 	"Disable-WinRMServer"
+	"Disconnect-Computer"
+	"Enable-RemoteRegistry"
 	"Enable-WinRMServer"
 	"Register-SslCertificate"
 	"Set-WinRMClient"
