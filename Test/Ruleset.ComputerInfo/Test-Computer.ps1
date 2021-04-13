@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-TargetComputer
+Unit test for Test-Computer
 
 .DESCRIPTION
-Test correctness of Test-TargetComputer function
+Test correctness of Test-Computer function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Test-TargetComputer.ps1
+PS> .\Test-Computer.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-TargetComputer.ps1
+None. You cannot pipe objects to Test-Computer.ps1
 
 .OUTPUTS
-None. Test-TargetComputer.ps1 does not generate any output
+None. Test-Computer.ps1 does not generate any output
 
 .NOTES
 None.
@@ -65,27 +65,27 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Test-TargetComputer"
+Enter-Test "Test-Computer"
 
 if ($PSVersionTable.PSEdition -eq "Core")
 {
 	Start-Test "-Retry 2 -Timeout 1"
-	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
+	Test-Computer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
 }
 else
 {
 	Start-Test "-Retry 2"
-	Test-TargetComputer ([System.Environment]::MachineName) -Retry 2
+	Test-Computer ([System.Environment]::MachineName) -Retry 2
 }
 
 Start-Test "-Retry" -Expected "FAIL"
-Test-TargetComputer "FAILURE-COMPUTER" -Retry 2
+Test-Computer "FAILURE-COMPUTER" -Retry 2
 
 Start-Test "default"
-$Result = Test-TargetComputer ([System.Environment]::MachineName)
+$Result = Test-Computer ([System.Environment]::MachineName)
 $Result
 
-Test-Output $Result -Command Test-TargetComputer
+Test-Output $Result -Command Test-Computer
 
 Update-Log
 Exit-Test

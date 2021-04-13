@@ -82,7 +82,7 @@ $Deny = "Abort operation, no firewall rules or settings will be imported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-# NOTE: import speed is 26 rules per minute, slowed down by "Test-TargetComputer" for store app rules
+# NOTE: import speed is 26 rules per minute, slowed down by "Test-Computer" for store app rules
 # 450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
 # NOTE: to speed up a little add following to defender exclusions:
 # C:\Windows\System32\wbem\WmiPrvSE.exe

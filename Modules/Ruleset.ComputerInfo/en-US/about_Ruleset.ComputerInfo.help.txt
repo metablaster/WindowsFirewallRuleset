@@ -34,7 +34,7 @@ EXAMPLES
 	Test-NetBiosName
 	Validate NETBIOS name syntax
 
-	Test-TargetComputer
+	Test-Computer
 	Test target computer (policy store) to which to deploy firewall
 
 	Test-UNC

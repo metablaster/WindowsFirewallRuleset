@@ -65,7 +65,7 @@ function Get-InstallProperties
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019
 		$HKLM = "SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData"

@@ -214,7 +214,7 @@ function Get-SystemSKU
 			{
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
 
-				if (Test-TargetComputer $Computer)
+				if (Test-Computer $Computer)
 				{
 					try
 					{

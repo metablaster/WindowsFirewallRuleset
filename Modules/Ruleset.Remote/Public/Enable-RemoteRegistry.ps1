@@ -47,7 +47,7 @@ None. You cannot pipe objects to Enable-RemoteRegistry
 None. Enable-RemoteRegistry does not generate any output
 
 .NOTES
-None.
+TODO: Disable remote registry
 #>
 function Enable-RemoteRegistry
 {

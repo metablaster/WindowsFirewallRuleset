@@ -354,6 +354,17 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+
+	# Valid policy stores
+	Set-Variable -Name LocalStores -Scope Global -Option ReadOnly -Force -Value @(
+		([System.Environment]::MachineName)
+		"PersistentStore"
+		"ActiveStore"
+		"RSOP"
+		"SystemDefaults"
+		"StaticServiceStore"
+		"ConfigurableServiceStore"
+	)
 }
 
 if ($Develop -and !$InModule)
@@ -390,18 +401,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value $TargetHost
 		}
-
-		# Valid policy stores
-		# TODO: Move CimOptions and LocalStores to WinRM scripts when part of module
-		Set-Variable -Name LocalStores -Scope Global -Option ReadOnly -Force -Value @(
-			([System.Environment]::MachineName)
-			"PersistentStore"
-			"ActiveStore"
-			"RSOP"
-			"SystemDefaults"
-			"StaticServiceStore"
-			"ConfigurableServiceStore"
-		)
 
 		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
@@ -594,7 +593,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
 
 	# Remote test computer which will perform unit testing
-	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
+	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-DATACENTER"
 }
 #endregion
 

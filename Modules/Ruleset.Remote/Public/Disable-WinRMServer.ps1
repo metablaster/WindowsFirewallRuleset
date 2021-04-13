@@ -62,7 +62,6 @@ WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Remote registry disable
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-WinRMServer.md

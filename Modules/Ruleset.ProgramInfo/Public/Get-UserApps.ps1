@@ -89,7 +89,7 @@ function Get-UserApps
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)

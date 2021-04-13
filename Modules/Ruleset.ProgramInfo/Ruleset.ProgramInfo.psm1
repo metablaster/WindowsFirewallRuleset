@@ -128,6 +128,25 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+# Override "FunctionsToExport" and "VariablesToExport" entries
+if ($Develop)
+{
+	$PublicScripts += @(
+		"Edit-Table"
+		"Initialize-Table"
+		"Show-Table"
+		"Update-Table"
+	)
+
+	Export-ModuleMember -Variable InstallTable
+}
+else
+{
+	Export-ModuleMember -Variable @()
+}
+
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #

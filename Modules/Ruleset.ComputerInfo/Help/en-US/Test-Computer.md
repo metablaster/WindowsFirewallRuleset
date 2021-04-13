@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ComputerInfo-help.xml
 Module Name: Ruleset.ComputerInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-TargetComputer.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-Computer.md
 schema: 2.0.0
 ---
 
-# Test-TargetComputer
+# Test-Computer
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Test target computer (policy store) to which to deploy firewall
 ## SYNTAX
 
 ```powershell
-Test-TargetComputer [-Domain] <String> [-Retry <Int16>] [-Timeout <Int16>] [<CommonParameters>]
+Test-Computer [-Domain] <String> [-Retry <Int16>] [-Timeout <Int16>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,13 +28,13 @@ for both PowerShell editions.
 ### EXAMPLE 1
 
 ```powershell
-Test-TargetComputer "COMPUTERNAME"
+Test-Computer "COMPUTERNAME"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Test-TargetComputer "COMPUTERNAME" -Count 2 -Timeout 1
+Test-Computer "COMPUTERNAME" -Count 2 -Timeout 1
 ```
 
 ## PARAMETERS
@@ -96,7 +96,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-TargetComputer
+### None. You cannot pipe objects to Test-Computer
 
 ## OUTPUTS
 

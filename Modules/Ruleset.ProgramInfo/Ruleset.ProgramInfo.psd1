@@ -115,6 +115,8 @@ SOFTWARE.
 
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
+	# NOTE: When the value of any *ToExport key is an empty array,
+	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"Confirm-Installation"
 		"Format-Path"
@@ -137,12 +139,11 @@ SOFTWARE.
 		"Test-ExecutableFile"
 		"Test-FileSystemPath"
 		"Test-Service"
-		# TODO: Following exports only for unit testing
-		# NOTE: Control import with if ($Develop) { Export-ModuleMember ... }
-		# "Edit-Table"
-		# "Initialize-Table"
-		# "Show-Table"
-		# "Update-Table"
+		# NOTE: Following exports only for unit testing
+		"Edit-Table"
+		"Initialize-Table"
+		"Show-Table"
+		"Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -152,8 +153,8 @@ SOFTWARE.
 	# Variables to export from this module.
 	# Wildcard characters are permitted, by default, all variables ("*") are exported.
 	VariablesToExport = @(
-		# TODO: Following exports only for unit testing
-		# "InstallTable"
+		# NOTE: Following exports only for unit testing
+		"InstallTable"
 	)
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not

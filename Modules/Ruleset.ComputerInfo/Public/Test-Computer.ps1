@@ -68,29 +68,30 @@ Valid only for PowerShell Core.
 The default value is 2 seconds.
 
 .EXAMPLE
-PS> Test-TargetComputer "Server1" -Credential (Get-Credential)
+PS> Test-Computer "Server1" -Credential (Get-Credential)
 
 .EXAMPLE
-PS> Test-TargetComputer "Server2" -Count 2 -Timeout 1 -Protocol Ping
+PS> Test-Computer "Server2" -Count 2 -Timeout 1 -Protocol Ping
 
 .EXAMPLE
-PS> Test-TargetComputer "Server3" -Count 2 -Timeout 1
+PS> Test-Computer "Server3" -Count 2 -Timeout 1
 
 .INPUTS
-None. You cannot pipe objects to Test-TargetComputer
+None. You cannot pipe objects to Test-Computer
 
 .OUTPUTS
 [bool] True if target host is responsive, false otherwise
 
 .NOTES
+NOTE: This function currently does nothing useful except testing if CIM session is still alive.
 TODO: Partially avoiding error messages, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)
 TODO: Test CIM and DCOM
 #>
-function Test-TargetComputer
+function Test-Computer
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "WSMan",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-TargetComputer.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-Computer.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -120,12 +121,23 @@ function Test-TargetComputer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	return $true
-	if (Get-Variable -Name LastConnectionTest -Scope Script)
+	if (Get-CimSession -Name RemoteCim)
 	{
-		# Doing only initial test to confirm working connection
-		if ($LastConnectionTest) { return $LastConnectionTest }
+		$Status = $CimServer.TestConnection()
 	}
+	else
+	{
+		$Status = $false
+	}
+
+	if (!$Status)
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer: $Domain"
+	}
+
+	return $Status
+
+	#######################################################################
 
 	if ($Protocol -eq "WSMan")
 	{

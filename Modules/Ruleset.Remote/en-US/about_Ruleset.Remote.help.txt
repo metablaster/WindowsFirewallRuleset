@@ -20,6 +20,12 @@ EXAMPLES
 	Disable-WinRMServer
 	Disable WinRM server previously enabled by Enable-WinRMServer
 
+	Disconnect-Computer
+	Disconnect remote computer previously connected with Connect-Computer
+
+	Enable-RemoteRegistry
+	Enable remote users to modify registry settings on this computer
+
 	Enable-WinRMServer
 	Configure WinRM server for CIM and PowerShell remoting
 

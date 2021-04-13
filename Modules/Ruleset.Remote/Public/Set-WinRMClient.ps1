@@ -91,7 +91,6 @@ TODO: Authenticate users using certificates optionally or instead of credential 
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Remote registry setup and test
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Set-WinRMClient.md

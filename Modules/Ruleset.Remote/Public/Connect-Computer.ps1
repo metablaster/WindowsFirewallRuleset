@@ -39,6 +39,7 @@ against remote CIM server.
 Following global variables are created:
 RemoteCredential, to be used by commands that require credentials.
 CimServer, to be used by CIM commandlets to specify cim session to use.
+RemoteRegistry, administrative share C$ to remote computer (needed for authentication)
 
 .PARAMETER Domain
 Computer name with to which to connect for remoting
@@ -172,6 +173,7 @@ function Connect-Computer
 
 		if (!$CimOptions)
 		{
+			# TODO: LocalStores needs a better place for adjustment
 			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 		}
 	}
@@ -260,13 +262,17 @@ function Connect-Computer
 
 				# Authentication is required to access remote registry
 				# NOTE: Registry provider does not support credentials
+				# TODO: More limited drive would be better
 				New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
 					-Root \\$Domain\C$ -Description "Remote registry authentication" | Out-Null
 			}
 		}
 		catch
 		{
+			Remove-CimSession -Name RemoteCim
+			Remove-Variable -Name CimServer -Scope Global -Force
 			Remove-Variable -Name RemoteCredential -Scope Global -Force
+
 			Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
 				-Message "Authenticating $($RemoteCredential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
 		}
@@ -279,6 +285,9 @@ function Connect-Computer
 		}
 		catch
 		{
+			Remove-CimSession -Name RemoteCim
+			Remove-Variable -Name CimServer -Scope Global -Force
+
 			Remove-PSDrive -Name RemoteRegistry -Scope Global
 			Remove-Variable -Name RemoteCredential -Scope Global -Force
 

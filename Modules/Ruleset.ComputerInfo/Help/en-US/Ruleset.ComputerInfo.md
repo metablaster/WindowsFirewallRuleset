@@ -46,7 +46,7 @@ Validate DNS domain name syntax
 
 Validate NETBIOS name syntax
 
-### [Test-TargetComputer](Test-TargetComputer.md)
+### [Test-Computer](Test-Computer.md)
 
 Test target computer (policy store) to which to deploy firewall
 

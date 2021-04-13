@@ -81,7 +81,7 @@ function Get-UserGroup
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
 				# Core: -TimeoutSeconds -IPv4
-				if (Test-TargetComputer $Computer)
+				if (Test-Computer $Computer)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 

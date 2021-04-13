@@ -48,7 +48,7 @@ None. You cannot pipe objects to Disconnect-Computer
 None. Disconnect-Computer does not generate any output
 
 .NOTES
-None.
+TODO: If there are multiple connections, remove only specific ones
 #>
 function Disconnect-Computer
 {
@@ -62,9 +62,29 @@ function Disconnect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Remove-Variable -Name RemoteCredential -Scope Global -Force
+	if (Get-Variable -Name RemoteCredential -Scope Global -EA Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'RemoteCredential'"
+		Remove-Variable -Name RemoteCredential -Scope Global -Force
+	}
 
-	# TODO: Release resources as needed before de-authorizing here
-	Remove-PSDrive -Name RemoteRegistry -Scope Global
+	if (Get-CimSession -Name RemoteCim -EA Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing CIM session 'RemoteCim'"
+		Remove-CimSession -Name RemoteCim
+	}
+
+	if (Get-Variable -Name CimServer -Scope Global -EA Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'CimServer'"
+		Remove-Variable -Name CimServer -Scope Global -Force
+	}
+
+	if (Get-PSDrive -Name RemoteRegistry -Scope Global -EA Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSDrive 'RemoteRegistry'"
+		Remove-PSDrive -Name RemoteRegistry -Scope Global
+	}
+
 	Exit-PSSession
 }

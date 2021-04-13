@@ -75,7 +75,7 @@ function Get-OneDrive
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		$UserSID = Get-PrincipalSID $User -Domain $Domain
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users

@@ -91,7 +91,6 @@ TODO: Authenticate users using certificates optionally or instead of credential 
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Remote registry setup
 TODO: Configure server remotely either with WSMan or trough SSH
 TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
 

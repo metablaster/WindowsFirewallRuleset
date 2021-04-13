@@ -72,7 +72,7 @@ function Get-UserSoftware
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		$HKU = Get-PrincipalSID $User -Domain $Domain
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"

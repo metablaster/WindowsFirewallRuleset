@@ -66,7 +66,7 @@ function Get-ExecutablePath
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 		if ([System.Environment]::Is64BitOperatingSystem)

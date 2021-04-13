@@ -195,15 +195,21 @@ function Initialize-Project
 			# 2. For PowerShell Core 7.1+ this service is required for compatibility module
 			# 3. Required for CIM functions
 			"WinRM" # Windows Remote Management (WS-Management)
-			# ssh-agent recommended for:
-			# 1. Remote SSH in VSCode
-			# 2. git over SSH
-			"ssh-agent" # OpenSSH Authentication Agent
-			# sshd recommended to host remote SSH and VSCode server
-			"sshd" # OpenSSH SSH Server
 			# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
 			"RemoteRegistry"
 		)
+
+		if ($Develop)
+		{
+			$RequiredServices += @(
+				# ssh-agent recommended for:
+				# 1. Remote SSH in VSCode
+				# 2. git over SSH
+				"ssh-agent" # OpenSSH Authentication Agent
+				# sshd recommended to host SSH and VSCode server
+				"sshd" # OpenSSH SSH Server
+			)
+		}
 
 		if (!(Initialize-Service $RequiredServices))
 		{

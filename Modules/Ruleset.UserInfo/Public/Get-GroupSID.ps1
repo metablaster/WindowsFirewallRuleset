@@ -89,7 +89,7 @@ function Get-GroupSID
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-				if (Test-TargetComputer $Domain)
+				if (Test-Computer $Domain)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
 

@@ -55,6 +55,8 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Deploy-SshKey` function to upload and set SSH key to server for remote debugging with VSCode
     over SSH
   - `Disable-WinRMServer` function to disable WinRM remoting
+  - `Disconnect-Computer` function to release resources and disconnect remote host
+  - `Enable-RemoteRegistry` function to enable drilling registry remotely
   - `Enable-WinRMServer` function to configure WinRM server for remoting
   - `Register-SslCertificate` function to create, install and export SSL certificate for remoting
   - `Set-WinRMClient` function to configure client for remoting
@@ -63,7 +65,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Modules
 
-  - `Test-TargetComputer` function now does WSMan test by default and ping test optionally
+  - `Test-TargetComputer` renamed to `Test-Computer` now experimental and no longer useful
   - `Resolve-Host` function improved, removed deprecated API, duplicate code etc.
   - Registry drilling functions updated for remote registry
 

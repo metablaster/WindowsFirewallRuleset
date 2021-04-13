@@ -63,7 +63,7 @@ Test-NetBiosName
 Validate NETBIOS name syntax
 
 ```powershell
-Test-TargetComputer
+Test-Computer
 ```
 
 Test target computer (policy store) to which to deploy firewall

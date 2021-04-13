@@ -111,6 +111,8 @@ SOFTWARE.
 
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
+	# NOTE: When the value of any *ToExport key is an empty array,
+	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"ConvertFrom-OSBuild"
 		"Get-InterfaceAlias"
@@ -118,9 +120,9 @@ SOFTWARE.
 		"Get-SystemSKU"
 		"Resolve-Host"
 		"Select-IPInterface"
-		"Test-DnsName"
 		"Test-NetBiosName"
-		"Test-TargetComputer"
+		"Test-DnsName"
+		"Test-Computer"
 		"Test-UNC"
 	)
 
@@ -156,9 +158,9 @@ SOFTWARE.
 		"Help\en-US\Resolve-Host.md"
 		"Help\en-US\Ruleset.ComputerInfo.md"
 		"Help\en-US\Select-IPInterface.md"
+		"Help\en-US\Test-Computer.md"
 		"Help\en-US\Test-DnsName.md"
 		"Help\en-US\Test-NetBiosName.md"
-		"Help\en-US\Test-TargetComputer.md"
 		"Help\en-US\Test-UNC.md"
 		"Help\README.md"
 		"Public\ConvertFrom-OSBuild.ps1"
@@ -168,9 +170,9 @@ SOFTWARE.
 		"Public\README.md"
 		"Public\Resolve-Host.ps1"
 		"Public\Select-IPInterface.ps1"
+		"Public\Test-Computer.ps1"
 		"Public\Test-DnsName.ps1"
 		"Public\Test-NetBiosName.ps1"
-		"Public\Test-TargetComputer.ps1"
 		"Public\Test-UNC.ps1"
 		"Ruleset.ComputerInfo_c68a812d-076d-47bd-a73d-8d4600bd3c51_HelpInfo.xml"
 		"Ruleset.ComputerInfo.Format.ps1xml"

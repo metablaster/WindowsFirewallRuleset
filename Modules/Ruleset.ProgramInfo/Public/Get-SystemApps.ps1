@@ -82,7 +82,7 @@ function Get-SystemApps
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
 
-	if (Test-TargetComputer $Domain)
+	if (Test-Computer $Domain)
 	{
 		# TODO: show warning instead of error when fail (ex. in non elevated run)
 		# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1

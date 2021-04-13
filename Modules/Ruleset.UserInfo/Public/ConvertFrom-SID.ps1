@@ -322,7 +322,7 @@ function ConvertFrom-SID
 							# TODO: could this result is incomplete information if multiple computers match?
 							:computer foreach ($Computer in $Domain)
 							{
-								if (!(Test-TargetComputer $Computer))
+								if (!(Test-Computer $Computer))
 								{
 									continue
 								}
@@ -384,7 +384,7 @@ function ConvertFrom-SID
 							# TODO: could this result is incomplete information if multiple computers match?
 							:computer foreach ($Computer in $Domain)
 							{
-								if (!(Test-TargetComputer $Computer))
+								if (!(Test-Computer $Computer))
 								{
 									continue
 								}

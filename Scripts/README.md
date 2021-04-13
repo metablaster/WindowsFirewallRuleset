@@ -24,17 +24,17 @@ Contains scripts which are not part of modules as follows:
 | Get-NetworkStatistics.ps1   | Display current TCP/IP connections for local or remote system        |
 | Get-ParameterAlias.ps1      | Gets parameter aliases of functions, commandlets, scripts or aliases |
 | Get-PropertyType.ps1        | Get .NET types for properties of one or more objects                 |
-| Initialize-Development.ps1  | Initialize development environment                                   |
 | Restart-Network.ps1         | Restart or reset network without the need for reboot                 |
 | Select-HiddenProperty.ps1   | Get a list of hidden properties for specified firewall rule group    |
 | Update-HelpContent.ps1      | Generate new or update existing help files for all project modules   |
 
 ---
 
-| Experimental scripts  | Description                                                          |
-| --------------------- | -------------------------------------------------------------------- |
-| Start-PacketTrace.ps1 | Start capturing network traffic into an *.etl file for analysis      |
-| Stop-PacketTrace.ps1  | Stop capturing traffic previously started with Start-PacketTrace.ps1 |
+| Experimental scripts        | Description                                                          |
+| --------------------------- | -------------------------------------------------------------------- |
+| Initialize-Development.ps1  | Initialize development environment                                   |
+| Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis      |
+| Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |
 
 ---
 

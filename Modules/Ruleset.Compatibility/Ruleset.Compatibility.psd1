@@ -114,6 +114,8 @@ commands much as if they were native to PowerShell Core.
 
 	# Functions to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no functions to export.
+	# NOTE: When the value of any *ToExport key is an empty array,
+	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"Add-WindowsPSModulePath"
 		"Add-WinFunction"

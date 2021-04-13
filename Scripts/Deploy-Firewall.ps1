@@ -573,4 +573,5 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $PreviousErrorStatus
 Set-Variable -Name WarningStatus -Scope Global -Value $PreviousWarningStatus
 Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 
+Disconnect-Computer $Domain
 Update-Log

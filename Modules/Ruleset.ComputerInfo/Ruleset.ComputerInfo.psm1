@@ -59,7 +59,7 @@ $PublicScripts = @(
 	"Select-IPInterface"
 	"Test-DnsName"
 	"Test-NetBiosName"
-	"Test-TargetComputer"
+	"Test-Computer"
 	"Test-UNC"
 )
 
