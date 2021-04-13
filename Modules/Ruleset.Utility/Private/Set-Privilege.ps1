@@ -202,11 +202,15 @@ function Set-Privilege
 				# Success: STATUS_SUCCESS 0x00000000
 				# Failure: NTSTATUS code
 				$Result = [long][AdjPriv.Privilege]::SetPrivilege($PrivID, !$Disable, $false, [ref] $PreviousValue)
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Previous value for $Name was '$PreviousValue'"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Previous value for $Name was '$PreviousValue'"
 
 				if ($Result -eq 0)
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Privilege $Name successfully $($StatusMessage.ToLower())"
+					Write-Information -Tags $MyInvocation.InvocationName `
+						-MessageData "INFO: Privilege $Name successfully $($StatusMessage.ToLower())"
+
+					# NOTE: it's "True" if ALL privileges were successfully set! (the trick is with "continue")
 					$Status = $Status -and $true
 					continue
 				}

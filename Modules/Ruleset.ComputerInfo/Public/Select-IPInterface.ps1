@@ -71,7 +71,7 @@ None. You cannot pipe objects to Select-IPInterface
 "NetIPConfiguration" [PSCustomObject] or error message if no adapter configured
 
 .NOTES
-None.
+TODO: If no candidates are selected it's not an error
 #>
 function Select-IPInterface
 {

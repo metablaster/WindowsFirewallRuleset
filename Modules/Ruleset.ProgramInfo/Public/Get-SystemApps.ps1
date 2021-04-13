@@ -100,7 +100,8 @@ function Get-SystemApps
 			else
 			{
 				Write-Warning -Message "Store app '$($_.Name)' is not installed by user '$User' or the app is missing"
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
 			}
 		}
 	}

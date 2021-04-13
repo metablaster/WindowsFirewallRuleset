@@ -88,7 +88,8 @@ function Test-Service
 		if (!$Services)
 		{
 			Write-Warning -Message "Service '$Name' was not found, rules for '$Name' service won't have any effect"
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Name' service"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: To fix this problem, update or comment out all firewall rules for '$Name' service"
 			return $false
 		}
 

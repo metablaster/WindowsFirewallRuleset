@@ -236,7 +236,8 @@ else
 	# the Microsoft.PowerShell session configuration on the remote computer.
 	# If you specify only a configuration name, the following schema URI is prepended:
 	# http://schemas.microsoft.com/PowerShell/
-	$PSSessionConfigurationName = "Microsoft.PowerShell"
+	# NOTE: Controlled later
+	# $PSSessionConfigurationName = "Microsoft.PowerShell"
 
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.
@@ -356,7 +357,7 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
 	# Valid policy stores
-	Set-Variable -Name LocalStores -Scope Global -Option ReadOnly -Force -Value @(
+	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
 		([System.Environment]::MachineName)
 		"PersistentStore"
 		"ActiveStore"
@@ -402,8 +403,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value $TargetHost
 		}
 
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
-
 		$ConnectParams = @{
 			SessionOption = $PSSessionOption
 			ErrorAction = "Stop"
@@ -414,24 +413,26 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		if ($PolicyStore -notin $LocalStores)
 		{
-			$PSSessionConfigurationName = "RemoteFirewall"
+			$ConnectParams["ConfigurationName"] = "RemoteFirewall"
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
 			$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 		}
-		elseif ($PolicyStore -ne ([System.Environment]::MachineName))
+		elseif ($PolicyStore -eq ([System.Environment]::MachineName))
+		{
+			$ConnectParams["ConfigurationName"] = "Microsoft.PowerShell"
+			$ConnectParams["Protocol"] = "HTTP"
+			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+		}
+		else
 		{
 			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
-		else
-		{
-			$ConnectParams["Protocol"] = "HTTP"
-			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
-		}
 
-		$ConnectParams["ConfigurationName"] = $PSSessionConfigurationName
+		Set-Variable -Name PSSessionConfigurationName -Scope Global -Value $ConnectParams["ConfigurationName"]
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
 		try
 		{
@@ -440,6 +441,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		catch
 		{
+			# To allow trying again
 			Remove-Variable -Name PolicyStore -Scope Global -Force
 			Write-Error -ErrorRecord $_ -ErrorAction Stop
 		}
@@ -745,7 +747,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 55, 1))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 55, 2))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

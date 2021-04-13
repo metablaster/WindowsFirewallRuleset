@@ -556,8 +556,11 @@ function Search-Installation
 		$Script = (Get-PSCallStack)[2].Command
 
 		# TODO: these loops seem to be skipped, probably missing Test-ExecutableFile, need to check
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
+		Write-Information -Tags $MyInvocation.InvocationName `
+			-MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
+
+		Write-Information -Tags $MyInvocation.InvocationName `
+			-MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 
 		$Accept = "Provide full path to '$Application' installation directory"
 		$Deny = "Skip operation, rules for '$Application' won't be loaded into firewall"

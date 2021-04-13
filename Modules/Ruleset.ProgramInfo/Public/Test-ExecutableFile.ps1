@@ -166,7 +166,8 @@ function Test-ExecutableFile
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for: $ExpandedPath"
 
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 				return $false
 			}
 		}
@@ -175,7 +176,8 @@ function Test-ExecutableFile
 		return $true
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
 
 	return $false
 }

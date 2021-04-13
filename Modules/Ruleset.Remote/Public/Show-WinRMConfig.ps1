@@ -102,7 +102,8 @@ function Show-WinRMConfig
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
 
 	$Present = $false
 	$Enabled = $false
@@ -114,7 +115,8 @@ function Show-WinRMConfig
 		$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
 
 	$Present = $false
 	$Enabled = $false
@@ -126,7 +128,8 @@ function Show-WinRMConfig
 		$Enabled = $null -eq ($Rules.Enabled | Where-Object { $_ -eq "False" })
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
 
 	# To start it, it must not be disabled
 	if ($WinRM.StartType -eq "Disabled")
@@ -148,7 +151,8 @@ function Show-WinRMConfig
 	{
 		# TODO: Custom object and numbered Permission.Split(",")
 		# winrm get winrm/config
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing all enabled session configurations (short version)"
+		Write-Information -Tags $MyInvocation.InvocationName `
+			-MessageData "INFO: Showing all enabled session configurations (short version)"
 		Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
 		Select-Object -Property Name, lang, Enabled, PSVersion, SDKVersion, Architecture,
 		Capability, SupportsOptions, AutoRestart, OutputBufferingMode, RunAsUser, RunAsPassword,
@@ -174,7 +178,8 @@ function Show-WinRMConfig
 
 		if ($null -ne $TokenValue)
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: LocalAccountTokenFilterPolicy value is $TokenValue"
 		}
 		else
 		{

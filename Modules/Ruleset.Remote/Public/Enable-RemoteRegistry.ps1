@@ -104,7 +104,8 @@ function Enable-RemoteRegistry
 
 		if ($RegService.StartType -ne "Automatic")
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting Remote Registry service to automatic startup"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Setting Remote Registry service to automatic startup"
 			Set-Service -InputObject $RegService -StartType Automatic
 		}
 

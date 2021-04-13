@@ -197,7 +197,8 @@ function Register-SslCertificate
 				}
 				else
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using existing certificate with thumbprint '$($Cert.thumbprint)'"
+					Write-Information -Tags $MyInvocation.InvocationName `
+						-MessageData "INFO: Using existing certificate with thumbprint '$($Cert.thumbprint)'"
 				}
 			}
 			else
@@ -237,7 +238,8 @@ function Register-SslCertificate
 				Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default repository location failed"
 			}
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
 		}
 		elseif ($ProductType -eq "Server")
 		{
@@ -302,7 +304,8 @@ function Register-SslCertificate
 			# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
 			$Cert = New-SelfSignedCertificate @CertParams
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 		}
 		else
 		{
@@ -342,7 +345,8 @@ function Register-SslCertificate
 
 		if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using certificate from custom location '$($Cert.thumbprint)'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Using certificate from custom location '$($Cert.thumbprint)'"
 		}
 		else
 		{
@@ -386,7 +390,8 @@ function Register-SslCertificate
 		# Add public key to trusted root to trust this certificate locally
 		if ($PSCmdlet.ShouldContinue("Add certificate to trusted root store?", "Certificate not trusted"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "Trusting certificate '$Domain.cer' with thumbprint '$($Cert.thumbprint)'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "Trusting certificate '$Domain.cer' with thumbprint '$($Cert.thumbprint)'"
 			Import-Certificate -FilePath $ExportFile -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
 		}
 		else

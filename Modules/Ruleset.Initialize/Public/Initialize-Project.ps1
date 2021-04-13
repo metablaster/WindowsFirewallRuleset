@@ -254,7 +254,8 @@ function Initialize-Project
 			{
 				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
 					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
 
 				if ($Strict) { exit }
 				return
@@ -273,13 +274,15 @@ function Initialize-Project
 			}
 			else
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: VSCode v$TargetVSCode meets >= v$RequireVSCodeVersion "
 			}
 		}
 		else
 		{
 			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
 		}
 	}
 
@@ -301,17 +304,20 @@ function Initialize-Project
 			if ($TargetGit -lt $RequireGitVersion)
 			{
 				Write-Warning -Message "Git v$TargetGit is out of date, recommended is git v$RequireGitVersion"
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please visit https://git-scm.com to download and update"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Please visit https://git-scm.com to download and update"
 			}
 			else
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: git v$TargetGit meets >= v$RequireGitVersion"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: git v$TargetGit meets >= v$RequireGitVersion"
 			}
 		}
 		else
 		{
 			Write-Warning -Message "Git in the PATH minimum v$RequireGitVersion is recommended but missing"
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 		}
 	}
 
@@ -407,7 +413,8 @@ function Initialize-Project
 
 			if ($Decision -ne $Default)
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please wait, checking online for help updates..."
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Please wait, checking online for help updates..."
 
 				$CultureNames = "en-US"
 
@@ -458,7 +465,8 @@ function Initialize-Project
 	else
 	{
 		Write-Warning -Message "3rd party modules may be missing or outdated which could result in unexpected behavior"
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
+		Write-Information -Tags $MyInvocation.InvocationName `
+			-MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 	}
 
 	# TODO: CIM may not always work

@@ -91,7 +91,8 @@ function Confirm-Installation
 		{
 			# TODO: Duplicate of global todo, need to prompt to handle all cases or choose one,
 			# TODO: Prompts should be inserted into table, ex. abort, all
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Found multiple candidate installation directories for $Program"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Found multiple candidate installation directories for $Program"
 
 			# Sort the table by ID column in ascending order
 			# NOTE: not needed if table is not modified
@@ -105,7 +106,8 @@ function Confirm-Installation
 			[int32] $Choice = -1
 			while ($Choice -lt 0 -or $Choice -gt $Count)
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Input the ID number to choose which one is correct"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Input the ID number to choose which one is correct"
 				$UserInput = Read-Host
 
 				if ($UserInput -notmatch '^-?\d+$')
@@ -136,7 +138,8 @@ function Confirm-Installation
 		if ($Directory.Value -cne $InstallLocation)
 		{
 			# Using single quotes to make emptiness obvious when the path is empty.
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Path corrected from: '$($Directory.Value)' to: '$InstallLocation'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Path corrected from: '$($Directory.Value)' to: '$InstallLocation'"
 		}
 
 		$Directory.Value = $InstallLocation

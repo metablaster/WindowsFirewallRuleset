@@ -113,7 +113,8 @@ function Set-NetworkProfile
 			}
 
 			Set-NetConnectionProfile -InterfaceAlias $Interface -NetworkCategory $NetworkCategory
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network profile set to '$NetworkCategory' for '$Interface' interface"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Network profile set to '$NetworkCategory' for '$Interface' interface"
 		}
 	}
 	else

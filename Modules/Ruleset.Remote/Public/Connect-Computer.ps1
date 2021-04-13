@@ -258,7 +258,8 @@ function Connect-Computer
 		{
 			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
 
 				# Authentication is required to access remote registry
 				# NOTE: Registry provider does not support credentials

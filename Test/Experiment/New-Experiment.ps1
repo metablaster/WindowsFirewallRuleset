@@ -55,10 +55,6 @@ param (
 	[Alias("ComputerName", "CN", "PolicyStore")]
 	[string] $Domain = [System.Environment]::MachineName,
 
-	[Parameter(Mandatory = $true)]
-	[Alias("UserName")]
-	[string[]] $User,
-
 	[Parameter()]
 	[switch] $Force
 )
@@ -69,7 +65,6 @@ begin
 	Import-Module -Name $PSScriptRoot\Experiment.Module -Scope Global -Force:$Force
 
 	$DebugPreference = "Continue"
-	$VerbosePreference = "Continue"
 	Write-Debug -Message "[$ThisScript] Run module function"
 	Debug-Experiment # -Debug
 }
@@ -77,27 +72,8 @@ begin
 process
 {
 	Write-Debug -Message "INFO: Run script function"
-
-	Get-WindowsDefender -Domain $Domain
-
-	Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" |
-	Select-Object CSName, Caption | Format-Table
-
-	Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -Class Win32_OperatingSystem |
-	Select-Object CSName, Caption | Format-Table
-
-	if ($Domain -eq ([System.Environment]::MachineName))
-	{
-		Get-PrincipalSID -User $User -Domain $Domain
-	}
-
-	Get-PrincipalSID -User $User -Domain $Domain -CIM
 }
 
 end
 {
-	Exit-PSSession
-	Get-PSDrive -Name RemoteRegistry -EA Ignore | Remove-PSDrive
-
-	Update-Log
 }
