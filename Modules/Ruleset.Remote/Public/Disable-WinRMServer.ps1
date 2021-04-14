@@ -108,7 +108,7 @@ function Disable-WinRMServer
 	#>
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
-	Initialize-WinRM -Force:$Force
+	Initialize-WinRM -Force
 	Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
 	if ($All)
@@ -164,7 +164,7 @@ function Disable-WinRMServer
 			Write-Error -ErrorRecord $_ -ErrorAction "Continue"
 		}
 
-		Restore-NetProfile -Force:$Force
+		Restore-NetProfile -Force
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"

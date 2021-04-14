@@ -48,7 +48,7 @@ None. Restore-NetProfile does not generate any output
 
 .NOTES
 TODO: Handle restoring network profile
-TODO: Handle restoring only modified adapters
+TODO: Handle restoring only modified adapters and profiles
 #>
 function Restore-NetProfile
 {

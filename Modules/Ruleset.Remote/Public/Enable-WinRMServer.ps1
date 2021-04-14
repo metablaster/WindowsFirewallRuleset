@@ -155,7 +155,7 @@ function Enable-WinRMServer
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
 	Unblock-NetProfile -Force:$Force
-	Initialize-WinRM -Force:$Force
+	Initialize-WinRM -Force
 
 	# Remove all default and repository specifc session configurations
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default session configurations"
@@ -316,7 +316,7 @@ function Enable-WinRMServer
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
 	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 
-	Restore-NetProfile -Force:$Force
+	Restore-NetProfile -Force
 	# Remove WinRM predefined compatibility rules
 	Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
 

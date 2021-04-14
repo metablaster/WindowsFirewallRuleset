@@ -94,8 +94,12 @@ SOFTWARE.
 	# RequiredModules = @()
 
 	# Assemblies that must be loaded prior to importing this module
-	# Required by Get-AppCapability
-	RequiredAssemblies = @("Microsoft.Windows.Appx.PackageManager.Commands")
+	RequiredAssemblies = @(
+		# Required for System.Data.ObjectNotFoundException
+		"System.Data.Entity"
+		# Required by Get-AppCapability
+		"Microsoft.Windows.Appx.PackageManager.Commands"
+	)
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	ScriptsToProcess = @(

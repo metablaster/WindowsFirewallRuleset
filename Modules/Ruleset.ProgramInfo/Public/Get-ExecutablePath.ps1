@@ -103,6 +103,11 @@ function Get-ExecutablePath
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
 				$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey, $RegistryPermission, $RegistryRights)
+
+				if (!$RootKey)
+				{
+					throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKLMRootKey")
+				}
 			}
 			catch
 			{

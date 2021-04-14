@@ -80,6 +80,11 @@ function Get-WindowsDefender
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $LocalRights)
+
+			if (!$RootKey)
+			{
+				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKLM")
+			}
 		}
 		catch
 		{

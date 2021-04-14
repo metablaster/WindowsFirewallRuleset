@@ -437,8 +437,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
 
-		Set-Variable -Name PSSessionConfigurationName -Scope Global -Value $ConnectParams["ConfigurationName"]
-
 		try
 		{
 			Connect-Computer @ConnectParams
@@ -523,7 +521,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

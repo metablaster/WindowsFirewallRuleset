@@ -140,10 +140,13 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 - update reported server versions
 - added more verbose and debug output, path formatting.
-- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
+- Replaced WMI calls with CIM calls which are more universal and cross platform
 
 12 December 2020:
 - Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
+
+14 April 2021:
+- Check returned key is not null when opening from top registry node
 
 See links section for original and individual versions of code
 
@@ -221,25 +224,38 @@ function Get-SqlServerInstance
 			{
 				try
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLMRootKey"
 					$RootKey = $RemoteKey.OpenSubKey($HKLMRootKey, $RegistryPermission, $RegistryRights)
+
+					if (!$RootKey)
+					{
+						throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLMRootKey")
+					}
 				}
 				catch
 				{
-					Write-Warning -Message "Failed to open registry root key: $HKLMRootKey"
+					Write-Warning -Message "Failed to open registry root key: HKLM:\$HKLMRootKey"
 					continue
 				}
 
+				[array] $Instances = $null
 				if ($RootKey.GetSubKeyNames() -contains "Instance Names")
 				{
 					try
 					{
-						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: Instance Names\SQL"
-						$RootKey = $RemoteKey.OpenSubKey("$HKLMRootKey\Instance Names\SQL", $RegistryPermission, $RegistryRights)
+						$KeyPath = "$HKLMRootKey\Instance Names\SQL"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: HKLM:\$KeyPath"
+						$RootKey = $RemoteKey.OpenSubKey($KeyPath, $RegistryPermission, $RegistryRights)
+
+						if (!$RootKey)
+						{
+							throw [System.Data.ObjectNotFoundException]::new(
+								"Following registry key does not exist: HKLM:\$KeyPath")
+						}
 					}
 					catch
 					{
-						Write-Warning -Message "Failed to open registry sub key: Instance Names\SQL"
+						Write-Warning -Message "Failed to open registry sub key: HKLM:\$KeyPath"
 					}
 
 					if ($RootKey)
@@ -268,12 +284,19 @@ function Get-SqlServerInstance
 
 						try
 						{
-							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceReg key: $HKLMRootKey\$InstanceValue"
-							$InstanceReg = $RemoteKey.OpenSubKey("$HKLMRootKey\$InstanceValue", $RegistryPermission, $RegistryRights)
+							$KeyPath = "$HKLMRootKey\$InstanceValue"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceReg key: HKLM:\$KeyPath"
+							$InstanceReg = $RemoteKey.OpenSubKey($KeyPath, $RegistryPermission, $RegistryRights)
+
+							if (!$InstanceReg)
+							{
+								throw [System.Data.ObjectNotFoundException]::new(
+									"Following registry key does not exist: HKLM:\$KeyPath")
+							}
 						}
 						catch
 						{
-							Write-Warning -Message "Failed to open InstanceReg key: $HKLMRootKey\$InstanceValue"
+							Write-Warning -Message "Failed to open InstanceReg key: HKLM:\$KeyPath"
 							continue
 						}
 
@@ -295,21 +318,27 @@ function Get-SqlServerInstance
 
 							try
 							{
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
-								# TODO: this should probably be $InstanceReg.OpenSubKey("Cluster\Nodes") ?
-								Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: this doesn't look good!"
+								$KeyPath = "$HKLMRootKey\$InstanceValue\Cluster\Nodes"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ClusterReg key: HKLM:\$KeyPath"
+								# TODO: this could probably be $InstanceReg.OpenSubKey("Cluster\Nodes") ?
+								Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: Verify this is good!" -Debug
 								$ClusterReg = $RemoteKey.OpenSubKey("Cluster\Nodes", $RegistryPermission, $RegistryRights)
+
+								if (!$ClusterReg)
+								{
+									throw [System.Data.ObjectNotFoundException]::new(
+										"Following registry key does not exist: HKLM:\$KeyPath")
+								}
 							}
 							catch
 							{
-								Write-Warning -Message "Failed to open ClusterReg key: $HKLMRootKey\$InstanceValue\Cluster\Nodes"
+								Write-Warning -Message "Failed to open ClusterReg key: HKLM:\$KeyPath"
 							}
-
 
 							if ($ClusterReg)
 							{
 								$ClusterReg.GetSubKeyNames() | ForEach-Object {
-									# TODO: check opening sub key
+									# TODO: check opening sub key and getting value
 									$Nodes.Add($ClusterReg.OpenSubKey($_).GetValue("NodeName")) | Out-Null
 								}
 							}
@@ -346,18 +375,25 @@ function Get-SqlServerInstance
 							try
 							{
 								# Get from filename to determine version
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ServicesReg key: HKLM:SYSTEM\CurrentControlSet\Services"
-								$ServicesReg = $RemoteKey.OpenSubKey("SYSTEM\CurrentControlSet\Services", $RegistryPermission, $RegistryRights)
+								$KeyPath = "SYSTEM\CurrentControlSet\Services"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ServicesReg key: HKLM:\$KeyPath"
+								$ServicesReg = $RemoteKey.OpenSubKey($KeyPath, $RegistryPermission, $RegistryRights)
+
+								if (!$ServicesReg)
+								{
+									throw [System.Data.ObjectNotFoundException]::new(
+										"Following registry key does not exist: HKLM:\$KeyPath")
+								}
 							}
 							catch
 							{
-								Write-Warning -Message "Failed to open ServiceReg key: HKLM:SYSTEM\CurrentControlSet\Services"
+								Write-Warning -Message "Failed to open ServiceReg key: HKLM:\$KeyPath"
 							}
 
 							if ($ServicesReg)
 							{
 								$ServiceKey = $ServicesReg.GetSubKeyNames() | Where-Object {
-									$_ -match "$Instance"
+									$_ -match $Instance
 								} | Select-Object -First 1
 
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key: $ServiceKey"
@@ -389,12 +425,21 @@ function Get-SqlServerInstance
 						$Major, $Minor, $Build, $Revision = $Version.Split(".")
 						try
 						{
-							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMRootKey\$Major$Minor"
-							$VersionKey = $RemoteKey.OpenSubKey("$HKLMRootKey\$Major$Minor", $RegistryPermission, $RegistryRights)
+							$KeyPath = "$HKLMRootKey\$Major$Minor"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: HKLM:\$KeyPath"
+							# TODO: this should probably be $ClusterReg.OpenSubKey("$Major$Minor") ?
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: Verify this is good!" -Debug
+							$VersionKey = $RemoteKey.OpenSubKey($KeyPath, $RegistryPermission, $RegistryRights)
+
+							if (!$VersionKey)
+							{
+								throw [System.Data.ObjectNotFoundException]::new(
+									"Following registry key does not exist: HKLM:\$KeyPath")
+							}
 						}
 						catch
 						{
-							Write-Warning -Message "Failed to open VersionKey sub key: $HKLMRootKey\$Major$Minor"
+							Write-Warning -Message "Failed to open VersionKey sub key: HKLM:\$KeyPath"
 						}
 
 						if ($VersionKey)

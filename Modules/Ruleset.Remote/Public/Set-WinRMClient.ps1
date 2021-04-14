@@ -53,9 +53,7 @@ Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER Force
-If specified, does not prompt for confirmation to start WinRM service and set it to automatic,
-and to add required firewal rules.
-Also it does not prompt to set connected network adapters to private profile,
+If specified, does not prompt to set connected network adapters to private profile,
 and does not prompt to temporarily disable any non connected network adapter if needed.
 
 .EXAMPLE
@@ -134,7 +132,7 @@ function Set-WinRMClient
 	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
-	Initialize-WinRM -EA Stop -Force:$Force
+	Initialize-WinRM -EA Stop -Force
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client authentication options"
 
@@ -194,7 +192,7 @@ function Set-WinRMClient
 		Write-Error -ErrorRecord $_ -ErrorAction "Continue"
 	}
 
-	Restore-NetProfile -Force:$Force
+	Restore-NetProfile -Force
 
 	if ($Protocol -eq "HTTPS")
 	{

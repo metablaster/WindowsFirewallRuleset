@@ -87,6 +87,11 @@ function Get-WindowsSDK
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
+
+			if (!$RootKey)
+			{
+				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKLM")
+			}
 		}
 		catch
 		{

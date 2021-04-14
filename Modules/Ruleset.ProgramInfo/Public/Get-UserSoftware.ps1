@@ -84,7 +84,12 @@ function Get-UserSoftware
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
-			$UserKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $RegistryRights)
+			$RootKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $RegistryRights)
+
+			if (!$RootKey)
+			{
+				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKU")
+			}
 		}
 		catch
 		{
@@ -97,10 +102,10 @@ function Get-UserSoftware
 			return
 		}
 
-		foreach ($HKUSubKey in $UserKey.GetSubKeyNames())
+		foreach ($HKUSubKey in $RootKey.GetSubKeyNames())
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKUSubKey"
-			$SubKey = $UserKey.OpenSubkey($HKUSubKey)
+			$SubKey = $RootKey.OpenSubkey($HKUSubKey)
 
 			if (!$SubKey)
 			{

@@ -68,13 +68,13 @@ function Get-AppSID
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SHA256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
-	$Hash = $SHA256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($PackageFamilyName.ToLowerInvariant()))
+	$Sha256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
+	$Hash = $Sha256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($PackageFamilyName.ToLowerInvariant()))
 
 	$SID = "S-1-15-2"
-	for ($i = 0; $i -lt 28; $i += 4)
+	for ($Length = 0; $Length -lt 28; $Length += 4)
 	{
-		$SID += "-" + [System.BitConverter]::ToUInt32($Hash, $i)
+		$SID += "-" + [System.BitConverter]::ToUInt32($Hash, $Length)
 	}
 
 	Write-Output $SID

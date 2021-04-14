@@ -77,7 +77,8 @@ If you would like to see fresh changes done since last release you can do so on 
 - Bugfix
 
   - Fixed bug with `WpsPushUserService` rule when applied to multiple standard users
-  - Fixed issue with `Test-TargetComputer` when used in Windows PowerShell for NetBIOS name resolution
+  - Fixed issue with `Test-Computer` when used in Windows PowerShell for NetBIOS name resolution
+  - Checking for null of registry keys opened trough registry hive key.
 
 - Other
 

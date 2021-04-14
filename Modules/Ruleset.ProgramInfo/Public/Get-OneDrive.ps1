@@ -92,7 +92,7 @@ function Get-OneDrive
 		}
 
 		# Check if target user is logged in (user reg hive is loaded)
-		[bool] $ReleaseHive = $false
+		$TempKey = $null
 
 		if ([array]::Find($RemoteKey.GetSubKeyNames(), [System.Predicate[string]] { $UserSID -eq $args[0] }))
 		{
@@ -102,7 +102,7 @@ function Get-OneDrive
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$User' is not logged into system"
 
-			# TODO: We need environment variable for remote computer
+			# TODO: Environment variable needed for remote computer
 			$UserRegConfig = "$env:SystemDrive\Users\$User\NTUSER.DAT"
 
 			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
@@ -112,11 +112,10 @@ function Get-OneDrive
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$User' to HKU:$TempKey"
 
-				# NOTE: Start-Process is needed to make the command finish it's job and print status
+				# NOTE: Invoke-Process is needed to make the command finish it's job and print status
 				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig" -Raw
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
-				$ReleaseHive = $true
 				$HKU = "$TempKey\Software\Microsoft\OneDrive"
 			}
 			else
@@ -130,16 +129,21 @@ function Get-OneDrive
 		try
 		{
 			$LocalRights = [System.Security.AccessControl.RegistryRights]::QueryValues
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:$HKU"
-			# TODO: Will not throw if $HKU path does not exist
-			$OneDriveKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $LocalRights)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key HKU:\$HKU"
+			$RootKey = $RemoteKey.OpenSubkey($HKU, $RegistryPermission, $LocalRights)
+
+			if (!$RootKey)
+			{
+				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKU")
+			}
 		}
 		catch
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Exception opening registry root key: HKU:$HKU"
-			if ($ReleaseHive)
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Exception opening registry root key: HKU:\$HKU"
+
+			if ($TempKey)
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Unloading and release hive HKU:$TempKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 
 				[gc]::collect()
 				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
@@ -151,7 +155,7 @@ function Get-OneDrive
 			return
 		}
 
-		$OneDrivePath = $OneDriveKey.GetValue("OneDriveTrigger")
+		$OneDrivePath = $RootKey.GetValue("OneDriveTrigger")
 
 		if ([string]::IsNullOrEmpty($OneDrivePath))
 		{
@@ -159,7 +163,7 @@ function Get-OneDrive
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $OneDriveKey"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKey"
 
 			# NOTE: remove executable file name
 			$InstallLocation = Split-Path -Path $OneDrivePath -Parent
@@ -171,10 +175,10 @@ function Get-OneDrive
 			[PSCustomObject]@{
 				Domain = $Domain
 				Name = "OneDrive"
-				Version = $OneDriveKey.GetValue("Version")
+				Version = $RootKey.GetValue("Version")
 				Publisher = "Microsoft Corporation"
 				InstallLocation = $InstallLocation
-				UserFolder = $OneDriveKey.GetValue("UserFolder")
+				UserFolder = $RootKey.GetValue("UserFolder")
 				RegistryKey = "HKU:\$UserSID\Software\Microsoft\OneDrive"
 				PSTypeName = "Ruleset.ProgramInfo"
 			}
@@ -182,14 +186,15 @@ function Get-OneDrive
 
 		# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access is denied"
 		# TODO: We close the key regardless, other functions using registry should also implement closing keys
-		$OneDriveKey.Close()
+		$RootKey.Close()
 
-		if ($ReleaseHive)
+		if ($TempKey)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
+
 			[gc]::collect()
 			$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 		}
 
 		$RemoteKey.Dispose()
