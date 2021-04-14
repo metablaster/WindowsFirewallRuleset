@@ -33,7 +33,7 @@ Test WinRM service configuration
 .DESCRIPTION
 Test WinRM service configuration on either client or server computer.
 WinRM service is tested for functioning connectivity which includes
-PowerShell remoting and remoting with CIM commandlets.
+PowerShell remoting, remoting with CIM commandlets and user authentication.
 
 .PARAMETER Domain
 Target host which is to be tested.

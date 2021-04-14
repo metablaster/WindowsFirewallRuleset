@@ -37,7 +37,7 @@ issues are handled and attempted to be resolved or bypassed automatically.
 
 If specified -Protocol is set to HTTPS, it will export public key (DER encoded CER file)
 to default repository location (\Exports), which you should then copy to client machine
-to be picked up by Set-WinRMClient and used for client SSL authentication.
+to be picked up by Set-WinRMClient and used for communication over SSL.
 
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
@@ -92,7 +92,7 @@ TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Configure server remotely either with WSMan or trough SSH
-TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
+TODO: To test and configure server remotely use Connect-WSMan and New-WSManSessionOption
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -236,7 +236,7 @@ function Enable-WinRMServer
 	Set-StrictMode -Version Latest
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
-	# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
+	# TODO: Use Set-WSManQuickConfig since or if recreating default session configurations is not absolutely needed
 	Enable-PSRemoting -Force | Out-Null
 
 	# Disable unused built in session configurations
@@ -296,7 +296,6 @@ function Enable-WinRMServer
 		$AuthenticationOptions["Certificate"] = $true
 	}
 
-	# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient)
 	Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"

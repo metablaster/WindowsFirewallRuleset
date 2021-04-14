@@ -84,7 +84,6 @@ None. You cannot pipe objects to Set-WinRMClient
 .NOTES
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: To test, configure or query remote computer, use Connect-WSMan and New-WSManSessionOption
 TODO: Authenticate users using certificates optionally or instead of credential object
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
@@ -154,10 +153,16 @@ function Set-WinRMClient
 	}
 	catch
 	{
-		# TODO: WinRM service should be restarted to pick up our fix?
 		Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry..."
 		Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
 			[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
+
+		# TODO: WinRM service should be restarted to pick up this fix?
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management service"
+		$WinRM.Stop()
+		$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+		$WinRM.Start()
+		$WinRM.WaitForStatus("Running", $ServiceTimeout)
 	}
 
 	Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
@@ -169,8 +174,16 @@ function Set-WinRMClient
 
 	if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName)))
 	{
-		# TODO: Add instead of replace
-		$ClientOptions["TrustedHosts"] = $Domain
+		$TrustedHosts = (Get-Item WSMan:\localhost\Client\TrustedHosts).Value
+
+		if ([string]::IsNullOrEmpty($TrustedHosts))
+		{
+			$ClientOptions["TrustedHosts"] = $Domain
+		}
+		else
+		{
+			$ClientOptions["TrustedHosts"] = "$TrustedHosts, $Domain"
+		}
 	}
 
 	Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
@@ -182,6 +195,10 @@ function Set-WinRMClient
 		# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
 		# cmd.exe /C 'winrm set winrm/config @{ MaxTimeoutms = 10 }'
 		Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+
+		# TODO: Not working
+		# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRS options"
+		# Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
 	}
 	catch [System.OperationCanceledException]
 	{

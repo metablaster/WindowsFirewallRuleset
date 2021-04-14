@@ -44,6 +44,8 @@ if ($ListPreference)
 }
 #endregion
 
+# TODO: Function to restore WinRM service to default needed
+
 #
 # Script imports
 #

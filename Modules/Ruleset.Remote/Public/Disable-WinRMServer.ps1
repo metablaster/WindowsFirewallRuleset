@@ -62,7 +62,6 @@ WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
 TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: This function must be renamed and new function made for Restore-WinRMServer
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-WinRMServer.md
@@ -109,7 +108,7 @@ function Disable-WinRMServer
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
 	Initialize-WinRM -Force
-	Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+	Get-ChildItem WSMan:\localhost\listener -EA Stop | Remove-Item -Recurse
 
 	if ($All)
 	{
@@ -140,7 +139,6 @@ function Disable-WinRMServer
 			-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
-		# TODO: Test registry fix for cases when Negotiate is disabled (see Set-WinRMClient.ps1)
 		Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
 		try
@@ -157,7 +155,7 @@ function Disable-WinRMServer
 		}
 		catch [System.OperationCanceledException]
 		{
-			Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+			Write-Warning -Message "Operation incomplete because: $($_.Exception.Message)"
 		}
 		catch
 		{
