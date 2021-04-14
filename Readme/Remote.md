@@ -208,12 +208,12 @@ catch
 
 try
 {
-    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+    Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
     $RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 
     if (!$RootKey)
     {
-        throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKLM")
+        throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLM")
     }
 }
 catch [System.Security.SecurityException]
@@ -252,6 +252,7 @@ Following section lists other not so common problems and how to resolve them.
 TODO: missing resolutions for the following known problems:
 
 - system cannot find file because it does not exist
+- "Negotiate" authentication is not enabled
 
 #### Encountered an internal error in the SSL library
 

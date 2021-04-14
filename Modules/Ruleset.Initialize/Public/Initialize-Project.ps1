@@ -193,11 +193,15 @@ function Initialize-Project
 			# WinRM required for:
 			# 1. Remote firewall administration, see Enable-PSRemoting cmdlet, or when localhost is specified instad of NETBIOS name
 			# 2. For PowerShell Core 7.1+ this service is required for compatibility module
-			# 3. Required for CIM functions
+			# 3. Required for CIM functions by both local and remote machine
 			"WinRM" # Windows Remote Management (WS-Management)
-			# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
-			"RemoteRegistry"
 		)
+
+		if ($PolicyStore -ne [System.Environment]::MachineName)
+		{
+			# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
+			$RequiredServices += "RemoteRegistry"
+		}
 
 		if ($Develop)
 		{
@@ -469,7 +473,6 @@ function Initialize-Project
 			-MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 	}
 
-	# TODO: CIM may not always work
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
 	$OSCaption = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 		-Class Win32_OperatingSystem -Property Caption | Select-Object -ExpandProperty Caption

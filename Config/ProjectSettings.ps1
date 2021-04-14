@@ -422,7 +422,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			# There is global variable that controls encoding, see if it can be used here
 			$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 		}
-		elseif ($PolicyStore -eq ([System.Environment]::MachineName))
+		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
 			# Enable loopback only HTTP
 			Set-WinRMClient -Protocol HTTP

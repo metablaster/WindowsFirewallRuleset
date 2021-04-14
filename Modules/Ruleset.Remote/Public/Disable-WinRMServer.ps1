@@ -108,7 +108,7 @@ function Disable-WinRMServer
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
 	Initialize-WinRM -Force
-	Get-ChildItem WSMan:\localhost\listener -EA Stop | Remove-Item -Recurse
+	Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
 	if ($All)
 	{
