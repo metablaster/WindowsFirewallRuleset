@@ -118,7 +118,6 @@ function Test-WinRM
 		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
 	}
 
-	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 	$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
 	$PSSessionOption = New-PSSessionOption -UICulture $UICulture -Culture $Culture `
 		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2

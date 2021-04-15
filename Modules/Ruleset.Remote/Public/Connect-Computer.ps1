@@ -127,21 +127,19 @@ function Connect-Computer
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# WinRM service must be running at this point
-	# TODO: does not belong here, move to requirements secion
-	$WinRM = Get-Service -Name WinRM
-
-	if ($WinRM.Status -ne "Running")
+	# TODO: does not belong here, move to requirements section
+	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 	{
 		Write-Information -Tags $SettingsScript -MessageData "INFO: Starting WS-Management service"
 
 		# NOTE: Unable to start if it's disabled
-		if ($WinRM.StartType -eq "Disabled")
+		if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)
 		{
-			Set-Service -InputObject $WinRM -StartupType Automatic
+			Set-Service -InputObject $WinRM -StartupType Manual
 		}
 
 		$WinRM.Start()
-		$WinRM.WaitForStatus("Running", $ServiceTimeout)
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
 	$WSManParams = @{

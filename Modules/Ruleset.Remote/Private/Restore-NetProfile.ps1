@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +33,6 @@ Re-enable any disabled virtual adapters
 .DESCRIPTION
 Re-enable any disabled virtual adapters previously disabled by Unblock-NetProfile
 
-.PARAMETER Force
-The description of Force parameter.
-
 .EXAMPLE
 PS> Restore-NetProfile
 
@@ -47,28 +43,44 @@ None. You cannot pipe objects to Restore-NetProfile
 None. Restore-NetProfile does not generate any output
 
 .NOTES
-TODO: Handle restoring network profile
-TODO: Handle restoring only modified adapters and profiles
+None.
 #>
 function Restore-NetProfile
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	[OutputType([void])]
-	param (
-		[Parameter()]
-		[switch] $Force
-	)
+	param ()
 
-	if ($script:Workstation -and $script:VirtualAdapter)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	if ($script:Workstation)
 	{
-		foreach ($Alias in $VirtualAdapter.InterfaceAlias)
+		if ($script:VirtualAdapter)
 		{
-			if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Re-enable network adapter"))
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Re-enabling virtual or disconnected adapters"
+			foreach ($Adapter in $script:VirtualAdapter)
 			{
-				Enable-NetAdapter -InterfaceAlias $Alias
+				if ($PSCmdlet.ShouldProcess($Adapter, "Re-enable network adapter"))
+				{
+					Enable-NetAdapter -InterfaceAlias $Adapter
+				}
 			}
+
+			Set-Variable -Name VirtualAdapter -Scope Script -Value $null -Confirm:$false
 		}
 
-		Set-Variable -Name VirtualAdapter -Scope Script -Value $null
+		if ($script:AdapterProfile)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring adapter network profile"
+			foreach ($Adapter in $script:AdapterProfile.GetEnumerator())
+			{
+				if ($PSCmdlet.ShouldProcess($Adapter.Key, "Restore network profile"))
+				{
+					Set-NetConnectionProfile -InterfaceAlias $Adapter.Key -NetworkCategory $Adapter.Value
+				}
+			}
+
+			Set-Variable -Name AdapterProfile -Scope Script -Value $null -Confirm:$false
+		}
 	}
 }

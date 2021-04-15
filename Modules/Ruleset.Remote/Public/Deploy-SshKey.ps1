@@ -72,7 +72,6 @@ if no existing public SSH key is ready on remote host.
 
 TODO: Optionally deploy sshd_config to remote
 TODO: Make use of certificates
-TODO: Test SSH connectivity prior to key transfer
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Deploy-SshKey.md
@@ -82,7 +81,7 @@ https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based
 #>
 function Deploy-SshKey
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Deploy-SshKey.md")]
 	[OutputType([void])]
 	param (
@@ -112,6 +111,18 @@ function Deploy-SshKey
 		return
 	}
 
+	if (!(Get-Command -Name ssh.exe -CommandType Application))
+	{
+		Write-Error -Category ObjectNotFound -Message "ssh.exe not found on this computer"
+		return
+	}
+
+	if (!(Test-NetConnection -ComputerName $Domain -Port 22 -InformationLevel Quiet))
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "'$Domain' does not respond on SSH port"
+		return
+	}
+
 	# Set remote key destination
 	if ($Admin)
 	{
@@ -122,29 +133,34 @@ function Deploy-SshKey
 		$FilePath = "C:\Users\$User\.ssh\authorized_keys"
 	}
 
-	$InformationPreference = "Continue"
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Upload key to $Domain"
+	if ($PSCmdlet.ShouldProcess($Domain, "Deploy SSH key"))
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Upload key to $Domain"
 
-	# Upload key
-	if ($Overwrite)
-	{
-		Get-Content $Key | Out-String | ssh $User@$Domain "powershell `"New-Item -Force -ItemType Directory -Path `"`$HOME\.ssh`"; Set-Content -Force -Path $FilePath`""
-	}
-	else
-	{
-		Get-Content $Key | Out-String | ssh $User@$Domain "powershell `"New-Item -Force -ItemType Directory -Path `"`$HOME\.ssh`"; Add-Content -Force -Path $FilePath`""
+		# Upload key
+		if ($Overwrite)
+		{
+			Get-Content $Key | Out-String | ssh $User@$Domain "powershell `"New-Item -Force -ItemType Directory -Path `"`$HOME\.ssh`"; Set-Content -Force -Path $FilePath`""
+		}
+		else
+		{
+			Get-Content $Key | Out-String | ssh $User@$Domain "powershell `"New-Item -Force -ItemType Directory -Path `"`$HOME\.ssh`"; Add-Content -Force -Path $FilePath`""
+		}
 	}
 
 	# Adjust permissions
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Set ownership of file to user $User"
-	ssh $User@$Domain "cmd.exe /C icacls $FilePath /setowner $User"
+	if ($PSCmdlet.ShouldProcess($FilePath, "Adjust file system permissions on $Domain"))
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Set ownership of file to user $User"
+		ssh $User@$Domain "cmd.exe /C icacls $FilePath /setowner $User"
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Remove file inherited permissions"
-	ssh $User@$Domain "cmd.exe /C icacls $FilePath /inheritancelevel:r"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Remove file inherited permissions"
+		ssh $User@$Domain "cmd.exe /C icacls $FilePath /inheritancelevel:r"
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user $User"
-	ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant "$User":F"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user $User"
+		ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant "$User":F"
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user SYSTEM"
-	ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant SYSTEM:F"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Grant permissions on file for user SYSTEM"
+		ssh $User@$Domain "cmd.exe /C icacls $FilePath /grant SYSTEM:F"
+	}
 }

@@ -34,9 +34,6 @@ Enable remote registry
 Starts the RemoteRegistry service and adds required firewall rules
 which enables remote users to modify registry settings on this computer.
 
-.PARAMETER Force
-If specified, does not prompt for confirmation.
-
 .EXAMPLE
 PS> Enable-RemoteRegistry
 
@@ -47,44 +44,44 @@ None. You cannot pipe objects to Enable-RemoteRegistry
 None. Enable-RemoteRegistry does not generate any output
 
 .NOTES
-TODO: Disable remote registry
+TODO: Disable remote registry and revert changes
 #>
 function Enable-RemoteRegistry
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([void])]
-	param (
-		[Parameter()]
-		[switch] $Force
-	)
+	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$VerbosePreference = "Continue"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking remote registry requirements"
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Windows firewall, persistent store", "Add and enable firewall rules for remote registry"))
+	# Determine whether GPO firewall is active
+	$GpoStore = $null -ne (Get-NetFirewallProfile -Profile Private -PolicyStore ([System.Environment]::MachineName) |
+		Where-Object { $_.Enabled -eq $true })
+
+	if ($GpoStore)
 	{
-		# Determine whether GPO firewall is active
-		$GpoStore = $null -ne (Get-NetFirewallProfile -Profile Private -PolicyStore ([System.Environment]::MachineName) |
-			Where-Object { $_.Enabled -eq $true })
-
-		if ($GpoStore)
-		{
-			$Store = [System.Environment]::MachineName
-		}
-		else
-		{
-			$Store = "PersistentStore"
-		}
+		$Store = [System.Environment]::MachineName
+	}
+	else
+	{
+		$Store = "PersistentStore"
+	}
 
 
-		$AllRuleGroups = @(
-			# File and Printer Sharing
-			"@FirewallAPI.dll,-28502"
+	$AllRuleGroups = @(
+		# File and Printer Sharing
+		"@FirewallAPI.dll,-28502"
 
-			# Network Discovery
-			"@FirewallAPI.dll,-32752"
-		)
+		# Network Discovery
+		"@FirewallAPI.dll,-32752"
+	)
 
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add and enable firewall rules to allow remote registry"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding and enabling firewall rules to allow remote registry"
+
+		# TODO: Only private profile should be affected on workstation machines
 		foreach ($RuleGroup in $AllRuleGroups)
 		{
 			Remove-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound -EA Ignore
@@ -98,22 +95,25 @@ function Enable-RemoteRegistry
 		}
 	}
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Remote Registry service", "Start service and set to automatic startup"))
-	{
-		$RegService = Get-Service -Name RemoteRegistry
+	# TODO: Handled by Initialize-Service
+	$RegService = Get-Service -Name RemoteRegistry
 
-		if ($RegService.StartType -ne "Automatic")
+	if ($RegService.StartType -ne [ServiceStartMode]::Automatic)
+	{
+		if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to automatic startup"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Setting Remote Registry service to automatic startup"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
 			Set-Service -InputObject $RegService -StartType Automatic
 		}
+	}
 
-		if ($RegService.Status -ne "Running")
+	if ($RegService.Status -ne [ServiceControllerStatus]::Running)
+	{
+		if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Start service"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Starting Remote Registry service"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"
 			$RegService.Start()
-			$RegService.WaitForStatus("Running", $ServiceTimeout)
+			$RegService.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 		}
 	}
 }

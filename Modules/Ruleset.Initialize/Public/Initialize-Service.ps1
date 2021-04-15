@@ -97,7 +97,7 @@ function Initialize-Service
 		[string] $Title = "Required system service not running"
 
 		# Timeout to start and stop WinRM service
-		$ServiceTimeout = "00:00:20"
+		$ServiceTimeout = "00:00:30"
 
 		# Log file header to use for this script
 		$HeaderStack.Push("System services status change")

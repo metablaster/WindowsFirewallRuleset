@@ -27,6 +27,8 @@ SOFTWARE.
 #>
 
 #region Initialization
+using namespace System.ServiceProcess
+
 param (
 	[Parameter()]
 	[switch] $ListPreference
@@ -45,6 +47,8 @@ if ($ListPreference)
 #endregion
 
 # TODO: Function to restore WinRM service to default needed
+# TODO: Revisit functions and determine where to put ErrorAction Stop
+# TODO: Verbose output should write only if ShouldProcess was approved
 
 #
 # Script imports
@@ -102,7 +106,7 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Timeout to start and stop WinRM service
-New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:20"
+New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:30"
 
 # Firewall rules needed to be present to configure some of the WinRM options
 New-Variable -Name WinRMRules -Scope Script -Value "@FirewallAPI.dll,-30267"
@@ -116,3 +120,10 @@ New-Variable -Name Workstation -Scope Script -Option Constant -Value (
 		Select-Object -ExpandProperty ProductType) -eq 1)
 
 New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
+
+# Adapters modified by module
+Set-Variable -Name AdapterProfile -Scope Script -Value $null
+Set-Variable -Name VirtualAdapter -Scope Script -Value $null
+
+# TODO: Temporarily enable verbose output
+# $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true

@@ -132,17 +132,17 @@ function Show-WinRMConfig
 		-MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
 
 	# To start it, it must not be disabled
-	if ($WinRM.StartType -eq "Disabled")
+	if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting WinRM service to manual startup"
 		Set-Service -InputObject $WinRM -StartupType Manual
 	}
 
-	if ($WinRM.Status -ne "Running")
+	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Starting WinRM service"
 		$WinRM.Start()
-		$WinRM.WaitForStatus("Running", $ServiceTimeout)
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
 	# MSDN: Select-Object, beginning in PowerShell 6,

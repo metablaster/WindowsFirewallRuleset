@@ -30,6 +30,9 @@ SOFTWARE.
 # TODO: If this is based on 3rd party module, include *.psm1 file changes here
 
 #region Initialization
+# TODO: Remove using statement
+using namespace System
+
 param (
 	[Parameter()]
 	[switch] $ListPreference

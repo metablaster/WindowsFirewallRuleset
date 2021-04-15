@@ -43,10 +43,6 @@ Administrators group on the computer.
 If specified, will disable WinRM service completely, remove all listeners and
 disable all session configurations.
 
-.PARAMETER Force
-If specified, does not prompt to set connected network adapters to private profile,
-and does not prompt to temporarily disable any non connected network adapter if needed.
-
 .EXAMPLE
 PS> Disable-WinRMServer
 
@@ -60,7 +56,6 @@ None. Disable-WinRMServer does not generate any output
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Needs testing with PS Core
-TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 
 .LINK
@@ -80,21 +75,17 @@ winrm help config
 #>
 function Disable-WinRMServer
 {
-	[CmdletBinding(DefaultParameterSetName = "Default",
+	[CmdletBinding(DefaultParameterSetName = "Default", SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-WinRMServer.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(ParameterSetName = "All")]
-		[switch] $All,
-
-		[Parameter(ParameterSetName = "Default")]
-		[switch] $Force
+		[switch] $All
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer
-	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 
 	<# MSDN: Disabling the session configurations does not undo all the changes made by the
 	Enable-PSRemoting or Enable-PSSessionConfiguration cmdlet.
@@ -107,51 +98,67 @@ function Disable-WinRMServer
 	#>
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
-	Initialize-WinRM -Force
-	Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+	Initialize-WinRM
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove all listeners"))
+	{
+		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+	}
 
 	if ($All)
 	{
-		Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all session configurations and stop WinRM service"))
+		{
+			Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
 
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
-		Set-Service -Name WinRM -StartupType Disabled
-		$WinRM.Stop()
-		$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
+			Set-Service -Name WinRM -StartupType Disabled
+			$WinRM.Stop()
+			$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		}
 	}
 	else
 	{
-		# Disable all session configurations except what's needed for local firewall management
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
-		Get-PSSessionConfiguration | Where-Object {
-			$_.Name -ne "RemoteFirewall"
-		} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Leave only 'RemoteFirewall' session configurations enabled"))
+		{
+			# Disable all session configurations except what's needed for local firewall management
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
+			Get-PSSessionConfiguration | Where-Object {
+				$_.Name -ne "RemoteFirewall"
+			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+		}
 
-		# Enable only localhost on loopback
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
-		Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable only loopback"))
+		{
+			# Enable only localhost on loopback
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
+			Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
-		New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
-			-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
+			New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
+				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
-		New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
-			-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+			New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
+				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
-		Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
+			Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+		}
 
 		try
 		{
-			Unblock-NetProfile -Force:$Force
+			Unblock-NetProfile
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
-			# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-			# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-			Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server and protocol options"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
+				# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+				# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+				Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
-			Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
+				Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+			}
 		}
 		catch [System.OperationCanceledException]
 		{
@@ -159,10 +166,10 @@ function Disable-WinRMServer
 		}
 		catch
 		{
-			Write-Error -ErrorRecord $_ -ErrorAction "Continue"
+			Write-Error -ErrorRecord $_
 		}
 
-		Restore-NetProfile -Force
+		Restore-NetProfile
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
@@ -171,9 +178,12 @@ function Disable-WinRMServer
 	Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
 		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 
-	# Remove all WinRM predefined rules
-	Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
-		-Direction Inbound -PolicyStore PersistentStore
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove all WinRM predefined rules"))
+	{
+		# Remove all WinRM predefined rules
+		Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
+			-Direction Inbound -PolicyStore PersistentStore
+	}
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM server is complete"
 }

@@ -213,7 +213,12 @@ else
 
 	if (!$Cmdlet.MyInvocation.BoundParameters.ContainsKey("Confirm"))
 	{
-		# To control confirmation level set to None, Low, Medium or High
+		# If $ConfirmPreference value is less than or equal to the risk assigned to function.
+		# To control confirmation level set to:
+		# None, never prompt
+		# Low, prompt for low, medium and high impact actions
+		# Medium, prompt for medium and hight impact actions
+		# High, prompt for high impact actions only
 		$ConfirmPreference = "High"
 	}
 
@@ -416,7 +421,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		if ($PolicyStore -notin $LocalStores)
 		{
 			# Configure this machine for remote session over SSL
-			Set-WinRMClient $PolicyStore
+			Set-WinRMClient $PolicyStore -Confirm:$false
+			Enable-RemoteRegistry
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
@@ -425,8 +431,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
 			# Enable loopback only HTTP
-			Set-WinRMClient -Protocol HTTP
-			Disable-WinRMServer
+			Set-WinRMClient -Protocol HTTP -Confirm:$false
+			Disable-WinRMServer -Confirm:$false
 
 			$ConnectParams["Protocol"] = "HTTP"
 			# TODO: Culture default values project wide

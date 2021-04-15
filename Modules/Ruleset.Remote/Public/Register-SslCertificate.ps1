@@ -59,6 +59,10 @@ For server -Target this must be PFX file, for client -Target it must be DER enco
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
+.PARAMETER PassThru
+Returns an object that represents the certificate.
+By default, no output is generated.
+
 .PARAMETER Force
 If specified, overwrites an existing exported certificate file,
 unless it has the Read-only attribute set.
@@ -89,7 +93,6 @@ None. You cannot pipe objects to Register-SslCertificate
 .NOTES
 This script is called by Enable-WinRMServer and doesn't need to be run on it's own.
 TODO: Needs testing with PS Core
-TODO: Risk mitigation
 HACK: What happens when exporting a certificate that is already installed? (no error is shown)
 
 .LINK
@@ -100,9 +103,9 @@ https://docs.microsoft.com/en-us/powershell/module/pkiclient
 #>
 function Register-SslCertificate
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default", SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md")]
-	[OutputType([System.Security.Cryptography.X509Certificates.X509Certificate2])]
+	[OutputType([void], [System.Security.Cryptography.X509Certificates.X509Certificate2])]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
@@ -119,13 +122,19 @@ function Register-SslCertificate
 		[string] $CertThumbprint,
 
 		[Parameter()]
+		[switch] $PassThru,
+
+		[Parameter()]
 		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 	$ExportPath = "$ProjectRoot\Exports"
+	if ($Force -and !$PSBoundParameters.ContainsKey("Confirm"))
+	{
+		$ConfirmPreference = "None"
+	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring SSL certificate"
 
@@ -171,7 +180,7 @@ function Register-SslCertificate
 			}
 		}
 
-		if ($CertThumbprint)
+		if (![string]::IsNullOrEmpty($CertThumbprint))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating SSL thumbprint"
 
@@ -212,148 +221,157 @@ function Register-SslCertificate
 		}
 		elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
 		{
-			# Import certificate file from default repository location
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching default repository location for SSL certificate"
-
-			if ($ProductType -eq "Server")
+			if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate from default repository location to personal store"))
 			{
-				$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-					"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter password for certificate $Domain.pfx"))
+				# Import certificate file from default repository location
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching default repository location for SSL certificate"
 
-				$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
-					-Password $CertPassword.Password -Exportable
-			}
-			else
-			{
-				$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
-			}
+				if ($ProductType -eq "Server")
+				{
+					$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
+						"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter password for certificate $Domain.pfx"))
 
-			if (($Cert.Subject -ne "CN=$Domain") -or
-				($CertThumbprint -and ($Cert.thumbprint -ne $CertThumbprint)) -or
-				!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
-			{
-				# Undo import operation
-				Get-ChildItem Cert:\LocalMachine\My |
-				Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-				Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default repository location failed"
-			}
+					$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
+						-Password $CertPassword.Password -Exportable
+				}
+				else
+				{
+					$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
+				}
 
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
+				if (($Cert.Subject -ne "CN=$Domain") -or
+					(![string]::IsNullOrEmpty($CertThumbprint) -and ($Cert.thumbprint -ne $CertThumbprint)) -or
+					!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
+				{
+					# Undo import operation
+					Get-ChildItem Cert:\LocalMachine\My |
+					Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
+					Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default repository location failed"
+				}
+
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
+			}
 		}
 		elseif ($ProductType -eq "Server")
 		{
-			# Create new self signed server certificate
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new SSL certificate"
+			if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Create new self signed certificate"))
+			{
+				# Create new self signed server certificate
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new SSL certificate"
 
-			# NOTE: Yellow exclamation mark on "Key Usage" means following:
-			# The key usage extension defines the purpose (e.g., encipherment,
-			# signature, certificate signing) of the key contained in the certificate.
-			# The usage restriction might be employed when a key that could be used for more than one
-			# operation is to be restricted.
-			# Conforming CAs MUST include this extension in certificates that contain public keys that
-			# are used to validate digital signatures on other public key certificates or CRLs.
-			# When present, conforming CAs SHOULD mark this extension as critical.
-			# https://tools.ietf.org/html/rfc5280#section-4.2.1.3
+				# NOTE: Yellow exclamation mark on "Key Usage" means following:
+				# The key usage extension defines the purpose (e.g., encipherment,
+				# signature, certificate signing) of the key contained in the certificate.
+				# The usage restriction might be employed when a key that could be used for more than one
+				# operation is to be restricted.
+				# Conforming CAs MUST include this extension in certificates that contain public keys that
+				# are used to validate digital signatures on other public key certificates or CRLs.
+				# When present, conforming CAs SHOULD mark this extension as critical.
+				# https://tools.ietf.org/html/rfc5280#section-4.2.1.3
 
-			# Each extension in a certificate is designated as either critical or non-critical.
-			# A certificate-using system MUST reject the certificate if it encounters a critical
-			# extension it does not recognize or a critical extension that contains information that
-			# it cannot process.
-			# A non-critical extension MAY be ignored if it is not recognized,
-			# but MUST be processed if it is recognized.
-			# https://tools.ietf.org/html/rfc5280#section-4.1.2.9
-			$Date = Get-Date
-			$CertParams = @{
-				# Install certificate into "Personal" store
-				# https://docs.microsoft.com/en-us/windows/win32/seccrypto/system-store-locations
-				CertStoreLocation = "Cert:\LocalMachine\My"
-				# Specifies a friendly name for the new certificate (Friendly name field)
-				FriendlyName = "WinRM Server"
-				# Specifies a description for the private key
-				KeyDescription = "WinRM remoting key"
-				# Specifies a friendly name for the private key
-				KeyFriendlyName = "WinRM and CIM remoting key"
-				# The type of certificate that this cmdlet creates
-				Type = "SSLServerAuthentication"
-				# Allow password protected private key export
-				KeyExportPolicy = "ExportableEncrypted"
-				# Valid from now for the next 1 year
-				NotBefore = $Date
-				NotAfter = $Date.AddMonths(12)
-				# MSDN: The first DNS name is also saved as the Subject Name.
-				# If no signing certificate is specified, the first DNS name is also saved as the Issuer Name.
-				DnsName = $Domain
-				Subject = $Domain # [x]
-				# The key can be used for key encryption
-				# https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509keyusageflags?view=net-5.0
-				KeyUsage = "None" # [x] "DigitalSignature, KeyEncipherment"
-				# MSDN: Specifies whether the private key associated with the new certificate can be used for signing, encryption, or both
-				# None uses the default value from the underlying CSP.
-				# If the key is managed by a Cryptography Next Generation (CNG) KSP, the value is None
-				# TODO: To set to "KeyExchange" another Provider is needed that supports it
-				# The key usages for the key usages property of the private key
-				KeyUsageProperty = "None" # [ ]
-				KeySpec = "None" # [ ]
-				KeyAlgorithm = "RSA"
-				KeyLength = "2048"
-				# https://docs.microsoft.com/en-us/windows/win32/seccrypto/microsoft-cryptographic-service-providers
-				Provider = "Microsoft Software Key Storage Provider" # [ ]
+				# Each extension in a certificate is designated as either critical or non-critical.
+				# A certificate-using system MUST reject the certificate if it encounters a critical
+				# extension it does not recognize or a critical extension that contains information that
+				# it cannot process.
+				# A non-critical extension MAY be ignored if it is not recognized,
+				# but MUST be processed if it is recognized.
+				# https://tools.ietf.org/html/rfc5280#section-4.1.2.9
+				$Date = Get-Date
+				$CertParams = @{
+					# Install certificate into "Personal" store
+					# https://docs.microsoft.com/en-us/windows/win32/seccrypto/system-store-locations
+					CertStoreLocation = "Cert:\LocalMachine\My"
+					# Specifies a friendly name for the new certificate (Friendly name field)
+					FriendlyName = "WinRM Server"
+					# Specifies a description for the private key
+					KeyDescription = "WinRM remoting key"
+					# Specifies a friendly name for the private key
+					KeyFriendlyName = "WinRM and CIM remoting key"
+					# The type of certificate that this cmdlet creates
+					Type = "SSLServerAuthentication"
+					# Allow password protected private key export
+					KeyExportPolicy = "ExportableEncrypted"
+					# Valid from now for the next 1 year
+					NotBefore = $Date
+					NotAfter = $Date.AddMonths(12)
+					# MSDN: The first DNS name is also saved as the Subject Name.
+					# If no signing certificate is specified, the first DNS name is also saved as the Issuer Name.
+					DnsName = $Domain
+					Subject = $Domain # [x]
+					# The key can be used for key encryption
+					# https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509keyusageflags?view=net-5.0
+					KeyUsage = "None" # [x] "DigitalSignature, KeyEncipherment"
+					# MSDN: Specifies whether the private key associated with the new certificate can be used for signing, encryption, or both
+					# None uses the default value from the underlying CSP.
+					# If the key is managed by a Cryptography Next Generation (CNG) KSP, the value is None
+					# TODO: To set to "KeyExchange" another Provider is needed that supports it
+					# The key usages for the key usages property of the private key
+					KeyUsageProperty = "None" # [ ]
+					KeySpec = "None" # [ ]
+					KeyAlgorithm = "RSA"
+					KeyLength = "2048"
+					# https://docs.microsoft.com/en-us/windows/win32/seccrypto/microsoft-cryptographic-service-providers
+					Provider = "Microsoft Software Key Storage Provider" # [ ]
+				}
+
+				# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
+				$Cert = New-SelfSignedCertificate @CertParams
+
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 			}
-
-			# https://docs.microsoft.com/en-us/powershell/module/pkiclient/new-selfsignedcertificate
-			$Cert = New-SelfSignedCertificate @CertParams
-
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Using new certificate with thumbprint '$($Cert.thumbprint)'"
 		}
 		else
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "No certificate was not found in default repository location"
+			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "No certificate was found in default repository location"
 		}
 	}
 	elseif (Test-Path -Path $CertFile -PathType Leaf -ErrorAction Ignore)
 	{
-		# Import certificate file from custom location
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Using specified file as SSL certificate"
-
-		if ($ProductType -eq "Server")
+		if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate from custom location to personal store"))
 		{
-			$ExportFile = "$ExportPath\$((Split-Path -Path $CertFile -Leaf) -replace '\.pfx$').cer"
+			# Import certificate file from custom location
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Using specified file as SSL certificate"
 
-			if ($CertFile.EndsWith(".pfx"))
+			if ($ProductType -eq "Server")
 			{
-				$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-					"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter certificate password"))
+				$ExportFile = "$ExportPath\$((Split-Path -Path $CertFile -Leaf) -replace '\.pfx$').cer"
 
-				$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
-					-Password $CertPassword.Password -Exportable
+				if ($CertFile.EndsWith(".pfx"))
+				{
+					$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
+						"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter certificate password"))
+
+					$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
+						-Password $CertPassword.Password -Exportable
+				}
+				else
+				{
+					Write-Error -Category InvalidArgument -TargetObject $CertFile -Message "Invalid certificate file format, *.pfx expected"
+				}
+			}
+			elseif ($CertFile.EndsWith(".cer"))
+			{
+				$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
 			}
 			else
 			{
-				Write-Error -Category InvalidArgument -TargetObject $CertFile -Message "Invalid certificate file format, *.pfx expected"
+				Write-Error -Category InvalidArgument -TargetObject $CertFile -Message "Invalid certificate file format, *.cer expected"
 			}
-		}
-		elseif ($CertFile.EndsWith(".cer"))
-		{
-			$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
-		}
-		else
-		{
-			Write-Error -Category InvalidArgument -TargetObject $CertFile -Message "Invalid certificate file format, *.cer expected"
-		}
 
-		if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
-		{
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Using certificate from custom location '$($Cert.thumbprint)'"
-		}
-		else
-		{
-			# Undo import operation
-			Get-ChildItem Cert:\LocalMachine\My |
-			Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-			Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from custom location failed"
+			if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
+			{
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Using certificate from custom location '$($Cert.thumbprint)'"
+			}
+			else
+			{
+				# Undo import operation
+				Get-ChildItem Cert:\LocalMachine\My |
+				Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
+				Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from custom location failed"
+			}
 		}
 	}
 	else
@@ -361,34 +379,43 @@ function Register-SslCertificate
 		Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "Specified certificate file was not found '$CertFile'"
 	}
 
+	if (!$Cert)
+	{
+		# If $Cert is null, could be either ShouldProcess was dismissed or some other error occurred
+		return
+	}
+
 	if ($ProductType -eq "Server")
 	{
-		# Export self signed, existing certificate from store or imported PFX
+		# Export self signed or existing certificate from personal store
 		if (Test-Path $ExportFile -PathType Leaf -ErrorAction Ignore)
 		{
 			if ($Force)
 			{
-				# NOTE: Will not overwrite readonly file, which isn't reported here
-				Write-Warning -Message "Overwriting existing certificate file '$ExportFile'"
-				Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT -Force | Out-Null
+				if ($PSCmdlet.ShouldProcess($ExportFile, "Overwrite existing certificate file"))
+				{
+					# NOTE: Will not overwrite readonly file, which isn't reported here
+					Write-Warning -Message "Overwriting existing certificate file '$ExportFile'"
+					Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT -Force | Out-Null
+				}
 			}
 			else
 			{
 				Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
 			}
 		}
-		else
+		elseif ($PSCmdlet.ShouldProcess($ExportFile, "Exporting certificate file '$Domain.cer'"))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting certificate '$Domain.cer'"
 			Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT | Out-Null
 		}
 	}
 
-	# TODO: Should be verified or singed by custom key instead of having many trusted self signed certs
+	# TODO: Should be verified or singed by custom key instead of having multiple trusted self signed certs
 	if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore -WarningAction Ignore))
 	{
 		# Add public key to trusted root to trust this certificate locally
-		if ($PSCmdlet.ShouldContinue("Add certificate to trusted root store?", "Certificate not trusted"))
+		if ($PSCmdlet.ShouldProcess("Add certificate to trusted root store?", "Certificate not trusted"))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "Trusting certificate '$Domain.cer' with thumbprint '$($Cert.thumbprint)'"
@@ -400,5 +427,8 @@ function Register-SslCertificate
 		}
 	}
 
-	Write-Output $Cert
+	if ($PassThru)
+	{
+		Write-Output $Cert
+	}
 }

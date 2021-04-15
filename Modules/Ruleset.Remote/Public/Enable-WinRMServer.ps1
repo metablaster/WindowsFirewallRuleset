@@ -55,8 +55,6 @@ Use this parameter when there are multiple certificates with same DNS entries.
 .PARAMETER Force
 If specified, overwrites an existing exported certificate (*.cer) file,
 unless it has the Read-only attribute set.
-Also it does not prompt to set connected network adapters to private profile,
-and does not prompt to temporarily disable any non connected network adapter if needed.
 
 .EXAMPLE
 PS> Enable-WinRMServer
@@ -89,10 +87,9 @@ TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Authenticate users using certificates optionally or instead of credential object
 TODO: Needs testing with PS Core
-TODO: Risk mitigation
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
-TODO: Configure server remotely either with WSMan or trough SSH
-TODO: To test and configure server remotely use Connect-WSMan and New-WSManSessionOption
+TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server
+remotely use Connect-WSMan and New-WSManSessionOption
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -117,7 +114,7 @@ winrm help config
 #>
 function Enable-WinRMServer
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default", SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md")]
 	[OutputType([void], [System.Xml.XmlElement])]
 	param (
@@ -138,7 +135,6 @@ function Enable-WinRMServer
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer
-	$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
 	$Domain = [System.Environment]::MachineName
 
 	<# MSDN: The Enable-PSRemoting cmdlet performs the following operations:
@@ -154,15 +150,17 @@ function Enable-WinRMServer
 	#>
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
 
-	Unblock-NetProfile -Force:$Force
-	Initialize-WinRM -Force
+	Initialize-WinRM
 
-	# Remove all default and repository specifc session configurations
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default session configurations"
-	Get-PSSessionConfiguration | Where-Object {
-		$_.Name -like "Microsoft*" -or
-		$_.Name -eq "RemoteFirewall"
-	} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove default session configurations"))
+	{
+		# Remove all default and repository specifc session configurations
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default session configurations"
+		Get-PSSessionConfiguration | Where-Object {
+			$_.Name -like "Microsoft*" -or
+			$_.Name -eq "RemoteFirewall"
+		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
+	}
 
 	# Re-register repository specific session configuration
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
@@ -227,59 +225,93 @@ function Enable-WinRMServer
 		# RunAsCredential = Get-Credential
 	}
 
-	# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
-	Set-StrictMode -Off
-
-	# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
-	# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
-	Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
-	Set-StrictMode -Version Latest
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
-	# TODO: Use Set-WSManQuickConfig since or if recreating default session configurations is not absolutely needed
-	Enable-PSRemoting -Force | Out-Null
-
-	# Disable unused built in session configurations
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
-	Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
-	Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
-	Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
-
-	if ($Protocol -ne "HTTPS")
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
 	{
-		# Add new HTTP listener
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTP listener options"
-		New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
-			-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
+		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
+		Set-StrictMode -Off
+
+		# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
+		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
+		Set-StrictMode -Version Latest
 	}
 
-	if ($Protocol -ne "HTTP")
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS listener options"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
 
-		# SSL certificate
-		[hashtable] $SSLCertParams = @{
-			ProductType = "Server"
-			Force = $Force
+		try
+		{
+			Unblock-NetProfile
+
+			# TODO: Use Set-WSManQuickConfig since or if recreating default session configurations is not absolutely needed
+			Enable-PSRemoting -Force | Out-Null
+		}
+		catch [System.OperationCanceledException]
+		{
+			Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+	{
+		# Disable unused built in session configurations
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
+		Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
+		Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server listener"))
+	{
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
+		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+
+		if ($Protocol -ne "HTTPS")
+		{
+			# Add new HTTP listener
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTP listener options"
+			New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
+				-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 		}
 
-		if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-		elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
-		$Cert = & Register-SslCertificate @SSLCertParams
+		if ($Protocol -ne "HTTP")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS listener options"
 
-		# Add new HTTPS listener
-		New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
-			-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
+			# SSL certificate
+			[hashtable] $SSLCertParams = @{
+				ProductType = "Server"
+				Force = $Force
+				CertFile = $CertFile
+				CertThumbprint = $CertThumbprint
+				PassThru = $true
+			}
+
+			$Cert = & Register-SslCertificate @SSLCertParams
+
+			if ($Cert)
+			{
+				# Add new HTTPS listener
+				New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
+					-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
+			}
+		}
 	}
 
 	# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
 	if ($WmiPlugin.Value -ne $true)
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WMI Provider plugin"
-		Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable WMI Provider plugin"))
+		{
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WMI Provider plugin"
+			Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+		}
 	}
 
 	# Specify acceptable client authentication methods
@@ -296,10 +328,13 @@ function Enable-WinRMServer
 		$AuthenticationOptions["Certificate"] = $true
 	}
 
-	Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM authentication and default ports"))
+	{
+		Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
-	Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
+		Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
 
@@ -308,35 +343,51 @@ function Enable-WinRMServer
 		$ServerOptions["AllowUnencrypted"] = $false
 	}
 
-	# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-	# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-	Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server options"))
+	{
+		# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+		# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+		Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
-	Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM protocol options"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
+		Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+	}
 
-	Restore-NetProfile -Force
-	# Remove WinRM predefined compatibility rules
-	Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
+	Restore-NetProfile
+
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
+	{
+		# Remove WinRM predefined compatibility rules
+		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
+	}
 
 	if ($script:Workstation)
 	{
-		# Restore public profile rules to local subnet which is the default
-		Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
-			$_.Profile -like "*Public*"
-		} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
+		{
+			# Restore public profile rules to local subnet which is the default
+			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+				$_.Profile -like "*Public*"
+			} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WinRM service"
-	$WinRM.Stop()
-	$WinRM.WaitForStatus("Stopped", $ServiceTimeout)
-	$WinRM.Start()
-	$WinRM.WaitForStatus("Running", $ServiceTimeout)
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WinRM service"
+		$WinRM.Stop()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		$WinRM.Start()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+	}
 
 	$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 	$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
 
-	if ($TokenValue -ne 1)
+	if (!$WhatIfPreference.IsPresent -and ($TokenValue -ne 1))
 	{
 		Write-Error -Category InvalidResult -TargetObject $TokenValue `
 			-Message "LocalAccountTokenFilterPolicy was not enabled"

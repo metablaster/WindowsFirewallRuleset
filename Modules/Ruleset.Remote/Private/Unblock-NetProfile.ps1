@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +37,6 @@ Virtual adapters which are configured but not connected cannot be assigned to pr
 also default Hyper-V switch can't be set to private even if connected, in these cases they need
 to be temporarily disabled.
 
-.PARAMETER Force
-If specified, does not prompt to set connected network adapters to private profile,
-and does not prompt to temporarily disable any non connected network adapter if needed.
-
 .EXAMPLE
 PS> Unblock-NetProfile
 
@@ -56,50 +51,67 @@ None.
 #>
 function Unblock-NetProfile
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([void])]
-	param (
-		[Parameter()]
-		[switch] $Force
-	)
+	param ()
+
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($script:Workstation)
 	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking network profile requirements"
+
 		[array] $PublicAdapter = Get-NetConnectionProfile |
 		Where-Object -Property NetworkCategory -NE Private
 
 		if ($PublicAdapter)
 		{
-			Write-Warning -Message "Following network adapters need to be set to private network profile to continue"
-			foreach ($Alias in $PublicAdapter.InterfaceAlias)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting connected adapters to private network profile"
+
+			# Keep track of previous adapter profile values
+			[hashtable] $script:AdapterProfile = @{}
+
+			foreach ($Adapter in $PublicAdapter)
 			{
-				if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Set adapter to private network profile"))
+				if ($PSCmdlet.ShouldProcess($Adapter.InterfaceAlias, "Set adapter to private network profile"))
 				{
-					Set-NetConnectionProfile -InterfaceAlias $Alias -NetworkCategory Private -Force
+					# NOTE: This will modify following registry key:
+					# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles
+					# The "Category" value of corresponded NIC:
+					# 0 = public
+					# 1 = private
+					# 2 = domain
+					Set-NetConnectionProfile -InterfaceAlias $Adapter.InterfaceAlias -NetworkCategory Private
+					$script:AdapterProfile.Add($Adapter.InterfaceAlias, $Adapter.NetworkCategory)
 				}
-				else
+				elseif (!$WhatIfPreference.IsPresent)
 				{
-					throw [System.OperationCanceledException]::new("not all connected network adapters are not operating on private profile")
+					throw [System.OperationCanceledException]::new(
+						"not all connected network adapters are not operating on private profile")
 				}
 			}
 		}
 
-		Set-Variable -Name VirtualAdapter -Scope Script -Value (
-			Get-NetIPConfiguration | Where-Object { !$_.NetProfile })
+		[array] $AllVirtualAdapters = Get-NetIPConfiguration | Where-Object { !$_.NetProfile }
 
-		if ($script:VirtualAdapter)
+		if ($AllVirtualAdapters)
 		{
-			Write-Warning -Message "Following network adapters need to be temporarily disabled to continue"
-			foreach ($Alias in $script:VirtualAdapter.InterfaceAlias)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Temporarily disabling virtual or disconnected adapters"
+
+			# Keep track of disabled virtual adapters
+			[array] $script:VirtualAdapter = @()
+
+			foreach ($Adapter in $AllVirtualAdapters)
 			{
-				if ($Force -or $PSCmdlet.ShouldContinue($Alias, "Temporarily disable network adapter"))
+				if ($PSCmdlet.ShouldProcess($Adapter.InterfaceAlias, "Temporarily disable network adapter"))
 				{
-					Disable-NetAdapter -InterfaceAlias $Alias -Confirm:$false
+					Disable-NetAdapter -InterfaceAlias $Adapter.InterfaceAlias -Confirm:$false
+					$script:VirtualAdapter += $Adapter.InterfaceAlias
 				}
-				else
+				elseif (!$WhatIfPreference.IsPresent)
 				{
-					Set-Variable -Name VirtualAdapter -Scope Script -Value $null
-					throw [System.OperationCanceledException]::new("not all configured network adapters are not operating on private profile")
+					throw [System.OperationCanceledException]::new(
+						"not all configured network adapters are not operating on private profile")
 				}
 			}
 		}

@@ -35,9 +35,6 @@ Starts the WinRM service, Windows Remote Management (WS-Management) and set it t
 automatic startup.
 Adds required firewall rules to be able to configure service options.
 
-.PARAMETER Force
-If specified, does not prompt for confirmation.
-
 .EXAMPLE
 PS> Initialize-WinRM
 
@@ -52,32 +49,32 @@ None.
 #>
 function Initialize-WinRM
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([void])]
-	param (
-		[Parameter()]
-		[switch] $Force
-	)
+	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$VerbosePreference = "Continue"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking WS-Management (WinRM) requirements"
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Windows firewall, persistent store", "Add 'Windows Remote Management' rules"))
+	# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
+	# present may cause issues adjusting some of the WinRM options
+	if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 	{
-		# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
-		# present may cause issues adjusting some of the WinRM options
-		if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
+		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add 'Windows Remote Management' rules"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding firewall rules 'Windows Remote Management'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management' firewall rules"
 
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
 				-Direction Inbound -NewPolicyStore PersistentStore |
 			Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 		}
+	}
 
-		if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
+	if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
+	{
+		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add 'Windows Remote Management - Compatibility Mode' rules"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding firewall rules 'Windows Remote Management - Compatibility Mode'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management - Compatibility Mode' firewall rules"
 
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
 				-Direction Inbound -NewPolicyStore PersistentStore |
@@ -85,21 +82,23 @@ function Initialize-WinRM
 		}
 	}
 
-	if ($Force -or $PSCmdlet.ShouldContinue("Windows Remote Management (WS-Management)", "Start service and set to automatic startup"))
+	# TODO: Handled by Initialize-Service
+	if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
 	{
-		# NOTE: WinRM service must be running at this point
-		# TODO: Handled by ProjectSettings.ps1
-		if ($WinRM.StartType -ne "Automatic")
+		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting WS-Management service to automatic startup"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($WinRM.DisplayName) service to automatic startup"
 			Set-Service -InputObject $WinRM -StartType Automatic
 		}
+	}
 
-		if ($WinRM.Status -ne "Running")
+	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
+	{
+		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Start service"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Starting WS-Management service"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($WinRM.DisplayName) service"
 			$WinRM.Start()
-			$WinRM.WaitForStatus("Running", $ServiceTimeout)
+			$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 		}
 	}
 }
