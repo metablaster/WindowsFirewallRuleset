@@ -309,12 +309,12 @@ function Enable-WinRMServer
 			[hashtable] $SSLCertParams = @{
 				ProductType = "Server"
 				Force = $Force
-				CertFile = $CertFile
-				CertThumbprint = $CertThumbprint
 				PassThru = $true
 			}
 
-			$Cert = & Register-SslCertificate @SSLCertParams
+			if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+			elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
+			$Cert = Register-SslCertificate @SSLCertParams
 
 			if ($Cert)
 			{

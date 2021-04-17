@@ -230,11 +230,11 @@ function Set-WinRMClient
 		[hashtable] $SSLCertParams = @{
 			ProductType = "Client"
 			Domain = $Domain
-			CertFile = $CertFile
-			CertThumbprint = $CertThumbprint
 		}
 
-		& Register-SslCertificate @SSLCertParams
+		if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+		elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
+		Register-SslCertificate @SSLCertParams
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))

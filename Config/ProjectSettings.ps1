@@ -422,7 +422,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			# Configure this machine for remote session over SSL
 			Set-WinRMClient $PolicyStore -Confirm:$false
-			Enable-RemoteRegistry
+			Enable-RemoteRegistry -Confirm:$false
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
@@ -432,6 +432,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			# Enable loopback only HTTP
 			Set-WinRMClient -Protocol HTTP -Confirm:$false
+			Enable-WinRMServer -Protocol HTTP -Confirm:$false
 			Disable-WinRMServer -Confirm:$false
 
 			$ConnectParams["Protocol"] = "HTTP"

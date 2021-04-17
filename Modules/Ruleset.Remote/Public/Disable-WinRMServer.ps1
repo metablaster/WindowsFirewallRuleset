@@ -99,6 +99,12 @@ function Disable-WinRMServer
 
 	Initialize-WinRM
 
+	if (!(Get-PSSessionConfiguration -Name $script:FirewallSession -EA Ignore))
+	{
+		Write-Error -Category InvalidOperation -Message "Enable-WinRMServer must run before calling Disable-WinRMServer"
+		return
+	}
+
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove all listeners"))
 	{
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
@@ -118,6 +124,7 @@ function Disable-WinRMServer
 	}
 	else
 	{
+		# TODO: This should be part of Enable-WinRMServer or separate function which could be called by both
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Leave only '$script:FirewallSession' session configurations enabled"))
 		{
 			# Disable all session configurations except what's needed for local firewall management
@@ -134,10 +141,10 @@ function Disable-WinRMServer
 			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
-			New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `
+			New-WSManInstance -SelectorSet @{ Address = "IP:[::1]"; Transport = "HTTP" } `
 				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
-			New-WSManInstance -SelectorSet @{Address = "IP:127.0.0.1"; Transport = "HTTP" } `
+			New-WSManInstance -SelectorSet @{ Address = "IP:127.0.0.1"; Transport = "HTTP" } `
 				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
