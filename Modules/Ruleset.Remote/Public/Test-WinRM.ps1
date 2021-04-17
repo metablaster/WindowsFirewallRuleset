@@ -113,7 +113,7 @@ function Test-WinRM
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($PSSessionConfigurationName -ne "RemoteFirewall")
+	if ($PSSessionConfigurationName -ne $script:FirewallSession)
 	{
 		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
 	}

@@ -33,7 +33,7 @@ Disable WinRM server for CIM and PowerShell remoting
 .DESCRIPTION
 Disable WinRM server for remoting previously enabled by Enable-WinRMServer.
 WinRM service will continue to run but will accept only loopback HTTP and only if
-using "RemoteFirewall" session configuration.
+using "RemoteFirewall.PSedition" session configuration.
 
 In addition unlike Disable-PSRemoting, it will also remove default firewall rules
 and restore registry setting which restricts remote access to members of the
@@ -55,7 +55,6 @@ None. Disable-WinRMServer does not generate any output
 .NOTES
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: Needs testing with PS Core
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 
 .LINK
@@ -119,12 +118,12 @@ function Disable-WinRMServer
 	}
 	else
 	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Leave only 'RemoteFirewall' session configurations enabled"))
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Leave only '$script:FirewallSession' session configurations enabled"))
 		{
 			# Disable all session configurations except what's needed for local firewall management
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
 			Get-PSSessionConfiguration | Where-Object {
-				$_.Name -ne "RemoteFirewall"
+				$_.Name -ne $script:FirewallSession
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 
@@ -132,7 +131,7 @@ function Disable-WinRMServer
 		{
 			# Enable only localhost on loopback
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
-			Set-PSSessionConfiguration -Name RemoteFirewall -AccessMode Local -NoServiceRestart -Force
+			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
 			New-WSManInstance -SelectorSet @{Address = "IP:[::1]"; Transport = "HTTP" } `

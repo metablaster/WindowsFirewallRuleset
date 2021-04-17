@@ -241,7 +241,7 @@ else
 	# the "Microsoft.PowerShell" session configuration on the remote computer.
 	# If you specify only a configuration name, the following schema URI is prepended:
 	# http://schemas.microsoft.com/PowerShell/
-	$PSSessionConfigurationName = "RemoteFirewall"
+	$PSSessionConfigurationName = "RemoteFirewall.$($PSVersionTable.PSEdition)"
 
 	# The $PSSessionApplicationName preference variable is set on the local computer,
 	# but it specifies a listener on the remote computer.

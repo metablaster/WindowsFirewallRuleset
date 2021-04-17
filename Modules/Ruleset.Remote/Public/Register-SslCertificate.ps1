@@ -92,7 +92,6 @@ None. You cannot pipe objects to Register-SslCertificate
 
 .NOTES
 This script is called by Enable-WinRMServer and doesn't need to be run on it's own.
-TODO: Needs testing with PS Core
 HACK: What happens when exporting a certificate that is already installed? (no error is shown)
 
 .LINK

@@ -85,7 +85,6 @@ None. You cannot pipe objects to Set-WinRMClient
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Authenticate users using certificates optionally or instead of credential object
-TODO: Needs testing with PS Core
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 
 .LINK

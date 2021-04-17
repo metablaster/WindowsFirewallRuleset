@@ -31,7 +31,7 @@ param ()
 
 # Imports
 # TODO Use -InModule to avoid creating connection and just import module
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule # $PSCmdlet
 
 #
 # Import all modules into current session, useful to quickly load module functions into session

@@ -106,7 +106,7 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Timeout to start and stop WinRM service
-New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:30"
+New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:50"
 
 # Firewall rules needed to be present to configure some of the WinRM options
 New-Variable -Name WinRMRules -Scope Script -Value "@FirewallAPI.dll,-30267"
@@ -125,5 +125,7 @@ New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
 Set-Variable -Name AdapterProfile -Scope Script -Value $null
 Set-Variable -Name VirtualAdapter -Scope Script -Value $null
 
+Set-Variable -Name FirewallSession -Scope Script -Value "RemoteFirewall.$($PSVersionTable.PSEdition)"
+
 # TODO: Temporarily enable verbose output
-# $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+$PSDefaultParameterValues["Write-Verbose:Verbose"] = $true

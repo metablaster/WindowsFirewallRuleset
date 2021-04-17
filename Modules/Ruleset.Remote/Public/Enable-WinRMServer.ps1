@@ -86,7 +86,6 @@ NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Authenticate users using certificates optionally or instead of credential object
-TODO: Needs testing with PS Core
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server
 remotely use Connect-WSMan and New-WSManSessionOption
@@ -152,13 +151,27 @@ function Enable-WinRMServer
 
 	Initialize-WinRM
 
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		# "PowerShell." + "current PowerShell version"
+		# "PowerShell.7", untied to any specific PowerShell version.
+		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion.Major)*"
+	}
+	else
+	{
+		# "Microsoft.PowerShell" is used for sessions by default
+		# "Microsoft.PowerShell32" is used for sessions by 32bit host
+		# "Microsoft.PowerShell.Workflow" is used by workflows
+		$DefaultSession = "Microsoft.PowerShell*"
+	}
+
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove default session configurations"))
 	{
 		# Remove all default and repository specifc session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default session configurations"
 		Get-PSSessionConfiguration | Where-Object {
-			$_.Name -like "Microsoft*" -or
-			$_.Name -eq "RemoteFirewall"
+			$_.Name -like $DefaultSession -or
+			$_.Name -eq $script:FirewallSession
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
@@ -180,7 +193,7 @@ function Enable-WinRMServer
 
 	# [Microsoft.WSMan.Management.WSManConfigContainerElement]
 	$SessionConfigParams = @{
-		Name = "RemoteFirewall"
+		Name = $script:FirewallSession
 		Path = "$ProjectRoot\Config\RemoteFirewall.pssc"
 
 		# Determines whether a 32-bit or 64-bit version of the PowerShell process is started in sessions
@@ -261,8 +274,17 @@ function Enable-WinRMServer
 	{
 		# Disable unused built in session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
-		Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
-		Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
+			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.ToString())" -NoServiceRestart -Force
+		}
+		else
+		{
+			Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
+			Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server listener"))
@@ -387,7 +409,7 @@ function Enable-WinRMServer
 	$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 	$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
 
-	if (!$WhatIfPreference.IsPresent -and ($TokenValue -ne 1))
+	if (!$WhatIfPreference -and ($TokenValue -ne 1))
 	{
 		Write-Error -Category InvalidResult -TargetObject $TokenValue `
 			-Message "LocalAccountTokenFilterPolicy was not enabled"
