@@ -42,6 +42,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Added rules for PowerShell remoting
   - Added rules for VSCode remote debugging trough SSH
+  - Added rule for UAC
 
 - Scripts
 

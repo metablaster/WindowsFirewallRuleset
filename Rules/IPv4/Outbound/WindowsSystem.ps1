@@ -895,6 +895,23 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
+$Program = "%SystemRoot%\System32\consent.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "Windows UAC" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
+		-Description "consent.exe connects to the internet to verify the digital signature
+(certification expiry) of applications that needs administrative privilege,
+from the certification issuer." |
+	Format-RuleOutput
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
