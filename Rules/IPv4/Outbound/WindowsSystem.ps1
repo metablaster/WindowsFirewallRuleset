@@ -895,6 +895,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
+# TODO: Needs testings, probably current user needed as well
 $Program = "%SystemRoot%\System32\consent.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
