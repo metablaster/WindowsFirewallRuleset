@@ -174,6 +174,7 @@ function Initialize-Service
 				else
 				{
 					# Configure dependent services first
+					# TODO: This will also return non service objects, such as drivers which cant be configured
 					foreach ($Required in $Service.ServicesDependedOn)
 					{
 						# For dependent services show only failures

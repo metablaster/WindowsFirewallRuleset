@@ -89,6 +89,7 @@ function ConvertFrom-OSBuild
 <#
 https://docs.microsoft.com/en-us/windows/release-information/
 Version	Servicing option				Availability OS build	Latest revision date	End of service
+21H1	Semi-Annual Channel				2021-05-18	19043.1165	2021-08-10	2022-12-13	2022-12-13
 20H2	Semi-Annual Channel				2020-10-20	19042.572	2020-10-13	2022-05-10	2023-05-09
 2004	Semi-Annual Channel				2020-05-27	19041.450	2020-08-11	2021-12-14	2021-12-14	Microsoft recommends
 1909	Semi-Annual Channel				2019-11-12	18363.1049	2020-08-20	2021-05-11	2022-05-10
@@ -109,6 +110,10 @@ Version		Servicing option					Availability OS build	Latest revision date	Mainstr
 #>
 
 Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomObject[]]@(
+		[hashtable]@{
+			Version = "21H1"
+			Build = 19043
+		}
 		[hashtable]@{
 			Version = "20H2"
 			Build = 19042

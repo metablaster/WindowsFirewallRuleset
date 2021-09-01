@@ -69,6 +69,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Test-TargetComputer` renamed to `Test-Computer` now experimental and no longer useful
   - `Resolve-Host` function improved, removed deprecated API, duplicate code etc.
   - Registry drilling functions updated for remote registry
+  - `ConvertFrom-OSBuild` updated for 21H1 OS version
 
 - Documentation
 
