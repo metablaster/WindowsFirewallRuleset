@@ -88,7 +88,7 @@ function Initialize-WinRM
 		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($WinRM.DisplayName) service to automatic startup"
-			Set-Service -InputObject $WinRM -StartType Automatic
+			Set-Service -InputObject $WinRM -StartupType Automatic
 		}
 	}
 

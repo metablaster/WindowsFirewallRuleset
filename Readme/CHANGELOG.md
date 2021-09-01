@@ -46,7 +46,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Scripts
 
-  - Reworked `ProjectSettings\Config` for remoting
+  - Reworked `Config\ProjectSettings` for remoting
 
 - New features
 
