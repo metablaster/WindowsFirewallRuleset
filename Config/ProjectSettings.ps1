@@ -271,6 +271,15 @@ else
 		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 }
 
+# Set to true to enable development features, it does following at a minimum:
+# 1. Forces reloading modules and removable variables.
+# 2. Loads troubleshooting rules defined in Temporary.ps1
+# 3. Performs additional requirements checks needed or recommended for development
+# 4. Enables some disabled unit tests and disables logging
+# 5. Enables setting preference variables for modules
+# NOTE: If changed to $true, the change requires PowerShell restart
+Set-Variable -Name Develop -Scope Global -Value $true
+
 if ($Develop)
 {
 	if ($PSVersionTable.PSEdition -eq "Desktop")
@@ -327,15 +336,6 @@ if ($MyInvocation.InvocationName -ne ".")
 	Write-Error -Category InvalidOperation -TargetObject $SettingsScript `
 		-Message "$SettingsScript script must be dot sourced"
 }
-
-# Set to true to enable development features, it does following at a minimum:
-# 1. Forces reloading modules and removable variables.
-# 2. Loads troubleshooting rules defined in Temporary.ps1
-# 3. Performs additional requirements checks needed or recommended for development
-# 4. Enables some disabled unit tests and disables logging
-# 5. Enables setting preference variables for modules
-# NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -679,7 +679,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 3))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 1, 4))
 	}
 	else
 	{
@@ -712,7 +712,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
 		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
 		# https://github.com/PowerShell/PSScriptAnalyzer#requirements
-		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 19, 1))
+		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 20, 0))
 
 		# Recommended minimum posh-git version for git in PowerShell
 		# NOTE: pre-release minimum 1.0.0-beta4 will be installed
@@ -721,7 +721,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		# Recommended minimum Pester version for code testing
 		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
-		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 2, 1))
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 3, 0))
 
 		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
@@ -730,7 +730,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 5))
 
 		# Recommended minimum platyPS version used to generate online help files for modules, do not decrement!
-		New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 1))
+		New-Variable -Name RequirePlatyPSVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 2))
 
 		# Recommended minimum PSReadline version for command line editing experience of PowerShell
 		# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
@@ -741,7 +741,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 31, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 33, 0))
 	}
 
 	if ($Develop)
@@ -758,7 +758,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 56, 2))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 59, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
