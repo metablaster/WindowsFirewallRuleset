@@ -328,7 +328,7 @@ function Search-Installation
 		}
 		"OBSStudio"
 		{
-			Update-Table -Search "OBSStudio"
+			Update-Table -Search "OBS Studio"
 			break
 		}
 		"PasswordSafe"
