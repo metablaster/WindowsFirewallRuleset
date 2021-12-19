@@ -39,6 +39,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - Visual Studio,
     - Store Apps,
     - MS Office
+    - MS Edge (pokerist web app)
 
   - Added rules for PowerShell remoting
   - Added rules for VSCode remote debugging trough SSH
@@ -69,7 +70,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Test-TargetComputer` renamed to `Test-Computer` now experimental and no longer useful
   - `Resolve-Host` function improved, removed deprecated API, duplicate code etc.
   - Registry drilling functions updated for remote registry
-  - `ConvertFrom-OSBuild` updated for 21H1 OS version
+  - `ConvertFrom-OSBuild` updated for 21H1 and 21H2 OS version (including Windows 11)
 
 - Documentation
 

@@ -137,6 +137,13 @@ Experimental transport layer network protocol developed by Google and implemente
 			-LocalUser $UsersGroupSDDL `
 			-Description "File transfer protocol." | Format-RuleOutput
 
+		New-NetFirewallRule -Platform $Platform `
+			-DisplayName "Edge-Chromium pokerist" -Service Any -Program $Program `
+			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
+			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 3103-3110 `
+			-LocalUser $UsersGroupSDDL `
+			-Description "Ports needed for pokerist casino game" | Format-RuleOutput
+
 		if ($false)
 		{
 			# NOTE: Not applied because now handled by IPv4 multicast rules
