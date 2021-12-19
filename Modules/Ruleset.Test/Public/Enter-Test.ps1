@@ -116,10 +116,10 @@ function Enter-Test
 			if ($Private)
 			{
 				# Temporarily export private functions to global scope
+				# TODO: Private functions won't work if they depend on module scope variables
 				$PrivateScript = Get-ChildItem -Path "$ProjectRoot\Modules\*\Private" -Filter *.ps1 -Recurse
-				$PrivateScript += Get-ChildItem -Path "$ProjectRoot\Modules\*\Private\External" -Filter *.ps1 -Recurse
-
 				foreach ($Script in $PrivateScript) { . $Script.FullName }
+
 				Export-ModuleMember -Function *
 			}
 		} | Import-Module -Scope Global

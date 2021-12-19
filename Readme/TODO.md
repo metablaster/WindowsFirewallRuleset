@@ -46,6 +46,7 @@ Todo's in this file are categorized into following sections:
 
 4. Release checklist
 
+    - Comment out private module exports (currently only Ruleset.Remote module)
     - Run each module individually in clean shell with `-Verbose -Debug` and also with
     `Import-Module -Name *.psd1` to ensure expected module load behavior
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad

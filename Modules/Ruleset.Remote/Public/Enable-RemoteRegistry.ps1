@@ -103,7 +103,7 @@ function Enable-RemoteRegistry
 		if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to automatic startup"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
-			Set-Service -InputObject $RegService -StartType Automatic
+			Set-Service -InputObject $RegService -StartupType Automatic
 		}
 	}
 

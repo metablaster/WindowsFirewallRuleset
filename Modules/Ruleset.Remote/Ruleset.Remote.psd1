@@ -124,6 +124,10 @@ SOFTWARE.
 		"Set-WinRMClient"
 		"Show-WinRMConfig"
 		"Test-WinRM"
+		# NOTE: Temporarily exporting for testing
+		"Initialize-WinRM"
+		"Restore-NetProfile"
+		"Unblock-NetProfile"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not

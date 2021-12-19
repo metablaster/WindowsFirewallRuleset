@@ -61,6 +61,8 @@ function Disconnect-Computer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	# TODO: This message should depend on whether connection is established
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disconnecting host '$Domain'"
 
 	if (Get-Variable -Name RemoteCredential -Scope Global -EA Ignore)

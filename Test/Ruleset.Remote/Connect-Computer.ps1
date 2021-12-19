@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,28 +28,29 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Show-Table
+Unit test for Connect-Computer
 
 .DESCRIPTION
-Test correctness of Show-Table function
+Test correctness of Connect-Computer function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Show-Table.ps1
+PS> .\Connect-Computer.ps1
 
 .INPUTS
-None. You cannot pipe objects to Show-Table.ps1
+None. You cannot pipe objects to Connect-Computer.ps1
 
 .OUTPUTS
-None. Show-Table.ps1 does not generate any output
+None. Connect-Computer.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -63,42 +64,25 @@ param (
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-Enter-Test -Private "Show-Table"
+Enter-Test "Connect-Computer"
 
-Start-Test "Multiple paths - Visual Studio"
-Initialize-Table
-Update-Table -Search "Visual Studio" -UserProfile
-Show-Table
+if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
+{
+	$ConnectParams = @{
+		SessionOption = $PSSessionOption
+		ErrorAction = "Stop"
+		Domain = $PolicyStore
+		Protocol = "HTTP"
+		ConfigurationName = $PSSessionConfigurationName
+		ApplicationName = $PSSessionApplicationName
+		CimOptions = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+	}
 
-Start-Test "-Executable PowerShell.exe"
-Initialize-Table
-Update-Table -Executable "PowerShell.exe"
-Show-Table
-
-Start-Test "-Search EdgeChromium -Executable msedge.exe"
-Initialize-Table
-Update-Table -Search "EdgeChromium" -Executable "msedge.exe"
-$Result = Show-Table
-$Result
-
-Start-Test "Good user profile path"
-Initialize-Table
-Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\"
-Show-Table
-
-Start-Test "Good system path"
-Initialize-Table
-Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
-Show-Table
-
-Start-Test "Failure Test"
-Initialize-Table
-Update-Table "Failure" -UserProfile
-Show-Table
-
-Test-Output $Result -Command Show-Table
+	Start-Test "Default"
+	Connect-Computer @ConnectParams
+}
 
 Update-Log
 Exit-Test

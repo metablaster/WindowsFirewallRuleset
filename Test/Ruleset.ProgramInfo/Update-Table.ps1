@@ -65,27 +65,11 @@ param (
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\ContextSetup.ps1
 
-if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
-{
-	Write-Error -Category NotEnabled -TargetObject "Variable 'Develop'" `
-		-Message "Unit test $ThisScript is enabled only when 'Develop' variable is set to `$true"
-	return
-}
-elseif (!((Get-Command -Name Initialize-Table -EA Ignore) -and
-		(Get-Command -Name Update-Table -EA Ignore) -and
-		(Get-Variable -Name InstallTable -Scope Global -EA Ignore)))
-{
-	Write-Error -Category NotEnabled -TargetObject "Private Functions" `
-		-Message "This unit test is missing required private functions, please visit Ruleset.ProgramInfo.psd1 to adjust exports"
-	return
-}
-
-
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Update-Table"
+Enter-Test -Private "Update-Table"
 
 Start-Test "Greenshot -UserProfile"
 Initialize-Table

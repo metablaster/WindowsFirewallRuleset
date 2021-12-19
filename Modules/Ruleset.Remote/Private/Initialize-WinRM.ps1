@@ -68,6 +68,11 @@ function Initialize-WinRM
 			Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 		}
 	}
+	else
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling 'Windows Remote Management' firewall rules"
+		Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Enable-NetFirewallRule
+	}
 
 	if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 	{
@@ -79,6 +84,11 @@ function Initialize-WinRM
 				-Direction Inbound -NewPolicyStore PersistentStore |
 			Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
 		}
+	}
+	else
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling 'Windows Remote Management - Compatibility Mode' firewall rules"
+		Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore | Enable-NetFirewallRule
 	}
 
 	# TODO: Handled by Initialize-Service, but in other functions within module service may be left in unknown state

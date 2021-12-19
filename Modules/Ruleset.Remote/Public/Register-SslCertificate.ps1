@@ -44,7 +44,7 @@ picked up by Set-WinRMClient and used for client authentication.
 .PARAMETER Domain
 Specify host name which is to be managed remotely from this machine.
 This parameter is required only when setting up client computer.
-For server -Target this defaults to server NetBios host name.
+For server -ProductType this defaults to server NetBios host name.
 
 .PARAMETER ProductType
 Specify current system role which controls script behavior.
@@ -53,7 +53,7 @@ This is either Client (management computer) or Server (managed computer).
 .PARAMETER CertFile
 Optionally specify custom certificate file.
 By default new self signed certifcate is made and trusted if no suitable certificate exists.
-For server -Target this must be PFX file, for client -Target it must be DER encoded CER file
+For server -ProductType this must be PFX file, for client -ProductType it must be DER encoded CER file
 
 .PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
@@ -68,18 +68,18 @@ If specified, overwrites an existing exported certificate file,
 unless it has the Read-only attribute set.
 
 .EXAMPLE
-PS> Register-SslCertificate -Target Server
+PS> Register-SslCertificate -ProductType Server
 
 Installs existing or new SSL certificate on server computer,
 public key is exported to be used on client computer.
 
 .EXAMPLE
-PS> Register-SslCertificate -Target Client -CertFile C:\Cert\Server.cer
+PS> Register-SslCertificate -ProductType Client -CertFile C:\Cert\Server.cer
 
 Installs specified SSL certificate on client computer.
 
 .EXAMPLE
-PS> Register-SslCertificate -Target Server -CertThumbprint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
+PS> Register-SslCertificate -ProductType Server -CertThumbprint "96158c29ab14a96892c1a5202058c6fe25f06fd7"
 
 Installs existing SSL certificate with specified thumbprint on the server computer,
 public key is exported to be used on client computer.
