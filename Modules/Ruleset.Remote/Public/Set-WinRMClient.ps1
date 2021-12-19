@@ -126,9 +126,11 @@ function Set-WinRMClient
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client ..."
 
+	# TODO: Initialize-WinRM and Unblock-NetProfile are called multiple times since multiple functions are needed for configuration
 	Initialize-WinRM
+
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client authentication options"
 
 	# NOTE: Not assuming WinRM responds, contact localhost
@@ -264,5 +266,5 @@ function Set-WinRMClient
 		}
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM client configuration was successful"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM client configuration was successful"
 }

@@ -95,7 +95,7 @@ function Disable-WinRMServer
 	4. Restore the value of the LocalAccountTokenFilterPolicy to 0, which restricts remote access to
 	members of the Administrators group on the computer.
 	#>
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM server ..."
 
 	Initialize-WinRM
 
@@ -137,6 +137,7 @@ function Disable-WinRMServer
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable only loopback"))
 		{
 			# Enable only localhost on loopback
+			# TODO: -NoServiceRestart will issue a warning, do we need to restart WinRM?
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
 			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force
 
@@ -191,5 +192,5 @@ function Disable-WinRMServer
 			-Direction Inbound -PolicyStore PersistentStore
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM server is complete"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WinRM server was successful"
 }

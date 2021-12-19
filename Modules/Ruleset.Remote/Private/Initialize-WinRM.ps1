@@ -54,7 +54,6 @@ function Initialize-WinRM
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking WS-Management (WinRM) requirements"
 
 	# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
 	# present may cause issues adjusting some of the WinRM options
@@ -82,7 +81,7 @@ function Initialize-WinRM
 		}
 	}
 
-	# TODO: Handled by Initialize-Service
+	# TODO: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
 	if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
 	{
 		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))

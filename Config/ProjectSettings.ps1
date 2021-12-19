@@ -47,7 +47,8 @@ Target host or policy store name
 Script modules must call this script with this parameter
 
 .PARAMETER ShowPreference
-If specified, displays preferences and optionally variables in the calling scope
+If specified, displays preferences and optionally variables in the calling scope.
+To be used for debugging purposes
 
 .EXAMPLE
 PS> .\ProjectSettings.ps1 $PSCmdlet

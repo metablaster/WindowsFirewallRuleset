@@ -147,7 +147,7 @@ function Enable-WinRMServer
 	7. Changes the security descriptor of all session configurations to allow remote access.
 	Restarts the WinRM service to make the preceding changes effective.
 	#>
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM service"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM server ..."
 
 	Initialize-WinRM
 
@@ -415,5 +415,5 @@ function Enable-WinRMServer
 			-Message "LocalAccountTokenFilterPolicy was not enabled"
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM server configuration was successful"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM server configuration was successful"
 }

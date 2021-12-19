@@ -59,8 +59,6 @@ function Unblock-NetProfile
 
 	if ($script:Workstation)
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking network profile requirements"
-
 		[array] $PublicAdapter = Get-NetConnectionProfile |
 		Where-Object -Property NetworkCategory -NE Private
 
@@ -87,7 +85,7 @@ function Unblock-NetProfile
 				elseif (!$WhatIfPreference.IsPresent)
 				{
 					throw [System.OperationCanceledException]::new(
-						"not all connected network adapters are not operating on private profile")
+						"not all connected network adapters are operating on private profile")
 				}
 			}
 		}
@@ -111,7 +109,7 @@ function Unblock-NetProfile
 				elseif (!$WhatIfPreference.IsPresent)
 				{
 					throw [System.OperationCanceledException]::new(
-						"not all configured network adapters are not operating on private profile")
+						"not all configured network adapters are operating on private profile")
 				}
 			}
 		}

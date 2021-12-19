@@ -51,7 +51,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - New features
 
-  - A new module used for remoting configuration of WinRM, CIM and remote registry with the
+  - A new module used for remoting configuration using WinRM, CIM and remote registry with the
   following functions:
   - `Connect-Computer` function to initialize connection to remote computer
   - `Deploy-SshKey` function to upload and set SSH key to server for remote debugging with VSCode
