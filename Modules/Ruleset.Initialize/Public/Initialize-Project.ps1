@@ -256,7 +256,7 @@ function Initialize-Project
 
 			if ($TargetNETVersion -lt $RequireNETVersion)
 			{
-				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion `
+				Write-Error -Category OperationStopped -TargetObject $TargetNETVersion -ErrorAction SilentlyContinue `
 					-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
 				Write-Information -Tags $MyInvocation.InvocationName `
 					-MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
@@ -488,7 +488,6 @@ function Initialize-Project
 	# Everything OK, print environment status
 	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
-	# HACK: We don't know if it was successful, need to record errors and/or warnings
 	Write-Host "Checking minimum requirements was successful!" -ForegroundColor Cyan
 
 	Write-Host ""

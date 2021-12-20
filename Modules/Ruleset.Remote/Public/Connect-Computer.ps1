@@ -36,11 +36,12 @@ This script will perform necessary initialization to enter PS session to remote 
 in addition required authentication is made to use remote registry service and to run commands
 against remote CIM server.
 
-Following global variables are created:
-RemoteCredential, to be used by commands that require credentials.
-CimServer, to be used by CIM commandlets to specify cim session to use.
-RemoteRegistry, administrative share C$ to remote computer (needed for authentication)
-RemoteSession, PS session object which represent remote session
+Following global variables or objects are created:
+RemoteCredential (variable), to be used by commands that require credentials
+CimServer (variable), to be used by CIM commandlets to specify cim session to use
+RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
+RemoteSession (PSSession), PS session object which represent remote session
+RemoteCIM (CimSession), CIM session object
 
 .PARAMETER Domain
 Computer name with to which to connect for remoting
@@ -133,6 +134,7 @@ function Connect-Computer
 	{
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Connection already established to $($PSSenderInfo.ApplicationArguments.Domain), run Disconnect-Computer to disconnect"
+		return
 	}
 
 	if ($PSSessionConfigurationName -ne $script:FirewallSession)

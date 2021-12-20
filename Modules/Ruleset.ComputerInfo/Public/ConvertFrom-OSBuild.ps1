@@ -89,6 +89,7 @@ function ConvertFrom-OSBuild
 <#
 https://docs.microsoft.com/en-us/windows/release-health/release-information
 Version	Servicing option				Availability OS build	Latest revision date	End of service
+21H2	General Availability Channel	2021-11-16	19044.1415	2021-12-14	2023-06-13	2024-06-11
 21H1	Semi-Annual Channel				2021-05-18	19043.1165	2021-08-10	2022-12-13	2022-12-13
 20H2	Semi-Annual Channel				2020-10-20	19042.572	2020-10-13	2022-05-10	2023-05-09
 2004	Semi-Annual Channel				2020-05-27	19041.450	2020-08-11	2021-12-14	2021-12-14	Microsoft recommends
@@ -104,12 +105,26 @@ Version	Servicing option				Availability OS build	Latest revision date	End of se
 Enterprise and IoT Enterprise LTSB/LTSC editions
 
 Version		Servicing option					Availability OS build	Latest revision date	Mainstream support end date	Extended support end date
+21H2		Long-Term Servicing Channel (LTSC)	2021-11-16	19044.1415	2021-12-14	2027-01-12	2032-01-13 (IoT Enterprise only)
 1809		Long-Term Servicing Channel (LTSC)	2018-11-13	17763.1432	2020-08-20	2024-01-09	2029-01-09
 1607		Long-Term Servicing Branch (LTSB)	2016-08-02	14393.3866	2020-08-11	2021-10-12	2026-10-13
 1507 (RTM)	Long-Term Servicing Branch (LTSB)	2015-07-29	10240.18666	2020-08-11	2020-10-13	2025-10-14
+
+Windows Server release				Servicing option					Editions							Availability	Build		Mainstream support end date	Extended support end date
+Windows Server 2022					Long-Term Servicing Channel (LTSC)	Datacenter, Standard				2021-08-18		20348.169	2026-10-13					2031-10-14
+Windows Server, version 20H2		Semi-Annual Channel					Datacenter Core, Standard Core		2020-10-20		19042.508	2022-05-10					Not applicable
+Windows Server, version 2004		Semi-Annual Channel					Datacenter Core, Standard Core		2020-05-27		19041.264	End of servicing			Not applicable
+Windows Server, version 1909		Semi-Annual Channel					Datacenter Core, Standard Core		2019-11-12		18363.418	End of servicing			Not applicable
+Windows Server 2019 (version 1809)	Long-Term Servicing Channel (LTSC)	Datacenter, Essentials, Standard	2018-11-13		17763.107	2024-01-09					2029-01-09
+Windows Server 2016 (version 1607)	Long-Term Servicing Channel (LTSC)	Datacenter, Essentials, Standard	2016-10-15		14393.0		2022-01-11					2027-01-11
 #>
 
 Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomObject[]]@(
+		# Windows Server 2022
+		[hashtable]@{
+			Version = "21H2" # Version obtained from winver.exe
+			Build = 20348
+		}
 		# Windows 11
 		[hashtable]@{
 			Version = "21H2"

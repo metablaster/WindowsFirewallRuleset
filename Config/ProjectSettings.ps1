@@ -411,18 +411,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
-		Write-Debug -Message "[$SettingsScript] Setting up remoting variables"
+		Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
 
-		# Check if session is already initialized and established, do not modify!
-		# Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $false
-
-		# NOTE: Variables RemoteRegistry (PSDrive) and RemoteCim (CimSession) are set by Connect-Computer function
-
-		# Credentials to access remote computer is set by Connect-Computer function
-		New-Variable -Name RemoteCredential -Scope Global -Value $null
-
-		# CIM server configuration to access remote computer is set by Connect-Computer function
-		New-Variable -Name CimServer -Scope Global -Value $null
+		# NOTE: Global object RemoteRegistry (PSDrive), RemoteCim (CimSession) and RemoteSession (PSSession) are created by Connect-Computer function
+		# NOTE: Global variables RemoteCredential and CimServer are set by Connect-Computer function
+		# Destruction of these is done by Disconnect-Computer
 
 		$ConnectParams = @{
 			ErrorAction = "Stop"
@@ -503,6 +496,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		try
 		{
 			Connect-Computer @ConnectParams
+
+			# Check if session is already initialized and established, do not modify!
 			Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $true
 
 			Remove-Variable -Name ConnectParams
@@ -588,7 +583,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

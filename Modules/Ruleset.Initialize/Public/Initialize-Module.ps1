@@ -556,7 +556,7 @@ function Initialize-Module
 					-MessageData "INFO: Adding $ModuleName v$RequireVersion to profile"
 				Add-PoshGitToProfile -AllHosts
 
-				Write-Warning -Message "Run 'Add-PoshGitToProfile -AllHosts' in non elevated shell manually"
+				Write-Warning -Message "Run 'Add-PoshGitToProfile -AllHosts' in non elevated PowerShell manually"
 			}
 
 			return $true

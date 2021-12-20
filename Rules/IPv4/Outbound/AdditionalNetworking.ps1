@@ -243,22 +243,28 @@ Format-RuleOutput
 #
 # Proximity sharing predefined rule
 #
+$ServerTarget = (Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+		-ClassName Win32_OperatingSystem -EA Stop |
+	Select-Object -ExpandProperty ProductType) -eq 3
 
-# TODO: does not exist in Windows Server 2019
-# TODO: description missing data
-$Program = "%SystemRoot%\System32\ProximityUxHost.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
+if (!$ServerTarget)
 {
-	New-NetFirewallRule -DisplayName "Proximity sharing" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any `
-		-InterfaceType $DefaultInterface `
-		-Description "Outbound rule for Proximity sharing over." |
-	Format-RuleOutput
+	# NOTE: does not exist in Windows Server 2019 and 2022
+	# TODO: description missing data
+	$Program = "%SystemRoot%\System32\ProximityUxHost.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Proximity sharing" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Public `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any `
+			-InterfaceType $DefaultInterface `
+			-Description "Outbound rule for Proximity sharing over." |
+		Format-RuleOutput
+	}
 }
 
 #

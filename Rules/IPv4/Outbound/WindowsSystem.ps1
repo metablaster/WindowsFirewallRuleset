@@ -96,22 +96,29 @@ $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 # Rules for Windows system
 #
 
-# TODO: remote port unknown, protocol assumed
-# TODO: does not exist in Windows Server 2019
-# NOTE: user can by any local human user
-$Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
+$ServerTarget = (Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+		-ClassName Win32_OperatingSystem -EA Stop |
+	Select-Object -ExpandProperty ProductType) -eq 3
+
+if (!$ServerTarget)
 {
-	New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any `
-		-InterfaceType $DefaultInterface `
-		-Description "Probably related to keeping bandwidth usage information up-to-date." |
-	Format-RuleOutput
+	# TODO: remote port unknown, protocol assumed
+	# NOTE: does not exist in Windows Server 2019 and 2022
+	# NOTE: user can by any local human user
+	$Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "DataSenseLiveTileTask" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any `
+			-InterfaceType $DefaultInterface `
+			-Description "Probably related to keeping bandwidth usage information up-to-date." |
+		Format-RuleOutput
+	}
 }
 
 # Test if installation exists on system
@@ -590,6 +597,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 	Format-RuleOutput
 }
 
+# TODO: Not available in Windows Server 2022
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -705,25 +713,28 @@ In order to target builds to your machine, we need to know a few important thing
 $USOAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 
-# TODO: Not available in Windows Server 2019
-$Program = "%SystemRoot%\System32\usocoreworker.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
+if (!$ServerTarget)
 {
-	New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $USOAccounts `
-		-InterfaceType $DefaultInterface `
-		-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
+	# NOTE: does not exist in Windows Server 2019 and 2022
+	$Program = "%SystemRoot%\System32\usocoreworker.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Update Session Orchestrator" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $USOAccounts `
+			-InterfaceType $DefaultInterface `
+			-Description "wuauclt.exe is deprecated on Windows 10 (and Server 2016 and newer).
 The command line tool has been replaced by usoclient.exe.
 When the system starts an update session, it launches usoclient.exe,
 which in turn launches usocoreworker.exe.
 Usocoreworker is the worker process for usoclient.exe and essentially it does all the work that
 the USO component needs done." |
-	Format-RuleOutput
+		Format-RuleOutput
+	}
 }
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019

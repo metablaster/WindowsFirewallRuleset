@@ -73,11 +73,17 @@ Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
+# TODO: Same code in multiple places, it makes sense to have global variable which would
+# hold information about remote computer
+$ServerTarget = (Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+		-ClassName Win32_OperatingSystem -EA Stop |
+	Select-Object -ExpandProperty ProductType) -eq 3
+
 $Group = "Microsoft - One Drive"
 $Accept = "Outbound rules for One Drive will be loaded, recommended if One Drive is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for One Drive will not be loaded into firewall"
 
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force -Unsafe:$ServerTarget)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

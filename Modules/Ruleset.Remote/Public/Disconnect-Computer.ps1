@@ -92,7 +92,7 @@ function Disconnect-Computer
 		Remove-PSDrive -Name RemoteRegistry -Scope Global
 	}
 
-	if (Get-PSSession -Name RemoteSession -Scope Global -EA Ignore)
+	if (Get-PSSession -Name RemoteSession -EA Ignore)
 	{
 		Exit-PSSession
 
