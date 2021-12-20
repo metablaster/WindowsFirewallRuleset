@@ -266,24 +266,26 @@ function Set-Shortcut
 		}
 		else
 		{
-			$Shortcut.TargetPath = $TargetPath
+			$Shortcut.TargetPath = $TargetPath.FullName
 		}
 
 		# Optionally set shortcut icon
 		if (![string]::IsNullOrEmpty($IconLocation))
 		{
+			$IconLocationName = $IconLocation.FullName
+
 			if (Test-Path -Path $IconLocation -PathType Leaf)
 			{
 				if ($IconIndex)
 				{
 					# ex. %SystemRoot%\System32\Shell32.dll,-19
-					$IconLocation = $IconLocation.FullName + ",$IconIndex"
+					$IconLocationName = $IconLocation.FullName + ",$IconIndex"
 				}
 
 				try
 				{
 					# TODO: Property is present in url shortcut
-					$Shortcut.IconLocation = $IconLocation
+					$Shortcut.IconLocation = $IconLocationName
 				}
 				catch
 				{
@@ -292,7 +294,7 @@ function Set-Shortcut
 			}
 			else
 			{
-				Write-Warning -Message "Unable to locate icon file: $IconLocation"
+				Write-Warning -Message "Unable to locate icon file: $IconLocationName"
 			}
 		}
 

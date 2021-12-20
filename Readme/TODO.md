@@ -194,6 +194,7 @@ Todo's in this file are categorized into following sections:
     scriptblocks or filters.
     - Test each module function as if module only is used, to make sure it's self sufficient, ex.
     `Initialize-Service` function will fail.
+    A major issue to solution is module interdependency and dependency on global variables.
 
 2. Scripts
 

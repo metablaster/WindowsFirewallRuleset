@@ -46,9 +46,9 @@ if ($ListPreference)
 }
 #endregion
 
-# TODO: Function to restore WinRM service to default needed
 # TODO: Revisit functions and determine where to put ErrorAction Stop
 # TODO: Verbose output should write only if ShouldProcess was approved
+# TODO: Function to show connection status, CIM server, PS session and PSDrive instance(s)
 
 #
 # Script imports
@@ -80,7 +80,9 @@ $PublicScripts = @(
 	"Disconnect-Computer"
 	"Enable-RemoteRegistry"
 	"Enable-WinRMServer"
+	"Export-WinRM"
 	"Register-SslCertificate"
+	"Reset-WinRM"
 	"Set-WinRMClient"
 	"Show-WinRMConfig"
 	"Test-WinRM"
@@ -117,7 +119,7 @@ New-Variable -Name WinRMCompatibilityRules -Scope Script -Value "@FirewallAPI.dl
 # Server (3)
 New-Variable -Name Workstation -Scope Script -Option Constant -Value (
 	(Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
-		Select-Object -ExpandProperty ProductType) -eq 1)
+	Select-Object -ExpandProperty ProductType) -eq 1)
 
 New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
 

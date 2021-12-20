@@ -439,7 +439,7 @@ function Initialize-Project
 					# Even after updating modules and manually running Update-Help which btw. succeeded!
 					Write-Warning -Message "No modules contain HelpInfo files required to update help"
 
-					# Otherwise the cause may because Update-Help was never run which is required to
+					# Otherwise the cause may be because Update-Help was never run which is required to
 					# download helpinfo.xml files
 					Update-Help @UpdateParams
 				}
@@ -447,7 +447,7 @@ function Initialize-Project
 				{
 					$UpdateParams["Module"] = $UpdatableModules
 
-					if ($PowerShellEdition -eq "Core")
+					if (($PowerShellEdition -eq "Core") -and ($PSVersionTable.PSVersion -ge 6.1))
 					{
 						# The -Scope parameter was introduced in PowerShell Core version 6.1
 						Update-Help @UpdateParams -Scope AllUsers

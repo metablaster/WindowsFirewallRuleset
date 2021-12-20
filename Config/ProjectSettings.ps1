@@ -269,8 +269,8 @@ $PSSessionApplicationName = "wsman"
 # The default value is 5 for PS session.
 # The default value is 4 for Test-NetConnection which specifies echo requests
 # [System.Management.Automation.Remoting.PSSessionOption]
-$PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
-	-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
+# NOTE: Used later, $PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
+# -OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -407,14 +407,46 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value $TargetHost
 		}
+	}
+
+	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
+	{
+		Write-Debug -Message "[$SettingsScript] Setting up remoting variables"
+
+		# Check if session is already initialized and established, do not modify!
+		# Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $false
+
+		# NOTE: Variables RemoteRegistry (PSDrive) and RemoteCim (CimSession) are set by Connect-Computer function
+
+		# Credentials to access remote computer is set by Connect-Computer function
+		New-Variable -Name RemoteCredential -Scope Global -Value $null
+
+		# CIM server configuration to access remote computer is set by Connect-Computer function
+		New-Variable -Name CimServer -Scope Global -Value $null
 
 		$ConnectParams = @{
-			SessionOption = $PSSessionOption
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
 			Protocol = "HTTPS"
 			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
+		}
+
+		# PSPrimitiveDictionary, data to send to remote computer
+		$SenderArguments = @{
+			Domain = $PolicyStore
+		}
+
+		$SessionOptionParams = @{
+			UICulture = "en-US"
+			Culture = "en-US"
+			OpenTimeout = 3000
+			CancelTimeout = 5000
+			OperationTimeout = 10000
+			MaxConnectionRetryCount = 2
+			ApplicationArguments = $SenderArguments
+			NoEncryption = $false
+			NoCompression = $false
 		}
 
 		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
@@ -431,6 +463,9 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				Set-WinRMClient $PolicyStore -Confirm:$false
 				Enable-RemoteRegistry -Confirm:$false
 			}
+
+			# TODO: Not all options are used, ex. -NoCompression and -NoEncryption could be used for loopback
+			$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
@@ -450,6 +485,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			}
 
 			Remove-Variable -Name TargetHostStatus
+
+			$SessionOptionParams["NoEncryption"] = $true
+			$SessionOptionParams["NoCompression"] = $true
+			$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
+
 			$ConnectParams["Protocol"] = "HTTP"
 			# TODO: Culture default values project wide
 			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
@@ -463,7 +503,11 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		try
 		{
 			Connect-Computer @ConnectParams
+			Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $true
+
 			Remove-Variable -Name ConnectParams
+			Remove-Variable -Name SenderArguments
+			Remove-Variable -Name SessionOptionParams
 		}
 		catch
 		{
@@ -563,7 +607,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 {
 	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
 
-	# check if removable variables already initialized, do not modify!
+	# Check if removable variables already initialized, do not modify!
 	Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
 
 	# Windows 10, Windows Server 2019 and above
@@ -725,7 +769,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		}
 
 		# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
-		# PSScriptAnalyzer >= 1.19.1 is required otherwise code will start missing while editing probably due to analyzer settings
+		# PSScriptAnalyzer >= 1.19.1 is minimum required otherwise code will start missing while editing probably due to analyzer settings
 		# https://github.com/PowerShell/PSScriptAnalyzer#requirements
 		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 20, 0))
 

@@ -40,6 +40,7 @@ Following global variables are created:
 RemoteCredential, to be used by commands that require credentials.
 CimServer, to be used by CIM commandlets to specify cim session to use.
 RemoteRegistry, administrative share C$ to remote computer (needed for authentication)
+RemoteSession, PS session object which represent remote session
 
 .PARAMETER Domain
 Computer name with to which to connect for remoting
@@ -126,6 +127,14 @@ function Connect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# The $PSSenderInfo automatic variable includes a user-configurable property, ApplicationArguments,
+	# that by default, contains only the $PSVersionTable from the originating session.
+	if (Get-Variable -Name PSSenderInfo -ErrorAction Ignore)
+	{
+		Write-Error -Category ConnectionError -TargetObject $Domain `
+			-Message "Connection already established to $($PSSenderInfo.ApplicationArguments.Domain), run Disconnect-Computer to disconnect"
+	}
+
 	if ($PSSessionConfigurationName -ne $script:FirewallSession)
 	{
 		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
@@ -148,6 +157,8 @@ function Connect-Computer
 	}
 
 	$WSManParams = @{
+		# PS session name
+		Name = "RemoteSession"
 		Port = $Port
 		Authentication = "Default"
 		ApplicationName = $ApplicationName
@@ -195,6 +206,7 @@ function Connect-Computer
 	}
 
 	$CimParams = @{
+		# CIM session name
 		Name = "RemoteCim"
 		Authentication = "Default"
 		Port = $WSManParams["Port"]
@@ -252,6 +264,8 @@ function Connect-Computer
 	catch
 	{
 		Remove-Variable -Name RemoteCredential -Scope Global -Force -ErrorAction Ignore
+		Remove-Variable -Name CimServer -Scope Global -Force
+
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
 	}
@@ -284,17 +298,23 @@ function Connect-Computer
 
 		try
 		{
+			if (!(Get-PSSession -Name RemoteSession -ErrorAction Ignore))
+			{
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating remote session to computer '$Domain'"
+				New-PSSession @WSManParams | Out-Null
+			}
+
 			# TODO: For VM without external switch use -VMName
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
-			Enter-PSSession @WSManParams
+			Enter-PSSession -Name RemoteSession
 		}
 		catch
 		{
 			Remove-CimSession -Name RemoteCim
 			Remove-Variable -Name CimServer -Scope Global -Force
+			Remove-Variable -Name RemoteCredential -Scope Global -Force
 
 			Remove-PSDrive -Name RemoteRegistry -Scope Global
-			Remove-Variable -Name RemoteCredential -Scope Global -Force
 
 			Write-Error -Category ConnectionError -TargetObject $Domain `
 				-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"

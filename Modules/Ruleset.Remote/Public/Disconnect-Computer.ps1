@@ -49,6 +49,8 @@ None. Disconnect-Computer does not generate any output
 
 .NOTES
 TODO: If there are multiple connections, remove only specific ones
+TODO: This function should be called at the end of each script since individual scripts may run,
+implementation needed to prevent disconnection when Deploy-Firewall runs.
 #>
 function Disconnect-Computer
 {
@@ -71,6 +73,7 @@ function Disconnect-Computer
 		Remove-Variable -Name RemoteCredential -Scope Global -Force
 	}
 
+	# TODO: Verify what happens if multiple instances of same name exist for PSDrive, PSSession and CimSession
 	if (Get-CimSession -Name RemoteCim -EA Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing CIM session 'RemoteCim'"
@@ -89,5 +92,15 @@ function Disconnect-Computer
 		Remove-PSDrive -Name RemoteRegistry -Scope Global
 	}
 
-	Exit-PSSession
+	if (Get-PSSession -Name RemoteSession -Scope Global -EA Ignore)
+	{
+		Exit-PSSession
+
+		# NOTE: When you use Exit-PSSession or the EXIT keyword, the interactive session ends,
+		# but the PSSession that you created remains open and available for use.
+		Disconnect-PSSession -Name RemoteSession
+		Remove-PSSession -Name RemoteSession
+	}
+
+	Remove-Variable -Name SessionEstablished -Scope Global -Force -ErrorAction Ignore
 }

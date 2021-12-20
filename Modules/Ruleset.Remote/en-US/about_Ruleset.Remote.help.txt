@@ -29,8 +29,14 @@ EXAMPLES
 	Enable-WinRMServer
 	Configure WinRM server for CIM and PowerShell remoting
 
+	Export-WinRM
+	Export WinRM configuration to file
+
 	Register-SslCertificate
 	Install SSL certificate for PowerShell and CIM remoting
+
+	Reset-WinRM
+	Reset WinRM configuration to either system default or to previous settings
 
 	Set-WinRMClient
 	Configure client computer for WinRM remoting

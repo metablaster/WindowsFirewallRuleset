@@ -175,80 +175,6 @@ function Enable-WinRMServer
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
-	# Re-register repository specific session configuration
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
-
-	# A null value does not affect the session configuration.
-	# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pstransportoption
-	$TransportConfig = @{
-		# Limits the number of sessions that use the session configuration.
-		# The MaxSessions parameter corresponds to the MaxShells property of a session configuration.
-		# The default value is 25.
-		MaxSessions = 1
-
-		# Determines how command output is managed in disconnected sessions when the output buffer becomes full
-		# "Block", When the output buffer is full, execution is suspended until the buffer is clear
-		OutputBufferingMode = "Block"
-	}
-
-	# [Microsoft.WSMan.Management.WSManConfigContainerElement]
-	$SessionConfigParams = @{
-		Name = $script:FirewallSession
-		Path = "$ProjectRoot\Config\RemoteFirewall.pssc"
-
-		# Determines whether a 32-bit or 64-bit version of the PowerShell process is started in sessions
-		# x86 or amd64,
-		# The default value is determined by the processor architecture of the computer that hosts the session configuration.
-		ProcessorArchitecture = "amd64"
-
-		# Maximum amount of data that can be sent to this computer in any single remote command.
-		# The default is 50 MB
-		MaximumReceivedDataSizePerCommandMB = 50
-
-		# Maximum amount of data that can be sent to this computer in any single object.
-		# The default is 10 MB
-		MaximumReceivedObjectSizeMB = 10
-
-		# Disabled, this configuration cannot be used for remote or local access to the computer.
-		# Local, allows users of the local computer to create a loopback session on the same computer.
-		# Remote, allows local and remote users to create sessions and run commands on this computer.
-		AccessMode = "Remote"
-
-		# The apartment state of the threading module to be used:
-		# MTA: The Thread will create and enter a multithreaded apartment.
-		# STA: The Thread will create and enter a single-threaded apartment.
-		# Unknown: The ApartmentState property has not been set.
-		# https://docs.microsoft.com/en-us/dotnet/api/system.threading.apartmentstate
-		ThreadApartmentState = "Unknown"
-
-		# The specified script runs in the new session that uses the session configuration.
-		# If the script generates an error, even a non-terminating error, the session is not created.
-		# TODO: Following path is created by "MountUserDrive" option in RemoteFirewall.pssc (another option is: ScriptsToProcess in *.pssc)
-		# StartupScript = "$env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME\ProjectSettings.ps1"
-
-		# The default value is UseCurrentThread.
-		# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.psthreadoptions
-		ThreadOptions = "UseCurrentThread"
-
-		# Advanced options for a session configuration
-		TransportOption = New-PSTransportOption @TransportConfig
-
-		# Specifies credentials for commands in the session.
-		# By default, commands run with the permissions of the current user.
-		# RunAsCredential = Get-Credential
-	}
-
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
-	{
-		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
-		Set-StrictMode -Off
-
-		# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
-		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
-		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
-		Set-StrictMode -Version Latest
-	}
-
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
@@ -256,6 +182,12 @@ function Enable-WinRMServer
 		try
 		{
 			Unblock-NetProfile
+
+			# NOTE: For Register-PSSessionConfiguration to succeed Enable-PSRemoting must have been called at least once to avoid error:
+			# The WinRM plugin DLL pwrshplugin.dll is missing for PowerShell.
+			# Please run Enable-PSRemoting and then retry this command.
+			# TODO: See if pwrshplugin.dll could be installed manually without running Enable-PSRemoting
+			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
 
 			# TODO: Use Set-WSManQuickConfig since or if recreating default session configurations is not absolutely needed
 			Enable-PSRemoting -Force | Out-Null
@@ -268,6 +200,80 @@ function Enable-WinRMServer
 		{
 			Write-Error -ErrorRecord $_
 		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
+	{
+		# Re-register repository specific session configuration
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
+
+		# A null value does not affect the session configuration.
+		# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pstransportoption
+		$TransportConfig = @{
+			# Limits the number of sessions that use the session configuration.
+			# The MaxSessions parameter corresponds to the MaxShells property of a session configuration.
+			# The default value is 25.
+			MaxSessions = 1
+
+			# Determines how command output is managed in disconnected sessions when the output buffer becomes full
+			# "Block", When the output buffer is full, execution is suspended until the buffer is clear
+			OutputBufferingMode = "Block"
+		}
+
+		# [Microsoft.WSMan.Management.WSManConfigContainerElement]
+		$SessionConfigParams = @{
+			Name = $script:FirewallSession
+			Path = "$ProjectRoot\Config\RemoteFirewall.pssc"
+
+			# Determines whether a 32-bit or 64-bit version of the PowerShell process is started in sessions
+			# x86 or amd64,
+			# The default value is determined by the processor architecture of the computer that hosts the session configuration.
+			ProcessorArchitecture = "amd64"
+
+			# Maximum amount of data that can be sent to this computer in any single remote command.
+			# The default is 50 MB
+			MaximumReceivedDataSizePerCommandMB = 50
+
+			# Maximum amount of data that can be sent to this computer in any single object.
+			# The default is 10 MB
+			MaximumReceivedObjectSizeMB = 10
+
+			# Disabled, this configuration cannot be used for remote or local access to the computer.
+			# Local, allows users of the local computer to create a loopback session on the same computer.
+			# Remote, allows local and remote users to create sessions and run commands on this computer.
+			AccessMode = "Remote"
+
+			# The apartment state of the threading module to be used:
+			# MTA: The Thread will create and enter a multithreaded apartment.
+			# STA: The Thread will create and enter a single-threaded apartment.
+			# Unknown: The ApartmentState property has not been set.
+			# https://docs.microsoft.com/en-us/dotnet/api/system.threading.apartmentstate
+			ThreadApartmentState = "Unknown"
+
+			# The specified script runs in the new session that uses the session configuration.
+			# If the script generates an error, even a non-terminating error, the session is not created.
+			# TODO: Following path is created by "MountUserDrive" option in RemoteFirewall.pssc (another option is: ScriptsToProcess in *.pssc)
+			# StartupScript = "$env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME\ProjectSettings.ps1"
+
+			# The default value is UseCurrentThread.
+			# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.psthreadoptions
+			ThreadOptions = "UseCurrentThread"
+
+			# Advanced options for a session configuration
+			TransportOption = New-PSTransportOption @TransportConfig
+
+			# Specifies credentials for commands in the session.
+			# By default, commands run with the permissions of the current user.
+			# RunAsCredential = Get-Credential
+		}
+
+		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
+		Set-StrictMode -Off
+
+		# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
+		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
+		Set-StrictMode -Version Latest
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
