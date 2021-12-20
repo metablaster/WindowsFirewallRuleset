@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test -Private
 
-if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing", "Accept dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Uninstall specified modules for testing", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Get-Module"
 	[PSModuleInfo[]] $TargetModule = Get-Module -ListAvailable -Name Pester

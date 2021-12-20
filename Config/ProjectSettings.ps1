@@ -661,7 +661,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		[Microsoft.Win32.RegistryView]::Registry64)
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 10, 1))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 11, 0))
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019

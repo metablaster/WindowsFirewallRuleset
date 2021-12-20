@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Initialize-Project"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept potentially dangerous unit test"))
 {
 	if (!($ProjectCheck -and $ModulesCheck -and $ServicesCheck))
 	{

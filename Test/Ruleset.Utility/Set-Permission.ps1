@@ -214,7 +214,7 @@ if ($FileSystem)
 }
 elseif ($Registry)
 {
-	if ($PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept dangerous unit test"))
+	if ($PSCmdlet.ShouldContinue("Modify registry ownership or permissions", "Accept potentially dangerous unit test"))
 	{
 		# NOTE: This test may fail until Set-Privilege script is considered into Set-Permission function
 		# Ownership + Full control

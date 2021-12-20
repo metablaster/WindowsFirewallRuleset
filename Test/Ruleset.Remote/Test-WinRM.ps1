@@ -68,14 +68,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Test-WinRM"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
-{
-	Start-Test "HTTP"
-	$Result = Test-WinRM -Protocol HTTP
-	$Result
+Start-Test "HTTP"
+$Result = Test-WinRM -Protocol HTTP
+$Result
 
-	Test-Output $Result -Command Test-WinRM
-}
+Test-Output $Result -Command Test-WinRM
 
 Update-Log
 Exit-Test

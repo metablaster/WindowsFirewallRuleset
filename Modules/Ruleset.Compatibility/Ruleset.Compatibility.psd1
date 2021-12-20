@@ -44,7 +44,7 @@ SOFTWARE.
 	RootModule = "Ruleset.Compatibility.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "0.10.1"
+	ModuleVersion = "0.11.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @("Core")
