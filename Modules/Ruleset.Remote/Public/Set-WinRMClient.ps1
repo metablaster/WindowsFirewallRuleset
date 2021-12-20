@@ -171,10 +171,25 @@ function Set-WinRMClient
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set client authentication and port options"))
 	{
-		Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+			Set-Item -Path WSMan:\localhost\client\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
+			Set-Item -Path WSMan:\localhost\client\auth\Certificate -Value $AuthenticationOptions["Certificate"]
+			Set-Item -Path WSMan:\localhost\client\auth\Basic -Value $AuthenticationOptions["Basic"]
+			Set-Item -Path WSMan:\localhost\client\auth\CredSSP -Value $AuthenticationOptions["CredSSP"]
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default client ports"
-		Set-WSManInstance -ResourceURI winrm/config/client/DefaultPorts -ValueSet $PortOptions | Out-Null
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default client ports"
+			Set-Item -Path WSMan:\localhost\client\DefaultPorts\HTTP -Value $PortOptions["HTTP"]
+			Set-Item -Path WSMan:\localhost\client\DefaultPorts\HTTPS -Value $PortOptions["HTTPS"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
+
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default client ports"
+			Set-WSManInstance -ResourceURI winrm/config/client/DefaultPorts -ValueSet $PortOptions | Out-Null
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set client options"))
@@ -195,7 +210,18 @@ function Set-WinRMClient
 			}
 		}
 
-		Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+			Set-Item -Path WSMan:\localhost\client\NetworkDelayms -Value $ClientOptions["NetworkDelayms"]
+			Set-Item -Path WSMan:\localhost\client\URLPrefix -Value $ClientOptions["URLPrefix"]
+			Set-Item -Path WSMan:\localhost\client\AllowUnencrypted -Value $ClientOptions["AllowUnencrypted"]
+			Set-Item -Path WSMan:\localhost\client\TrustedHosts -Value $ClientOptions["TrustedHosts"] -Force
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/client -ValueSet $ClientOptions | Out-Null
+		}
 	}
 
 	try
@@ -206,9 +232,20 @@ function Set-WinRMClient
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
 
-			# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-			# cmd.exe /C 'winrm set winrm/config @{ MaxTimeoutms = 10 }'
-			Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				# TODO: protocol and WinRS options are common to client and server
+				# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+				Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
+				Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
+				Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
+			}
+			else
+			{
+				# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+				# cmd.exe /C 'winrm set winrm/config @{ MaxTimeoutms = 10 }'
+				Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+			}
 		}
 
 		# TODO: Not working

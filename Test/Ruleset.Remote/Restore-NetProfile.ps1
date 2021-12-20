@@ -71,7 +71,10 @@ Enter-Test "Restore-NetProfile"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "Default"
-	Restore-NetProfile
+	$Result = Restore-NetProfile
+	$Result
+
+	Test-Output $Result -Command Restore-NetProfile
 }
 
 Update-Log

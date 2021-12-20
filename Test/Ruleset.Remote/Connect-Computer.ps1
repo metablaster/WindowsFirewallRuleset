@@ -81,7 +81,9 @@ if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept danger
 	}
 
 	Start-Test "Default"
-	Connect-Computer @ConnectParams
+	$Result = Connect-Computer @ConnectParams
+
+	Test-Output $Result -Command Connect-Computer
 }
 
 Update-Log

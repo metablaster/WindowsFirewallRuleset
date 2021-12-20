@@ -448,7 +448,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		try
 		{
-			Connect-Computer @ConnectParams
+			# Connect-Computer @ConnectParams
 			Remove-Variable -Name ConnectParams
 		}
 		catch

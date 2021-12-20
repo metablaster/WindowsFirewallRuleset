@@ -71,7 +71,10 @@ Enter-Test "Register-SslCertificate"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "-Server"
-	Register-SslCertificate -ProductType Server -PassThru
+	$Result = Register-SslCertificate -ProductType Server -PassThru
+	$Result
+
+	Test-Output $Result -Command Register-SslCertificate
 }
 
 Update-Log

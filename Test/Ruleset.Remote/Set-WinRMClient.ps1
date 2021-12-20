@@ -71,7 +71,10 @@ Enter-Test "Set-WinRMClient"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "HTTP"
-	Set-WinRMClient -Protocol HTTP
+	$Result = Set-WinRMClient -Protocol HTTP
+	$Result
+
+	Test-Output $Result -Command Set-WinRMClient
 }
 
 Update-Log

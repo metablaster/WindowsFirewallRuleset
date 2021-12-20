@@ -297,8 +297,16 @@ function Enable-WinRMServer
 		{
 			# Add new HTTP listener
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTP listener options"
-			New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
-				-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
+				New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null
+			}
+			else
+			{
+				New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
+					-SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
+			}
 		}
 
 		if ($Protocol -ne "HTTP")
@@ -318,9 +326,18 @@ function Enable-WinRMServer
 
 			if ($Cert)
 			{
-				# Add new HTTPS listener
-				New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
-					-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
+				if ($PSVersionTable.PSEdition -eq "Core")
+				{
+					# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
+					New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTPS -Enabled $true `
+						-Hostname $Domain -CertificateThumbprint $Cert.Thumbprint | Out-Null
+				}
+				else
+				{
+					# Add new HTTPS listener
+					New-WSManInstance -ResourceURI winrm/config/Listener -SelectorSet @{ Address = "*"; Transport = "HTTPS" } `
+						-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
+				}
 			}
 		}
 	}
@@ -352,10 +369,21 @@ function Enable-WinRMServer
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM authentication and default ports"))
 	{
-		Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+			Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
+			Set-Item -Path WSMan:\localhost\service\auth\Certificate -Value $AuthenticationOptions["Certificate"]
+			Set-Item -Path WSMan:\localhost\service\auth\Basic -Value $AuthenticationOptions["Basic"]
+			Set-Item -Path WSMan:\localhost\service\auth\CredSSP -Value $AuthenticationOptions["CredSSP"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
-		Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
+			Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
+		}
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
@@ -367,15 +395,42 @@ function Enable-WinRMServer
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server options"))
 	{
-		# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-		# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-		Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+			Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
+			Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
+			Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
+			Set-Item -Path WSMan:\localhost\service\MaxPacketRetrievalTimeSeconds -Value $ServerOptions["MaxPacketRetrievalTimeSeconds"]
+			Set-Item -Path WSMan:\localhost\service\AllowUnencrypted -Value $ServerOptions["AllowUnencrypted"]
+			Set-Item -Path WSMan:\localhost\service\IPv4Filter -Value $ServerOptions["IPv4Filter"]
+			Set-Item -Path WSMan:\localhost\service\IPv6Filter -Value $ServerOptions["IPv6Filter"]
+			Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpListener -Value $ServerOptions["EnableCompatibilityHttpListener"]
+			Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpsListener -Value $ServerOptions["EnableCompatibilityHttpsListener"]
+		}
+		else
+		{
+			# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+			# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+			Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM protocol options"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
-		Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# TODO: protocol and WinRS options are common to client and server
+			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
+			Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
+			Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
+			Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
+		}
+		else
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
+			Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+		}
 	}
 
 	Restore-NetProfile

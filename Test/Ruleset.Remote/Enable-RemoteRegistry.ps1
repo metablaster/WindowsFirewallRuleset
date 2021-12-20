@@ -71,7 +71,10 @@ Enter-Test "Enable-RemoteRegistry"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "Default"
-	Enable-RemoteRegistry
+	$Result = Enable-RemoteRegistry
+	$Result
+
+	Test-Output $Result -Command Enable-RemoteRegistry
 }
 
 Update-Log

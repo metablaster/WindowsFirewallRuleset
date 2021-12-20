@@ -129,6 +129,7 @@ function Test-WinRM
 		ApplicationName = "wsman"
 		# NOTE: Only valid for Enter-PSSession
 		# SessionOption = $PSSessionOption
+		ErrorAction = "Stop"
 	}
 
 	$CimParams = @{

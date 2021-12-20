@@ -74,7 +74,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept danger
 	Show-WinRMConfig -Server -Detailed
 
 	Start-Test "-Client -Detailed"
-	Show-WinRMConfig -Client -Detailed
+	$Result = Show-WinRMConfig -Client -Detailed
+	$Result
+
+	Test-Output $Result -Command Show-WinRMConfig
 }
 
 Update-Log

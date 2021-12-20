@@ -71,7 +71,10 @@ Enter-Test "Disconnect-Computer"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "Default"
-	Disconnect-Computer $PolicyStore
+	$Result = Disconnect-Computer $PolicyStore
+	$Result
+
+	Test-Output $Result -Command Disconnect-Computer
 }
 
 Update-Log

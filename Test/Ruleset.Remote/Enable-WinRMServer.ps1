@@ -71,7 +71,10 @@ Enter-Test "Enable-WinRMServer"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "HTTP"
-	Enable-WinRMServer -Protocol HTTP
+	$Result = Enable-WinRMServer -Protocol HTTP
+	$Result
+
+	Test-Output $Result -Command Enable-WinRMServer
 }
 
 Update-Log

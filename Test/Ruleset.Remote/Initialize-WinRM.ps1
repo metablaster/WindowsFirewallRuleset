@@ -71,7 +71,10 @@ Enter-Test "Initialize-WinRM"
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept dangerous unit test"))
 {
 	Start-Test "Default"
-	Initialize-WinRM
+	$Result = Initialize-WinRM
+	$Result
+
+	Test-Output $Result -Command Initialize-WinRM
 }
 
 Update-Log

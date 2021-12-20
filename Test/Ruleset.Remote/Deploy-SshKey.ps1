@@ -72,7 +72,10 @@ if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept danger
 {
 	# TODO: Test case not implemented
 	Start-Test "Deploy-SshKey"
-	# Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin
+	# $Result = Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin
+	# $Result
+
+	# Test-Output $Result -Command Deploy-SshKey
 }
 
 Update-Log
