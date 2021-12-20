@@ -126,6 +126,11 @@ function Connect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	if ($PSSessionConfigurationName -ne $script:FirewallSession)
+	{
+		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
+	}
+
 	# WinRM service must be running at this point
 	# TODO: does not belong here, move to requirements section
 	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)

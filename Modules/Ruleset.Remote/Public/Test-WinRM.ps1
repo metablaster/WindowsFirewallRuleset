@@ -31,7 +31,7 @@ SOFTWARE.
 Test WinRM service configuration
 
 .DESCRIPTION
-Test WinRM service configuration on either client or server computer.
+Test WinRM service (server) configuration on either client or server computer.
 WinRM service is tested for functioning connectivity which includes
 PowerShell remoting, remoting with CIM commandlets and user authentication.
 
@@ -61,11 +61,21 @@ Controls the formats used to represent numbers, currency values, and date/time v
 in Windows this setting is known as "Region and regional format"
 The default value is en-US, current value can be obtained with Get-Culture
 
+.PARAMETER Status
+Boolean reference variable used for return value which indicates whether the test was success
+
+.PARAMETER Quiet
+If specified, does not produce errors, success messages or informational action messages
+
 .EXAMPLE
 PS> Test-WinRM HTTP
 
 .EXAMPLE
 PS> Test-WinRM -Domain Server1 -Protocol Any
+
+.EXAMPLE
+PS> $RemoteStatus = $false
+PS> Test-WinRM HTTP -Quiet -Status $RemoteStatus
 
 .INPUTS
 None. You cannot pipe objects to Test-WinRM
@@ -108,14 +118,29 @@ function Test-WinRM
 
 		[Parameter()]
 		[System.Globalization.CultureInfo] $Culture =
-		[System.Globalization.CultureInfo]::new("en-US", $false)
+		[System.Globalization.CultureInfo]::new("en-US", $false),
+
+		[Parameter()]
+		[ref] $Status,
+
+		[Parameter()]
+		[switch] $Quiet
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($PSSessionConfigurationName -ne $script:FirewallSession)
+	$StatusHTTP = $false
+	$StatusHTTPS = $false
+
+	if ($Quiet)
 	{
-		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
+		$ErrorActionPreference = "SilentlyContinue"
+		$InformationPreference = "SilentlyContinue"
+	}
+
+	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+	{
+		$Status.Value = $false
 	}
 
 	$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
@@ -129,7 +154,6 @@ function Test-WinRM
 		ApplicationName = "wsman"
 		# NOTE: Only valid for Enter-PSSession
 		# SessionOption = $PSSessionOption
-		ErrorAction = "Stop"
 	}
 
 	$CimParams = @{
@@ -169,7 +193,9 @@ function Test-WinRM
 		$CimParams["Credential"] = $RemoteCredential
 
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
-		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+		$WSManResult = Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+
+		if (!$Quiet) { $WSManResult }
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
 		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
@@ -177,6 +203,7 @@ function Test-WinRM
 			Remove-CimSession -Name $CimParams["Name"]
 		}
 
+		$CimResult = $null
 		$CimServer = New-CimSession @CimParams
 
 		if ($CimServer)
@@ -184,17 +211,27 @@ function Test-WinRM
 			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTPS on '$Domain'"
-			Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
+			$CimResult = Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 			Select-Object CSName, Caption | Format-Table
 
+			if (!$Quiet) { $CimResult }
 			Remove-CimSession -Name $CimParams["Name"]
+		}
+
+		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult)
+		if ($Protocol -ne "Any")
+		{
+			if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+			{
+				$Status.Value = $StatusHTTPS
+			}
 		}
 	}
 
-	$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
-
 	if ($Protocol -ne "HTTPS")
 	{
+		$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
+
 		$WSManParams["UseSsl"] = $false
 		$CimParams["SessionOption"] = $CimOptions
 
@@ -221,7 +258,8 @@ function Test-WinRM
 		}
 
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
-		Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+		$WSManResult2 = Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
+		if (!$Quiet) { $WSManResult2 }
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to $Domain"
 		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
@@ -229,17 +267,35 @@ function Test-WinRM
 			Remove-CimSession -Name $CimParams["Name"]
 		}
 
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTP on '$Domain'"
 		$CimServer = New-CimSession @CimParams
 
 		if ($CimServer)
 		{
 			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTP on '$Domain'"
-			Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
+			$CimResult2 = Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 			Select-Object CSName, Caption | Format-Table
 
+			if (!$Quiet) { $CimResult2 }
 			Remove-CimSession -Name $CimParams["Name"]
+
+			$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2)
+			if ($Protocol -ne "Any")
+			{
+				if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+				{
+					$Status.Value = $StatusHTTP
+				}
+			}
+		}
+	}
+
+	if ($Protocol -eq "Any")
+	{
+		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+		{
+			$Status.Value = $StatusHTTP -or $StatusHTTPS
 		}
 	}
 }
