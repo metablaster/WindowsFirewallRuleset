@@ -37,7 +37,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Generate or update help files for all project modules
+Generate or update help files for all modules in repository
 
 .DESCRIPTION
 Update-HelpContent.ps1 Updates existing or generates new help files for all modules

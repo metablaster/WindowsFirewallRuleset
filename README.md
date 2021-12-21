@@ -147,13 +147,14 @@ Following table lists currently tested operating systems
 
 | OS                  | Edition       | Version     | Architecture |
 | ------------------- | ------------- | ----------- | ------------ |
-| Windows 10          | Pro           | 1809 - 20H2 | x64          |
+| Windows 10          | Pro           | 1809 - 21H2 | x64          |
 | Windows 10          | Pro Education | 20H2        | x64          |
 | Windows 10          | Enterprise    | 1809 - 20H2 | x64          |
 | Windows 10          | Education     | 20H2        | x64          |
 | Windows Server 2019 | Essentials    | 1809        | x64          |
 | Windows Server 2019 | Standard      | 1809        | x64          |
 | Windows Server 2019 | Datacenter    | 1809        | x64          |
+| Windows Server 2022 | Standard      | 21H2        | x64          |
 
 ***
 
@@ -479,9 +480,27 @@ which is where you'll find description on how to use export\import module functi
 
 ## Remote firewall deployment
 
-This section and functionality is currently under construction
+This section and functionality is currently under construction and incomplete
 
 ![Under construction](Readme/Screenshots/UnderConstruction.gif)
+
+In remote firewall deployment there are at least 2 computers involved,\
+ one is management computer
+and all others are server computers.\
+Scripts are executed by you on management computer, and firewall is then deployed to or configured on
+multiple server computers simultaneously.
+
+At the moment following core remoting capabilities are implemented:
+
+1. Automatic creation of PS and CIM sessions
+2. Drilling registry remotely
+3. Configuring WinRM service
+4. Establishing encrypted session to remote host
+
+For implementation details see `Modules\Ruleset.Remote` module
+
+**NOTE:** Remoting functionality is not exclusive to remote firewall deployment, deployment to
+localhost by design requires working WinRM and PS remoting configuration as well.
 
 ## Checking for updates
 

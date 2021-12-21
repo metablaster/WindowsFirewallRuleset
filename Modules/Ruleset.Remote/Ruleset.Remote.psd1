@@ -128,10 +128,10 @@ SOFTWARE.
 		"Show-WinRMConfig"
 		"Test-WinRM"
 		"Unregister-SslCertificate"
-		# NOTE: Temporarily exporting for testing
-		"Initialize-WinRM"
-		"Restore-NetProfile"
-		"Unblock-NetProfile"
+		# NOTE: Temporarily export for testing
+		# "Initialize-WinRM"
+		# "Restore-NetProfile"
+		# "Unblock-NetProfile"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
