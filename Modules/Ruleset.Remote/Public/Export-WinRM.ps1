@@ -34,75 +34,29 @@ Export WinRM configuration to file
 Export-WinRM exports current WinRM configuration to file to be able to import
 settings later and restore changes
 
-.PARAMETER ParameterName
-The description of a parameter.
-Repeat ".PARAMETER" keyword for each parameter.
-
-.PARAMETER Force
-The description of Force parameter.
-
 .EXAMPLE
 PS> Export-WinRM
 
-Repeat ".EXAMPLE" keyword for each example.
-
 .INPUTS
-[string[]]
 None. You cannot pipe objects to Export-WinRM
 
 .OUTPUTS
 None. Export-WinRM does not generate any output
 
 .NOTES
-None.
-TODO: Remove unneeded template code
+TODO: Function not implemented
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Export-WinRM.md
 #>
 function Export-WinRM
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
+	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Export-WinRM.md")]
 	[OutputType([void])]
-	param (
-		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string[]] $ParameterName,
+	param ()
 
-		[Parameter()]
-		[switch] $Force
-	)
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	begin
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	}
-
-	process
-	{
-		foreach ($Value in $ParameterName)
-		{
-			# TODO: Update confirm parameters
-			# "TARGET", "MESSAGE", "OPERATION", [ref]$reason
-			# https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.shouldprocessreason?view=powershellsdk-7.0.0
-			# https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess?view=powershell-7#quick-parameter-reference
-			$CallReason
-			if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPERATION", [ref] $CallReason))
-			{
-				# NOTE: Sample output depens on amount of parameters (2, 3 or 4 parameters)
-				# Performing the operation "Template MESSAGE" on target "Template TARGET"
-				#
-				# OR
-				#
-				# "Template OPERATION"
-				# "Template MESSAGE"
-
-				$CallReason
-			}
-		}
-	}
-
-	end
-	{
-	}
+	Write-Error -Category NotImplemented -Message "Export-WinRM function not implemented"
 }

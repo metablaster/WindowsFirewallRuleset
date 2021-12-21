@@ -56,6 +56,7 @@ None. Disable-WinRMServer does not generate any output
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
+HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-WinRMServer.md
@@ -144,7 +145,6 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
 				New-Item -Path WSMan:\localhost\Listener -Address "IP:[::1]" -Transport HTTP -Enabled $true -Force | Out-Null
 				New-Item -Path WSMan:\localhost\Listener -Address "IP:127.0.0.1" -Transport HTTP -Enabled $true -Force | Out-Null
 			}
@@ -160,7 +160,6 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
 				Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
 				Set-Item -Path WSMan:\localhost\service\auth\Certificate -Value $AuthenticationOptions["Certificate"]
 				Set-Item -Path WSMan:\localhost\service\auth\Basic -Value $AuthenticationOptions["Basic"]
@@ -181,7 +180,6 @@ function Disable-WinRMServer
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
-					# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 					Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
 					Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
 					Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
@@ -203,7 +201,6 @@ function Disable-WinRMServer
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
 					# TODO: protocol and WinRS options are common to client and server
-					# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 					Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
 					Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
 					Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
@@ -217,13 +214,13 @@ function Disable-WinRMServer
 		catch [System.OperationCanceledException]
 		{
 			Write-Warning -Message "Operation incomplete because: $($_.Exception.Message)"
+			Restore-NetProfile
 		}
 		catch
 		{
 			Write-Error -ErrorRecord $_
+			Restore-NetProfile
 		}
-
-		Restore-NetProfile
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"

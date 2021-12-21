@@ -30,7 +30,7 @@ SOFTWARE.
 param ()
 
 # Imports
-# TODO Use -InModule to avoid creating connection and just import module
+# TODO Using -InModule to avoid creating connection will result in WinRM not being set
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule # $PSCmdlet
 
 #

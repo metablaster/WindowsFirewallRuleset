@@ -45,6 +45,10 @@ Include setting that apply to client configuration
 .PARAMETER IncludeServer
 Include setting that apply to service configuration
 
+.PARAMETER Default
+If specified default options are used instead of modified ones,
+this is to be used to restore WinRM to factory defaults.
+
 .EXAMPLE
 PS> .\WinRMSettings.ps1
 
@@ -63,7 +67,6 @@ None. You cannot pipe objects to WinRMSettings.ps1
 None. WinRMSettings.ps1 does not generate any output
 
 .NOTES
-TODO: Make use of all default values, ex. Restore-WinRM or ResetWinRM
 TODO: Client settings are missing for server and vice versa
 
 .LINK
@@ -252,7 +255,8 @@ if (!$Default)
 		# Specifies the maximum time, in milliseconds, that the remote command or script is allowed to execute.
 		# The default is 28800000.
 		# NOTE: WinRM 2.0: The MaxShellRunTime setting is set to read-only.
-		MaxShellRunTime = 28800000
+		# NOTE: MaxShellRunTime" is deprecated and cannot be changed.
+		# MaxShellRunTime = 28800000
 
 		# Specifies the maximum number of processes that any shell operation is allowed to start.
 		# A value of 0 allows for an unlimited number of processes.
@@ -270,50 +274,63 @@ if (!$Default)
 }
 else
 {
-	# Default WinRM option values, do not modify except to update wrong defaults
-	$ProtocolOptions["MaxEnvelopeSizekb"] = 150
-	$ProtocolOptions["MaxTimeoutms"] = 60000
-	$ProtocolOptions["MaxBatchItems"] = 32000
+	# Default WinRM option values, do not modify except to update to new official defaults
 
-	$AuthenticationOptions["Basic"] = $true
-	$AuthenticationOptions["Kerberos"] = $true
-	$AuthenticationOptions["Negotiate"] = $true
-	$AuthenticationOptions["Certificate"] = $true
-	$AuthenticationOptions["CredSSP"] = $false
+	[hashtable] $ProtocolOptions = @{
+		MaxEnvelopeSizekb = 150
+		MaxTimeoutms = 60000
+		MaxBatchItems = 32000
+	}
+
+	[hashtable] $AuthenticationOptions = @{
+		Basic = $true
+		Kerberos = $true
+		Negotiate = $true
+		Certificate = $true
+		CredSSP = $false
+	}
 
 	if ($IncludeClient)
 	{
 		$AuthenticationOptions["Digest"] = $true
 
-		$ClientOptions["NetworkDelayms"] = 5000
-		$ClientOptions["URLPrefix"] = "wsman"
-		$ClientOptions["AllowUnencrypted"] = $false
-		$ClientOptions["TrustedHosts"] = ""
+		[hashtable] $ClientOptions = @{
+			NetworkDelayms = 5000
+			URLPrefix = "wsman"
+			AllowUnencrypted = $false
+			TrustedHosts = ""
+		}
 	}
 
 	if ($IncludeServer)
 	{
 		$AuthenticationOptions["CbtHardeningLevel"] = "Relaxed"
 
-		$ServerOptions["RootSDDL"] = "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)"
-		$ServerOptions["MaxConcurrentOperationsPerUser"] = 1500
-		$ServerOptions["EnumerationTimeoutms"] = 60000
-		$ServerOptions["MaxConnections"] = 300
-		$ServerOptions["MaxPacketRetrievalTimeSeconds"] = 120
-		$ServerOptions["AllowUnencrypted"] = $false
-		$ServerOptions["IPv4Filter"] = " * "
-		$ServerOptions["IPv6Filter"] = "*"
-		$ServerOptions["EnableCompatibilityHttpListener"] = $false
-		$ServerOptions["EnableCompatibilityHttpsListener"] = $false
+		[hashtable] $ServerOptions = @{
+			RootSDDL = "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)"
+			MaxConcurrentOperationsPerUser = 1500
+			EnumerationTimeoutms = 60000
+			MaxConnections = 300
+			MaxPacketRetrievalTimeSeconds = 120
+			AllowUnencrypted = $false
+			IPv4Filter = " * "
+			IPv6Filter = "*"
+			EnableCompatibilityHttpListener = $false
+			EnableCompatibilityHttpsListener = $false
+		}
 	}
 
-	$PortOptions["HTTP"] = 5985
-	$PortOptions["HTTPS"] = 5986
+	[hashtable] $PortOptions = @{
+		HTTP = 5985
+		HTTPS = 5986
+	}
 
-	$WinRSOptions["AllowRemoteShellAccess"] = $true
-	$WinRSOptions["IdleTimeout"] = 180000
-	$WinRSOptions["MaxConcurrentUsers"] = 5
-	$WinRSOptions["MaxProcessesPerShell"] = 15
-	$WinRSOptions["MaxMemoryPerShellMB"] = 150
-	$WinRSOptions["MaxShellsPerUser"] = 5
+	[hashtable] $WinRSOptions = @{
+		AllowRemoteShellAccess = $true
+		IdleTimeout = 180000
+		MaxConcurrentUsers = 5
+		MaxProcessesPerShell = 15
+		MaxMemoryPerShellMB = 150
+		MaxShellsPerUser = 5
+	}
 }

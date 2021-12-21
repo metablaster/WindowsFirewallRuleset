@@ -86,6 +86,7 @@ TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Authenticate users using certificates optionally or instead of credential object
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
+HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Set-WinRMClient.md
@@ -173,7 +174,6 @@ function Set-WinRMClient
 	{
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 			Set-Item -Path WSMan:\localhost\client\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
 			Set-Item -Path WSMan:\localhost\client\auth\Certificate -Value $AuthenticationOptions["Certificate"]
 			Set-Item -Path WSMan:\localhost\client\auth\Basic -Value $AuthenticationOptions["Basic"]
@@ -212,7 +212,6 @@ function Set-WinRMClient
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 			Set-Item -Path WSMan:\localhost\client\NetworkDelayms -Value $ClientOptions["NetworkDelayms"]
 			Set-Item -Path WSMan:\localhost\client\URLPrefix -Value $ClientOptions["URLPrefix"]
 			Set-Item -Path WSMan:\localhost\client\AllowUnencrypted -Value $ClientOptions["AllowUnencrypted"]
@@ -235,7 +234,6 @@ function Set-WinRMClient
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				# TODO: protocol and WinRS options are common to client and server
-				# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 				Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
 				Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
 				Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
@@ -254,14 +252,14 @@ function Set-WinRMClient
 	}
 	catch [System.OperationCanceledException]
 	{
+		Restore-NetProfile
 		Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
 	}
 	catch
 	{
+		Restore-NetProfile
 		Write-Error -ErrorRecord $_
 	}
-
-	Restore-NetProfile
 
 	if ($Protocol -eq "HTTPS")
 	{

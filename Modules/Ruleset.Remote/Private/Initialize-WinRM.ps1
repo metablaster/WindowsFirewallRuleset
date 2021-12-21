@@ -57,41 +57,40 @@ function Initialize-WinRM
 
 	# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
 	# present may cause issues adjusting some of the WinRM options
-	if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Check 'Windows Remote Management' rules"))
 	{
-		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add 'Windows Remote Management' rules"))
+		if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management' firewall rules"
 
+			# NOTE: Piping to Copy-NetFirewallRule (CimInstance) possible but change not saved
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
-				-Direction Inbound -NewPolicyStore PersistentStore |
-			Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
+				-Direction Inbound -NewPolicyStore PersistentStore
 		}
-	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling 'Windows Remote Management' firewall rules"
-		Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Enable-NetFirewallRule
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Modifying 'Windows Remote Management' firewall rules"
+
+		Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore |
+		Set-NetFirewallRule -RemoteAddress Any -Enabled True
 	}
 
-	if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Check 'Windows Remote Management - Compatibility Mode' rules"))
 	{
-		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add 'Windows Remote Management - Compatibility Mode' rules"))
+		if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management - Compatibility Mode' firewall rules"
 
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
-				-Direction Inbound -NewPolicyStore PersistentStore |
-			Set-NetFirewallRule -RemoteAddress Any | Enable-NetFirewallRule
+				-Direction Inbound -NewPolicyStore PersistentStore
 		}
-	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling 'Windows Remote Management - Compatibility Mode' firewall rules"
-		Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore | Enable-NetFirewallRule
+
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Modifying 'Windows Remote Management - Compatibility Mode' firewall rules"
+
+		Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore |
+		Set-NetFirewallRule -RemoteAddress Any -Enabled True
 	}
 
-	# TODO: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
+	# NOTE: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
 	if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
 	{
 		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))

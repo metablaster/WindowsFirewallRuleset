@@ -89,6 +89,7 @@ TODO: Authenticate users using certificates optionally or instead of credential 
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server
 remotely use Connect-WSMan and New-WSManSessionOption
+HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -189,7 +190,7 @@ function Enable-WinRMServer
 			# TODO: See if pwrshplugin.dll could be installed manually without running Enable-PSRemoting
 			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
 
-			# TODO: Use Set-WSManQuickConfig since or if recreating default session configurations is not absolutely needed
+			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
 			Enable-PSRemoting -Force | Out-Null
 		}
 		catch [System.OperationCanceledException]
@@ -305,7 +306,6 @@ function Enable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTP listener options"
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
 				New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null
 			}
 			else
@@ -334,7 +334,6 @@ function Enable-WinRMServer
 			{
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
-					# TODO: New-WSManInstance fails with "Invalid ResourceURI format" error
 					New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTPS -Enabled $true `
 						-Hostname $Domain -CertificateThumbprint $Cert.Thumbprint | Out-Null
 				}
@@ -377,7 +376,6 @@ function Enable-WinRMServer
 	{
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 			Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
 			Set-Item -Path WSMan:\localhost\service\auth\Certificate -Value $AuthenticationOptions["Certificate"]
 			Set-Item -Path WSMan:\localhost\service\auth\Basic -Value $AuthenticationOptions["Basic"]
@@ -403,7 +401,6 @@ function Enable-WinRMServer
 	{
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 			Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
 			Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
 			Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
@@ -427,7 +424,6 @@ function Enable-WinRMServer
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			# TODO: protocol and WinRS options are common to client and server
-			# TODO: Set-WSManInstance fails with "Invalid ResourceURI format" error
 			Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
 			Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
 			Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
