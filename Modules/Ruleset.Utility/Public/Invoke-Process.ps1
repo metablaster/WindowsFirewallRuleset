@@ -404,7 +404,7 @@ function Invoke-Process
 		if ($Timeout -ge 0)
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish ..."
+				-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish..."
 
 			if ($Async)
 			{
@@ -419,14 +419,14 @@ function Invoke-Process
 
 			if (!$StatusWait)
 			{
-				Write-Warning -Message "Process '$CommandName' is taking too long, aborting ..."
+				Write-Warning -Message "Process '$CommandName' is taking too long, aborting..."
 			}
 		}
 		else
 		{
 			$StatusWait = $true
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish ..."
+				-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish..."
 
 			if ($Async)
 			{

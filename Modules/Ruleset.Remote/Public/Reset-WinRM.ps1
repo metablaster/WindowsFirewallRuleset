@@ -107,6 +107,7 @@ function Reset-WinRM
 	#
 	# WinRM reset
 	#
+	Unblock-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset WinRM protocol options"))
 	{
@@ -244,7 +245,6 @@ function Reset-WinRM
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset server options"))
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WinRM server options"
-		Unblock-NetProfile
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
@@ -264,9 +264,9 @@ function Reset-WinRM
 			# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
 			Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 		}
-
-		Restore-NetProfile
 	}
+
+	Restore-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove all listeners"))
 	{

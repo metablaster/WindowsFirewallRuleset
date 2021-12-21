@@ -409,17 +409,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 	}
 
-	if ($Develop)
-	{
-		# TODO: Temporarily while working on remoting to debug WinRM configuration setup
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
-
-		Disconnect-Computer $PolicyStore
-		Disable-RemoteRegistry -Confirm:$false
-		Reset-WinRM -Confirm:$false
-		Remove-Variable -Name SessionEstablished -Scope Global -Force -ErrorAction Ignore
-	}
-
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
 		Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
@@ -453,7 +442,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			NoCompression = $false
 		}
 
-		# Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 		$PolicyStoreStatus = $false
 
 		if ($PolicyStore -notin $LocalStores)
@@ -594,7 +583,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

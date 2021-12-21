@@ -127,7 +127,7 @@ function Set-WinRMClient
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client ..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client..."
 
 	# TODO: Initialize-WinRM and Unblock-NetProfile are called multiple times since multiple functions are needed for configuration
 	Initialize-WinRM

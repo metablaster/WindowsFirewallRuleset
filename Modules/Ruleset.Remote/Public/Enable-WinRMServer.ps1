@@ -148,7 +148,7 @@ function Enable-WinRMServer
 	7. Changes the security descriptor of all session configurations to allow remote access.
 	Restarts the WinRM service to make the preceding changes effective.
 	#>
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM server ..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM server..."
 	Initialize-WinRM
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove default session configurations"))
