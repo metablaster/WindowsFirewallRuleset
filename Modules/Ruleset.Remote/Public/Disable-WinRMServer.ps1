@@ -127,19 +127,18 @@ function Disable-WinRMServer
 	}
 	else
 	{
-		# TODO: This should be part of Enable-WinRMServer or separate function which could be called by both
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
 
 			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			Get-PSSessionConfiguration | Where-Object {
-				$_.Name -ne $script:FirewallSession
-				# NOTE: "Microsoft.PowerShell" default session is used by Ruleset.Compatibility module
-				# $_.Name -ne "Microsoft.PowerShell"
+				$_.Name -ne $script:FirewallSession -and
+				$_.Name -ne "Microsoft.PowerShell"
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 
+		# TODO: This should be part of Enable-WinRMServer
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable only loopback"))
 		{
 			# Enable only localhost on loopback
@@ -161,7 +160,10 @@ function Disable-WinRMServer
 				New-WSManInstance -SelectorSet @{ Address = "IP:127.0.0.1"; Transport = "HTTP" } `
 					-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
 			}
+		}
 
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server authentication options"))
+		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{

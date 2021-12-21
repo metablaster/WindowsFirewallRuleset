@@ -40,7 +40,7 @@ In this file project settings and preferences are set, these are grouped into
 .PARAMETER Cmdlet
 PSCmdlet object of the calling script
 
-.PARAMETER Domain
+.PARAMETER TargetHost
 Target host or policy store name
 
 .PARAMETER InModule
@@ -77,7 +77,7 @@ TODO: Deploy rules to different PolicyStore on remote host
 TODO: Check parameter naming convention
 TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
 HACK: This script become too big and too depending, move non variable code somewhere else
-HACK: -Domain parameter would override because of dot sourcing
+HACK: -Domain parameter would override because script is dot sourced
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -97,7 +97,7 @@ param (
 	[System.Management.Automation.PSCmdlet]	$Cmdlet,
 
 	[Parameter(ParameterSetName = "Script")]
-	[Alias("ComputerName", "CN", "Domain")]
+	[Alias("ComputerName", "CN", "Domain", "PolicyStore")]
 	[string] $TargetHost,
 
 	[Parameter(Mandatory = $true, ParameterSetName = "Module")]
@@ -399,7 +399,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	else
 	{
 		# Target machine onto which to deploy firewall (default: Local Group Policy)
-		if ([string]::IsNullOrEmpty($TargetHost)) # TODO: -or ($TargetHost -eq "localhost"))
+		if ([string]::IsNullOrEmpty($TargetHost) -or ($TargetHost -eq "localhost"))
 		{
 			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value ([System.Environment]::MachineName)
 		}
@@ -414,7 +414,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		# TODO: Temporarily while working on remoting to debug WinRM configuration setup
 		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
-		# Disconnect-Computer
+		Disconnect-Computer $PolicyStore
 		Disable-RemoteRegistry -Confirm:$false
 		Reset-WinRM -Confirm:$false
 		Remove-Variable -Name SessionEstablished -Scope Global -Force -ErrorAction Ignore
@@ -454,14 +454,14 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 
 		# Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+		$PolicyStoreStatus = $false
 
 		if ($PolicyStore -notin $LocalStores)
 		{
-			$TargetHostStatus = $false
-			Test-WinRM -Protocol HTTPS -Domain $TargetHost -Status ([ref] $TargetHostStatus) -Quiet
+			Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
-			if (!$TargetHostStatus)
+			if (!$PolicyStoreStatus)
 			{
 				# Configure this machine for remote session over SSL
 				Set-WinRMClient $PolicyStore -Confirm:$false
@@ -477,18 +477,15 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
-			$TargetHostStatus = $false
-			Test-WinRM -Protocol HTTP -Status ([ref] $TargetHostStatus) -Quiet
+			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
 
-			if (!$TargetHostStatus)
+			if (!$PolicyStoreStatus)
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
 				Enable-WinRMServer -Protocol HTTP -Confirm:$false
 				Disable-WinRMServer -Confirm:$false
 			}
-
-			Remove-Variable -Name TargetHostStatus
 
 			$SessionOptionParams["NoEncryption"] = $true
 			$SessionOptionParams["NoCompression"] = $true
@@ -503,6 +500,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
+
+		Remove-Variable -Name PolicyStoreStatus
 
 		try
 		{
@@ -595,7 +594,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop

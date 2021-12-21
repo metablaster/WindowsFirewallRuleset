@@ -28,11 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Reset WinRM configuration
+Reset WinRM and PS remoting configuration
 
 .DESCRIPTION
 Reset-WinRM resets WinRM configuration to either system defaults or to previous settings
-that were exported by Export-WinRM
+that were exported by Export-WinRM.
+In addition PS remoting is disabled or restored and reset to PowerShell defaults, default firewall rules
+are removed and WinRM service is stopped and disabled.
 
 .EXAMPLE
 PS> Reset-WinRM
@@ -60,6 +62,47 @@ function Reset-WinRM
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient -IncludeServer -Default
 
 	Initialize-WinRM
+
+	#
+	# PowerShell specific reset
+	#
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset session configurations"))
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting session configurations"
+
+		# Recreating default sessions involves removing existing ones and then
+		# populating fresh ones with Enable-PSRemoting
+		Get-PSSessionConfiguration -Name * |
+		Unregister-PSSessionConfiguration -NoServiceRestart -Force
+
+		# NOTE: Enable-PSRemoting may fail in Windows PowerShell
+		Set-StrictMode -Off
+		Enable-PSRemoting -Force -WarningAction Ignore | Out-Null
+		Set-StrictMode -Version Latest
+
+		Disable-PSRemoting -Force -WarningAction Ignore
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting"))
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
+
+		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+		# allows remote access to members of the Administrators group on the computer.
+		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+			-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+	}
+
+	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
+	if ($WmiPlugin.Value -ne $false)
+	{
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
+		{
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WMI Provider plugin"
+			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
+		}
+	}
 
 	#
 	# WinRM reset
@@ -231,58 +274,6 @@ function Reset-WinRM
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset session configurations"))
-	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting session configurations"
-
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			# "PowerShell." + "current PowerShell version"
-			# "PowerShell.7", untied to any specific PowerShell version.
-			$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion.Major)*"
-		}
-		else
-		{
-			# NOTE: "Microsoft.PowerShell" default session is used by Ruleset.Compatibility module
-			# "Microsoft.PowerShell" is used for sessions by default
-			# "Microsoft.PowerShell32" is used for sessions by 32bit host
-			# "Microsoft.PowerShell.Workflow" is used by workflows
-			$DefaultSession = "Microsoft.PowerShell*"
-		}
-
-		# TODO: Will not recreate default sessions if missing or modified
-		Get-PSSessionConfiguration | Where-Object {
-			$_.Name -notlike $DefaultSession
-			# $_.Name -ne "Microsoft.PowerShell"
-		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
-
-		# Get-PSSessionConfiguration | Where-Object {
-		# 	$_.Name -ne "Microsoft.PowerShell"
-		# } | Disable-PSSessionConfiguration -NoServiceRestart -Force
-
-		Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
-	}
-
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting"))
-	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
-
-		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
-		# allows remote access to members of the Administrators group on the computer.
-		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-			-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-	}
-
-	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-	if ($WmiPlugin.Value -ne $false)
-	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
-		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WMI Provider plugin"
-			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
-		}
-	}
-
 	#
 	# Rules and service Reset
 	#
@@ -300,9 +291,9 @@ function Reset-WinRM
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
 
-		Set-Service -Name WinRM -StartupType Disabled
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		Set-Service -Name WinRM -StartupType Disabled
 	}
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM reset completed successfully!"

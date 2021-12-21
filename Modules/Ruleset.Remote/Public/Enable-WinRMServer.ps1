@@ -192,6 +192,7 @@ function Enable-WinRMServer
 			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
 
 			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
+			# NOTE: Enable-PSRemoting may fail in Windows PowerShell
 			Set-StrictMode -Off
 			Enable-PSRemoting -Force | Out-Null
 			Set-StrictMode -Version Latest
@@ -299,7 +300,6 @@ function Enable-WinRMServer
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server listener"))
 	{
-
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
