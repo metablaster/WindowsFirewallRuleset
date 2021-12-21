@@ -113,7 +113,7 @@ function Reset-WinRM
 			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Attempt to set client 'Negotiate' authentication"))
 			{
 				# NOTE: If this fails, registry fix must precede all other authentication edits
-				Set-Item WSMan:\localhost\Client\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
+				Set-Item -Path WSMan:\localhost\Client\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
 			}
 		}
 		catch
@@ -243,6 +243,7 @@ function Reset-WinRM
 		}
 		else
 		{
+			# NOTE: "Microsoft.PowerShell" default session is used by Ruleset.Compatibility module
 			# "Microsoft.PowerShell" is used for sessions by default
 			# "Microsoft.PowerShell32" is used for sessions by 32bit host
 			# "Microsoft.PowerShell.Workflow" is used by workflows
@@ -252,7 +253,12 @@ function Reset-WinRM
 		# TODO: Will not recreate default sessions if missing or modified
 		Get-PSSessionConfiguration | Where-Object {
 			$_.Name -notlike $DefaultSession
+			# $_.Name -ne "Microsoft.PowerShell"
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
+
+		# Get-PSSessionConfiguration | Where-Object {
+		# 	$_.Name -ne "Microsoft.PowerShell"
+		# } | Disable-PSSessionConfiguration -NoServiceRestart -Force
 
 		Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
 	}
@@ -273,7 +279,7 @@ function Reset-WinRM
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WMI Provider plugin"
-			Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
+			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
 		}
 	}
 
@@ -290,7 +296,7 @@ function Reset-WinRM
 			-Direction Inbound -PolicyStore PersistentStore
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop WinRM service"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop and disable WinRM service"))
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
 

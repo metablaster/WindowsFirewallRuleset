@@ -57,7 +57,7 @@ param (
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 Enter-Test -Pester
 
-if (-not $UseExisting)
+if (!$UseExisting)
 {
 	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
 	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")

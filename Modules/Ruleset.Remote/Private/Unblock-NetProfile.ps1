@@ -28,11 +28,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Set network profile to private and disable virtual adapter
+Set network profile to private and disable virtual adapters
 
 .DESCRIPTION
-To configure WinRM service any network adapter which does not operate on private network profile
-should be set to private profile.
+To be able to configure WinRM service any network adapter which does not operate on private
+network profile should be set to private profile.
 Virtual adapters which are configured but not connected cannot be assigned to private profile,
 also default Hyper-V switch can't be set to private even if connected, in these cases they need
 to be temporarily disabled.

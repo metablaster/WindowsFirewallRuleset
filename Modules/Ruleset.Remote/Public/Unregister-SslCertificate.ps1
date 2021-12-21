@@ -28,60 +28,35 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Re-enable any disabled virtual adapters and restore network profile
+Unregister SSL certificate for CIM and PowerShell remoting
 
 .DESCRIPTION
-Restore-NetProfile re-enables any disabled virtual adapters and restores network profile previously
-disabled by Unblock-NetProfile
+Unregister-SslCertificate uninstalls SSL certificate and undoes changes
+previously done by Register-SslCertificate
 
 .EXAMPLE
-PS> Restore-NetProfile
+PS> Unregister-SslCertificate
 
 .INPUTS
-None. You cannot pipe objects to Restore-NetProfile
+None. You cannot pipe objects to Unregister-SslCertificate
 
 .OUTPUTS
-None. Restore-NetProfile does not generate any output
+None. Unregister-SslCertificate does not generate any output
 
 .NOTES
-None.
+TODO: Function not implemented
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md
 #>
-function Restore-NetProfile
+function Unregister-SslCertificate
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md")]
 	[OutputType([void])]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($script:Workstation)
-	{
-		if ($script:VirtualAdapter)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Re-enabling virtual or disconnected adapters"
-			foreach ($Adapter in $script:VirtualAdapter)
-			{
-				if ($PSCmdlet.ShouldProcess($Adapter, "Re-enable network adapter"))
-				{
-					Enable-NetAdapter -InterfaceAlias $Adapter
-				}
-			}
-
-			Set-Variable -Name VirtualAdapter -Scope Script -Value $null -Confirm:$false
-		}
-
-		if ($script:AdapterProfile)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring adapter network profile"
-			foreach ($Adapter in $script:AdapterProfile.GetEnumerator())
-			{
-				if ($PSCmdlet.ShouldProcess($Adapter.Key, "Restore network profile"))
-				{
-					Set-NetConnectionProfile -InterfaceAlias $Adapter.Key -NetworkCategory $Adapter.Value
-				}
-			}
-
-			Set-Variable -Name AdapterProfile -Scope Script -Value $null -Confirm:$false
-		}
-	}
+	Write-Error -Category NotImplemented -Message "Unregister-SslCertificate function not implemented"
 }

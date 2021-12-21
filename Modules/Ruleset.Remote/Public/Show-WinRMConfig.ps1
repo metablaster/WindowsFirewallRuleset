@@ -40,10 +40,10 @@ can cause isssues hard to debug due to WinRM service misconfiguration.
 
 This scripts does all this, by harvesting all important and relevant information and
 excludes\includes containers by specifying few switches, all of which is then sorted so that it
-can be compared with other working configurations to quickly discover problem.
+can be compared with other working configurations to quickly discover problems.
 
 .PARAMETER Server
-Display WinRM service configuration.
+Display WinRM server configuration.
 This includes configuration that is essential to accept remote commands.
 
 .PARAMETER Client
@@ -56,7 +56,7 @@ Display additional WinRM configuration not handled by -Server and -Client switch
 .EXAMPLE
 PS> Show-WinRMConfig
 
-Without any switches it will show only status of the WinRM service status and firewall rules
+Without any switches it will show only status of the WinRM service and status of firewall rules
 
 .EXAMPLE
 PS> Show-WinRMConfig -Server -Detailed
@@ -228,7 +228,8 @@ function Show-WinRMConfig
 	if ($Detailed)
 	{
 		# TODO: More configuration data can be harvested here
-		Write-Verbose -Message "Showing shell configuration" -Verbose
+		Write-Verbose -Message "Showing shell (WinRS) configuration" -Verbose
+		# winrm get winrm/config/winrs
 		Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value | Format-Table -AutoSize
 
 		# winrm enumerate winrm/config/plugin
@@ -243,7 +244,5 @@ function Show-WinRMConfig
 				PSPath = $_.PSPath
 			}
 		} | Sort-Object -Property Enabled -Descending | Format-Table -AutoSize
-
-		# TODO: WinRS configuration
 	}
 }

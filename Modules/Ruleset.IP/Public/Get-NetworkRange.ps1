@@ -150,7 +150,7 @@ function Get-NetworkRange
 			$StartDecimal = $DecimalIP -band $DecimalMask
 			$EndDecimal = $DecimalIP -bor (-bnot $DecimalMask -band [uint32]::MaxValue)
 
-			if (-not $IncludeNetworkAndBroadcast)
+			if (!$IncludeNetworkAndBroadcast)
 			{
 				$StartDecimal++
 				$EndDecimal--

@@ -329,7 +329,7 @@ As you can see `WMI Provider` plugin is not enabled in this example which does t
 Since this plugin is required to run CIM commands against remote computer you enable it like this:
 
 ```powershell
-Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true
+Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true
 Restart-Service -Name WinRM
 ```
 

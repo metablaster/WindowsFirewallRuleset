@@ -33,7 +33,7 @@ Register SSL certificate for CIM and PowerShell remoting
 .DESCRIPTION
 Install SSL certificate to be used for encrypted PowerShell remoting session.
 By default certificate store is searched for existing certificate that matches CN entry,
-if not found default repository location (\Exports) is searched for certificate file which must
+if not found, default repository location (\Exports) is searched for certificate file which must
 have same name as -Domain parameter value.
 
 Otherwise you can specify your own custom certificate file location.

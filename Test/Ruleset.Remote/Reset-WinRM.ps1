@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Deploy-SshKey
+Unit test for Reset-WinRM
 
 .DESCRIPTION
-Test correctness of Deploy-SshKey function
+Test correctness of Reset-WinRM function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Deploy-SshKey.ps1
+PS> .\Reset-WinRM.ps1
 
 .INPUTS
-None. You cannot pipe objects to Deploy-SshKey.ps1
+None. You cannot pipe objects to Reset-WinRM.ps1
 
 .OUTPUTS
-None. Deploy-SshKey.ps1 does not generate any output
+None. Reset-WinRM.ps1 does not generate any output
 
 .NOTES
 None.
@@ -66,16 +66,15 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Deploy-SshKey"
+Enter-Test "Reset-WinRM"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
 {
-	# TODO: Test case not implemented
-	Start-Test "Deploy-SshKey"
-	# $Result = Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin
-	# $Result
+	Start-Test "Default"
+	$Result = Reset-WinRM
+	$Result
 
-	# Test-Output $Result -Command Deploy-SshKey
+	Test-Output $Result -Command Reset-WinRM
 }
 
 Update-Log

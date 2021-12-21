@@ -44,7 +44,7 @@ None. You cannot pipe objects to Enable-RemoteRegistry
 None. Enable-RemoteRegistry does not generate any output
 
 .NOTES
-TODO: Disable remote registry and revert changes
+None.
 #>
 function Enable-RemoteRegistry
 {
@@ -95,25 +95,27 @@ function Enable-RemoteRegistry
 		}
 	}
 
-	# TODO: Handled by Initialize-Service
-	$RegService = Get-Service -Name RemoteRegistry
-
-	if ($RegService.StartType -ne [ServiceStartMode]::Automatic)
+	if ($PSCmdlet.ShouldProcess("Windows services", "Enable and start remote registry service"))
 	{
-		if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to automatic startup"))
+		$RegService = Get-Service -Name RemoteRegistry
+
+		if ($RegService.StartType -ne [ServiceStartMode]::Automatic)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
-			Set-Service -InputObject $RegService -StartupType Automatic
+			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to automatic startup"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
+				Set-Service -InputObject $RegService -StartupType Automatic
+			}
 		}
-	}
 
-	if ($RegService.Status -ne [ServiceControllerStatus]::Running)
-	{
-		if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Start service"))
+		if ($RegService.Status -ne [ServiceControllerStatus]::Running)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"
-			$RegService.Start()
-			$RegService.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Start service"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"
+				$RegService.Start()
+				$RegService.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			}
 		}
 	}
 }

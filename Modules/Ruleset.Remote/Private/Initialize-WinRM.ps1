@@ -31,7 +31,7 @@ SOFTWARE.
 Initialize WinRM service
 
 .DESCRIPTION
-Starts the WinRM service, Windows Remote Management (WS-Management) and set it to
+Initialize-WinRM starts the WinRM service, Windows Remote Management (WS-Management) and sets it to
 automatic startup.
 Adds required firewall rules to be able to configure service options.
 
@@ -90,23 +90,26 @@ function Initialize-WinRM
 		Set-NetFirewallRule -RemoteAddress Any -Enabled True
 	}
 
-	# NOTE: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
-	if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
+	if ($PSCmdlet.ShouldProcess("Windows services", "Enable and start WS-Management (WinRM) service"))
 	{
-		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))
+		# NOTE: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
+		if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($WinRM.DisplayName) service to automatic startup"
-			Set-Service -InputObject $WinRM -StartupType Automatic
+			if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Set service to automatic startup"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($WinRM.DisplayName) service to automatic startup"
+				Set-Service -InputObject $WinRM -StartupType Automatic
+			}
 		}
-	}
 
-	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
-	{
-		if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Start service"))
+		if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($WinRM.DisplayName) service"
-			$WinRM.Start()
-			$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			if ($PSCmdlet.ShouldProcess($WinRM.DisplayName, "Start service"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($WinRM.DisplayName) service"
+				$WinRM.Start()
+				$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			}
 		}
 	}
 }

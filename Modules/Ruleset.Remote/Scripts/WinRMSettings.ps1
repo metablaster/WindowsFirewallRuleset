@@ -40,23 +40,23 @@ This script is automatically picked up by other WinRM remoting scripts within
 this module.
 
 .PARAMETER IncludeClient
-Include setting that apply to client configuration
+Include settings that apply to WinRM client configuration
 
 .PARAMETER IncludeServer
-Include setting that apply to service configuration
+Include settings that apply to WinRM server configuration
 
 .PARAMETER Default
 If specified default options are used instead of modified ones,
-this is to be used to restore WinRM to factory defaults.
+this is to be used to restore WinRM to system defaults.
 
 .EXAMPLE
-PS> .\WinRMSettings.ps1
+PS> . .\WinRMSettings.ps1
 
 Picks up only global options.
-Note that it must be dot sourced to pick up modifications.
+Note that it must be dot sourced to pick up (import) modifications.
 
 .EXAMPLE
-PS> .\WinRMSettings.ps1 -IncludeClient
+PS> . .\WinRMSettings.ps1 -IncludeClient
 
 Picks up global options and client specific options.
 
@@ -240,7 +240,8 @@ if (!$Default)
 	[hashtable] $WinRSOptions = @{
 		# Enables access to remote shells.
 		# The default is True.
-		AllowRemoteShellAccess = $false
+		# NOTE: This setting must be enabled for Ruleset.Compatibility module to work
+		AllowRemoteShellAccess = $true
 
 		# Specifies the maximum time, in milliseconds, that the remote shell will remain open when
 		# there is no user activity in the remote shell

@@ -75,17 +75,19 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Connect-Computer"
-	"Deploy-SshKey"
+	"Disable-RemoteRegistry"
 	"Disable-WinRMServer"
 	"Disconnect-Computer"
 	"Enable-RemoteRegistry"
 	"Enable-WinRMServer"
 	"Export-WinRM"
+	"Publish-SshKey"
 	"Register-SslCertificate"
 	"Reset-WinRM"
 	"Set-WinRMClient"
 	"Show-WinRMConfig"
 	"Test-WinRM"
+	"Unregister-SslCertificate"
 )
 
 foreach ($Script in $PublicScripts)

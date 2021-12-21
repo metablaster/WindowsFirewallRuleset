@@ -409,6 +409,17 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 	}
 
+	if ($Develop)
+	{
+		# TODO: Temporarily while working on remoting to debug WinRM configuration setup
+		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+
+		# Disconnect-Computer
+		Disable-RemoteRegistry -Confirm:$false
+		Reset-WinRM -Confirm:$false
+		Remove-Variable -Name SessionEstablished -Scope Global -Force -ErrorAction Ignore
+	}
+
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
 		Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
@@ -442,7 +453,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			NoCompression = $false
 		}
 
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+		# Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 
 		if ($PolicyStore -notin $LocalStores)
 		{
@@ -498,6 +509,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			Connect-Computer @ConnectParams
 
 			# Check if session is already initialized and established, do not modify!
+			# TODO: Connect-Computer may fail without throwing
 			Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $true
 
 			Remove-Variable -Name ConnectParams
@@ -827,6 +839,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	}
 
 	# Add project module directory to session module path
+	# TODO: We can avoid using Import-Module in this script if this is executed earlier
 	New-Variable -Name PathEntry -Scope Private -Value (
 		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
 

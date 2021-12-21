@@ -131,7 +131,7 @@ function ConvertTo-Network
 		'{0}/{1}' -f $this.IPAddress, $this.MaskLength
 	}
 
-	if (-not $PSBoundParameters.ContainsKey("SubnetMask") -or $SubnetMask -eq "")
+	if (!$PSBoundParameters.ContainsKey("SubnetMask") -or $SubnetMask -eq "")
 	{
 		$IPAddress, $SubnetMask = $IPAddress.Split([char[]]'\/ ', [StringSplitOptions]::RemoveEmptyEntries)
 	}

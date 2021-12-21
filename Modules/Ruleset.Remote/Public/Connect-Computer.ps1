@@ -44,10 +44,10 @@ RemoteSession (PSSession), PS session object which represent remote session
 RemoteCIM (CimSession), CIM session object
 
 .PARAMETER Domain
-Computer name with to which to connect for remoting
+Computer name with which to connect for remoting
 
 .PARAMETER Protocol
-Specify protocol to use for test, HTTP, HTTPS or both.
+Specify protocol to use for test, HTTP, HTTPS or any.
 The default value is "Any" which means HTTPS is used for connection to remote computer
 and HTTP for local machine.
 
@@ -87,7 +87,7 @@ None. You cannot pipe objects to Connect-Computer
 None. Connect-Computer does not generate any output
 
 .NOTES
-TODO: When localhost is specified it should be treated as localhost which means localhost
+TODO: When localhost or dot (.) is specified it should be treated as localhost which means localhost
 requirements must be met.
 #>
 function Connect-Computer
@@ -143,10 +143,9 @@ function Connect-Computer
 	}
 
 	# WinRM service must be running at this point
-	# TODO: does not belong here, move to requirements section
 	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 	{
-		Write-Information -Tags $SettingsScript -MessageData "INFO: Starting WS-Management service"
+		Write-Warning -Message "WS-Management service supposed to be already running, starting now..."
 
 		# NOTE: Unable to start if it's disabled
 		if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)
@@ -313,10 +312,10 @@ function Connect-Computer
 		catch
 		{
 			Remove-CimSession -Name RemoteCim
+			Remove-PSDrive -Name RemoteRegistry -Scope Global
+
 			Remove-Variable -Name CimServer -Scope Global -Force
 			Remove-Variable -Name RemoteCredential -Scope Global -Force
-
-			Remove-PSDrive -Name RemoteRegistry -Scope Global
 
 			Write-Error -Category ConnectionError -TargetObject $Domain `
 				-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"

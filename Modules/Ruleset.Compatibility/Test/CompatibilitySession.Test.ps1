@@ -132,7 +132,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 
 	It "Copy-WinModule should copy the specified module to the destination path" {
 		$TestDrive = Join-Path -Path $DefaultTestDrive -ChildPath "tmp$(Get-Random)"
-		New-Item -ItemType Directory $TestDrive | Out-Null
+		New-Item -ItemType Directory -Path $TestDrive | Out-Null
 
 		# Invoke the command to copy the module
 		Copy-WinModule PnpDevice -Destination $TestDrive

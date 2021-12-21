@@ -488,9 +488,10 @@ function Initialize-Project
 	# Everything OK, print environment status
 	# TODO: finally show loaded modules, providers and services stataus
 	Write-Host ""
-	Write-Host "Checking minimum requirements was successful!" -ForegroundColor Cyan
+	Write-Host "Checking minimum requirements completed successfully!" -ForegroundColor Cyan
 
 	Write-Host ""
+	# TODO: This should include both, server and client system
 	# NOTE: No 'v' prefix because of possible "Insider" string
 	Write-Host "System:`t`t $OSCaption $OSBuildVersion"
 	Write-Host "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"

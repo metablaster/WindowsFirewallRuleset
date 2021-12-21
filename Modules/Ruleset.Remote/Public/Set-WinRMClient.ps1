@@ -39,7 +39,7 @@ Computer name which is to be managed remotely from this machine.
 If not specified local machine is the default.
 
 .PARAMETER Protocol
-Specifies protocol to HTTP, HTTPS or both.
+Specifies protocol to HTTP, HTTPS or any.
 By default only HTTPS is configured.
 
 .PARAMETER CertFile
@@ -132,62 +132,70 @@ function Set-WinRMClient
 	# TODO: Initialize-WinRM and Unblock-NetProfile are called multiple times since multiple functions are needed for configuration
 	Initialize-WinRM
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client authentication options"
-
-	# NOTE: Not assuming WinRM responds, contact localhost
-	if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set client authentication options"))
 	{
-		$AuthenticationOptions["Kerberos"] = $true
-	}
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client authentication options"
 
-	if ($Protocol -ne "HTTP")
-	{
-		$AuthenticationOptions["Certificate"] = $true
-	}
-
-	try
-	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Attempt to set 'Negotiate' authentication"))
+		# NOTE: Not assuming WinRM responds, contact localhost
+		if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
 		{
-			# NOTE: If this fails, registry fix must precede all other authentication edits
-			Set-Item WSMan:\localhost\Client\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
+			$AuthenticationOptions["Kerberos"] = $true
 		}
-	}
-	catch
-	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Fix 'Negotiate' authentication using registry"))
+
+		if ($Protocol -ne "HTTP")
 		{
-			Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry..."
-			Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
-				[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
-
-			# TODO: WinRM service should be restarted to pick up this fix?
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management service"
-			$WinRM.Stop()
-			$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
-			$WinRM.Start()
-			$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			$AuthenticationOptions["Certificate"] = $true
 		}
-	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set client authentication and port options"))
-	{
+		try
+		{
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Attempt to set 'Negotiate' authentication"))
+			{
+				# NOTE: If this fails, registry fix must precede all other authentication edits
+				Set-Item -Path WSMan:\localhost\Client\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
+			}
+		}
+		catch
+		{
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Fix 'Negotiate' authentication using registry"))
+			{
+				Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry"
+				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
+					[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
+
+				# TODO: WinRM service should be restarted to pick up this fix?
+				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management service"
+				# $WinRM.Stop()
+				# $WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+				# $WinRM.Start()
+				# $WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+			}
+		}
+
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			Set-Item -Path WSMan:\localhost\client\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
 			Set-Item -Path WSMan:\localhost\client\auth\Certificate -Value $AuthenticationOptions["Certificate"]
 			Set-Item -Path WSMan:\localhost\client\auth\Basic -Value $AuthenticationOptions["Basic"]
 			Set-Item -Path WSMan:\localhost\client\auth\CredSSP -Value $AuthenticationOptions["CredSSP"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
+		}
+	}
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default client ports"
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set client port options"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client ports"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
 			Set-Item -Path WSMan:\localhost\client\DefaultPorts\HTTP -Value $PortOptions["HTTP"]
 			Set-Item -Path WSMan:\localhost\client\DefaultPorts\HTTPS -Value $PortOptions["HTTPS"]
 		}
 		else
 		{
-			Set-WSManInstance -ResourceURI winrm/config/client/auth -ValueSet $AuthenticationOptions | Out-Null
-
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default client ports"
 			Set-WSManInstance -ResourceURI winrm/config/client/DefaultPorts -ValueSet $PortOptions | Out-Null
 		}
 	}
@@ -223,14 +231,13 @@ function Set-WinRMClient
 		}
 	}
 
-	try
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set protocol options"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
 		Unblock-NetProfile
 
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set protocol options"))
+		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
-
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				# TODO: protocol and WinRS options are common to client and server
@@ -245,38 +252,54 @@ function Set-WinRMClient
 				Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 			}
 		}
-
-		# TODO: Not working
-		# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRS options"
-		# Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
-	}
-	catch [System.OperationCanceledException]
-	{
-		Restore-NetProfile
-		Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
-	}
-	catch
-	{
-		Restore-NetProfile
-		Write-Error -ErrorRecord $_
-	}
-
-	if ($Protocol -eq "HTTPS")
-	{
-		# SSL certificate
-		[hashtable] $SSLCertParams = @{
-			ProductType = "Client"
-			Domain = $Domain
+		catch [System.OperationCanceledException]
+		{
+			Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
 		}
 
-		if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-		elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
-		Register-SslCertificate @SSLCertParams
+		Restore-NetProfile
+
+		if ($Protocol -eq "HTTPS")
+		{
+			# SSL certificate
+			[hashtable] $SSLCertParams = @{
+				ProductType = "Client"
+				Domain = $Domain
+			}
+
+			if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
+			elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
+			Register-SslCertificate @SSLCertParams
+		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set WinRS options"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRS options"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Set-Item -Path WSMan:\localhost\Shell\AllowRemoteShellAccess -Value $WinRSOptions["AllowRemoteShellAccess"]
+			Set-Item -Path WSMan:\localhost\Shell\IdleTimeout -Value $WinRSOptions["IdleTimeout"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxConcurrentUsers -Value $WinRSOptions["MaxConcurrentUsers"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxProcessesPerShell -Value $WinRSOptions["MaxProcessesPerShell"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxMemoryPerShellMB -Value $WinRSOptions["MaxMemoryPerShellMB"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxShellsPerUser -Value $WinRSOptions["MaxShellsPerUser"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management service"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
+
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
 		$WinRM.Start()
@@ -285,6 +308,8 @@ function Set-WinRMClient
 
 	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
+
 		# Remove WinRM predefined compatibility rules
 		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound `
 			-PolicyStore PersistentStore
@@ -294,6 +319,8 @@ function Set-WinRMClient
 	{
 		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
+
 			# Restore public profile rules to local subnet which is the default
 			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
 				$_.Profile -like "*Public*"
@@ -301,5 +328,5 @@ function Set-WinRMClient
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM client configuration was successful"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM client configuration completed successfully!"
 }

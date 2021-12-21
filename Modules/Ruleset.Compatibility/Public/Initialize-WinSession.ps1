@@ -172,19 +172,21 @@ function Initialize-WinSession
 		$Session = $null
 	}
 
-	if (-not $Session)
+	if (!$Session)
 	{
 		$NewPSSessionParameters = @{
 			Verbose = $VerboseFlag
 			ComputerName = $Domain
-			Name = $script:sessionName
-			ConfigurationName = $configurationName
+			Name = $script:SessionName
+			ConfigurationName = $ConfigurationName
 			ErrorAction = "Stop"
 		}
+
 		if ($Credential)
 		{
 			$NewPSSessionParameters.Credential = $Credential
 		}
+
 		if ($Domain -eq "localhost" -or $Domain -eq [System.Environment]::MachineName)
 		{
 			$NewPSSessionParameters.EnableNetworkAccess = $true
@@ -192,6 +194,7 @@ function Initialize-WinSession
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$Domain'"
 		$Session = New-PSSession @NewPSSessionParameters | Select-Object -First 1
+
 		if ($Session.ComputerName -eq "localhost")
 		{
 			$UsingPath = (Get-Location).Path

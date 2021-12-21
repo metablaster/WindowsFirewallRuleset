@@ -28,60 +28,54 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Re-enable any disabled virtual adapters and restore network profile
+Disable remote registry
 
 .DESCRIPTION
-Restore-NetProfile re-enables any disabled virtual adapters and restores network profile previously
-disabled by Unblock-NetProfile
+Disable-RemoteRegistry stops the RemoteRegistry service but does not remove firewall rules
+previously configured by Enable-RemoteRegistry function
 
 .EXAMPLE
-PS> Restore-NetProfile
+PS> Disable-RemoteRegistry
 
 .INPUTS
-None. You cannot pipe objects to Restore-NetProfile
+None. You cannot pipe objects to Disable-RemoteRegistry
 
 .OUTPUTS
-None. Restore-NetProfile does not generate any output
+None. Disable-RemoteRegistry does not generate any output
 
 .NOTES
-None.
+TODO: Does not revert firewall rules because previous status is unknown
 #>
-function Restore-NetProfile
+function Disable-RemoteRegistry
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 	[OutputType([void])]
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling remote registry"
 
-	if ($script:Workstation)
+	if ($PSCmdlet.ShouldProcess("Windows services", "Disable and stop remote registry service"))
 	{
-		if ($script:VirtualAdapter)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Re-enabling virtual or disconnected adapters"
-			foreach ($Adapter in $script:VirtualAdapter)
-			{
-				if ($PSCmdlet.ShouldProcess($Adapter, "Re-enable network adapter"))
-				{
-					Enable-NetAdapter -InterfaceAlias $Adapter
-				}
-			}
+		$RegService = Get-Service -Name RemoteRegistry
 
-			Set-Variable -Name VirtualAdapter -Scope Script -Value $null -Confirm:$false
+		if ($RegService.Status -ne [ServiceControllerStatus]::Stopped)
+		{
+			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Stop service"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Stopping $($RegService.DisplayName) service"
+				$RegService.Stop()
+				$RegService.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+			}
 		}
 
-		if ($script:AdapterProfile)
+		if ($RegService.StartType -ne [ServiceStartMode]::Disabled)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring adapter network profile"
-			foreach ($Adapter in $script:AdapterProfile.GetEnumerator())
+			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to disabled"))
 			{
-				if ($PSCmdlet.ShouldProcess($Adapter.Key, "Restore network profile"))
-				{
-					Set-NetConnectionProfile -InterfaceAlias $Adapter.Key -NetworkCategory $Adapter.Value
-				}
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to disabled"
+				Set-Service -InputObject $RegService -StartupType Disabled
 			}
-
-			Set-Variable -Name AdapterProfile -Scope Script -Value $null -Confirm:$false
 		}
 	}
 }

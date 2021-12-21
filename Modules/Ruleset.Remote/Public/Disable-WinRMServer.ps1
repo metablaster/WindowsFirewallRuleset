@@ -108,6 +108,7 @@ function Disable-WinRMServer
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove all listeners"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing all WinRM server listeners"
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 	}
 
@@ -115,9 +116,10 @@ function Disable-WinRMServer
 	{
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all session configurations and stop WinRM service"))
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all WinRM session configurations"
 			Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Stopping WS-Management (WinRM) service"
 			Set-Service -Name WinRM -StartupType Disabled
 			$WinRM.Stop()
 			$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
@@ -126,21 +128,24 @@ function Disable-WinRMServer
 	else
 	{
 		# TODO: This should be part of Enable-WinRMServer or separate function which could be called by both
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Leave only '$script:FirewallSession' session configurations enabled"))
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 		{
-			# Disable all session configurations except what's needed for local firewall management
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
+
+			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			Get-PSSessionConfiguration | Where-Object {
 				$_.Name -ne $script:FirewallSession
+				# NOTE: "Microsoft.PowerShell" default session is used by Ruleset.Compatibility module
+				# $_.Name -ne "Microsoft.PowerShell"
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable only loopback"))
 		{
 			# Enable only localhost on loopback
-			# TODO: -NoServiceRestart will issue a warning, do we need to restart WinRM?
+			# NOTE: -NoServiceRestart will issue a warning to restart WinRM, while not needed we'll restart anyway later
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
-			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force
+			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force -WA Ignore
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
 			if ($PSVersionTable.PSEdition -eq "Core")
@@ -171,13 +176,14 @@ function Disable-WinRMServer
 			}
 		}
 
+		Unblock-NetProfile
+
 		try
 		{
-			Unblock-NetProfile
-
-			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server and protocol options"))
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server options"))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
+
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
 					Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
@@ -196,8 +202,12 @@ function Disable-WinRMServer
 					# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
 					Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
 				}
+			}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure protocol options"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server protocol options"
+
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
 					# TODO: protocol and WinRS options are common to client and server
@@ -214,27 +224,62 @@ function Disable-WinRMServer
 		catch [System.OperationCanceledException]
 		{
 			Write-Warning -Message "Operation incomplete because: $($_.Exception.Message)"
-			Restore-NetProfile
 		}
 		catch
 		{
 			Write-Error -ErrorRecord $_
-			Restore-NetProfile
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
-	# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
-	# allows remote access to members of the Administrators group on the computer.
-	Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-		-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+	Restore-NetProfile
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set WinRS options"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRS options"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Set-Item -Path WSMan:\localhost\Shell\AllowRemoteShellAccess -Value $WinRSOptions["AllowRemoteShellAccess"]
+			Set-Item -Path WSMan:\localhost\Shell\IdleTimeout -Value $WinRSOptions["IdleTimeout"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxConcurrentUsers -Value $WinRSOptions["MaxConcurrentUsers"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxProcessesPerShell -Value $WinRSOptions["MaxProcessesPerShell"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxMemoryPerShellMB -Value $WinRSOptions["MaxMemoryPerShellMB"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxShellsPerUser -Value $WinRSOptions["MaxShellsPerUser"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
+		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Update registry setting"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
+
+		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+		# allows remote access to members of the Administrators group on the computer.
+		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+			-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+	}
 
 	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove all WinRM predefined rules"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing all default WinRM firewall rules"
+
 		# Remove all WinRM predefined rules
 		Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
 			-Direction Inbound -PolicyStore PersistentStore
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WinRM server was successful"
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
+
+		$WinRM.Stop()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		$WinRM.Start()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WinRM server completed successfully!"
 }

@@ -149,32 +149,35 @@ function Enable-WinRMServer
 	Restarts the WinRM service to make the preceding changes effective.
 	#>
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM server ..."
-
 	Initialize-WinRM
-
-	if ($PSVersionTable.PSEdition -eq "Core")
-	{
-		# "PowerShell." + "current PowerShell version"
-		# "PowerShell.7", untied to any specific PowerShell version.
-		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion.Major)*"
-	}
-	else
-	{
-		# "Microsoft.PowerShell" is used for sessions by default
-		# "Microsoft.PowerShell32" is used for sessions by 32bit host
-		# "Microsoft.PowerShell.Workflow" is used by workflows
-		$DefaultSession = "Microsoft.PowerShell*"
-	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove default session configurations"))
 	{
-		# Remove all default and repository specifc session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default session configurations"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# "PowerShell." + "current PowerShell version"
+			# "PowerShell.7", untied to any specific PowerShell version.
+			$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion.Major)*"
+		}
+		else
+		{
+			# NOTE: "Microsoft.PowerShell" session is also used by Ruleset.Compatibility module
+			# "Microsoft.PowerShell" is used for sessions by default
+			# "Microsoft.PowerShell32" is used for sessions by 32bit host
+			# "Microsoft.PowerShell.Workflow" is used by workflows
+			$DefaultSession = "Microsoft.PowerShell*"
+		}
+
+		# Remove all default and repository specifc session configurations
 		Get-PSSessionConfiguration | Where-Object {
 			$_.Name -like $DefaultSession -or
 			$_.Name -eq $script:FirewallSession
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
+
+	Unblock-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
@@ -182,8 +185,6 @@ function Enable-WinRMServer
 
 		try
 		{
-			Unblock-NetProfile
-
 			# NOTE: For Register-PSSessionConfiguration to succeed Enable-PSRemoting must have been called at least once to avoid error:
 			# The WinRM plugin DLL pwrshplugin.dll is missing for PowerShell.
 			# Please run Enable-PSRemoting and then retry this command.
@@ -191,7 +192,9 @@ function Enable-WinRMServer
 			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
 
 			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
+			Set-StrictMode -Off
 			Enable-PSRemoting -Force | Out-Null
+			Set-StrictMode -Version Latest
 		}
 		catch [System.OperationCanceledException]
 		{
@@ -268,33 +271,33 @@ function Enable-WinRMServer
 			# RunAsCredential = Get-Credential
 		}
 
-		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
-		Set-StrictMode -Off
-
 		# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
 		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
+		Set-StrictMode -Off
 		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
 		Set-StrictMode -Version Latest
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 	{
-		# Disable unused built in session configurations
+		# Disable unused default session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
-			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.ToString())" -NoServiceRestart -Force
+			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion)" -NoServiceRestart -Force
 		}
 		else
 		{
+			# NOTE: "Microsoft.PowerShell" default session is used by Ruleset.Compatibility module
 			Disable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
 			Disable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server listener"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server listener"))
 	{
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
@@ -304,6 +307,7 @@ function Enable-WinRMServer
 		{
 			# Add new HTTP listener
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring HTTP listener options"
+
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null
@@ -353,27 +357,27 @@ function Enable-WinRMServer
 	{
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable WMI Provider plugin"))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WMI Provider plugin"
-			Set-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WMI Provider plugin"
+			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
 		}
 	}
 
-	# Specify acceptable client authentication methods
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
-
-	# NOTE: Not assuming WinRM responds, contact localhost
-	if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server authentication options"))
 	{
-		$AuthenticationOptions["Kerberos"] = $true
-	}
+		# Specify acceptable client authentication methods
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
 
-	if ($Protocol -ne "HTTP")
-	{
-		$AuthenticationOptions["Certificate"] = $true
-	}
+		# NOTE: Not assuming WinRM responds, contact localhost
+		if (Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain)
+		{
+			$AuthenticationOptions["Kerberos"] = $true
+		}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM authentication and default ports"))
-	{
+		if ($Protocol -ne "HTTP")
+		{
+			$AuthenticationOptions["Certificate"] = $true
+		}
+
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
@@ -384,21 +388,33 @@ function Enable-WinRMServer
 		else
 		{
 			Set-WSManInstance -ResourceURI winrm/config/service/auth -ValueSet $AuthenticationOptions | Out-Null
+		}
+	}
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure default server ports"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Set-Item -Path WSMan:\localhost\service\DefaultPorts\HTTP -Value $PortOptions["HTTP"]
+			Set-Item -Path WSMan:\localhost\service\DefaultPorts\HTTPS -Value $PortOptions["HTTPS"]
+		}
+		else
+		{
 			Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
-
-	if ($Protocol -eq "HTTPS")
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server options"))
 	{
-		$ServerOptions["AllowUnencrypted"] = $false
-	}
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM server options"))
-	{
+		if ($Protocol -eq "HTTPS")
+		{
+			$ServerOptions["AllowUnencrypted"] = $false
+		}
+
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
@@ -419,8 +435,10 @@ function Enable-WinRMServer
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure WinRM protocol options"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure protocol options"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
+
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			# TODO: protocol and WinRS options are common to client and server
@@ -430,15 +448,35 @@ function Enable-WinRMServer
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM protocol options"
 			Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 		}
 	}
 
 	Restore-NetProfile
 
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set WinRS options"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRS options"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Set-Item -Path WSMan:\localhost\Shell\AllowRemoteShellAccess -Value $WinRSOptions["AllowRemoteShellAccess"]
+			Set-Item -Path WSMan:\localhost\Shell\IdleTimeout -Value $WinRSOptions["IdleTimeout"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxConcurrentUsers -Value $WinRSOptions["MaxConcurrentUsers"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxProcessesPerShell -Value $WinRSOptions["MaxProcessesPerShell"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxMemoryPerShellMB -Value $WinRSOptions["MaxMemoryPerShellMB"]
+			Set-Item -Path WSMan:\localhost\Shell\MaxShellsPerUser -Value $WinRSOptions["MaxShellsPerUser"]
+		}
+		else
+		{
+			Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
+		}
+	}
+
 	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
+
 		# Remove WinRM predefined compatibility rules
 		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
 	}
@@ -447,6 +485,8 @@ function Enable-WinRMServer
 	{
 		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
+
 			# Restore public profile rules to local subnet which is the default
 			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
 				$_.Profile -like "*Public*"
@@ -456,21 +496,23 @@ function Enable-WinRMServer
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WinRM service"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
+
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
 		$WinRM.Start()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
+	# Ensure registry setting was updated
 	$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
 	$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
 
 	if (!$WhatIfPreference -and ($TokenValue -ne 1))
 	{
 		Write-Error -Category InvalidResult -TargetObject $TokenValue `
-			-Message "LocalAccountTokenFilterPolicy was not enabled"
+			-Message "LocalAccountTokenFilterPolicy was not enabled ($TokenValue)"
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM server configuration was successful"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM server completed successfully!"
 }

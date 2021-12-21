@@ -122,7 +122,7 @@ function Copy-WinModule
 	[bool] $WhatIfFlag = $PSBoundParameters["WhatIf"]
 	[bool] $ConfirmFlag = $PSBoundParameters["Confirm"]
 
-	if (-not $Destination)
+	if (!$Destination)
 	{
 		# If the user hasn't specified a destination, default to the user module directory
 		$Parts = [System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::MyDocuments),
@@ -133,7 +133,7 @@ function Copy-WinModule
 
 	# Resolve the path which also verifies that the path exists
 	$ResolvedDestination = Resolve-Path $Destination -ErrorAction SilentlyContinue
-	if (-not $?)
+	if (!$?)
 	{
 		throw "The destination path '$Destination' could not be resolved. Please ensure that the path exists and try the command again"
 	}
@@ -187,13 +187,13 @@ function Copy-WinModule
 	foreach ($Module in $ModulesToCopy)
 	{
 		# Skip modules that aren't on the named module list
-		if (-not ($Name.Where{ $Module.Name -like $_ }))
+		if (!($Name.Where{ $Module.Name -like $_ }))
 		{
 			continue
 		}
 
 		$FullDestination = Join-Path $Destination $Module.name
-		if (-not (Test-Path $FullDestination))
+		if (!(Test-Path $FullDestination))
 		{
 			Copy-Item -Path $Module.ModuleBase -Destination $FullDestination @CopyItemParameters
 		}

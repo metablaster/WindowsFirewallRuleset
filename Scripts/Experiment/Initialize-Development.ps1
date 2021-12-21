@@ -272,7 +272,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 
 						if (!(Test-Path $SshDirectory -PathType Container))
 						{
-							New-Item $SshDirectory -ItemType Directory | Out-Null
+							New-Item -Path $SshDirectory -ItemType Directory | Out-Null
 						}
 
 						if (!(Test-Path $SshDirectory\$($SshKey.Name)))
