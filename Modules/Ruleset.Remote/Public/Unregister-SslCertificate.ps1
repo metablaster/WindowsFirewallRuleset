@@ -34,6 +34,9 @@ Unregister SSL certificate for CIM and PowerShell remoting
 Unregister-SslCertificate uninstalls SSL certificate and undoes changes
 previously done by Register-SslCertificate
 
+.PARAMETER CertThumbprint
+Certificate thumbprint which is to be uninstalled
+
 .EXAMPLE
 PS> Unregister-SslCertificate
 

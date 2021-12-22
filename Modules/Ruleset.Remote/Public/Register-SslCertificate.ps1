@@ -240,7 +240,7 @@ function Register-SslCertificate
 				}
 
 				# HACK: When -AllowUntrustedRoot is specified, for a certificate that is expired test will pass
-				if (!(Test-Certificate -Cert $TestCert -Policy SSL -DNSName $Domain -AllowUntrustedRoot) -or
+				if (!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot) -or
 					(![string]::IsNullOrEmpty($CertThumbprint) -and ($CertThumbprint -ne $Cert.thumbprint)))
 				{
 					# Undo import operation
@@ -412,6 +412,7 @@ function Register-SslCertificate
 	}
 
 	# TODO: Should be verified or singed by custom key instead of having multiple trusted self signed certs
+	# HACK: If certificate is expired this will pass but we want to test trusted root here
 	if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore -WarningAction Ignore))
 	{
 		# Add public key to trusted root to trust this certificate locally

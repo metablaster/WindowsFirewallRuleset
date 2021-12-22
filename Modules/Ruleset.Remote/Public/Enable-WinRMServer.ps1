@@ -39,6 +39,8 @@ If specified -Protocol is set to HTTPS, it will export public key (DER encoded C
 to default repository location (\Exports), which you should then copy to client machine
 to be picked up by Set-WinRMClient and used for communication over SSL.
 
+If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-WinRMServer
+
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
 By default only HTTPS is configured.
@@ -72,6 +74,12 @@ Client will authenticate with specified certificate for HTTPS.
 PS> Enable-WinRMServer -Protocol HTTP
 
 Configures server machine to accept remoting commands trough HTTP.
+
+.EXAMPLE
+PS> Enable-WinRMServer
+PS> Disable-WinRMServer
+
+Will make WinRM work only on loopback
 
 .INPUTS
 None. You cannot pipe objects to Enable-WinRMServer
@@ -172,8 +180,8 @@ function Enable-WinRMServer
 
 		# Remove all default and repository specifc session configurations
 		Get-PSSessionConfiguration | Where-Object {
-			$_.Name -like $DefaultSession -or
-			$_.Name -eq $script:FirewallSession
+			($_.Name -like $DefaultSession) -or
+			($_.Name -eq $script:FirewallSession)
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
@@ -185,15 +193,15 @@ function Enable-WinRMServer
 
 		try
 		{
+			# NOTE: Enable-PSRemoting may fail in Windows PowerShell
+			Set-StrictMode -Off
+
 			# NOTE: For Register-PSSessionConfiguration to succeed Enable-PSRemoting must have been called at least once to avoid error:
 			# The WinRM plugin DLL pwrshplugin.dll is missing for PowerShell.
 			# Please run Enable-PSRemoting and then retry this command.
 			# TODO: See if pwrshplugin.dll could be installed manually without running Enable-PSRemoting
 			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
-
 			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
-			# NOTE: Enable-PSRemoting may fail in Windows PowerShell
-			Set-StrictMode -Off
 			Enable-PSRemoting -Force | Out-Null
 			Set-StrictMode -Version Latest
 		}
@@ -302,6 +310,20 @@ function Enable-WinRMServer
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			New-Item -Path WSMan:\localhost\Listener -Address "IP:[::1]" -Transport HTTP -Enabled $true -Force | Out-Null
+			New-Item -Path WSMan:\localhost\Listener -Address "IP:127.0.0.1" -Transport HTTP -Enabled $true -Force | Out-Null
+		}
+		else
+		{
+			New-WSManInstance -SelectorSet @{ Address = "IP:[::1]"; Transport = "HTTP" } `
+				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+
+			New-WSManInstance -SelectorSet @{ Address = "IP:127.0.0.1"; Transport = "HTTP" } `
+				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+		}
 
 		if ($Protocol -ne "HTTPS")
 		{
@@ -441,7 +463,6 @@ function Enable-WinRMServer
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			# TODO: protocol and WinRS options are common to client and server
 			Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
 			Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
 			Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
@@ -473,37 +494,6 @@ function Enable-WinRMServer
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
-
-		# Remove WinRM predefined compatibility rules
-		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
-	}
-
-	if ($script:Workstation)
-	{
-		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
-
-			# Restore public profile rules to local subnet which is the default
-			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
-				$_.Profile -like "*Public*"
-			} | Set-NetFirewallRule -RemoteAddress LocalSubnet
-		}
-	}
-
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
-
-		$WinRM.Stop()
-		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
-		$WinRM.Start()
-		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
-	}
-
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Verify registry setting"))
 	{
 		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
@@ -522,6 +512,37 @@ function Enable-WinRMServer
 			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
 				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
+
+		# Remove WinRM predefined compatibility rules
+		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
+	}
+
+	if ($script:Workstation)
+	{
+		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
+
+			# Restore public profile rules to local subnet which is the default for workstations
+			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
+				$_.Profile -like "*Public*"
+			} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
+
+		$WinRM.Stop()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		$WinRM.Start()
+		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM server completed successfully!"

@@ -71,12 +71,6 @@ function Disconnect-Computer
 	# TODO: This message should depend on whether connection is established
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disconnecting host '$Domain'"
 
-	if (Get-Variable -Name RemoteCredential -Scope Global -EA Ignore)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'RemoteCredential'"
-		Remove-Variable -Name RemoteCredential -Scope Global -Force
-	}
-
 	# TODO: Verify what happens if multiple instances of same name exist for PSDrive, PSSession and CimSession
 	if (Get-CimSession -Name RemoteCim -EA Ignore)
 	{

@@ -39,6 +39,10 @@ PowerShell remoting, remoting with CIM commandlets and user authentication.
 Target host which is to be tested.
 If not specified, local machine is the default
 
+.PARAMETER Credential
+Specify credentials which to use to test connection to remote computer.
+If not specified, you'll be asked for credentials
+
 .PARAMETER Protocol
 Specify protocol to use for test, HTTP, HTTPS or both.
 By default only HTTPS is tested.
@@ -100,6 +104,9 @@ function Test-WinRM
 		[Parameter(Position = 0)]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[PSCredential] $Credential,
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
@@ -184,13 +191,16 @@ function Test-WinRM
 		# authentication otherwise the error is:
 		# "The server certificate on the destination computer (localhost) has the following errors:
 		# Encountered an internal error in the SSL library"
-		$RemoteCredential = Get-Credential -Message "Credentials are required to access '$Domain'"
+		if (!$Credential)
+		{
+			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
+		}
 
 		$WSManParams["ComputerName"] = $Domain
-		$WSManParams["Credential"] = $RemoteCredential
+		$WSManParams["Credential"] = $Credential
 
 		$CimParams["ComputerName"] = $Domain
-		$CimParams["Credential"] = $RemoteCredential
+		$CimParams["Credential"] = $Credential
 
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
 		$WSManResult = Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List

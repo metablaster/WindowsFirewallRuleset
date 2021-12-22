@@ -37,7 +37,6 @@ in addition required authentication is made to use remote registry service and t
 against remote CIM server.
 
 Following global variables or objects are created:
-RemoteCredential (variable), to be used by commands that require credentials
 CimServer (variable), to be used by CIM commandlets to specify cim session to use
 RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
 RemoteSession (PSSession), PS session object which represent remote session
@@ -45,6 +44,10 @@ RemoteCIM (CimSession), CIM session object
 
 .PARAMETER Domain
 Computer name with which to connect for remoting
+
+.PARAMETER Credential
+Specify credentials which to use to connect to remote computer.
+If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
 Specify protocol to use for test, HTTP, HTTPS or any.
@@ -102,6 +105,9 @@ function Connect-Computer
 		[Parameter(Position = 0)]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[PSCredential] $Credential,
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
@@ -226,30 +232,29 @@ function Connect-Computer
 	# Remote computer or localhost over SSL
 	if (($Domain -ne ([System.Environment]::MachineName)) -or ($WSManParams["UseSSL"]))
 	{
-		if (!(Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore))
+		if (!$Credential)
 		{
 			# TODO: -Credential param, specify SERVER\UserName
-			New-Variable -Name RemoteCredential -Scope Global -Option ReadOnly (
-				Get-Credential -Message "Credentials are required to access '$Domain'")
+			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
 
-			if (!$RemoteCredential)
+			if (!$Credential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
 				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
 			}
-			elseif ($RemoteCredential.Password.Length -eq 0)
+			elseif ($Credential.Password.Length -eq 0)
 			{
 				# HACK: Will ask for password but won't be recorded
-				Write-Error -Category InvalidData -Message "User '$($RemoteCredential.UserName)' must have a password"
-				Remove-Variable -Name RemoteCredential -Scope Global -Force
+				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+				$Credential = $null
 			}
 		}
 
 		$CimParams["ComputerName"] = $Domain
-		$CimParams["Credential"] = $RemoteCredential
+		$CimParams["Credential"] = $Credential
 
 		$WSManParams["ComputerName"] = $Domain
-		$WSManParams["Credential"] = $RemoteCredential
+		$WSManParams["Credential"] = $Credential
 	}
 
 	try
@@ -267,9 +272,6 @@ function Connect-Computer
 	}
 	catch
 	{
-		Remove-Variable -Name RemoteCredential -Scope Global -Force -ErrorAction Ignore
-		Remove-Variable -Name CimServer -Scope Global -Force
-
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
 	}
@@ -281,12 +283,12 @@ function Connect-Computer
 			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
 			{
 				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Authenticating '$($RemoteCredential.UserName)' to computer '$Domain'"
+					-MessageData "INFO: Authenticating '$($Credential.UserName)' to computer '$Domain'"
 
 				# Authentication is required to access remote registry
 				# NOTE: Registry provider does not support credentials
 				# TODO: More limited drive would be better
-				New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
+				New-PSDrive -Credential $Credential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
 					-Root \\$Domain\C$ -Description "Remote registry authentication" | Out-Null
 			}
 		}
@@ -294,10 +296,9 @@ function Connect-Computer
 		{
 			Remove-CimSession -Name RemoteCim
 			Remove-Variable -Name CimServer -Scope Global -Force
-			Remove-Variable -Name RemoteCredential -Scope Global -Force
 
-			Write-Error -Category AuthenticationError -TargetObject $RemoteCredential `
-				-Message "Authenticating $($RemoteCredential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
+			Write-Error -Category AuthenticationError -TargetObject $Credential `
+				-Message "Authenticating $($Credential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
 		}
 
 		try
@@ -316,9 +317,7 @@ function Connect-Computer
 		{
 			Remove-CimSession -Name RemoteCim
 			Remove-PSDrive -Name RemoteRegistry -Scope Global
-
 			Remove-Variable -Name CimServer -Scope Global -Force
-			Remove-Variable -Name RemoteCredential -Scope Global -Force
 
 			Write-Error -Category ConnectionError -TargetObject $Domain `
 				-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"

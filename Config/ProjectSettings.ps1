@@ -414,7 +414,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
 
 		# NOTE: Global object RemoteRegistry (PSDrive), RemoteCim (CimSession) and RemoteSession (PSSession) are created by Connect-Computer function
-		# NOTE: Global variables RemoteCredential and CimServer are set by Connect-Computer function
+		# NOTE: Global variable CimServer is set by Connect-Computer function
 		# Destruction of these is done by Disconnect-Computer
 
 		$ConnectParams = @{
@@ -447,18 +447,17 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		if ($PolicyStore -notin $LocalStores)
 		{
-			Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Status ([ref] $PolicyStoreStatus) -Quiet
+			$ConnectParams["Credential"] = Get-Credential -Message "Credentials are required to access '$Domain'"
+			Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Credential $ConnectParams["Credential"] -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
+			# TODO: If credentials are not configuring WinRM won't make any difference
 			if (!$PolicyStoreStatus)
 			{
 				# Configure this machine for remote session over SSL
 				Set-WinRMClient $PolicyStore -Confirm:$false
 				Enable-RemoteRegistry -Confirm:$false
 			}
-
-			# TODO: Not all options are used, ex. -NoCompression and -NoEncryption could be used for loopback
-			$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
@@ -478,7 +477,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 			$SessionOptionParams["NoEncryption"] = $true
 			$SessionOptionParams["NoCompression"] = $true
-			$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
 
 			$ConnectParams["Protocol"] = "HTTP"
 			# TODO: Culture default values project wide
@@ -491,6 +489,9 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 
 		Remove-Variable -Name PolicyStoreStatus
+
+		# TODO: Not all options are used, ex. -NoCompression and -NoEncryption could be used for loopback
+		$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
 
 		try
 		{

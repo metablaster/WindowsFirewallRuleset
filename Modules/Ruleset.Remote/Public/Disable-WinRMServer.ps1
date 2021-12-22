@@ -40,8 +40,8 @@ and restore registry setting which restricts remote access to members of the
 Administrators group on the computer.
 
 .PARAMETER All
-If specified, will disable WinRM service completely, remove all listeners and
-disable all session configurations.
+If specified, will disable WinRM service completely including loopback functionality,
+remove all listeners and disable all session configurations.
 
 .EXAMPLE
 PS> Disable-WinRMServer
@@ -84,7 +84,6 @@ function Disable-WinRMServer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer
 
 	<# MSDN: Disabling the session configurations does not undo all the changes made by the
@@ -97,7 +96,6 @@ function Disable-WinRMServer
 	members of the Administrators group on the computer.
 	#>
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM server..."
-
 	Initialize-WinRM
 
 	if (!(Get-PSSessionConfiguration -Name $script:FirewallSession -EA Ignore))
@@ -133,13 +131,12 @@ function Disable-WinRMServer
 
 			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			Get-PSSessionConfiguration | Where-Object {
-				$_.Name -ne $script:FirewallSession -and
-				$_.Name -ne "Microsoft.PowerShell"
+				($_.Name -ne "Microsoft.PowerShell") -and
+				($_.Name -ne $script:FirewallSession)
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 
-		# TODO: This should be part of Enable-WinRMServer
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable only loopback"))
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure loopback listener"))
 		{
 			# Enable only localhost on loopback
 			# NOTE: -NoServiceRestart will issue a warning to restart WinRM, while not needed we'll restart anyway later
@@ -162,9 +159,15 @@ function Disable-WinRMServer
 			}
 		}
 
+		#
+		# The rest of WinRM configuration is to ensure loopback functioning and
+		# to revert changes done by Enable-WinRMServer
+		#
+
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server authentication options"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server authentication options"
+
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
@@ -180,56 +183,59 @@ function Disable-WinRMServer
 
 		Unblock-NetProfile
 
-		try
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure default server ports"))
 		{
-			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server options"))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM default server ports"
 
-				if ($PSVersionTable.PSEdition -eq "Core")
-				{
-					Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
-					Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
-					Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
-					Set-Item -Path WSMan:\localhost\service\MaxPacketRetrievalTimeSeconds -Value $ServerOptions["MaxPacketRetrievalTimeSeconds"]
-					Set-Item -Path WSMan:\localhost\service\AllowUnencrypted -Value $ServerOptions["AllowUnencrypted"]
-					Set-Item -Path WSMan:\localhost\service\IPv4Filter -Value $ServerOptions["IPv4Filter"]
-					Set-Item -Path WSMan:\localhost\service\IPv6Filter -Value $ServerOptions["IPv6Filter"]
-					Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpListener -Value $ServerOptions["EnableCompatibilityHttpListener"]
-					Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpsListener -Value $ServerOptions["EnableCompatibilityHttpsListener"]
-				}
-				else
-				{
-					# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
-					# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
-					Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
-				}
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				Set-Item -Path WSMan:\localhost\service\DefaultPorts\HTTP -Value $PortOptions["HTTP"]
+				Set-Item -Path WSMan:\localhost\service\DefaultPorts\HTTPS -Value $PortOptions["HTTPS"]
 			}
-
-			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure protocol options"))
+			else
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server protocol options"
-
-				if ($PSVersionTable.PSEdition -eq "Core")
-				{
-					# TODO: protocol and WinRS options are common to client and server
-					Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
-					Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
-					Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
-				}
-				else
-				{
-					Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
-				}
+				Set-WSManInstance -ResourceURI winrm/config/service/DefaultPorts -ValueSet $PortOptions | Out-Null
 			}
 		}
-		catch [System.OperationCanceledException]
+
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server options"))
 		{
-			Write-Warning -Message "Operation incomplete because: $($_.Exception.Message)"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server options"
+
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
+				Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
+				Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
+				Set-Item -Path WSMan:\localhost\service\MaxPacketRetrievalTimeSeconds -Value $ServerOptions["MaxPacketRetrievalTimeSeconds"]
+				Set-Item -Path WSMan:\localhost\service\AllowUnencrypted -Value $ServerOptions["AllowUnencrypted"]
+				Set-Item -Path WSMan:\localhost\service\IPv4Filter -Value $ServerOptions["IPv4Filter"]
+				Set-Item -Path WSMan:\localhost\service\IPv6Filter -Value $ServerOptions["IPv6Filter"]
+				Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpListener -Value $ServerOptions["EnableCompatibilityHttpListener"]
+				Set-Item -Path WSMan:\localhost\service\EnableCompatibilityHttpsListener -Value $ServerOptions["EnableCompatibilityHttpsListener"]
+			}
+			else
+			{
+				# NOTE: This will fail if any adapter is on public network, using winrm gives same result:
+				# cmd.exe /C 'winrm set winrm/config/service @{MaxConnections=300}'
+				Set-WSManInstance -ResourceURI winrm/config/service -ValueSet $ServerOptions | Out-Null
+			}
 		}
-		catch
+
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure protocol options"))
 		{
-			Write-Error -ErrorRecord $_
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server protocol options"
+
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				Set-Item -Path WSMan:\localhost\config\MaxEnvelopeSizekb -Value $ProtocolOptions["MaxEnvelopeSizekb"]
+				Set-Item -Path WSMan:\localhost\config\MaxTimeoutms -Value $ProtocolOptions["MaxTimeoutms"]
+				Set-Item -Path WSMan:\localhost\config\MaxBatchItems -Value $ProtocolOptions["MaxBatchItems"]
+			}
+			else
+			{
+				Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
+			}
 		}
 	}
 
