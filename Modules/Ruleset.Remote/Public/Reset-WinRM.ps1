@@ -91,7 +91,7 @@ function Reset-WinRM
 		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
 		# allows remote access to members of the Administrators group on the computer.
 		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-			-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+			-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 	}
 
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled

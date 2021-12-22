@@ -504,14 +504,24 @@ function Enable-WinRMServer
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
-	# Ensure registry setting was updated
-	$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-	$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
-
-	if (!$WhatIfPreference -and ($TokenValue -ne 1))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Verify registry setting"))
 	{
-		Write-Error -Category InvalidResult -TargetObject $TokenValue `
-			-Message "LocalAccountTokenFilterPolicy was not enabled ($TokenValue)"
+		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
+		# In this case, Enable-PSRemoting does not create the key,
+		# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
+
+		# Ensure registry setting was updated
+		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
+
+		if ($TokenValue -ne 1)
+		{
+			# In some cases Enable-PSRemoting did not set it
+			Write-Warning -Message "LocalAccountTokenFilterPolicy was not enabled ($TokenValue), setting manually"
+
+			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		}
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM server completed successfully!"

@@ -93,6 +93,7 @@ None. You cannot pipe objects to Register-SslCertificate
 .NOTES
 This script is called by Enable-WinRMServer and doesn't need to be run on it's own.
 HACK: What happens when exporting a certificate that is already installed? (no error is shown)
+TODO: This function must be simplified and certificate creation should be separate function
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md
@@ -238,9 +239,9 @@ function Register-SslCertificate
 					$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
 				}
 
-				if (($Cert.Subject -ne "CN=$Domain") -or
-					(![string]::IsNullOrEmpty($CertThumbprint) -and ($Cert.thumbprint -ne $CertThumbprint)) -or
-					!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot))
+				# HACK: When -AllowUntrustedRoot is specified, for a certificate that is expired test will pass
+				if (!(Test-Certificate -Cert $TestCert -Policy SSL -DNSName $Domain -AllowUntrustedRoot) -or
+					(![string]::IsNullOrEmpty($CertThumbprint) -and ($CertThumbprint -ne $Cert.thumbprint)))
 				{
 					# Undo import operation
 					Get-ChildItem Cert:\LocalMachine\My |

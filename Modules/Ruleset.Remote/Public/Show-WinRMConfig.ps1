@@ -173,7 +173,7 @@ function Show-WinRMConfig
 		EnableCompatibilityHttpListener, EnableCompatibilityHttpsListener, CertificateThumbprint,
 		AllowRemoteAccess, IsReadOnly, IsEmpty, HasChildNodes
 
-		$TokenKey = Get-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
 
 		if ($null -ne $TokenValue)

@@ -44,19 +44,29 @@ None. You cannot pipe objects to Unregister-SslCertificate
 None. Unregister-SslCertificate does not generate any output
 
 .NOTES
-TODO: Function not implemented
+TODO: Does not undo registration with WinRM listener
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md
 #>
 function Unregister-SslCertificate
 {
-	[CmdletBinding(
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md")]
 	[OutputType([void])]
-	param ()
+	param (
+		[Parameter()]
+		[string] $CertThumbprint
+	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Error -Category NotImplemented -Message "Unregister-SslCertificate function not implemented"
+	if ($PSCmdlet.ShouldProcess("Certificate store", "Uninstall certificate $CertThumbprint"))
+	{
+		Get-ChildItem Cert:\LocalMachine\My |
+		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item
+
+		Get-ChildItem Cert:\LocalMachine\Root |
+		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item
+	}
 }
