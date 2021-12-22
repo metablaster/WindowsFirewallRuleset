@@ -972,7 +972,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test each link in one or multiple markdown files and report if any link is dead. You can "brute force" test links or test only unique ones. Links to be tested can be excluded or included by using wildcard pattern. Test can be customized for various TLS protocols, query timeouts and retry attempts. The links to be tested can be reference links, inline links or both.</maml:para>
+      <maml:para>Test each link in one or multiple markdown files and report if any link is invalid. You can "brute force" test links or test only unique ones. Links to be tested can be excluded or included by using wildcard pattern. Test can be customized for various TLS protocols, query timeouts and retry attempts. The links to be tested can be reference links, inline links or both.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1016,14 +1016,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRetryCount</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
+            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is defined in $PSSessionOption preference variable</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>2</dev:defaultValue>
+          <dev:defaultValue>$PSSessionOption.MaxConnectionRetryCount</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>RetryIntervalSec</maml:name>
@@ -1135,7 +1135,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Log</maml:name>
           <maml:description>
-            <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+            <maml:para>If specified, invalid links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1185,14 +1185,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>MaximumRetryCount</maml:name>
           <maml:description>
-            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
+            <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is defined in $PSSessionOption preference variable</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
             <maml:name>System.Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>2</dev:defaultValue>
+          <dev:defaultValue>$PSSessionOption.MaxConnectionRetryCount</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>RetryIntervalSec</maml:name>
@@ -1304,7 +1304,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Log</maml:name>
           <maml:description>
-            <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+            <maml:para>If specified, invalid links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1367,14 +1367,14 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>MaximumRetryCount</maml:name>
         <maml:description>
-          <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is 2</maml:para>
+          <maml:para>Specifies (per link) how many times PowerShell retries a connection when a failure code between 400 and 599, inclusive or 304 is received. This parameter is valid for PowerShell Core edition only. The default value is defined in $PSSessionOption preference variable</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
           <maml:name>System.Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>2</dev:defaultValue>
+        <dev:defaultValue>$PSSessionOption.MaxConnectionRetryCount</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>RetryIntervalSec</maml:name>
@@ -1488,7 +1488,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Log</maml:name>
         <maml:description>
-          <maml:para>If specified, dead links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
+          <maml:para>If specified, invalid links are logged. Log file can be found in Logs\MarkdownLinkTest_DATE.log</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1520,7 +1520,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>WebSslProtocol enum does not list Tls13 TODO: Implement pipeline support</maml:para>
+        <maml:para>WebSslProtocol enum does not list Tls13 TODO: Implement pipeline support TODO: Implement testing links to repository</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

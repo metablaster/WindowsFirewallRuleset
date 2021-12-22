@@ -87,8 +87,8 @@ False
 ### -Name
 
 Universal Principal Name in form of: user@domain.com
-If Prefix is specified, domain name can be omitted.
-If Suffix is specified, logon name can be omitted.
+If -Prefix is specified, domain name can be omitted.
+If -Suffix is specified, logon name can be omitted.
 
 ```yaml
 Type: System.String[]

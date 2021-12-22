@@ -45,10 +45,14 @@ None. Disable-RemoteRegistry does not generate any output
 
 .NOTES
 TODO: Does not revert firewall rules because previous status is unknown
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md
 #>
 function Disable-RemoteRegistry
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md")]
 	[OutputType([void])]
 	param ()
 

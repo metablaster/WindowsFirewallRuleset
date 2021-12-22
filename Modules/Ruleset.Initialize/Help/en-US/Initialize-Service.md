@@ -22,7 +22,7 @@ Initialize-Service [-Name] <String[]> [<CommonParameters>]
 Test if required system services are started, if not all services on which target service depends
 are started before starting requested service and setting it to automatic startup.
 Some services are essential for correct firewall and network functioning,
-without essential services project code may result in errors hard to debug
+without essential services running code may result in errors hard to debug
 
 ## EXAMPLES
 
@@ -30,8 +30,9 @@ without essential services project code may result in errors hard to debug
 
 ```powershell
 Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
-$true if all input services are started successfully $false otherwise
 ```
+
+Returns True if all requested services are started successfully False otherwise
 
 ### EXAMPLE 2
 
@@ -76,7 +77,14 @@ This function main purpose is automated development environment setup to be able
 setup on multiple computers and virtual operating systems, in cases such as frequent system restores
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
+
 TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 \[System.ServiceProcess.ServiceController\[\]\]
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode)

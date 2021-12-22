@@ -85,6 +85,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: -Log parameter should be accompanied -LogName parameter
+TODO: -Log parameter should be accompanied with -LogName parameter
 
 ## RELATED LINKS

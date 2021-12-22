@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ComputerInfo
 Module Guid: c68a812d-076d-47bd-a73d-8d4600bd3c51
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.10.0
-Help Version: 0.10.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.11.0
+Help Version: 0.11.0
 Locale: en-US
 ---
 
@@ -32,11 +32,15 @@ Get operating system SKU information
 
 ### [Resolve-Host](Resolve-Host.md)
 
-Resolve host to IP or an IP to host
+Resolve host to IP or IP to host
 
 ### [Select-IPInterface](Select-IPInterface.md)
 
 Select IP configuration for specified network adapters
+
+### [Test-Computer](Test-Computer.md)
+
+Test target computer (policy store) on which to deploy firewall
 
 ### [Test-DnsName](Test-DnsName.md)
 
@@ -45,10 +49,6 @@ Validate DNS domain name syntax
 ### [Test-NetBiosName](Test-NetBiosName.md)
 
 Validate NETBIOS name syntax
-
-### [Test-Computer](Test-Computer.md)
-
-Test target computer (policy store) to which to deploy firewall
 
 ### [Test-UNC](Test-UNC.md)
 

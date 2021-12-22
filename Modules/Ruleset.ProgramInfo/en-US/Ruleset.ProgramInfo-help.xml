@@ -23,7 +23,8 @@
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SQLDTS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlServer</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>
@@ -1143,29 +1144,30 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:para>- Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor</maml:para>
         <maml:para>- update reported server versions</maml:para>
         <maml:para>- added more verbose and debug output, path formatting.</maml:para>
-        <maml:para>- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI</maml:para>
-        <maml:para>- 12 December 2020:</maml:para>
-        <maml:para>- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module</maml:para>
+        <maml:para>- Replaced WMI calls with CIM calls which are more universal and cross platform</maml:para>
         <maml:para></maml:para>
+        <maml:para>12 December 2020:</maml:para>
+        <maml:para>- Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module</maml:para>
+        <maml:para>14 April 2021:</maml:para>
+        <maml:para>- Check returned key is not null when opening from top registry node</maml:para>
         <maml:para>See links section for original and individual versions of code</maml:para>
-        <maml:para>TODO: Update examples to include DTS directory</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SqlServerInstance -Domain Server01</dev:code>
+        <dev:code>Get-SqlServerInstance -Domain Server01 | Select-Object *</dev:code>
         <dev:remarks>
-          <maml:para>SQLInstance   : MSSQLSERVER Version       : 10.0.1600.22 IsCluster     : False Domain        : Server01 FullName      : Server01 IsClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Name          : SQL Server 2008</maml:para>
-          <maml:para>SQLInstance   : SQLSERVER Version       : 10.0.1600.22 IsCluster     : False Domain        : Server01 FullName      : Server01\SQLSERVER IsClusterNode : False Edition       : Enterprise Edition ClusterName   : ClusterNodes  : {} Name          : SQL Server 2008</maml:para>
+          <maml:para>Domain          : Server01 SqlInstance     : MSSQLSERVER InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Binn SqlPath         : %ProgramW6432%\Microsoft SQL Server\150\DTS Version         : 15.0.2080.9 Name            : SQL Server 2019 IsCluster       : False FullName        : Server01 IsClusterNode   : False Edition         : Developer Edition ClusterName     : ClusterNodes    : {}</maml:para>
+          <maml:para>Domain          : Server01 SqlInstance     : MSSQLSERVER InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL8.MSSQLSERVER\MSSQL\Binn SqlPath         : %ProgramW6432%\Microsoft SQL Server\80\DTS Version         : 10.0.1600.22 Name            : SQL Server 2008 IsCluster       : False FullName        : Server01 IsClusterNode   : False Edition         : Enterprise Edition ClusterName     : ClusterNodes    : {}</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Get-SqlServerInstance -Domain Server1, Server2 -CIM</dev:code>
         <dev:remarks>
-          <maml:para>Domain           : Server1 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Name             : SQL Server 2012 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
-          <maml:para>Domain           : Server2 SQLInstance      : MSSQLSERVER SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn Edition          : Enterprise Edition Version          : 10.50.4000.0 Name             : SQL Server 2008 R2 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
+          <maml:para>Domain           : Server1 SqlInstance      : MSSQLSERVER InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\Binn SqlPath          : D:\Program Files\Microsoft SQL Server\80\DTS Edition          : Enterprise Edition: Core-based Licensing Version          : 11.0.3128.0 Name             : SQL Server 2012 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server1 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server1SQL ServiceStartMode : Auto</maml:para>
+          <maml:para>Domain           : Server2 SqlInstance      : MSSQLSERVER InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn SqlPath          : D:\Program Files\Microsoft SQL Server\100\DTS Edition          : Enterprise Edition Version          : 10.50.4000.0 Name             : SQL Server 2008 R2 IsCluster        : False IsClusterNode    : False ClusterName      : ClusterNodes     : {} FullName         : Server2 ServiceName      : SQL Server (MSSQLSERVER) ServiceState     : Running ServiceAccount   : domain\Server2SQL ServiceStartMode : Auto</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1968,7 +1970,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">SQLDTS</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlServer</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>

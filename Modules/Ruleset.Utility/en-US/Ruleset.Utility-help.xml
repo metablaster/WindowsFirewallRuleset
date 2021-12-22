@@ -443,7 +443,7 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: -Log parameter should be accompanied -LogName parameter</maml:para>
+        <maml:para>TODO: -Log parameter should be accompanied with -LogName parameter</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1890,7 +1890,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Because of uncertain output this function needs a lot of improvements and a lot more test cases to handle variable varieties of process outputs. TODO: Domain parameter needed to invoke process remotely</maml:para>
+        <maml:para>TODO: Because of uncertain output this function needs a lot of improvements and a lot more test cases to handle variable varieties of process outputs. TODO: Domain parameter needed to invoke process remotely TODO: Process may need to read input TODO: NoNewWindow should be default TODO: To implement LiteralPath parameter, it must be done with parameter sets.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2013,7 +2013,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic. This would not catch empty strings, zero, $false and other non-null items 							  - Added perhaps pointless error handling</maml:para>
+        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic.  This would not catch empty strings, zero, $false and other non-null items 							  - Added perhaps pointless error handling</maml:para>
         <maml:para>Modifications by metablaster January 2021: Updated formatting, casing and naming according to the rest of project Updated comment based help Convert inner function to scriptblock</maml:para>
       </maml:alert>
     </maml:alertSet>

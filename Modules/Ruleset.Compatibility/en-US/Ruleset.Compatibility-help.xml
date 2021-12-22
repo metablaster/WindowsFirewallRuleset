@@ -1165,6 +1165,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>TODO: Implement -Scope Parameter</maml:para>
         <maml:para>Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>

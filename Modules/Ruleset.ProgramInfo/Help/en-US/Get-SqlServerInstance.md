@@ -28,30 +28,34 @@ instances from a SQL server and detects if in a cluster or not.
 ### EXAMPLE 1
 
 ```powershell
-Get-SqlServerInstance -Domain Server01
+Get-SqlServerInstance -Domain Server01 | Select-Object *
 ```
 
-SQLInstance   : MSSQLSERVER
-Version       : 10.0.1600.22
-IsCluster     : False
-Domain        : Server01
-FullName      : Server01
-IsClusterNode : False
-Edition       : Enterprise Edition
-ClusterName   :
-ClusterNodes  : {}
-Name          : SQL Server 2008
+Domain          : Server01
+SqlInstance     : MSSQLSERVER
+InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Binn
+SqlPath         : %ProgramW6432%\Microsoft SQL Server\150\DTS
+Version         : 15.0.2080.9
+Name            : SQL Server 2019
+IsCluster       : False
+FullName        : Server01
+IsClusterNode   : False
+Edition         : Developer Edition
+ClusterName     :
+ClusterNodes    : {}
 
-SQLInstance   : SQLSERVER
-Version       : 10.0.1600.22
-IsCluster     : False
-Domain        : Server01
-FullName      : Server01\SQLSERVER
-IsClusterNode : False
-Edition       : Enterprise Edition
-ClusterName   :
-ClusterNodes  : {}
-Name          : SQL Server 2008
+Domain          : Server01
+SqlInstance     : MSSQLSERVER
+InstallLocation : %ProgramW6432%\Microsoft SQL Server\MSSQL8.MSSQLSERVER\MSSQL\Binn
+SqlPath         : %ProgramW6432%\Microsoft SQL Server\80\DTS
+Version         : 10.0.1600.22
+Name            : SQL Server 2008
+IsCluster       : False
+FullName        : Server01
+IsClusterNode   : False
+Edition         : Enterprise Edition
+ClusterName     :
+ClusterNodes    : {}
 
 ### EXAMPLE 2
 
@@ -60,8 +64,9 @@ Get-SqlServerInstance -Domain Server1, Server2 -CIM
 ```
 
 Domain           : Server1
-SQLInstance      : MSSQLSERVER
-SQLBinRoot       : D:\MSSQL11.MSSQLSERVER\MSSQL\Binn
+SqlInstance      : MSSQLSERVER
+InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\Binn
+SqlPath          : D:\Program Files\Microsoft SQL Server\80\DTS
 Edition          : Enterprise Edition: Core-based Licensing
 Version          : 11.0.3128.0
 Name             : SQL Server 2012
@@ -76,8 +81,9 @@ ServiceAccount   : domain\Server1SQL
 ServiceStartMode : Auto
 
 Domain           : Server2
-SQLInstance      : MSSQLSERVER
-SQLBinRoot       : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
+SqlInstance      : MSSQLSERVER
+InstallLocation  : D:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn
+SqlPath          : D:\Program Files\Microsoft SQL Server\100\DTS
 Edition          : Enterprise Edition
 Version          : 10.50.4000.0
 Name             : SQL Server 2008 R2
@@ -164,13 +170,17 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - Include license into file (MIT all 3), links to original sites and add appropriate Copyright for each author/contributor
 - update reported server versions
 - added more verbose and debug output, path formatting.
-- Replaced WMI calls with CIM calls which are more universal and cross platform that WMI
-- 12 December 2020:
+- Replaced WMI calls with CIM calls which are more universal and cross platform
+
+12 December 2020:
+
 - Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
-See links section for original and individual versions of code
+14 April 2021:
 
-TODO: Update examples to include DTS directory
+- Check returned key is not null when opening from top registry node
+
+See links section for original and individual versions of code
 
 ## RELATED LINKS
 

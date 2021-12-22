@@ -14,7 +14,7 @@ Validate NETBIOS name syntax
 ## SYNTAX
 
 ```powershell
-Test-NetBiosName [-Name] <String[]> [-Target <String>] [-Strict] [-Quiet] [-Force] [<CommonParameters>]
+Test-NetBiosName [-Name] <String[]> [-Operation <String>] [-Strict] [-Quiet] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,14 +28,14 @@ systems in Active Direcotry.
 ### EXAMPLE 1
 
 ```powershell
-Test-NetBiosName "*SERVER" -Target Domain
+Test-NetBiosName "*SERVER" -Operation Domain
 False
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Test-NetBiosName "-SERVER-01" -Quiet -Strict -Target Domain
+Test-NetBiosName "-SERVER-01" -Quiet -Strict -Operation Domain
 True
 ```
 
@@ -49,7 +49,7 @@ True
 ### EXAMPLE 4
 
 ```powershell
-Test-NetBiosName "User+Name" -Target User -Strict -Quiet
+Test-NetBiosName "User+Name" -Operation User -Strict -Quiet
 False
 ```
 
@@ -71,7 +71,7 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Target
+### -Operation
 
 Specifies the kind of name checking to perform on -Name parameter as follows:
 
