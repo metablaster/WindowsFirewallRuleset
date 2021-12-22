@@ -128,7 +128,8 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
-# Override "FunctionsToExport" and "VariablesToExport" entries
+# Override "FunctionsToExport" and "VariablesToExport" entries for testing
+# TODO: See how could this method be used for all modules
 if ($Develop)
 {
 	$PublicScripts += @(

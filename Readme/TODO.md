@@ -46,8 +46,8 @@ Todo's in this file are categorized into following sections:
 
 4. Release checklist
 
-    - Comment out private module exports (currently only Ruleset.Remote module)
-    - Run each module individually in clean shell with `-Verbose -Debug` and also with
+    - Comment out private function exports in (*.psd1) files
+    - Run each module individually with `-Verbose -Debug -Force` and also with
     `Import-Module -Name *.psd1` to ensure expected module load behavior
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, TestDomain
@@ -195,6 +195,8 @@ Todo's in this file are categorized into following sections:
     - Test each module function as if module only is used, to make sure it's self sufficient, ex.
     `Initialize-Service` function will fail.
     A major issue to solution is module interdependency and dependency on global variables.
+    - Module files (*psm1) could generate hashes for scripts to be dot sourced, and compare
+    result to predefined hashes to ensure scripts were not modified externally, or sign whole module.
 
 2. Scripts
 

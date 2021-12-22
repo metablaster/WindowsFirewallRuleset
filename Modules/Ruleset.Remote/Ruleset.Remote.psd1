@@ -128,10 +128,6 @@ SOFTWARE.
 		"Show-WinRMConfig"
 		"Test-WinRM"
 		"Unregister-SslCertificate"
-		# NOTE: Temporarily export for testing
-		# "Initialize-WinRM"
-		# "Restore-NetProfile"
-		# "Unblock-NetProfile"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -158,19 +154,20 @@ SOFTWARE.
 	FileList = @(
 		"en-US\about_Ruleset.Remote.help.txt"
 		"en-US\Ruleset.Remote-help.xml"
+		"Help\en-US\about_Ruleset.Remote.md"
 		"Help\en-US\Connect-Computer.md"
 		"Help\en-US\Disable-RemoteRegistry.md"
 		"Help\en-US\Disable-WinRMServer.md"
 		"Help\en-US\Enable-WinRMServer.md"
 		"Help\en-US\Export-WinRM.md"
 		"Help\en-US\Publish-SshKey.md"
-		"Help\en-US\README.md"
 		"Help\en-US\Register-SslCertificate.md"
 		"Help\en-US\Reset-WinRM.md"
 		"Help\en-US\Set-WinRMClient.md"
 		"Help\en-US\Show-WinRMConfig.md"
 		"Help\en-US\Test-WinRM.md"
 		"Help\en-US\Unregister-SslCertificate.md"
+		"Help\README.md"
 		"Private\Initialize-WinRM.ps1"
 		"Private\README.md"
 		"Private\Restore-NetProfile.ps1"
@@ -236,7 +233,7 @@ SOFTWARE.
 
 	# Updatable Help uses the HelpInfoURI key in the module manifest to find the Help information
 	# (HelpInfo XML) file that contains the location of the updated help files for the module.
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Ruleset.Remote/Ruleset.Remote_28ed593c-ae6e-4067-8a50-28f0d32d2edd_HelpInfo.xml"
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Ruleset.Remote/Ruleset.Remote_28ed593c-ae6e-4067-8a50-28f0d32d2edd_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

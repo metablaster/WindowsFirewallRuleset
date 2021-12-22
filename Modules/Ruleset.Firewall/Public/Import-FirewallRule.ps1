@@ -176,7 +176,7 @@ function Import-FirewallRule
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
 			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
-			group = $Rule.Group
+			Group = $Rule.Group
 			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
 			Platform = Convert-ListToArray $Rule.Platform @()

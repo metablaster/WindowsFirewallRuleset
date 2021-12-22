@@ -32,7 +32,8 @@ SOFTWARE.
 Exports firewall rules to a CSV or JSON file
 
 .DESCRIPTION
-Exports firewall rules to a CSV or JSON file. Only local GPO rules are exported by default.
+Export-FirewallRule exports firewall rules to a CSV or JSON file.
+Only local GPO rules are exported by default.
 CSV files are semicolon separated (Beware! Excel is not friendly to CSV files).
 All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound,
 -Enabled, -Disabled, -Allow and -Block.
@@ -45,7 +46,7 @@ Policy store from which to export rules, default is local GPO.
 Path into which to save file
 
 .PARAMETER FileName
-Output file, default is JSON format
+Output file, default is CSV format
 
 .PARAMETER DisplayName
 Display name of the rules to be processed. Wildcard character * is allowed.
@@ -109,7 +110,7 @@ Following modifications by metablaster August 2020:
 3. Separated functions into their own scope
 4. Added function to decode string into multi line
 5. Added parameter to target specific policy store
-6. Added parameter to let specify directory, and crate it if it doesn't exist
+6. Added parameter to specify directory, and crate it if it doesn't exist
 7. Added more output streams for debug, verbose and info
 8. Added parameter to export according to rule group
 9. Changed minor flow and logic of execution
@@ -156,7 +157,7 @@ function Export-FirewallRule
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[Alias("ComputerName", "CN")]
+		[Alias("ComputerName", "CN", "PolicyStore")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter(Mandatory = $true)]
@@ -217,8 +218,8 @@ function Export-FirewallRule
 	if ($Allow -and !$Block) { $Action = "Allow" }
 	if (!$Allow -and $Block) { $Action = "Block" }
 
-	# read firewall rules
-	# NOTE: getting rules may fail for multiple reasons, there is no point to handle errors here
+	# Read firewall rules
+	# NOTE: Getting rules may fail for multiple reasons, there is no point to handle errors here
 	if ($DisplayGroup -eq "")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
@@ -255,7 +256,7 @@ function Export-FirewallRule
 		return
 	}
 
-	# start array of rules
+	# Starting array of rules
 	$FirewallRuleSet = @()
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
@@ -269,7 +270,7 @@ function Export-FirewallRule
 			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
 			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
 
-		# iterate through rules
+		# Iterate through rules
 		if ($Rule.Group -like "")
 		{
 			Write-Host "Export Rule: [Ungrouped Rule] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
@@ -294,8 +295,8 @@ function Export-FirewallRule
 		# and security settings
 		$SecurityFilter = $Rule | Get-NetFirewallSecurityFilter
 
-		# generate sorted Hashtable
-		$HashProps = [PSCustomObject]@{
+		# Add sorted Hashtable to result
+		$FirewallRuleSet += [PSCustomObject]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
 			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
@@ -316,8 +317,8 @@ function Export-FirewallRule
 			RemotePort = Convert-ArrayToList $PortFilter.RemotePort
 			IcmpType = Convert-ArrayToList $PortFilter.IcmpType
 			DynamicTarget = $PortFilter.DynamicTarget
-			# TODO: need to see why is this needed
-			Program = $ApplicationFilter.Program -Replace "$($ENV:SystemRoot.Replace("\","\\"))\\", "%SystemRoot%\" -Replace "$(${ENV:ProgramFiles(x86)}.Replace("\","\\").Replace("(","\(").Replace(")","\)"))\\", "%ProgramFiles(x86)%\" -Replace "$($ENV:ProgramFiles.Replace("\","\\"))\\", "%ProgramFiles%\"
+			# TODO: Need to see why is this needed
+			Program = $ApplicationFilter.Program -Replace "$($env:SystemRoot.Replace("\","\\"))\\", "%SystemRoot%\" -Replace "$(${ENV:ProgramFiles(x86)}.Replace("\","\\").Replace("(","\(").Replace(")","\)"))\\", "%ProgramFiles(x86)%\" -Replace "$($ENV:ProgramFiles.Replace("\","\\"))\\", "%ProgramFiles%\"
 			Package = $ApplicationFilter.Package
 			Service = $ServiceFilter.Service
 			InterfaceAlias = Convert-ArrayToList $InterfaceFilter.InterfaceAlias
@@ -329,16 +330,14 @@ function Export-FirewallRule
 			Encryption = $SecurityFilter.Encryption
 			OverrideBlockRules = $SecurityFilter.OverrideBlockRules
 		}
-
-		# add to array with rules
-		$FirewallRuleSet += $HashProps
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
 
-	$Path = Resolve-Path $Path -Create
+	$Path = Resolve-FileSystemPath $Path -Create
 	if (!$Path)
 	{
+		# Errors if any, reported by Resolve-FileSystemPath
 		return
 	}
 
@@ -347,7 +346,7 @@ function Export-FirewallRule
 
 	if ($JSON)
 	{
-		# output rules in JSON format
+		# Output rules in JSON format
 		if (!$FileExtension -or ($FileExtension -ne ".json"))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
@@ -356,7 +355,7 @@ function Export-FirewallRule
 
 		if ($Append)
 		{
-			# TODO: need to implement appending to JSON
+			# TODO: Need to implement appending to JSON
 			Write-Warning -Message "Appending to JSON not implemented"
 			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
@@ -368,7 +367,7 @@ function Export-FirewallRule
 	}
 	else
 	{
-		# output rules in CSV format
+		# Output rules in CSV format
 		if (!$FileExtension -or ($FileExtension -ne ".csv"))
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
