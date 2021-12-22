@@ -1474,7 +1474,7 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster January 2021: Function interface reworked by removing unnecesarry parameter and changin param block Simplified logic to validate credential based on context type Added links, inputs, outputs and notes to comment based help</maml:para>
+        <maml:para>Modifications by metablaster January 2021: Function interface reworked by removing unnecesarry parameter and changin param block Simplified logic to validate credential based on context type Added links, inputs, outputs and notes to comment based help TODO: Does not seem to work on LAN, try with Domain\User + pwd and: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/create-inbound-rules-to-support-rpc</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1535,7 +1535,7 @@ PS&gt; Test-Credential $Cred -Domain Server01 -Context Domain</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>Universal Principal Name in form of: user@domain.com If Prefix is specified, domain name can be omitted. If Suffix is specified, logon name can be omitted.</maml:para>
+            <maml:para>Universal Principal Name in form of: user@domain.com If -Prefix is specified, domain name can be omitted. If -Suffix is specified, logon name can be omitted.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -1572,7 +1572,7 @@ PS&gt; Test-Credential $Cred -Domain Server01 -Context Domain</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>Universal Principal Name in form of: user@domain.com If Prefix is specified, domain name can be omitted. If Suffix is specified, logon name can be omitted.</maml:para>
+            <maml:para>Universal Principal Name in form of: user@domain.com If -Prefix is specified, domain name can be omitted. If -Suffix is specified, logon name can be omitted.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -1609,7 +1609,7 @@ PS&gt; Test-Credential $Cred -Domain Server01 -Context Domain</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
-          <maml:para>Universal Principal Name in form of: user@domain.com If Prefix is specified, domain name can be omitted. If Suffix is specified, logon name can be omitted.</maml:para>
+          <maml:para>Universal Principal Name in form of: user@domain.com If -Prefix is specified, domain name can be omitted. If -Suffix is specified, logon name can be omitted.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>

@@ -184,6 +184,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: If no candidates are selected it's not an error
 
 ## RELATED LINKS

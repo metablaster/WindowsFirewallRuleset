@@ -143,9 +143,11 @@ Following modifications by metablaster based on both originals 15 Feb 2020:
 - Replaced WMI calls with CIM calls which are more universal and cross platform
 
 12 December 2020:
+
 - Renamed from Get-SQLInstance to Get-SqlServerInstance because of name colision from SQLPS module
 
 14 April 2021:
+
 - Check returned key is not null when opening from top registry node
 
 See links section for original and individual versions of code

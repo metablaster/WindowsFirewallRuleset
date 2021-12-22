@@ -467,7 +467,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test if required system services are started, if not all services on which target service depends are started before starting requested service and setting it to automatic startup. Some services are essential for correct firewall and network functioning, without essential services project code may result in errors hard to debug</maml:para>
+      <maml:para>Test if required system services are started, if not all services on which target service depends are started before starting requested service and setting it to automatic startup. Some services are essential for correct firewall and network functioning, without essential services running code may result in errors hard to debug</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -522,16 +522,16 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize" TODO: Optionally set services to automatic startup, most of services are needed only to run code. [System.ServiceProcess.ServiceController[]]</maml:para>
+        <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
+        <maml:para>TODO: Optionally set services to automatic startup, most of services are needed only to run code. [System.ServiceProcess.ServiceController[]]</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
-$true if all input services are started successfully $false otherwise</dev:code>
+        <dev:code>Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Returns True if all requested services are started successfully False otherwise</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -547,6 +547,18 @@ $true if WinRM service was started $false otherwise</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

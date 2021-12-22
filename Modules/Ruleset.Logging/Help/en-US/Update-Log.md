@@ -116,5 +116,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: when strict mode is on, errors captured by strict mode are not captured into log buffers
+TODO: It takes a lot of time when called from script, reproduce with Disable-WinRMServer.ps1
 
 ## RELATED LINKS

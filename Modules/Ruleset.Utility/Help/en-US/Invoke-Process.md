@@ -234,6 +234,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: Because of uncertain output this function needs a lot of improvements and a lot more test cases
 to handle variable varieties of process outputs.
 TODO: Domain parameter needed to invoke process remotely
+TODO: Process may need to read input
+TODO: NoNewWindow should be default
+TODO: To implement LiteralPath parameter, it must be done with parameter sets.
 
 ## RELATED LINKS
 

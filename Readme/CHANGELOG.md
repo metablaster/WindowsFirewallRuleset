@@ -54,16 +54,21 @@ If you would like to see fresh changes done since last release you can do so on 
   - A new module used for remoting configuration using WinRM, CIM and remote registry with the
   following functions:
   - `Connect-Computer` function to initialize connection to remote computer
-  - `Deploy-SshKey` function to upload and set SSH key to server for remote debugging with VSCode
-    over SSH
+  - `Disable-RemoteRegistry` function to disable remote registry enabled by Enable-RemoteRegistry
   - `Disable-WinRMServer` function to disable WinRM remoting
   - `Disconnect-Computer` function to release resources and disconnect remote host
   - `Enable-RemoteRegistry` function to enable drilling registry remotely
   - `Enable-WinRMServer` function to configure WinRM server for remoting
+  - `Export-WinRM` function to export WinRM configuration to file (not implemented)
+  - `Publish-SshKey` function to upload and set SSH key to server for remote debugging with VSCode
+    over SSH
   - `Register-SslCertificate` function to create, install and export SSL certificate for remoting
+  - `Reset-WinRM` function to reset WinRM service and configuration to system defaults
   - `Set-WinRMClient` function to configure client for remoting
   - `Show-WinRMConfig` function to list detailed WinRM configuration
   - `Test-WinRM` function to test and discover issues with remoting configuration
+  - `Unregister-SslCertificate` function to uninstall certificate installed by
+    Register-SslCertificate (not implemented)
 
 - Modules
 

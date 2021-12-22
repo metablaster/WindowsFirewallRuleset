@@ -33,7 +33,7 @@ Test-MarkdownLinks -LiteralPath <String[]> [-Recurse] [-TimeoutSec <Int32>] [-Ma
 
 ## DESCRIPTION
 
-Test each link in one or multiple markdown files and report if any link is dead.
+Test each link in one or multiple markdown files and report if any link is invalid.
 You can "brute force" test links or test only unique ones.
 Links to be tested can be excluded or included by using wildcard pattern.
 Test can be customized for various TLS protocols, query timeouts and retry attempts.
@@ -140,7 +140,7 @@ Accept wildcard characters: False
 Specifies (per link) how many times PowerShell retries a connection when a failure code between 400
 and 599, inclusive or 304 is received.
 This parameter is valid for PowerShell Core edition only.
-The default value is 2
+The default value is defined in $PSSessionOption preference variable
 
 ```yaml
 Type: System.Int32
@@ -149,7 +149,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 2
+Default value: $PSSessionOption.MaxConnectionRetryCount
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -316,7 +316,7 @@ Accept wildcard characters: False
 
 ### -Log
 
-If specified, dead links are logged.
+If specified, invalid links are logged.
 Log file can be found in Logs\MarkdownLinkTest_DATE.log
 
 ```yaml
@@ -347,5 +347,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 WebSslProtocol enum does not list Tls13
 TODO: Implement pipeline support
+TODO: Implement testing links to repository
 
 ## RELATED LINKS

@@ -9,15 +9,14 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Resolve host to IP or an IP to host
+Resolve host to IP or IP to host
 
 ## SYNTAX
 
 ### Physical (Default)
 
 ```powershell
-Resolve-Host [-AddressFamily <String>] [-Physical] [-Hidden] [-Connected] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Resolve-Host [-AddressFamily <String>] [-Physical] [-Connected] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Host
@@ -35,14 +34,14 @@ Resolve-Host -IPAddress <IPAddress[]> [-FlushDNS] [-WhatIf] [-Confirm] [<CommonP
 ### Virtual
 
 ```powershell
-Resolve-Host [-AddressFamily <String>] [-Virtual] [-Hidden] [-Connected] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Resolve-Host [-AddressFamily <String>] [-Virtual] [-Connected] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Resolve host to IP or an IP to host.
-For localhost select virtual, hidden or connected adapters.
+Resolve host name to IP address or IP address to host name.
+For localhost process virtual or hidden, connected or disconnected adapter address.
+By default only physical adapters are processed
 
 ## EXAMPLES
 
@@ -61,14 +60,14 @@ Resolve-Host -FlushDNS -Domain "microsoft.com"
 ### EXAMPLE 3
 
 ```powershell
-Resolve-Host -LocalHost -AddressFamily IPv4 -Connected
+Resolve-Host -AddressFamily IPv4 -Connected
 ```
 
 ## PARAMETERS
 
 ### -Domain
 
-Target host name which to resolve to an IP address.
+Target host name which to resolve to IP address
 
 ```yaml
 Type: System.String[]
@@ -84,7 +83,7 @@ Accept wildcard characters: False
 
 ### -IPAddress
 
-Target IP which to resolve to host name.
+Target IP which to resolve to host name
 
 ```yaml
 Type: System.Net.IPAddress[]
@@ -132,7 +131,7 @@ Accept wildcard characters: False
 
 ### -Physical
 
-Resolve local host name to an IP of a physical adapter
+Resolve local host name to IP of a physical adapter
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -148,7 +147,7 @@ Accept wildcard characters: False
 
 ### -Virtual
 
-Resolve local host name to an IP of a virtual adapter
+Resolve local host name to IP of a virtual adapter
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -162,25 +161,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Hidden
-
-If specified, only hidden interfaces are included
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Physical, Virtual
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Connected
 
-If specified, only interfaces connected to network are returned
+If specified, only interfaces connected to network are considered
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -244,5 +227,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Single IP is selected for result, maybe we should return all IP addresses
+TODO: AddressFamily could be 2 switches, -IPv4 and IPv6
 
 ## RELATED LINKS

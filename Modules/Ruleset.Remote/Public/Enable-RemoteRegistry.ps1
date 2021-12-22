@@ -45,10 +45,14 @@ None. Enable-RemoteRegistry does not generate any output
 
 .NOTES
 None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md
 #>
 function Enable-RemoteRegistry
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md")]
 	[OutputType([void])]
 	param ()
 

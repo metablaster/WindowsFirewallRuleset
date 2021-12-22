@@ -30,11 +30,10 @@ SOFTWARE.
 param ()
 
 # Imports
-# TODO Using -InModule to avoid creating connection will result in WinRM not being set
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule # $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
 #
-# Import all modules into current session, useful to quickly load module functions into session
+# Import all modules into current session, useful to quickly load all module functions into session
 #
 
 if ($PSVersionTable.PSEdition -eq "Desktop")
