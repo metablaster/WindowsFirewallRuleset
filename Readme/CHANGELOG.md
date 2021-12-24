@@ -68,7 +68,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Show-WinRMConfig` function to list detailed WinRM configuration
   - `Test-WinRM` function to test and discover issues with remoting configuration
   - `Unregister-SslCertificate` function to uninstall certificate installed by
-    Register-SslCertificate (not implemented)
+    Register-SslCertificate
 
 - Modules
 
@@ -496,7 +496,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Code formatted and updated according to PSScriptAnalyzer rules
   - todo list categorized according to area and priority, duplicates removed
   - Markdown formatted according to markdownlint rules
-  - Entry project spellchecked
+  - Entire project spellchecked
   - Added regex samples to query rules inside scripts for bulk operations
 
 - Documentation

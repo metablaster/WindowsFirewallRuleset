@@ -44,7 +44,12 @@ None. You cannot pipe objects to Enable-RemoteRegistry
 None. Enable-RemoteRegistry does not generate any output
 
 .NOTES
-None.
+For remote registry to work, both client and server must enable remote registry service,
+must enable File and Printer sharing and Network Discovery for both inbound and outbound,
+and must operate on private profile if either one is workstation machine.
+
+In addition to make it work in PS, administrative authentication must be done by opening a share
+to server by client computer.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md
@@ -59,19 +64,17 @@ function Enable-RemoteRegistry
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking remote registry requirements"
 
-	# Determine whether GPO firewall is active
-	$GpoStore = $null -ne (Get-NetFirewallProfile -Profile Private -PolicyStore ([System.Environment]::MachineName) |
-		Where-Object { $_.Enabled -eq $true })
-
-	if ($GpoStore)
+	if ($Workstation)
 	{
-		$Store = [System.Environment]::MachineName
+		$RuleProfile = "*Private*"
+
+		# For workstations remote registry works on private profile only
+		Write-Warning -Message "Remote registry does not work over publick network profile"
 	}
 	else
 	{
-		$Store = "PersistentStore"
+		$RuleProfile = "*"
 	}
-
 
 	$AllRuleGroups = @(
 		# File and Printer Sharing
@@ -81,21 +84,30 @@ function Enable-RemoteRegistry
 		"@FirewallAPI.dll,-32752"
 	)
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Add and enable firewall rules to allow remote registry"))
+	if ($PSCmdlet.ShouldProcess("Windows firewall", "Add and enable firewall rules to allow remote registry"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding and enabling firewall rules to allow remote registry"
 
-		# TODO: Only private profile should be affected on workstation machines
+		$Store = [System.Environment]::MachineName
 		foreach ($RuleGroup in $AllRuleGroups)
 		{
-			Remove-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound -EA Ignore
-			Remove-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound -EA Ignore
+			# Remove rules before copying over fresh ones
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound |
+			Where-Object { $_.Profile -like $RuleProfile } | Remove-NetFirewallRule
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound |
+			Where-Object { $_.Profile -like $RuleProfile } | Remove-NetFirewallRule
 
-			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $RuleGroup -Direction Inbound -NewPolicyStore $Store
-			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $RuleGroup -Direction Outbound -NewPolicyStore $Store
+			# Copy only rules which were removed, ignore the rest
+			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $RuleGroup `
+				-Direction Inbound -NewPolicyStore $Store -ErrorAction Ignore
+			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $RuleGroup `
+				-Direction Outbound -NewPolicyStore $Store -ErrorAction Ignore
 
-			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound | Enable-NetFirewallRule
-			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound | Enable-NetFirewallRule
+			# Enable copied rules
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound |
+			Where-Object { $_.Profile -like $RuleProfile } | Enable-NetFirewallRule
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound |
+			Where-Object { $_.Profile -like $RuleProfile } | Enable-NetFirewallRule
 		}
 	}
 
@@ -105,21 +117,15 @@ function Enable-RemoteRegistry
 
 		if ($RegService.StartType -ne [ServiceStartMode]::Automatic)
 		{
-			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Set service to automatic startup"))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
-				Set-Service -InputObject $RegService -StartupType Automatic
-			}
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
+			Set-Service -InputObject $RegService -StartupType Automatic
 		}
 
 		if ($RegService.Status -ne [ServiceControllerStatus]::Running)
 		{
-			if ($PSCmdlet.ShouldProcess($RegService.DisplayName, "Start service"))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"
-				$RegService.Start()
-				$RegService.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
-			}
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"
+			$RegService.Start()
+			$RegService.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 		}
 	}
 }

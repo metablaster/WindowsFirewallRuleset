@@ -144,7 +144,7 @@ if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name Inbo
 		$TotalMinutes += $InboundMinutes
 	}
 
-	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entry firewall was: $TotalMinutes minutes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entire firewall was: $TotalMinutes minutes"
 }
 
 Update-Log

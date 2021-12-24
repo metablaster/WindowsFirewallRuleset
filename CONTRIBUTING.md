@@ -300,7 +300,7 @@ This is so that when you need to change or search for something or do some regex
 easy to see what is where, easy to use advanced search/replace or multicursor tricks.
 
 Performing regex operations on firewall rules in combination with multicursor feature can be
-done in a matter of minutes, without this strict rule design it would take an entry day and might
+done in a matter of minutes, without this strict rule design it would take an entire day and might
 result in bugs or random issues.
 
 [Table of Contents](#table-of-contents)

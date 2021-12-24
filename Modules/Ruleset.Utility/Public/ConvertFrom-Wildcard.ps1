@@ -237,7 +237,7 @@ function ConvertFrom-Wildcard
 		# result: a_b.*c%d\[e\\\.\\\.f]\\\.\\\..g_%%_.*\[\?].{2}\[\*]\\i\[\[].{2,}\[%%]\\Z\\w\+
 		$Result = [regex]::Replace($Result, "\\\[(?<data>[_%])\]", $UnescapeEvaluator, $Options)
 
-		# Convert wildcard escapes [\*] and [\?] to regex equivalent escapes before un-escaping entry pattern
+		# Convert wildcard escapes [\*] and [\?] to regex equivalent escapes before un-escaping entire pattern
 		# result: a_b.*c%d\[e\\\.\\\.f]\\\.\\\..g_%%_.*\\\?.{2}\\\*\\i\[\[].{2,}\[%%]\\Z\\w\+
 		$Result = [regex]::Replace($Result, "\\\[(?<data>\\(\?|\*))+\]", $EscapeEvaluator, $Options)
 

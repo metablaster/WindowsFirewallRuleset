@@ -248,7 +248,7 @@ Todo's in this file are categorized into following sections:
 
     - Indentation doesn't work as expected for pipeline operators, currently using "NoIndentation",
     also there is no indentation for back ticks.
-    - A helper script to recursively invoke `PSScriptAnalyzer` formatter for entry repository
+    - A helper script to recursively invoke `PSScriptAnalyzer` formatter for entire repository
     - Set code regions where applicable
 
 6. Documentation

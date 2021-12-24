@@ -66,7 +66,7 @@ None. Update-Table does not generate any output
 
 .NOTES
 TODO: For programs in user profile rules should update LocalUser parameter accordingly,
-currently it looks like we assign entry user group for program that applies to single user only.
+currently it looks like we assign entire user group for program that applies to single user only.
 TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search
 TODO: This function should make use of Out-DataTable function from Ruleset.Utility module
 TODO: Using Format.psm1xml for DataTable would apply to all data tables, maybe reveting to PSCustomObject?

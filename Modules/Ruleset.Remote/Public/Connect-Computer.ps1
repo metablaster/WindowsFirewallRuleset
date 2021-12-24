@@ -40,7 +40,7 @@ Following global variables or objects are created:
 CimServer (variable), to be used by CIM commandlets to specify cim session to use
 RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
 RemoteSession (PSSession), PS session object which represent remote session
-RemoteCIM (CimSession), CIM session object
+RemoteCim (CimSession), CIM session object
 
 .PARAMETER Domain
 Computer name with which to connect for remoting

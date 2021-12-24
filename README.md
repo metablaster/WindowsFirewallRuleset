@@ -485,10 +485,10 @@ This section and functionality is currently under construction and incomplete
 ![Under construction](Readme/Screenshots/UnderConstruction.gif)
 
 In remote firewall deployment there are at least 2 computers involved,\
- one is management computer
-and all others are server computers.\
-Scripts are executed by you on management computer, and firewall is then deployed to or configured on
-multiple server computers simultaneously.
+one is management computer (client) and all others are managed computers (servers).
+
+Scripts are executed by administrator on management computer, and firewall is then deployed to or
+configured on multiple server computers simultaneously.
 
 At the moment following core remoting capabilities are implemented:
 
@@ -501,6 +501,36 @@ For implementation details see `Modules\Ruleset.Remote` module
 
 **NOTE:** Remoting functionality is not exclusive to remote firewall deployment, deployment to
 localhost by design requires working WinRM and PS remoting configuration as well.
+
+Before remote deployment can be performed, remote computer (server) needs to be configured to accept
+connection, example on how to establish SSL connection as follows:
+
+- To configure WinRM service and remote registry on server computer, run:
+
+```powershell
+# On server computer
+cd C:\Path\to\WindowsFirewallRuleset
+Import-Module .\Modules\Ruleset.Remote
+Enable-WinRMServer -Protocol HTTPS -Confirm:$false
+Enable-RemoteRegistry -Confirm:$false
+```
+
+After performing these steps, inside `\Exports` directory you'll find SSL certificate which
+needs to be copied to management computer also into `\Exports` directory.
+
+**NOTE:** Configuring server computer manually is performed only once for initial setup,
+you don't need to repeat it for subsequent deployments.
+
+- Next step is to move on to management computer and run scripts as wanted, for example:
+
+```powershell
+# On management computer
+cd C:\Path\to\WindowsFirewallRuleset
+Deploy-Firewall -Domain "enter one or more remote computer names here"
+```
+
+This is how remote deployment is going to work once this functionality gets fully implemented.\
+For additional information see also `Readme\Remote.md`
 
 ## Checking for updates
 

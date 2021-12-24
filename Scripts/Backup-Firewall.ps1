@@ -111,7 +111,7 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export in
 $TotalMinutes = $OutboundMinutes + $InboundMinutes
 $TotalMinutes += $OutboundHours * 60
 $TotalMinutes += $InboundHours * 60
-Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entry firewall was: $TotalMinutes minutes"
+Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entire firewall was: $TotalMinutes minutes"
 
 Update-Log
 

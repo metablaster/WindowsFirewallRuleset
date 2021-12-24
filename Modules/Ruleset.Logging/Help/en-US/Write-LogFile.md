@@ -60,7 +60,7 @@ PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Hash $HashR
 PS> $HeaderStack.Pop() | Out-Null
 ```
 
-Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
+Will write entire $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"
 
 ### EXAMPLE 3
 

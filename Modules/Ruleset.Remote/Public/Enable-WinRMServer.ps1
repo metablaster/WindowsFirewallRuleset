@@ -509,7 +509,7 @@ function Enable-WinRMServer
 			# In some cases Enable-PSRemoting did not set it
 			Write-Warning -Message "LocalAccountTokenFilterPolicy was not enabled ($TokenValue), setting manually"
 
-			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
 				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 		}
 	}
