@@ -447,16 +447,18 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		if ($PolicyStore -notin $LocalStores)
 		{
-			$ConnectParams["Credential"] = Get-Credential -Message "Credentials are required to access '$Domain'"
+			$ConnectParams["Credential"] = Get-Credential -Message "Credentials are required to access '$PolicyStore'"
 			Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Credential $ConnectParams["Credential"] -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
-			# TODO: If credentials are not configuring WinRM won't make any difference
+			# TODO: If credentials are not valid, configuring WinRM won't make any difference
 			if (!$PolicyStoreStatus)
 			{
 				# Configure this machine for remote session over SSL
-				Set-WinRMClient $PolicyStore -Confirm:$false
+				Set-WinRMClient -Domain $PolicyStore -Confirm:$false
 				Enable-RemoteRegistry -Confirm:$false
+				Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Credential $ConnectParams["Credential"] `
+					-Status ([ref] $PolicyStoreStatus) -Quiet -ErrorAction Stop
 			}
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
@@ -661,7 +663,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
 
 	# Remote test computer which will perform unit testing
-	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-DATACENTER"
+	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO11"
 }
 #endregion
 

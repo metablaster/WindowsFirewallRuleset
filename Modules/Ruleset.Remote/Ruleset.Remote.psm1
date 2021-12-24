@@ -49,6 +49,7 @@ if ($ListPreference)
 # TODO: Revisit functions and determine where to put ErrorAction Stop
 # TODO: Verbose output should write only if ShouldProcess was approved
 # TODO: Function to show connection status, CIM server, PS session and PSDrive instance(s)
+# TODO: Need to handle interface profile depending on system role (server or workstation)
 
 #
 # Script imports

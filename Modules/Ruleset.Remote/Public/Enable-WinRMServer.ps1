@@ -186,6 +186,11 @@ function Enable-WinRMServer
 	}
 
 	Unblock-NetProfile
+	if ($script:Workstation)
+	{
+		# For workstations remote registry works on private profile only
+		Write-Warning -Message "Remoting will not work over publick network profile"
+	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
@@ -311,6 +316,7 @@ function Enable-WinRMServer
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
+		# NOTE: -Force is used for "New-Item" to avoid prompting for acceptance to create listener
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			New-Item -Path WSMan:\localhost\Listener -Address "IP:[::1]" -Transport HTTP -Enabled $true -Force | Out-Null
@@ -360,7 +366,7 @@ function Enable-WinRMServer
 			{
 				if ($PSVersionTable.PSEdition -eq "Core")
 				{
-					New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTPS -Enabled $true `
+					New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTPS -Enabled $true -Force `
 						-Hostname $Domain -CertificateThumbprint $Cert.Thumbprint | Out-Null
 				}
 				else
@@ -514,24 +520,23 @@ function Enable-WinRMServer
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
+	if ($PSCmdlet.ShouldProcess("Windows firewall, GPO store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
 
 		# Remove WinRM predefined compatibility rules
-		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
+		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore [System.Environment]::MachineName
 	}
 
 	if ($script:Workstation)
 	{
-		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
+		if ($PSCmdlet.ShouldProcess("Windows firewall, GPO store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
 
 			# Restore public profile rules to local subnet which is the default for workstations
-			Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore | Where-Object {
-				$_.Profile -like "*Public*"
-			} | Set-NetFirewallRule -RemoteAddress LocalSubnet
+			Get-NetFirewallRule -Group $WinRMRules -Direction Inbound -PolicyStore [System.Environment]::MachineName |
+			Where-Object { $_.Profile -like "*Public*" } | Set-NetFirewallRule -RemoteAddress LocalSubnet
 		}
 	}
 

@@ -64,12 +64,12 @@ function Enable-RemoteRegistry
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking remote registry requirements"
 
-	if ($Workstation)
+	if ($script:Workstation)
 	{
 		$RuleProfile = "*Private*"
 
 		# For workstations remote registry works on private profile only
-		Write-Warning -Message "Remote registry does not work over publick network profile"
+		Write-Warning -Message "Remote registry will not work over publick network profile"
 	}
 	else
 	{

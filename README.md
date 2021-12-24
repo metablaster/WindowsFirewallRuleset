@@ -151,6 +151,7 @@ Following table lists currently tested operating systems
 | Windows 10          | Pro Education | 20H2        | x64          |
 | Windows 10          | Enterprise    | 1809 - 20H2 | x64          |
 | Windows 10          | Education     | 20H2        | x64          |
+| Windows 11          | Pro Education | 21H2        | x64          |
 | Windows Server 2019 | Essentials    | 1809        | x64          |
 | Windows Server 2019 | Standard      | 1809        | x64          |
 | Windows Server 2019 | Datacenter    | 1809        | x64          |
@@ -490,7 +491,7 @@ one is management computer (client) and all others are managed computers (server
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
 configured on multiple server computers simultaneously.
 
-At the moment following core remoting capabilities are implemented:
+At the moment following rudimentary remoting capabilities are implemented:
 
 1. Automatic creation of PS and CIM sessions
 2. Drilling registry remotely
@@ -515,8 +516,8 @@ Enable-WinRMServer -Protocol HTTPS -Confirm:$false
 Enable-RemoteRegistry -Confirm:$false
 ```
 
-After performing these steps, inside `\Exports` directory you'll find SSL certificate which
-needs to be copied to management computer also into `\Exports` directory.
+After performing these steps, inside `\Exports` directory you'll find SSL certificate (*.cer) file
+which needs to be copied to management computer also into `\Exports` directory.
 
 **NOTE:** Configuring server computer manually is performed only once for initial setup,
 you don't need to repeat it for subsequent deployments.
@@ -529,8 +530,16 @@ cd C:\Path\to\WindowsFirewallRuleset
 Deploy-Firewall -Domain "enter one or more remote computer names here"
 ```
 
-This is how remote deployment is going to work once this functionality gets fully implemented.\
-For additional information see also `Readme\Remote.md`
+This is how remote deployment is going to work once this functionality gets fully implemented.
+
+Remote deployment can be customized in a great detail in the following locations:
+
+- To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`\
+- To customize WSMan session configuration see: `Modules\Ruleset.Remote\Scripts\Enable-WinRMServer.ps1`
+- To customize self signed SSL certificate see: `Modules\Ruleset.Remote\Scripts\Register-SslCertificate.ps1`
+- To customize PS and CIM session configuration see: `Config\RemoteFirewall.pssc`
+
+For additional information and troubleshooting tips see also [Remoting help](Readme/Remote.md)
 
 ## Checking for updates
 

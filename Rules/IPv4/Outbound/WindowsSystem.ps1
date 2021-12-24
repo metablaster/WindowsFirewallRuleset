@@ -96,6 +96,8 @@ $NETFrameworkRoot = "" # "%SystemRoot%\Microsoft.NET\Framework64"
 # Rules for Windows system
 #
 
+# TODO: Should be global variable, there is also one defined in
+# Ruleset.Remote and other rule scripts
 $ServerTarget = (Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 		-ClassName Win32_OperatingSystem -EA Stop |
 	Select-Object -ExpandProperty ProductType) -eq 3
@@ -104,6 +106,7 @@ if (!$ServerTarget)
 {
 	# TODO: remote port unknown, protocol assumed
 	# NOTE: does not exist in Windows Server 2019 and 2022
+	# TODO: does not exist in Windows 11, there must be replacement executable
 	# NOTE: user can by any local human user
 	$Program = "%SystemRoot%\System32\DataUsageLiveTileTask.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -598,6 +601,7 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 }
 
 # TODO: Not available in Windows Server 2022
+# TODO: does not exist in Windows 11, there must be replacement executable
 $Program = "%SystemRoot%\System32\SettingSyncHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -716,6 +720,7 @@ Merge-SDDL ([ref] $USOAccounts) -From $UsersGroupSDDL
 if (!$ServerTarget)
 {
 	# NOTE: does not exist in Windows Server 2019 and 2022
+	# TODO: does not exist in Windows 11, there must be replacement executable
 	$Program = "%SystemRoot%\System32\usocoreworker.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -738,6 +743,7 @@ the USO component needs done." |
 }
 
 # TODO: This one is present since Windows 10 v2004, needs description, not available in Server 2019
+# TODO: does not exist in Windows 11, there must be replacement executable
 $Program = "%SystemRoot%\System32\MoUsoCoreWorker.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {

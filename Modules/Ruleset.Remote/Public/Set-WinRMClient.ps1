@@ -162,8 +162,8 @@ function Set-WinRMClient
 				Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry"
 
 				# TODO: WinRM service should be restarted to pick up this fix?
-				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
-					[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
+				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ `
+					-Name auth_negotiate -Value ([int32] ($AuthenticationOptions["Negotiate"] -eq $true))
 			}
 		}
 

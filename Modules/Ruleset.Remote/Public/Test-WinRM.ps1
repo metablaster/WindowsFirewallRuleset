@@ -91,6 +91,7 @@ None. Test-WinRM does not generate any output
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 TODO: Remote registry test
 TODO: Default test should be to localhost which must not ask for credentials
+TODO: Test for private profile to avoid cryptic error message
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md
