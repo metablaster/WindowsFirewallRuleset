@@ -272,7 +272,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -378,7 +378,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -608,7 +608,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -715,7 +715,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -1320,12 +1320,8 @@ PS&gt; Disable-WinRMServer</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication</maml:linkText>
@@ -1666,8 +1662,8 @@ PS&gt; Disable-WinRMServer</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/pkiclient</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/pkiclient</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/pki</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/pki</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2558,7 +2554,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
@@ -2688,7 +2684,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md</maml:linkText>
+        <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>

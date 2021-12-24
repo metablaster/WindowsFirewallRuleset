@@ -68,5 +68,3 @@ TODO: This function should be called at the end of each script since individual 
 implementation needed to prevent disconnection when Deploy-Firewall runs.
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md)

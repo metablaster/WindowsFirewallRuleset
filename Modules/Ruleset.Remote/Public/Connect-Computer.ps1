@@ -92,9 +92,6 @@ None. Connect-Computer does not generate any output
 .NOTES
 TODO: When localhost or dot (.) is specified it should be treated as localhost which means localhost
 requirements must be met.
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md
 #>
 function Connect-Computer
 {

@@ -48,9 +48,6 @@ None. Unregister-SslCertificate does not generate any output
 
 .NOTES
 TODO: Does not undo registration with WinRM listener
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md
 #>
 function Unregister-SslCertificate
 {

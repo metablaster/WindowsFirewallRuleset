@@ -98,5 +98,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: Does not undo registration with WinRM listener
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md)

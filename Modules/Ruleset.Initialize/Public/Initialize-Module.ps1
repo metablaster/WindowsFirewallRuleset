@@ -96,7 +96,7 @@ TODO: installing post-git in same session while installing other modules may fai
 function Initialize-Module
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Module.md" )]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Module.md" )]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0,

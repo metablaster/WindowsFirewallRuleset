@@ -63,9 +63,6 @@ None. You cannot pipe objects to Convert-EncodingString
 None.
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md
-
-.LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
 
 .LINK
@@ -73,8 +70,7 @@ https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesy
 #>
 function Convert-EncodingString
 {
-	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

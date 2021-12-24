@@ -215,5 +215,3 @@ TODO: When localhost or dot (.) is specified it should be treated as localhost w
 requirements must be met.
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md)

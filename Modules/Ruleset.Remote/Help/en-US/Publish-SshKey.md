@@ -179,6 +179,6 @@ TODO: Make use of certificates
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md)
 
 [https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication](https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication)

@@ -82,5 +82,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: Does not revert firewall rules because previous status is unknown
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-RemoteRegistry.md)

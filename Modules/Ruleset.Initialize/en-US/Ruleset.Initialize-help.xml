@@ -545,12 +545,8 @@ $true if WinRM service was started $false otherwise</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus</maml:linkText>

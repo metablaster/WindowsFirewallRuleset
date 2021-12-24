@@ -236,4 +236,4 @@ TODO: This function must be simplified and certificate creation should be separa
 
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md)
 
-[https://docs.microsoft.com/en-us/powershell/module/pkiclient](https://docs.microsoft.com/en-us/powershell/module/pkiclient)
+[https://docs.microsoft.com/en-us/powershell/module/pki](https://docs.microsoft.com/en-us/powershell/module/pki)

@@ -92,9 +92,6 @@ TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (S
 TODO: Remote registry test
 TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md
 #>
 function Test-WinRM
 {

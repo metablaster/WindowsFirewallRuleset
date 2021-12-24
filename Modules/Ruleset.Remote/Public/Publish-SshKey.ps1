@@ -74,7 +74,7 @@ TODO: Optionally deploy sshd_config to remote
 TODO: Make use of certificates
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md
 
 .LINK
 https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
@@ -82,7 +82,7 @@ https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based
 function Publish-SshKey
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Publish-SshKey.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

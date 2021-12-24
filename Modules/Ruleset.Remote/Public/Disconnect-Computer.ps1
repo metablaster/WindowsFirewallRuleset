@@ -51,9 +51,6 @@ None. Disconnect-Computer does not generate any output
 TODO: If there are multiple connections, remove only specific ones
 TODO: This function should be called at the end of each script since individual scripts may run,
 implementation needed to prevent disconnection when Deploy-Firewall runs.
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md
 #>
 function Disconnect-Computer
 {

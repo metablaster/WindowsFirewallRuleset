@@ -87,5 +87,3 @@ In addition to make it work in PS, administrative authentication must be done by
 to server by client computer.
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md)

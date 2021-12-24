@@ -50,9 +50,6 @@ and must operate on private profile if either one is workstation machine.
 
 In addition to make it work in PS, administrative authentication must be done by opening a share
 to server by client computer.
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-RemoteRegistry.md
 #>
 function Enable-RemoteRegistry
 {

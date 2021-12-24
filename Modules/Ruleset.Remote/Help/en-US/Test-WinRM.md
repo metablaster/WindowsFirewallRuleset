@@ -230,5 +230,3 @@ TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
 
 ## RELATED LINKS
-
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md)

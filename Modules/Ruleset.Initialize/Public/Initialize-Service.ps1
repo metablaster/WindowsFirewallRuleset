@@ -66,7 +66,7 @@ TODO: Optionally set services to automatic startup, most of services are needed 
 [System.ServiceProcess.ServiceController[]]
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus
@@ -77,7 +77,7 @@ https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmo
 function Initialize-Service
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]

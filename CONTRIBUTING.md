@@ -573,7 +573,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension remote SSH]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh "Visit Marketplace"
 [extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
-[powershell style]: https://poshcode.gitbooks.io/powershell-practice-and-style/Style-Guide/Introduction.html "PowerShell code style"
+[powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
 [about comment based help]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7 "Visit documentation"
 [comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"

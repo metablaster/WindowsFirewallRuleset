@@ -76,7 +76,7 @@ function Initialize-Project
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host because of output formatting issues")]
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Project.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Project.md")]
 	[OutputType([void])]
 	param (
 		[Parameter()]

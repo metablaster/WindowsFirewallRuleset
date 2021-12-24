@@ -83,7 +83,7 @@ TODO: Optionally set services to automatic startup, most of services are needed 
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Initialize-Service.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md)
 
 [https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus)
 
