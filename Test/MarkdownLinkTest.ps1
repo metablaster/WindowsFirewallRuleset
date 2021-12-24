@@ -31,7 +31,7 @@ SOFTWARE.
 Run markdown link test
 
 .DESCRIPTION
-Run markdown link test on all repository markdown files
+Run markdown link test on all markdown files in repository
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
