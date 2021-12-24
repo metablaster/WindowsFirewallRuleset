@@ -189,7 +189,9 @@ function Enable-WinRMServer
 	if ($script:Workstation)
 	{
 		# For workstations remote registry works on private profile only
-		Write-Warning -Message "Remoting will not work over publick network profile"
+		# TODO: Need to handle interface profile depending on system role (server or workstation)
+		# for both Enable-WinRMServer and Set-WinRMClient
+		Write-Warning -Message "Remote deployment will not work over publick network profile"
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
@@ -520,22 +522,22 @@ function Enable-WinRMServer
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall, GPO store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove 'Windows Remote Management - Compatibility Mode' firewall rules"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing default WinRM compatibility firewall rules"
 
 		# Remove WinRM predefined compatibility rules
-		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore [System.Environment]::MachineName
+		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
 	}
 
 	if ($script:Workstation)
 	{
-		if ($PSCmdlet.ShouldProcess("Windows firewall, GPO store", "Restore 'Windows Remote Management' firewall rules to default"))
+		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restoring default WinRM firewall rules"
 
 			# Restore public profile rules to local subnet which is the default for workstations
-			Get-NetFirewallRule -Group $WinRMRules -Direction Inbound -PolicyStore [System.Environment]::MachineName |
+			Get-NetFirewallRule -Group $WinRMRules -Direction Inbound -PolicyStore PersistentStore |
 			Where-Object { $_.Profile -like "*Public*" } | Set-NetFirewallRule -RemoteAddress LocalSubnet
 		}
 	}

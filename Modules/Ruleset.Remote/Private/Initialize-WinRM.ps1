@@ -58,38 +58,39 @@ function Initialize-WinRM
 
 	# NOTE: "Windows Remote Management" predefined rules (including compatibility rules) if not
 	# present may cause issues adjusting some of the WinRM options
-	# Loading into GPO firewall to handle case where GPO firewall is active before deployment
-	if ($PSCmdlet.ShouldProcess("Windows firewall - GPO store", "Check 'Windows Remote Management' rules"))
+	# TODO: This will not work if GPO firewall is active and dropping persistent store rules
+	if ($PSCmdlet.ShouldProcess("Windows firewall - persistent store", "Check 'Windows Remote Management' rules"))
 	{
-		if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore [System.Environment]::MachineName -EA Ignore))
+		if (!(Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -EA Ignore))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management' firewall rules"
 
 			# NOTE: Piping to Copy-NetFirewallRule (CimInstance) possible but change not saved
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMRules `
-				-Direction Inbound -NewPolicyStore [System.Environment]::MachineName
+				-Direction Inbound -NewPolicyStore PersistentStore
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Modifying 'Windows Remote Management' firewall rules"
 
-		Get-NetFirewallRule -Group $WinRMRules -PolicyStore [System.Environment]::MachineName -Direction Inbound |
-		Set-NetFirewallRule -RemoteAddress Any -Enabled True -RemotePort $PortOptions["HTTP"], $PortOptions["HTTPS"]
+		Get-NetFirewallRule -Group $WinRMRules -PolicyStore PersistentStore -Direction Inbound |
+		# NOTE: Adding custom ports, by default only default HTTP is set
+		Set-NetFirewallRule -RemoteAddress Any -Enabled True -LocalPort $PortOptions["HTTP"], $PortOptions["HTTPS"]
 	}
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall - GPO store", "Check 'Windows Remote Management - Compatibility Mode' rules"))
+	if ($PSCmdlet.ShouldProcess("Windows firewall - persistent store", "Check 'Windows Remote Management - Compatibility Mode' rules"))
 	{
-		if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore [System.Environment]::MachineName -EA Ignore))
+		if (!(Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -EA Ignore))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding 'Windows Remote Management - Compatibility Mode' firewall rules"
 
 			Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $WinRMCompatibilityRules `
-				-Direction Inbound -NewPolicyStore [System.Environment]::MachineName
+				-Direction Inbound -NewPolicyStore PersistentStore
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Modifying 'Windows Remote Management - Compatibility Mode' firewall rules"
 
-		Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore [System.Environment]::MachineName -Direction Inbound |
-		Set-NetFirewallRule -RemoteAddress Any -Enabled True -RemotePort $PortOptions["HTTP"], $PortOptions["HTTPS"]
+		Get-NetFirewallRule -Group $WinRMCompatibilityRules -PolicyStore PersistentStore -Direction Inbound |
+		Set-NetFirewallRule -RemoteAddress Any -Enabled True
 	}
 
 	if ($PSCmdlet.ShouldProcess("Windows services", "Enable and start WS-Management (WinRM) service"))
