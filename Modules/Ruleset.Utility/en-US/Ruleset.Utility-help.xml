@@ -2620,6 +2620,18 @@ binary</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-NetworkProfile</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>NetworkCategory</maml:name>
+          <maml:description>
+            <maml:para>Specify network category which to apply to all NIC's. If not specified, you're prompted for each NIC individually</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
           <maml:description>
@@ -2645,6 +2657,18 @@ binary</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>NetworkCategory</maml:name>
+        <maml:description>
+          <maml:para>Specify network category which to apply to all NIC's. If not specified, you're prompted for each NIC individually</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
         <maml:description>
@@ -2692,7 +2716,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: It looks like option to change network profile in settings app will be gone after using this function in an elevated prompt</maml:para>
+        <maml:para>HACK: It looks like option to change network profile in settings app will be gone after using this function in an elevated prompt</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

@@ -410,7 +410,7 @@ PS&gt; [hashtable] $HashResult = Get-SomeHashTable
 PS&gt; Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Hash $HashResult
 PS&gt; $HeaderStack.Pop() | Out-Null</dev:code>
         <dev:remarks>
-          <maml:para>Will write entry $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"</maml:para>
+          <maml:para>Will write entire $HashResult to log C:\logs\Settings_15.12.20.log with a header set to "My Header"</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>

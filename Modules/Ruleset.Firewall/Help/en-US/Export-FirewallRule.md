@@ -21,7 +21,7 @@ Export-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>
 
 ## DESCRIPTION
 
-Exports firewall rules to a CSV or JSON file.
+Export-FirewallRule exports firewall rules to a CSV or JSON file.
 Only local GPO rules are exported by default.
 CSV files are semicolon separated (Beware!
 Excel is not friendly to CSV files).
@@ -64,7 +64,7 @@ Policy store from which to export rules, default is local GPO.
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: ComputerName, CN
+Aliases: ComputerName, CN, PolicyStore
 
 Required: False
 Position: Named
@@ -91,7 +91,7 @@ Accept wildcard characters: True
 
 ### -FileName
 
-Output file, default is JSON format
+Output file, default is CSV format
 
 ```yaml
 Type: System.String
@@ -297,7 +297,7 @@ Added function to decode string into multi line
 5.
 Added parameter to target specific policy store
 6.
-Added parameter to let specify directory, and crate it if it doesn't exist
+Added parameter to specify directory, and crate it if it doesn't exist
 7.
 Added more output streams for debug, verbose and info
 8.

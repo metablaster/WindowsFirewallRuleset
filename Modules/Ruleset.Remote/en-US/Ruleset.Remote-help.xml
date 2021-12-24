@@ -11,7 +11,7 @@
     </command:details>
     <maml:description>
       <maml:para>Connect to remote computer onto which to deploy firewall. This script will perform necessary initialization to enter PS session to remote computer, in addition required authentication is made to use remote registry service and to run commands against remote CIM server.</maml:para>
-      <maml:para>Following global variables or objects are created: RemoteCredential (variable), to be used by commands that require credentials CimServer (variable), to be used by CIM commandlets to specify cim session to use RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) RemoteSession (PSSession), PS session object which represent remote session RemoteCIM (CimSession), CIM session object</maml:para>
+      <maml:para>Following global variables or objects are created: CimServer (variable), to be used by CIM commandlets to specify cim session to use RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) RemoteSession (PSSession), PS session object which represent remote session RemoteCim (CimSession), CIM session object</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -27,6 +27,18 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify credentials which to use to connect to remote computer. If not specified, you'll be asked for credentials</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
@@ -126,6 +138,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specify credentials which to use to connect to remote computer. If not specified, you'll be asked for credentials</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
@@ -378,7 +402,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>All</maml:name>
           <maml:description>
-            <maml:para>If specified, will disable WinRM service completely, remove all listeners and disable all session configurations.</maml:para>
+            <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners and disable all session configurations.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -414,7 +438,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>All</maml:name>
         <maml:description>
-          <maml:para>If specified, will disable WinRM service completely, remove all listeners and disable all session configurations.</maml:para>
+          <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners and disable all session configurations.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -676,7 +700,8 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>For remote registry to work, both client and server must enable remote registry service, must enable File and Printer sharing and Network Discovery for both inbound and outbound, and must operate on private profile if either one is workstation machine.</maml:para>
+        <maml:para>In addition to make it work in PS, administrative authentication must be done by opening a share to server by client computer.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -707,6 +732,7 @@
     <maml:description>
       <maml:para>Configures local machine to accept remote CIM and PowerShell requests using WS-Management. In addition it initializes specialized remoting session configuration as well as most common issues are handled and attempted to be resolved or bypassed automatically.</maml:para>
       <maml:para>If specified -Protocol is set to HTTPS, it will export public key (DER encoded CER file) to default repository location (\Exports), which you should then copy to client machine to be picked up by Set-WinRMClient and used for communication over SSL.</maml:para>
+      <maml:para>If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-WinRMServer</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -965,6 +991,14 @@
         <dev:code>Enable-WinRMServer -Protocol HTTP</dev:code>
         <dev:remarks>
           <maml:para>Configures server machine to accept remoting commands trough HTTP.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Enable-WinRMServer
+PS&gt; Disable-WinRMServer</dev:code>
+        <dev:remarks>
+          <maml:para>Will make WinRM work only on loopback</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1600,7 +1634,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This script is called by Enable-WinRMServer and doesn't need to be run on it's own. HACK: What happens when exporting a certificate that is already installed? (no error is shown)</maml:para>
+        <maml:para>This script is called by Enable-WinRMServer and doesn't need to be run on it's own. HACK: What happens when exporting a certificate that is already installed? (no error is shown) TODO: This function must be simplified and certificate creation should be separate function</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2267,6 +2301,18 @@
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify credentials which to use to test connection to remote computer. If not specified, you'll be asked for credentials</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
             <maml:para>Specify protocol to use for test, HTTP, HTTPS or both. By default only HTTPS is tested.</maml:para>
@@ -2363,6 +2409,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specify credentials which to use to test connection to remote computer. If not specified, you'll be asked for credentials</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
@@ -2471,7 +2529,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?) TODO: Remote registry test TODO: Default test should be to localhost which must not ask for credentials</maml:para>
+        <maml:para>TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?) TODO: Remote registry test TODO: Default test should be to localhost which must not ask for credentials TODO: Test for private profile to avoid cryptic error message</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2520,9 +2578,80 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Unregister-SslCertificate</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>CertThumbprint</maml:name>
+          <maml:description>
+            <maml:para>Certificate thumbprint which is to be uninstalled</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
-    <command:parameters />
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>CertThumbprint</maml:name>
+        <maml:description>
+          <maml:para>Certificate thumbprint which is to be uninstalled</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
@@ -2545,7 +2674,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Function not implemented</maml:para>
+        <maml:para>TODO: Does not undo registration with WinRM listener</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

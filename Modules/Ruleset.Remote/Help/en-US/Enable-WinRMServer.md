@@ -42,6 +42,8 @@ If specified -Protocol is set to HTTPS, it will export public key (DER encoded C
 to default repository location (\Exports), which you should then copy to client machine
 to be picked up by Set-WinRMClient and used for communication over SSL.
 
+If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-WinRMServer
+
 ## EXAMPLES
 
 ### EXAMPLE 1
@@ -69,6 +71,15 @@ Enable-WinRMServer -Protocol HTTP
 ```
 
 Configures server machine to accept remoting commands trough HTTP.
+
+### EXAMPLE 4
+
+```powershell
+Enable-WinRMServer
+PS> Disable-WinRMServer
+```
+
+Will make WinRM work only on loopback
 
 ## PARAMETERS
 

@@ -14,7 +14,7 @@ Set network profile for physical network interfaces
 ## SYNTAX
 
 ```powershell
-Set-NetworkProfile [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-NetworkProfile [[-NetworkCategory] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,6 +31,23 @@ Set-NetworkProfile
 ```
 
 ## PARAMETERS
+
+### -NetworkCategory
+
+Specify network category which to apply to all NIC's.
+If not specified, you're prompted for each NIC individually
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -WhatIf
 
@@ -79,7 +96,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: It looks like option to change network profile in settings app will be gone after using this
+HACK: It looks like option to change network profile in settings app will be gone after using this
 function in an elevated prompt
 
 ## RELATED LINKS

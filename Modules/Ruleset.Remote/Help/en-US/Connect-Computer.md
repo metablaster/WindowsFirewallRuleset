@@ -14,9 +14,9 @@ Connect to remote computer
 ## SYNTAX
 
 ```powershell
-Connect-Computer [[-Domain] <String>] [-Protocol <String>] [-Port <Int32>] [-CertThumbprint <String>]
- [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-ApplicationName <String>]
- [-CimOptions <CimSessionOptions>] [<CommonParameters>]
+Connect-Computer [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
+ [-CertThumbprint <String>] [-SessionOption <PSSessionOption>] [-ConfigurationName <String>]
+ [-ApplicationName <String>] [-CimOptions <CimSessionOptions>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,11 +27,10 @@ in addition required authentication is made to use remote registry service and t
 against remote CIM server.
 
 Following global variables or objects are created:
-RemoteCredential (variable), to be used by commands that require credentials
 CimServer (variable), to be used by CIM commandlets to specify cim session to use
 RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
 RemoteSession (PSSession), PS session object which represent remote session
-RemoteCIM (CimSession), CIM session object
+RemoteCim (CimSession), CIM session object
 
 ## EXAMPLES
 
@@ -55,6 +54,23 @@ Aliases: ComputerName, CN
 Required: False
 Position: 1
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specify credentials which to use to connect to remote computer.
+If not specified, you'll be asked for credentials
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

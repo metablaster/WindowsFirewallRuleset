@@ -279,7 +279,7 @@ $PSSessionApplicationName = "wsman"
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, the change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $true
+Set-Variable -Name Develop -Scope Global -Value $false
 
 if ($Develop)
 {
@@ -663,7 +663,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
 
 	# Remote test computer which will perform unit testing
-	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO11"
+	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
 }
 #endregion
 

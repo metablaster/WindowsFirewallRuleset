@@ -47,8 +47,8 @@ Disable-WinRMServer
 
 ### -All
 
-If specified, will disable WinRM service completely, remove all listeners and
-disable all session configurations.
+If specified, will disable WinRM service completely including loopback functionality,
+remove all listeners and disable all session configurations.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

@@ -79,7 +79,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+For remote registry to work, both client and server must enable remote registry service,
+must enable File and Printer sharing and Network Discovery for both inbound and outbound,
+and must operate on private profile if either one is workstation machine.
+
+In addition to make it work in PS, administrative authentication must be done by opening a share
+to server by client computer.
 
 ## RELATED LINKS
 
