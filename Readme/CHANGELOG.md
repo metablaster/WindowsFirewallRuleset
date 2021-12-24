@@ -10,8 +10,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.11.0 (develop branch)](#v0110-develop-branch)
-  - [v0.10.0 (current release)](#v0100-current-release)
+  - [v0.11.0 (current release)](#v0110-current-release)
+  - [v0.10.0](#v0100)
   - [v0.9.0](#v090)
   - [v0.8.0](#v080)
   - [v0.7.0](#v070)
@@ -22,7 +22,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.11.0 (develop branch)
+## v0.11.0 (current release)
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
 
@@ -96,7 +96,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Updated `todo-tree` extension settings for markdown support
   - Improved process monitor configuration files for network activity optionally for TCP or UDP
 
-## v0.10.0 (current release)
+## v0.10.0
 
 - Modules
 

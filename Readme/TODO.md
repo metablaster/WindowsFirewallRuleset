@@ -117,6 +117,7 @@ Todo's in this file are categorized into following sections:
 
     - Paths to fix: visio, project
     - Rules to fix: vcpkg, msys2, internet browser (auto loads)
+    - Rules to update: nvidia, sql server, steam, visual studio, office
     - Need to update the order of rule parameters to be consistent.
     - Variable to conditionally apply rules for Administrators
     - Rule display name, we need some conventional way to name and to name them uniquely for sortability

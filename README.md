@@ -527,7 +527,7 @@ you don't need to repeat it for subsequent deployments.
 ```powershell
 # On management computer
 cd C:\Path\to\WindowsFirewallRuleset
-Deploy-Firewall -Domain "enter one or more remote computer names here"
+Deploy-Firewall -Domain "Server01"
 ```
 
 This is how remote deployment is going to work once this functionality gets fully implemented.
