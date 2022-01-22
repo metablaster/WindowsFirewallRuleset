@@ -213,6 +213,10 @@ function Search-Installation
 			Update-Table -Search "Google Drive"
 			break
 		}
+		"ColorMania"
+		{
+			Update-Table -Search "ColorMania"
+		}
 		"RivaTuner"
 		{
 			Update-Table -Search "RivaTuner Statistics Server"

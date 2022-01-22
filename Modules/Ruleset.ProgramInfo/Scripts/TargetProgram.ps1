@@ -48,6 +48,7 @@ enum TargetProgram
 	GoogleDrive
 	RivaTuner
 	Incredibuild
+	ColorMania
 	MetaTrader
 	RealWorld
 	qBittorrent

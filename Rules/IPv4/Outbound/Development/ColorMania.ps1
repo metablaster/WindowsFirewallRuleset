@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2021 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules for RealWorld
+Outbound firewall rules for ColorMania
 
 .DESCRIPTION
-Outbound firewall rules for Real World cursor editor
+Outbound firewall rules for ColorMania color picker
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -41,13 +41,13 @@ If specified, rules will be loaded for executables with missing or invalid digit
 By default an error is generated and rule isn't loaded.
 
 .EXAMPLE
-PS> .\RealWorld.ps1
+PS> .\ColorMania.ps1
 
 .INPUTS
-None. You cannot pipe objects to RealWorld.ps1
+None. You cannot pipe objects to ColorMania.ps1
 
 .OUTPUTS
-None. RealWorld.ps1 does not generate any output
+None. ColorMania.ps1 does not generate any output
 
 .NOTES
 None.
@@ -73,38 +73,38 @@ Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Development - Real World"
-$Accept = "Outbound rules for Real World cursor editor will be loaded, recommended if Real World cursor editor is installed to let it access to network"
-$Deny = "Skip operation, outbound rules for Real World  cursor editor will not be loaded into firewall"
+$Group = "Development - ColorMania"
+$Accept = "Outbound rules for ColorMania color picker will be loaded, recommended if ColorMania color picker is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for ColorMania  color picker will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 #
-# RealWorld installation directories
+# ColorMania installation directories
 #
-$RealWorldRoot = "%ProgramFiles(x86)%\RealWorld Cursor Editor"
+$ColorManiaRoot = "%ProgramFiles(x86)%\ColorMania"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Rules for RealWorld
+# Rules for ColorMania
 #
 
 # Test if installation exists on system
-if ((Confirm-Installation "RealWorld" ([ref] $RealWorldRoot)) -or $ForceLoad)
+if ((Confirm-Installation "ColorMania" ([ref] $ColorManiaRoot)) -or $ForceLoad)
 {
-	$Program = "$RealWorldRoot\RWCursorEditor.exe"
+	$Program = "$ColorManiaRoot\ColorMania.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Real World Cursor Editor" -Service Any -Program $Program `
+			-DisplayName "ColorMania" -Service Any -Program $Program `
 			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
 			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "To get online resources and template projects" | Format-RuleOutput
+			-Description "ColorMania update check at program startup" | Format-RuleOutput
 	}
 }
 
