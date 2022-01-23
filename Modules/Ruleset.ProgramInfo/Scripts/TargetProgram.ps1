@@ -51,6 +51,7 @@ enum TargetProgram
 	ColorMania
 	MetaTrader
 	RealWorld
+	AzureDataStudio
 	qBittorrent
 	OpenTTD
 	EveOnline

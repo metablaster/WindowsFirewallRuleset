@@ -203,6 +203,11 @@ function Search-Installation
 			Edit-Table "%ALLUSERSPROFILE%\chocolatey"
 			break
 		}
+		"AzureDataStudio"
+		{
+			Edit-Table -Search "Azure Data Studio"
+			break
+		}
 		"ArenaChess"
 		{
 			Update-Table -Search "Arena Chess"
