@@ -912,7 +912,11 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
-# TODO: Needs testings, probably current user needed as well
+# TODO: Needs testings, current user which runs application which starts consent.exe need to
+# be added to -LocalUser parameter, test with pokerstars game when out of date
+$ConsentUsers = $LocalSystem
+Merge-SDDL ([ref] $ConsentUsers) -From $UsersGroupSDDL
+
 $Program = "%SystemRoot%\System32\consent.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -922,7 +926,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80 `
-		-LocalUser $LocalSystem `
+		-LocalUser $ConsentUsers `
 		-InterfaceType $DefaultInterface `
 		-Description "consent.exe connects to the internet to verify the digital signature
 (certification expiry) of applications that needs administrative privilege,
