@@ -6,7 +6,7 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2020 Markus Scholtes
-Copyright (C) 2020, 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2021 metablaster zebal@protonmail.ch
+Copyright (C) 2021, 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -61,7 +61,7 @@ SOFTWARE.
 	# CompanyName = "Unknown"
 
 	# Copyright statement for this module
-	Copyright = "Copyright (C) 2021 metablaster zebal@protonmail.ch"
+	Copyright = "Copyright (C) 2021, 2022 metablaster zebal@protonmail.ch"
 
 	# Description of the functionality provided by this module
 	Description = "Module used for remoting configuration of WinRM, CIM and remote registry"
