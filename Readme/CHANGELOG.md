@@ -29,7 +29,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Rules
 
-  - Added rules for ColorMania color picker, Azure Color studio
+  - Added rules for ColorMania color picker, Azure Color studio, Windows System
 
 ## v0.11.0 (current release)
 
