@@ -31,7 +31,9 @@ SOFTWARE.
 Outbound firewall rules for WebPlatform
 
 .DESCRIPTION
-Outbound firewall rules for Web Platform
+Outbound firewall rules the Microsoft Web Platform Installer.
+WebPI provides a simplified installation workflow for installing common open source web
+applications and web platform technologies
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -99,12 +101,16 @@ if ((Confirm-Installation "WebPlatform" ([ref] $WebPlatformRoot)) -or $ForceLoad
 	$Program = "$WebPlatformRoot\WebPlatformInstaller.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Web Platform Installer" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "Web Platform Installer" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "" |
+		Format-RuleOutput
 	}
 }
 

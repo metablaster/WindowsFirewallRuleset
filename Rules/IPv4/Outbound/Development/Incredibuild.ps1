@@ -99,12 +99,16 @@ if ((Confirm-Installation "Incredibuild" ([ref] $IncredibuildRoot)) -or $ForceLo
 	$Program = "$IncredibuildRoot\XLicProc.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Incredibuild License" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		New-NetFirewallRule -DisplayName "Incredibuild License" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Used to connect to license server for activation" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "Used to connect to license server for activation" |
+		Format-RuleOutput
 	}
 }
 

@@ -99,11 +99,14 @@ if ((Confirm-Installation "DemiseOfNations" ([ref] $DemiseOfNationsRoot)) -or $F
 	$Program = "$DemiseOfNationsRoot\app_main.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Demise of Nations" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		New-NetFirewallRule -DisplayName "Demise of Nations" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 	}
 }

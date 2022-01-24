@@ -99,45 +99,61 @@ if ((Confirm-Installation "WindowsKits" ([ref] $SDKDebuggers)) -or $ForceLoad)
 	$Program = "$SDKDebuggers\x86\windbg.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WinDbg Symbol Server x86" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "WinDbg Symbol Server x86" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "WinDbg access to Symbols Server." | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "WinDbg access to Symbols Server." |
+		Format-RuleOutput
 	}
 
 	$Program = "$SDKDebuggers\x64\windbg.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WinDbg Symbol Server x64" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "WinDbg Symbol Server x64" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "WinDbg access to Symbols Server" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "WinDbg access to Symbols Server" |
+		Format-RuleOutput
 	}
 
 	$Program = "$SDKDebuggers\x86\symchk.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Symchk Symbol Server x86" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "Symchk Symbol Server x86" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "WinDbg Symchk access to Symbols Server." | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "WinDbg Symchk access to Symbols Server." |
+		Format-RuleOutput
 	}
 
 	$Program = "$SDKDebuggers\x64\symchk.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Symchk Symbol Server x64" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "Symchk Symbol Server x64" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "WinDbg Symchk access to Symbols Server" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "WinDbg Symchk access to Symbols Server" |
+		Format-RuleOutput
 	}
 }
 

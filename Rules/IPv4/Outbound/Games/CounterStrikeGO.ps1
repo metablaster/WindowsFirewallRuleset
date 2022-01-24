@@ -99,22 +99,28 @@ if ((Confirm-Installation "CounterStrikeGO" ([ref] $CounterStrikeRoot)) -or $For
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Counter Strike GO (HTTP)" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		New-NetFirewallRule -DisplayName "Counter Strike GO (HTTP)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "download maps" | Format-RuleOutput
 	}
 
 	$Program = "$CounterStrikeRoot\csgo.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Counter Strike GO" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 27000-27100 `
+		New-NetFirewallRule -DisplayName "Counter Strike GO" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 27000-27100 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 	}
 }

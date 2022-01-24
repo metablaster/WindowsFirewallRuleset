@@ -99,12 +99,16 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 	$Program = "$VSCodeRoot\Code.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Visual Studio Code" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "Visual Studio Code" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." |
+		Format-RuleOutput
 	}
 }
 

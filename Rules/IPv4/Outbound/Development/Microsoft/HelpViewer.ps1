@@ -102,23 +102,31 @@ if ((Confirm-Installation "HelpViewer" ([ref] $HelpViewerRoot)) -or $ForceLoad)
 	$Program = "$HelpViewerRoot\HlpCtntMgr.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Help Viewer (Content manager)" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "Help Viewer (Content manager)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "" |
+		Format-RuleOutput
 	}
 
 	$Program = "$HelpViewerRoot\HlpViewer.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Help Viewer" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "Help Viewer" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "Review downloadable content." | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "Review downloadable content." |
+		Format-RuleOutput
 	}
 }
 

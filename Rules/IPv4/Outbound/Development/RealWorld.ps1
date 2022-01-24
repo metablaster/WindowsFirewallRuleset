@@ -99,12 +99,16 @@ if ((Confirm-Installation "RealWorld" ([ref] $RealWorldRoot)) -or $ForceLoad)
 	$Program = "$RealWorldRoot\RWCursorEditor.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Real World Cursor Editor" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		New-NetFirewallRule -DisplayName "Real World Cursor Editor" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
-			-Description "To get online resources and template projects" | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "To get online resources and template projects" |
+		Format-RuleOutput
 	}
 }
 

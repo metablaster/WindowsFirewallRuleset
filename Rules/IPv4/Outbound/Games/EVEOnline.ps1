@@ -99,11 +99,14 @@ if ((Confirm-Installation "EveOnline" ([ref] $EveOnlineRoot)) -or $ForceLoad)
 	$Program = "$EveOnlineRoot\evelauncher.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Eve Online" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443, 27030 `
+		New-NetFirewallRule -DisplayName "Eve Online" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443, 27030 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 	}
 }

@@ -99,65 +99,90 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 	$Program = "$WarThunderRoot\win64\aces.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - aces" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443, 7800-7802, 7850-7854 `
+		New-NetFirewallRule -DisplayName "WarThunder - aces" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443, 7800-7802, 7850-7854 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - aces" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1900, 20010-20500 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "WarThunder - aces" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 1900, 20010-20500 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$WarThunderRoot\gaijin_downloader.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "WarThunder - gajin_downloader" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - gajin_downloader" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "WarThunder - gajin_downloader" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 20010 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$WarThunderRoot\gjagent.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - gjagent" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "WarThunder - gjagent" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 20010 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 
 	$Program = "$WarThunderRoot\launcher.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "WarThunder - Launcher" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "WarThunder - Launcher" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 20010 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "WarThunder - Launcher" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 20010 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 	}
 }

@@ -100,12 +100,16 @@ if ((Confirm-Installation "dotnet" ([ref] $dotnetRoot)) -or $ForceLoad)
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# TODO: There could be more ports or specific users, needs complete testing...
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "dotnet" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled True -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 443 `
+		New-NetFirewallRule -DisplayName "dotnet" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $LocalSystem `
-			-Description "Provides commands for working with .NET Core projects." | Format-RuleOutput
+			-InterfaceType $DefaultInterface `
+			-Description "Provides commands for working with .NET Core projects." |
+		Format-RuleOutput
 	}
 }
 

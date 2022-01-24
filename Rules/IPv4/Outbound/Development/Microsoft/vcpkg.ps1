@@ -107,7 +107,8 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "bootstrap vcpkg" | Format-RuleOutput
+			-Description "bootstrap vcpkg" |
+		Format-RuleOutput
 	}
 
 	$Program = "$vcpkgRoot\vcpkg.exe"
@@ -121,7 +122,8 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "install package source code" | Format-RuleOutput
+			-Description "install package source code" |
+		Format-RuleOutput
 	}
 
 	# TODO: need to update for all users
@@ -137,7 +139,8 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "vcpkg sends usage data to Microsoft" | Format-RuleOutput
+			-Description "vcpkg sends usage data to Microsoft" |
+		Format-RuleOutput
 	}
 
 	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
@@ -151,7 +154,8 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "vcpkg has it's own powershell" | Format-RuleOutput
+			-Description "vcpkg has it's own powershell" |
+		Format-RuleOutput
 	}
 
 	# TODO: if cmake in root and of required version it's used, needs conditional rule
@@ -180,7 +184,8 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-RuleOutput
+			-Description "" |
+		Format-RuleOutput
 	}
 }
 
