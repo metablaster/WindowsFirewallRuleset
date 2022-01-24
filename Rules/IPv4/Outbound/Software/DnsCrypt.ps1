@@ -87,7 +87,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 #
 # DnsCrypt installation directories
 #
-$DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
+$DnsCryptRoot = "%ProgramFiles%\bitbeans\Simple DNSCrypt x64"
 
 #
 # DnsCrypt rules
@@ -101,16 +101,18 @@ $DnsCryptRoot = "%ProgramFiles%\Simple DNSCrypt x64"
 # Test if installation exists on system
 if ((Confirm-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 {
+	# NOTE: Port 53 (unencrypted) is required for fallback resolver
+	# NOTE: Previously it was -Service dnscrypt-proxy, but now it's NT AUTHORITY SYSTEM
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service dnscrypt-proxy -Program $Program -Group $Group `
+			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443, 853 `
-			-LocalUser Any `
+			-LocalPort Any -RemotePort 53, 443, 853 `
+			-LocalUser $LocalSystem `
 			-InterfaceType $DefaultInterface `
 			-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
 and a DNS resolver. It prevents DNS spoofing.
@@ -119,15 +121,14 @@ and haven't been tampered with.
 This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 		Format-RuleOutput
 
-		# $LocalSystem
 		# TODO: see if LooseSourceMapping is needed
 		New-NetFirewallRule -DisplayName "dnscrypt-proxy" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service dnscrypt-proxy -Program $Program -Group $Group `
+			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443, 853 `
-			-LocalUser Any `
+			-LocalPort Any -RemotePort 53, 443, 853 `
+			-LocalUser $LocalSystem `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-InterfaceType $DefaultInterface `
 			-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
