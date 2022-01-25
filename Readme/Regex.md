@@ -25,6 +25,7 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
     - [Get platform](#get-platform)
     - [Get group](#get-group)
     - [Get Interface](#get-interface)
+    - [Get policy store](#get-policy-store)
     - [Get Profile property if value also contains variable names](#get-profile-property-if-value-also-contains-variable-names)
     - [Direction protocol pairs](#direction-protocol-pairs)
     - [Get local and remote port parameters and values](#get-local-and-remote-port-parameters-and-values)
@@ -141,6 +142,16 @@ New-NetFirewallRule -InterfaceType Wired, Wireless
 
 [//]: # (PolicyStore)
 
+### Get policy store
+
+```powershell
+-PolicyStore $PolicyStore
+```
+
+```regex
+-PolicyStore [\$|\w]\w+ ?
+```
+
 ### Get Profile property if value also contains variable names
 
 ```powershell
@@ -201,6 +212,7 @@ New-NetFirewallRule -LocalUser Any -EdgeTraversalPolicy DeferToApp
 ```
 
 ```regex
+-LocalUser [\$|\w]\w+ ?
 -LocalUser [\$|\w]\w+ -EdgeTraversalPolicy \w+ ?
 ```
 
