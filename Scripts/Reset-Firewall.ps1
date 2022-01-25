@@ -37,11 +37,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Reset GPO firewall to factory defaults
+Reset GPO firewall and WinRM to factory defaults
 
 .DESCRIPTION
 Reset-Firewall script clears all GPO firewall rules and sets all GPO firewall parameters to their
-default values
+default values.
+Resets Windows Remote Management service configuration to factory defaults.
+Disables PS remoting and restores leftover changes.
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
@@ -169,6 +171,9 @@ Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 
 # Update Local Group Policy for changes to take effect
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+
+# Reset WinRM and PS remoting configuration
+Reset-WinRM
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
 Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"

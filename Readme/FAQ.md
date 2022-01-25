@@ -197,13 +197,32 @@ So here is an overview to help you see what they do hopefully answering all of y
 
 4. Required system services are started and set to automatic startup
 
-    - Inside `Logs` you'll find `Services-DATE.LOG` to help you restore defaults
+    - Inside `Logs` you'll find `Services-<DATE>.log` to help you restore defaults
 
-5. All other system or session settings are left alone **by default** unless you demand or accept
+5. WS-Management service (Windows Remote Management) configuration is modified
+
+    - WinRM configuration is completely modified
+    - PowerShell remoting is enabled which does the following
+      - Starts the WinRM service.
+      - Sets the startup type on the WinRM service to Automatic.
+      - Creates a listener to accept requests on any IP address.
+      - Enables a firewall exception for WS-Management communications.
+      - Creates the simple and long name session endpoint configurations if needed.
+      - Enables all session configurations.
+      - Changes the security descriptor of all session configurations to allow remote access.
+
+    - Default PowerShell session configurations are recreated and disabled
+    - Custom session configuration is created which is used for firewall deployment
+    - WMI Provider plugin is enabled which is required for CIM to work
+
+6. Following default firewall rules are recreated in control panel firewall
+
+    - Rules for Network Discovery, File and Printer Sharing, WinRM and WinRM compatibility rules
+
+7. All other system or session settings are left alone **by default** unless you demand or accept
 them as follows:
 
     - Adjust console buffer size (valid until you close down PowerShell)
-    - Modify network profile for currently connected network adapter (ex. public or private)
     - Update PowerShell module help files (only if you enable development mode)
     - Install or update dependent PowerShell modules (only if you enable development mode)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
@@ -221,7 +240,7 @@ them as follows:
     - You manually load software configuration from `Config` folder
     - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
 
-6. Here is a list of scripts that may behave unexpectedly because these are either experimental,
+8. Here is a list of scripts that may behave unexpectedly because these are either experimental,
    not intended for end user or hard to get right, therefore you should review them first to learn
    their purpose:
 
@@ -235,11 +254,12 @@ them as follows:
     - `...\Ruleset.Firewall\Export-FirewallRule.ps1`
     - `...\Ruleset.Firewall\Import-FirewallRule.ps1`
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
+    - `...\Ruleset.Remote\*.ps1`
 
     By default none of these scripts run on their own, except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 
-7. Following is a list of external executables that are run by some scripts
+9. Following is a list of external executables that are run by some scripts
 
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
@@ -247,21 +267,21 @@ them as follows:
     - [git.exe][git] (To learn git version or to set up git)
     - [makecab.exe][makecab] (To make online help content)
 
-8. There is nothing harmful here
+10. There is nothing harmful
 
-   - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
-   to download or update modules, however this happens only if you manually enable setting
-   - Some scripts are potentially dangerous due to their experimental state such as
-   `Uninstall-DuplicateModule.ps1` which may fail and leave you with broken modules that you would
-   have to to fix with your own intervention.
-   - "development mode" may be enabled by default on `develop` branch but never on `master` branch,
-   which means defaults described so far may no longer be defaults
-   - The scripts will gather all sorts of system information but only as required to configure firewall,
-   none of this information is ever sent anywhere and once you close down PowerShell it's all cleared.
-   - If you publish your code modifications online (ex. to your fork) make sure your modifications
-   don't include any personal information such as user names, email or system details.
-   - Bugs may exist which could break things, while I do my best to avoid bugs you might want to
-   report your findings to be fixed.
+    - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
+    to download or update modules, however this happens only if you manually enable setting
+    - Some scripts are potentially dangerous due to their experimental state such as
+    `Uninstall-DuplicateModule.ps1` which may fail and leave you with broken modules that you would
+    have to to fix with your own intervention.
+    - "development mode" may be enabled by default on `develop` branch but never on `master` branch,
+    which means defaults described so far may no longer be defaults
+    - The scripts will gather all sorts of system information but only as required to configure firewall,
+    none of this information is ever sent anywhere and once you close down PowerShell it's all cleared.
+    - If you publish your code modifications online (ex. to your fork) make sure your modifications
+    don't include any personal information such as user names, email or system details.
+    - Bugs may exist which could break things, while I do my best to avoid bugs you might want to
+    report your findings to be fixed.
 
 [Table of Contents](#table-of-contents)
 
@@ -288,6 +308,9 @@ as 3rd party firewalls.
 
 Here in this case this will happen when you run `Set-NetworkProfile.ps1` which runs only on demand,
 however you won't notice this problem until system is rebooted.
+
+NOTE: Since Windows Firewall Ruleset v0.11.0, `Set-NetworkProfile.ps1` runs by default and there is
+no way to avoid this issue.
 
 There are many options to troubleshoot this problem, most of which are just a workaround but don't
 actually bring these options back, so here are my favorites that should fix it instead:

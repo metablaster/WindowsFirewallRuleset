@@ -33,8 +33,8 @@ Reset WinRM and PS remoting configuration
 .DESCRIPTION
 Reset-WinRM resets WinRM configuration to either system defaults or to previous settings
 that were exported by Export-WinRM.
-In addition PS remoting is disabled or restored and reset to PowerShell defaults, default firewall rules
-are removed and WinRM service is stopped and disabled.
+In addition PS remoting is disabled or restored and reset to PowerShell defaults,
+default firewall rules are removed and WinRM service is stopped and disabled.
 
 .EXAMPLE
 PS> Reset-WinRM
@@ -47,6 +47,8 @@ None. Reset-WinRM does not generate any output
 
 .NOTES
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
+TODO: Need to reset changes done by Enable-RemoteRegistry
+TODO: Restoring old setup not implemented
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Reset-WinRM.md
