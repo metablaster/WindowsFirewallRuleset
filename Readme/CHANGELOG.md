@@ -29,7 +29,18 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Rules
 
-  - Added rules for ColorMania color picker, Azure Color studio, Windows System
+  - Added rules for:
+
+    - ColorMania color picker
+    - Azure Color studio
+
+  - Updated rules for:
+
+    - Windows System
+    - Simple DNS Crypt
+    - KMS Connection broker (SppExtComObj.exe)
+
+  - Rule scripts, consistent rule formatting for all scripts
 
 ## v0.11.0 (current release)
 

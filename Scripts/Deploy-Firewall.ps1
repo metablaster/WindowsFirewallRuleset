@@ -550,6 +550,7 @@ Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectR
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)
 {
+	# HACK: Will print when no errors were reported to console, could be because of -ErrorAction SilentlyContinue
 	Write-Information -MessageData "" -InformationVariable ThrowAway
 	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
 	Write-Information -Tags $ThisScript -MessageData "INFO: You can review these logs to see if you want to resolve some of them"

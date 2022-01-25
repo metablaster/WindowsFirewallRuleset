@@ -215,15 +215,19 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 $Program = "%SystemRoot%\System32\SppExtComObj.Exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	New-NetFirewallRule -DisplayName "Activation KMS" `
+	# Port 1688 is used for Microsoft Key Management Service (KMS) for Windows Activation
+	New-NetFirewallRule -DisplayName "KMS Connection Broker" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 1688 `
-		-LocalUser Any `
+		-LocalUser $NetworkService `
 		-InterfaceType $DefaultInterface `
-		-Description "Activate Office and KMS based software." |
+		-Description "Activate Office and KMS based software.
+sppextcomobj.exe is used for Key Management Service (KMS) Licensing for
+Microsoft Products, the KMS Connection Broker or sppextcomobj.exe is responsible for the activation
+of Microsoft products." |
 	Format-RuleOutput
 }
 
@@ -851,6 +855,28 @@ even if you are using a third-party antivirus product." |
 	Format-RuleOutput
 }
 
+# TODO: Needs testings, current user which runs application which starts consent.exe need to
+# be added to -LocalUser parameter, test with pokerstars game when out of date
+$ConsentUsers = $LocalSystem
+Merge-SDDL ([ref] $ConsentUsers) -From $UsersGroupSDDL
+
+$Program = "%SystemRoot%\System32\consent.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "Windows UAC" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80 `
+		-LocalUser $ConsentUsers `
+		-InterfaceType $DefaultInterface `
+		-Description "consent.exe connects to the internet to verify the digital signature
+(certification expiry) of applications that needs administrative privilege,
+from the certification issuer." |
+	Format-RuleOutput
+}
+
 #
 # Windows Device Management (predefined rules)
 #
@@ -909,28 +935,6 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
 		-Description "Allow outbound TCP traffic from Windows Device Management Sync Client." |
-	Format-RuleOutput
-}
-
-# TODO: Needs testings, current user which runs application which starts consent.exe need to
-# be added to -LocalUser parameter, test with pokerstars game when out of date
-$ConsentUsers = $LocalSystem
-Merge-SDDL ([ref] $ConsentUsers) -From $UsersGroupSDDL
-
-$Program = "%SystemRoot%\System32\consent.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
-{
-	New-NetFirewallRule -DisplayName "Windows UAC" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80 `
-		-LocalUser $ConsentUsers `
-		-InterfaceType $DefaultInterface `
-		-Description "consent.exe connects to the internet to verify the digital signature
-(certification expiry) of applications that needs administrative privilege,
-from the certification issuer." |
 	Format-RuleOutput
 }
 
