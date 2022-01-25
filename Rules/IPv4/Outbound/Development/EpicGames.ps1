@@ -33,12 +33,16 @@ Outbound firewall rules for EpicGames
 .DESCRIPTION
 Outbound firewall rules for Epic Games game engine
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Quiet
+If specified, it won't ask user to specify program location if not found,
+instead only a warning is shown.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\EpicGames.ps1
@@ -62,6 +66,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Quiet,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -79,6 +86,7 @@ $Accept = "Outbound rules for Epic Games launcher and engine will be loaded, rec
 $Deny = "Skip operation, outbound rules for Epic Games launcher and engine will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -34,12 +34,12 @@ Outbound firewall rules for Windows remoting programs and services
 Rules which apply to Windows remoting programs and services,
 which are not handled by predefined rules
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\RemoteWindows.ps1

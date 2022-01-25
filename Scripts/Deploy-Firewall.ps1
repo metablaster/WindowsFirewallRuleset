@@ -49,6 +49,11 @@ management console is set and optionally custom firewall log location is set.
 Specify computer name onto which to deploy firewall.
 The default value is this machine (localhost)
 
+.PARAMETER Quiet
+If specified, it won't ask user to specify program location if not found,
+instead only a warning is shown.
+It also won't ask for permission to create firewall shortcut on all desktops
+
 .PARAMETER Force
 If specified, firewall deployment is automated and no prompt for confirmation is shown to perform
 actions.
@@ -83,6 +88,9 @@ param (
 	[Parameter(Position = 0)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[switch] $Quiet,
 
 	[Parameter()]
 	[switch] $Force
@@ -191,7 +199,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -224,7 +232,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent
+		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "No inbound rules for server platforms or software exist"
@@ -242,11 +250,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party software
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -261,8 +269,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft software
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 }
@@ -311,7 +319,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
 		& "$Destination\Temporary.ps1" -Force:$AllCurrent
 		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
-		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent
+		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
 		$AllCurrent = $YesToAll
 	}
@@ -327,13 +335,13 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent
-		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent
-		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent
-		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent
-		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -348,15 +356,15 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft development software
-		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent
-		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent
+		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -371,16 +379,16 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent
-		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent
-		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent
-		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent
-		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent
-		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent
-		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent
-		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent
-		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent
-		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent
+		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -410,28 +418,28 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party programs
-		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent
-		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent
-		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Google.ps1" -Force:$AllCurrent
-		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Java.ps1" -Force:$AllCurrent
-		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent
-		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent
-		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent
-		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent
-		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent
-		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent
-		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Google.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Java.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -446,11 +454,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft programs
-		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent
+		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 }
@@ -544,8 +552,10 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall r
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 
 # Set desktop shortcut to custom management console
-Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -TargetPath "$ProjectRoot\Config\System\Firewall.msc" -Admin `
-	-Description "View and modify GPO firewall" -IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -IconIndex -19
+Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
+	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
+	-Description "View and modify GPO firewall" -IconIndex -19 `
+	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:!$Quiet
 
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)

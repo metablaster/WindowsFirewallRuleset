@@ -37,6 +37,10 @@ Outbound firewall rules for Azure Data Studio
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
+.PARAMETER Quiet
+If specified, it won't ask user to specify program location if not found,
+instead only a warning is shown.
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -62,6 +66,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Quiet,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -78,6 +85,7 @@ $Accept = "Outbound rules for Azure Data Studio will be loaded, recommended if A
 $Deny = "Skip operation, outbound rules for Azure Data Studio will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

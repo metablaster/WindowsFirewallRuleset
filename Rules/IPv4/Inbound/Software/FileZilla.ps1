@@ -33,12 +33,16 @@ Inbound firewall rules for FileZilla
 .DESCRIPTION
 Inbound firewall rules for FileZilla FTP client
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Quiet
+If specified, it won't ask user to specify program location if not found,
+instead only a warning is shown.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\FileZilla.ps1
@@ -62,6 +66,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Quiet,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -78,6 +85,7 @@ $Accept = "Inbound rules for FileZilla software will be loaded, recommended if F
 $Deny = "Skip operation, inbound rules for FileZilla software will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

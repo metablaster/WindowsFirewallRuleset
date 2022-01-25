@@ -33,12 +33,12 @@ Inbound IPv4 multicast rules
 .DESCRIPTION
 Inbound firewall rules for IPv4 multicast address Space
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Multicast.ps1

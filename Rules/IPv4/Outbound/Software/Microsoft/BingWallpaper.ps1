@@ -33,12 +33,16 @@ Outbound rule for Bing wallpaper app
 .DESCRIPTION
 Outbound rule for Bing Wallpaper app
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Quiet
+If specified, it won't ask user to specify program location if not found,
+instead only a warning is shown.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\BingWallpaper.ps1
@@ -62,6 +66,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Quiet,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -77,6 +84,7 @@ $Accept = "Outbound rule for bing wallpaper app will be loaded"
 $Deny = "Skip operation, outbound rule for bing wallpaper app will not be loaded"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -34,12 +34,12 @@ Temporary inbound firewall rules
 Temporary rules are enabled on demand only to let some program do it's internet work, or
 to troubleshoot firewall without shuting it down completely.
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
+
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> .\Temporary.ps1

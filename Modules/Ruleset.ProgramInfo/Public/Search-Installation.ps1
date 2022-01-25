@@ -40,6 +40,11 @@ Predefined program name
 .PARAMETER Domain
 Computer name on which to look for program installation
 
+.PARAMETER Quiet
+If requested program installation directory is not found, Search-Installation won't ask
+user to specify program location.
+This is useful to ignore non found programs and only print a warning.
+
 .EXAMPLE
 PS> Search-Installation "Office"
 
@@ -67,7 +72,10 @@ function Search-Installation
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $Quiet
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -561,47 +569,50 @@ function Search-Installation
 	{
 		Write-Warning -Message "Installation directory for '$Application' not found"
 
-		# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
-		$Script = (Get-PSCallStack)[2].Command
-
-		# TODO: these loops seem to be skipped, probably missing Test-ExecutableFile, need to check
-		Write-Information -Tags $MyInvocation.InvocationName `
-			-MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
-
-		Write-Information -Tags $MyInvocation.InvocationName `
-			-MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
-
-		$Accept = "Provide full path to '$Application' installation directory"
-		$Deny = "Skip operation, rules for '$Application' won't be loaded into firewall"
-
-		if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Application" -Question "Do you want to input path now?")
+		if (!$Quiet)
 		{
-			$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Application'"
-			$Deny = "Stop asking for '$Application' and continue"
+			# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
+			$Script = (Get-PSCallStack)[2].Command
 
-			while ($InstallTable.Rows.Count -eq 0)
+			# TODO: these loops seem to be skipped, probably missing Test-ExecutableFile, need to check
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
+
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
+
+			$Accept = "Provide full path to '$Application' installation directory"
+			$Deny = "Skip operation, rules for '$Application' won't be loaded into firewall"
+
+			if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Application" -Question "Do you want to input path now?")
 			{
-				[string] $InstallLocation = Read-Host "Please input path to '$Application' root directory"
+				$Accept = "Try again, required path may be deeper or shallower into/from root directory for '$Application'"
+				$Deny = "Stop asking for '$Application' and continue"
 
-				if (![string]::IsNullOrEmpty($InstallLocation))
+				while ($InstallTable.Rows.Count -eq 0)
 				{
-					Edit-Table $InstallLocation
+					[string] $InstallLocation = Read-Host "Please input path to '$Application' root directory"
 
-					if ($InstallTable.Rows.Count -gt 0)
+					if (![string]::IsNullOrEmpty($InstallLocation))
 					{
-						return $true
+						Edit-Table $InstallLocation
+
+						if ($InstallTable.Rows.Count -gt 0)
+						{
+							return $true
+						}
+					}
+
+					Write-Warning -Message "Installation directory for '$Application' not found"
+					if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
+					{
+						break
 					}
 				}
-
-				Write-Warning -Message "Installation directory for '$Application' not found"
-				if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
-				{
-					break
-				}
 			}
-		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Application"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User skips input for $Application"
+		}
 
 		# Finally status is bad
 		Set-Variable -Name WarningStatus -Scope Global -Value $true
