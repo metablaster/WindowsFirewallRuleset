@@ -93,56 +93,6 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 # Rules for Windows services
 #
 
-New-NetFirewallRule -DisplayName "Delivery Optimization" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service DoSvc -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Service responsible for delivery optimization.
-Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
-apps from sources in addition to Microsoft, like other PCs on your local network, or PCs on the
-Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
-or PCs on the Internet, based on your settings." |
-Format-RuleOutput
-
-# TODO: duplicate description
-New-NetFirewallRule -DisplayName "Delivery Optimization" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service DoSvc -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort 7680 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Service responsible for delivery optimization.
-Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
-apps from sources in addition to Microsoft, like other PCs on your local network, or PCs on the
-Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
-or PCs on the Internet, based on your settings." |
-Format-RuleOutput
-
-New-NetFirewallRule -DisplayName "Delivery Optimization" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-	-Service DoSvc -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-	-LocalAddress Any -RemoteAddress LocalSubnet4 `
-	-LocalPort Any -RemotePort 7680 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-LocalOnlyMapping $false -LooseSourceMapping $false `
-	-Description "Service responsible for delivery optimization.
-Windows Update Delivery Optimization works by letting you get Windows updates and Microsoft Store
-apps from sources in addition to Microsoft, like other PCs on your local network, or PCs on the
-Internet that are downloading the same files.
-Delivery Optimization also sends updates and apps from your PC to other PCs on your local network
-or PCs on the Internet, based on your settings." |
-Format-RuleOutput
-
 New-NetFirewallRule -DisplayName "Windows Modules Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service TrustedInstaller -Program $ServiceHost -Group $Group `
@@ -368,6 +318,60 @@ New-NetFirewallRule -DisplayName "Router SSDP discovery" `
 protocol, such as UPnP devices.
 Also announces SSDP devices and services running on the local computer.
 If this rule is blocked, router SSDP-based services will not be discovered." |
+Format-RuleOutput
+
+#
+# Rules for delivery optimization
+#
+# Delivery Optimization listens on port 7680 for requests from other peers by using TCP/IP.
+# The service will register and open this port on the device, but you might need to set this port
+# to accept inbound traffic through your firewall yourself.
+# If you don't allow inbound traffic over port 7680, you can't use the peer-to-peer functionality
+# of Delivery Optimization.
+# However, devices can still successfully download by using HTTP or HTTPS traffic over port 80
+# (such as for default Windows Update data).
+#
+# TODO: If you set up Delivery Optimization to create peer groups that include devices across NATs
+# (or any form of internal subnet that uses gateways or firewalls between subnets), it will use Teredo.
+# For this to work, you must allow inbound TCP/IP traffic over port 3544.
+# Look for a "NAT traversal" setting in your firewall to set this up.
+#
+# Delivery Optimization also communicates with its cloud service by using HTTP/HTTPS over port 80.
+#
+
+New-NetFirewallRule -DisplayName "Delivery Optimization" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service DoSvc -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Internet4 `
+	-LocalPort Any -RemotePort 80, 443 `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-Description "Delivery Optimization communicates with its cloud service by using HTTP/HTTPS
+over port 80 and 443" | Format-RuleOutput
+
+# TODO: for testing purposes -RemoteAddress is Any instead of LocalSubnet4
+New-NetFirewallRule -DisplayName "Delivery Optimization" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service DoSvc -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 7680 `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-Description "Delivery optimization clients connect to peers on port 7680" |
+Format-RuleOutput
+
+New-NetFirewallRule -DisplayName "Delivery Optimization" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+	-Service DoSvc -Program $ServiceHost -Group $Group `
+	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort 7680 `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-LocalOnlyMapping $false -LooseSourceMapping $false `
+	-Description "Delivery optimization clients connect to peers on port 7680" |
 Format-RuleOutput
 
 #
