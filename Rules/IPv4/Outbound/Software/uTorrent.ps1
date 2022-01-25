@@ -108,72 +108,111 @@ if ((Confirm-Installation "uTorrent" ([ref] $uTorrentRoot)) -or $ForceLoad)
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - Client to peers" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 1024-65535 `
+		New-NetFirewallRule -DisplayName "uTorrent - Client to peers" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 1024-65535 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "Torrent client" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - DNS" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DNS4, 208.67.222.222, 208.67.220.220 -LocalPort Any -RemotePort 53 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Unknown why uTorrent needs DNS to OpenDNS, it also uses system DNS." | Format-RuleOutput
+		New-NetFirewallRule -DisplayName "uTorrent - DNS" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress DNS4, 208.67.222.222, 208.67.220.220 `
+			-LocalPort Any -RemotePort 53 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "Unknown why uTorrent needs DNS to OpenDNS, it also uses system DNS." |
+		Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - NAT Port mapping protocol" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress DefaultGateway4 -LocalPort 5351 -RemotePort 5351 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "The NAT Port Mapping Protocol (NAT-PMP) is a network protocol for establishing network address translation (NAT) settings
-and port forwarding configurations automatically without user effort." | Format-RuleOutput
+		New-NetFirewallRule -DisplayName "uTorrent - NAT Port mapping protocol" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress DefaultGateway4 `
+			-LocalPort 5351 -RemotePort 5351 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "The NAT Port Mapping Protocol (NAT-PMP) is a network protocol for
+establishing network address translation (NAT) settings and port forwarding configurations
+automatically without user effort." | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - part of full range of ports used most often" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 6881-6968, 6970-6999 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "BitTorrent part of full range of ports used most often (Trackers)	" | Format-RuleOutput
+		New-NetFirewallRule -DisplayName "uTorrent - part of full range of ports used most often" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 6881-6968, 6970-6999 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "BitTorrent part of full range of ports used most often (Trackers)	" |
+		Format-RuleOutput
 
 		# TODO: description doesn't seem ok? "All interface types for IPv6 to teredo"
 		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - DHT" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress Internet4 -LocalPort 1161 -RemotePort 1024-65535 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "DHT (Distributed Hash Table, technical explanation) is a decentralized network that uTorrent can use to find more peers without a tracker. What this means is that your client will be able to find peers even when the tracker is down, or doesn't even exist anymore.
-You can also download .torrent files through DHT if you have a magnet link, which can be obtained from various sources.
-All interface types for IPv6 to teredo" | Format-RuleOutput
-
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - HTTP/HTTPS" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "uTorrent - DHT" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort 1161 -RemotePort 1024-65535 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "DHT (Distributed Hash Table, technical explanation) is a decentralized
+network that uTorrent can use to find more peers without a tracker. What this means is that your
+client will be able to find peers even when the tracker is down, or doesn't even exist anymore.
+You can also download .torrent files through DHT if you have a magnet link, which can be obtained
+from various sources. All interface types for IPv6 to teredo" | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "uTorrent - HTTP/HTTPS" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "HTTP/HTTPS for browsing, adds and client content" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - Local Peer Discovery" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 224.0.0.0-239.255.255.255 -LocalPort 6771 -RemotePort 6771 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "UDP multicast search to identify other peers in your subnet that are also on torrents you are on." | Format-RuleOutput
+		New-NetFirewallRule -DisplayName "uTorrent - Local Peer Discovery" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress 224.0.0.0-239.255.255.255 `
+			-LocalPort 6771 -RemotePort 6771 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "UDP multicast search to identify other peers in your subnet that
+are also on torrents you are on." | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrent - SSDP" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile Private -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol UDP -LocalAddress Any -RemoteAddress 239.255.255.250 -LocalPort Any -RemotePort 1900 `
-			-LocalUser $UsersGroupSDDL -LocalOnlyMapping $false -LooseSourceMapping $false `
+		New-NetFirewallRule -DisplayName "uTorrent - SSDP" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress 239.255.255.250 `
+			-LocalPort Any -RemotePort 1900 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "uTorrentie - WebHelper - HTTP" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80 `
+		New-NetFirewallRule -DisplayName "uTorrentie - WebHelper - HTTP" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
 			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "HTTP probably for adds and client content" | Format-RuleOutput
 	}
 }
