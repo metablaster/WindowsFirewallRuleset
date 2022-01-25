@@ -37,6 +37,10 @@ Module scope installation table is updated
 .PARAMETER Path
 Program installation directory
 
+.PARAMETER Quiet
+If specified does not print warning message if specified path does not exist or
+if it's not valid for firewall.
+
 .EXAMPLE
 PS> Edit-Table "%ProgramFiles(x86)%\TeamViewer"
 
@@ -58,7 +62,10 @@ function Edit-Table
 	param (
 		[Parameter(Mandatory = $true)]
 		[Alias("InstallLocation")]
-		[string] $Path
+		[string] $Path,
+
+		[Parameter()]
+		[switch] $Quiet
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -94,7 +101,10 @@ function Edit-Table
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
 	}
-	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory)
+	# Check if input path is valid for firewall, since this path is manually specified by developer
+	# in Search-Installation we need to test it just like in Confirm-Installation where path is
+	# manually specified by the user
+	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory -Quiet:$Quiet)
 	{
 		$Path = Format-Path $Path
 

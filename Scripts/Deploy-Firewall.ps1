@@ -73,7 +73,6 @@ None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Rule deployment should probably be separated into new script
-TODO: Deployment is not fully automated because of prompts to provide path to missing program
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -403,7 +402,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent
+		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -555,7 +554,7 @@ Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
-	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:!$Quiet
+	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:(!$Quiet)
 
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)

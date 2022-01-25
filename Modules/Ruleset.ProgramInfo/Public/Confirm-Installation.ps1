@@ -45,6 +45,8 @@ excluding executable file name.
 .PARAMETER Quiet
 If requested program installation directory is not found, Confirm-Installation won't ask
 user to specify program location.
+It also won't print warning message if specified path does not exist or
+if it's not valid for firewall.
 This is useful to ignore non found programs and only print a warning.
 
 .EXAMPLE
@@ -81,7 +83,7 @@ function Confirm-Installation
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory))
+	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value

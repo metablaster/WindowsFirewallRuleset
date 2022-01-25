@@ -79,7 +79,7 @@ Custom help message for "NoToAll" choice
 If specified, the command is considered unsafe and the default action is then "No"
 
 .PARAMETER Force
-If specified, this function does nothing, ignores all other parameters and returns true
+If specified, only module scope last context is set and the function returns true
 
 .EXAMPLE
 PS> Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
@@ -145,12 +145,6 @@ function Approve-Execute
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	if ($Force)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning true because 'Force' was specified"
-		return $true
-	}
 
 	if ([string]::IsNullOrEmpty($Title))
 	{
@@ -240,6 +234,12 @@ function Approve-Execute
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Context set to: $Context"
 		Set-Variable -Name PreviousContext -Scope Script -Value $Context
+	}
+
+	if ($Force)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning true because 'Force' was specified"
+		return $true
 	}
 
 	# First run will be null

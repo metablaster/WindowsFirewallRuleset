@@ -349,14 +349,40 @@ on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step.
 
-12. Back to PowerShell console and run:
+12. Back to PowerShell console and run one of the `Deploy-Firewall` commands below,
+depending on your preference:
+
+    To automatically run all rules without prompt but only for programs which exist on system run:
+
+    ```powershell
+    .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
+    ```
+
+    Otherwise to go step by step and to be prompted for confirmation on which rulesets to load and
+    to attempt to resolve issues on the fly run `Deploy-Firewall` without any parameters:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1
     ```
 
-    Hit enter and you will be asked questions such as what kind of rulesets you want.\
-    If you need help to decide whether to run some ruleset or not, type `?` and press enter.
+    Otherwise, to automatically run all rules without prompt but to be prompted to fix problems as
+    needed run:
+
+    ```powershell
+    .\Scripts\Deploy-Firewall.ps1 -Force
+    ```
+
+    Otherwise, to be prompted for confirmation on which rulesets to load but without prompts to fix
+    issues run:
+
+    ```powershell
+    .\Scripts\Deploy-Firewall.ps1 -Quiet
+    ```
+
+    Hit enter and depending on `Deploy-Firewall` version you choose you'll be asked questions such
+    as what kind of rulesets you want.\
+    If you need help to decide whether to run some ruleset or not, run `Deploy-Firewall` without
+    `-Force` parameter and type `?` when prompted to run ruleset and press enter to get more info.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 15 minutes of your attention.

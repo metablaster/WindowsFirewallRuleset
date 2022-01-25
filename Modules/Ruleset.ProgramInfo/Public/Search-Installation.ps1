@@ -43,6 +43,8 @@ Computer name on which to look for program installation
 .PARAMETER Quiet
 If requested program installation directory is not found, Search-Installation won't ask
 user to specify program location.
+It also won't print warning message if specified path does not exist or
+if it's not valid for firewall.
 This is useful to ignore non found programs and only print a warning.
 
 .EXAMPLE
@@ -81,6 +83,7 @@ function Search-Installation
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	Initialize-Table
+	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
