@@ -112,7 +112,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Any `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType Any `
 			-Description "" | Format-RuleOutput
 
@@ -122,7 +122,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Any `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType Any `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput
@@ -137,7 +137,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType Any `
 			-Description "Swarm agent is used for build farm." | Format-RuleOutput
 
@@ -147,7 +147,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType Any `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "Swarm agent is used for build farm." | Format-RuleOutput
@@ -162,7 +162,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
@@ -172,7 +172,7 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress LocalSubnet4 `
 			-LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-Description "" | Format-RuleOutput

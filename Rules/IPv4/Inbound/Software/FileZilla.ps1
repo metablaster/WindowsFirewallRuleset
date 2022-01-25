@@ -99,11 +99,14 @@ if ((Confirm-Installation "FileZilla" ([ref] $FileZillaRoot)) -or $ForceLoad)
 	$Program = "$FileZillaRoot\filezilla.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "FileZilla" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
-			-EdgeTraversalPolicy Block -LocalUser $UsersGroupSDDL `
+		New-NetFirewallRule -DisplayName "FileZilla" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP  `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 	}
 }

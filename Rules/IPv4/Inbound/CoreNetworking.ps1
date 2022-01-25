@@ -102,8 +102,8 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress Any -RemoteAddress 127.0.0.1 `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
+	-LocalPort Any -RemotePort Any -EdgeTraversalPolicy Block `
+	-LocalUser Any `
 	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's
 TCP/IP network resources." | Format-RuleOutput
@@ -113,8 +113,8 @@ New-NetFirewallRule -DisplayName "Loopback" `
 	-Service Any -Program Any -Group $Group `
 	-Enabled True -Action Allow -Direction $Direction -Protocol Any `
 	-LocalAddress 127.0.0.1 -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any -EdgeTraversalPolicy Block `
+	-LocalPort Any -RemotePort Any -EdgeTraversalPolicy Block `
+	-LocalUser Any `
 	-InterfaceType Any `
 	-Description "Network software and utilities use loopback address to access a local computer's
 TCP/IP network resources." | Format-RuleOutput
@@ -171,8 +171,8 @@ New-NetFirewallRule -DisplayName "DHCP Client" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress Any -RemoteAddress DHCP4 `
 	-LocalPort 68 -RemotePort 67 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "Allow DHCPv4 messages for stateful auto-configuration.
 UDP port number 67 is the destination port of a server, and UDP port number 68 is used by the client." |
@@ -184,8 +184,8 @@ New-NetFirewallRule -DisplayName "DHCP Client (Discovery)" `
 	-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress 255.255.255.255 -RemoteAddress Any `
 	-LocalPort 68 -RemotePort 67 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The DHCP client broadcasts a DHCPDISCOVER message on the network subnet using
 the destination address 255.255.255.255 (limited broadcast) or
@@ -200,8 +200,8 @@ New-NetFirewallRule -DisplayName "DHCP Server" `
 	-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 	-LocalAddress 255.255.255.255 -RemoteAddress Any `
 	-LocalPort 67 -RemotePort 68 `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface -EdgeTraversalPolicy Block `
+	-LocalUser Any -EdgeTraversalPolicy Block `
+	-InterfaceType $DefaultInterface `
 	-LocalOnlyMapping $false -LooseSourceMapping $false `
 	-Description "The DHCP client broadcasts a DHCPDISCOVER message on the network subnet using
 the destination address 255.255.255.255 (limited broadcast) or
