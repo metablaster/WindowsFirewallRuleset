@@ -238,6 +238,8 @@ function Approve-Execute
 
 	if ($Force)
 	{
+		# NOTE: PreviousContext should be set regardless of -Force to keep track of context in
+		# cases where an error could occur
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Returning true because 'Force' was specified"
 		return $true
 	}

@@ -42,6 +42,11 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Rule scripts, consistent rule formatting for all scripts
 
+- Scripts
+
+  - Firewall deployment with `Deploy-Firewall` script can be fully automated by using `-Force` and
+  `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet` won't ask user any questions
+
 ## v0.11.0 (current release)
 
 - Rules
