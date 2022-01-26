@@ -37,9 +37,14 @@ Outbound firewall rules for MetaTrader platform
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
+.PARAMETER Interactive
+If program installation directory is not found, script will ask user to
+specify program installation location.
+
 .PARAMETER Quiet
-If specified, it won't ask user to specify program location if not found,
-instead only a warning is shown.
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program path does not exist or if it's of an invalid syntax needed for firewall.
+
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -66,6 +71,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Interactive,
+
+	[Parameter()]
 	[switch] $Quiet,
 
 	[Parameter()]
@@ -86,6 +94,8 @@ $Deny = "Skip operation, outbound rules for MetaTrader software will not be load
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

@@ -153,6 +153,11 @@ $Destination = "$ProjectRoot\Rules\IPv4\Inbound"
 [bool] $AllCurrent = $YesToAll
 [bool] $NoCurrent = $false
 
+$ScriptParams = @{
+	Quiet = $Quiet
+	Interactive = $Interactive
+}
+
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv4 rules to deploy"
 $ExecuteParams["Deny"] = "Skip all inbound IPv4 rules"
 $ExecuteParams["Title"] = "Selecting inbound IPv4 rules"
@@ -204,7 +209,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -237,7 +242,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "No inbound rules for server platforms or software exist"
@@ -255,11 +260,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party software
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -274,8 +279,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft software
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
@@ -324,7 +329,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
 		& "$Destination\Temporary.ps1" -Force:$AllCurrent
 		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
-		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
 		$AllCurrent = $YesToAll
 	}
@@ -340,13 +345,13 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -361,15 +366,15 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft development software
-		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -384,16 +389,16 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -408,7 +413,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -423,28 +428,28 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party programs
-		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Google.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Java.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Google.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Java.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -459,11 +464,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft programs
-		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
