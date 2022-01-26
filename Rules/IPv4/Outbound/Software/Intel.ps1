@@ -108,11 +108,14 @@ if ((Confirm-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 	$Program = "$IntelXTURoot\PerfTune.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -Platform $Platform `
-			-DisplayName "Extreme tuning utility" -Service Any -Program $Program `
-			-PolicyStore $PolicyStore -Enabled False -Action Allow -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-			-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+		New-NetFirewallRule -DisplayName "Extreme tuning utility" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $AdminGroupSDDL `
+			-InterfaceType $DefaultInterface `
 			-Description "Extreme Tuning utility check for updates" | Format-RuleOutput
 	}
 }
@@ -121,11 +124,14 @@ if ((Confirm-Installation "XTU" ([ref] $IntelXTURoot)) -or $ForceLoad)
 $Program = "%ProgramFiles(x86)%\Intel\Telemetry 2.0\lrio.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Intel telemetry" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort 80, 443 `
+	New-NetFirewallRule -DisplayName "Intel telemetry" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
 		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
 		-Description "Uploader for the Intel(R) Product Improvement Program." | Format-RuleOutput
 }
 
@@ -133,11 +139,14 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 $Program = "%ProgramFiles%\Intel\Intel(R) Management Engine Components\iCLS\IntelPTTEKRecertification.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	New-NetFirewallRule -Platform $Platform `
-		-DisplayName "Intel PTT EK Recertification" -Service Any -Program $Program `
-		-PolicyStore $PolicyStore -Enabled True -Action Block -Group $Group -Profile $DefaultProfile -InterfaceType $DefaultInterface `
-		-Direction $Direction -Protocol TCP -LocalAddress Any -RemoteAddress Internet4 -LocalPort Any -RemotePort Any `
+	New-NetFirewallRule -DisplayName "Intel PTT EK Recertification" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort Any `
 		-LocalUser $LocalSystem `
+		-InterfaceType $DefaultInterface `
 		-Description "" | Format-RuleOutput
 }
 
