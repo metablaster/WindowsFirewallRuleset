@@ -621,7 +621,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 
 	# To force loading rules regardless of presence of a program set to true
 	# The purpose of this is to test loading rules that would otherwise be skipped
-	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
+	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
 
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
