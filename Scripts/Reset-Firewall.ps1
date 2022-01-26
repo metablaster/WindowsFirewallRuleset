@@ -173,9 +173,12 @@ Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 # Reset WinRM and PS remoting configuration
-Reset-WinRM
+Reset-WinRM -Confirm:$false
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
 Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"
+
+# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
+Write-Warning -Message "To continue running firewall scripts please restart PowerShell console"
 
 Update-Log

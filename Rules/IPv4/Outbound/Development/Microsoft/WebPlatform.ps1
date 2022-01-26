@@ -47,7 +47,6 @@ specify program installation location.
 If specified, it suppresses warning, error or informationall messages if user specified or default
 program path does not exist or if it's of an invalid syntax needed for firewall.
 
-
 .PARAMETER Force
 If specified, no prompt to run script is shown
 

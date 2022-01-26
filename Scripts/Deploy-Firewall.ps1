@@ -183,7 +183,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
 		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
 		& "$Destination\ICMP.ps1" -Force:$AllCurrent
@@ -318,7 +318,7 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
 		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
 		& "$Destination\ICMP.ps1" -Force:$AllCurrent
@@ -565,7 +565,7 @@ Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
-	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:(!$Quiet)
+	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:(!$Force)
 
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)
