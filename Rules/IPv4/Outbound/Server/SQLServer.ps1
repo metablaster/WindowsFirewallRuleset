@@ -37,9 +37,13 @@ Outbound firewall rules for SQL Server instance
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
+.PARAMETER Interactive
+If program installation directory is not found, script will ask user to
+specify program installation location.
+
 .PARAMETER Quiet
-If specified, it won't ask user to specify program location if not found,
-instead only a warning is shown.
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program path does not exist or if it's of an invalid syntax needed for firewall.
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -66,6 +70,9 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
+	[switch] $Interactive,
+
+	[Parameter()]
 	[switch] $Quiet,
 
 	[Parameter()]
@@ -88,6 +95,8 @@ $Deny = "Skip operation, outbound rules for Microsoft SQL Server software will n
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
@@ -150,11 +159,20 @@ if ((Confirm-Installation "SqlServer" ([ref] $SqlServerRoot)) -or $ForceLoad)
 	$Program = "$SqlServerRoot\sqlceip.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		$SqlTelemetryUser = Get-SDDL -Domain "NT SERVICE" -User "SQLTELEMETRY"
+		# SQLTELEMETRY service must exist in order for "NT SERVICE\SQLTELEMETRY" to exist on system
+		$TelemetryService = Get-Service -Name SQLTELEMETRY -ErrorAction Ignore
+
+		if (!$TelemetryService -and $ForceLoad)
+		{
+			$SqlTelemetryUser = "Any"
+		}
+		else
+		{
+			$SqlTelemetryUser = Get-SDDL -Domain "NT SERVICE" -User "SQLTELEMETRY"
+		}
 
 		# TODO: only connections to LocalSubnet and/or over virtual adapters were seen
 		# Service short name = SQLTELEMETRY
-		# TODO: This rule simply does not work
 		New-NetFirewallRule -DisplayName "SQL Server telemetry" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
 			-Service Any -Program $Program -Group $Group `

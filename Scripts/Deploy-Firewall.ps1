@@ -49,10 +49,13 @@ management console is set and optionally custom firewall log location is set.
 Specify computer name onto which to deploy firewall.
 The default value is this machine (localhost)
 
+.PARAMETER Interactive
+If any program installation directory is not found, Deploy-Firewall will ask
+user to specify program installation location.
+
 .PARAMETER Quiet
-If specified, it won't ask user to specify program location if not found,
-instead only a warning is shown.
-It also won't ask for permission to create firewall shortcut on all desktops
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program path does not exist or if it's of an invalid syntax needed for firewall.
 
 .PARAMETER Force
 If specified, firewall deployment is automated and no prompt for confirmation is shown to perform
@@ -87,6 +90,9 @@ param (
 	[Parameter(Position = 0)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[switch] $Interactive,
 
 	[Parameter()]
 	[switch] $Quiet,
