@@ -45,6 +45,10 @@ default values.
 Resets Windows Remote Management service configuration to factory defaults.
 Disables PS remoting and restores leftover changes.
 
+.PARAMETER Remoting
+If specified resets and disables Windows remote management service, disables PowerShell remoting and
+disabled remote registry in addition to firewall reset
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -60,6 +64,7 @@ None. Reset-Firewall.ps1 does not generate any output
 .NOTES
 TODO: OutputType attribute
 TODO: Implement resetting only public, private or domain profile, ShouldProcess
+TODO: Remote registry reset is not implemented by Reset-WinRM
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -70,6 +75,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 [CmdletBinding()]
 param (
+	[Parameter()]
+	[switch] $Remoting,
+
 	[Parameter()]
 	[switch] $Force
 )
@@ -173,12 +181,18 @@ Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 # Reset WinRM and PS remoting configuration
-Reset-WinRM -Confirm:$false
+if ($Remoting)
+{
+	Reset-WinRM -Confirm:$false
+}
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
 Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"
 
-# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
-Write-Warning -Message "To continue running firewall scripts please restart PowerShell console"
+if ($Remoting)
+{
+	# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
+	Write-Warning -Message "To continue running firewall scripts please restart PowerShell console"
+}
 
 Update-Log

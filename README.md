@@ -20,6 +20,7 @@
     - [Note](#note)
     - [Quick start](#quick-start)
   - [Firewall management](#firewall-management)
+    - [Automated and interactive firewall deployment](#automated-and-interactive-firewall-deployment)
     - [Manage GPO rules](#manage-gpo-rules)
     - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
@@ -349,40 +350,15 @@ on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step.
 
-12. Back to PowerShell console and run one of the `Deploy-Firewall` commands below,
-depending on your preference:
-
-    - To automatically run all rules without prompt but only for programs which exist on system run:
+12. Back to PowerShell console and run interactive `Deploy-Firewall` command below:
 
     ```powershell
-    .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
+    .\Scripts\Deploy-Firewall.ps1 -Interactive
     ```
 
-    - Otherwise, to go step by step and to be prompted for confirmation on which rulesets to load
-    and to attempt to resolve issues on the fly run `Deploy-Firewall` without any parameters:
-
-    ```powershell
-    .\Scripts\Deploy-Firewall.ps1
-    ```
-
-    - Otherwise, to automatically run all rules without prompt but to be prompted to resolve issues
-    as needed run `Deploy-Firewall` without `-Quiet` parameter:
-
-    ```powershell
-    .\Scripts\Deploy-Firewall.ps1 -Force
-    ```
-
-    - Otherwise, to be prompted for confirmation on which rulesets to load but without prompts to
-    resolve issues run `Deploy-Firewall` without `-Force` parameter:
-
-    ```powershell
-    .\Scripts\Deploy-Firewall.ps1 -Quiet
-    ```
-
-    Hit enter and depending on `Deploy-Firewall` version you choose you'll be asked questions such
-    as what kind of rulesets you want.\
-    If you need help to decide whether to run some ruleset or not, run `Deploy-Firewall` without
-    `-Force` parameter and type `?` when prompted to run ruleset and press enter to get more info.
+    Hit enter and you'll be asked questions such as what kind of rulesets you want.\
+    If you need help to decide whether to run some ruleset or not, type `?` when prompted to run
+    ruleset and press enter to get more info.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 15 minutes of your attention.
@@ -412,6 +388,39 @@ For example `Windows Remote Management` service should not run if not needed
 [Table of Contents](#table-of-contents)
 
 ## Firewall management
+
+Following section gives some hints to manage firewall with ease
+
+### Automated and interactive firewall deployment
+
+`Deploy-Firewall.ps1` script supports several parameters to let you customize deployment automation
+as follows:
+
+- To automatically run all rules without prompt but only for programs which exist on system run:
+
+```powershell
+.\Scripts\Deploy-Firewall.ps1 -Force -Quiet
+```
+
+- To go step by step, to be prompted for confirmation on which rulesets to load
+and to attempt to resolve issues on the fly run:
+
+```powershell
+.\Scripts\Deploy-Firewall.ps1 -Interactive
+```
+
+- To be prompted only for ruleset selection run `Deploy-Firewall` without any parameters:
+
+```powershell
+.\Scripts\Deploy-Firewall.ps1
+```
+
+To learn the meaning of parmaters to be able to combine them on your own see `Deploy-Firewall.ps1`
+script or run following command:
+
+```powershell
+Get-Help .\Scripts\Deploy-Firewall.ps1 -Detailed
+```
 
 ### Manage GPO rules
 

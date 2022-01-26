@@ -47,7 +47,7 @@ None. Reset-WinRM does not generate any output
 
 .NOTES
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
-TODO: Need to reset changes done by Enable-RemoteRegistry
+TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired
 TODO: Restoring old setup not implemented
 
 .LINK
