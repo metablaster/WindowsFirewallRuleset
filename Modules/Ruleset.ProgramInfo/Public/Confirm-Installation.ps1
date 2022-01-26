@@ -42,12 +42,13 @@ Predefined program name for which to search
 Reference to variable which should be updated with the path to program installation directory
 excluding executable file name.
 
+.PARAMETER Interactive
+If requested program installation directory is not found, Confirm-Installation will ask
+user to specify program installation location.
+
 .PARAMETER Quiet
-If requested program installation directory is not found, Confirm-Installation won't ask
-user to specify program location.
-It also won't print warning message if specified path does not exist or
-if it's not valid for firewall.
-This is useful to ignore non found programs and only print a warning.
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program installation directory path does not exist or if it's of an invalid syntax needed for firewall.
 
 .EXAMPLE
 PS> $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
@@ -75,6 +76,9 @@ function Confirm-Installation
 		[ref] $Directory,
 
 		[Parameter()]
+		[switch] $Interactive,
+
+		[Parameter()]
 		[switch] $Quiet
 	)
 
@@ -91,7 +95,7 @@ function Confirm-Installation
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Program well known"
 		return $true # input path is correct
 	}
-	elseif (Search-Installation $Program -Quiet:$Quiet)
+	elseif (Search-Installation $Program -Interactive:$Interactive -Quiet:$Quiet)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallLocation = "unknown install location"

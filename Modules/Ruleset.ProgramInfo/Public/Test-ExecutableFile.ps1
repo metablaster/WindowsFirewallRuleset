@@ -42,6 +42,9 @@ is producing this issue.
 .PARAMETER LiteralPath
 Fully qualified path to executable file
 
+.PARAMETER Quiet
+If specified, no information, warning or error message is shown, only true or false is returned
+
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
@@ -80,7 +83,7 @@ None. You cannot pipe objects to Test-ExecutableFile
 [bool]
 
 .NOTES
-TODO: We should attempt to fix the path if invalid here, ex. Get-Command
+TODO: We should attempt to fix the path if invalid here, ex. Get-Command (-Repair parameter)
 TODO: We should return true or false and conditionally load rule
 TODO: Verify file is executable file (and path formatted?)
 #>
@@ -94,10 +97,20 @@ function Test-ExecutableFile
 		[string] $LiteralPath,
 
 		[Parameter()]
+		[switch] $Quiet,
+
+		[Parameter()]
 		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	if ($Quiet)
+	{
+		$ErrorActionPreference = "SilentlyContinue"
+		$WarningPreference = "SilentlyContinue"
+		$InformationPreference = "SilentlyContinue"
+	}
 
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path: $ExpandedPath"
@@ -107,7 +120,7 @@ function Test-ExecutableFile
 	# NOTE: Index 0 is this function
 	$Caller = (Get-PSCallStack)[1].Command
 
-	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall)
+	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet)
 	{
 		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{

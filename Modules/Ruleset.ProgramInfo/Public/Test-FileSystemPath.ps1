@@ -55,10 +55,10 @@ Ensures path is valid for firewall rule
 Checks if the path leads to user profile
 
 .PARAMETER Strict
-If specified, this function produces errors instead of warnings.
+If specified, this function produces errors instead of warnings
 
 .PARAMETER Quiet
-If specified, does not write any warnings or errors, only true or false is returned.
+If specified, no information, warning or error message is shown, only true or false is returned
 
 .EXAMPLE
 PS> Test-FileSystemPath "%Windir%"

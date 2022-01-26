@@ -40,12 +40,14 @@ Predefined program name
 .PARAMETER Domain
 Computer name on which to look for program installation
 
+.PARAMETER Interactive
+If requested program installation directory is not found, Search-Installation will ask
+user to specify program installation location
+
 .PARAMETER Quiet
-If requested program installation directory is not found, Search-Installation won't ask
-user to specify program location.
-It also won't print warning message if specified path does not exist or
-if it's not valid for firewall.
-This is useful to ignore non found programs and only print a warning.
+If specified, it suppresses warning, error or informationall messages if default program
+installation directory path does not exist or if it's of an invalid syntax needed for firewall.
+Same applies for program path (if found) specified by -Application parameter.
 
 .EXAMPLE
 PS> Search-Installation "Office"
@@ -75,6 +77,9 @@ function Search-Installation
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[switch] $Interactive,
 
 		[Parameter()]
 		[switch] $Quiet
@@ -559,7 +564,10 @@ function Search-Installation
 		}
 		default
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $Application -Message "Parameter '$Application' not implemented"
+			if (!$Quiet)
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $Application -Message "Parameter '$Application' not implemented"
+			}
 		}
 	}
 
@@ -570,9 +578,12 @@ function Search-Installation
 	}
 	else
 	{
-		Write-Warning -Message "Installation directory for '$Application' not found"
-
 		if (!$Quiet)
+		{
+			Write-Warning -Message "Installation directory for '$Application' not found"
+		}
+
+		if ($Interactive)
 		{
 			# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
 			$Script = (Get-PSCallStack)[2].Command
