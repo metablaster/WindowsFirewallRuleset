@@ -40,4 +40,4 @@ Follow steps below to reset default windows firewall:
 
 See [Network troubleshooting detailed guide](NetworkTroubleshooting.md)
 
-[configure winrm]: [https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management]
+[configure winrm]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management

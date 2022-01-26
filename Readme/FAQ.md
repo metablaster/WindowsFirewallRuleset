@@ -257,7 +257,7 @@ them as follows:
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
     - `...\Ruleset.Remote\*.ps1`
 
-    By default none of these scripts except `Ruleset.Remote` run on their own,
+    By default none of these scripts (except scripts in `Ruleset.Remote`) run on their own,
     except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 

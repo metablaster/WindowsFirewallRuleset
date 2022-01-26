@@ -366,14 +366,14 @@ depending on your preference:
     ```
 
     - Otherwise, to automatically run all rules without prompt but to be prompted to resolve issues
-    as needed run:
+    as needed run `Deploy-Firewall` without `-Quiet` parameter:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force
     ```
 
     - Otherwise, to be prompted for confirmation on which rulesets to load but without prompts to
-    resolve issues run:
+    resolve issues run `Deploy-Firewall` without `-Force` parameter:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Quiet
