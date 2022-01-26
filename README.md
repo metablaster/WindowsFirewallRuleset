@@ -352,28 +352,28 @@ It is recommended to close down all other programs before running master script 
 12. Back to PowerShell console and run one of the `Deploy-Firewall` commands below,
 depending on your preference:
 
-    To automatically run all rules without prompt but only for programs which exist on system run:
+    - To automatically run all rules without prompt but only for programs which exist on system run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
     ```
 
-    Otherwise to go step by step and to be prompted for confirmation on which rulesets to load and
-    to attempt to resolve issues on the fly run `Deploy-Firewall` without any parameters:
+    - Otherwise, to go step by step and to be prompted for confirmation on which rulesets to load
+    and to attempt to resolve issues on the fly run `Deploy-Firewall` without any parameters:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1
     ```
 
-    Otherwise, to automatically run all rules without prompt but to be prompted to fix problems as
-    needed run:
+    - Otherwise, to automatically run all rules without prompt but to be prompted to resolve issues
+    as needed run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force
     ```
 
-    Otherwise, to be prompted for confirmation on which rulesets to load but without prompts to fix
-    issues run:
+    - Otherwise, to be prompted for confirmation on which rulesets to load but without prompts to
+    resolve issues run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Quiet

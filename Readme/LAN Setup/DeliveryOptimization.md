@@ -1,18 +1,20 @@
 
 # Delivery Optimization
 
-Delivery Optimization listens on port 7680 for requests from other peers by using TCP/IP.
+Delivery Optimization listens on port 7680 for requests from other peers by using TCP/IP.\
 The service will register and open this port on the device, but you might need to set this port
-to accept inbound traffic through your firewall yourself.
+to accept inbound traffic through your firewall yourself.\
 If you don't allow inbound traffic over port 7680, you can't use the peer-to-peer functionality
-of Delivery Optimization.
+of Delivery Optimization.\
 However, devices can still successfully download by using HTTP or HTTPS traffic over port 80
 (such as for default Windows Update data).
 
 If you set up Delivery Optimization to create peer groups that include devices across NATs
-(or any form of internal subnet that uses gateways or firewalls between subnets), it will use Teredo.
-For this to work, you must allow inbound TCP/IP traffic over port 3544.
+(or any form of internal subnet that uses gateways or firewalls between subnets), it will use Teredo.\
+For this to work, you must allow inbound TCP/IP traffic over port 3544.\
 Look for a "NAT traversal" setting in your firewall to set this up.
+
+[Delivery Optimization for Windows client updates][delivery optimization]
 
 ## Setting
 
@@ -61,3 +63,5 @@ Other Delivery Optimization PowerShell Cmdlets
 ```powershell
 Get-DeliveryOptimizationLog | Set-Content c:\temp\dosvc.log
 ```
+
+[delivery optimization]: https://docs.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization

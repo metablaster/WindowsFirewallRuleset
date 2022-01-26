@@ -63,7 +63,7 @@ tries to get firewall rules from GPO and will produce this problem:
 Get-NetFirewallRule -PolicyStore [system.environment]::MachineName
 ```
 
-In this example to fix the problem modify bad command to the following and it should work:
+In this example to fix the problem modify command above to the following and it should work:
 
 ```powershell
 Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
@@ -71,7 +71,7 @@ Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
 
 If you're trying to deploy or manage firewall remotely see this document [Remote.md](/Readme/Remote.md)
 
-If none of this works even after reboot of all involved computers, following links might help:
+If none of this works even after reboot of all involved computers, following link might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
 
@@ -84,7 +84,7 @@ but only for the firewall part of protection.
 
 For maximum security you'll need way more than just good firewall, here is a minimum list:
 
-1. Using non Administrative Windows account for almost all use.\
+1. Using standard (non Administrative) Windows account for almost all use.\
 Administrative account should be used for administration only, preferably offline.
 
 2. Installing and running only digitally signed software, and only those publishers you trust.\
@@ -100,7 +100,8 @@ Your passwords should meet length and complexity requirements.\
 Never use same password to log in to multiple places, use unique password for each login.
 
 5. Don't let your email program or web interface auto load email content.\
-Also important not to open attachments you don't recognize or didn't ask for.
+Configure you mail client to be restrictive, also important not to open attachments you don't
+recognize or didn't ask for.
 
 6. Never disable antivirus or firewall except to troubleshoot issues.\
 Btw. Troubleshooting doesn't include installing software or visiting some web site.
@@ -111,19 +112,19 @@ Even if VPN provider is considered "trusted".
 8. Protect your web browser maximum possible by restrictively adjusting settings, and
 avoid using addons except one to block ads, which is known to be trusted by online community.
 
-9. When it comes to privacy, briefly, there 2 very different defense categories:
+9. When it comes to privacy, briefly, there are 2 very different defense categories:
 
    - Prevent identity theft, this is worse than loosing data, being hacked or just being spied on.\
    Go ahead and study worse identity theft cases and you'll understand
 
-   - Hide your activity, is what people usually refer to when talking about "privacy"
+   - Hide your activity, is what people usually refer to when talking about "privacy"\
    Understanding the difference is important, because how do you defend if the threat is unknown?
 
 10. Keep your operating system and anti virus patched maximum possible, that means checking for
 system and virus updates on daily basis.
 
 11. High value data and larger financial transactions should be performed on separate computer whose
-only purpose is to do this an nothing else, and to keep valueable data protected away from network.
+only purpose is to do this and nothing else, and to keep valueable data protected away from network.
 
 12. Encrypt your valueable hard drives or individual files, for computers such as those in point 10,
 this is requirement not suggestion.
@@ -157,7 +158,7 @@ To resolve this issue ensure following:
     - Under `Name` verify location to log file is correct
     - Under `Log dropped packet` make sure it's set to `Yes`
 
-2. Verify that both the target folder and all the logs inside that directory grant write
+2. Verify that both the target folder and all the logs inside that directory grant write\
 permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
 3. For changes to take effect save your modifications and reboot system
@@ -176,7 +177,7 @@ Btw. firewall service can't be stopped or manipulated in any way except trough U
 - You might be wondering, what happens to my system if I run scripts from this repository?
 - Can these scripts do any kind of harm to my computer or privacy?
 - What system and environment modifications are done to setup firewall?
-- Is there anything I should be aware of?
+- Is there anything else I should be aware of?
 
 There is a lot of scripts and you might not have the time to investigate them all.\
 So here is an overview to help you see what they do hopefully answering all of your concerns.
@@ -215,7 +216,7 @@ So here is an overview to help you see what they do hopefully answering all of y
     - Custom session configuration is created which is used for firewall deployment
     - WMI Provider plugin is enabled which is required for CIM to work
 
-6. Following default firewall rules are recreated in control panel firewall
+6. Following default firewall rules are recreated or removed in control panel firewall
 
     - Rules for Network Discovery, File and Printer Sharing, WinRM and WinRM compatibility rules
 
@@ -241,8 +242,8 @@ them as follows:
     - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
 
 8. Here is a list of scripts that may behave unexpectedly because these are either experimental,
-   not intended for end user or hard to get right, therefore you should review them first to learn
-   their purpose:
+   not intended for end user or hard to get right, therefore you might want to review them first
+   to learn their purpose:
 
     - `Scripts\Grant-Logs.ps1`
     - `Scripts\Reset-Firewall.ps1`
@@ -256,7 +257,8 @@ them as follows:
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
     - `...\Ruleset.Remote\*.ps1`
 
-    By default none of these scripts run on their own, except as explained in point 5.\
+    By default none of these scripts except `Ruleset.Remote` run on their own,
+    except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
 
 9. Following is a list of external executables that are run by some scripts
@@ -276,7 +278,7 @@ them as follows:
     have to to fix with your own intervention.
     - "development mode" may be enabled by default on `develop` branch but never on `master` branch,
     which means defaults described so far may no longer be defaults
-    - The scripts will gather all sorts of system information but only as required to configure firewall,
+    - Scripts will gather all sorts of system information but only as required to configure firewall,
     none of this information is ever sent anywhere and once you close down PowerShell it's all cleared.
     - If you publish your code modifications online (ex. to your fork) make sure your modifications
     don't include any personal information such as user names, email or system details.
@@ -309,8 +311,8 @@ as 3rd party firewalls.
 Here in this case this will happen when you run `Set-NetworkProfile.ps1` which runs only on demand,
 however you won't notice this problem until system is rebooted.
 
-NOTE: Since Windows Firewall Ruleset v0.11.0, `Set-NetworkProfile.ps1` runs by default and there is
-no way to avoid this issue.
+**NOTE:** Since Windows Firewall Ruleset v0.11.0, `Set-NetworkProfile` runs by default and there is
+no way to avoid this issue because the function is run as Administrator.
 
 There are many options to troubleshoot this problem, most of which are just a workaround but don't
 actually bring these options back, so here are my favorites that should fix it instead:

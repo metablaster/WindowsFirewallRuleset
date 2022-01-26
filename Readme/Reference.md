@@ -23,6 +23,7 @@ customized scenarios.
   - [OS and software](#os-and-software)
   - [Protocols](#protocols)
   - [Troubleshooting](#troubleshooting)
+  - [WinRM and PowerShell remoting](#winrm-and-powershell-remoting)
   - [tools](#tools)
   - [Unclassified links](#unclassified-links)
 
@@ -174,6 +175,24 @@ Also few commandlets from these modules:
 [WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
 
 [Capture Network Traffic with netsh trace command](https://www.computertechblog.com/capture-network-traffic-with-netsh-trace-windows-command)
+
+## WinRM and PowerShell remoting
+
+[Installation and configuration for Windows Remote Management](https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management)
+
+[about_WSMan_Provider](https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management/about/about_wsman_provider?view=powershell-7.1)
+
+[Windows Remote Management Glossary](https://docs.microsoft.com/en-us/windows/win32/winrm/windows-remote-management-glossary)
+
+[How to configure WINRM for HTTPS](https://docs.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/configure-winrm-for-https)
+
+[PowerShell Remoting over HTTPS with a self-signed SSL certificate](https://4sysops.com/archives/powershell-remoting-over-https-with-a-self-signed-ssl-certificate)
+
+[about_Remote_Requirements](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_requirements?view=powershell-7.1)
+
+[about_Remote_Troubleshooting](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting?view=powershell-7.1)
+
+[Enable-PSRemoting](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1)
 
 ## tools
 

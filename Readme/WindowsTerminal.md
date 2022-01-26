@@ -3,12 +3,20 @@
 
 [What is Windows Terminal?][about terminal]
 
-Windows Terminal is not installed by default in Windows 10, it can be installed from Windows Store app,
+Windows Terminal is not installed by default in Windows 10, it can be installed from Windows Store app,\
 for more details see [Install and get started setting up Windows Terminal][install windows terminal]
+
+## How to open Windows Terminal
+
+1. Click on start button
+2. Find Windows terminal app and either run it normally or as Administrator
+
+![Alternate text](Screenshots/WindowsTerminal.png)
 
 ## How to open Windows Terminal in target folder
 
-Currently there is no way to do it as Administrator by default in Windows 10
+Currently there is no way to do it as Administrator by default in Windows 10\
+To run it as standard user you'll find it in right click context menu.
 
 ## Right click "Open Windows Terminal as Administrator" context menu
 

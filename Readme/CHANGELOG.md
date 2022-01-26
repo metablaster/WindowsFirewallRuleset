@@ -32,7 +32,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for:
 
     - ColorMania color picker
-    - Azure Color studio
+    - Azure Data studio
 
   - Updated rules for:
 
@@ -44,8 +44,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Scripts
 
-  - Firewall deployment with `Deploy-Firewall` script can be fully automated by using `-Force` and
-  `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet` won't ask user any questions
+  - Firewall deployment with `Deploy-Firewall.ps1` script can be fully automated by using `-Force`
+  and `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet` won't ask you any questions
 
 ## v0.11.0 (current release)
 
