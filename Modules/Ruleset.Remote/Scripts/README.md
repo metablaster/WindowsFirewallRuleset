@@ -1,6 +1,8 @@
 
 # Scripts directory
 
-Contains script files that are run in the caller's environment prior to importing this module
+Contains script files that are run in the caller's environment prior to importing this module.\
+Some or all of these script files may run in module scope only instead.
 
-Some or all of these script files may run in module scope only instead
+This directory may contain any additional files which don't belong to `Public` or `Private`
+category.

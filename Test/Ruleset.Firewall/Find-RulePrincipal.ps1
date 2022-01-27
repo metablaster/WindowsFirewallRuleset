@@ -69,8 +69,10 @@ Enter-Test "Find-RulePrincipal"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
-	Start-Test "default"
-	$Result = Find-RulePrincipal
+	$Exports = "$ProjectRoot\Exports"
+
+	Start-Test "-Direction Outbound -Weak"
+	$Result = Find-RulePrincipal -Path $Exports -Direction Outbound -Weak
 	$Result
 
 	Test-Output $Result -Command Find-RulePrincipal

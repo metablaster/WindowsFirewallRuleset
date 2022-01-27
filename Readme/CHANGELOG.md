@@ -51,7 +51,9 @@ If you would like to see fresh changes done since last release you can do so on 
 - Modules
 
   - Fixed a bug in `Ruleset.Firewall\ConvertListTo-Multiline` causing bad rule export
-  - Updated functions, `Export-FirewallRule`, `Import-FirewallRule` and `Remove-FirewallRule`
+  - Updated functions, `Export-FirewallRule`, `Import-FirewallRule`, `Remove-FirewallRule` and `Find-RulePrincipal`
+  - New function `Get-FirewallRule` which gets firewall rules directly from registry for faster
+  rule processing
 
 ## v0.11.0 (current release)
 

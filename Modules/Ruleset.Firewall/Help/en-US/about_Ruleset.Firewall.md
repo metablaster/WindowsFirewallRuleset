@@ -31,6 +31,12 @@ Get all firewall rules with or without LocalUser value
 Format-RuleOutput
 ```
 
+Get firewall rules from registry
+
+```powershell
+Get-FirewallRule
+```
+
 Format output of the Net-NewFirewallRule commandlet
 
 ```powershell

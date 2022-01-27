@@ -32,21 +32,25 @@ SOFTWARE.
 Imports firewall rules from a CSV or JSON file
 
 .DESCRIPTION
-Imports firewall rules generated with Export-FirewallRule, CSV or JSON file.
+Imports firewall rules exported with Export-FirewallRule, CSV or JSON file.
 CSV files have to be separated with semicolons.
-Existing rules with same name will be overwritten.
+Existing rules with same name will not be overwritten by default.
 
 .PARAMETER Domain
 Policy store into which to import rules, default is local GPO.
 
 .PARAMETER Path
-Path to directory where exported rules file is located
+Path to directory where exported rules file is located.
+Wildcard characters are supported.
 
 .PARAMETER FileName
 Input file
 
 .PARAMETER JSON
 Input from JSON instead of CSV format
+
+.PARAMETER Overwrite
+Overwrite existing rules with same name as rules being imported
 
 .EXAMPLE
 PS> Import-FirewallRule
@@ -108,12 +112,15 @@ function Import-FirewallRule
 		[string] $FileName = "FirewallRules",
 
 		[Parameter()]
-		[switch] $JSON
+		[switch] $JSON,
+
+		[Parameter()]
+		[switch] $Overwrite
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$Path = [System.IO.DirectoryInfo] (Resolve-Path $Path.FullName).Path
+	$Path = Resolve-FileSystemPath $Path
 	if (!$Path -or !$Path.Exists)
 	{
 		Write-Error -Category ResourceUnavailable -Message "The path was not found: $Path"
@@ -261,22 +268,37 @@ function Import-FirewallRule
 		# Remove rule if present
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 
-		$IsRemoved = @()
-		Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
-
-		if ($IsRemoved.Count -gt 0)
+		$ImportRule = $true
+		if ($Overwrite)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
+			$IsRemoved = @()
+			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+
+			if ($IsRemoved.Count -gt 0)
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
+			}
+			else
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
+			}
+		}
+		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue))
+		{
+			$ImportRule = $false
+		}
+
+		if ($ImportRule)
+		{
+			# Create new firewall rule, parameters are assigned with splatting
+			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
+			New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing rule '$($Rule.Displayname)' from '$FileName' skipped"
 		}
-
-		# Create new firewall rule, parameters are assigned with splatting
-		# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-		New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
-	}
+	} # foreach
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall rules from '$FileName' done"
 }

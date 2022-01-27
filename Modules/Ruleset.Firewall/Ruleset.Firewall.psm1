@@ -73,6 +73,7 @@ $PublicScripts = @(
 	"Export-FirewallRule"
 	"Find-RulePrincipal"
 	"Format-RuleOutput"
+	"Get-FirewallRule"
 	"Import-FirewallRule"
 	"Remove-FirewallRule"
 )

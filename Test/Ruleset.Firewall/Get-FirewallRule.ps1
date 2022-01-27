@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,29 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Import-FirewallRule
+Unit test for Get-FirewallRule
 
 .DESCRIPTION
-Test correctness of Import-FirewallRule function
+Test correctness of Get-FirewallRule function
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Import-FirewallRule.ps1
+PS> .\Get-FirewallRule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Import-FirewallRule.ps1
+None. You cannot pipe objects to Get-FirewallRule.ps1
 
 .OUTPUTS
-None. Import-FirewallRule.ps1 does not generate any output
+None. Get-FirewallRule.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -63,32 +62,16 @@ param (
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
-#endregion
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#Endregion
 
-Enter-Test "Import-FirewallRule"
+Enter-Test "Get-FirewallRule"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
-{
-	$Exports = "$ProjectRoot\Exports"
+Start-Test "Default test"
+$Result = Get-FirewallRule
+$Result
 
-	# TODO: Need to test failure cases, see also module todo's for more info
-
-	Start-Test "-FileName GroupExport.csv"
-	Import-FirewallRule -Path $Exports -FileName "GroupExport.csv"
-
-	Start-Test "-FileName NamedExport1.csv"
-	Import-FirewallRule -Path $Exports -FileName "NamedExport1.csv" -Overwrite
-
-	Start-Test "-JSON -FileName NamedExport2.json"
-	Import-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json" -Overwrite
-
-	Start-Test "-FileName StoreAppExport.csv"
-	$Result = Import-FirewallRule -Path $Exports -FileName "StoreAppExport.csv" -Overwrite
-	$Result
-
-	Test-Output $Result -Command Import-FirewallRule
-}
+Test-Output $Result -Command Get-FirewallRule
 
 Update-Log
 Exit-Test

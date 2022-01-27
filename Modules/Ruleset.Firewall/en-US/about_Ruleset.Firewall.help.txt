@@ -20,6 +20,9 @@ EXAMPLES
 	Format-RuleOutput
 	Format output of the Net-NewFirewallRule commandlet
 
+	Get-FirewallRule
+	Gets firewall rules directly from registry
+
 	Import-FirewallRule
 	Imports firewall rules from a CSV or JSON file
 

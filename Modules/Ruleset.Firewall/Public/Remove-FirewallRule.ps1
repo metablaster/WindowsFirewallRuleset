@@ -40,7 +40,8 @@ Only the field Name or - if Name is missing - DisplayName is used, all other fie
 Policy store from which remove rules, default is local GPO.
 
 .PARAMETER Path
-Folder in which file is located
+Folder in which file is located.
+Wildcard characters are supported.
 
 .PARAMETER FileName
 File name according to which to delete rules
@@ -115,7 +116,7 @@ function Remove-FirewallRule
 
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
-		$Path = [System.IO.DirectoryInfo] (Resolve-Path $Path.FullName).Path
+		$Path = Resolve-FileSystemPath $Path
 		if (!$Path -or !$Path.Exists)
 		{
 			Write-Error -Category ResourceUnavailable -Message "The path was not found: $Path"

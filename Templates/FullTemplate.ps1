@@ -131,7 +131,7 @@ This content appears when the Get-Help command includes the Functionality parame
 -Functionality parameter displays help for items with the specified functionality.
 #>
 
-# TODO: Remove using statement and/or elevation requirement
+# TODO: Remove or update using statement and/or elevation requirement
 using namespace System
 #Requires -Version 5.1
 #Requires -RunAsAdministrator

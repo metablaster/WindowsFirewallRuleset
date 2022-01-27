@@ -43,7 +43,8 @@ If the export file already exists it's content will be replaced by default.
 Policy store from which to export rules, default is local GPO.
 
 .PARAMETER Path
-Path into which to save file
+Path into which to save file.
+Wildcard characters are supported.
 
 .PARAMETER FileName
 Output file, default is CSV format
