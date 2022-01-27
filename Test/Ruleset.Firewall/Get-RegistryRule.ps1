@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-FirewallRule
+Unit test for Get-RegistryRule
 
 .DESCRIPTION
-Test correctness of Get-FirewallRule function
+Test correctness of Get-RegistryRule function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Get-FirewallRule.ps1
+PS> .\Get-RegistryRule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-FirewallRule.ps1
+None. You cannot pipe objects to Get-RegistryRule.ps1
 
 .OUTPUTS
-None. Get-FirewallRule.ps1 does not generate any output
+None. Get-RegistryRule.ps1 does not generate any output
 
 .NOTES
 None.
@@ -65,13 +65,31 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Get-FirewallRule"
+Enter-Test "Get-RegistryRule"
 
-Start-Test "Default test"
-$Result = Get-FirewallRule
+$Group = "Test registry rule"
+
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
+
+# New-NetFirewallRule -DisplayName "Test Internet" `
+# 	-PolicyStore $PolicyStore -Group $Group -Enabled False `
+# 	-Direction Inbound -EdgeTraversalPolicy DeferToApp |
+# Format-RuleOutput
+
+# Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+
+
+Start-Test "Default test 1"
+Get-RegistryRule -Direction Outbound -DisplayName "Microsoft.MicrosoftSolitaireCollection" #| Select-Object -Property RA4, RA42
+
+Start-Test "Default test 2"
+Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
+
+Start-Test "Default test 3"
+$Result = Get-RegistryRule -Direction Outbound -DisplayName "DNS Client"
 $Result
 
-Test-Output $Result -Command Get-FirewallRule
+Test-Output $Result -Command Get-RegistryRule
 
 Update-Log
 Exit-Test

@@ -57,7 +57,7 @@ If specified, name syntax errors are not shown, only true or false is returned.
 
 .PARAMETER Force
 If specified, domain name isn't checked against reserved words, thus the length of domain
-name isn't check either since reserved words may exceed the limit.
+name isn't checked either since reserved words may exceed the limit.
 
 .EXAMPLE
 PS> Test-NetBiosName "*SERVER" -Operation Domain
@@ -313,7 +313,9 @@ function Test-NetBiosName
 
 				if ($UserName.Contains(" "))
 				{
-					Write-Warning -Message "NETBIOS user name '$UserName' it's generally not a good idea to use spaces in account names" -WarningAction $WriteWarning
+					# TODO: Using verbose instead of warning because we are dealing a lot with NT AUTHORITY accounts
+					# There needs to be better design to avoid this, ex. by specifying switch parameter somehow
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] NETBIOS user name '$UserName' it's generally not a good idea to use spaces in account names"
 				}
 			}
 

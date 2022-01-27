@@ -39,6 +39,9 @@ One or more principals in form of UPN or NetBIOS Name.
 .PARAMETER DomainName
 If specified, the result is domain name instead of user name
 
+.PARAMETER Force
+If specified, does not perform name checking
+
 .EXAMPLE
 PS> Split-Principal COMPUTERNAME\USERNAME
 
@@ -65,7 +68,10 @@ function Split-Principal
 		[string[]] $Principal,
 
 		[Parameter()]
-		[switch] $DomainName
+		[switch] $DomainName,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	begin
@@ -80,7 +86,7 @@ function Split-Principal
 
 			if ($Account.Contains("\"))
 			{
-				if (Test-NetBiosName $Account -Force)
+				if ($Force -or (Test-NetBiosName $Account -Force))
 				{
 					if ($DomainName) { $Index = 0 }
 					else { $Index = 1 }
@@ -91,7 +97,7 @@ function Split-Principal
 			}
 			elseif ($Account.Contains("@"))
 			{
-				if (Test-UPN $Account)
+				if ($Force -or (Test-UPN $Account))
 				{
 					if ($DomainName) { $Index = 1 }
 					else { $Index = 0 }

@@ -37,6 +37,11 @@ relevant information about the principal.
 .PARAMETER SDDL
 One or more strings of SDDL syntax
 
+.PARAMETER Force
+If specified, does not perform name checking of converted string.
+This is useful for example to force spliting name like:
+"NT APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections from the Internet"
+
 .EXAMPLE
 PS> ConvertFrom-SDDL -SDDL "D:(A;;CC;;;S-1-5-84-0-0-0-0-0)"
 
@@ -62,7 +67,10 @@ function ConvertFrom-SDDL
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string[]] $SDDL
+		[string[]] $SDDL,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	begin
@@ -143,8 +151,8 @@ function ConvertFrom-SDDL
 						Select-Object -ExpandProperty Value
 
 						[PSCustomObject]@{
-							Domain = Split-Principal $Principal -DomainName
-							User = Split-Principal $Principal
+							Domain = Split-Principal $Principal -DomainName -Force:$Force
+							User = Split-Principal $Principal -Force:$Force
 							# TODO: Group = ?, we have no clue about group, calling a function would be overhead
 							# the reason why to include group is consitency for "Ruleset.UserInfo" custom object
 							Principal = $Principal

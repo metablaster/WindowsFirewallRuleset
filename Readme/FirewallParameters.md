@@ -1,10 +1,11 @@
 
 # Firewall Parameters
 
-Parameters and their values are not the same as they are displayed in Firewall GUI such as
-GPO or Advanced Windows firewall.
+Firewall parameters and their values are not the same as they are displayed in Firewall GUI,
+registry or by PowerShell commandlets.
 
-Explain what is what by mapping powershell parameters to GUI display equivalents.
+Explain what is what by mapping powershell parameters to GUI and registry equivalents.\
+In this document registry values are enclosed in parentheses.
 
 In addition, explanation of other parameters which are not self explanatory or well documented
 and usually need googling out what they do.
@@ -57,6 +58,7 @@ and usually need googling out what they do.
 
 - Port(s) can be specified only for TCP/UDP
 - The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
+**NOTE:** IPHTTPS(Out\In) ports are only supported on Windows Server
 
 ### LocalPort/RemotePort
 
@@ -64,18 +66,18 @@ and usually need googling out what they do.
 
 ### LocalPort TCP Inbound
 
-- `RPCEPMap` RPC Endpoint Mapper
-- `RPC` RPC Dynamic Ports
-- `IPHTTPSIn` IPHTTPS
+- `RPCEPMap` RPC Endpoint Mapper (RPC-EPMap)
+- `RPC` RPC Dynamic Ports (RPC)
+- `IPHTTPSIn` IPHTTPS (?)
 
 ### LocalPort UDP Inbound
 
-- `PlayToDiscovery` PlayTo Discovery
-- `Teredo` Edge Traversal
+- `PlayToDiscovery` PlayTo Discovery (sets LocalOnlyMapping to Ply2Disc)
+- `Teredo` Edge Traversal (Teredo)
 
 ### RemotePort TCP Outbound
 
-- `IPHTTPSOut` IPHTTPS
+- `IPHTTPSOut` IPHTTPS (?)
 
 [Table of Contents](#table-of-contents)
 
@@ -86,16 +88,16 @@ and usually need googling out what they do.
 
 ### RemoteAddress
 
-- `Any` Any IP Address
-- `LocalSubnet` Local Subnet
-- `Internet` Internet
-- `Intranet` Intranet
-- `DefaultGateway` Default Gateway
-- `DNS` DNS Servers
-- `WINS` WINS Servers
-- `DHCP` DHCP Servers
-- `IntranetRemoteAccess` Remote Corp Network
-- `PlayToDevice` PlayTo Renderers
+- `Any` Any IP Address (BLANK field)
+- `LocalSubnet` Local Subnet (LocalSubnet)
+- `Internet` Internet (IntErnet)
+- `Intranet` Intranet (IntrAnet)
+- `DefaultGateway` Default Gateway (DefaultGateway)
+- `DNS` DNS Servers (DNS)
+- `WINS` WINS Servers (WINS)
+- `DHCP` DHCP Servers (DHCP)
+- `IntranetRemoteAccess` Remote Corp Network (RmtIntrAnet)
+- `PlayToDevice` PlayTo Renderers (Ply2Renders)
 - `<unknown>` Captive Portal Addresses
 
 Address sections below were tested with:
@@ -155,10 +157,10 @@ From addresses below, only the IPv4 loopback range is valid for Windows firewall
 
 ### InterfaceType
 
-- `Any` All interface types
-- `Wired` Wired
-- `Wireless` Wireless
-- `RemoteAccess` Remote access
+- `Any` All interface types (BLANK field)
+- `Wired` Wired (Lan)
+- `Wireless` Wireless (Wireless)
+- `RemoteAccess` Remote access (RemoteAccess)
 
 ### InterfaceAlias
 
@@ -182,10 +184,10 @@ except if InterfaceType is `Any`, use just one of these two parameters.
 
 ## Edge traversal
 
-- `Block` Allow edge traversal
-- `Allow` Block edge traversal
-- `DeferToUser` Defer to user / Defer allow to user
-- `DeferToApp` Defer to application / Defer allow to application
+- `Block` Allow edge traversal (BLANK field)
+- `Allow` Block edge traversal (TRUE)
+- `DeferToUser` Defer to user / Defer allow to user (Defer = User)
+- `DeferToApp` Defer to application / Defer allow to application (TRUE, Defer = App)
 
 [Table of Contents](#table-of-contents)
 
