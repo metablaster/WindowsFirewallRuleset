@@ -48,6 +48,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - Firewall deployment with `Deploy-Firewall.ps1` script can be fully automated by using `-Force`
   and `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet` won't ask you any questions
 
+- Modules
+
+  - Fixed a bug in `Ruleset.Firewall\ConvertListTo-Multiline` causing bad rule export
+  - Updated functions, `Export-FirewallRule`, `Import-FirewallRule` and `Remove-FirewallRule`
+
 ## v0.11.0 (current release)
 
 - Rules

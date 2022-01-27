@@ -75,14 +75,14 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow an
 	# TODO: need to test failure cases, see also module todo's for more info
 
 	Start-Test "default"
-	$Result = Remove-FirewallRule -Folder $Exports -FileName "GroupExport"
+	$Result = Remove-FirewallRule -Path $Exports -FileName "GroupExport"
 	$Result
 
 	Start-Test "csv extension"
-	Remove-FirewallRule -Folder $Exports -FileName "$Exports\NamedExport1.csv"
+	Remove-FirewallRule -Path $Exports -FileName "NamedExport1.csv"
 
-	Start-Test " -JSON"
-	Remove-FirewallRule -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
+	Start-Test "-JSON"
+	Remove-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json"
 
 	Test-Output $Result -Command Remove-FirewallRule
 }

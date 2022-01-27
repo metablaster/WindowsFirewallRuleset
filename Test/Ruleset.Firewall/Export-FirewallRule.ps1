@@ -67,20 +67,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Export-FirewallRule"
 
-$Exports = "$ProjectRoot\Exports"
-
-# TODO: need to test failure cases, see also module todo's for more info
-
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
+	$Exports = "$ProjectRoot\Exports"
+
+	# TODO: need to test failure cases, see also module todo's for more info
+
 	Start-Test "-DisplayGroup '' -Outbound"
 	Export-FirewallRule -DisplayGroup "" -Outbound -Path $Exports -FileName "GroupExport"
 
 	Start-Test "-DisplayGroup 'Broadcast' -Outbound"
 	Export-FirewallRule -DisplayGroup "Broadcast" -Outbound -Path $Exports -FileName "GroupExport"
-
-	Start-Test "-DisplayName 'NONEXISTENT'"
-	Export-FirewallRule -DisplayName "NONEXISTENT" -Path $Exports -FileName "NonexistentExport"
 
 	Start-Test "-DisplayName 'Domain Name System'"
 	Export-FirewallRule -DisplayName "Domain Name System" -Path $Exports -FileName "NamedExport1"
@@ -88,11 +85,11 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 	Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -Append"
 	Export-FirewallRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -Append -FileName "NamedExport1"
 
-	Start-Test "-DisplayName 'Domain Name System' -JSON"
-	Export-FirewallRule -DisplayName "Domain Name System" -Path $Exports -JSON -FileName "NamedExport2"
+	Start-Test "-DisplayName 'Internet Group Management Protocol' -JSON"
+	Export-FirewallRule -DisplayName "Internet Group Management Protocol" -Path $Exports -JSON -FileName "NamedExport2"
 
-	Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -JSON -Append"
-	Export-FirewallRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -JSON -Append -FileName "NamedExport2"
+	Start-Test "-DisplayGroup 'Microsoft - One Drive' -Outbound -JSON -Append"
+	Export-FirewallRule -DisplayGroup "Microsoft - One Drive" -Outbound -Path $Exports -JSON -Append -FileName "NamedExport2"
 
 	# Start-Test "-Outbound -Disabled -Allow"
 	# Export-FirewallRule -Outbound -Disabled -Allow -Path $Exports -FileName "OutboundExport"

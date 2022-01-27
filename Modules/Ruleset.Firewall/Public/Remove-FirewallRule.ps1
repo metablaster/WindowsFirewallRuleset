@@ -115,10 +115,10 @@ function Remove-FirewallRule
 
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
-		$Path = Resolve-Path $Path
+		$Path = [System.IO.DirectoryInfo] (Resolve-Path $Path.FullName).Path
 		if (!$Path -or !$Path.Exists)
 		{
-			Write-Error -Category ResourceUnavailable -Message "The path was not: $Path"
+			Write-Error -Category ResourceUnavailable -Message "The path was not found: $Path"
 			return
 		}
 

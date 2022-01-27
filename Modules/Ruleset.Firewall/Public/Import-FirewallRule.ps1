@@ -270,7 +270,7 @@ function Import-FirewallRule
 		}
 		else
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Replacing existing rule"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
 		}
 
 		# Create new firewall rule, parameters are assigned with splatting
