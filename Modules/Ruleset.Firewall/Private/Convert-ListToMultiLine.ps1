@@ -33,6 +33,7 @@ Convert encoded single line string to multi line string array
 .DESCRIPTION
 Convert encoded single line string to multi line CRLF string array
 Input string `r is encoded as %% and `n as ||
+This function is used to dencode encoded firewall rule multiline description
 
 .PARAMETER Value
 String which to convert
@@ -72,7 +73,8 @@ function Convert-ListToMultiLine
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning -Message "Input is missing, result is empty string"
+		# TODO: Uncomment when all rules will have description
+		# Write-Warning -Message "Input is missing, result is empty string"
 		return ""
 	}
 

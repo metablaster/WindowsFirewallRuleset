@@ -1,0 +1,141 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Ruleset.Firewall/Scripts/ExportSchema.json",
+	"title": "Firewall rule schema",
+	"description": "Schema for Export-FirewallRule command",
+	"type": "object",
+	"required": [
+		"Name",
+		"DisplayName",
+		"Group",
+		"Profile",
+		"Enabled",
+		"Action",
+		"Service",
+		"Program",
+		"LocalAddress",
+		"RemoteAddress",
+		"Protocol",
+		"IcmpType",
+		"LocalPort",
+		"RemotePort",
+		"LocalUser",
+		"RemoteUser",
+		"InterfaceType",
+		"InterfaceAlias",
+		"EdgeTraversalPolicy",
+		"Owner",
+		"Package",
+		"Direction",
+		"Platform",
+		"LooseSourceMapping",
+		"LocalOnlyMapping",
+		"DynamicTarget",
+		"RemoteMachine",
+		"Authentication",
+		"Encryption",
+		"OverrideBlockRules",
+		"Description"
+	],
+	"properties": {
+		"Name": {
+			"type": "string"
+		},
+		"DisplayName": {
+			"type": "string"
+		},
+		"Group": {
+			"type": "string"
+		},
+		"Profile": {
+			"type": "number"
+		},
+		"Enabled": {
+			"type": "number"
+		},
+		"Action": {
+			"type": "number"
+		},
+		"Service": {
+			"type": "string"
+		},
+		"Program": {
+			"type": "string"
+		},
+		"LocalAddress": {
+			"type": "string"
+		},
+		"RemoteAddress": {
+			"type": "string"
+		},
+		"Protocol": {
+			"type": "string"
+		},
+		"IcmpType": {
+			"type": "string"
+		},
+		"LocalPort": {
+			"type": "string"
+		},
+		"RemotePort": {
+			"type": "string"
+		},
+		"LocalUser": {
+			"type": "string"
+		},
+		"RemoteUser": {
+			"type": "string"
+		},
+		"InterfaceType": {
+			"type": "number"
+		},
+		"InterfaceAlias": {
+			"type": "string"
+		},
+		"EdgeTraversalPolicy": {
+			"type": "number"
+		},
+		"Owner": {
+			"type": [
+				"null",
+				"string"
+			]
+		},
+		"Package": {
+			"type": [
+				"null",
+				"string"
+			]
+		},
+		"Direction": {
+			"type": "number"
+		},
+		"Platform": {
+			"type": "string"
+		},
+		"LooseSourceMapping": {
+			"type": "boolean"
+		},
+		"LocalOnlyMapping": {
+			"type": "boolean"
+		},
+		"DynamicTarget": {
+			"type": "number"
+		},
+		"RemoteMachine": {
+			"type": "string"
+		},
+		"Authentication": {
+			"type": "number"
+		},
+		"Encryption": {
+			"type": "number"
+		},
+		"OverrideBlockRules": {
+			"type": "boolean"
+		},
+		"Description": {
+			"type": "string"
+		}
+	}
+}

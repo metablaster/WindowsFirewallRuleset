@@ -85,8 +85,6 @@ function Convert-ArrayToList
 			{
 				$Result += "$Value,"
 			}
-
-			Write-Output $Result.TrimEnd(",")
 		}
 		else
 		{
@@ -95,6 +93,6 @@ function Convert-ArrayToList
 	}
 	end
 	{
-		Write-Output $Result
+		Write-Output $Result.TrimEnd(",")
 	}
 }

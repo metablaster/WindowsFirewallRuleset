@@ -140,6 +140,8 @@ Also few commandlets from these modules:
 
 [Windows Firewall Technologies](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/portal)
 
+[Firewall Rule and the Firewall Rule Grammar Rule](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16?redirectedfrom=MSDN)
+
 ## Virtualization
 
 [What is the Hyper-V Virtual Switch and How Does it Work?](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)

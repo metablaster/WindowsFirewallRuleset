@@ -73,29 +73,35 @@ $Exports = "$ProjectRoot\Exports"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
 {
-	Start-Test "-DisplayGroup"
-	Export-FirewallRule -DisplayGroup "" -Outbound -Folder $Exports -FileName "GroupExport" # -DisplayName "Gwent"
+	Start-Test "-DisplayGroup '' -Outbound"
+	Export-FirewallRule -DisplayGroup "" -Outbound -Path $Exports -FileName "GroupExport"
 
-	Start-Test "-DisplayGroup"
-	Export-FirewallRule -DisplayGroup "Broadcast" -Outbound -Folder $Exports -FileName "GroupExport"
+	Start-Test "-DisplayGroup 'Broadcast' -Outbound"
+	Export-FirewallRule -DisplayGroup "Broadcast" -Outbound -Path $Exports -FileName "GroupExport"
 
-	Start-Test "-DisplayName NONEXISTENT"
-	Export-FirewallRule -DisplayName "NONEXISTENT" -Folder $Exports -FileName "NamedExport1"
+	Start-Test "-DisplayName 'NONEXISTENT'"
+	Export-FirewallRule -DisplayName "NONEXISTENT" -Path $Exports -FileName "NonexistentExport"
 
-	Start-Test "-DisplayName"
-	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -FileName "NamedExport1"
+	Start-Test "-DisplayName 'Domain Name System'"
+	Export-FirewallRule -DisplayName "Domain Name System" -Path $Exports -FileName "NamedExport1"
 
-	Start-Test "-DisplayName -JSON"
-	Export-FirewallRule -DisplayName "Domain Name System" -Folder $Exports -JSON -Append -FileName "NamedExport2"
+	Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -Append"
+	Export-FirewallRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -Append -FileName "NamedExport1"
 
-	Start-Test "-Outbound -Disabled -Allow"
-	Export-FirewallRule -Outbound -Disabled -Allow -Folder $Exports -FileName "OutboundExport"
+	Start-Test "-DisplayName 'Domain Name System' -JSON"
+	Export-FirewallRule -DisplayName "Domain Name System" -Path $Exports -JSON -FileName "NamedExport2"
 
-	Start-Test "-Inbound -Enabled -Block -JSON"
-	Export-FirewallRule -Inbound -Enabled -Block -Folder $Exports -JSON -FileName "InboundExport"
+	Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -JSON -Append"
+	Export-FirewallRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -JSON -Append -FileName "NamedExport2"
 
-	Start-Test "-DisplayGroup"
-	$Result = Export-FirewallRule -DisplayName "Microsoft.BingWeather" -Outbound -Folder $Exports -FileName "StoreAppExport" # -DisplayName "Gwent"
+	# Start-Test "-Outbound -Disabled -Allow"
+	# Export-FirewallRule -Outbound -Disabled -Allow -Path $Exports -FileName "OutboundExport"
+
+	# Start-Test "-Inbound -Enabled -Block -JSON"
+	# Export-FirewallRule -Inbound -Enabled -Block -Path $Exports -JSON -FileName "InboundExport"
+
+	Start-Test "-DisplayName 'Microsoft.BingWeather' -Outbound"
+	$Result = Export-FirewallRule -DisplayName "Microsoft.BingWeather" -Outbound -Path $Exports -FileName "StoreAppExport"
 	$Result
 
 	Test-Output $Result -Command Export-FirewallRule

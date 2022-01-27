@@ -515,7 +515,8 @@ function Enable-WinRMServer
 		if ($TokenValue -ne 1)
 		{
 			# In some cases Enable-PSRemoting did not set it
-			Write-Warning -Message "LocalAccountTokenFilterPolicy was not enabled ($TokenValue), setting manually"
+			# TODO: On fresh W10 system TokenValue was blank, why or how?
+			Write-Warning -Message "LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
 
 			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
 				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System

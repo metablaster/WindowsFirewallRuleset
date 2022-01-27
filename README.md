@@ -350,10 +350,10 @@ on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step.
 
-12. Back to PowerShell console and run interactive `Deploy-Firewall` command below:
+12. Back to PowerShell console and run `Deploy-Firewall` command below:
 
     ```powershell
-    .\Scripts\Deploy-Firewall.ps1 -Interactive
+    .\Scripts\Deploy-Firewall.ps1
     ```
 
     Hit enter and you'll be asked questions such as what kind of rulesets you want.\

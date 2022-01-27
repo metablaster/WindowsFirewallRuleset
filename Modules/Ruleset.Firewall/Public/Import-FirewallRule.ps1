@@ -113,10 +113,10 @@ function Import-FirewallRule
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$Path = Resolve-Path $Path
+	$Path = [System.IO.DirectoryInfo] (Resolve-Path $Path.FullName).Path
 	if (!$Path -or !$Path.Exists)
 	{
-		Write-Error -Category ResourceUnavailable -Message "The path was not: $Path"
+		Write-Error -Category ResourceUnavailable -Message "The path was not found: $Path"
 		return
 	}
 
@@ -171,74 +171,94 @@ function Import-FirewallRule
 			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
 			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 26 * 60)
 
-		# generate Hashtable for New-NetFirewallRule parameters
+		# Create Hashtable for New-NetFirewallRule parameters
 		$RuleSplatHash = @{
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
-			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
 			Group = $Rule.Group
-			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
-			Platform = Convert-ListToArray $Rule.Platform @()
-			Direction = $Rule.Direction
+			Enabled = $Rule.Enabled
 			Action = $Rule.Action
-			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			LooseSourceMapping = Convert-ValueToBoolean $Rule.LooseSourceMapping
-			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
+			Service = $Rule.Service
+			Program = $Rule.Program
 			LocalAddress = Convert-ListToArray $Rule.LocalAddress
 			RemoteAddress = Convert-ListToArray $Rule.RemoteAddress
 			Protocol = $Rule.Protocol
+			IcmpType = Convert-ListToArray $Rule.IcmpType
 			LocalPort = Convert-ListToArray $Rule.LocalPort
 			RemotePort = Convert-ListToArray $Rule.RemotePort
-			IcmpType = $Rule.IcmpType
-			DynamicTarget = if ([string]::IsNullOrEmpty($Rule.DynamicTarget)) { "Any" } else { $Rule.DynamicTarget }
-			Program = $Rule.Program
-			Service = $Rule.Service
-			InterfaceAlias = Convert-ListToArray $Rule.InterfaceAlias
-			InterfaceType = $Rule.InterfaceType
 			LocalUser = $Rule.LocalUser
 			RemoteUser = $Rule.RemoteUser
+			InterfaceType = $Rule.InterfaceType
+			InterfaceAlias = Convert-ListToArray $Rule.InterfaceAlias
+			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
+			Direction = $Rule.Direction
+			Platform = Convert-ListToArray $Rule.Platform @()
+			LooseSourceMapping = Convert-ValueToBoolean $Rule.LooseSourceMapping
+			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
+			DynamicTarget = if ([string]::IsNullOrEmpty($Rule.DynamicTarget)) { "Any" } else { $Rule.DynamicTarget }
 			RemoteMachine = $Rule.RemoteMachine
 			Authentication = $Rule.Authentication
 			Encryption = $Rule.Encryption
 			OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
+			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
 		}
 
-		# for SID types no empty value is defined, so omit if not present
+		# For SID types no empty value is defined, therefore omit if not present
 		if (![string]::IsNullOrEmpty($Rule.Owner))
 		{
-			$LoginName = (ConvertFrom-SID $Rule.Owner).Name
-
-			# For rule owner "Any" refers to any owner
-			# TODO: for store apps owner must be explicit? see specific rules that apply to all store apps
-			if ([string]::IsNullOrEmpty($LoginName) -or ($Rule.Package -ne "Any"))
+			# TODO: For rule owner, "Any" refers to any owner? for store apps owner must be explicit?
+			if ($Rule.Owner -eq "Any")
 			{
-				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner does not exist"
-				continue
+				$LoginName = ""
 			}
 			else
 			{
-				$RuleSplatHash.Owner = $Rule.Owner
+				$LoginName = (ConvertFrom-SID $Rule.Owner).Name
 			}
-		}
 
-		if (![string]::IsNullOrEmpty($Rule.Package))
-		{
-			$LoginName = (ConvertFrom-SID $Rule.Package).Name
-
-			# For rule package "*" refers to store apps only, and, "Any" refers to any programs, apps or services
-			if ([string]::IsNullOrEmpty($LoginName) -or (($Rule.Package -ne "*") -or ($Rule.Package -ne "Any")))
+			# NOTE: We're assuming "Any" is not valid for store app rule
+			if ([string]::IsNullOrEmpty($LoginName))
 			{
-				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package does not exist"
+				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner is missing or does not exist"
 				continue
+			}
+			elseif (![string]::IsNullOrEmpty($Rule.Package))
+			{
+				# For rule package, "*" refers to store apps only, and "Any" refers to all programs and application packages
+				if ($Rule.Package -eq "Any")
+				{
+					$PackageName = ""
+				}
+				elseif ($Rule.Package -eq "*")
+				{
+					$PackageName = "*"
+				}
+				else
+				{
+					$PackageName = (ConvertFrom-SID $Rule.Package).Name
+				}
+
+				# NOTE: We're assuming "Any" is not valid for store app rule
+				if ([string]::IsNullOrEmpty($PackageName))
+				{
+					Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package is missing or does not exist"
+					continue
+				}
+				else
+				{
+					$RuleSplatHash.Owner = $Rule.Owner
+					$RuleSplatHash.Package = $Rule.Package
+				}
 			}
 			else
 			{
-				$RuleSplatHash.Package = $Rule.Package
+				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package is missing"
+				continue
 			}
 		}
 
-		# remove rule if present
+		# Remove rule if present
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 
 		$IsRemoved = @()
@@ -253,7 +273,7 @@ function Import-FirewallRule
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Replacing existing rule"
 		}
 
-		# generate new firewall rule, parameters are assigned with splatting
+		# Create new firewall rule, parameters are assigned with splatting
 		# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
 		New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
 	}

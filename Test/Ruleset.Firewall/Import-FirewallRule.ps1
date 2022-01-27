@@ -72,20 +72,19 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 {
 	$Exports = "$ProjectRoot\Exports"
 
-	# TODO: need to test failure cases, see also module todo's for more info
-	# TODO: need to test store apps import for "Any" and "*" owner/package
+	# TODO: Need to test failure cases, see also module todo's for more info
 
 	Start-Test "-FileName GroupExport.csv"
-	Import-FirewallRule -Folder $Exports -FileName "GroupExport.csv"
+	Import-FirewallRule -Path $Exports -FileName "GroupExport.csv"
 
 	Start-Test "-FileName NamedExport1.csv"
-	Import-FirewallRule -Folder $Exports -FileName "$Exports\NamedExport1.csv"
+	Import-FirewallRule -Path $Exports -FileName "NamedExport1.csv"
 
 	Start-Test "-JSON -FileName NamedExport2.json"
-	Import-FirewallRule -JSON -Folder $Exports -FileName "$Exports\NamedExport2.json"
+	Import-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json"
 
 	Start-Test "-FileName StoreAppExport.csv"
-	$Result = Import-FirewallRule -Folder $Exports -FileName "StoreAppExport.csv"
+	$Result = Import-FirewallRule -Path $Exports -FileName "StoreAppExport.csv"
 	$Result
 
 	Test-Output $Result -Command Import-FirewallRule

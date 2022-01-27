@@ -33,6 +33,7 @@ Convert multi line string array to single line string
 .DESCRIPTION
 Convert multi line string array to single line string
 `r is encoded as %% and `n as ||
+This function is used to encode firewall rule multiline description
 
 .PARAMETER Value
 String array which to convert
@@ -71,7 +72,8 @@ function Convert-MultiLineToList
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning -Message "Input is missing, result is empty string"
+		# TODO: Uncomment when all rules will have description
+		# Write-Warning -Message "Input is missing, result is empty string"
 		return ""
 	}
 

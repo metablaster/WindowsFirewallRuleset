@@ -119,27 +119,7 @@ Following modifications by metablaster August 2020:
 December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
-TODO: export to excel
-TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"
-
-Outbound:
-
-Broadcast
-Network Discovery
-File and Printer Sharing
-GitHub
-Development - Microsoft Visual Studio
-Software - Nvidia
-[Server - SQL] -> SQL Server Management Studio
-[Microsoft - Office
-Windows System
-
-Inbound:
-
-Broadcast
-Network Discovery
-File and Printer Sharing
-Microsoft Office
+TODO: Export to excel
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md
@@ -265,7 +245,7 @@ function Export-FirewallRule
 
 	foreach ($Rule In $FirewallRules)
 	{
-		# TODO: -Status to be consistent (to not repeat multiple times) we need to sort rules
+		# TODO: for -Status to be consistent (to not repeat multiple times) we need to sort rules
 		Write-Progress -Activity "Exporting firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
 			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
 			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
@@ -280,6 +260,7 @@ function Export-FirewallRule
 			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 		}
 
+		# NOTE: Filters are what makes this script ultra slow, each takes approx 1 second
 		# Retrieve addresses,
 		$AddressFilter = $Rule | Get-NetFirewallAddressFilter
 		# ports,
@@ -299,36 +280,35 @@ function Export-FirewallRule
 		$FirewallRuleSet += [PSCustomObject]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
-			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
 			Group = $Rule.Group
-			Enabled = $Rule.Enabled
 			Profile = $Rule.Profile
-			Platform = Convert-ArrayToList $Rule.Platform
-			Direction = $Rule.Direction
+			Enabled = $Rule.Enabled
 			Action = $Rule.Action
-			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			LooseSourceMapping = $Rule.LooseSourceMapping
-			LocalOnlyMapping = $Rule.LocalOnlyMapping
-			Owner = $Rule.Owner
+			Service = $ServiceFilter.Service
+			Program = $ApplicationFilter.Program
 			LocalAddress = Convert-ArrayToList $AddressFilter.LocalAddress
 			RemoteAddress = Convert-ArrayToList $AddressFilter.RemoteAddress
 			Protocol = $PortFilter.Protocol
+			IcmpType = Convert-ArrayToList $PortFilter.IcmpType
 			LocalPort = Convert-ArrayToList $PortFilter.LocalPort
 			RemotePort = Convert-ArrayToList $PortFilter.RemotePort
-			IcmpType = Convert-ArrayToList $PortFilter.IcmpType
-			DynamicTarget = $PortFilter.DynamicTarget
-			# TODO: Need to see why is this needed
-			Program = $ApplicationFilter.Program -Replace "$($env:SystemRoot.Replace("\","\\"))\\", "%SystemRoot%\" -Replace "$(${ENV:ProgramFiles(x86)}.Replace("\","\\").Replace("(","\(").Replace(")","\)"))\\", "%ProgramFiles(x86)%\" -Replace "$($ENV:ProgramFiles.Replace("\","\\"))\\", "%ProgramFiles%\"
-			Package = $ApplicationFilter.Package
-			Service = $ServiceFilter.Service
-			InterfaceAlias = Convert-ArrayToList $InterfaceFilter.InterfaceAlias
-			InterfaceType = $InterfaceTypeFilter.InterfaceType
 			LocalUser = $SecurityFilter.LocalUser
 			RemoteUser = $SecurityFilter.RemoteUser
+			InterfaceType = $InterfaceTypeFilter.InterfaceType
+			InterfaceAlias = Convert-ArrayToList $InterfaceFilter.InterfaceAlias
+			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
+			Owner = $Rule.Owner
+			Package = $ApplicationFilter.Package
+			Direction = $Rule.Direction
+			Platform = Convert-ArrayToList $Rule.Platform
+			LooseSourceMapping = $Rule.LooseSourceMapping
+			LocalOnlyMapping = $Rule.LocalOnlyMapping
+			DynamicTarget = $PortFilter.DynamicTarget
 			RemoteMachine = $SecurityFilter.RemoteMachine
 			Authentication = $SecurityFilter.Authentication
 			Encryption = $SecurityFilter.Encryption
 			OverrideBlockRules = $SecurityFilter.OverrideBlockRules
+			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
 		}
 	}
 
@@ -355,9 +335,16 @@ function Export-FirewallRule
 
 		if ($Append)
 		{
-			# TODO: Need to implement appending to JSON
-			Write-Warning -Message "Appending to JSON not implemented"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+			if (Test-Path -PathType Leaf -Path "$Path\$FileName")
+			{
+				$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path "$Path\$FileName" -Raw)
+				@($JsonFile; $FirewallRuleSet) | ConvertTo-Json |
+				Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+			}
+			else
+			{
+				Write-Warning -Message "Not appending rule to file because no existing file"
+			}
 		}
 		else
 		{
@@ -381,17 +368,18 @@ function Export-FirewallRule
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
 				$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
 				Select-Object -Skip 1 | Add-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
-				return
 			}
 			else
 			{
 				Write-Warning -Message "Not appending rule to file because no existing file"
 			}
 		}
-
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
-		$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-		Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+		else
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
+			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
+			Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+		}
 	}
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules into: '$FileName' done"
