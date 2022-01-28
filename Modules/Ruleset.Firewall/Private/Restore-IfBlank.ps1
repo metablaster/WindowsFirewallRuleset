@@ -62,6 +62,8 @@ function Restore-IfBlank
 		[string[]] $DefaultValue = "Any"
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	if (![string]::IsNullOrEmpty($Value))
 	{
 		return $Value

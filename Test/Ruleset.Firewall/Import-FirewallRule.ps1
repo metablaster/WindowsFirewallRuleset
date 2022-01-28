@@ -55,6 +55,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[switch] $Registry,
+
+	[Parameter()]
+	[switch] $Default,
+
+	[Parameter()]
+	[switch] $StoreApp,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -74,23 +83,47 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 
 	# TODO: Need to test failure cases, see also module todo's for more info
 
-	Start-Test "-FileName GroupExport.csv"
-	Import-FirewallRule -Path $Exports -FileName "RegGroupExport.csv"
-
-	Start-Test "-FileName NamedExport1.csv"
-	Import-FirewallRule -Path $Exports -FileName "RegNamedExport1.csv" -Overwrite
-
-	Start-Test "-JSON -FileName NamedExport2.json"
-	$Result = Import-FirewallRule -JSON -Path $Exports -FileName "RegNamedExport2.json" -Overwrite
-	$Result
-
-	if ($false)
+	if ($Registry)
 	{
-		Start-Test "-FileName StoreAppExport.csv"
-		Import-FirewallRule -Path $Exports -FileName "RegStoreAppExport.csv" -Overwrite
+		Start-Test "-FileName RegGroupExport.csv"
+		Import-FirewallRule -Path $Exports -FileName "RegGroupExport.csv"
+
+		Start-Test "-FileName RegNamedExport1.csv"
+		Import-FirewallRule -Path $Exports -FileName "RegNamedExport1.csv" -Overwrite
+
+		Start-Test "-JSON -FileName RegNamedExport2.json"
+		$Result = Import-FirewallRule -JSON -Path $Exports -FileName "RegNamedExport2.json" -Overwrite
+		$Result
+
+		if ($StoreApp)
+		{
+			Start-Test "-FileName RegStoreAppExport.csv"
+			Import-FirewallRule -Path $Exports -FileName "RegStoreAppExport.csv" -Overwrite
+		}
+
+		Test-Output $Result -Command Import-FirewallRule
 	}
 
-	Test-Output $Result -Command Import-FirewallRule
+	if ($Default)
+	{
+		Start-Test "-FileName GroupExport.csv"
+		Import-FirewallRule -Path $Exports -FileName "GroupExport.csv"
+
+		Start-Test "-FileName RegNamedExport1.csv"
+		Import-FirewallRule -Path $Exports -FileName "NamedExport1.csv" -Overwrite
+
+		Start-Test "-JSON -FileName NamedExport2.json"
+		$Result = Import-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json" -Overwrite
+		$Result
+
+		if ($StoreApp)
+		{
+			Start-Test "-FileName StoreAppExport.csv"
+			Import-FirewallRule -Path $Exports -FileName "StoreAppExport.csv" -Overwrite
+		}
+
+		Test-Output $Result -Command Import-FirewallRule
+	}
 }
 
 Update-Log

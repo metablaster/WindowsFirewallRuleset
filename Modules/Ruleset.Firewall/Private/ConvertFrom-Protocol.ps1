@@ -60,13 +60,16 @@ function ConvertFrom-Protocol
 		[int32] $Protocol
 	)
 
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 	switch ($Protocol)
 	{
+		# NOTE: For New-NetFirewallRule following protocols by name are valid: TCP, UDP, ICMPv4, or ICMPv6.
 		1 { "ICMPv4" }
-		2 { "IGMP" }
+		# 2 { "IGMP" }
 		6 { "TCP" }
 		17 { "UDP" }
-		41 { "IPv6" }
+		# 41 { "IPv6" }
 		58 { "ICMPv6" }
 		default { $Protocol }
 	}

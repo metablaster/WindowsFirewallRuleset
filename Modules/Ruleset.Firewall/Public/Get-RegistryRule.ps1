@@ -281,8 +281,11 @@ function Get-RegistryRule
 						# This token represents the FW_RULE_FLAGS_ACTIVE flag
 						"Active"
 						{
-							if ($EntryValue -eq "TRUE") { $HashProps.Enabled = $true }
-							else { $HashProps.Enabled = $false }
+							# NOTE: New-NetFirewallRule, the type of this parameter is not boolean,
+							# therefore $true and $false variables are not acceptable values here.
+							# Use "True" and "False" text strings instead.
+							if ($EntryValue -eq "TRUE") { $HashProps.Enabled = "True" }
+							else { $HashProps.Enabled = "False" }
 							break
 						}
 						# This token value represents the Direction field
@@ -436,14 +439,8 @@ function Get-RegistryRule
 						# FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE_APP and FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE_USER flag
 						"Defer" { $HashProps.Defer = $EntryValue; break }
 						# This token represents the wszLocalUserAuthorizationList field of the FW_RULE structure
-						"LUAuth"
-						{
-							# $FromSDDL = ConvertFrom-SDDL $EntryValue -Force
-							# $HashProps.LocalUser = $FromSDDL.Principal
-
-							$HashProps.LocalUser = $EntryValue
-							break
-						}
+						# ex. D:(D;;CC;;;S-1-15-3-4)
+						"LUAuth" { $HashProps.LocalUser = $EntryValue; break }
 						# This token value represents the base64 encoded content of wszLocalUserAuthorizationList and
 						# it also adds the FW_RULE_FLAGS_LUA_CONDITIONAL_ACE flag on the wFlags field of the FW_RULE2_24 structure
 						"LUAuth2_24" { $HashProps.LocalUserBase64 = $EntryValue; break }
@@ -452,37 +449,13 @@ function Get-RegistryRule
 						#  This token represents the wszLocalUserOwner field of the FW_RULE structure
 						# FW_RULE: A pointer to a Unicode string in SID string format. The SID specifies the security principal that owns the rule.
 						# ex. S-1-5-21-2594679847-4063407168-2096078110-1010
-						"LUOwn"
-						{
-							if ($EntryValue -ne "Any")
-							{
-								$HashProps.Owner = Get-SDDL -User (ConvertFrom-SID $EntryValue).User
-							}
-							else
-							{
-								$HashProps.Owner = $EntryValue
-							}
-							break
-						}
+						"LUOwn" { $HashProps.Owner = $EntryValue; break }
 						# This token represents the wszPackageId field of the FW_RULE structure
 						# FW_RULE: A pointer to a Unicode string in SID string format ([MS-DTYP] section 2.4.2.1).
 						# It is a condition that specifies the application SID of the process that uses the traffic that the rule matches.
 						# A null in this field means that the rule applies to all processes in the host.
 						# ex. S-1-15-2-1985198343-3186790915-4047221937-1969271670-3792558349-1325541827-400269725
-						"AppPkgId"
-						{
-							if ($EntryValue -eq "*")
-							{
-								$HashProps.Package = "*"
-							}
-							else # if ($EntryValue -ne "Any")
-							{
-								# NOTE: Not converting SID here because it takes too long
-								# Can be faster if single rule is retrieved
-								$HashProps.Package = $EntryValue
-							}
-							break
-						}
+						"AppPkgId" { $HashProps.Package = $EntryValue; break }
 						# This token represents the FW_RULE_FLAGS_LOOSE_SOURCE_MAPPED flag
 						"LSM"
 						{

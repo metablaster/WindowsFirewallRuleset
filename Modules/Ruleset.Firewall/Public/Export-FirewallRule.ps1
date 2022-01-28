@@ -200,12 +200,14 @@ function Export-FirewallRule
 	if (!$Allow -and $Block) { $Action = "Block" }
 
 	# Read firewall rules
+	[array] $FirewallRules = @()
+
 	# NOTE: Getting rules may fail for multiple reasons, there is no point to handle errors here
 	if ($DisplayGroup -eq "")
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
+		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
 			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
 				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
@@ -215,7 +217,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
+		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -224,13 +226,13 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
+		$FirewallRules += Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
 	}
 
-	if (!$FirewallRules)
+	if ($FirewallRules.Length -eq 0)
 	{
 		Write-Warning -Message "No rules were retrieved from firewall to export"
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: possible cause is either no match or an error ocurred"
@@ -327,6 +329,9 @@ function Export-FirewallRule
 	# NOTE: Split-Path -Extension is not available in Windows PowerShell
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
 
+	# HACK: For some very odd reason rule properties Action, Enabled, Direction and Profile will
+	# be saved as numbers, and odd enough it will work for import.
+	# This happens after ConvertTo-Json, $FirewallRuleSet variable contains string values
 	if ($JSON)
 	{
 		# Output rules in JSON format

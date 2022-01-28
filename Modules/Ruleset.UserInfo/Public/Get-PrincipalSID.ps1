@@ -34,7 +34,7 @@ Get SID for specified user account
 Get SID's for single or multiple user names on a target computer
 
 .PARAMETER User
-Array of user names
+One or more user names
 
 .PARAMETER Domain
 Target computer on which to perform query

@@ -129,6 +129,7 @@ function Import-FirewallRule
 
 	# NOTE: Split-Path -Extension is not available in Windows PowerShell
 	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+	[array] $FirewallRules = @()
 
 	if ($JSON)
 	{
@@ -145,7 +146,7 @@ function Import-FirewallRule
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
 		Confirm-FileEncoding "$Path\$FileName"
-		$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
+		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 	}
 	else
 	{
@@ -162,7 +163,7 @@ function Import-FirewallRule
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"
 		Confirm-FileEncoding "$Path\$FileName"
-		$FirewallRules = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
+		$FirewallRules += Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Csv -Delimiter ";"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
@@ -201,6 +202,8 @@ function Import-FirewallRule
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
 			LocalUser = $Rule.LocalUser
 			RemoteUser = $Rule.RemoteUser
+			Owner = $Rule.Owner
+			Package = Restore-IfBlank $Rule.Package
 			LooseSourceMapping = Convert-ValueToBoolean $Rule.LooseSourceMapping
 			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
 			Platform = Convert-ListToArray $Rule.Platform -DefaultValue @()
@@ -211,61 +214,6 @@ function Import-FirewallRule
 			# Authentication = $Rule.Authentication
 			# Encryption = $Rule.Encryption
 			# OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
-		}
-
-		# TODO: Both should default to Any?
-		# For SID types no empty value is defined, therefore omit if not present
-		if (![string]::IsNullOrEmpty($Rule.Owner))
-		{
-			# TODO: For rule owner, "Any" refers to any owner? for store apps owner must be explicit?
-			if ($Rule.Owner -eq "Any")
-			{
-				$LoginName = ""
-			}
-			else
-			{
-				$LoginName = (ConvertFrom-SID $Rule.Owner).Name
-			}
-
-			# NOTE: We're assuming "Any" is not valid for store app rule
-			if ([string]::IsNullOrEmpty($LoginName))
-			{
-				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app owner is missing or does not exist"
-				continue
-			}
-			elseif (![string]::IsNullOrEmpty($Rule.Package))
-			{
-				# For rule package, "*" refers to store apps only, and "Any" refers to all programs and application packages
-				if ($Rule.Package -eq "Any")
-				{
-					$PackageName = ""
-				}
-				elseif ($Rule.Package -eq "*")
-				{
-					$PackageName = "*"
-				}
-				else
-				{
-					$PackageName = (ConvertFrom-SID $Rule.Package).Name
-				}
-
-				# NOTE: We're assuming "Any" is not valid for store app rule
-				if ([string]::IsNullOrEmpty($PackageName))
-				{
-					Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package is missing or does not exist"
-					continue
-				}
-				else
-				{
-					$HashProps.Owner = $Rule.Owner
-					$HashProps.Package = $Rule.Package
-				}
-			}
-			else
-			{
-				Write-Warning -Message "Importing rule '$($Rule.Displayname)' skipped, store app package is missing"
-				continue
-			}
 		}
 
 		# Remove rule if present
@@ -300,7 +248,7 @@ function Import-FirewallRule
 		}
 		else
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing rule '$($Rule.Displayname)' from '$FileName' skipped"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing rule '$($Rule.Displayname)' from '$FileName' skipped, use -Overwrite to force"
 		}
 	} # foreach
 
