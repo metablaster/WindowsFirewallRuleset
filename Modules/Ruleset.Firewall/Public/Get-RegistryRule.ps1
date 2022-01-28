@@ -148,47 +148,61 @@ function Get-RegistryRule
 				$HashProps = [ordered]@{
 					Name = $null # Name
 					DisplayName = $null
+					Group = $null
 					DisplayGroup = $null # EmbedCtxt
 					Action = $null
 					Enabled = $null # Active
 					Direction = $null # Dir
-					Profile = $null
-					Protocol = $null
+					Profile = $null # "Any"
+					Protocol = $null # "Any"
 					LPort = $null
 					RPort = $null
 					LPort2_10 = $null
 					RPort2_10 = $null
-					LocalPort = $null
-					RemotePort = $null
+					LocalPort = $null # "Any"
+					RemotePort = $null # "Any"
+					ICMP4 = $null
+					ICMP6 = $null
+					IcmpType = $null # "Any"
 					LA4 = $null
 					LA6 = $null
 					RA4 = $null
 					RA6 = $null
 					RA42 = $null
 					RA62 = $null
-					LocalAddress = $null
-					RemoteAddress = $null
-					Service = $null # Svc
-					Program = $null # App
-					ICMP4 = $null
-					ICMP6 = $null
-					InterfaceType = $null # IFType
+					LocalAddress = $null # "Any"
+					RemoteAddress = $null # "Any"
+					Service = $null # "Any" # Svc
+					Program = $null # "Any" # App
+					InterfaceType = $null # "Any" # IFType
 					InterfaceAlias = $null # IF
 					Edge = $null
 					Defer = $null
 					EdgeTraversalPolicy = $null
-					LocalUser = $null # LUAuth
+					LocalUser = $null # "Any" # LUAuth
 					LocalUserBase64 = $null # LUAuth2_24
-					Owner = $null # LUOwn
-					ApplicationPackage = $null # AppPkgId
-					LooseSourceMapping = $null # LSM
-					LocalOnlyMapping = $null # LOM
+					RemoteUser = $null # RUAuth
+					Owner = $null # "Any" # LUOwn
+					Package = $null # "Any" # AppPkgId
+					LooseSourceMapping = $null # $false # LSM
+					LocalOnlyMapping = $null # $false # LOM
 					Platform = $null # Platform
 					Platform2 = $null
 					RuleVersion = $null # <BLANK>
-					TTK2_27 = $null
-					LPort2_20 = $null
 					Description = $null # Desc
+					TTK = $null
+					TTK2_22 = $null
+					TTK2_27 = $null
+					TTK2_28 = $null
+					LPort2_20 = $null
+					Security = $null
+					Security2 = $null
+					Security2_9 = $null
+					SkipVer = $null
+					PCross = $null
+					AuthByPassOut = $null
+					NNm = $null
+					SecurityRealmId = $null
 				}
 
 				# Determine if this is a local or a group policy rule and display this in the hashtable
@@ -238,7 +252,14 @@ function Get-RegistryRule
 						# A pointer to a Unicode string that provides a friendly name for the rule
 						"Name" { $HashProps.DisplayName = $EntryValue; break }
 						# It specifies a group name for this rule
-						"EmbedCtxt" { $HashProps.DisplayGroup = $EntryValue; break }
+						"EmbedCtxt"
+						{
+							# NOTE: EmbedCtxt is DisplayGroup, setting Group here by the way
+							# because we want to set it to something
+							$HashProps.Group = $EntryValue
+							$HashProps.DisplayGroup = $EntryValue
+							break
+						}
 						"Action" { $HashProps.Action = $EntryValue; break }
 						# This token represents the FW_RULE_FLAGS_ACTIVE flag
 						"Active"
@@ -254,7 +275,7 @@ function Get-RegistryRule
 							else { $HashProps.Direction = "Inbound" }
 							break
 						}
-						"Profile" { $HashProps.Profile = $EntryValue }
+						"Profile" { [array] $HashProps.Profile += $EntryValue }
 						"Protocol"
 						{
 							$HashProps.Protocol = ConvertFrom-Protocol $EntryValue
@@ -293,8 +314,24 @@ function Get-RegistryRule
 							[array] $HashProps.RemotePort += $EntryValue
 							break
 						}
+						# This token value represents the V4TypeCodeList field
+						"ICMP4"
+						{
+							[array] $HashProps.ICMP4 += $EntryValue
+							# Icmp type only, without code, is saved as type:*
+							[array] $HashProps.IcmpType += $EntryValue.ToString().TrimEnd(":*")
+							break
+						}
+						# This token value represents the V6TypeCodeList
+						"ICMP6"
+						{
+							[array] $HashProps.ICMP6 += $EntryValue
+							# Icmp type only, without code, is saved as type:*
+							[array] $HashProps.IcmpType += $EntryValue.ToString().TrimEnd(":*")
+							break
+						}
 						# This token value represents the LocalAddress field of the FW_RULE structure, specifically the v4 fields
-						# Applies to local IPv4 addresses, all forms
+						# Applies to local IPv4 addresses, all forms and multiple keywords, both restricted and non restricted
 						"LA4"
 						{
 							[array] $HashProps.LA4 += $EntryValue
@@ -302,7 +339,7 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the LocalAddress field of the FW_RULE structure, specifically the v6 fields
-						# Applies to local IPv6 addresses, all forms
+						# Applies to local IPv6 addresses, all forms and multiple keywords, both restricted and non restricted
 						"LA6"
 						{
 							[array] $HashProps.LA6 += $EntryValue
@@ -310,7 +347,7 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the RemoteAddress field of the FW_RULE structure, specifically the v4 fields
-						# Applies to remote IPv4 addresses, all forms
+						# Applies to remote IPv4 addresses, all forms and multiple keywords, both restricted and non restricted
 						"RA4"
 						{
 							[array] $HashProps.RA4 += $EntryValue
@@ -318,7 +355,7 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the RemoteAddress field of the FW_RULE structure, specifically the v6 fields
-						# Applies to remote IPv6 addresses, all forms
+						# Applies to remote IPv6 addresses, all forms and multiple keywords, both restricted and non restricted
 						"RA6"
 						{
 							[array] $HashProps.RA6 += $EntryValue
@@ -326,18 +363,18 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the RemoteAddresses field of the FW_RULE structure, specifically the dwV4AddressKeywords field
-						# Applies to remote address keywords, both restricted and non restricted
+						# Applies to remote address single keywords only, both restricted and non restricted
 						"RA42"
 						{
-							[array] $HashProps.RA42 += $EntryValue
+							$HashProps.RA42 = $EntryValue
 							[array] $HashProps.RemoteAddress += $EntryValue
 							break
 						}
 						# This token value represents the RemoteAddresses field of the FW_RULE structure, specifically the dwV4AddressKeywords field
-						# Applies to remote address keywords, both restricted and non restricted
+						# Applies to remote address single keywords only, both restricted and non restricted
 						"RA62"
 						{
-							[array] $HashProps.RA62 += $EntryValue
+							$HashProps.RA62 = $EntryValue
 							[array] $HashProps.RemoteAddress += $EntryValue
 							break
 						}
@@ -345,10 +382,6 @@ function Get-RegistryRule
 						"Svc" { $HashProps.Service = $EntryValue; break }
 						# This token represents the wszLocalApplication field of the FW_RULE structure
 						"App" { $HashProps.Program = $EntryValue; break }
-						# This token value represents the V4TypeCodeList field
-						"ICMP4" { $HashProps.ICMP4 = $EntryValue; break }
-						# This token value represents the V6TypeCodeList
-						"ICMP6" { $HashProps.ICMP6 = $EntryValue; break }
 						# This token represents the dwLocalInterfaceType field of the FW_RULE structure.
 						"IFType"
 						{
@@ -366,15 +399,14 @@ function Get-RegistryRule
 
 							if ($Adapter)
 							{
-								$HashProps.InterfaceAlias = $Adapter.InterfaceAlias
+								[array] $HashProps.InterfaceAlias += $Adapter.InterfaceAlias
 							}
 							else
 							{
-								$HashProps.InterfaceAlias = $EntryValue
+								[array] $HashProps.InterfaceAlias += $EntryValue
 							}
 							break
 						}
-
 						# This token represents the FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE flag
 						# If Direction is FW_DIR_OUT, wFlags MUST NOT contain a FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE
 						"Edge"
@@ -385,17 +417,21 @@ function Get-RegistryRule
 						}
 						#  This token represents the contents of the wFlags field of the FW_RULE structure on the position defined by the
 						# FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE_APP and FW_RULE_FLAGS_ROUTEABLE_ADDRS_TRAVERSE_USER flag
-						"Defer" { $HashProps.Defer = $EntryValue }
+						"Defer" { $HashProps.Defer = $EntryValue; break }
 						# This token represents the wszLocalUserAuthorizationList field of the FW_RULE structure
 						"LUAuth"
 						{
-							$FromSDDL = ConvertFrom-SDDL $EntryValue -Force
-							$HashProps.LocalUser = $FromSDDL.Principal
+							# $FromSDDL = ConvertFrom-SDDL $EntryValue -Force
+							# $HashProps.LocalUser = $FromSDDL.Principal
+
+							$HashProps.LocalUser = $EntryValue
 							break
 						}
 						# This token value represents the base64 encoded content of wszLocalUserAuthorizationList and
 						# it also adds the FW_RULE_FLAGS_LUA_CONDITIONAL_ACE flag on the wFlags field of the FW_RULE2_24 structure
 						"LUAuth2_24" { $HashProps.LocalUserBase64 = $EntryValue; break }
+						# This token represents the wszRemoteUserAuthorizationList field of the FW_RULE structure
+						"RUAuth" { $HashProps.RemoteUser = $EntryValue; break }
 						#  This token represents the wszLocalUserOwner field of the FW_RULE structure
 						# FW_RULE: A pointer to a Unicode string in SID string format. The SID specifies the security principal that owns the rule.
 						# ex. S-1-5-21-2594679847-4063407168-2096078110-1010
@@ -403,7 +439,7 @@ function Get-RegistryRule
 						{
 							if ($EntryValue -ne "Any")
 							{
-								$HashProps.Owner = (ConvertFrom-SID $EntryValue).Name
+								$HashProps.Owner = Get-SDDL -User (ConvertFrom-SID $EntryValue).User
 							}
 							else
 							{
@@ -420,16 +456,13 @@ function Get-RegistryRule
 						{
 							if ($EntryValue -eq "*")
 							{
-								$HashProps.ApplicationPackage = "*"
+								$HashProps.Package = "*"
 							}
-							elseif ($EntryValue -ne "Any")
+							else # if ($EntryValue -ne "Any")
 							{
 								# NOTE: Not converting SID here because it takes too long
-								$HashProps.ApplicationPackage = $EntryValue
-							}
-							else
-							{
-								$HashProps.ApplicationPackage = $EntryValue
+								# Can be faster if single rule is retrieved
+								$HashProps.Package = $EntryValue
 							}
 							break
 						}
@@ -443,7 +476,7 @@ function Get-RegistryRule
 							}
 							else
 							{
-								# Field is blank
+								# Rule entry not set, "FALSE" is never set
 								$HashProps.LooseSourceMapping = $false
 							}
 							break
@@ -452,23 +485,55 @@ function Get-RegistryRule
 						"LOM"
 						{
 							if ($EntryValue -eq "TRUE") { $HashProps.LocalOnlyMapping = $true }
-							else { $HashProps.LocalOnlyMapping = $false } # Field is blank
+							else { $HashProps.LocalOnlyMapping = $false } # Rule entry not set, "FALSE" is never set
 							break
 						}
 						# This token value represents the PlatformValidityList field of the FW_RULE structure
-						"Platform" { $HashProps.Platform = $EntryValue; break }
+						# TODO: Needs parsing, may appear multiple times in registry
+						# HACK: Specifying -Platform with New-NetFirewallRule does not safe platform into registry
+						"Platform" { [array] $HashProps.Platform += $EntryValue; break }
+						# TODO: Tokens which follow (except 'Desc') are of unknown purpose
 						# This token represents the operator to use on the last entry of the PlatformValidityList field of the FW_RULE structure
 						"Platform2" { $HashProps.Platform2 = $EntryValue; break }
-						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
-						"TTK2_27" { $HashProps.LocalOnlyMapping = $EntryValue; break }
-						# This token value represents the LocalPorts field of the FW_RULE structure, specifically the wPortKeywords field
-						"LPort2_20" { $HashProps.LocalOnlyMapping = $EntryValue; break }
 						#  This token represents the wszDescription
 						"Desc" { $HashProps.Description = $EntryValue; break }
+						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
+						"TTK" { $HashProps.TTK = $EntryValue; break }
+						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
+						"TTK2_22" { $HashProps.TTK2_22 = $EntryValue; break }
+						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
+						"TTK2_27" { $HashProps.TTK2_27 = $EntryValue; break }
+						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
+						"TTK2_28" { $HashProps.TTK2_28 = $EntryValue; break }
+						# This token value represents the LocalPorts field of the FW_RULE structure, specifically the wPortKeywords field
+						"LPort2_20" { $HashProps.LPort2_20 = $EntryValue; break }
+						# This token value represents specific flags in the wFlags field of the FW_RULE structure
+						# The IFSECURE-VAL grammar rule represents a flag of such field.
+						# This token MUST appear at most once in a rule string
+						"Security" { $HashProps.Security = $EntryValue; break }
+						# This token value represents specific flags in the wFlags field of the FW_RULE structure
+						# The IFSECURE-VAL grammar rule represents a flag of such field.
+						# This token MUST appear at most once in a rule string
+						"Security2" { $HashProps.Security2 = $EntryValue; break }
+						# This token value represents specific flags in the wFlags field of the FW_RULE structure
+						# The IFSECURE-VAL grammar rule represents a flag of such field.
+						# This token MUST appear at most once in a rule string
+						"Security2_9" { $HashProps.Security2_9 = $EntryValue; break }
+						# The VERSION grammar rule following this token represents the highest inherent version of the
+						# Firewall and Advanced Security components that can ignore this rule string completely
+						"SkipVer" { $HashProps.SkipVer = $EntryValue; break }
+						# This token represents the FW_RULE_FLAGS_ALLOW_PROFILE_CROSSING flag
+						"PCross" { $HashProps.PCross = $EntryValue; break }
+						# This token represents the FW_RULE_FLAGS_AUTHENTICATE_BYPASS_OUTBOUND flag
+						"AuthByPassOut" { $HashProps.AuthByPassOut = $EntryValue; break }
+						# This token value represents the OnNetworkNames field of the FW_RULE2_24 structure
+						"NNm" { $HashProps.NNm = $EntryValue; break }
+						# This token represents the wszSecurityRealmId field of the FW_RULE2_24 structure
+						"SecurityRealmId" { $HashProps.SecurityRealmId = $EntryValue; break }
 						default
 						{
-							Write-Error -Category NotImplemented -TargetObject $RuleValue `
-								-Message "Parsing not implemented for $RuleValue"
+							Write-Error -Category NotImplemented -TargetObject $EntryName `
+								-Message "Parsing not implemented for $EntryName"
 						}
 					}
 				} # foreach rule value
@@ -481,9 +546,13 @@ function Get-RegistryRule
 					elseif ($HashProps.Edge -eq $true) { $HashProps.EdgeTraversalPolicy = "Allow" }
 					else { $HashProps.EdgeTraversalPolicy = "Block" }
 				}
+				else
+				{
+					$HashProps.EdgeTraversalPolicy = "Block"
+				}
 
 				# Create output object using the properties defined in the hashtable
-				$RuleObject = New-Object -TypeName "PSCustomObject" -Property $HashProps
+				$RuleObject = New-Object -TypeName PSCustomObject -Property $HashProps
 
 				# TODO: Getting rules based on function parameters should be done beforehand to
 				# reduce amount of rules parsed for performance reasons
@@ -511,7 +580,10 @@ function Get-RegistryRule
 					}
 				}
 
-				Write-Output $RuleObject
+				if ($RuleObject)
+				{
+					Write-Output $RuleObject
+				}
 			} # foreach registry rule
 		}
 	}

@@ -457,7 +457,9 @@ function ConvertFrom-SID
 			# TODO: we should also save system edition, authority, domain etc.
 			[PSCustomObject]@{
 				Type = $SidType
-				Name = $LogonName
+				Principal = $LogonName
+				User = Split-Principal $LogonName
+				Domain = Split-Principal $LogonName -DomainName
 				SID = $InputSID
 			}
 		} # foreach SID

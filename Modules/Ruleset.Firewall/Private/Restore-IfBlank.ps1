@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 Markus Scholtes
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,64 +28,40 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Convert comma separated list to string array
 
 .DESCRIPTION
-Convert comma separated list to string array
-Used by Import-FirewallRule to unpack a string of IP addresses back into string array
 
 .PARAMETER Value
-List of comma separated string values, previously packed with Convert-ArrayToList
+Input value which is returned without modification
 
 .PARAMETER DefaultValue
-Value to set if a list is empty.
+Value to set if a input is empty.
 This way calling code can be generic since it doesn't need to handle default values
 
 .EXAMPLE
-PS> Convert-ArrayToList "192.168.1.1,192.168.2.1,172.24.33.100"
-
-"192.168.1.1", "192.168.2.1", "172.24.33.100"
+PS> Restore-IfBlank
 
 .INPUTS
-None. You cannot pipe objects to Convert-ListToArray
+None. You cannot pipe objects to Restore-IfBlank
 
 .OUTPUTS
 [string]
 
 .NOTES
-TODO: DefaultValue can't be string, try string[]
-Following modifications by metablaster:
-August 2020:
-- Make Convert-ListToArray Advanced function
-- Change code style to be same as the rest of a project code
-September 2020:
-- Show warning for unexpected input
-- Added Write-* stream
-December 2020:
-- Renamed parameter to standard name
+None.
 #>
-function Convert-ListToArray
+function Restore-IfBlank
 {
 	[CmdletBinding()]
 	[OutputType([string])]
 	param (
 		[Parameter()]
-		[Alias("List")]
 		[string] $Value,
 
 		[Parameter()]
-		$DefaultValue = "Any"
+		[string[]] $DefaultValue = "Any"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	if ([string]::IsNullOrEmpty($Value))
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
-		Write-Output $DefaultValue
-	}
-	else
-	{
-		Write-Output ($Value -split ",")
-	}
+	if ($Value) { return $Value }
+	else { return $DefaultValue }
 }

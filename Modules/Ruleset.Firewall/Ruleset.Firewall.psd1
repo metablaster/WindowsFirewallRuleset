@@ -116,6 +116,7 @@ SOFTWARE.
 	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"Export-FirewallRule"
+		"Export-RegistryRule"
 		"Find-RulePrincipal"
 		"Format-RuleOutput"
 		"Get-RegistryRule"
@@ -149,6 +150,7 @@ SOFTWARE.
 		"en-US\Ruleset.Firewall-help.xml"
 		"Help\en-US\about_Ruleset.Firewall.md"
 		"Help\en-US\Export-FirewallRule.md"
+		"Help\en-US\Export-RegistryRule.md"
 		"Help\en-US\Find-RulePrincipal.md"
 		"Help\en-US\Format-RuleOutput.md"
 		"Help\en-US\Get-RegistryRule.md"
@@ -163,7 +165,9 @@ SOFTWARE.
 		"Private\Convert-ValueToBoolean.ps1"
 		"Private\ConvertFrom-Protocol.ps1"
 		"Private\README.md"
+		"Private\Restore-IfBlank.ps1"
 		"Public\Export-FirewallRule.ps1"
+		"Public\Export-RegistryRule.ps1"
 		"Public\Find-RulePrincipal.ps1"
 		"Public\Format-RuleOutput.ps1"
 		"Public\Get-RegistryRule.ps1"

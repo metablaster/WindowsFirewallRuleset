@@ -33,10 +33,14 @@ Convert String array to comma separated list
 
 .DESCRIPTION
 Convert String array to comma separated list.
-Used by Export-FirewallRule ex. to pack an array of IP addresses into a single string
+Used by Export-FirewallRule to pack an array of IP addresses into a single string
 
 .PARAMETER InputObject
 String array which to convert
+
+.PARAMETER DefaultValue
+Value to set if return if input object is empty or missing.
+This way calling code can be generic since it doesn't need to handle default values
 
 .EXAMPLE
 PS> Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
@@ -63,12 +67,15 @@ December 2020:
 #>
 function Convert-ArrayToList
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
-		[Parameter(ValueFromPipeline = $true)]
+		[Parameter(ValueFromPipeline = $true, Position = 0)]
 		[Alias("Array")]
-		[string[]] $InputObject
+		[string[]] $InputObject,
+
+		[Parameter()]
+		$DefaultValue = "Any"
 	)
 
 	begin
@@ -88,7 +95,8 @@ function Convert-ArrayToList
 		}
 		else
 		{
-			Write-Warning -Message "Input is missing, result is empty string"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
+			$Result = $DefaultValue
 		}
 	}
 	end

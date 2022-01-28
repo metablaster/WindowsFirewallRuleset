@@ -51,9 +51,25 @@ If you would like to see fresh changes done since last release you can do so on 
 - Modules
 
   - Fixed a bug in `Ruleset.Firewall\ConvertListTo-Multiline` causing bad rule export
-  - Updated functions, `Export-FirewallRule`, `Import-FirewallRule`, `Remove-FirewallRule` and `Find-RulePrincipal`
-  - New function `Get-RegistryRule` which gets firewall rules directly from registry for faster
+  - Improved private functions of `Ruleset.Firewall` module
+  - Improved or updated functions:
+    - `ConvertFrom-SID`
+    - `Split-Principal`
+    - `ConvertFrom-SDDL`
+    - `Export-FirewallRule`
+    - `Import-FirewallRule`
+    - `Remove-FirewallRule`
+    - `Find-RulePrincipal`
+
+- New features
+
+  - `Get-RegistryRule` new function which gets firewall rules directly from registry for faster
   rule processing ex. to speed up export\import of rules
+  - `Export-RegistryRule` new function which exports firewall rules to file from registry, which
+  is much faster compared to `Export-FirewallRule` which uses standard commandlets
+  - `Restore-IfBlank` new private function to help with generic default values in caller code
+
+- Documentation revisited and updated for missing changes introduced since v0.10.0
 
 ## v0.11.0 (current release)
 

@@ -69,18 +69,28 @@ Enter-Test "Get-RegistryRule"
 
 $Group = "Test registry rule"
 
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction Ignore
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
 
-# New-NetFirewallRule -DisplayName "Test Internet" `
-# 	-PolicyStore $PolicyStore -Group $Group -Enabled False `
-# 	-Direction Inbound -EdgeTraversalPolicy DeferToApp |
-# Format-RuleOutput
+if ($false)
+{
+	New-NetFirewallRule -DisplayName "Test Internet" -Direction Outbound `
+		-PolicyStore $PolicyStore -Group $Group -Enabled False `
+		-IcmpType 4 -Protocol ICMPv4 |
+	Format-RuleOutput
 
-# Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
+	Start-Test "Custom test"
+	Get-RegistryRule -Direction Outbound -DisplayName "asdf"
+}
+
+# Start-Test "Persistent store"
+# Get-RegistryRule -Direction Outbound -DisplayName "Xbox Game Bar" -Local
+# return
 
 Start-Test "Default test 1"
-Get-RegistryRule -Direction Outbound -DisplayName "Microsoft.MicrosoftSolitaireCollection" #| Select-Object -Property RA4, RA42
+Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
 
 Start-Test "Default test 2"
 Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"

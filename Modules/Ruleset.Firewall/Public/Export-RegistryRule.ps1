@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020 Markus Scholtes
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +31,7 @@ SOFTWARE.
 Exports firewall rules to a CSV or JSON file
 
 .DESCRIPTION
-Export-FirewallRule exports firewall rules to a CSV or JSON file.
+Export-RegistryRule exports firewall rules to a CSV or JSON file.
 Only local GPO rules are exported by default.
 CSV files are semicolon separated (Beware! Excel is not friendly to CSV files).
 All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound,
@@ -80,25 +79,25 @@ Export blocking rules
 Append exported rules to existing file instead of replacing
 
 .EXAMPLE
-PS> Export-FirewallRule
+PS> Export-RegistryRule
 
 Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-FirewallRule -Inbound -Allow
+PS> Export-RegistryRule -Inbound -Allow
 
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-FirewallRule -DisplayGroup ICMP* ICMPRules.json -json
+PS> Export-RegistryRule -DisplayGroup ICMP* ICMPRules.json -json
 
 Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 .INPUTS
-None. You cannot pipe objects to Export-FirewallRule
+None. You cannot pipe objects to Export-RegistryRule
 
 .OUTPUTS
-None. Export-FirewallRule does not generate any output
+None. Export-RegistryRule does not generate any output
 
 .NOTES
 Author: Markus Scholtes
@@ -123,18 +122,18 @@ December 2020:
 TODO: Export to excel
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md
 
 .LINK
 https://github.com/MScholtes/Firewall-Manager
 #>
-function Export-FirewallRule
+function Export-RegistryRule
 {
 	# TODO: Should be possible to use Format-RuleOutput function
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md")]
 	[OutputType([void])]
 	param (
 		[Parameter()]
@@ -205,7 +204,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
+		$FirewallRules = Get-RegistryRule -DisplayName $DisplayName -GPO |
 		Where-Object {
 			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
 				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
@@ -215,7 +214,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
+		$FirewallRules = Get-RegistryRule -DisplayName $DisplayName -GPO |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -224,7 +223,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules = Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
+		$FirewallRules = Get-RegistryRule -DisplayGroup $DisplayGroup -GPO |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -248,11 +247,11 @@ function Export-FirewallRule
 	{
 		# TODO: for -Status to be consistent (to not repeat multiple times) we need to sort rules
 		Write-Progress -Activity "Exporting firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
-			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
+			-CurrentOperation $Rule.DisplayName -Status $Rule.DisplayGroup `
 			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
 
 		# Iterate through rules
-		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
+		if ($Rule.DisplayGroup -like "")
 		{
 			Write-Host "Export Rule: [Ungrouped Rule] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 		}
@@ -260,22 +259,6 @@ function Export-FirewallRule
 		{
 			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 		}
-
-		# NOTE: Filters are what makes this script ultra slow, each takes approx 1 second
-		# Retrieve addresses,
-		$AddressFilter = $Rule | Get-NetFirewallAddressFilter
-		# ports,
-		$PortFilter = $Rule | Get-NetFirewallPortFilter
-		# application,
-		$ApplicationFilter = $Rule | Get-NetFirewallApplicationFilter
-		# service,
-		$ServiceFilter = $Rule | Get-NetFirewallServiceFilter
-		# interface,
-		$InterfaceFilter = $Rule | Get-NetFirewallInterfaceFilter
-		# interface type
-		$InterfaceTypeFilter = $Rule | Get-NetFirewallInterfaceTypeFilter
-		# and security settings
-		$SecurityFilter = $Rule | Get-NetFirewallSecurityFilter
 
 		# Add sorted Hashtable to result
 		$FirewallRuleSet += [PSCustomObject]@{
@@ -286,31 +269,32 @@ function Export-FirewallRule
 			Action = $Rule.Action
 			Enabled = $Rule.Enabled
 			Direction = $Rule.Direction
-			Profile = $Rule.Profile
-			Protocol = $PortFilter.Protocol
-			LocalPort = Convert-ArrayToList $PortFilter.LocalPort
-			RemotePort = Convert-ArrayToList $PortFilter.RemotePort
-			IcmpType = Convert-ArrayToList $PortFilter.IcmpType
-			LocalAddress = Convert-ArrayToList $AddressFilter.LocalAddress
-			RemoteAddress = Convert-ArrayToList $AddressFilter.RemoteAddress
-			Service = $ServiceFilter.Service
-			Program = $ApplicationFilter.Program
-			InterfaceType = $InterfaceTypeFilter.InterfaceType
-			InterfaceAlias = Convert-ArrayToList $InterfaceFilter.InterfaceAlias
+			Profile = Convert-ArrayToList $Rule.Profile
+			Protocol = $Rule.Protocol
+			LocalPort = Convert-ArrayToList $Rule.LocalPort
+			RemotePort = Convert-ArrayToList $Rule.RemotePort
+			IcmpType = Convert-ArrayToList $Rule.IcmpType
+			LocalAddress = Convert-ArrayToList $Rule.LocalAddress
+			RemoteAddress = Convert-ArrayToList $Rule.RemoteAddress
+			Service = Restore-IfBlank $Rule.Service
+			Program = $Rule.Program
+			InterfaceType = Convert-ArrayToList $Rule.InterfaceType
+			InterfaceAlias = Convert-ArrayToList $Rule.InterfaceAlias
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			LocalUser = $SecurityFilter.LocalUser
-			RemoteUser = $SecurityFilter.RemoteUser
-			Owner = $Rule.Owner
-			Package = Restore-IfBlank $ApplicationFilter.Package
-			LooseSourceMapping = $Rule.LooseSourceMapping
-			LocalOnlyMapping = $Rule.LocalOnlyMapping
-			Platform = Convert-ArrayToList $Rule.Platform
+			LocalUser = $Rule.LocalUser
+			RemoteUser = $Rule.RemoteUser
+			Owner = Restore-IfBlank $Rule.Owner
+			Package = Restore-IfBlank $Rule.Package
+			LooseSourceMapping = Restore-IfBlank $Rule.LooseSourceMapping -DefaultValue $false
+			LocalOnlyMapping = Restore-IfBlank $Rule.LocalOnlyMapping -DefaultValue $false
+			Platform = Convert-ArrayToList $Rule.Platform -DefaultValue ""
 			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
-			DynamicTarget = $PortFilter.DynamicTarget
-			RemoteMachine = $SecurityFilter.RemoteMachine
-			Authentication = $SecurityFilter.Authentication
-			Encryption = $SecurityFilter.Encryption
-			OverrideBlockRules = $SecurityFilter.OverrideBlockRules
+			# TODO: Not handled in Get-RegistryRule
+			# DynamicTarget = $PortFilter.DynamicTarget
+			# RemoteMachine = $SecurityFilter.RemoteMachine
+			# Authentication = $SecurityFilter.Authentication
+			# Encryption = $SecurityFilter.Encryption
+			# OverrideBlockRules = $SecurityFilter.OverrideBlockRules
 		}
 	}
 

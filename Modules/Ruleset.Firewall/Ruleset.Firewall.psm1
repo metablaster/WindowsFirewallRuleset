@@ -55,6 +55,7 @@ $PrivateScripts = @(
 	"Convert-MultiLineToList"
 	"Convert-ValueToBoolean"
 	"ConvertFrom-Protocol"
+	"Restore-IfBlank"
 )
 
 foreach ($Script in $PrivateScripts)
@@ -72,6 +73,7 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Export-FirewallRule"
+	"Export-RegistryRule"
 	"Find-RulePrincipal"
 	"Format-RuleOutput"
 	"Get-RegistryRule"

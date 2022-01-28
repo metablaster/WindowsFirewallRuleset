@@ -211,6 +211,7 @@ function Import-FirewallRule
 			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
 		}
 
+		# TODO: Both should default to Any?
 		# For SID types no empty value is defined, therefore omit if not present
 		if (![string]::IsNullOrEmpty($Rule.Owner))
 		{
@@ -292,6 +293,7 @@ function Import-FirewallRule
 		{
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
+			# TODO: Set-NetFirewallRule -DisplayGroup
 			New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
 		}
 		else

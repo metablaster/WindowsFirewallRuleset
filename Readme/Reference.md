@@ -148,6 +148,8 @@ Also few commandlets from these modules:
 
 [Windows Firewall On Hyper-V Host Has Nothing To Do With Virtual Machines](https://aidanfinn.com/?p=15222)
 
+[FW_RULE structure](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b)
+
 ## OS and software
 
 [.NET Framework versions and dependencies](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies)
