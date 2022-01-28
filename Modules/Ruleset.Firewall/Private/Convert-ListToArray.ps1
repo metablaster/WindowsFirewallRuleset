@@ -67,10 +67,10 @@ December 2020:
 #>
 function Convert-ListToArray
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[Alias("List")]
 		[string] $Value,
 
@@ -87,6 +87,6 @@ function Convert-ListToArray
 	}
 	else
 	{
-		Write-Output ($Value -split ",")
+		Write-Output ($Value -split ", ")
 	}
 }

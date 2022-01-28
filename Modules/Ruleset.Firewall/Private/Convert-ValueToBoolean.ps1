@@ -67,10 +67,10 @@ September 2020:
 #>
 function Convert-ValueToBoolean
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([bool])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[string] $Value,
 
 		[Parameter()]

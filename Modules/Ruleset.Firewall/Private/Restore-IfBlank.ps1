@@ -52,16 +52,23 @@ None.
 #>
 function Restore-IfBlank
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[string] $Value,
 
 		[Parameter()]
 		[string[]] $DefaultValue = "Any"
 	)
 
-	if ($Value) { return $Value }
-	else { return $DefaultValue }
+	if (![string]::IsNullOrEmpty($Value))
+	{
+		return $Value
+	}
+	else
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
+		return $DefaultValue
+	}
 }

@@ -256,8 +256,8 @@ For more information see [New-NetFirewallRule][netfirewallrule]
 
 The meaning of this parameter value depends on which parameter is it used:
 
-1. `"*"` Applies to: services only OR application packages only
-2. `Any` Applies to: all programs AND (services OR application packages)
+1. `"*"` Applies to: services only OR application packages only (?)
+2. `Any` Applies to: all programs AND (services OR application packages) (BLANK field)
 
 Both of which are applied only if a packet meet the specified rule conditions
 

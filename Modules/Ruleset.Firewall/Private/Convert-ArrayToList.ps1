@@ -81,7 +81,6 @@ function Convert-ArrayToList
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
 		[string] $Result = ""
 	}
 	process
@@ -90,7 +89,7 @@ function Convert-ArrayToList
 		{
 			foreach ($Value In $InputObject)
 			{
-				$Result += "$Value,"
+				$Result += "$Value, "
 			}
 		}
 		else
@@ -101,6 +100,6 @@ function Convert-ArrayToList
 	}
 	end
 	{
-		Write-Output $Result.TrimEnd(",")
+		Write-Output $Result.TrimEnd(", ")
 	}
 }

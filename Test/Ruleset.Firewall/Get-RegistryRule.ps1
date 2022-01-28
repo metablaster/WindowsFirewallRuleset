@@ -74,32 +74,34 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inboun
 
 if ($false)
 {
-	New-NetFirewallRule -DisplayName "Test Internet" -Direction Outbound `
+	New-NetFirewallRule -DisplayName "Test" -Direction Outbound `
 		-PolicyStore $PolicyStore -Group $Group -Enabled False `
-		-IcmpType 4 -Protocol ICMPv4 |
+		-IcmpType 4 -Protocol ICMPv4 -Platform "10.0" |
 	Format-RuleOutput
 
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 	Start-Test "Custom test"
-	Get-RegistryRule -Direction Outbound -DisplayName "asdf"
+	Get-RegistryRule -Direction Outbound -DisplayName "Test"
 }
+else
+{
+	# Start-Test "Persistent store"
+	# Get-RegistryRule -Direction Outbound -DisplayName "Xbox Game Bar" -Local
+	# return
 
-# Start-Test "Persistent store"
-# Get-RegistryRule -Direction Outbound -DisplayName "Xbox Game Bar" -Local
-# return
+	Start-Test "Default test 1"
+	Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
 
-Start-Test "Default test 1"
-Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
+	Start-Test "Default test 2"
+	Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
 
-Start-Test "Default test 2"
-Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
+	Start-Test "Default test 3"
+	$Result = Get-RegistryRule -Direction Outbound -DisplayName "DNS Client"
+	$Result
 
-Start-Test "Default test 3"
-$Result = Get-RegistryRule -Direction Outbound -DisplayName "DNS Client"
-$Result
-
-Test-Output $Result -Command Get-RegistryRule
+	Test-Output $Result -Command Get-RegistryRule
+}
 
 Update-Log
 Exit-Test

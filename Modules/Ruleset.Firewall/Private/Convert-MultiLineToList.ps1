@@ -57,10 +57,10 @@ None.
 #>
 function Convert-MultiLineToList
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[Alias("Multiline")]
 		[string] $Value,
 
@@ -72,12 +72,11 @@ function Convert-MultiLineToList
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		# TODO: Uncomment when all rules will have description
-		# Write-Warning -Message "Input is missing, result is empty string"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, result is empty string"
 		return ""
 	}
 
-	# replace new line with encoded string
+	# Replace new line with encoded string
 	# For CSV files need to encode multi line rule description into single line
 	if ($JSON)
 	{

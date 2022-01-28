@@ -260,8 +260,8 @@ function Export-RegistryRule
 			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 		}
 
-		# Add sorted Hashtable to result
-		$FirewallRuleSet += [PSCustomObject]@{
+		# Add sorted hashtable to result
+		$FirewallRuleSet += [ordered]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
 			Group = $Rule.Group
@@ -270,24 +270,24 @@ function Export-RegistryRule
 			Enabled = $Rule.Enabled
 			Direction = $Rule.Direction
 			Profile = Convert-ArrayToList $Rule.Profile
-			Protocol = $Rule.Protocol
+			Protocol = Restore-IfBlank $Rule.Protocol
 			LocalPort = Convert-ArrayToList $Rule.LocalPort
 			RemotePort = Convert-ArrayToList $Rule.RemotePort
 			IcmpType = Convert-ArrayToList $Rule.IcmpType
 			LocalAddress = Convert-ArrayToList $Rule.LocalAddress
 			RemoteAddress = Convert-ArrayToList $Rule.RemoteAddress
 			Service = Restore-IfBlank $Rule.Service
-			Program = $Rule.Program
+			Program = Restore-IfBlank $Rule.Program
 			InterfaceType = Convert-ArrayToList $Rule.InterfaceType
 			InterfaceAlias = Convert-ArrayToList $Rule.InterfaceAlias
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			LocalUser = $Rule.LocalUser
-			RemoteUser = $Rule.RemoteUser
+			LocalUser = Restore-IfBlank $Rule.LocalUser
+			RemoteUser = Restore-IfBlank $Rule.RemoteUser
 			Owner = Restore-IfBlank $Rule.Owner
 			Package = Restore-IfBlank $Rule.Package
 			LooseSourceMapping = Restore-IfBlank $Rule.LooseSourceMapping -DefaultValue $false
 			LocalOnlyMapping = Restore-IfBlank $Rule.LocalOnlyMapping -DefaultValue $false
-			Platform = Convert-ArrayToList $Rule.Platform -DefaultValue ""
+			Platform = Convert-ArrayToList $Rule.Platform -DefaultValue @()
 			Description = Convert-MultiLineToList $Rule.Description -JSON:$JSON
 			# TODO: Not handled in Get-RegistryRule
 			# DynamicTarget = $PortFilter.DynamicTarget

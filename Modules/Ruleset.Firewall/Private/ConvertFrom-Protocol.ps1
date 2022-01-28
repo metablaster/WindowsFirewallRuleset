@@ -53,6 +53,7 @@ None.
 #>
 function ConvertFrom-Protocol
 {
+	[CmdletBinding()]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]

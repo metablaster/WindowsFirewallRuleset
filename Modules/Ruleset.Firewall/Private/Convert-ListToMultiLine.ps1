@@ -58,10 +58,10 @@ None.
 #>
 function Convert-ListToMultiLine
 {
-	[CmdletBinding()]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([string])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[Alias("List")]
 		[string] $Value,
 
@@ -73,8 +73,7 @@ function Convert-ListToMultiLine
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		# TODO: Uncomment when all rules will have description
-		# Write-Warning -Message "Input is missing, result is empty string"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, result is empty string"
 		return ""
 	}
 

@@ -179,36 +179,37 @@ function Import-FirewallRule
 			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 26 * 60)
 
 		# Create Hashtable for New-NetFirewallRule parameters
-		$RuleSplatHash = @{
+		$HashProps = @{
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
 			Group = $Rule.Group
-			Profile = $Rule.Profile
-			Enabled = $Rule.Enabled
+			# DisplayGroup = $Rule.DisplayGroup
 			Action = $Rule.Action
-			Service = $Rule.Service
-			Program = $Rule.Program
-			LocalAddress = Convert-ListToArray $Rule.LocalAddress
-			RemoteAddress = Convert-ListToArray $Rule.RemoteAddress
+			Enabled = $Rule.Enabled
+			Direction = $Rule.Direction
+			Profile = $Rule.Profile # convert
 			Protocol = $Rule.Protocol
-			IcmpType = Convert-ListToArray $Rule.IcmpType
 			LocalPort = Convert-ListToArray $Rule.LocalPort
 			RemotePort = Convert-ListToArray $Rule.RemotePort
-			LocalUser = $Rule.LocalUser
-			RemoteUser = $Rule.RemoteUser
-			InterfaceType = $Rule.InterfaceType
+			IcmpType = Convert-ListToArray $Rule.IcmpType
+			LocalAddress = Convert-ListToArray $Rule.LocalAddress
+			RemoteAddress = Convert-ListToArray $Rule.RemoteAddress
+			Service = $Rule.Service
+			Program = $Rule.Program
+			InterfaceType = Convert-ListToArray $Rule.InterfaceType
 			InterfaceAlias = Convert-ListToArray $Rule.InterfaceAlias
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
-			Direction = $Rule.Direction
-			Platform = Convert-ListToArray $Rule.Platform @()
+			LocalUser = $Rule.LocalUser
+			RemoteUser = $Rule.RemoteUser
 			LooseSourceMapping = Convert-ValueToBoolean $Rule.LooseSourceMapping
 			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
-			DynamicTarget = if ([string]::IsNullOrEmpty($Rule.DynamicTarget)) { "Any" } else { $Rule.DynamicTarget }
+			Platform = Convert-ListToArray $Rule.Platform -DefaultValue @()
+			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
+			DynamicTarget = Restore-IfBlank $Rule.DynamicTarget
 			RemoteMachine = $Rule.RemoteMachine
 			Authentication = $Rule.Authentication
 			Encryption = $Rule.Encryption
 			OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
-			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
 		}
 
 		# TODO: Both should default to Any?
@@ -255,8 +256,8 @@ function Import-FirewallRule
 				}
 				else
 				{
-					$RuleSplatHash.Owner = $Rule.Owner
-					$RuleSplatHash.Package = $Rule.Package
+					$HashProps.Owner = $Rule.Owner
+					$HashProps.Package = $Rule.Package
 				}
 			}
 			else
@@ -284,7 +285,7 @@ function Import-FirewallRule
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
 			}
 		}
-		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue))
+		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction Ignore))
 		{
 			$ImportRule = $false
 		}
@@ -294,7 +295,7 @@ function Import-FirewallRule
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
 			# TODO: Set-NetFirewallRule -DisplayGroup
-			New-NetFirewallRule -PolicyStore $Domain @RuleSplatHash | Format-RuleOutput -Import
+			New-NetFirewallRule -PolicyStore $Domain @HashProps | Format-RuleOutput -Import
 		}
 		else
 		{

@@ -277,8 +277,8 @@ function Export-FirewallRule
 		# and security settings
 		$SecurityFilter = $Rule | Get-NetFirewallSecurityFilter
 
-		# Add sorted Hashtable to result
-		$FirewallRuleSet += [PSCustomObject]@{
+		# Add sorted hashtable to result
+		$FirewallRuleSet += [ordered]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
 			Group = $Rule.Group
@@ -300,7 +300,7 @@ function Export-FirewallRule
 			EdgeTraversalPolicy = $Rule.EdgeTraversalPolicy
 			LocalUser = $SecurityFilter.LocalUser
 			RemoteUser = $SecurityFilter.RemoteUser
-			Owner = $Rule.Owner
+			Owner = Restore-IfBlank $Rule.Owner
 			Package = Restore-IfBlank $ApplicationFilter.Package
 			LooseSourceMapping = $Rule.LooseSourceMapping
 			LocalOnlyMapping = $Rule.LocalOnlyMapping

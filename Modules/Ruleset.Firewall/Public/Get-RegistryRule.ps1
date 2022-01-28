@@ -124,6 +124,31 @@ function Get-RegistryRule
 			return
 		}
 
+		$ParseAddressKeyword = {
+			param ([string] $EntryValue)
+
+			switch ($EntryValue)
+			{
+				"IntErnet" { "Internet"; break }
+				"IntrAnet" { "Intranet"; break }
+				"RmtIntrAnet" { "IntranetRemoteAccess"; break }
+				"Ply2Renders" { "PlayToDevice"; break }
+				default { $EntryValue }
+			}
+		}
+
+		$ParsePortKeyword = {
+			param ([string] $EntryValue)
+
+			switch ($EntryValue)
+			{
+				# TODO: Not handling IPHTTPS
+				"RPC-EPMap" { "RPCEPMap"; break }
+				"Ply2Disc" { "PlayToDiscovery"; break }
+				default { $EntryValue }
+			}
+		}
+
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			try
@@ -142,53 +167,64 @@ function Get-RegistryRule
 				continue
 			}
 
+			# Determine if this is a local or a group policy rule and display this in the hashtable
+			if ($HKLMRootKey -match "^System\\CurrentControlSet")
+			{
+				$PolicyStoreSourceType = "Local"
+			}
+			else
+			{
+				$PolicyStoreSourceType = "GPO"
+			}
+
 			foreach ($RuleName in $RootKey.GetValueNames())
 			{
 				# Prepare hashtable
 				$HashProps = [ordered]@{
-					Name = $null # Name
+					Name = $RuleName
 					DisplayName = $null
-					Group = $null
+					Group = $null # EmbedCtxt
 					DisplayGroup = $null # EmbedCtxt
 					Action = $null
 					Enabled = $null # Active
 					Direction = $null # Dir
-					Profile = $null # "Any"
-					Protocol = $null # "Any"
+					Profile = $null
+					Protocol = $null
 					LPort = $null
 					RPort = $null
 					LPort2_10 = $null
 					RPort2_10 = $null
-					LocalPort = $null # "Any"
-					RemotePort = $null # "Any"
+					LocalPort = $null
+					RemotePort = $null
 					ICMP4 = $null
 					ICMP6 = $null
-					IcmpType = $null # "Any"
+					IcmpType = $null
 					LA4 = $null
 					LA6 = $null
 					RA4 = $null
 					RA6 = $null
 					RA42 = $null
 					RA62 = $null
-					LocalAddress = $null # "Any"
-					RemoteAddress = $null # "Any"
-					Service = $null # "Any" # Svc
-					Program = $null # "Any" # App
-					InterfaceType = $null # "Any" # IFType
+					LocalAddress = $null
+					RemoteAddress = $null
+					Service = $null # Svc
+					Program = $null # App
+					InterfaceType = $null # IFType
 					InterfaceAlias = $null # IF
 					Edge = $null
 					Defer = $null
 					EdgeTraversalPolicy = $null
-					LocalUser = $null # "Any" # LUAuth
+					LocalUser = $null # LUAuth
 					LocalUserBase64 = $null # LUAuth2_24
 					RemoteUser = $null # RUAuth
-					Owner = $null # "Any" # LUOwn
-					Package = $null # "Any" # AppPkgId
-					LooseSourceMapping = $null # $false # LSM
-					LocalOnlyMapping = $null # $false # LOM
-					Platform = $null # Platform
+					Owner = $null # LUOwn
+					Package = $null # AppPkgId
+					LooseSourceMapping = $null # LSM
+					LocalOnlyMapping = $null # LOM
+					Platform = $null
 					Platform2 = $null
-					RuleVersion = $null # <BLANK>
+					RuleVersion = (($RootKey.GetValue($RuleName).ToString() -split '\|')[0]).TrimStart("v") # <BLANK>
+					PolicyStoreSourceType = $PolicyStoreSourceType
 					Description = $null # Desc
 					TTK = $null
 					TTK2_22 = $null
@@ -205,45 +241,26 @@ function Get-RegistryRule
 					SecurityRealmId = $null
 				}
 
-				# Determine if this is a local or a group policy rule and display this in the hashtable
-				$HashProps.PolicyStoreSourceType = "GPO"
-				if ($HKLMRootKey -match "^System\\CurrentControlSet")
-				{
-					$HashProps.PolicyStoreSourceType = "Local"
-				}
-				else
-				{
-					$HashProps.PolicyStoreSourceType = "GPO"
-				}
-
-				$HashProps.Name = $RuleName
-				$HashProps.RuleVersion = (($RootKey.GetValue($RuleName) -split '\|')[0]).ToString().TrimStart("v")
-
 				# Iterate through the rest of value of the registry rule
-				foreach ($RuleValue in ($RootKey.GetValue($RuleName) -split '\|'))
+				foreach ($RuleEntry in ($RootKey.GetValue($RuleName) -split '\|'))
 				{
-					# Current name value pair
-					$EntryName = ""
-					$EntryValue = ""
-					$RawValue = $RuleValue.ToString()
+					# Split current name value pair
+					$RuleEntryString = $RuleEntry.ToString()
 
-					if ($RawValue.Contains("="))
+					if ($RuleEntryString.Contains("="))
 					{
-						$EntryName = ($RuleValue -split '=')[0]
-						$EntryValue = ($RuleValue -split "=")[1]
+						$EntryName = ($RuleEntry -split '=')[0]
+						$EntryValue = ($RuleEntry -split "=")[1]
+					}
+					elseif ([string]::IsNullOrEmpty($RuleEntryString))
+					{
+						# Empty value
+						continue
 					}
 					else
 					{
-						if ([string]::IsNullOrEmpty($RawValue))
-						{
-							# Empty value
-							continue
-						}
-						else
-						{
-							# ex. version string, which is already handled
-							continue
-						}
+						# ex. version string, which is already handled
+						continue
 					}
 
 					switch ($EntryName)
@@ -286,7 +303,7 @@ function Get-RegistryRule
 						"LPort"
 						{
 							[array] $HashProps.LPort += $EntryValue
-							[array] $HashProps.LocalPort += $EntryValue
+							[array] $HashProps.LocalPort += & $ParsePortKeyword $EntryValue
 							break
 						}
 						# This token value represents the RemotePorts field of the FW_RULE structure.
@@ -295,7 +312,7 @@ function Get-RegistryRule
 						"RPort"
 						{
 							[array] $HashProps.RPort += $EntryValue
-							[array] $HashProps.RemotePort += $EntryValue
+							[array] $HashProps.RemotePort += & $ParsePortKeyword $EntryValue
 							break
 						}
 						# This token value represents the LocalPorts
@@ -331,7 +348,7 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the LocalAddress field of the FW_RULE structure, specifically the v4 fields
-						# Applies to local IPv4 addresses, all forms and multiple keywords, both restricted and non restricted
+						# Applies to local IPv4 addresses, all forms
 						"LA4"
 						{
 							[array] $HashProps.LA4 += $EntryValue
@@ -339,7 +356,7 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the LocalAddress field of the FW_RULE structure, specifically the v6 fields
-						# Applies to local IPv6 addresses, all forms and multiple keywords, both restricted and non restricted
+						# Applies to local IPv6 addresses, all forms
 						"LA6"
 						{
 							[array] $HashProps.LA6 += $EntryValue
@@ -351,7 +368,7 @@ function Get-RegistryRule
 						"RA4"
 						{
 							[array] $HashProps.RA4 += $EntryValue
-							[array] $HashProps.RemoteAddress += $EntryValue
+							[array] $HashProps.RemoteAddress += & $ParseAddressKeyword $EntryValue
 							break
 						}
 						# This token value represents the RemoteAddress field of the FW_RULE structure, specifically the v6 fields
@@ -359,7 +376,7 @@ function Get-RegistryRule
 						"RA6"
 						{
 							[array] $HashProps.RA6 += $EntryValue
-							[array] $HashProps.RemoteAddress += $EntryValue
+							[array] $HashProps.RemoteAddress += & $ParseAddressKeyword $EntryValue
 							break
 						}
 						# This token value represents the RemoteAddresses field of the FW_RULE structure, specifically the dwV4AddressKeywords field
@@ -367,7 +384,7 @@ function Get-RegistryRule
 						"RA42"
 						{
 							$HashProps.RA42 = $EntryValue
-							[array] $HashProps.RemoteAddress += $EntryValue
+							[array] $HashProps.RemoteAddress += & $ParseAddressKeyword $EntryValue
 							break
 						}
 						# This token value represents the RemoteAddresses field of the FW_RULE structure, specifically the dwV4AddressKeywords field
@@ -375,7 +392,7 @@ function Get-RegistryRule
 						"RA62"
 						{
 							$HashProps.RA62 = $EntryValue
-							[array] $HashProps.RemoteAddress += $EntryValue
+							[array] $HashProps.RemoteAddress += & $ParseAddressKeyword $EntryValue
 							break
 						}
 						# This token represents the wszLocalService
@@ -489,14 +506,35 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the PlatformValidityList field of the FW_RULE structure
-						# TODO: Needs parsing, may appear multiple times in registry
-						# HACK: Specifying -Platform with New-NetFirewallRule does not safe platform into registry
-						"Platform" { [array] $HashProps.Platform += $EntryValue; break }
-						# TODO: Tokens which follow (except 'Desc') are of unknown purpose
+						# First number 2 = VER_PLATFORM_WIN32_NT which means the operating system is Windows NT, ex.
+						# Windows 7, Windows Server 2008, Windows Vista, Windows Server 2003, Windows XP, or Windows 2000.
+						# Next 2 digits are Major.Minor
+						# HACK: Specifying -Platform with New-NetFirewallRule does not save platform into registry
+						"Platform"
+						{
+							# Convert "2:10:0" to "10.0"
+							[regex] $Regex = "\d+:\d+$"
+
+							if ($Regex.Match($EntryValue).Success)
+							{
+								$RegexResult = [regex]::Replace($Regex.Match($EntryValue).Value, ":", ".")
+							}
+							else
+							{
+								Write-Warning -Message "Failed to parse Platform value"
+								$RegexResult = $EntryValue
+							}
+
+							[array] $HashProps.Platform += $RegexResult
+							break
+						}
 						# This token represents the operator to use on the last entry of the PlatformValidityList field of the FW_RULE structure
+						# FW_OS_PLATFORM_OP_GTEQ: The operating system MUST be greater than or equal to the one specified.
+						# Conclusion: in registry a value "GTEQ" means we should apply + to last entry in Platform array
 						"Platform2" { $HashProps.Platform2 = $EntryValue; break }
 						#  This token represents the wszDescription
 						"Desc" { $HashProps.Description = $EntryValue; break }
+						# TODO: Tokens which follow are of unknown purpose
 						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
 						"TTK" { $HashProps.TTK = $EntryValue; break }
 						# This token value represents the dwTrustTupleKeywords field of the FW_RULE structure
@@ -551,6 +589,16 @@ function Get-RegistryRule
 					$HashProps.EdgeTraversalPolicy = "Block"
 				}
 
+				# TODO: It's unclear in what order are multiple platform numbers stored in registry,
+				# we are assuming they are stored in ascending order.
+				# Unable to test this because New-NetFirewallRule allows specifying single platform number only
+				if (($null -ne $HashProps.Platform) -and ($HashProps.Platform2 -eq "GTEQ"))
+				{
+					# Add '+' sign to last platform entry if Platform2 indicates "grater than equal" operator
+					$Index = ([array] $HashProps.Platform).Length - 1
+					([array] $HashProps.Platform)[$Index] += "+"
+				}
+
 				# Create output object using the properties defined in the hashtable
 				$RuleObject = New-Object -TypeName PSCustomObject -Property $HashProps
 
@@ -559,7 +607,6 @@ function Get-RegistryRule
 				if (![string]::IsNullOrEmpty($DisplayName))
 				{
 					$RuleObject = $RuleObject | Where-Object {
-						# Write-Warning "DisplayName: $($_.DisplayName)"
 						$_.DisplayName -like $DisplayName
 					}
 				}
@@ -567,7 +614,6 @@ function Get-RegistryRule
 				if (![string]::IsNullOrEmpty($DisplayGroup))
 				{
 					$RuleObject = $RuleObject | Where-Object {
-						# Write-Warning "DisplayGroup: $($_.DisplayGroup)"
 						$_.DisplayGroup -like $DisplayGroup
 					}
 				}
@@ -575,7 +621,6 @@ function Get-RegistryRule
 				if (![string]::IsNullOrEmpty($Direction))
 				{
 					$RuleObject = $RuleObject | Where-Object {
-						# Write-Warning "Direction: $($_.Direction)"
 						$_.Direction -eq $Direction
 					}
 				}
