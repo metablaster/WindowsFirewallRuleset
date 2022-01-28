@@ -81,37 +81,40 @@ $Deny = "Abort operation, no firewall rules or settings will be exported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-# NOTE: export speed is 10 rules per minute
+# NOTE: With Export-FirewallRule Export speed is 10 rules per minute
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
 # NOTE: to speed up a little add following to defender exclusions:
 # C:\Windows\System32\wbem\WmiPrvSE.exe
+# With Export-RegistryRule export speed is only 8 seconds!
 # TODO: function to export firewall settings needed
-# TODO: need to speed up rule export by at least 700%
 $StopWatch = [System.Diagnostics.Stopwatch]::new()
 
 $StopWatch.Start()
 # Export all outbound rules from GPO
-Export-FirewallRule -Outbound -Path "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore -Verbose
+Export-RegistryRule -Outbound -Path "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore -Verbose
 $StopWatch.Stop()
 
 $OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes"
+$OutboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes and $OutboundSeconds seconds"
 
 $StopWatch.Reset()
 $StopWatch.Start()
 # Export all inbound rules from GPO
-Export-FirewallRule -Inbound -Path "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
+Export-RegistryRule -Inbound -Path "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $InboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and  $InboundMinutes minutes"
+$InboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and $InboundMinutes minutes and $InboundSeconds seconds"
 
 $TotalMinutes = $OutboundMinutes + $InboundMinutes
 $TotalMinutes += $OutboundHours * 60
 $TotalMinutes += $InboundHours * 60
-Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entire firewall was: $TotalMinutes minutes"
+$TotalSeconds = $OutboundSeconds + $InboundSeconds
+Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entire firewall was: $TotalMinutes minutes and $TotalSeconds seconds"
 
 Update-Log
 

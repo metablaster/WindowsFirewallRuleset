@@ -248,10 +248,20 @@ function Export-FirewallRule
 
 	foreach ($Rule In $FirewallRules)
 	{
-		# TODO: for -Status to be consistent (to not repeat multiple times) we need to sort rules
-		Write-Progress -Activity "Exporting firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
-			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
-			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
+		$ProgressParams = @{
+			Activity = "Exporting firewall rules"
+			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
+			CurrentOperation = $Rule.DisplayName
+			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
+		}
+
+		if (![string]::IsNullOrEmpty($Rule.DisplayGroup))
+		{
+			# TODO: for -Status to be consistent (to not repeat multiple times) we need to sort rules
+			$ProgressParams.Status = $Rule.DisplayGroup
+		}
+
+		Write-Progress @ProgressParams
 
 		# Iterate through rules
 		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
