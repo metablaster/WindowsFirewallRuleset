@@ -205,11 +205,12 @@ function Import-FirewallRule
 			LocalOnlyMapping = Convert-ValueToBoolean $Rule.LocalOnlyMapping
 			Platform = Convert-ListToArray $Rule.Platform -DefaultValue @()
 			Description = Convert-ListToMultiLine $Rule.Description -JSON:$JSON
-			DynamicTarget = Restore-IfBlank $Rule.DynamicTarget
-			RemoteMachine = $Rule.RemoteMachine
-			Authentication = $Rule.Authentication
-			Encryption = $Rule.Encryption
-			OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
+			# TODO: Missing in import file when exporting from registry
+			# DynamicTarget = Restore-IfBlank $Rule.DynamicTarget
+			# RemoteMachine = $Rule.RemoteMachine
+			# Authentication = $Rule.Authentication
+			# Encryption = $Rule.Encryption
+			# OverrideBlockRules = Convert-ValueToBoolean $Rule.OverrideBlockRules
 		}
 
 		# TODO: Both should default to Any?

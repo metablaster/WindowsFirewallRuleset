@@ -260,8 +260,9 @@ function Export-RegistryRule
 			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 		}
 
+		# TODO: Using [ordered] will not work for PowerShell Desktop, however [ordered] was introduced in PowerShell 3.0
 		# Add sorted hashtable to result
-		$FirewallRuleSet += [ordered]@{
+		$FirewallRuleSet += [PSCustomObject]@{
 			Name = $Rule.Name
 			DisplayName = $Rule.DisplayName
 			Group = $Rule.Group

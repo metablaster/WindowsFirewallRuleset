@@ -75,17 +75,20 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 	# TODO: Need to test failure cases, see also module todo's for more info
 
 	Start-Test "-FileName GroupExport.csv"
-	Import-FirewallRule -Path $Exports -FileName "GroupExport.csv"
+	Import-FirewallRule -Path $Exports -FileName "RegGroupExport.csv"
 
 	Start-Test "-FileName NamedExport1.csv"
-	Import-FirewallRule -Path $Exports -FileName "NamedExport1.csv" -Overwrite
+	Import-FirewallRule -Path $Exports -FileName "RegNamedExport1.csv" -Overwrite
 
 	Start-Test "-JSON -FileName NamedExport2.json"
-	Import-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json" -Overwrite
-
-	Start-Test "-FileName StoreAppExport.csv"
-	$Result = Import-FirewallRule -Path $Exports -FileName "StoreAppExport.csv" -Overwrite
+	$Result = Import-FirewallRule -JSON -Path $Exports -FileName "RegNamedExport2.json" -Overwrite
 	$Result
+
+	if ($false)
+	{
+		Start-Test "-FileName StoreAppExport.csv"
+		Import-FirewallRule -Path $Exports -FileName "RegStoreAppExport.csv" -Overwrite
+	}
 
 	Test-Output $Result -Command Import-FirewallRule
 }
