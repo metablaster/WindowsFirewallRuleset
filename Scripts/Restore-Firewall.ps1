@@ -121,7 +121,7 @@ else
 {
 	$StopWatch.Start()
 	# Import all inbound rules from GPO
-	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "InboundGPO"
+	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "InboundGPO.csv"
 	$StopWatch.Stop()
 
 	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
@@ -139,15 +139,19 @@ if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name Inbo
 
 	if ($OutboundMinutes)
 	{
+		$TotalSeconds += $OutboundSeconds
 		$TotalMinutes += $OutboundMinutes
-		$TotalSeconds += $OutboundSeconds + $InboundSeconds
 	}
 
 	if ($InboundMinutes)
 	{
-		$TotalMinutes += $InboundMinutes
 		$TotalSeconds += $InboundSeconds
+		$TotalMinutes += $InboundMinutes
 	}
+
+	# Move minutes out of seconds into minutes
+	$TotalMinutes += [System.Math]::Truncate($TotalSeconds / 60)
+	$TotalSeconds = $TotalSeconds % 60
 
 	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entire firewall was: $TotalMinutes minutes and $TotalSeconds seconds"
 }
