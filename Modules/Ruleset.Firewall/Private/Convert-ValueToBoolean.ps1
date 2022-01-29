@@ -63,7 +63,9 @@ August 2020:
 - Change code style to be same as the rest of a project code
 September 2020:
 - Change logic to validate input and show warning or error for unexpected input
-- Added Write-* stream
+- Added Write-* streams
+January 2022:
+- Disabled PositionalBinding and set default binding parameter
 #>
 function Convert-ValueToBoolean
 {

@@ -64,6 +64,8 @@ September 2020:
 December 2020:
 - Add pipline support
 - Rename parameter to standard name
+January 2022:
+- Disabled PositionalBinding and set default binding parameter
 #>
 function Convert-ArrayToList
 {

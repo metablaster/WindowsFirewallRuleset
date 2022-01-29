@@ -64,6 +64,8 @@ September 2020:
 - Added Write-* stream
 December 2020:
 - Renamed parameter to standard name
+January 2022:
+- Disabled PositionalBinding and set default binding parameter
 #>
 function Convert-ListToArray
 {

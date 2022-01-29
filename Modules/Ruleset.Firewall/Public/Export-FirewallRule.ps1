@@ -121,6 +121,9 @@ Following modifications by metablaster August 2020:
 December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
+January 2022:
+1. Implemented appending to json
+
 TODO: Export to excel
 
 .LINK

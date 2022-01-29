@@ -86,10 +86,10 @@ if ($false)
 }
 else
 {
-	if ($true)
+	if ($false)
 	{
 		Start-Test "Persistent store"
-		Get-RegistryRule -Direction Outbound -DisplayGroup ""
+		Get-RegistryRule -Action Block -Enabled False -Direction Outbound
 	}
 	else
 	{

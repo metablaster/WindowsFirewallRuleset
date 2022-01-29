@@ -56,6 +56,12 @@ Wildcard characters are accepted.
 .PARAMETER Direction
 Specifies that matching firewall rules of the indicated direction are retrieved
 
+.PARAMETER Action
+Specifies that matching firewall rules of the indicated action are retrieved
+
+.PARAMETER Enabled
+Specifies that matching firewall rules of the indicated state are retrieved
+
 .EXAMPLE
 PS> Get-RegistryRule
 
@@ -67,7 +73,7 @@ None. You cannot pipe objects to Get-RegistryRule
 
 .NOTES
 TODO: Getting rules from persistent store (-Local switch) needs testing
-TODO: Implement more parameters to be able to fine tune which rules to get
+Not implementing more parameters because only those here are always present in registry in all rules
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md
@@ -83,7 +89,7 @@ https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-16
 #>
 function Get-RegistryRule
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Ruleset.Firewall/Help/en-US/Get-RegistryRule.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -97,17 +103,25 @@ function Get-RegistryRule
 		[Parameter()]
 		[switch] $GroupPolicy,
 
-		[Parameter()]
+		[Parameter(Mandatory = $true, ParameterSetName = "NotAllowingEmptyString")]
 		[SupportsWildcards()]
 		[string] $DisplayName,
 
 		[Parameter()]
 		[SupportsWildcards()]
-		[string] $DisplayGroup,
+		[string] $DisplayGroup = "*",
 
 		[Parameter()]
 		[ValidateSet("Inbound", "Outbound")]
-		[string] $Direction
+		[string] $Direction,
+
+		[Parameter()]
+		[ValidateSet("Allow", "Block")]
+		[string] $Action,
+
+		[Parameter()]
+		[ValidateSet("True", "False")]
+		[string] $Enabled
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -119,6 +133,7 @@ function Get-RegistryRule
 		if (!$Local -and !$GroupPolicy) { $GroupPolicy = $true }
 
 		$HKLM = @()
+		# NOTE: If group policy firewall is not configured this registry key won't exist
 		if ($GroupPolicy) { $HKLM += "Software\Policies\Microsoft\WindowsFirewall\FirewallRules" }
 		if ($Local) { $HKLM += "System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules" }
 
@@ -168,38 +183,38 @@ function Get-RegistryRule
 			}
 		}
 
+		# Filter out which rules to process
 		if (![string]::IsNullOrEmpty($DisplayName))
 		{
-			$RegexDisplayName = ConvertFrom-Wildcard $DisplayName -SkipAnchor
-			Write-Debug "RegexDisplayName: $RegexDisplayName" -Debug
+			$RegexDisplayName = ConvertFrom-Wildcard -Pattern $DisplayName -SkipAnchor
 		}
 
 		# Include empty string for rules without display group
-		if ($null -ne $DisplayGroup)
+		if ([string]::IsNullOrEmpty($DisplayGroup))
 		{
-			if ($DisplayGroup -eq "")
-			{
-				$RegexDisplayGroup = ""
-			}
-			else
-			{
-				$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup -SkipAnchor
-			}
-			Write-Debug "RegexDisplayGroup: $RegexDisplayGroup" -Debug
-		}
-
-		if ([string]::IsNullOrEmpty($Direction))
-		{
-			$RegistryDirection = "*"
-			$RegexDirection = ConvertFrom-Wildcard $RegistryDirection -SkipAnchor
+			$RegexDisplayGroup = ""
 		}
 		else
 		{
-			if ($Direction -eq "Outbound") { $RegistryDirection = "Out" }
-			elseif ($Direction -eq "Inbound") { $RegistryDirection = "In" }
-			$RegexDirection = $RegistryDirection
+			$RegexDisplayGroup = ConvertFrom-Wildcard -Pattern $DisplayGroup -SkipAnchor
 		}
-		Write-Debug "RegexDirection: $RegexDirection" -Debug
+
+		if (![string]::IsNullOrEmpty($Direction))
+		{
+			if ($Direction -eq "Outbound") { $RegexDirection = "Out" }
+			else { $RegexDirection = "In" }
+		}
+
+		if (![string]::IsNullOrEmpty($Action))
+		{
+			$RegexAction = $Action
+		}
+
+		if (![string]::IsNullOrEmpty($Enabled))
+		{
+			if ($Enabled -eq "True") { $RegexEnabled = "TRUE" }
+			else { $RegexEnabled = "FALSE" }
+		}
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
@@ -248,17 +263,30 @@ function Get-RegistryRule
 					}
 				}
 
-				if ($null -ne $DisplayGroup)
+				if (![regex]::Match($RuleValue, "\|EmbedCtxt=$RegexDisplayGroup\|", [RegexOptions]::Multiline).Success)
 				{
-					if (![regex]::Match($RuleValue, "\|EmbedCtxt=$RegexDisplayGroup\|", [RegexOptions]::Multiline).Success)
-					{
-						continue
-					}
+					continue
 				}
 
 				if (![string]::IsNullOrEmpty($Direction))
 				{
 					if (![regex]::Match($RuleValue, "\|Dir=$RegexDirection\|", [RegexOptions]::Multiline).Success)
+					{
+						continue
+					}
+				}
+
+				if (![string]::IsNullOrEmpty($Action))
+				{
+					if (![regex]::Match($RuleValue, "\|Action=$RegexAction\|", [RegexOptions]::Multiline).Success)
+					{
+						continue
+					}
+				}
+
+				if (![string]::IsNullOrEmpty($Enabled))
+				{
+					if (![regex]::Match($RuleValue, "\|Active=$RegexEnabled\|", [RegexOptions]::Multiline).Success)
 					{
 						continue
 					}

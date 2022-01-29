@@ -28,12 +28,12 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Exports firewall rules to a CSV or JSON file
+Exports firewall rules to a CSV or JSON file from registry
 
 .DESCRIPTION
-Export-RegistryRule exports firewall rules to a CSV or JSON file.
+Export-RegistryRule exports firewall rules to a CSV or JSON file directly from registry.
 Only local GPO rules are exported by default.
-CSV files are semicolon separated (Beware! Excel is not friendly to CSV files).
+CSV files are semicolon separated.
 All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound,
 -Enabled, -Disabled, -Allow and -Block.
 If the export file already exists it's content will be replaced by default.
@@ -101,26 +101,8 @@ None. You cannot pipe objects to Export-RegistryRule
 None. Export-RegistryRule does not generate any output
 
 .NOTES
-Author: Markus Scholtes
-Version: 1.02
-Build date: 2020/02/15
-
-Following modifications by metablaster August 2020:
-1. Applied formatting and code style according to project rules
-2. Added switch to optionally append instead of replacing output file
-3. Separated functions into their own scope
-4. Added function to decode string into multi line
-5. Added parameter to target specific policy store
-6. Added parameter to specify directory, and crate it if it doesn't exist
-7. Added more output streams for debug, verbose and info
-8. Added parameter to export according to rule group
-9. Changed minor flow and logic of execution
-10. Make output formatted and colored
-11. Added progress bar
-December 2020:
-1. Rename parameters according to standard name convention
-2. Support resolving path wildcard pattern
 TODO: Export to excel
+Excel is not friendly to CSV files
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md
