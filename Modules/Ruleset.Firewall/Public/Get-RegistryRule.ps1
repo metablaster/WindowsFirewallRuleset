@@ -219,10 +219,18 @@ function Get-RegistryRule
 				$PolicyStoreSourceType = "GroupPolicy"
 			}
 
-			foreach ($RuleName in $RootKey.GetValueNames())
+			# Counter for progress
+			[int32] $RuleCount = 0
+			[array] $RuleValueNames = $RootKey.GetValueNames()
+
+			foreach ($RuleName in $RuleValueNames)
 			{
 				# Quickly check if current rule matches function parameters
 				$RuleValue = $RootKey.GetValue($RuleName)
+
+				Write-Progress -Activity "Getting rules from registry" -CurrentOperation $RuleName `
+					-PercentComplete (++$RuleCount / $RuleValueNames.Length * 100) `
+					-SecondsRemaining (($RuleValueNames.Length - $RuleCount + 1) / 10 * 60)
 
 				if (![string]::IsNullOrEmpty($DisplayName))
 				{

@@ -56,10 +56,18 @@ If you would like to see fresh changes done since last release you can do so on 
     - `ConvertFrom-SID`
     - `Split-Principal`
     - `ConvertFrom-SDDL`
+    - `Get-SDDL`
     - `Export-FirewallRule`
     - `Import-FirewallRule`
     - `Remove-FirewallRule`
     - `Find-RulePrincipal`
+
+  - Improved or updated scripts:
+
+    - `Backup-Firewall`
+    - `Restore-Firewall`
+    - `Reset-Firewall`
+    - `Deploy-Firewall`
 
 - New features
 

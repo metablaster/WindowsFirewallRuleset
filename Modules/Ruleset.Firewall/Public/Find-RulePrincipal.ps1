@@ -42,15 +42,17 @@ Wildcard characters are supported.
 .PARAMETER FileName
 Output file name, which is json file into which result is saved
 
-.PARAMETER Append
-Append rules to existing file instead of replacing
+.PARAMETER User
+User for which to obtain rules
 
-.PARAMETER Weak
-If specified, returns rules with no local user value,
-Otherwise only rules with local user are returned
+.PARAMETER Group
+Group for which to obtain rules
 
 .PARAMETER Direction
 Firewall rule direction, default is '*' both directions
+
+.PARAMETER Append
+If specified, result is appended to json file instead of replacing file contents
 
 .EXAMPLE
 PS> Find-RulePrincipal -Empty
@@ -62,11 +64,11 @@ None. You cannot pipe objects to Find-RulePrincipal
 [System.Void]
 
 .NOTES
-None.
+TODO: Should be able to query rules for multiple users or groups
 #>
 function Find-RulePrincipal
 {
-	[CmdletBinding(
+	[CmdletBinding(DefaultParameterSetName = "None", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Find-RulePrincipal.md")]
 	[OutputType([void])]
 	param (
@@ -77,36 +79,65 @@ function Find-RulePrincipal
 		[Parameter()]
 		[string] $FileName = "PrincipalRules",
 
-		[Parameter()]
-		[switch] $Append,
+		[Parameter(Mandatory = $true, ParameterSetName = "User")]
+		[Parameter(ParameterSetName = "Group")]
+		[Alias("UserName")]
+		[string] $User,
 
-		[Parameter()]
-		[switch] $Weak,
+		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
+		[Alias("UserGroup")]
+		[string] $Group,
 
 		[Parameter()]
 		[ValidateSet("Inbound", "Outbound", "*")]
-		[string] $Direction = "*"
+		[string] $Direction = "*",
+
+		[Parameter()]
+		[switch] $Append
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Getting rules from GPO..."
+	[array] $RegistryRules = Get-RegistryRule -GroupPolicy
 
-	$SelectRules = Get-RegistryRule -GroupPolicy |
-	Where-Object {
-		# Exclude rules for store apps and services
-		$null -eq $_.Owner -and
-		$null -eq $_.Service -and
-		$_.Direction -like $Direction
-	}
+	# Counter for progress
+	[int32] $RuleCount = 0
+	$SelectRules = @()
 
-	# Exclude rules with LocalUser set\unset
-	if ($Weak)
+	foreach ($Rule in $RegistryRules)
 	{
-		$SelectRules = $SelectRules | Where-Object { $null -eq $_.LocalUser }
-	}
-	else
-	{
-		$SelectRules = $SelectRules | Where-Object { $null -ne $_.LocalUser }
+		Write-Progress -Activity "Filtering rules" -CurrentOperation $Rule.DisplayName `
+			-PercentComplete (++$RuleCount / $RegistryRules.Length * 100) `
+			-SecondsRemaining (($RegistryRules.Length - $RuleCount + 1) / 10 * 60)
+
+		# Exclude rules for store app and services matching direction
+		if (($null -eq $Rule.Owner) -and ($null -eq $Rule.Service) -and	($Rule.Direction -like $Direction))
+		{
+			# Exclude rules with LocalUser set\unset
+			$SearchSDDL = $true
+
+			if ($PSCmdlet.ParameterSetName -eq "User")
+			{
+				$SDDL = Get-SDDL -User $User
+			}
+			elseif ($PSCmdlet.ParameterSetName -eq "Group")
+			{
+				$SDDL = Get-SDDL -Group $Group
+			}
+			else
+			{
+				$SearchSDDL = $false
+				$SelectRules += $Rule
+			}
+
+			if ($SearchSDDL -and ($null -ne $Rule.LocalUser))
+			{
+				if ($Rule.LocalUser -like "*$SDDL*")
+				{
+					$Rule.LocalUser = (ConvertFrom-SDDL $Rule.LocalUser).Principal
+					$SelectRules += $Rule
+				}
+			}
+		}
 	}
 
 	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser |

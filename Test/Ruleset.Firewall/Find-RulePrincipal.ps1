@@ -71,8 +71,11 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow un
 {
 	$Exports = "$ProjectRoot\Exports"
 
-	Start-Test "-Direction Outbound -Weak"
-	$Result = Find-RulePrincipal -Path $Exports -Direction Outbound -Weak
+	Start-Test "-Direction Outbound -Principal"
+	Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
+
+	Start-Test "-Direction Outbound <no principal>"
+	$Result = Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "NoPrincipalRules"
 	$Result
 
 	Test-Output $Result -Command Find-RulePrincipal

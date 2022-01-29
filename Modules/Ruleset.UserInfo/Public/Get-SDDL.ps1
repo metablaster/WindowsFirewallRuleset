@@ -41,7 +41,8 @@ One or more users for which to obtain SDDL string
 One or more user groups for which to obtain SDDL string
 
 .PARAMETER Path
-Single file system or registry location for which to obtain SDDL
+Single file system or registry location for which to obtain SDDL.
+Wildcard characters are supported.
 
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
@@ -86,10 +87,10 @@ function Get-SDDL
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
 		[Alias("UserGroup")]
-		[SupportsWildcards()]
 		[string[]] $Group,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Path")]
+		[SupportsWildcards()]
 		[string] $Path,
 
 		[Parameter()]
