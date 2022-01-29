@@ -34,7 +34,6 @@ Get all firewall rules with or without LocalUser value
 Get all rules which are either missing or not missing LocalUser value, and save the result
 into a JSON file.
 Rules which are missing LocalUser are considered weak and need to be updated.
-This operation is slow, intended for debugging.
 
 .PARAMETER Path
 Path into which to save file.
@@ -44,7 +43,7 @@ Wildcard characters are supported.
 Output file name, which is json file into which result is saved
 
 .PARAMETER Append
-Append exported rules to existing file instead of replacing
+Append rules to existing file instead of replacing
 
 .PARAMETER Weak
 If specified, returns rules with no local user value,
@@ -76,7 +75,7 @@ function Find-RulePrincipal
 		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
-		[string] $FileName = "NoPrincipalRules",
+		[string] $FileName = "PrincipalRules",
 
 		[Parameter()]
 		[switch] $Append,
@@ -90,59 +89,31 @@ function Find-RulePrincipal
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	$StopWatch = [System.Diagnostics.Stopwatch]::new()
-	$StopWatch.Start()
-
-	# Exclude rules for store apps
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Getting rules from GPO..."
-	$GPORules = Get-NetFirewallRule -PolicyStore $PolicyStore |
+
+	$SelectRules = Get-RegistryRule -GroupPolicy |
 	Where-Object {
+		# Exclude rules for store apps and services
 		$null -eq $_.Owner -and
+		$null -eq $_.Service -and
 		$_.Direction -like $Direction
 	}
 
 	# Exclude rules with LocalUser set\unset
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Applying security filter..."
-
 	if ($Weak)
 	{
-		$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
-		Where-Object -Property LocalUser -EQ Any
+		$SelectRules = $SelectRules | Where-Object { $null -eq $_.LocalUser }
 	}
 	else
 	{
-		$UserFilter = $GPORules | Get-NetFirewallSecurityFilter |
-		Where-Object -Property LocalUser -NE Any
+		$SelectRules = $SelectRules | Where-Object { $null -ne $_.LocalUser }
 	}
 
-	# Exclude rules for services because these can't have LocalUser property set
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Applying service filter..."
-	$ServiceFilter = $UserFilter | Get-NetFirewallRule |
-	Get-NetFirewallServiceFilter | Where-Object -Property Service -EQ Any
+	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser |
+	Sort-Object -Property Direction, DisplayGroup
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Selecting properties..."
-	$ResultRules = $ServiceFilter | Get-NetFirewallRule |
-	Select-Object -Property DisplayName, DisplayGroup, Direction |
-	Sort-Object -Property DisplayGroup
-
-	$StopWatch.Stop()
-	$TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
-	$TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	$TotalMinutes += $TotalHours * 60
-
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Time needed to find weak rules was: $TotalMinutes minutes"
-
-	# Replace 1 and 2 with Inbound and Outbound
-	$TargetRules = @()
-	foreach ($Rule in $ResultRules)
-	{
-		$TargetRules += [PSCustomObject]@{
-			DisplayName = $Rule.DisplayName
-			DisplayGroup = $Rule.DisplayGroup
-			Direction = if ($Rule.Direction -eq 1) { "Inbound" } else { "Outbound" }
-		}
-	}
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: In total there are $(($SelectRules | Measure-Object).Count) rules in the result"
 
 	$Path = Resolve-FileSystemPath $Path -Create
 	if (!$Path)
@@ -170,18 +141,18 @@ function Find-RulePrincipal
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending result to JSON file"
 			$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path "$Path\$FileName" -Raw)
 
-			@($JsonFile; $TargetRules) | ConvertTo-Json |
+			@($JsonFile; $SelectRules) | ConvertTo-Json |
 			Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
 		else
 		{
 			Write-Warning -Message "Not appending result to file because no existing file"
-			$TargetRules | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+			$SelectRules | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
 	}
 	else
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
-		$TargetRules | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+		$SelectRules | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 	}
 }

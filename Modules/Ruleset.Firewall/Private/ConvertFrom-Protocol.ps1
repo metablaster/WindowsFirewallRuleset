@@ -36,8 +36,8 @@ ConvertFrom-Protocol converts TCP\IP protocol number to string representation
 .PARAMETER Protocol
 TCP\IP protocol number which is to be converted
 
-.PARAMETER Force
-The description of Force parameter.
+.PARAMETER FirewallCompatible
+Conversion is compatible with Windows firewall
 
 .EXAMPLE
 PS> ConvertFrom-Protocol
@@ -58,21 +58,37 @@ function ConvertFrom-Protocol
 	[OutputType([string], [int32])]
 	param (
 		[Parameter(Mandatory = $true)]
-		[int32] $Protocol
+		[int32] $Protocol,
+
+		[Parameter()]
+		[switch] $FirewallCompatible
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	switch ($Protocol)
+	if ($FirewallCompatible)
 	{
-		# TODO: This switch is incomplete
-		# NOTE: For New-NetFirewallRule following protocols by name are valid: TCP, UDP, ICMPv4, or ICMPv6.
-		1 { "ICMPv4" }
-		# 2 { "IGMP" }
-		6 { "TCP" }
-		17 { "UDP" }
-		# 41 { "IPv6" }
-		58 { "ICMPv6" }
-		default { $Protocol }
+		switch ($Protocol)
+		{
+			1 { "ICMPv4" }
+			6 { "TCP" }
+			17 { "UDP" }
+			58 { "ICMPv6" }
+			default { $Protocol }
+		}
+	}
+	else
+	{
+		switch ($Protocol)
+		{
+			# TODO: This switch is incomplete
+			1 { "ICMPv4" }
+			2 { "IGMP" }
+			6 { "TCP" }
+			17 { "UDP" }
+			41 { "IPv6" }
+			58 { "ICMPv6" }
+			default { $Protocol }
+		}
 	}
 }

@@ -14,13 +14,16 @@ EXAMPLES
 	Export-FirewallRule
 	Exports firewall rules to a CSV or JSON file
 
+	Export-RegistryRule
+	Exports firewall rules from registry to CSV or JSON file
+
 	Find-RulePrincipal
 	Get all firewall rules with or without LocalUser value
 
 	Format-RuleOutput
 	Format output of the Net-NewFirewallRule commandlet
 
-	Get-FirewallRule
+	Get-RegistryRule
 	Gets firewall rules directly from registry
 
 	Import-FirewallRule

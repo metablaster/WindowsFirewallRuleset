@@ -26,12 +26,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Text.RegularExpressions
+
 <#
 .SYNOPSIS
 Gets firewall rules directly from registry
 
 .DESCRIPTION
-Get-RegistryRule gets firewall rules by drilling registry
+Get-RegistryRule gets firewall rules by drilling registry and parsing registry values.
+This method to retrieve rules results is very fast export compared to conventional way.
 
 .PARAMETER Domain
 Target computer name from which rules are to be queried
@@ -39,8 +42,19 @@ Target computer name from which rules are to be queried
 .PARAMETER Local
 Retrive rules from persistent store (control panel firewall)
 
-.PARAMETER GPO
-Retrive rules from GPO store (GPO firewall)
+.PARAMETER GroupPolicy
+Retrive rules from local group policy store (GPO firewall)
+
+.PARAMETER DisplayName
+Specifies that only matching firewall rules of the indicated display name are retrieved
+Wildcard characters are accepted.
+
+.PARAMETER DisplayGroup
+Specifies that only matching firewall rules of the indicated group association are retrieved
+Wildcard characters are accepted.
+
+.PARAMETER Direction
+Specifies that matching firewall rules of the indicated direction are retrieved
 
 .EXAMPLE
 PS> Get-RegistryRule
@@ -52,7 +66,8 @@ None. You cannot pipe objects to Get-RegistryRule
 [PSCustomObject]
 
 .NOTES
-None.
+TODO: Getting rules from persistent store (-Local switch) needs testing
+TODO: Implement more parameters to be able to fine tune which rules to get
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md
@@ -84,13 +99,14 @@ function Get-RegistryRule
 
 		[Parameter()]
 		[SupportsWildcards()]
-		[string] $DisplayGroup,
-
-		[Parameter()]
-		[SupportsWildcards()]
 		[string] $DisplayName,
 
 		[Parameter()]
+		[SupportsWildcards()]
+		[string] $DisplayGroup,
+
+		[Parameter()]
+		[ValidateSet("Inbound", "Outbound")]
 		[string] $Direction
 	)
 
@@ -152,6 +168,9 @@ function Get-RegistryRule
 			}
 		}
 
+		if ($Direction -eq "Outbound") { $RegDirection = "Out" }
+		else { $RegDirection = "In" }
+
 		foreach ($HKLMRootKey in $HKLM)
 		{
 			try
@@ -184,6 +203,33 @@ function Get-RegistryRule
 
 			foreach ($RuleName in $RootKey.GetValueNames())
 			{
+				# Quickly check if current rule matches function parameters
+				$RuleValue = $RootKey.GetValue($RuleName)
+
+				if (![string]::IsNullOrEmpty($DisplayName))
+				{
+					if (![regex]::Match($RuleValue, "\|Name=$DisplayName\|", [RegexOptions]::Multiline).Success)
+					{
+						continue
+					}
+				}
+
+				if (![string]::IsNullOrEmpty($DisplayGroup))
+				{
+					if (![regex]::Match($RuleValue, "\|EmbedCtxt=$DisplayGroup\|", [RegexOptions]::Multiline).Success)
+					{
+						continue
+					}
+				}
+
+				if (![string]::IsNullOrEmpty($Direction))
+				{
+					if (![regex]::Match($RuleValue, "\|Dir=$RegDirection\|", [RegexOptions]::Multiline).Success)
+					{
+						continue
+					}
+				}
+
 				# Prepare hashtable
 				$HashProps = [ordered]@{
 					Name = $RuleName # registry value name
@@ -248,18 +294,21 @@ function Get-RegistryRule
 					SecurityRealmId = $null
 				}
 
-				# Iterate through the rest of value of the registry rule
-				foreach ($RuleEntry in ($RootKey.GetValue($RuleName) -split '\|'))
+				# Iterate through the value of the registry rule, ex:
+				# v2.30|Action=Allow|Active=TRUE|Dir=Out|Protocol=6|RPort=22|RPort=80|RPort=443|RA42=IntErnet|
+				# IFType=Lan|IFType=Wireless|App=%SystemRoot%\System32\backgroundTaskHost.exe|Name=Background task host|
+				# Desc=Sample description|EmbedCtxt=Windows System|Platform=2:10:0|Platform2=GTEQ|
+				foreach ($Entry in ($RootKey.GetValue($RuleName) -split '\|'))
 				{
 					# Split current name value pair
-					$RuleEntryString = $RuleEntry.ToString()
+					$EntryString = $Entry.ToString()
 
-					if ($RuleEntryString.Contains("="))
+					if ($EntryString.Contains("="))
 					{
-						$EntryName = ($RuleEntry -split '=')[0]
-						$EntryValue = ($RuleEntry -split "=")[1]
+						$EntryName = ($Entry -split '=')[0]
+						$EntryValue = ($Entry -split "=")[1]
 					}
-					elseif ([string]::IsNullOrEmpty($RuleEntryString))
+					elseif ([string]::IsNullOrEmpty($EntryString))
 					{
 						# Empty value
 						continue
@@ -332,10 +381,10 @@ function Get-RegistryRule
 							else { $HashProps.Direction = "Inbound" }
 							break
 						}
-						"Profile" { [array] $HashProps.Profile += $EntryValue }
+						"Profile" { [array] $HashProps.Profile += $EntryValue; break }
 						"Protocol"
 						{
-							$HashProps.Protocol = ConvertFrom-Protocol $EntryValue
+							$HashProps.Protocol = ConvertFrom-Protocol $EntryValue -FirewallCompatible
 							break
 						}
 						# This token value represents the LocalPorts
@@ -620,35 +669,7 @@ function Get-RegistryRule
 				}
 
 				# Create output object using the properties defined in the hashtable
-				$RuleObject = New-Object -TypeName PSCustomObject -Property $HashProps
-
-				# TODO: Getting rules based on function parameters should be done beforehand to
-				# reduce amount of rules parsed for performance reasons
-				if (![string]::IsNullOrEmpty($DisplayName))
-				{
-					$RuleObject = $RuleObject | Where-Object {
-						$_.DisplayName -like $DisplayName
-					}
-				}
-
-				if (![string]::IsNullOrEmpty($DisplayGroup))
-				{
-					$RuleObject = $RuleObject | Where-Object {
-						$_.DisplayGroup -like $DisplayGroup
-					}
-				}
-
-				if (![string]::IsNullOrEmpty($Direction))
-				{
-					$RuleObject = $RuleObject | Where-Object {
-						$_.Direction -eq $Direction
-					}
-				}
-
-				if ($RuleObject)
-				{
-					Write-Output $RuleObject
-				}
+				New-Object -TypeName PSCustomObject -Property $HashProps
 			} # foreach registry rule
 		}
 	}

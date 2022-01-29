@@ -96,7 +96,7 @@ else
 	Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
 
 	Start-Test "Default test 3"
-	$Result = Get-RegistryRule -Direction Outbound -DisplayName "DNS Client"
+	$Result = Get-RegistryRule -Direction Outbound -DisplayGroup "Broadcast"
 	$Result
 
 	Test-Output $Result -Command Get-RegistryRule

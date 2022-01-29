@@ -88,12 +88,7 @@ December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 
-Port is invalid import:
-Core networking ipv6
-
-input is missing:
-network discovery
-
+TODO: Importing from JSON not tested
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md

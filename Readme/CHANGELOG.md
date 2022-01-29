@@ -67,7 +67,9 @@ If you would like to see fresh changes done since last release you can do so on 
   rule processing ex. to speed up export\import of rules
   - `Export-RegistryRule` new function which exports firewall rules to file from registry, which
   is much faster compared to `Export-FirewallRule` which uses standard commandlets
-  - `Restore-IfBlank` new private function to help with generic default values in caller code
+  - `Restore-IfBlank` new private helper function to help with generic default values in caller code
+  - `ConvertFrom-Protocol` new private help function to convert TPC\IP protocol numbers to string
+  representation
 
 - Documentation revisited and updated for missing changes introduced since v0.10.0
 
