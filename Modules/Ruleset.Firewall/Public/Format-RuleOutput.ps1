@@ -46,6 +46,9 @@ If specified, output status represents importing rule
 .EXAMPLE
 PS> Net-NewFirewallRule ... | Format-RuleOutput
 
+.EXAMPLE
+PS> Net-NewFirewallRule ... | Format-RuleOutput -Import
+
 .INPUTS
 [Microsoft.Management.Infrastructure.CimInstance[]]
 

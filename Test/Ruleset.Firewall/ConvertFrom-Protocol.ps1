@@ -28,52 +28,56 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
+Unit test for ConvertFrom-Protocol
 
 .DESCRIPTION
+Test correctness of ConvertFrom-Protocol function
 
-.PARAMETER Value
-Input value which is returned without modification
-
-.PARAMETER DefaultValue
-Value to set if a input is empty.
-This way calling code can be generic since it doesn't need to handle default values
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> Restore-IfBlank
-
-.EXAMPLE
-PS> Restore-IfBlank "NewValue"
+PS> .\ConvertFrom-Protocol.ps1
 
 .INPUTS
-None. You cannot pipe objects to Restore-IfBlank
+None. You cannot pipe objects to ConvertFrom-Protocol.ps1
 
 .OUTPUTS
-[string]
-
-.NOTES
-None.
+None. ConvertFrom-Protocol.ps1 does not generate any output
 #>
-function Restore-IfBlank
-{
-	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([string])]
-	param (
-		[Parameter(Position = 0)]
-		[string] $Value,
 
-		[Parameter()]
-		$DefaultValue = "Any"
-	)
+#Requires -Version 5.1
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
-	if (![string]::IsNullOrEmpty($Value))
-	{
-		return $Value
-	}
-	else
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
-		return $DefaultValue
-	}
-}
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\ContextSetup.ps1
+
+Initialize-Project -Strict
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
+
+Enter-Test -Private "ConvertFrom-Protocol"
+
+Start-Test "Convert 17 to UDP -FirewallCompatible"
+ConvertFrom-Protocol 17 -FirewallCompatible
+
+Start-Test "Convert 2 to 2 -FirewallCompatible"
+ConvertFrom-Protocol 2 -FirewallCompatible
+
+Start-Test "Convert 41 to IPv6"
+$Result = ConvertFrom-Protocol 41
+$Result
+
+Start-Test "Protocol out of range"
+ConvertFrom-Protocol 300
+
+Test-Output $Result -Command ConvertFrom-Protocol
+
+Update-Log
+Exit-Test

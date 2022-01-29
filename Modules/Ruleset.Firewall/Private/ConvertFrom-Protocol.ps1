@@ -40,7 +40,10 @@ TCP\IP protocol number which is to be converted
 Conversion is compatible with Windows firewall
 
 .EXAMPLE
-PS> ConvertFrom-Protocol
+PS> ConvertFrom-Protocol 41
+
+.EXAMPLE
+PS> ConvertFrom-Protocol 17 -FirewallCompatible
 
 .INPUTS
 None. You cannot pipe objects to ConvertFrom-Protocol
@@ -58,6 +61,7 @@ function ConvertFrom-Protocol
 	[OutputType([string], [int32])]
 	param (
 		[Parameter(Mandatory = $true)]
+		[ValidateRange(0, 255)]
 		[int32] $Protocol,
 
 		[Parameter()]
@@ -70,10 +74,10 @@ function ConvertFrom-Protocol
 	{
 		switch ($Protocol)
 		{
-			1 { "ICMPv4" }
-			6 { "TCP" }
-			17 { "UDP" }
-			58 { "ICMPv6" }
+			1 { "ICMPv4"; break }
+			6 { "TCP"; break }
+			17 { "UDP"; break }
+			58 { "ICMPv6"; break }
 			default { $Protocol }
 		}
 	}
@@ -82,12 +86,12 @@ function ConvertFrom-Protocol
 		switch ($Protocol)
 		{
 			# TODO: This switch is incomplete
-			1 { "ICMPv4" }
-			2 { "IGMP" }
-			6 { "TCP" }
-			17 { "UDP" }
-			41 { "IPv6" }
-			58 { "ICMPv6" }
+			1 { "ICMPv4"; break }
+			2 { "IGMP"; break }
+			6 { "TCP"; break }
+			17 { "UDP"; break }
+			41 { "IPv6"; break }
+			58 { "ICMPv6"; break }
 			default { $Protocol }
 		}
 	}

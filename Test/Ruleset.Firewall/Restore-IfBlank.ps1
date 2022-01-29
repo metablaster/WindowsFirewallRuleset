@@ -28,52 +28,50 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
+Unit test for Restore-IfBlank
 
 .DESCRIPTION
+Test correctness of Restore-IfBlank function
 
-.PARAMETER Value
-Input value which is returned without modification
-
-.PARAMETER DefaultValue
-Value to set if a input is empty.
-This way calling code can be generic since it doesn't need to handle default values
+.PARAMETER Force
+If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> Restore-IfBlank
-
-.EXAMPLE
-PS> Restore-IfBlank "NewValue"
+PS> .\Restore-IfBlank.ps1
 
 .INPUTS
-None. You cannot pipe objects to Restore-IfBlank
+None. You cannot pipe objects to Restore-IfBlank.ps1
 
 .OUTPUTS
-[string]
-
-.NOTES
-None.
+None. Restore-IfBlank.ps1 does not generate any output
 #>
-function Restore-IfBlank
-{
-	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([string])]
-	param (
-		[Parameter(Position = 0)]
-		[string] $Value,
 
-		[Parameter()]
-		$DefaultValue = "Any"
-	)
+#Requires -Version 5.1
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
-	if (![string]::IsNullOrEmpty($Value))
-	{
-		return $Value
-	}
-	else
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
-		return $DefaultValue
-	}
-}
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\ContextSetup.ps1
+
+Initialize-Project -Strict
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
+
+Enter-Test -Private "Restore-IfBlank"
+
+Start-Test "default test"
+$Result = Restore-IfBlank
+$Result
+
+Start-Test "NewValue"
+Restore-IfBlank "NewValue"
+
+Test-Output $Result -Command Restore-IfBlank
+
+Update-Log
+Exit-Test

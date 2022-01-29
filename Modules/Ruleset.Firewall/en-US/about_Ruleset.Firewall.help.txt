@@ -14,6 +14,9 @@ EXAMPLES
 	Export-FirewallRule
 	Exports firewall rules to a CSV or JSON file
 
+	Export-FirewallSetting
+	Exports firewall settings and profile setup to file
+
 	Export-RegistryRule
 	Exports firewall rules from registry to CSV or JSON file
 
@@ -28,6 +31,9 @@ EXAMPLES
 
 	Import-FirewallRule
 	Imports firewall rules from a CSV or JSON file
+
+	Import-FirewallSetting
+	Imports firewall settings and profile setup to file
 
 	Remove-FirewallRule
 	Removes firewall rules according to a list in a CSV or JSON file

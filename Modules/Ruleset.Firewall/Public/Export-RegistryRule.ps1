@@ -90,7 +90,7 @@ PS> Export-RegistryRule -Inbound -Allow
 Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.
 
 .EXAMPLE
-PS> Export-RegistryRule -DisplayGroup ICMP* ICMPRules.json -json
+PS> Export-RegistryRule -DisplayGroup ICMP* ICMPRules.json -JSON
 
 Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 

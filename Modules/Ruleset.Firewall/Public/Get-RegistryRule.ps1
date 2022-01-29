@@ -63,7 +63,13 @@ Specifies that matching firewall rules of the indicated action are retrieved
 Specifies that matching firewall rules of the indicated state are retrieved
 
 .EXAMPLE
-PS> Get-RegistryRule
+PS> Get-RegistryRule -GroupPolicy
+
+.EXAMPLE
+PS> Get-RegistryRule -Action Block -Enabled False
+
+.EXAMPLE
+PS> Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
 
 .INPUTS
 None. You cannot pipe objects to Get-RegistryRule

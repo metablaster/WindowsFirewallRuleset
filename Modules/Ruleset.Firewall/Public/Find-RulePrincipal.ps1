@@ -56,7 +56,10 @@ Firewall rule direction, default is '*' both directions
 If specified, result is appended to json file instead of replacing file contents
 
 .EXAMPLE
-PS> Find-RulePrincipal -Empty
+PS> Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
+
+.EXAMPLE
+PS> Find-RulePrincipal -Path $Exports -FileName "NoPrincipalRules"
 
 .INPUTS
 None. You cannot pipe objects to Find-RulePrincipal

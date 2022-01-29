@@ -73,6 +73,7 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Export-FirewallRule"
+	"Export-FirewallSetting"
 	"Export-RegistryRule"
 	"Find-RulePrincipal"
 	"Format-RuleOutput"

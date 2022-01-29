@@ -28,52 +28,38 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
+Import firewall settings and profile setup to file
 
 .DESCRIPTION
+Import-FirewallSetting imports all firewall settings from file previously exported by
+Export-FirewallSetting
 
-.PARAMETER Value
-Input value which is returned without modification
-
-.PARAMETER DefaultValue
-Value to set if a input is empty.
-This way calling code can be generic since it doesn't need to handle default values
-
-.EXAMPLE
-PS> Restore-IfBlank
+.PARAMETER ParameterName
+The description of a parameter.
+Repeat ".PARAMETER" keyword for each parameter.
 
 .EXAMPLE
-PS> Restore-IfBlank "NewValue"
+PS> Import-FirewallSetting
 
 .INPUTS
-None. You cannot pipe objects to Restore-IfBlank
+None. You cannot pipe objects to Import-FirewallSetting
 
 .OUTPUTS
-[string]
+None. Import-FirewallSetting does not generate any output
 
 .NOTES
 None.
-#>
-function Restore-IfBlank
-{
-	[CmdletBinding(PositionalBinding = $false)]
-	[OutputType([string])]
-	param (
-		[Parameter(Position = 0)]
-		[string] $Value,
 
-		[Parameter()]
-		$DefaultValue = "Any"
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md
+#>
+function Import-FirewallSetting
+{
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md")]
+	[OutputType([void])]
+	param (
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	if (![string]::IsNullOrEmpty($Value))
-	{
-		return $Value
-	}
-	else
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
-		return $DefaultValue
-	}
 }
