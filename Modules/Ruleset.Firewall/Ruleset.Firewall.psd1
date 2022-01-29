@@ -168,6 +168,7 @@ SOFTWARE.
 		"Private\Convert-MultiLineToList.ps1"
 		"Private\Convert-ValueToBoolean.ps1"
 		"Private\ConvertFrom-Protocol.ps1"
+		"Private\Get-ObjectMember.ps1"
 		"Private\README.md"
 		"Private\Restore-IfBlank.ps1"
 		"Public\Export-FirewallRule.ps1"

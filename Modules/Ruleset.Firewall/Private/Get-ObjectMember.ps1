@@ -28,48 +28,48 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Export-FirewallSetting
+Turn JSON PSCustomObject into a hashtable
 
 .DESCRIPTION
-Test correctness of Export-FirewallSetting function
+Get-ObjectMember turns PSCustomObject that was produced by ConvertFrom-Json into a hashtable
 
-.PARAMETER Force
-If specified, no prompt to run script is shown
+.PARAMETER InputObject
+Json element returned as PSCustomObject
 
 .EXAMPLE
-PS> .\Export-FirewallSetting.ps1
+PS> $SomeJson | Get-ObjectMember
 
 .INPUTS
-None. You cannot pipe objects to Export-FirewallSetting.ps1
+[PSCustomObject]
 
 .OUTPUTS
-None. Export-FirewallSetting.ps1 does not generate any output
+[hashtable]
+
+.NOTES
+None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-ObjectMember.md
 #>
+function Get-ObjectMember
+{
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-ObjectMember.md")]
+	[OutputType([hashtable])]
+	Param(
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[PSCustomObject] $InputObject
+	)
 
-#Requires -Version 5.1
-
-[CmdletBinding()]
-param (
-	[Parameter()]
-	[switch] $Force
-)
-
-#region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\..\ContextSetup.ps1
-
-Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
-
-Enter-Test "Export-FirewallSetting"
-$Exports = "$ProjectRoot\Exports"
-
-Start-Test "default test"
-$Result = Export-FirewallSetting -Path $Exports
-$Result
-
-Test-Output $Result -Command Export-FirewallSetting
-
-Update-Log
-Exit-Test
+	begin
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	}
+	process
+	{
+		$InputObject | Get-Member -MemberType NoteProperty | ForEach-Object {
+			$Key = $_.Name
+			[hashtable]@{Key = $Key; Value = $InputObject.($Key) }
+		}
+	}
+}

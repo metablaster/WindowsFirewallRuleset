@@ -40,11 +40,11 @@ Existing rules with same name will not be overwritten by default.
 Target computer onto which to import rules, default is local GPO.
 
 .PARAMETER Path
-Path to directory where exported rules file is located.
+Path to directory where the exported rules file is located.
 Wildcard characters are supported.
 
 .PARAMETER FileName
-Input file
+Export file file containing firewall rules
 
 .PARAMETER JSON
 Input from JSON instead of CSV format
