@@ -28,12 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get all firewall rules with or without LocalUser value
+Get all firewall rules without or with specified LocalUser value
 
 .DESCRIPTION
-Get all rules which are either missing or not missing LocalUser value, and save the result
-into a JSON file.
-Rules which are missing LocalUser are considered weak and need to be updated.
+Get all rules which are either missing missing LocalUser value or rules which match specified
+LocalUser value, and save the result into a JSON file.
+Intended purpose of this function is to find rules without LocalUser value set to be able
+to quickly sport incomplete rules and assign LocalUser value for security reasons.
 
 .PARAMETER Path
 Path into which to save file.
