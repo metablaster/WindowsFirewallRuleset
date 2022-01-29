@@ -53,6 +53,9 @@ Optionally specify a time-out interval.
 By default pattern-matching operation does not time out.
 This parameter has no effect if -AsRegex switch was not specified.
 
+.PARAMETER SkipAnchor
+If specified, does not add ^ and $ anchors to the result pattern.
+
 .EXAMPLE
 PS> ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"
 
@@ -110,10 +113,15 @@ function ConvertFrom-Wildcard
 		[switch] $AsRegex,
 
 		[Parameter()]
+		[ValidateSet("Compiled", "CultureInvariant", "ECMAScript", "ExplicitCapture", "IgnoreCase",
+			"IgnorePatternWhitespace", "Multiline", "None", "RightToLeft", "Singleline")]
 		[System.Text.RegularExpressions.RegexOptions] $Options = "None",
 
 		[Parameter()]
-		[System.TimeSpan] $TimeSpan = [regex]::InfiniteMatchTimeout
+		[System.TimeSpan] $TimeSpan = [regex]::InfiniteMatchTimeout,
+
+		[Parameter(ParameterSetName = "String")]
+		[switch] $SkipAnchor
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -315,15 +323,18 @@ function ConvertFrom-Wildcard
 		# Unescape doubly esccaped * and ?
 		$Result = [regex]::Replace($Result, "(?<data>\\\\\\(\?|\*))+", $UnescapeEvaluator, $Options)
 
-		# To make it easier set anchors before escaping wildcard pattern
-		if (!$Pattern.StartsWith("*"))
+		if (!$SkipAnchor)
 		{
-			$Result = $Result.Insert(0, "^")
-		}
+			# To make it easier set anchors before escaping wildcard pattern
+			if (!$Pattern.StartsWith("*"))
+			{
+				$Result = $Result.Insert(0, "^")
+			}
 
-		if (!$Pattern.EndsWith("*"))
-		{
-			$Result += "$"
+			if (!$Pattern.EndsWith("*"))
+			{
+				$Result += "$"
+			}
 		}
 	}
 	elseif ($Pattern -eq "System.Management.Automation.WildcardPattern")
@@ -335,8 +346,15 @@ function ConvertFrom-Wildcard
 	{
 		Write-Warning -Message "Wildcard pattern '$Pattern' contains no wildcard characters"
 
-		$Result = $Pattern.Insert(0, "^")
-		$Result += "$"
+		if ($SkipAnchor)
+		{
+			$Result = $Pattern
+		}
+		else
+		{
+			$Result = $Pattern.Insert(0, "^")
+			$Result += "$"
+		}
 	}
 
 	try

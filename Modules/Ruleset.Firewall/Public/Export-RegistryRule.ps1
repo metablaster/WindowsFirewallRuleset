@@ -76,7 +76,8 @@ Export allowing rules
 Export blocking rules
 
 .PARAMETER Append
-Append exported rules to existing file instead of replacing
+Append exported rules to existing file.
+By default file of same name is replaced with new content
 
 .EXAMPLE
 PS> Export-RegistryRule
@@ -206,6 +207,7 @@ function Export-RegistryRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
 
+		# TODO: Use property selectors
 		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GroupPolicy |
 		Where-Object {
 			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `

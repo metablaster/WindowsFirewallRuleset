@@ -74,17 +74,29 @@ if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow an
 
 	# TODO: need to test failure cases, see also module todo's for more info
 
-	Start-Test "default"
-	$Result = Remove-FirewallRule -Path $Exports -FileName "GroupExport"
-	$Result
+	if ($true)
+	{
+		Start-Test "custom test"
+		Remove-FirewallRule -Path $Exports -FileName "InboundGPO.csv" -Confirm:$false
+		Remove-FirewallRule -Path $Exports -FileName "OutboundGPO.csv" -Confirm:$false
+	}
+	else
+	{
+		Start-Test "default"
+		$Result = Remove-FirewallRule -Path $Exports -FileName "RegGroupExport"
+		$Result
 
-	Start-Test "csv extension"
-	Remove-FirewallRule -Path $Exports -FileName "NamedExport1.csv"
+		Start-Test "csv extension"
+		Remove-FirewallRule -Path $Exports -FileName "RegNamedExport1.csv"
 
-	Start-Test "-JSON"
-	Remove-FirewallRule -JSON -Path $Exports -FileName "NamedExport2.json"
+		Start-Test "-JSON"
+		Remove-FirewallRule -JSON -Path $Exports -FileName "RegNamedExport2.json"
 
-	Test-Output $Result -Command Remove-FirewallRule
+		Start-Test "csv extension"
+		Remove-FirewallRule -Path $Exports -FileName "RegStoreAppExport.csv"
+
+		Test-Output $Result -Command Remove-FirewallRule
+	}
 }
 
 Update-Log

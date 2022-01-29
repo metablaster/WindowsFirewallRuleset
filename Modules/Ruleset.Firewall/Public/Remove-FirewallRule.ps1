@@ -32,9 +32,10 @@ SOFTWARE.
 Removes firewall rules according to a list in a CSV or JSON file
 
 .DESCRIPTION
-Removes firewall rules according to a with Export-FirewallRule generated list in a CSV or JSON file.
+Removes firewall rules according to Export-FirewallRule or Export-RegistryRule generated list in a
+CSV or JSON file.
 CSV files have to be separated with semicolons.
-Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
+Only the field Name is used (or if Name is missing, DisplayName is used), all other fields can be omitted.
 
 .PARAMETER Domain
 Policy store from which remove rules, default is local GPO.
@@ -164,12 +165,40 @@ function Remove-FirewallRule
 		# iterate rules
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
+		# Counter for progress
+		[int32] $RuleCount = 0
+
+		$StopWatch = [System.Diagnostics.Stopwatch]::new()
+		$StopWatch.Start()
+
 		foreach ($Rule In $FirewallRules)
 		{
+			# TODO: -SecondsRemaining needs to be updated after precise speed test
+			$ProgressParams = @{
+				Activity = "Removing firewall rules according to '$FileName'"
+				PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
+				SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
+			}
+
+			if (![string]::IsNullOrEmpty($Rule.Group))
+			{
+				$ProgressParams.Status = "$($Rule.Direction)\$($Rule.Group)"
+			}
+
 			$CurrentRule = $null
 
 			if (![string]::IsNullOrEmpty($Rule.Name))
 			{
+				if (![string]::IsNullOrEmpty($Rule.DisplayName))
+				{
+					$ProgressParams.CurrentOperation = $Rule.DisplayName
+				}
+				else
+				{
+					$ProgressParams.CurrentOperation = $Rule.Name
+				}
+
+				Write-Progress @ProgressParams
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to Name"
 				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -Name $Rule.Name -ErrorAction SilentlyContinue
 
@@ -180,32 +209,40 @@ function Remove-FirewallRule
 					continue
 				}
 			}
-			else
+			elseif (![string]::IsNullOrEmpty($Rule.DisplayName))
 			{
-				if (![string]::IsNullOrEmpty($Rule.DisplayName))
-				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
-					$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+				$ProgressParams.CurrentOperation = $Rule.DisplayName
+				Write-Progress @ProgressParams
 
-					if (!$CurrentRule)
-					{
-						Write-Error -Category ObjectNotFound -TargetObject $Rule `
-							-Message "Firewall rule `"$($Rule.DisplayName)`" does not exist"
-						continue
-					}
-				}
-				else
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+
+				if (!$CurrentRule)
 				{
-					Write-Error -Category ReadError -TargetObject $Rule `
-						-Message "Failure in data record"
+					Write-Error -Category ObjectNotFound -TargetObject $Rule `
+						-Message "Firewall rule `"$($Rule.DisplayName)`" does not exist"
 					continue
 				}
+			}
+			else
+			{
+				Write-Error -Category ReadError -TargetObject $Rule `
+					-Message "Specified file contains an error and cannot be used to remove rules"
+				continue
 			}
 
 			Write-Host "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
 			Remove-NetFirewallRule -PolicyStore $Domain -Name $CurrentRule.Name
 		}
 
+		$StopWatch.Stop()
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Removing firewall rules according to '$FileName' done"
+
+		$TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
+		$TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+		$TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+		$TotalMinutes += $TotalHours * 60
+
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Total time needed to remove rules was: $TotalMinutes minutes and $TotalSeconds seconds"
 	}
 }
