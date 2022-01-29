@@ -168,8 +168,26 @@ function Get-RegistryRule
 			}
 		}
 
-		if ($Direction -eq "Outbound") { $RegDirection = "Out" }
-		else { $RegDirection = "In" }
+		if (![string]::IsNullOrEmpty($DisplayName))
+		{
+			$RegexDisplayName = ConvertFrom-Wildcard $DisplayName
+		}
+		if (![string]::IsNullOrEmpty($DisplayGroup))
+		{
+			$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup
+		}
+
+		if ([string]::IsNullOrEmpty($Direction))
+		{
+			$RegDirection = "*"
+		}
+		else
+		{
+			if ($Direction -eq "Outbound") { $RegDirection = "Out" }
+			elseif ($Direction -eq "Inbound") { $RegDirection = "In" }
+		}
+
+		$RegexDirection = ConvertFrom-Wildcard $RegDirection
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
@@ -208,7 +226,7 @@ function Get-RegistryRule
 
 				if (![string]::IsNullOrEmpty($DisplayName))
 				{
-					if (![regex]::Match($RuleValue, "\|Name=$DisplayName\|", [RegexOptions]::Multiline).Success)
+					if (![regex]::Match($RuleValue, "\|Name=$RegexDisplayName\|", [RegexOptions]::Multiline).Success)
 					{
 						continue
 					}
@@ -216,7 +234,7 @@ function Get-RegistryRule
 
 				if (![string]::IsNullOrEmpty($DisplayGroup))
 				{
-					if (![regex]::Match($RuleValue, "\|EmbedCtxt=$DisplayGroup\|", [RegexOptions]::Multiline).Success)
+					if (![regex]::Match($RuleValue, "\|EmbedCtxt=$RegexDisplayGroup\|", [RegexOptions]::Multiline).Success)
 					{
 						continue
 					}
@@ -224,7 +242,7 @@ function Get-RegistryRule
 
 				if (![string]::IsNullOrEmpty($Direction))
 				{
-					if (![regex]::Match($RuleValue, "\|Dir=$RegDirection\|", [RegexOptions]::Multiline).Success)
+					if (![regex]::Match($RuleValue, "\|Dir=$RegexDirection\|", [RegexOptions]::Multiline).Success)
 					{
 						continue
 					}
