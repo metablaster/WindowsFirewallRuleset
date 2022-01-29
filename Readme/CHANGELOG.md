@@ -71,7 +71,17 @@ If you would like to see fresh changes done since last release you can do so on 
   - `ConvertFrom-Protocol` new private help function to convert TPC\IP protocol numbers to string
   representation
 
-- Documentation revisited and updated for missing changes introduced since v0.10.0
+- Development
+
+  - Added new recommended extensions:
+
+    - `VSCode Json`
+    - `Fix JSON`
+    - `Sort JSON objects`
+
+- Documentation
+
+  - Revisited and updated for missing changes introduced since v0.10.0
 
 ## v0.11.0 (current release)
 

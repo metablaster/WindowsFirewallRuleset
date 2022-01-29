@@ -293,6 +293,8 @@ Todo's in this file are categorized into following sections:
     manifest `FileList` entries
     - Use Module-Qualified Cmdlet Names to avoid name colision
     - Add SHA signature to scripts and modules
+    - For completness, specific functions could operate on persistent store firewall, currently
+    some functions are GPO only or not tested for persistent store or other stores
 
 2. Scripts
 

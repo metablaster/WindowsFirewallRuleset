@@ -157,6 +157,23 @@ Recommended workspace extensions are as follows:
     This extension complements the Remote - SSH extension with syntax colorization,
     keyword intellisense, and simple snippets when editing SSH configuration files.
 
+15. [Json][extension json]
+
+    This extension adds json support for Visual Studio Code.
+
+16. [Fix JSON][extension fix json]
+
+    fix-json uses jsonic to parse json data in the current editor,
+    then reformats the content using a simple JSON.stringify call.
+
+17. [Sort JSON objects][extension sort json]
+
+    Alphabetically sorts the keys in selected JSON objects.
+
+18. [VSCode json][extension vscode json]
+
+    This vscode extension beautify/uglify/escape/unescape JSON.
+
 Following 2 extensions are optional and will not be automatically offerred for installation:
 
 - [GitLens][extension gitlens]
@@ -572,6 +589,10 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
 [extension remote SSH]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh "Visit Marketplace"
 [extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
+[extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
+[extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
+[extension fix json]: https://marketplace.visualstudio.com/items?itemName=oliversturm.fix-json "Visit Marketplace"
+[extension vscode json]: https://marketplace.visualstudio.com/items?itemName=andyyaldoo.vscode-json "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"

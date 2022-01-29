@@ -2,7 +2,7 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Modules/Ruleset.Firewall/Scripts/ExportSchema.json",
 	"title": "Firewall rule schema",
-	"description": "Schema for Export-FirewallRule command",
+	"description": "Json schema for Export-FirewallRule and Export-RegistryRule commands",
 	"type": "object",
 	"required": [
 		"Name",
