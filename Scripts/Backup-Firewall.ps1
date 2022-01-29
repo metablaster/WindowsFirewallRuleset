@@ -42,6 +42,13 @@ Export all firewall rules and settings
 .DESCRIPTION
 Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory
 
+.PARAMETER Domain
+Target computer from which to backup firewall, default is local GPO.
+
+.PARAMETER Path
+Path into which to save file.
+Wildcard characters are supported.
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -55,8 +62,7 @@ None. You cannot pipe objects to Backup-Firewall.ps1
 None. Backup-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: Exporting settings not implemented
-TODO: OutputType attribute
+None.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -65,7 +71,16 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 
 [CmdletBinding()]
+[OutputType([void])]
 param (
+	[Parameter()]
+	[Alias("ComputerName", "CN", "PolicyStore")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter(Mandatory = $true)]
+	[SupportsWildcards()]
+	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
+
 	[Parameter()]
 	[switch] $Force
 )
@@ -81,45 +96,38 @@ $Deny = "Abort operation, no firewall rules or settings will be exported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
+$Path = Resolve-FileSystemPath $Path -Create
+if (!$Path)
+{
+	# Errors if any, reported by Resolve-FileSystemPath
+	return
+}
+
+$StopWatch = [System.Diagnostics.Stopwatch]::new()
+$StopWatch.Start()
+
+# Export all rules and settings from GPO
+Export-RegistryRule -Path $Path -FileName "FirewallRules.csv" -PolicyStore $Domain
+Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -PolicyStore $Domain
+
+$StopWatch.Stop()
+
+$TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
+$TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+$TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
+
+Update-Log
+
+<# STATS for Export-FirewallRule
 # NOTE: With Export-FirewallRule Export speed is 10 rules per minute
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
 # NOTE: to speed up a little add following to defender exclusions:
 # C:\Windows\System32\wbem\WmiPrvSE.exe
-# With Export-RegistryRule export speed is less than a minute!
-# TODO: function to export firewall settings needed
-$StopWatch = [System.Diagnostics.Stopwatch]::new()
 
-$StopWatch.Start()
-# Export all outbound rules from GPO
-Export-RegistryRule -Outbound -Path "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
-$StopWatch.Stop()
-
-$OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
-$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-$OutboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export outbound rules was: $OutboundHours hours and $OutboundMinutes minutes and $OutboundSeconds seconds"
-
-$StopWatch.Reset()
-$StopWatch.Start()
-# Export all inbound rules from GPO
-Export-RegistryRule -Inbound -Path "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
-$StopWatch.Stop()
-
-$InboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
-$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-$InboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export inbound rules was: $InboundHours hours and $InboundMinutes minutes and $InboundSeconds seconds"
-
-$TotalMinutes = $OutboundMinutes + $InboundMinutes
-$TotalMinutes += $OutboundHours * 60
-$TotalMinutes += $InboundHours * 60
-$TotalSeconds = $OutboundSeconds + $InboundSeconds
-Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to export entire firewall was: $TotalMinutes minutes and $TotalSeconds seconds"
-
-Update-Log
-
-<# STATS
 Outbound export took over 1h and the result was 1 minute
 Time needed to export inbound rules was: 33 minutes
 Total time needed to export entire firewall was: 34 minutes (1h 34m)
+
+With Export-RegistryRule export speed is less than a minute!
 #>

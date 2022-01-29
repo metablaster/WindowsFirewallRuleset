@@ -43,6 +43,13 @@ Restore previously saved firewall rules and configuration
 Restore-Firewall script imports all firewall rules and configuration that were previously exported
 with Backup-Firewall.ps1
 
+.PARAMETER Domain
+Target computer onto which to restore firewall, default is local GPO.
+
+.PARAMETER Path
+Path to directory where the exported settings file is located.
+Wildcard characters are supported.
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -56,7 +63,7 @@ None. You cannot pipe objects to Restore-Firewall.ps1
 None. Restore-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: OutputType attribute
+None.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -66,7 +73,16 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
+[OutputType([void])]
 param (
+	[Parameter()]
+	[Alias("ComputerName", "CN", "PolicyStore")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter(Mandatory = $true)]
+	[SupportsWildcards()]
+	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
+
 	[Parameter()]
 	[switch] $Force
 )
@@ -82,78 +98,49 @@ $Deny = "Abort operation, no firewall rules or settings will be imported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-# NOTE: import speed is 26 rules per minute, slowed down by "Test-Computer" for store app rules
-# 450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
-# NOTE: to speed up a little add following to defender exclusions:
-# C:\Windows\System32\wbem\WmiPrvSE.exe
-# TODO: function to import firewall settings needed
-# TODO: need to speed up rule import by at least 300%
-$StopWatch = [System.Diagnostics.Stopwatch]::new()
+$Path = Resolve-FileSystemPath $Path
+if (!$Path)
+{
+	# Errors if any, reported by Resolve-FileSystemPath
+	return
+}
 
-$FilePath = "$ProjectRoot\Exports\OutboundGPO.csv"
 # TODO: file existence checks such as this one, there should be utility function for this
+$FilePath = "$Path\FirewallRules.csv"
 if (!(Test-Path -Path $FilePath -PathType Leaf))
 {
 	Write-Error -Category ObjectNotFound -TargetObject $FilePath `
 		-Message "Cannot find path '$FilePath' because it does not exist"
-}
-else
-{
-	$StopWatch.Start()
-	# Import all outbound rules to GPO
-	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "OutboundGPO.csv"
-	$StopWatch.Stop()
-
-	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	$OutboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes and $OutboundSeconds seconds"
+	return
 }
 
-$StopWatch.Reset()
-
-$FilePath = "$ProjectRoot\Exports\InboundGPO.csv"
+$FilePath = "$Path\FirewallRules.csv"
 if (!(Test-Path -Path $FilePath -PathType Leaf))
 {
 	Write-Error -Category ObjectNotFound -TargetObject $FilePath `
 		-Message "Cannot find path '$FilePath' because it does not exist"
-}
-else
-{
-	$StopWatch.Start()
-	# Import all inbound rules from GPO
-	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "InboundGPO.csv"
-	$StopWatch.Stop()
-
-	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	$InboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes and $InboundSeconds seconds"
+	return
 }
 
-if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name InboundMinutes -EA Ignore))
-{
-	# Update Local Group Policy for changes to take effect
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+$StopWatch = [System.Diagnostics.Stopwatch]::new()
+$StopWatch.Start()
 
-	$TotalMinutes = 0
-	$TotalSeconds = 0
+# Import all firewall rules to GPO
+Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -PolicyStore $Domain
+Import-FirewallSetting -Path $Path -FileName "FirewallSetting.json" -PolicyStore $Domain
 
-	if ($OutboundMinutes)
-	{
-		$TotalSeconds += $OutboundSeconds
-		$TotalMinutes += $OutboundMinutes
-	}
+$StopWatch.Stop()
 
-	if ($InboundMinutes)
-	{
-		$TotalSeconds += $InboundSeconds
-		$TotalMinutes += $InboundMinutes
-	}
-
-	# Move minutes out of seconds into minutes
-	$TotalMinutes += [System.Math]::Truncate($TotalSeconds / 60)
-	$TotalSeconds = $TotalSeconds % 60
-
-	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entire firewall was: $TotalMinutes minutes and $TotalSeconds seconds"
-}
+$TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
+$TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
+$TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
 
 Update-Log
+
+<# STATS for Import-FirewallRule
+NOTE: import speed is 26 rules per minute, slowed down by "Test-Computer" for store app rules
+450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
+NOTE: to speed up a little add following to defender exclusions:
+C:\Windows\System32\wbem\WmiPrvSE.exe
+#>

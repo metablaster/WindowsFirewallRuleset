@@ -35,7 +35,7 @@ Import-FirewallSetting imports all firewall settings from file previously export
 Export-FirewallSetting
 
 .PARAMETER Domain
-Target computer onto which to import setting, default is local GPO.
+Target computer onto which to import settings, default is local GPO.
 
 .PARAMETER Path
 Path to directory where the exported settings file is located.
