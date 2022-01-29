@@ -88,8 +88,6 @@ December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 
-TODO: Import\export of rules with no group assigned not tested
-
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
 

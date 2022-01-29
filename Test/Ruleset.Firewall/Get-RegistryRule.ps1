@@ -86,20 +86,25 @@ if ($false)
 }
 else
 {
-	# Start-Test "Persistent store"
-	# Get-RegistryRule -Direction Outbound -DisplayName "Xbox Game Bar" -Local
+	if ($true)
+	{
+		Start-Test "Persistent store"
+		Get-RegistryRule -Direction Outbound -DisplayGroup ""
+	}
+	else
+	{
+		Start-Test "Default test 1"
+		Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
 
-	Start-Test "Default test 1"
-	Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"
+		Start-Test "Default test 2"
+		Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
 
-	Start-Test "Default test 2"
-	Get-RegistryRule -Direction Outbound -DisplayName "Steam Matchmaking and HLTV"
+		Start-Test "Default test 3"
+		$Result = Get-RegistryRule -Direction Outbound -DisplayGroup "Broadcast"
+		$Result
 
-	Start-Test "Default test 3"
-	$Result = Get-RegistryRule -Direction Outbound -DisplayGroup "Broadcast"
-	$Result
-
-	Test-Output $Result -Command Get-RegistryRule
+		Test-Output $Result -Command Get-RegistryRule
+	}
 }
 
 Update-Log

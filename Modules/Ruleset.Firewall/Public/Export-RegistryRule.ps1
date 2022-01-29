@@ -180,7 +180,6 @@ function Export-RegistryRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up variables"
 
 	# Filter rules?
 	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
@@ -200,37 +199,11 @@ function Export-RegistryRule
 	if (!$Allow -and $Block) { $Action = "Block" }
 
 	# Read firewall rules
-	[array] $FirewallRules = @()
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules from registry"
 
-	# NOTE: Getting rules may fail for multiple reasons, there is no point to handle errors here
-	if ($DisplayGroup -eq "")
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
-
-		# TODO: Use property selectors
-		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GroupPolicy |
-		Where-Object {
-			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
-				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
-		}
-	}
-	elseif ($DisplayGroup -eq "*")
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
-
-		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GroupPolicy |
-		Where-Object {
-			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
-		}
-	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
-
-		$FirewallRules += Get-RegistryRule -DisplayGroup $DisplayGroup -GroupPolicy |
-		Where-Object {
-			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
-		}
+	[array] $FirewallRules = Get-RegistryRule -GroupPolicy -DisplayName $DisplayName -DisplayGroup $DisplayGroup |
+	Where-Object {
+		$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 	}
 
 	if ($FirewallRules.Length -eq 0)
@@ -249,11 +222,11 @@ function Export-RegistryRule
 		# Iterate through rules
 		if ($Rule.DisplayGroup -like "")
 		{
-			Write-Host "Export Rule: [Ungrouped Rule] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+			Write-Host "Export Rule: $($Rule.DisplayName)" -ForegroundColor Cyan
 		}
 		else
 		{
-			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+			Write-Host "Export Rule: [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
 		}
 
 		# TODO: Using [ordered] will not work for PowerShell Desktop, however [ordered] was introduced in PowerShell 3.0

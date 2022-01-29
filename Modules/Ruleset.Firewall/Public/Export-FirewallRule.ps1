@@ -181,7 +181,6 @@ function Export-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up variables"
 
 	# Filter rules?
 	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
@@ -204,23 +203,14 @@ function Export-FirewallRule
 	[array] $FirewallRules = @()
 
 	# NOTE: Getting rules may fail for multiple reasons, there is no point to handle errors here
-	if ($DisplayGroup -eq "")
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
-
-		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
-		Where-Object {
-			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
-				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
-		}
-	}
-	elseif ($DisplayGroup -eq "*")
+	if (($DisplayGroup -eq "") -or ($DisplayGroup -eq "*"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
 		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
-			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
+			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
+				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
 	}
 	else
@@ -267,11 +257,11 @@ function Export-FirewallRule
 		# Iterate through rules
 		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
 		{
-			Write-Host "Export Rule: [Ungrouped Rule] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+			Write-Host "Export Rule: $($Rule.DisplayName)" -ForegroundColor Cyan
 		}
 		else
 		{
-			Write-Host "Export Rule: [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+			Write-Host "Export Rule: [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
 		}
 
 		# NOTE: Filters are what makes this script ultra slow, each takes approx 1 second

@@ -92,6 +92,13 @@ function Format-RuleOutput
 	}
 	process
 	{
-		Write-Host "$($Label): [$($Rule | Select-Object -ExpandProperty DisplayGroup)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
+		{
+			Write-Host "$($Label): $($Rule.DisplayName)" -ForegroundColor Cyan
+		}
+		else
+		{
+			Write-Host "$($Label): [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
+		}
 	}
 }

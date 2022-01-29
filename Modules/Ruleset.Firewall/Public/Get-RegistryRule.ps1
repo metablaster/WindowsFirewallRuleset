@@ -171,13 +171,21 @@ function Get-RegistryRule
 		if (![string]::IsNullOrEmpty($DisplayName))
 		{
 			$RegexDisplayName = ConvertFrom-Wildcard $DisplayName -SkipAnchor
-			Write-Debug "RegexDisplayName: $RegexDisplayName"
+			Write-Debug "RegexDisplayName: $RegexDisplayName" -Debug
 		}
 
-		if (![string]::IsNullOrEmpty($DisplayGroup))
+		# Include empty string for rules without display group
+		if ($null -ne $DisplayGroup)
 		{
-			$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup -SkipAnchor
-			Write-Debug "RegexDisplayGroup: $RegexDisplayGroup"
+			if ($DisplayGroup -eq "")
+			{
+				$RegexDisplayGroup = ""
+			}
+			else
+			{
+				$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup -SkipAnchor
+			}
+			Write-Debug "RegexDisplayGroup: $RegexDisplayGroup" -Debug
 		}
 
 		if ([string]::IsNullOrEmpty($Direction))
@@ -191,7 +199,7 @@ function Get-RegistryRule
 			elseif ($Direction -eq "Inbound") { $RegistryDirection = "In" }
 			$RegexDirection = $RegistryDirection
 		}
-		Write-Debug "RegexDirection: $RegexDirection"
+		Write-Debug "RegexDirection: $RegexDirection" -Debug
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
@@ -240,7 +248,7 @@ function Get-RegistryRule
 					}
 				}
 
-				if (![string]::IsNullOrEmpty($DisplayGroup))
+				if ($null -ne $DisplayGroup)
 				{
 					if (![regex]::Match($RuleValue, "\|EmbedCtxt=$RegexDisplayGroup\|", [RegexOptions]::Multiline).Success)
 					{
