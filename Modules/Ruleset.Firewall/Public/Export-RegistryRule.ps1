@@ -206,7 +206,7 @@ function Export-RegistryRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip grouped rules"
 
-		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GPO |
+		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GroupPolicy |
 		Where-Object {
 			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
 				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
@@ -216,7 +216,7 @@ function Export-RegistryRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
-		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GPO |
+		$FirewallRules += Get-RegistryRule -DisplayName $DisplayName -GroupPolicy |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}
@@ -225,7 +225,7 @@ function Export-RegistryRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules += Get-RegistryRule -DisplayGroup $DisplayGroup -GPO |
+		$FirewallRules += Get-RegistryRule -DisplayGroup $DisplayGroup -GroupPolicy |
 		Where-Object {
 			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
 		}

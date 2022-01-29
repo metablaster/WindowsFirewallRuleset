@@ -58,7 +58,7 @@ and usually need googling out what they do.
 
 - Port(s) can be specified only for TCP/UDP
 - The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
-**NOTE:** IPHTTPS(Out\In) ports are only supported on Windows Server
+**NOTE:** According to docs IPHTTPS(Out\In) ports are only supported on Windows Server
 
 ### LocalPort/RemotePort
 
@@ -68,7 +68,7 @@ and usually need googling out what they do.
 
 - `RPCEPMap` RPC Endpoint Mapper (RPC-EPMap)
 - `RPC` RPC Dynamic Ports (RPC)
-- `IPHTTPSIn` IPHTTPS (?)
+- `IPHTTPSIn` IPHTTPS (IPTLSIn, IPHTTPSIn)
 
 ### LocalPort UDP Inbound
 
@@ -77,7 +77,7 @@ and usually need googling out what they do.
 
 ### RemotePort TCP Outbound
 
-- `IPHTTPSOut` IPHTTPS (?)
+- `IPHTTPSOut` IPHTTPS (IPTLSOut, IPHTTPSOut)
 
 [Table of Contents](#table-of-contents)
 

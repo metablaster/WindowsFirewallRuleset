@@ -94,7 +94,7 @@ function Convert-ArrayToList
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
 			$Result = $DefaultValue
 		}
 	}

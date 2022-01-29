@@ -46,7 +46,8 @@ PS> ConvertFrom-Protocol
 None. You cannot pipe objects to ConvertFrom-Protocol
 
 .OUTPUTS
-None. ConvertFrom-Protocol does not generate any output
+[string]
+[int32]
 
 .NOTES
 None.
@@ -54,7 +55,7 @@ None.
 function ConvertFrom-Protocol
 {
 	[CmdletBinding()]
-	[OutputType([void])]
+	[OutputType([string], [int32])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[int32] $Protocol
@@ -64,6 +65,7 @@ function ConvertFrom-Protocol
 
 	switch ($Protocol)
 	{
+		# TODO: This switch is incomplete
 		# NOTE: For New-NetFirewallRule following protocols by name are valid: TCP, UDP, ICMPv4, or ICMPv6.
 		1 { "ICMPv4" }
 		# 2 { "IGMP" }

@@ -80,7 +80,7 @@ function Get-RegistryRule
 		[switch] $Local,
 
 		[Parameter()]
-		[switch] $GPO,
+		[switch] $GroupPolicy,
 
 		[Parameter()]
 		[SupportsWildcards()]
@@ -100,10 +100,10 @@ function Get-RegistryRule
 	if (Test-Computer $Domain)
 	{
 		# If no switches are set the script defaults to GPO store
-		if (!$Local -and !$Gpo) { $GPO = $true }
+		if (!$Local -and !$GroupPolicy) { $GroupPolicy = $true }
 
 		$HKLM = @()
-		if ($GPO) { $HKLM += "Software\Policies\Microsoft\WindowsFirewall\FirewallRules" }
+		if ($GroupPolicy) { $HKLM += "Software\Policies\Microsoft\WindowsFirewall\FirewallRules" }
 		if ($Local) { $HKLM += "System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules" }
 
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -142,9 +142,12 @@ function Get-RegistryRule
 
 			switch ($EntryValue)
 			{
-				# TODO: Not handling IPHTTPS
 				"RPC-EPMap" { "RPCEPMap"; break }
 				"Ply2Disc" { "PlayToDiscovery"; break }
+				# NOTE: "IPTLSOut" and "IPTLSIn" keywords are here for consistency reason, these should be
+				# ignored for parsing because keyword is duplicate, it's combined with IPHTTPS(Out\In) keyword
+				"IPTLSOut" { "IPHTTPSOut"; break }
+				"IPTLSIn" { "IPHTTPSIn"; break }
 				default { $EntryValue }
 			}
 		}
@@ -170,20 +173,22 @@ function Get-RegistryRule
 			# Determine if this is a local or a group policy rule and display this in the hashtable
 			if ($HKLMRootKey -match "^System\\CurrentControlSet")
 			{
+				$PolicyStoreSource = "PersistentStore"
 				$PolicyStoreSourceType = "Local"
 			}
 			else
 			{
-				$PolicyStoreSourceType = "GPO"
+				$PolicyStoreSource = $Domain
+				$PolicyStoreSourceType = "GroupPolicy"
 			}
 
 			foreach ($RuleName in $RootKey.GetValueNames())
 			{
 				# Prepare hashtable
 				$HashProps = [ordered]@{
-					Name = $RuleName
-					DisplayName = $null
-					Group = $null # EmbedCtxt
+					Name = $RuleName # registry value name
+					DisplayName = $null # Name
+					Group = $null # EmbedCtxt (borrowed from DisplayGroup)
 					DisplayGroup = $null # EmbedCtxt
 					Action = $null
 					Enabled = $null # Active
@@ -224,6 +229,8 @@ function Get-RegistryRule
 					Platform = $null
 					Platform2 = $null
 					RuleVersion = (($RootKey.GetValue($RuleName).ToString() -split '\|')[0]).TrimStart("v") # <BLANK>
+					Domain = $Domain
+					PolicyStoreSource = $PolicyStoreSource
 					PolicyStoreSourceType = $PolicyStoreSourceType
 					Description = $null # Desc
 					TTK = $null
@@ -267,10 +274,40 @@ function Get-RegistryRule
 					{
 						# This token represents the wszName field of the FW_RULE structure
 						# A pointer to a Unicode string that provides a friendly name for the rule
-						"Name" { $HashProps.DisplayName = $EntryValue; break }
+						"Name"
+						{
+							# HACK: Similarly as for "EmbedCtxt" below, should be implemented here
+							if ($EntryValue.StartsWith("@"))
+							{
+								Write-Verbose -Message "Translating rule name, source string to localized string, not implemented"
+							}
+
+							$HashProps.DisplayName = $EntryValue
+							break
+						}
 						# It specifies a group name for this rule
 						"EmbedCtxt"
 						{
+							if ($EntryValue.StartsWith("@"))
+							{
+								$FriendlyGroupName = Get-NetFirewallRule -PolicyStore SystemDefaults |
+								Sort-Object -Unique Group |
+								Where-Object -Property Group -EQ $EntryValue |
+								Select-Object -ExpandProperty DisplayGroup
+
+								if ([string]::IsNullOrEmpty($FriendlyGroupName))
+								{
+									Write-Warning -Message "Translating rule group, source string to localized string failed"
+								}
+								else
+								{
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating rule group, source string to localized string"
+									$HashProps.Group = $FriendlyGroupName
+									$HashProps.DisplayGroup = $FriendlyGroupName
+									break
+								}
+							}
+
 							# NOTE: EmbedCtxt is DisplayGroup, setting Group here by the way
 							# because we want to set it to something
 							$HashProps.Group = $EntryValue
@@ -319,19 +356,29 @@ function Get-RegistryRule
 							break
 						}
 						# This token value represents the LocalPorts
-						# applies to port ranges ex. 443-555 or 27331-27400, 3543-3566
+						# applies to port ranges ex. 443-555 or 27331-27400, 3543-3566 and keywords IPTLSOut, IPHTTPSOut
 						"LPort2_10"
 						{
 							[array] $HashProps.LPort2_10 += $EntryValue
-							[array] $HashProps.LocalPort += $EntryValue
+
+							# NOTE: "IPTLSIn" is ignored because IPHTTPSIn is already set
+							if ($EntryValue -ne "IPTLSIn")
+							{
+								[array] $HashProps.LocalPort += & $ParsePortKeyword $EntryValue
+							}
 							break
 						}
-						# This token value represents the RemotePorts
+						# This token value represents the RemotePorts and keywords IPTLSOut, IPHTTPSOut
 						# applies to port ranges ex. 443-555 or 27331-27400, 3543-3566
 						"RPort2_10"
 						{
 							[array] $HashProps.RPort2_10 += $EntryValue
-							[array] $HashProps.RemotePort += $EntryValue
+
+							# NOTE: "IPTLSOut" is ignored because IPHTTPSOut is already set
+							if ($EntryValue -ne "IPTLSOut")
+							{
+								[array] $HashProps.RemotePort += & $ParsePortKeyword $EntryValue
+							}
 							break
 						}
 						# This token value represents the V4TypeCodeList field

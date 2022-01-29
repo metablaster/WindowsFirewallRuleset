@@ -70,7 +70,7 @@ function Restore-IfBlank
 	}
 	else
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
 		return $DefaultValue
 	}
 }

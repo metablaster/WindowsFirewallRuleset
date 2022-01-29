@@ -85,13 +85,13 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
 # NOTE: to speed up a little add following to defender exclusions:
 # C:\Windows\System32\wbem\WmiPrvSE.exe
-# With Export-RegistryRule export speed is only 8 seconds!
+# With Export-RegistryRule export speed is less than a minute!
 # TODO: function to export firewall settings needed
 $StopWatch = [System.Diagnostics.Stopwatch]::new()
 
 $StopWatch.Start()
 # Export all outbound rules from GPO
-Export-RegistryRule -Outbound -Path "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore -Verbose
+Export-RegistryRule -Outbound -Path "$ProjectRoot\Exports" -FileName "OutboundGPO" -PolicyStore $PolicyStore
 $StopWatch.Stop()
 
 $OutboundHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours

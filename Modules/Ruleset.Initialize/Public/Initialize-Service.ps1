@@ -169,7 +169,7 @@ function Initialize-Service
 
 				if ($Decision -ne $Default)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting service was canceled by the user"
+					Write-Warning -Message "Starting service has been canceled by the user"
 				}
 				else
 				{

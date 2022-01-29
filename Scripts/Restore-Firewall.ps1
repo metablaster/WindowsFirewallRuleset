@@ -101,11 +101,12 @@ else
 {
 	$StopWatch.Start()
 	# Import all outbound rules to GPO
-	Import-FirewallRule -Folder "$ProjectRoot\Exports" -FileName "OutboundGPO.csv" -PolicyStore $PolicyStore
+	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "OutboundGPO.csv"
 	$StopWatch.Stop()
 
 	$OutboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes"
+	$OutboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import outbound rules was: $OutboundMinutes minutes and $OutboundSeconds seconds"
 }
 
 $StopWatch.Reset()
@@ -120,11 +121,12 @@ else
 {
 	$StopWatch.Start()
 	# Import all inbound rules from GPO
-	Import-FirewallRule -Folder "$ProjectRoot\Exports" -FileName "InboundGPO" -PolicyStore $PolicyStore
+	Import-FirewallRule -Path "$ProjectRoot\Exports" -FileName "InboundGPO"
 	$StopWatch.Stop()
 
 	$InboundMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
-	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes"
+	$InboundSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
+	Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import inbound rules was: $InboundMinutes minutes and $InboundSeconds seconds"
 }
 
 if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name InboundMinutes -EA Ignore))
@@ -133,18 +135,21 @@ if ((Get-Variable -Name OutboundMinutes -EA Ignore) -or (Get-Variable -Name Inbo
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 
 	$TotalMinutes = 0
+	$TotalSeconds = 0
 
 	if ($OutboundMinutes)
 	{
 		$TotalMinutes += $OutboundMinutes
+		$TotalSeconds += $OutboundSeconds + $InboundSeconds
 	}
 
 	if ($InboundMinutes)
 	{
 		$TotalMinutes += $InboundMinutes
+		$TotalSeconds += $InboundSeconds
 	}
 
-	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entire firewall was: $TotalMinutes minutes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: Total time needed to import entire firewall was: $TotalMinutes minutes and $TotalSeconds seconds"
 }
 
 Update-Log

@@ -558,6 +558,7 @@ if (Approve-Execute @ExecuteParams)
 Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall rules is complete"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
+# TODO: When -Force is specified it doesn't avoid confirmation prompts
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 

@@ -82,7 +82,7 @@ function Convert-ListToArray
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: $DefaultValue"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'" -Verbose
 		Write-Output $DefaultValue
 	}
 	else

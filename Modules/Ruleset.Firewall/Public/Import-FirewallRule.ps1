@@ -37,7 +37,7 @@ CSV files have to be separated with semicolons.
 Existing rules with same name will not be overwritten by default.
 
 .PARAMETER Domain
-Policy store into which to import rules, default is local GPO.
+Target computer onto which to import rules, default is local GPO.
 
 .PARAMETER Path
 Path to directory where exported rules file is located.
@@ -87,6 +87,13 @@ Following modifications by metablaster August 2020:
 December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
+
+Port is invalid import:
+Core networking ipv6
+
+input is missing:
+network discovery
+
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
@@ -175,15 +182,26 @@ function Import-FirewallRule
 	foreach ($Rule In $FirewallRules)
 	{
 		# TODO: -SecondsRemaining needs to be updated after precise speed test
-		Write-Progress -Activity "Importing firewall rules" -PercentComplete (++$RuleCount / $FirewallRules.Length * 100) `
-			-CurrentOperation $Rule.DisplayName -Status $Rule.Group `
-			-SecondsRemaining (($FirewallRules.Length - $RuleCount + 1) / 26 * 60)
+		$ProgressParams = @{
+			Activity = "Importing firewall rules"
+			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
+			CurrentOperation = $Rule.DisplayName
+			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
+		}
+
+		if (![string]::IsNullOrEmpty($Rule.Group))
+		{
+			$ProgressParams.Status = $Rule.Group
+		}
+
+		Write-Progress @ProgressParams
 
 		# Create Hashtable for New-NetFirewallRule parameters
 		$HashProps = @{
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
 			Group = $Rule.Group
+			# NOTE: DisplayGroup is not used
 			# DisplayGroup = $Rule.DisplayGroup
 			Action = $Rule.Action
 			Enabled = $Rule.Enabled
@@ -243,14 +261,13 @@ function Import-FirewallRule
 		{
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-			# TODO: Set-NetFirewallRule -DisplayGroup
 			New-NetFirewallRule -PolicyStore $Domain @HashProps | Format-RuleOutput -Import
 		}
 		else
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing rule '$($Rule.Displayname)' from '$FileName' skipped, use -Overwrite to force"
 		}
-	} # foreach
+	} # foreach rule
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall rules from '$FileName' done"
 }
