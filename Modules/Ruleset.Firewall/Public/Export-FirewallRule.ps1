@@ -77,7 +77,8 @@ Export allowing rules
 Export blocking rules
 
 .PARAMETER Append
-Append exported rules to existing file instead of replacing
+Append exported rules to existing file.
+By default file of same name is replaced with new content
 
 .EXAMPLE
 PS> Export-FirewallRule
@@ -249,9 +250,9 @@ function Export-FirewallRule
 	foreach ($Rule In $FirewallRules)
 	{
 		$ProgressParams = @{
-			Activity = "Exporting firewall rules"
+			Activity = "Exporting firewall rules according to file '$Filename'"
 			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
-			CurrentOperation = $Rule.DisplayName
+			CurrentOperation = "$($Rule.Direction)\$($Rule.DisplayName)"
 			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
 		}
 

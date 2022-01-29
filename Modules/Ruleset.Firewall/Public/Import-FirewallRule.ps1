@@ -88,7 +88,7 @@ December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 
-TODO: Importing from JSON not tested
+TODO: Import\export of rules with no group assigned not tested
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
@@ -178,9 +178,9 @@ function Import-FirewallRule
 	{
 		# TODO: -SecondsRemaining needs to be updated after precise speed test
 		$ProgressParams = @{
-			Activity = "Importing firewall rules"
+			Activity = "Importing firewall rules according to file '$Filename'"
 			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
-			CurrentOperation = $Rule.DisplayName
+			CurrentOperation = "$($Rule.Direction)\$($Rule.DisplayName)"
 			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
 		}
 

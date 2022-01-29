@@ -105,7 +105,8 @@ function Find-RulePrincipal
 
 	foreach ($Rule in $RegistryRules)
 	{
-		Write-Progress -Activity "Filtering rules" -CurrentOperation $Rule.DisplayName `
+		Write-Progress -Activity "Filtering rules" `
+			-CurrentOperation "$($Rule.Direction)\$($Rule.DisplayName)" `
 			-PercentComplete (++$RuleCount / $RegistryRules.Length * 100) `
 			-SecondsRemaining (($RegistryRules.Length - $RuleCount + 1) / 10 * 60)
 

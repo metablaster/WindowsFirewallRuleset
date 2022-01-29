@@ -170,24 +170,28 @@ function Get-RegistryRule
 
 		if (![string]::IsNullOrEmpty($DisplayName))
 		{
-			$RegexDisplayName = ConvertFrom-Wildcard $DisplayName
+			$RegexDisplayName = ConvertFrom-Wildcard $DisplayName -SkipAnchor
+			Write-Debug "RegexDisplayName: $RegexDisplayName"
 		}
+
 		if (![string]::IsNullOrEmpty($DisplayGroup))
 		{
-			$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup
+			$RegexDisplayGroup = ConvertFrom-Wildcard $DisplayGroup -SkipAnchor
+			Write-Debug "RegexDisplayGroup: $RegexDisplayGroup"
 		}
 
 		if ([string]::IsNullOrEmpty($Direction))
 		{
-			$RegDirection = "*"
+			$RegistryDirection = "*"
+			$RegexDirection = ConvertFrom-Wildcard $RegistryDirection -SkipAnchor
 		}
 		else
 		{
-			if ($Direction -eq "Outbound") { $RegDirection = "Out" }
-			elseif ($Direction -eq "Inbound") { $RegDirection = "In" }
+			if ($Direction -eq "Outbound") { $RegistryDirection = "Out" }
+			elseif ($Direction -eq "Inbound") { $RegistryDirection = "In" }
+			$RegexDirection = $RegistryDirection
 		}
-
-		$RegexDirection = ConvertFrom-Wildcard $RegDirection
+		Write-Debug "RegexDirection: $RegexDirection"
 
 		foreach ($HKLMRootKey in $HKLM)
 		{
@@ -228,10 +232,6 @@ function Get-RegistryRule
 				# Quickly check if current rule matches function parameters
 				$RuleValue = $RootKey.GetValue($RuleName)
 
-				Write-Progress -Activity "Getting rules from registry" -CurrentOperation $RuleName `
-					-PercentComplete (++$RuleCount / $RuleValueNames.Length * 100) `
-					-SecondsRemaining (($RuleValueNames.Length - $RuleCount + 1) / 10 * 60)
-
 				if (![string]::IsNullOrEmpty($DisplayName))
 				{
 					if (![regex]::Match($RuleValue, "\|Name=$RegexDisplayName\|", [RegexOptions]::Multiline).Success)
@@ -255,6 +255,10 @@ function Get-RegistryRule
 						continue
 					}
 				}
+
+				Write-Progress -Activity "Processing rules in registry" -CurrentOperation $RuleName `
+					-PercentComplete (++$RuleCount / $RuleValueNames.Length * 100) `
+					-SecondsRemaining (($RuleValueNames.Length - $RuleCount + 1) / 10 * 60)
 
 				# Prepare hashtable
 				$HashProps = [ordered]@{
