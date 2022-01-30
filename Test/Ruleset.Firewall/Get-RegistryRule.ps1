@@ -88,7 +88,7 @@ else
 {
 	if ($false)
 	{
-		Start-Test "Persistent store"
+		Start-Test "Custom test"
 		Get-RegistryRule -Action Block -Enabled False -Direction Outbound
 	}
 	else

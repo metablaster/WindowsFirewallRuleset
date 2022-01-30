@@ -38,7 +38,7 @@ CSV files have to be separated with semicolons.
 Only the field Name is used (or if Name is missing, DisplayName is used), all other fields can be omitted.
 
 .PARAMETER Domain
-Policy store from which remove rules, default is local GPO.
+Computer name from which remove rules, default is local GPO.
 
 .PARAMETER Path
 Folder in which file is located.

@@ -34,7 +34,7 @@ Export firewall settings and profile setup to file
 Export-FirewallSetting exports all firewall settings to file excluding firewall rules
 
 .PARAMETER Domain
-Target computer from which to export settings, default is local GPO.
+Computer name from which to export settings, default is local GPO.
 
 .PARAMETER Path
 Path into which to save file.
@@ -65,7 +65,7 @@ function Export-FirewallSetting
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[Alias("ComputerName", "CN", "PolicyStore")]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter(Mandatory = $true)]

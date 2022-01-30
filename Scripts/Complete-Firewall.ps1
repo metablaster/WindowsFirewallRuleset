@@ -89,6 +89,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #
 
 # NOTE: Reducing the default (4096 KB) log file size makes logs appear quicker but consumes more resources
+# MSDN: LogMaxSizeKilobytes, NotConfigured: Valid only when configuring a Group Policy Object (GPO)
+# This parameter values is case sensitive and NotConfigured can only be specified using dot-notation.
+# The default setting when managing a computer is 4096
+# When managing a GPO, the default setting is NotConfigured.
 $LogSize = 1024
 
 # Setting up profile seem to be slow, tell user what is going on
@@ -135,6 +139,10 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Setting up global firewa
 # Modify the global firewall settings of the target computer.
 # Configures properties that apply to the firewall and IPsec settings,
 # regardless of which network profile is currently in use.
+# MSDN: MaxSAIdleTimeSeconds, NotConfigured: Valid only when configuring a Group Policy Object (GPO)
+# This parameter values is case sensitive and NotConfigured can only be specified using dot-notation.
+# The default value when managing a local computer is 300 seconds (5 minutes).
+# When managing a GPO, the default value is NotConfigured.
 # TODO: Set and reset settings found in IPSec tab, see NetSecurity module
 Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-EnableStatefulFtp True -EnableStatefulPptp False -EnablePacketQueuing NotConfigured `

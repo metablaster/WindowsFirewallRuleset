@@ -37,7 +37,7 @@ CSV files have to be separated with semicolons.
 Existing rules with same name will not be overwritten by default.
 
 .PARAMETER Domain
-Target computer onto which to import rules, default is local GPO.
+Computer name onto which to import rules, default is local GPO.
 
 .PARAMETER Path
 Path to directory where the exported rules file is located.

@@ -35,7 +35,7 @@ Import-FirewallSetting imports all firewall settings from file previously export
 Export-FirewallSetting
 
 .PARAMETER Domain
-Target computer onto which to import settings, default is local GPO.
+Computer name onto which to import settings, default is local GPO.
 
 .PARAMETER Path
 Path to directory where the exported settings file is located.
@@ -104,11 +104,22 @@ function Import-FirewallSetting
 	Confirm-FileEncoding "$Path\$FileName"
 	$Settings = Get-Content "$Path\$FileName" -Encoding $DefaultEncoding | ConvertFrom-Json
 
+	$LogSize = 4096
 	foreach ($Profile in $Settings.FirewallProfile)
 	{
 		$Profile | Get-ObjectMember | ForEach-Object {
 			$Data = $_.Value
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing $($Data.Name) firewall profile..."
+
+			if ($Data.LogMaxSizeKilobytes -eq "NotConfigured")
+			{
+				# MSDN: NotConfigured: Valid only when configuring a Group Policy Object (GPO)
+				# This parameter values is case sensitive and NotConfigured can only be specified using dot-notation.
+				# The default setting when managing a computer is 4096
+				# When managing a GPO, the default setting is NotConfigured.
+				$Data.LogMaxSizeKilobytes = $LogSize
+				Write-Warning -Message "Unable to restore LogMaxSizeKilobytes to NotConfigured, setting to $LogSize"
+			}
 
 			Set-NetFirewallProfile -Profile $Data.Name -PolicyStore $PolicyStore `
 				-Enabled $Data.Enabled -DefaultInboundAction $Data.DefaultInboundAction `
@@ -125,6 +136,16 @@ function Import-FirewallSetting
 
 	$Data = $Settings.FirewallSetting
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall global settings..."
+
+	if ($Data.MaxSAIdleTimeSeconds -eq "NotConfigured")
+	{
+		# MSDN: NotConfigured: Valid only when configuring a Group Policy Object (GPO)
+		# This parameter values is case sensitive and NotConfigured can only be specified using dot-notation.
+		# The default value when managing a local computer is 300 seconds (5 minutes).
+		# When managing a GPO, the default value is NotConfigured.
+		$Data.MaxSAIdleTimeSeconds = 300
+		Write-Warning -Message "Unable to restore MaxSAIdleTimeSeconds to NotConfigured, setting to 300"
+	}
 
 	Set-NetFirewallSetting -PolicyStore $PolicyStore `
 		-EnableStatefulFtp $Data.EnableStatefulFtp -EnableStatefulPptp $Data.EnableStatefulPptp `

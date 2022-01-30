@@ -77,7 +77,7 @@ param (
 	[Alias("ComputerName", "CN", "PolicyStore")]
 	[string] $Domain = [System.Environment]::MachineName,
 
-	[Parameter(Mandatory = $true)]
+	[Parameter()]
 	[SupportsWildcards()]
 	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
 
@@ -107,8 +107,8 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Export all rules and settings from GPO
-Export-RegistryRule -Path $Path -FileName "FirewallRules.csv" -PolicyStore $Domain
-Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -PolicyStore $Domain
+Export-RegistryRule -Path $Path -FileName "FirewallRules.csv" -Domain $Domain
+Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Domain $Domain
 
 $StopWatch.Stop()
 

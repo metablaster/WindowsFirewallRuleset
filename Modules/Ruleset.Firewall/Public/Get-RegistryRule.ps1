@@ -37,7 +37,7 @@ Get-RegistryRule gets firewall rules by drilling registry and parsing registry v
 This method to retrieve rules results is very fast export compared to conventional way.
 
 .PARAMETER Domain
-Target computer name from which rules are to be queried
+Computer name from which rules are to be retrieved
 
 .PARAMETER Local
 Retrive rules from persistent store (control panel firewall)
@@ -78,8 +78,12 @@ None. You cannot pipe objects to Get-RegistryRule
 [PSCustomObject]
 
 .NOTES
-TODO: Getting rules from persistent store (-Local switch) needs testing
-Not implementing more parameters because only those here are always present in registry in all rules
+TODO: Getting rules from persistent store (-Local switch) needs testing.
+TODO: Design, Parameters -Local and -GroupPolicy must be converted to -PolicyStore? what about -Domain then?
+Not implementing more parameters because only those here are always present in registry in all rules.
+ParameterSetName = "NotAllowingEmptyString" is there because $DisplayName if not specified casts to
+empty string due to [string] declaration, which is the same thing as specifying -DisplayName "",
+we deny both with dummy parameter set name and setting default parameter set name to something else.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md
@@ -409,6 +413,7 @@ function Get-RegistryRule
 						# It specifies a group name for this rule
 						"EmbedCtxt"
 						{
+							# TODO: This is not universal, it may start with and be just anything
 							if ($EntryValue.StartsWith("@"))
 							{
 								$FriendlyGroupName = Get-NetFirewallRule -PolicyStore SystemDefaults |

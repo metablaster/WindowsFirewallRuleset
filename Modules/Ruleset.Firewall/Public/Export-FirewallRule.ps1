@@ -40,7 +40,7 @@ All rules are exported by default, you can filter with parameter -Name, -Inbound
 If the export file already exists it's content will be replaced by default.
 
 .PARAMETER Domain
-Policy store from which to export rules, default is local GPO.
+Computer name from which to export rules, default is local GPO.
 
 .PARAMETER Path
 Path into which to save file.
@@ -142,7 +142,7 @@ function Export-FirewallRule
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[Alias("ComputerName", "CN", "PolicyStore")]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter(Mandatory = $true)]
@@ -212,8 +212,8 @@ function Export-FirewallRule
 
 		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
 		Where-Object {
-			$_.DisplayGroup -Like $DisplayGroup -and $_.Direction -like $Direction `
-				-and $_.Enabled -like $RuleState -and $_.Action -like $Action
+			($_.DisplayGroup -Like $DisplayGroup) -and ($_.Direction -like $Direction) -and `
+			($_.Enabled -like $RuleState) -and ($_.Action -like $Action)
 		}
 	}
 	else
@@ -222,7 +222,7 @@ function Export-FirewallRule
 
 		$FirewallRules += Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
 		Where-Object {
-			$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
+			($_.Direction -like $Direction) -and ($_.Enabled -like $RuleState) -and ($_.Action -like $Action)
 		}
 	}
 

@@ -79,7 +79,7 @@ param (
 	[Alias("ComputerName", "CN", "PolicyStore")]
 	[string] $Domain = [System.Environment]::MachineName,
 
-	[Parameter(Mandatory = $true)]
+	[Parameter()]
 	[SupportsWildcards()]
 	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
 
@@ -126,8 +126,8 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Import all firewall rules to GPO
-Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -PolicyStore $Domain
-Import-FirewallSetting -Path $Path -FileName "FirewallSetting.json" -PolicyStore $Domain
+Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -Domain $Domain
+Import-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Domain $Domain
 
 $StopWatch.Stop()
 

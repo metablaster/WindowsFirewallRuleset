@@ -39,7 +39,7 @@ All rules are exported by default, you can filter with parameter -Name, -Inbound
 If the export file already exists it's content will be replaced by default.
 
 .PARAMETER Domain
-Policy store from which to export rules, default is local GPO.
+Computer name from which to export rules, default is local GPO.
 
 .PARAMETER Path
 Path into which to save file.
@@ -120,7 +120,7 @@ function Export-RegistryRule
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[Alias("ComputerName", "CN", "PolicyStore")]
+		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter(Mandatory = $true)]
@@ -181,16 +181,17 @@ function Export-RegistryRule
 	if (!$Allow -and $Block) { $Action = "Block" }
 
 	# Read firewall rules
+	[array] $FirewallRules = @()
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules from registry"
 
-	[array] $FirewallRules = Get-RegistryRule -GroupPolicy -DisplayName $DisplayName -DisplayGroup $DisplayGroup |
+	$FirewallRules += Get-RegistryRule -GroupPolicy -DisplayName $DisplayName -DisplayGroup $DisplayGroup |
 	Where-Object {
-		$_.Direction -like $Direction -and $_.Enabled -like $RuleState -and $_.Action -like $Action
+		($_.Direction -like $Direction) -and ($_.Enabled -like $RuleState) -and ($_.Action -like $Action)
 	}
 
 	if ($FirewallRules.Length -eq 0)
 	{
-		Write-Warning -Message "No rules were retrieved from firewall to export"
+		Write-Warning -Message "No rules were retrieved from registry to export"
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: possible cause is either no match or an error ocurred"
 		return
 	}
