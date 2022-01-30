@@ -165,7 +165,7 @@ function Resolve-IPAddress
 		}
 		elseif (![IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
 		{
-			Write-Warning -Message "The IPAddress argument is not a valid IP address and cannot be resolved"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The IPAddress argument is not a valid IP address and cannot be resolved"
 		}
 		else
 		{

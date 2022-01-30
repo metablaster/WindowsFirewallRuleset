@@ -87,11 +87,11 @@ function Convert-EncodingString
 
 	if (($PSVersionTable.PSEdition -eq "Core") -and ($Encoding -in @("byte", "default", "string", "unknown")))
 	{
-		Write-Warning "Encoding string '$Encoding' is not valid for Core edition"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Encoding string '$Encoding' is not valid for Core edition"
 	}
 	elseif (($PSVersionTable.PSEdition -eq "Desktop") -and ($Encoding -in @("utf8BOM", "utf8NoBOM")))
 	{
-		Write-Warning "Encoding string '$Encoding' is not valid for Desktop edition"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Encoding string '$Encoding' is not valid for Desktop edition"
 	}
 
 	$Result = switch ($Encoding)

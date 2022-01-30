@@ -198,7 +198,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# TODO: This is from Test-ExecutableFile, Test-ExecutableFile should handle this, see also todo in Test-ExecutableFile
 			$NVDisplayExe = "NVDisplay.Container.exe"
-			Write-Warning -Message "Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
+			Write-Warning -Message "[$ThisScript] Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
 
 			Write-Information -Tags $ThisScript -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
 			Write-Information -Tags $ThisScript -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and re-run the script"

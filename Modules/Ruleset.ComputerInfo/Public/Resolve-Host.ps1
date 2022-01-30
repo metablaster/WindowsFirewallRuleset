@@ -144,7 +144,7 @@ function Resolve-Host
 				}
 				catch [System.Net.Sockets.SocketException]
 				{
-					Write-Warning -Message "Socket exception resolving address: $IP"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Socket exception resolving address: $IP"
 				}
 				catch
 				{
@@ -214,7 +214,7 @@ function Resolve-Host
 					}
 					catch
 					{
-						Write-Warning -Message "Unable to resolve host $HostName"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to resolve host $HostName"
 					}
 				}
 

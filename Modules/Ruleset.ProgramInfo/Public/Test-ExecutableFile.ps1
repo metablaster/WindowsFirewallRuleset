@@ -125,7 +125,7 @@ function Test-ExecutableFile
 		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{
 			# TODO: While valid for fiewall, we want to resolve/format in Format-Path and Resolve-FileSystemPath
-			Write-Warning -Message "Specified file path contains parent directory notation: $ExpandedPath"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified file path contains parent directory notation: $ExpandedPath"
 		}
 
 		# NOTE: Split-Path -Extension is not available in Windows PowerShell
@@ -170,7 +170,7 @@ function Test-ExecutableFile
 		{
 			if ($Force)
 			{
-				Write-Warning -Message "Digital signature verification failed for: $ExpandedPath"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for: $ExpandedPath"
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 			}

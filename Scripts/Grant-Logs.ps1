@@ -115,7 +115,7 @@ Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 if (!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
 {
 	# Continue only if firewall logs go to location inside repository
-	Write-Warning -Message "Not granting permissions for $FirewallLogsFolder"
+	Write-Warning -Message "[$ThisScript] Not granting permissions for $FirewallLogsFolder"
 	exit
 }
 
@@ -164,7 +164,7 @@ foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain)
 {
 	if ($User -eq $Admin.User)
 	{
-		Write-Warning -Message "User '$User' belongs to Administrators group, no need to grant permission"
+		Write-Warning -Message "[$ThisScript] User '$User' belongs to Administrators group, no need to grant permission"
 		$StandardUser = $false
 		break
 	}
@@ -190,7 +190,7 @@ foreach ($Location in $OldLocation)
 {
 	if (!(Compare-Path $Location $TargetFolder))
 	{
-		Write-Warning -Message "System reboot is required for firewall logging path changes"
+		Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
 		break
 	}
 }

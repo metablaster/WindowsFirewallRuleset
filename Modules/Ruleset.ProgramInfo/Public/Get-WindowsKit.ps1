@@ -111,7 +111,7 @@ function Get-WindowsKit
 
 			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
-				Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $RootKeyLeaf\$RootKeyEntry"
 				continue
 			}
 			elseif ($InstallLocation -notmatch "^[A-Za-z]:\\.*")

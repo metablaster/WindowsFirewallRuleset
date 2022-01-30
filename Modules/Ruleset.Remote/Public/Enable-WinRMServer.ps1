@@ -191,7 +191,7 @@ function Enable-WinRMServer
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)
 		# for both Enable-WinRMServer and Set-WinRMClient
-		Write-Warning -Message "Remote deployment will not work over publick network profile"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment will not work over publick network profile"
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
@@ -214,7 +214,7 @@ function Enable-WinRMServer
 		}
 		catch [System.OperationCanceledException]
 		{
-			Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation incomplete because $($_.Exception.Message)"
 		}
 		catch
 		{
@@ -516,7 +516,7 @@ function Enable-WinRMServer
 		{
 			# In some cases Enable-PSRemoting did not set it
 			# TODO: On fresh W10 system TokenValue was blank, why or how?
-			Write-Warning -Message "LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
 
 			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
 				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System

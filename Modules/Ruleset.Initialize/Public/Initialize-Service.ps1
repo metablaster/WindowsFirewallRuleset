@@ -110,7 +110,7 @@ function Initialize-Service
 
 			if (!$Service)
 			{
-				Write-Warning -Message "Service '$InputService' not found, starting this service was ignored"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$InputService' not found, starting this service was ignored"
 				continue
 			}
 
@@ -169,7 +169,7 @@ function Initialize-Service
 
 				if ($Decision -ne $Default)
 				{
-					Write-Warning -Message "Starting service has been canceled by the user"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting service has been canceled by the user"
 				}
 				else
 				{
@@ -185,7 +185,7 @@ function Initialize-Service
 
 							if ($Required.StartType -ne [ServiceStartMode]::Automatic)
 							{
-								Write-Warning -Message "Set dependent service '$($Required.Name)' to Automatic failed"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Set dependent service '$($Required.Name)' to Automatic failed"
 							}
 							else
 							{
@@ -205,7 +205,7 @@ function Initialize-Service
 							{
 								Write-Error -Category OperationStopped -TargetObject $Required `
 									-Message "Unable to proceed, dependent services can't be started"
-								Write-Warning -Message "Start dependent service '$($Required.Name)' failed, please start manually and try again"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Start dependent service '$($Required.Name)' failed, please start manually and try again"
 								return $false
 							}
 							else
@@ -229,7 +229,7 @@ function Initialize-Service
 
 						if ($Service.StartType -ne [ServiceStartMode]::Automatic)
 						{
-							Write-Warning -Message "Set service '$($Service.Name)' to Automatic failed"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Set service '$($Service.Name)' to Automatic failed"
 						}
 						else
 						{
@@ -246,7 +246,7 @@ function Initialize-Service
 
 					if ($Service.Status -ne [ServiceControllerStatus]::Running)
 					{
-						Write-Warning -Message "Starting '$($Service.Name)' service failed, please start manually and try again"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
 					}
 					else
 					{

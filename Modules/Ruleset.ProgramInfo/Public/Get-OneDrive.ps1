@@ -121,7 +121,7 @@ function Get-OneDrive
 			else
 			{
 				$RemoteKey.Dispose()
-				Write-Warning -Message "Failed to locate user registry config: $UserRegConfig"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to locate user registry config: $UserRegConfig"
 				return
 			}
 		}
@@ -159,7 +159,7 @@ function Get-OneDrive
 
 		if ([string]::IsNullOrEmpty($OneDrivePath))
 		{
-			Write-Warning -Message "Failed to read registry entry $HKU\OneDriveTrigger"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry entry $HKU\OneDriveTrigger"
 		}
 		else
 		{

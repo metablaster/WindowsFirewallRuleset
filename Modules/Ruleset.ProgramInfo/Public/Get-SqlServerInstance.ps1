@@ -236,7 +236,7 @@ function Get-SqlServerInstance
 				}
 				catch
 				{
-					Write-Warning -Message "Failed to open registry root key: HKLM:\$HKLMRootKey"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:\$HKLMRootKey"
 					continue
 				}
 
@@ -257,7 +257,7 @@ function Get-SqlServerInstance
 					}
 					catch
 					{
-						Write-Warning -Message "Failed to open registry sub key: HKLM:\$KeyPath"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key: HKLM:\$KeyPath"
 					}
 
 					if ($RootKey)
@@ -298,7 +298,7 @@ function Get-SqlServerInstance
 						}
 						catch
 						{
-							Write-Warning -Message "Failed to open InstanceReg key: HKLM:\$KeyPath"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceReg key: HKLM:\$KeyPath"
 							continue
 						}
 
@@ -315,7 +315,7 @@ function Get-SqlServerInstance
 							}
 							else
 							{
-								Write-Warning -Message "Failed to open InstanceRegCluster sub key: Cluster"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceRegCluster sub key: Cluster"
 							}
 
 							try
@@ -334,7 +334,7 @@ function Get-SqlServerInstance
 							}
 							catch
 							{
-								Write-Warning -Message "Failed to open ClusterReg key: HKLM:\$KeyPath"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open ClusterReg key: HKLM:\$KeyPath"
 							}
 
 							if ($ClusterReg)
@@ -356,7 +356,7 @@ function Get-SqlServerInstance
 
 							if ([string]::IsNullOrEmpty($SQLBinRoot))
 							{
-								Write-Warning -Message "Failed to read registry key entry 'SQLBinRoot' for SQL Binn directory"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry 'SQLBinRoot' for SQL Binn directory"
 							}
 							else
 							{
@@ -365,7 +365,7 @@ function Get-SqlServerInstance
 						}
 						else
 						{
-							Write-Warning -Message "Failed to open InstanceRegSetup sub key: $HKLMRootKey\$InstanceValue\Setup"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceRegSetup sub key: $HKLMRootKey\$InstanceValue\Setup"
 							continue
 						}
 
@@ -389,7 +389,7 @@ function Get-SqlServerInstance
 							}
 							catch
 							{
-								Write-Warning -Message "Failed to open ServiceReg key: HKLM:\$KeyPath"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open ServiceReg key: HKLM:\$KeyPath"
 							}
 
 							if ($ServicesReg)
@@ -408,7 +408,7 @@ function Get-SqlServerInstance
 								}
 								else
 								{
-									Write-Warning -Message "Failed to open Service sub key: $ServiceKey"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open Service sub key: $ServiceKey"
 								}
 							}
 						}
@@ -441,7 +441,7 @@ function Get-SqlServerInstance
 						}
 						catch
 						{
-							Write-Warning -Message "Failed to open VersionKey sub key: HKLM:\$KeyPath"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open VersionKey sub key: HKLM:\$KeyPath"
 						}
 
 						if ($VersionKey)
@@ -457,7 +457,7 @@ function Get-SqlServerInstance
 
 									if ([string]::IsNullOrEmpty($SQLPath))
 									{
-										Write-Warning -Message "Failed to read registry key entry 'SQLPath' for SQL DTS Path"
+										Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry 'SQLPath' for SQL DTS Path"
 									}
 									else
 									{
@@ -466,7 +466,7 @@ function Get-SqlServerInstance
 								}
 								else
 								{
-									Write-Warning -Message "Failed to open DTSKey sub key: DTS\Setup"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open DTSKey sub key: DTS\Setup"
 								}
 							}
 						}

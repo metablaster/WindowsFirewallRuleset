@@ -184,7 +184,7 @@ function Show-WinRMConfig
 		else
 		{
 			# For example on fresh installed system
-			Write-Warning -Message "LocalAccountTokenFilterPolicy value is not present in the registry"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy value is not present in the registry"
 		}
 
 		# winrm get winrm/config/service/auth

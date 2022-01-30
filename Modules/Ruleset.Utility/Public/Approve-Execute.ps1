@@ -316,7 +316,7 @@ function Approve-Execute
 	{
 		if ($Unsafe)
 		{
-			Write-Warning -Message "The user refused default action"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The user refused default action"
 		}
 		else
 		{
@@ -327,11 +327,11 @@ function Approve-Execute
 	}
 	elseif ($Unsafe)
 	{
-		Write-Warning -Message "The operation has been canceled by default"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The operation has been canceled by default"
 	}
 	else
 	{
-		Write-Warning -Message "The operation has been canceled by the user"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The operation has been canceled by the user"
 	}
 
 	return $false

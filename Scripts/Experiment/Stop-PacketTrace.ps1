@@ -102,7 +102,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 	}
 	catch
 	{
-		Write-Warning -Message "Session '$Name' could not be stopped"
+		Write-Warning -Message "[$ThisScript] Session '$Name' could not be stopped"
 	}
 
 	try
@@ -128,7 +128,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 	}
 	catch
 	{
-		Write-Warning -Message "Capture provider for session '$Name' could not be removed"
+		Write-Warning -Message "[$ThisScript] Capture provider for session '$Name' could not be removed"
 	}
 
 	Write-Information -Tags $ThisScript -MessageData "INFO: Removing session '$Name'"
@@ -136,7 +136,7 @@ if (Get-NetEventSession -Name $Name -EA Ignore)
 }
 else
 {
-	Write-Warning -Message "No session named '$Name' found"
+	Write-Warning -Message "[$ThisScript] No session named '$Name' found"
 }
 
 Update-Log

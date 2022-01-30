@@ -263,7 +263,7 @@ process
 				}
 				else
 				{
-					Write-Warning -Message "Failed to import $ModuleName module"
+					Write-Warning -Message "[$ThisScript] Failed to import $ModuleName module"
 				}
 			}
 			catch

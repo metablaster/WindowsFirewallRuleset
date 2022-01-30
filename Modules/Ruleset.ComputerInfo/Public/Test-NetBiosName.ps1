@@ -283,7 +283,7 @@ function Test-NetBiosName
 				$BadMatch = [regex]::Match($DomainName, "^\d+$")
 				if ($BadMatch.Success)
 				{
-					Write-Warning -Message "NETBIOS computer name '$DomainName' is not valid for AD membership" -WarningAction $WriteWarning
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] NETBIOS computer name '$DomainName' is not valid for AD membership" -WarningAction $WriteWarning
 				}
 			}
 
@@ -308,7 +308,7 @@ function Test-NetBiosName
 
 				if ($UserName.Length -gt 64)
 				{
-					Write-Warning -Message "NETBIOS user name '$UserName' isn't practical to use because it's longer than 64 characters" -WarningAction $WriteWarning
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] NETBIOS user name '$UserName' isn't practical to use because it's longer than 64 characters" -WarningAction $WriteWarning
 				}
 
 				if ($UserName.Contains(" "))

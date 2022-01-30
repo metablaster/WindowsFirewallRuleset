@@ -389,7 +389,7 @@ function Wait-Adapter
 		Start-Sleep -Seconds $Time
 	}
 
-	Write-Warning -Message "Not all of the requested adapters are in '$State' state"
+	Write-Warning -Message "[$ThisScript] Not all of the requested adapters are in '$State' state"
 }
 
 # Ensure adapters are put into valid state for configuration
@@ -409,7 +409,7 @@ $AdapterAlias = Select-AdapterAlias Enabled
 if (!$AdapterAlias)
 {
 	# TODO: Use NetConnectionStatus property to get details
-	Write-Warning -Message "None of the adapters are ready for configuration"
+	Write-Warning -Message "[$ThisScript] None of the adapters are ready for configuration"
 }
 else
 {
@@ -616,7 +616,7 @@ else
 
 			if (!$Prefix)
 			{
-				Write-Warning -Message "Restoring IP configuration ignored, subnet mask is missing"
+				Write-Warning -Message "[$ThisScript] Restoring IP configuration ignored, subnet mask is missing"
 				continue
 			}
 
@@ -625,7 +625,7 @@ else
 
 			if ([string]::IsNullOrEmpty($Address))
 			{
-				Write-Warning -Message "Restoring IP configuration ignored, IP address is missing"
+				Write-Warning -Message "[$ThisScript] Restoring IP configuration ignored, IP address is missing"
 				continue
 			}
 
@@ -634,7 +634,7 @@ else
 
 			if ([string]::IsNullOrEmpty($Gateway))
 			{
-				Write-Warning -Message "Restoring IP configuration ignored, default gateway address is missing"
+				Write-Warning -Message "[$ThisScript] Restoring IP configuration ignored, default gateway address is missing"
 				continue
 			}
 
@@ -662,7 +662,7 @@ else
 
 			if ([string]::IsNullOrEmpty($DNSAddress4))
 			{
-				Write-Warning -Message "Restoring DNS Server addresses ignored, DNS server addresses are missing"
+				Write-Warning -Message "[$ThisScript] Restoring DNS Server addresses ignored, DNS server addresses are missing"
 				continue
 			}
 

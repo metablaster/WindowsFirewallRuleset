@@ -159,7 +159,7 @@ function Set-WinRMClient
 		{
 			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Fix 'Negotiate' authentication using registry"))
 			{
-				Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Enabling 'Negotiate' authentication failed, doing trough registry"
 
 				# TODO: WinRM service should be restarted to pick up this fix?
 				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ `
@@ -249,7 +249,7 @@ function Set-WinRMClient
 		}
 		catch [System.OperationCanceledException]
 		{
-			Write-Warning -Message "Operation incomplete because $($_.Exception.Message)"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation incomplete because $($_.Exception.Message)"
 		}
 		catch
 		{

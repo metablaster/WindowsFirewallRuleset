@@ -102,7 +102,7 @@ function Get-NetFramework
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key: $HKLMSubKey"
 				continue
 			}
 
@@ -137,14 +137,14 @@ function Get-NetFramework
 
 					if (!$Key)
 					{
-						Write-Warning -Message "Failed to open registry sub Key: $HKLMKey"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKLMKey"
 						continue
 					}
 
 					$Version = $Key.GetValue("Version")
 					if ([string]::IsNullOrEmpty($Version))
 					{
-						Write-Warning -Message "Failed to read registry key entry: $HKLMKey\Version"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $HKLMKey\Version"
 						continue
 					}
 

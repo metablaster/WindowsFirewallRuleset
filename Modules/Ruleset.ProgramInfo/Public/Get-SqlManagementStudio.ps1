@@ -113,7 +113,7 @@ function Get-SqlManagementStudio
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key: $HKLMSubKey"
 				continue
 			}
 
@@ -121,7 +121,7 @@ function Get-SqlManagementStudio
 
 			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
-				Write-Warning -Message "Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry $HKLMSubKey\SSMSInstallRoot"
 				continue
 			}
 

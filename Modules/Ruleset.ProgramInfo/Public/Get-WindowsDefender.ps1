@@ -102,7 +102,7 @@ function Get-WindowsDefender
 
 		if ([string]::IsNullOrEmpty($InstallLocation))
 		{
-			Write-Warning -Message "Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $RootKeyLeaf\InstallLocation"
 		}
 		else
 		{

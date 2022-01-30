@@ -111,7 +111,7 @@ function Get-SystemSoftware
 			}
 			catch
 			{
-				Write-Warning -Message "Failed to open registry root key: HKLM:\$HKLMRootKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:\$HKLMRootKey"
 				continue
 			}
 
@@ -123,7 +123,7 @@ function Get-SystemSoftware
 
 				if (!$SubKey)
 				{
-					Write-Warning -Message "Failed to open registry sub Key: $HKLMSubKey"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKLMSubKey"
 					continue
 				}
 

@@ -97,7 +97,7 @@ function Import-FirewallSetting
 	}
 	elseif ($FileExtension -ne ".json")
 	{
-		Write-Warning -Message "Unexpected file extension '$FileExtension'"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected file extension '$FileExtension'"
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
@@ -118,7 +118,7 @@ function Import-FirewallSetting
 				# The default setting when managing a computer is 4096
 				# When managing a GPO, the default setting is NotConfigured.
 				$Data.LogMaxSizeKilobytes = $LogSize
-				Write-Warning -Message "Unable to restore LogMaxSizeKilobytes to NotConfigured, setting to $LogSize"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to restore LogMaxSizeKilobytes to NotConfigured, setting to $LogSize"
 			}
 
 			Set-NetFirewallProfile -Profile $Data.Name -PolicyStore $PolicyStore `
@@ -144,7 +144,7 @@ function Import-FirewallSetting
 		# The default value when managing a local computer is 300 seconds (5 minutes).
 		# When managing a GPO, the default value is NotConfigured.
 		$Data.MaxSAIdleTimeSeconds = 300
-		Write-Warning -Message "Unable to restore MaxSAIdleTimeSeconds to NotConfigured, setting to 300"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to restore MaxSAIdleTimeSeconds to NotConfigured, setting to 300"
 	}
 
 	Set-NetFirewallSetting -PolicyStore $PolicyStore `

@@ -384,7 +384,7 @@ function Invoke-Process
 			Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
 
 			$Async = $false
-			Write-Warning -Message "Fallback to synchronous mode"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Fallback to synchronous mode"
 		}
 
 		# Define the cancellation token
@@ -419,7 +419,7 @@ function Invoke-Process
 
 			if (!$StatusWait)
 			{
-				Write-Warning -Message "Process '$CommandName' is taking too long, aborting..."
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$CommandName' is taking too long, aborting..."
 			}
 		}
 		else
@@ -444,7 +444,7 @@ function Invoke-Process
 
 		if ($Async -and $CancelSource.IsCancellationRequested)
 		{
-			Write-Warning -Message "The task has been canceled"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The task has been canceled"
 		}
 		else
 		{

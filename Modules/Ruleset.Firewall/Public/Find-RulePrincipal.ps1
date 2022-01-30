@@ -182,7 +182,7 @@ function Find-RulePrincipal
 		}
 		else
 		{
-			Write-Warning -Message "Not appending result to file because no existing file"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending result to file because no existing file"
 			$SelectRules | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
 		}
 	}

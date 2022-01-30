@@ -260,7 +260,7 @@ function Set-Permission
 
 	if (!$PSCmdlet.ShouldProcess($LiteralPath, $Message))
 	{
-		Write-Warning -Message "The operation has been canceled by the user"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The operation has been canceled by the user"
 		return $false
 	}
 
@@ -274,7 +274,7 @@ function Set-Permission
 	elseif ($Recurse -and (Test-Path -LiteralPath $LiteralPath -PathType Leaf))
 	{
 		$Recurse = $false
-		Write-Warning -Message "Recurse parameter ignored for leaf objects"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Recurse parameter ignored for leaf objects"
 	}
 
 	$Acl = Get-Acl -LiteralPath $LiteralPath
@@ -295,7 +295,7 @@ function Set-Permission
 		$Acl.GetAccessRules($IncludeExplicit, $IncludeInherited, [Principal.SecurityIdentifier]) | ForEach-Object {
 			if (!$Acl.RemoveAccessRule($_))
 			{
-				Write-Warning -Message "Removing SID based access rule for $($_.IdentityReference.Value) failed"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Removing SID based access rule for $($_.IdentityReference.Value) failed"
 			}
 		}
 
@@ -305,7 +305,7 @@ function Set-Permission
 		$Acl.GetAccessRules($IncludeExplicit, $IncludeInherited, [Principal.NTAccount]) | ForEach-Object {
 			if (!$Acl.RemoveAccessRule($_))
 			{
-				Write-Warning -Message "Removing account based access rule for $($_.IdentityReference.Value) failed"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Removing account based access rule for $($_.IdentityReference.Value) failed"
 			}
 		}
 
@@ -498,12 +498,12 @@ function Set-Permission
 		{
 			if (!$User)
 			{
-				Write-Warning -Message "You have no permission to finish recursive action, please specify Principal and Rights"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] You have no permission to finish recursive action, please specify Principal and Rights"
 				Write-Error -ErrorRecord $_
 				return $false
 			}
 
-			Write-Warning -Message "You have no permission to finish recursive action"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] You have no permission to finish recursive action"
 			if ($Force -or $PSCmdlet.ShouldContinue($LiteralPath, "Set required permissions to list directories and change permissions recursively"))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting permissions for recursive actions"
@@ -560,14 +560,14 @@ function Set-Permission
 				}
 				catch
 				{
-					Write-Warning -Message "Recursive action failed on object: $LiteralPath"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Recursive action failed on object: $LiteralPath"
 					Write-Error -ErrorRecord $_
 					return $false
 				}
 			}
 			else
 			{
-				Write-Warning -Message "The operation has been canceled by the user"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The operation has been canceled by the user"
 				return $false
 			}
 		}

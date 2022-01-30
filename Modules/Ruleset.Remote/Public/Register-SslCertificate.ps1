@@ -142,7 +142,7 @@ function Register-SslCertificate
 	{
 		if ($Domain -and ($Domain -ne ([System.Environment]::MachineName)))
 		{
-			Write-Warning -Message "Domain parameter ignored when target is server"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Domain parameter ignored when target is server"
 		}
 
 		$Domain = [System.Environment]::MachineName
@@ -395,13 +395,13 @@ function Register-SslCertificate
 				if ($PSCmdlet.ShouldProcess($ExportFile, "Overwrite existing certificate file"))
 				{
 					# NOTE: Will not overwrite readonly file, which isn't reported here
-					Write-Warning -Message "Overwriting existing certificate file '$ExportFile'"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Overwriting existing certificate file '$ExportFile'"
 					Export-Certificate -Cert $Cert -FilePath $ExportFile -Type CERT -Force | Out-Null
 				}
 			}
 			else
 			{
-				Write-Warning -Message "Certificate '$Domain.cer' not exported, target file already exists"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Certificate '$Domain.cer' not exported, target file already exists"
 			}
 		}
 		elseif ($PSCmdlet.ShouldProcess($ExportFile, "Exporting certificate file '$Domain.cer'"))
@@ -424,7 +424,7 @@ function Register-SslCertificate
 		}
 		else
 		{
-			Write-Warning -Message "Certificate '$Domain.cer' is not trusted because it is not in the Trusted Root Certification Authorities store"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Certificate '$Domain.cer' is not trusted because it is not in the Trusted Root Certification Authorities store"
 		}
 	}
 

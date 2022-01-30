@@ -580,7 +580,7 @@ function Search-Installation
 	{
 		if (!$Quiet)
 		{
-			Write-Warning -Message "Installation directory for '$Application' not found"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Installation directory for '$Application' not found"
 		}
 
 		if ($Interactive)
@@ -617,7 +617,7 @@ function Search-Installation
 						}
 					}
 
-					Write-Warning -Message "Installation directory for '$Application' not found"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Installation directory for '$Application' not found"
 					if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Title "Unable to locate '$InstallLocation'" -Question "Do you want to try again?"))
 					{
 						break

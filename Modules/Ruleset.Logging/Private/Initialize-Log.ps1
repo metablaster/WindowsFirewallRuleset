@@ -132,7 +132,7 @@ function Initialize-Log
 
 	if ([string]::IsNullOrEmpty($Header))
 	{
-		Write-Warning -Message "Log header is missing or invalid"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Log header is missing or invalid"
 	}
 	else
 	{

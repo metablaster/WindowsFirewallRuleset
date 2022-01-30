@@ -145,13 +145,13 @@ function Connect-Computer
 
 	if ($PSSessionConfigurationName -ne $script:FirewallSession)
 	{
-		Write-Warning -Message "Unexpected session configuration $PSSessionConfigurationName"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $PSSessionConfigurationName"
 	}
 
 	# WinRM service must be running at this point
 	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 	{
-		Write-Warning -Message "WS-Management service supposed to be already running, starting now..."
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] WS-Management service supposed to be already running, starting now..."
 
 		# NOTE: Unable to start if it's disabled
 		if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)

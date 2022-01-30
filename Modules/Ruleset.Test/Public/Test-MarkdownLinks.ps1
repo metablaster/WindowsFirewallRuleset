@@ -217,7 +217,7 @@ function Test-MarkdownLinks
 
 	if ($MarkdownFiles.Count -eq 0)
 	{
-		Write-Warning -Message "No markdown files were found specified by Path parameter"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] No markdown files were found specified by Path parameter"
 		return
 	}
 
@@ -271,7 +271,7 @@ function Test-MarkdownLinks
 		}
 		elseif ($NoProxy -or ($SslProtocol -ne "Default"))
 		{
-			Write-Warning -Message "NoProxy and SslProtocol parameters are valid only for PowerShell Core 6+"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] NoProxy and SslProtocol parameters are valid only for PowerShell Core 6+"
 		}
 	}
 
@@ -455,7 +455,7 @@ function Test-MarkdownLinks
 			}
 			catch
 			{
-				Write-Warning -Message "Found invalid link in '$File' -> $URL"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Found invalid link in '$File' -> $URL"
 
 				if ($Log)
 				{
@@ -530,11 +530,11 @@ function Test-MarkdownLinks
 
 		if ($StatusReport.Count -eq 1)
 		{
-			Write-Warning -Message "Only 1 invalid link found"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Only 1 invalid link found"
 		}
 		else
 		{
-			Write-Warning -Message "In total there are $($StatusReport.Count) invalid links"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] In total there are $($StatusReport.Count) invalid links"
 		}
 	}
 

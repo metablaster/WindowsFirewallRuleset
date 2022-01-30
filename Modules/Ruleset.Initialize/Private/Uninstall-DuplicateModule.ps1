@@ -158,7 +158,7 @@ function Uninstall-DuplicateModule
 
 				if (!$AllTargetModule -or ($AllTargetModule.Length -lt 2))
 				{
-					Write-Warning -Message "No candidate modules for removal found with name '$ModuleName'"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] No candidate modules for removal found with name '$ModuleName'"
 					continue
 				}
 
@@ -179,7 +179,7 @@ function Uninstall-DuplicateModule
 				{
 					if ($Scope.Length -gt 1)
 					{
-						Write-Warning -Message "System wide modules might be removed in favor of user specific installation"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] System wide modules might be removed in favor of user specific installation"
 						Write-Information -Tags $MyInvocation.InvocationName `
 							-MessageData "INFO: To avoid this warning, please don't mix 'User' location with other locations"
 
@@ -194,7 +194,7 @@ function Uninstall-DuplicateModule
 
 				if (!$TargetModule -or ($TargetModule.Length -lt 2))
 				{
-					Write-Warning -Message "No duplicate modules for removal found with name '$ModuleName'"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] No duplicate modules for removal found with name '$ModuleName'"
 					continue
 				}
 
@@ -266,7 +266,7 @@ function Uninstall-DuplicateModule
 							catch
 							{
 								Write-Error -ErrorRecord $_
-								Write-Warning -Message "Please close down all other PowerShell sessions including VSCode, then try again"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
 								Write-Information -Tags $MyInvocation.InvocationName `
 									-MessageData "INFO: If this session is inside module path, the session must be restarted"
 								continue
@@ -277,7 +277,7 @@ function Uninstall-DuplicateModule
 						}
 					}
 
-					Write-Warning -Message "Removing module $ModuleName failed"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Removing module $ModuleName failed"
 				}
 				else
 				{

@@ -243,7 +243,7 @@ if (Approve-Execute @ExecuteParams)
 		# & "$Destination\Games\ScriptName.ps1" -Force:$AllCurrent
 		$AllCurrent = $YesToAll
 
-		Write-Warning -Message "No inbound rules for games exist"
+		Write-Warning -Message "[$ThisScript] No inbound rules for games exist"
 	}
 
 	# Update user prompt
@@ -260,7 +260,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent @ScriptParams
 		$AllCurrent = $YesToAll
 
-		Write-Warning -Message "No inbound rules for server platforms or software exist"
+		Write-Warning -Message "[$ThisScript] No inbound rules for server platforms or software exist"
 	}
 
 	# Update user prompt
@@ -590,19 +590,19 @@ if ($ErrorLogging -and $ErrorStatus)
 {
 	# HACK: Will print when no errors were reported to console, could be because of -ErrorAction SilentlyContinue
 	Write-Information -MessageData "" -InformationVariable ThrowAway
-	Write-Warning -Message "Errors were generated and saved to: $("$ProjectRoot\Logs")"
+	Write-Warning -Message "[$ThisScript] Errors were generated and saved to: $("$ProjectRoot\Logs")"
 	Write-Information -Tags $ThisScript -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
 }
 
 if ($WarningLogging -and $WarningStatus)
 {
 	Write-Information -MessageData "" -InformationVariable ThrowAway
-	Write-Warning -Message "Warnings were generated and saved to: $("$ProjectRoot\Logs")"
+	Write-Warning -Message "[$ThisScript] Warnings were generated and saved to: $("$ProjectRoot\Logs")"
 }
 
 if ($ErrorStatus)
 {
-	Write-Warning -Message "Not all operations completed successfully"
+	Write-Warning -Message "[$ThisScript] Not all operations completed successfully"
 }
 else
 {

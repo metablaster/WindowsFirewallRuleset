@@ -272,7 +272,7 @@ foreach ($RawEvent in $Events)
 					default
 					{
 						$Value
-						Write-Warning -Message "Formatting protocol '$Value' not implemented"
+						Write-Warning -Message "[$ThisScript] Formatting protocol '$Value' not implemented"
 					}
 				}
 				break
@@ -285,7 +285,7 @@ foreach ($RawEvent in $Events)
 				}
 				else
 				{
-					Write-Warning -Message "Formatting direction '$Value' failed"
+					Write-Warning -Message "[$ThisScript] Formatting direction '$Value' failed"
 					$Value
 				}
 				break
@@ -298,7 +298,7 @@ foreach ($RawEvent in $Events)
 				}
 				else
 				{
-					Write-Warning -Message "Formatting layer name '$Value' failed"
+					Write-Warning -Message "[$ThisScript] Formatting layer name '$Value' failed"
 					$Value
 				}
 				break
@@ -315,7 +315,7 @@ foreach ($RawEvent in $Events)
 				}
 				else
 				{
-					Write-Warning -Message "Formatting application '$Value' failed"
+					Write-Warning -Message "[$ThisScript] Formatting application '$Value' failed"
 					$Value
 				}
 				break

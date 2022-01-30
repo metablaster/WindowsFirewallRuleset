@@ -141,7 +141,7 @@ function Get-GroupPrincipal
 
 						if ([string]::IsNullOrEmpty($GroupUsers))
 						{
-							Write-Warning -Message "User group '$UserGroup' is empty or does not exist on computer '$Computer'"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
 							continue
 						}
 
@@ -152,7 +152,7 @@ function Get-GroupPrincipal
 
 						if ([string]::IsNullOrEmpty($EnabledAccounts))
 						{
-							Write-Warning -Message "User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
 							continue
 						}
 
@@ -209,7 +209,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "User group '$UserGroup' is empty or does not exist on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
 						continue
 					}
 
@@ -218,7 +218,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
 					{
-						Write-Warning -Message "User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
 						continue
 					}
 

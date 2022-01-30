@@ -223,7 +223,7 @@ function Set-Shortcut
 		if ([string]::IsNullOrEmpty([System.IO.Path]::GetExtension($Name)))
 		{
 			$Name += $Extension
-			Write-Warning -Message "Shortcut extension implicitly set to *$Extension"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Shortcut extension implicitly set to *$Extension"
 		}
 		elseif (($URL -and $Name -notmatch "\.url$") -or ($TargetPath -and $Name -notmatch "\.lnk$"))
 		{
@@ -234,7 +234,7 @@ function Set-Shortcut
 			}
 
 			$Name = $Name -replace $Matches[0], $Extension
-			Write-Warning -Message "Shortcut extension *$($Matches[0]) replaced with *$Extension"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Shortcut extension *$($Matches[0]) replaced with *$Extension"
 		}
 
 		$FilePath = "$($FilePath.FullName)\$Name"
@@ -289,12 +289,12 @@ function Set-Shortcut
 				}
 				catch
 				{
-					Write-Warning -Message "Setting icon location not implemented. $($_.Exception.Message)"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting icon location not implemented. $($_.Exception.Message)"
 				}
 			}
 			else
 			{
-				Write-Warning -Message "Unable to locate icon file: $IconLocationName"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to locate icon file: $IconLocationName"
 			}
 		}
 
@@ -308,7 +308,7 @@ function Set-Shortcut
 			}
 			catch
 			{
-				Write-Warning -Message "Setting hotkey not implemented. $($_.Exception.Message)"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting hotkey not implemented. $($_.Exception.Message)"
 			}
 		}
 
@@ -332,7 +332,7 @@ function Set-Shortcut
 				}
 				else
 				{
-					Write-Warning -Message "Working directory skipped because it does not exist"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Working directory skipped because it does not exist"
 				}
 			}
 
@@ -371,7 +371,7 @@ function Set-Shortcut
 		}
 		catch
 		{
-			Write-Warning -Message "Lacking file system permissions is likely reason for failure"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Lacking file system permissions is likely reason for failure"
 			Write-Error -ErrorRecord $_
 			return
 		}

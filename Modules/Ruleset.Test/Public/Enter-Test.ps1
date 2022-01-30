@@ -93,7 +93,7 @@ function Enter-Test
 		# NOTE: This will fail if Exit-Test was not called, run Exit-Test manually in that case
 		if (Get-Variable -Name UnitTest -Scope Global -ErrorAction Ignore)
 		{
-			Write-Warning -Message "Either previous unit test did not complete or test module was reloaded"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Either previous unit test did not complete or test module was reloaded"
 		}
 		else
 		{

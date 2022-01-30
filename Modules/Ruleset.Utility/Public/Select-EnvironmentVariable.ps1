@@ -331,7 +331,7 @@ function Select-EnvironmentVariable
 			}
 			elseif ($Entry.Value -match '<>\?\|":')
 			{
-				Write-Warning -Message "Blacklisting environment variable with bad character $($Entry.Value)"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Blacklisting environment variable with bad character $($Entry.Value)"
 				$script:BlackList += $Entry
 				continue
 			}

@@ -77,7 +77,7 @@ function Set-NetworkProfile
 		if (!$HardwareInterfaces -or ($HardwareInterfaces.Length -eq 0))
 		{
 			# TODO: We should base this on IPv*Connectivity given by Get-NetConnectionProfile
-			Write-Warning -Message "Unable to set network profile, machine not connected to network"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to set network profile, machine not connected to network"
 			return
 		}
 
@@ -120,7 +120,7 @@ function Set-NetworkProfile
 				}
 				else
 				{
-					Write-Warning -Message "The operation has been canceled by the user"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] The operation has been canceled by the user"
 					return
 				}
 			}

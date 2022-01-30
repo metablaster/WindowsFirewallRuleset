@@ -102,7 +102,7 @@ function Get-InstallProperties
 
 			if (!$UserProducts)
 			{
-				Write-Warning -Message "Failed to open UserKey: $HKLSubMKey\Products"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open UserKey: $HKLSubMKey\Products"
 				continue
 			}
 
@@ -114,7 +114,7 @@ function Get-InstallProperties
 
 				if (!$ProductKey)
 				{
-					Write-Warning -Message "Failed to open ProductKey: $HKLMKey\InstallProperties"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open ProductKey: $HKLMKey\InstallProperties"
 					continue
 				}
 

@@ -192,7 +192,7 @@ Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity
 if ($Remoting)
 {
 	# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
-	Write-Warning -Message "To continue running firewall scripts please restart PowerShell console"
+	Write-Warning -Message "[$ThisScript] To continue running firewall scripts please restart PowerShell console"
 }
 
 Update-Log

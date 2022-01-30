@@ -189,7 +189,7 @@ function Initialize-Module
 		{
 			if ($TargetVersion)
 			{
-				Write-Warning -Message "$ModuleName requires git in PATH but git.exe not present, aborting update..."
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $ModuleName requires git in PATH but git.exe not present, aborting update..."
 			}
 			else
 			{
@@ -436,7 +436,7 @@ function Initialize-Module
 
 	if ($TargetVersion)
 	{
-		Write-Warning -Message "Current module $ModuleName v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Current module $ModuleName v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
 
 		$Title += " module out of date"
 		$Question = "Update $ModuleName module now?"
@@ -479,7 +479,7 @@ function Initialize-Module
 	}
 	else # Module not present
 	{
-		Write-Warning -Message "$ModuleName module minimum version v$RequireVersion is recommended but not installed"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] $ModuleName module minimum version v$RequireVersion is recommended but not installed"
 
 		$Title += " module not installed"
 		$Question = "Install $ModuleName module now?"
@@ -543,7 +543,7 @@ function Initialize-Module
 				# PowerShell needs to restart
 				Set-Variable -Name Restart -Scope Script -Value $true
 
-				Write-Warning -Message "$ModuleName provider v$RequireVersion could not be imported, please restart PowerShell and try again"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $ModuleName provider v$RequireVersion could not be imported, please restart PowerShell and try again"
 			}
 
 			# Finishing work, update as needed
@@ -556,7 +556,7 @@ function Initialize-Module
 					-MessageData "INFO: Adding $ModuleName v$RequireVersion to profile"
 				Add-PoshGitToProfile -AllHosts
 
-				Write-Warning -Message "Run 'Add-PoshGitToProfile -AllHosts' in non elevated PowerShell manually"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Run 'Add-PoshGitToProfile -AllHosts' in non elevated PowerShell manually"
 			}
 
 			return $true

@@ -125,7 +125,7 @@ function Format-Path
 					$NewPath = $Regex.Replace($NewPath, ";").TrimEnd(";")
 				}
 
-				Write-Warning -Message "Specified path is multi directory, likely environment variable"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Specified path is multi directory, likely environment variable"
 				Write-Output $NewPath
 				continue
 			}
@@ -148,7 +148,7 @@ function Format-Path
 			if ($BadData.Success)
 			{
 				# Formatting such path makes no sense, it must be fixed instead
-				Write-Warning -Message "Result of variable expansion resulted in multiple paths, formatting aborted"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Result of variable expansion resulted in multiple paths, formatting aborted"
 
 				Write-Output $PathEntry
 				continue
@@ -159,7 +159,7 @@ function Format-Path
 
 			if ($BadData.Success)
 			{
-				Write-Warning -Message "Path qualifier '$($BadData.Groups[1].Value)' not supported, formatting aborted"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Path qualifier '$($BadData.Groups[1].Value)' not supported, formatting aborted"
 				Write-Output $PathEntry
 				continue
 			}

@@ -364,18 +364,18 @@ function ConvertFrom-SID
 
 							if ([string]::IsNullOrEmpty($ResultName))
 							{
-								Write-Warning -Message "Specified SID is unknown store app SID"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID"
 							}
 							break
 						}
 						'^S-1-15-3-(\d+-)*\d+$'
 						{
 							$SidType = "Capability"
-							Write-Warning -Message "Translating capability SID's not implemented"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Translating capability SID's not implemented"
 
 							# TODO: Display what capability SID has, for more info look into registry and see:
 							# https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers#capability-sids
-							Write-Warning -Message "Specified SID: '$InputSID' is capability SID"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID: '$InputSID' is capability SID"
 							break
 						}
 						default
@@ -413,14 +413,14 @@ function ConvertFrom-SID
 								if ($InputSID -match '^S-1-5-21-\d+-\d+-\d+-\d+$')
 								{
 									$SidType = "Domain"
-									Write-Warning -Message "Specified SID is an unknown domain or NTAccount SID"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID is an unknown domain or NTAccount SID"
 								}
 								else
 								{
 									$SidType = "Unknown"
 									# TODO: check if invalid format or just not found
 									# NOTE: regex matches don't check length of a SID which could help identify problem
-									Write-Warning -Message "$InputSID is not a valid SID or could not be identified"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] $InputSID is not a valid SID or could not be identified"
 								}
 							}
 						} # default

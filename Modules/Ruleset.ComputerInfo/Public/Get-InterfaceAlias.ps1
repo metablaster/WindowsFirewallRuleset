@@ -134,7 +134,7 @@ function Get-InterfaceAlias
 	{
 		if ([WildcardPattern]::ContainsWildcardCharacters($Alias))
 		{
-			Write-Warning -Message "$Alias interface alias contains wildcard pattern"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $Alias interface alias contains wildcard pattern"
 
 			# NOTE: If WildCardOption == None, the pattern does not have wild cards
 			$AliasPattern = [WildcardPattern]::new($Alias, $WildCardOption)

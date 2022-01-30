@@ -166,7 +166,7 @@ function Reset-WinRM
 		{
 			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Fix 'Negotiate' authentication using registry"))
 			{
-				Write-Warning -Message "Enabling 'Negotiate' authentication failed, doing trough registry"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Enabling 'Negotiate' authentication failed, doing trough registry"
 				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
 					[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
 			}

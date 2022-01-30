@@ -111,7 +111,7 @@ function Get-WindowsSDK
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "Failed to open registry sub key: $HKLMSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key: $HKLMSubKey"
 				continue
 			}
 
@@ -119,7 +119,7 @@ function Get-WindowsSDK
 
 			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
-				Write-Warning -Message "Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $HKLMSubKey\InstallationFolder"
 				continue
 			}
 

@@ -168,7 +168,7 @@ function Initialize-Provider
 			{
 				# TODO: If there are multiple finds, selecting first one
 				$FoundProvider = $FoundProvider[0]
-				Write-Warning -Message "Found multiple sources for provider $($FoundProvider.Name), selecting first one"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Found multiple sources for provider $($FoundProvider.Name), selecting first one"
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName `
@@ -183,7 +183,7 @@ function Initialize-Provider
 			# "Bootstrap" provider, which means NuGet was already installed during "Find-PackageProvider" above!
 			if (!((Get-PackageSource).ProviderName -like "$($PackageSource.ProviderName)"))
 			{
-				Write-Warning -Message "Not using $($PackageSource.ProviderName) provider to install package, provider not registered"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using $($PackageSource.ProviderName) provider to install package, provider not registered"
 				return $true
 			}
 
@@ -215,7 +215,7 @@ function Initialize-Provider
 		{
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				Write-Warning -Message "Provider $ProviderName was not found because of a known issue with PowerShell Core"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName was not found because of a known issue with PowerShell Core"
 				Write-Information -Tags $MyInvocation.InvocationName `
 					-MessageData "INFO: see https://github.com/OneGet/oneget/issues/360"
 
@@ -250,13 +250,13 @@ function Initialize-Provider
 		{
 			$Title += " package provider is out of date"
 			$Question = "Install $ProviderName provider now?"
-			Write-Warning -Message "Provider $ProviderName v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName v$($TargetVersion.ToString()) is out of date, required version is v$RequireVersion"
 		}
 		else
 		{
 			$Title += " package provider is not installed"
 			$Question = "Update $ProviderName provider now?"
-			Write-Warning -Message "$ProviderName provider minimum version v$RequireVersion is required but not installed"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $ProviderName provider minimum version v$RequireVersion is required but not installed"
 		}
 
 		$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
@@ -286,7 +286,7 @@ function Initialize-Provider
 					# PowerShell needs to restart
 					Set-Variable -Name Restart -Scope Script -Value $true
 
-					Write-Warning -Message "$ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] $ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
 					return $false
 				}
 
@@ -319,7 +319,7 @@ function Initialize-Provider
 		{
 			# User refused default action
 			# TODO: should this be error? maybe switch
-			Write-Warning -Message "Installing provider $ProviderName aborted by user"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Installing provider $ProviderName aborted by user"
 			return !$Required
 		}
 	} # process

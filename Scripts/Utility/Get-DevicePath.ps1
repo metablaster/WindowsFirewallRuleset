@@ -108,7 +108,7 @@ if ($DriveLetter)
 	}
 	else
 	{
-		Write-Warning -Message "Drive letter '$DriveLetter' not found"
+		Write-Warning -Message "[$ThisScript] Drive letter '$DriveLetter' not found"
 	}
 
 	return
@@ -137,7 +137,7 @@ if ($DevicePath)
 
 	if ([string]::IsNullOrEmpty($Result))
 	{
-		Write-Warning -Message "Device path '$DevicePath' not found"
+		Write-Warning -Message "[$ThisScript] Device path '$DevicePath' not found"
 	}
 
 	return $Result

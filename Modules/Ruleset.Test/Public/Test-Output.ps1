@@ -124,7 +124,7 @@ function Test-Output
 		}
 		elseif ($TypeName -eq "System.Void" -and ($OutputType -notlike "*Void"))
 		{
-			Write-Warning -Message "Type comparison was not performed because result was likely null"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Type comparison was not performed because result was likely null"
 		}
 		elseif ($OutputType -ceq $TypeName)
 		{
@@ -136,7 +136,7 @@ function Test-Output
 			# Either typename is longer and contains one of OutputType's in it's name or
 			# typename is shorter and contained within one of OutputTypes or
 			# both are the same but different casing used.
-			Write-Warning -Message "Typename is similar to OutputType but not named exactly the same"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename is similar to OutputType but not named exactly the same"
 		}
 		else
 		{

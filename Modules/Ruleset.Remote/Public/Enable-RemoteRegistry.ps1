@@ -66,7 +66,7 @@ function Enable-RemoteRegistry
 		$RuleProfile = "*Private*"
 
 		# For workstations remote registry works on private profile only
-		Write-Warning -Message "Remote registry will not work over publick network profile"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry will not work over publick network profile"
 	}
 	else
 	{

@@ -141,7 +141,7 @@ function Import-FirewallRule
 		}
 		elseif ($FileExtension -ne ".json")
 		{
-			Write-Warning -Message "Unexpected file extension '$FileExtension'"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected file extension '$FileExtension'"
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading JSON file"
@@ -158,7 +158,7 @@ function Import-FirewallRule
 		}
 		elseif ($FileExtension -ne ".csv")
 		{
-			Write-Warning -Message "Unexpected file extension '$FileExtension'"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected file extension '$FileExtension'"
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reading CSV file"

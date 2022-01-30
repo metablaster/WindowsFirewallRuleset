@@ -215,7 +215,7 @@ local and push notifications. Supported notifications are tile, toast and raw." 
 else
 {
 	# NOTE: this may not be found on fresh installed system, need to reload later
-	Write-Warning -Message "Windows Push Notifications User Service was not found"
+	Write-Warning -Message "[$ThisScript] Windows Push Notifications User Service was not found"
 }
 
 New-NetFirewallRule -DisplayName "Windows Insider Service" `

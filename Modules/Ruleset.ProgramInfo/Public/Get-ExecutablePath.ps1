@@ -111,7 +111,7 @@ function Get-ExecutablePath
 			}
 			catch
 			{
-				Write-Warning -Message "Failed to open registry root key: HKLM:$HKLMRootKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:$HKLMRootKey"
 				continue
 			}
 

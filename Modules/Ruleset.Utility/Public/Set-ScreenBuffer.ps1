@@ -68,7 +68,7 @@ function Set-ScreenBuffer
 
 	if ($NewSize.Height -lt $Height)
 	{
-		Write-Warning -Message "Your screen buffer of $($NewSize.Height) is below recommended $Height to preserve all execution output"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Your screen buffer of $($NewSize.Height) is below recommended $Height to preserve all execution output"
 
 		if ($PSCmdlet.ShouldProcess((Get-Host).Name, "Increase Screen Buffer"))
 		{

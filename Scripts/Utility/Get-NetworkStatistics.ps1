@@ -240,7 +240,7 @@ process
 				}
 				catch
 				{
-					Write-Warning -Message "Unable to run Get-Process on computer $Computer, defaulting to no ShowProcessNames"
+					Write-Warning -Message "[$ThisScript] Unable to run Get-Process on computer $Computer, defaulting to no ShowProcessNames"
 					$ShowProcessName = $false
 				}
 			}
@@ -259,7 +259,7 @@ process
 			}
 			catch
 			{
-				Write-Warning -Message "Could not invoke create win32_process on $Computer to delete $TempLocation"
+				Write-Warning -Message "[$ThisScript] Could not invoke create win32_process on $Computer to delete $TempLocation"
 			}
 
 			# Run command

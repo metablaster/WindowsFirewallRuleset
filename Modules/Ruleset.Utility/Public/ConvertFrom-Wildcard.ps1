@@ -344,7 +344,7 @@ function ConvertFrom-Wildcard
 	}
 	else
 	{
-		Write-Warning -Message "Wildcard pattern '$Pattern' contains no wildcard characters"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Wildcard pattern '$Pattern' contains no wildcard characters"
 
 		if ($SkipAnchor)
 		{

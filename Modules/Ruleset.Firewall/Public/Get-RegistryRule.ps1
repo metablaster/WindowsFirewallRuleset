@@ -240,7 +240,7 @@ function Get-RegistryRule
 			}
 			catch
 			{
-				Write-Warning -Message "Failed to open registry root key: HKLM:\$HKLMRootKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:\$HKLMRootKey"
 				continue
 			}
 
@@ -423,7 +423,7 @@ function Get-RegistryRule
 
 								if ([string]::IsNullOrEmpty($FriendlyGroupName))
 								{
-									Write-Warning -Message "Translating rule group, source string to localized string failed"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Translating rule group, source string to localized string failed"
 								}
 								else
 								{
@@ -667,7 +667,7 @@ function Get-RegistryRule
 							}
 							else
 							{
-								Write-Warning -Message "Failed to parse Platform value"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to parse Platform value"
 								$RegexResult = $EntryValue
 							}
 

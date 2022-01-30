@@ -137,7 +137,7 @@ function Get-TypeName
 					if (([version] $PSVersionTable.PSVersion) -ge "7.1")
 					{
 						# NOTE: $Assembly.GetTypes() not compatible
-						Write-Warning -Message "Operation is not supported on PowerShell Core 7.1+"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation is not supported on PowerShell Core 7.1+"
 						return
 					}
 				}
@@ -230,7 +230,7 @@ function Get-TypeName
 						else
 						{
 							# Skip non .NET types, continue
-							Write-Warning -Message "Typename: '$Type' was excluded, not a .NET type"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename: '$Type' was excluded, not a .NET type"
 						}
 					}
 
@@ -247,7 +247,7 @@ function Get-TypeName
 					# It's a null value when the output is a not a .NET type,
 					# such as a WMI object or a formatted view of an object.
 					# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_outputtypeattribute?view=powershell-7
-					Write-Warning -Message "The command: '$Command' does not have [OutputType()] attribute defined"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] The command: '$Command' does not have [OutputType()] attribute defined"
 					return
 				}
 			}
@@ -277,7 +277,7 @@ function Get-TypeName
 		else
 		{
 			# TODO: Should not be allowed, but otherwise we won't be able to capture null/void type
-			Write-Warning -Message "Input is null, typename implicitly set to: System.Void"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Input is null, typename implicitly set to: System.Void"
 			$TypeName = "System.Void"
 		}
 
@@ -311,13 +311,13 @@ function Get-TypeName
 
 					if ($Duplicates -contains $TypeName)
 					{
-						Write-Warning -Message "Multiple accelerators exist for resulting type: $TypeName"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for resulting type: $TypeName"
 					}
 				}
 				else
 				{
 					# Not an error, the type is still valid .NET type
-					Write-Warning -Message "Typename not recognized as accelerator: $TypeName"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename not recognized as accelerator: $TypeName"
 				}
 
 				# There is nothing else to do for -Name
@@ -339,14 +339,14 @@ function Get-TypeName
 
 						if ($Duplicates -contains $TargetValue)
 						{
-							Write-Warning -Message "Multiple accelerators exist for type: $TargetValue"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type: $TargetValue"
 						}
 					}
 					else
 					{
 						# Not an error, the type is still valid .NET type
 						$TypeName += $Type
-						Write-Warning -Message "No accelerator found for: $Type"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for: $Type"
 					}
 				}
 			}
@@ -361,13 +361,13 @@ function Get-TypeName
 
 					if ($Duplicates -contains $TargetValue)
 					{
-						Write-Warning -Message "Multiple accelerators exist for type: $TargetValue"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type: $TargetValue"
 					}
 				}
 				else
 				{
 					# Not an error, the type is still valid .NET type
-					Write-Warning -Message "No accelerator found for: $TypeName"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for: $TypeName"
 				}
 			}
 		} # accelerator

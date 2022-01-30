@@ -181,7 +181,7 @@ begin
 	}
 	catch
 	{
-		Write-Warning -Message "Unexpected parent scope"
+		Write-Warning -Message "[$ThisScript] Unexpected parent scope"
 	}
 
 	$ParentScopeName = (Get-PSCallStack)[1].Command
@@ -266,7 +266,7 @@ end
 
 			if ($null -eq $Variable)
 			{
-				Write-Warning -Message "Unable to fetch variable: '$($Entry.Name)'"
+				Write-Warning -Message "[$ThisScript] Unable to fetch variable: '$($Entry.Name)'"
 			}
 			elseif ($SessionState -eq $ExecutionContext.SessionState)
 			{
@@ -296,7 +296,7 @@ end
 
 				if ($null -eq $Variable)
 				{
-					Write-Warning -Message "Unable to fetch filtered variable: '$($Entry.Name)'"
+					Write-Warning -Message "[$ThisScript] Unable to fetch filtered variable: '$($Entry.Name)'"
 				}
 				elseif ($SessionState -eq $ExecutionContext.SessionState)
 				{

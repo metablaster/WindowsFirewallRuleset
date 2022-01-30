@@ -87,7 +87,7 @@ function Test-Service
 
 		if (!$Services)
 		{
-			Write-Warning -Message "Service '$Name' was not found, rules for '$Name' service won't have any effect"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$Name' was not found, rules for '$Name' service won't have any effect"
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: To silence this warning, update or comment out all firewall rules for '$Name' service"
 			return $false
@@ -135,7 +135,7 @@ function Test-Service
 				{
 					if ($Signature.Status -ne "Valid")
 					{
-						Write-Warning -Message "Digital signature verification failed for service '$($Service.Name)'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
 						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 					}
 					else

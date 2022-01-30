@@ -228,7 +228,7 @@ function Export-FirewallRule
 
 	if ($FirewallRules.Length -eq 0)
 	{
-		Write-Warning -Message "No rules were retrieved from firewall to export"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] No rules were retrieved from firewall to export"
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: possible cause is either no match or an error ocurred"
 		return
 	}
@@ -355,7 +355,7 @@ function Export-FirewallRule
 			}
 			else
 			{
-				Write-Warning -Message "Not appending rule to file because no existing file"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending rule to file because no existing file"
 			}
 		}
 		else
@@ -383,7 +383,7 @@ function Export-FirewallRule
 			}
 			else
 			{
-				Write-Warning -Message "Not appending rule to file because no existing file"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending rule to file because no existing file"
 			}
 		}
 		else

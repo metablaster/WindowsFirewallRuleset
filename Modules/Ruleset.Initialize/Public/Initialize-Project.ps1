@@ -161,7 +161,7 @@ function Initialize-Project
 		$TargetOSBuildVersion = ConvertFrom-OSBuild $TargetOSVersion.Build
 		$RequireOSBuildVersion = ConvertFrom-OSBuild $RequireWindowsVersion.Build
 
-		Write-Warning -Message "Target system version is v$TargetOSBuildVersion, to reduce issues with firewall rules please upgrade to at least v$RequireOSBuildVersion"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Target system version is v$TargetOSBuildVersion, to reduce issues with firewall rules please upgrade to at least v$RequireOSBuildVersion"
 	}
 
 	# Check PowerShell edition
@@ -276,7 +276,7 @@ function Initialize-Project
 
 			if ($TargetVSCode -lt $RequireVSCodeVersion)
 			{
-				Write-Warning -Message "VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] VSCode v$TargetVSCode is out of date, recommended VSCode v$RequireVSCodeVersion"
 			}
 			else
 			{
@@ -286,7 +286,7 @@ function Initialize-Project
 		}
 		else
 		{
-			Write-Warning -Message "VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] VSCode in the PATH minimum v$RequireVSCodeVersion is recommended but missing"
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: Please verify PATH or visit https://code.visualstudio.com to download and install"
 		}
@@ -309,7 +309,7 @@ function Initialize-Project
 
 			if ($TargetGit -lt $RequireGitVersion)
 			{
-				Write-Warning -Message "Git v$TargetGit is out of date, recommended is git v$RequireGitVersion"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Git v$TargetGit is out of date, recommended is git v$RequireGitVersion"
 				Write-Information -Tags $MyInvocation.InvocationName `
 					-MessageData "INFO: Please visit https://git-scm.com to download and update"
 			}
@@ -321,7 +321,7 @@ function Initialize-Project
 		}
 		else
 		{
-			Write-Warning -Message "Git in the PATH minimum v$RequireGitVersion is recommended but missing"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Git in the PATH minimum v$RequireGitVersion is recommended but missing"
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: Please verify PATH or visit https://git-scm.com to download and install"
 		}
@@ -373,7 +373,7 @@ function Initialize-Project
 		{
 			# NOTE: at this point PowerShell should be restarted to avoid errors
 			# installing pester fails with signature, posh-git fails with -AllowPrerelease parameter
-			Write-Warning -Message "Please restart PowerShell for changes to take effect and run last command again"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Please restart PowerShell for changes to take effect and run last command again"
 			exit
 		}
 
@@ -439,7 +439,7 @@ function Initialize-Project
 					# HACK: UpdatableModules may be null, failed on Enterprise edition with 0 found
 					# helpinfo files.
 					# Even after updating modules and manually running Update-Help which btw. succeeded!
-					Write-Warning -Message "No modules contain HelpInfo files required to update help"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] No modules contain HelpInfo files required to update help"
 
 					# Otherwise the cause may be because Update-Help was never run which is required to
 					# download helpinfo.xml files
@@ -470,7 +470,7 @@ function Initialize-Project
 	}
 	else
 	{
-		Write-Warning -Message "3rd party modules may be missing or outdated which could result in unexpected behavior"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] 3rd party modules may be missing or outdated which could result in unexpected behavior"
 		Write-Information -Tags $MyInvocation.InvocationName `
 			-MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 	}
@@ -481,7 +481,7 @@ function Initialize-Project
 
 	if ([string]::IsNullOrEmpty($OSCaption))
 	{
-		Write-Warning -Message "Unable to determine OS on computer '$PolicyStore'"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to determine OS on computer '$PolicyStore'"
 		$OSCaption = "Windows"
 	}
 
