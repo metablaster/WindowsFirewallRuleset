@@ -14,7 +14,8 @@ Find installation directory for given predefined program name
 ## SYNTAX
 
 ```powershell
-Search-Installation [-Application] <TargetProgram> [-Domain <String>] [<CommonParameters>]
+Search-Installation [-Application] <TargetProgram> [-Domain <String>] [-Interactive] [-Quiet]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +48,7 @@ Predefined program name
 Type: TargetProgram
 Parameter Sets: (All)
 Aliases: Program
-Accepted values: dotnet, CMake, SqlPath, SqlServer, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, MetaTrader, RealWorld, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
+Accepted values: MSI, dotnet, CMake, SqlPath, SqlServer, SqlManagementStudio, WindowsDefender, NuGet, NETFramework, vcpkg, SysInternals, WindowsKits, WebPlatform, XTU, Chocolatey, ArenaChess, GoogleDrive, RivaTuner, Incredibuild, ColorMania, MetaTrader, RealWorld, AzureDataStudio, qBittorrent, OpenTTD, EveOnline, DemiseOfNations, CounterStrikeGO, PinballArcade, JavaUpdate, JavaRuntime, AdobeARM, AdobeReader, AdobeAcrobat, LoLGame, FileZilla, PathOfExile, HWMonitor, CPUZ, MSIAfterburner, GPG, OBSStudio, PasswordSafe, Greenshot, DnsCrypt, OpenSSH, PowerShellCore64, PowerShell64, PowerShell86, OneDrive, HelpViewer, VSCode, MicrosoftOffice, TeamViewer, EdgeChromium, Chrome, Firefox, Yandex, Tor, uTorrent, Thuderbird, Steam, Nvidia64, Nvidia86, GeForceExperience, WarThunder, PokerStars, VisualStudio, VisualStudioInstaller, MSYS2, Git, GitHubDesktop, EpicGames, UnrealEngine, BingWallpaper
 
 Required: True
 Position: 1
@@ -68,6 +69,41 @@ Aliases: ComputerName, CN
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Interactive
+
+If requested program installation directory is not found, Search-Installation will ask
+user to specify program installation location
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Quiet
+
+If specified, it suppresses warning, error or informationall messages if default program
+installation directory path does not exist or if it's of an invalid syntax needed for firewall.
+Same applies for program path (if found) specified by -Application parameter.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -14,7 +14,7 @@ Check if executable file exists and is trusted.
 ## SYNTAX
 
 ```powershell
-Test-ExecutableFile [-LiteralPath] <String> [-Force] [<CommonParameters>]
+Test-ExecutableFile [-LiteralPath] <String> [-Quiet] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -90,6 +90,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Quiet
+
+If specified, no information, warning or error message is shown, only true or false is returned
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 
 If specified, lack of digital signature or signature mismatch produces a warning
@@ -122,7 +138,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: We should attempt to fix the path if invalid here, ex.
-Get-Command
+Get-Command (-Repair parameter)
 TODO: We should return true or false and conditionally load rule
 TODO: Verify file is executable file (and path formatted?)
 

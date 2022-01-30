@@ -22,6 +22,18 @@ Export-FirewallRule
 Exports firewall rules to a CSV or JSON file
 
 ```powershell
+Export-FirewallSetting
+```
+
+Exports firewall settings and profile setup to file
+
+```powershell
+Export-RegistryRule
+```
+
+Exports firewall rules from registry to CSV or JSON file
+
+```powershell
 Find-RulePrincipal
 ```
 
@@ -31,19 +43,25 @@ Get all firewall rules with or without LocalUser value
 Format-RuleOutput
 ```
 
-Get firewall rules from registry
+Format output of the Net-NewFirewallRule commandlet
 
 ```powershell
-Get-FirewallRule
+Get-RegistryRule
 ```
 
-Format output of the Net-NewFirewallRule commandlet
+Gets firewall rules directly from registry
 
 ```powershell
 Import-FirewallRule
 ```
 
 Imports firewall rules from a CSV or JSON file
+
+```powershell
+Import-FirewallSetting
+```
+
+Imports firewall settings and profile setup to file
 
 ```powershell
 Remove-FirewallRule

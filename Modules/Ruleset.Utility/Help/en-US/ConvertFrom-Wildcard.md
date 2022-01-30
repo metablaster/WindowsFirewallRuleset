@@ -17,7 +17,7 @@ Convert wildcard pattern to regex
 
 ```powershell
 ConvertFrom-Wildcard [-Pattern] <String> [-AsRegex] [-Options <RegexOptions>] [-TimeSpan <TimeSpan>]
- [<CommonParameters>]
+ [-SkipAnchor] [<CommonParameters>]
 ```
 
 ### Wildcard
@@ -153,6 +153,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SkipAnchor
+
+If specified, does not add ^ and $ anchors to the result pattern.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: String
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -179,4 +195,3 @@ Intended purpose of this function is to use regex to parse parameters marked as 
 [https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards?view=powershell-7.1](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards?view=powershell-7.1)
 
 [https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions?view=net-5.0](https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions?view=net-5.0)
-

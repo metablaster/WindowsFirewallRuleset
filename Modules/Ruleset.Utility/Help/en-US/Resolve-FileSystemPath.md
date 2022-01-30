@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Resolve wildcard pattern of a directory or file location
+Resolve wildcard pattern and\or relative location of a directory or file location
 
 ## SYNTAX
 

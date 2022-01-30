@@ -128,7 +128,8 @@ Accept wildcard characters: False
 
 ### -Firewall
 
-Ensures path is valid for firewall rule
+Ensures path is valid for firewall rule.
+When specified, for path to be reported as valid it must be compatible for firewall
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -144,7 +145,8 @@ Accept wildcard characters: False
 
 ### -UserProfile
 
-Checks if the path leads to user profile
+Checks if the path leads to user profile.
+When specified, for path to be reported as valid it must lead to user profile.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -160,7 +162,7 @@ Accept wildcard characters: False
 
 ### -Strict
 
-If specified, this function produces errors instead of warnings.
+If specified, this function produces errors instead of warnings
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -176,7 +178,7 @@ Accept wildcard characters: False
 
 ### -Quiet
 
-If specified, does not write any warnings or errors, only true or false is returned.
+If specified, no information, warning or error message is shown, only true or false is returned
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

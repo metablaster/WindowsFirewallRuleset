@@ -103,45 +103,57 @@ function Confirm-Installation
 
 		if ($Count -gt 1)
 		{
-			# TODO: Duplicate of global todo, need to prompt to handle all cases or choose one,
-			# TODO: Prompts should be inserted into table, ex. abort, all
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Found multiple candidate installation directories for $Application"
-
-			# Sort the table by ID column in ascending order
-			# NOTE: not needed if table is not modified
-			$InstallTable.DefaultView.Sort = "ID asc"
-			$InstallTable = $InstallTable.DefaultView.ToTable()
-
-			# Print out all candidate rows
-			Show-Table "Input '0' to abort this operation"
-
-			# Prompt user to chose one
-			[int32] $Choice = -1
-			while ($Choice -lt 0 -or $Choice -gt $Count)
+			if ($Interactive)
 			{
+				# TODO: Duplicate of global todo, need to prompt to handle all cases or choose one,
+				# TODO: Prompts should be inserted into table, ex. abort, all
 				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Input the ID number to choose which one is correct"
-				$UserInput = Read-Host
+					-MessageData "INFO: Found multiple candidate installation directories for $Application"
 
-				if ($UserInput -notmatch '^-?\d+$')
+				# Sort the table by ID column in ascending order
+				# NOTE: not needed if table is not modified
+				$InstallTable.DefaultView.Sort = "ID asc"
+				$InstallTable = $InstallTable.DefaultView.ToTable()
+
+				# Print out all candidate rows
+				Show-Table "Input '0' to abort this operation"
+
+				# Prompt user to chose one
+				[int32] $Choice = -1
+				while ($Choice -lt 0 -or $Choice -gt $Count)
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Digits only please!"
-					continue
+					Write-Information -Tags $MyInvocation.InvocationName `
+						-MessageData "INFO: Input the ID number to choose which one is correct"
+					$UserInput = Read-Host
+
+					if ($UserInput -notmatch '^-?\d+$')
+					{
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Digits only please!"
+						continue
+					}
+
+					$Choice = $UserInput
 				}
 
-				$Choice = $UserInput
+				if ($Choice -eq 0)
+				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] User input is: $Choice, canceling operation"
+
+					# User doesn't know the path, skip correction message
+					return $false
+				}
+
+				$InstallLocation = $InstallTable.Rows[$Choice - 1].InstallLocation
 			}
-
-			if ($Choice -eq 0)
+			else
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] User input is: $Choice, canceling operation"
+				if (!$Quiet)
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Found multiple candidate installation directories for $Application, ignoring"
+				}
 
-				# User doesn't know the path, skip correction message
 				return $false
 			}
-
-			$InstallLocation = $InstallTable.Rows[$Choice - 1].InstallLocation
 		}
 		else
 		{

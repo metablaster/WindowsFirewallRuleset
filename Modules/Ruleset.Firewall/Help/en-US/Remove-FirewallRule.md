@@ -20,9 +20,10 @@ Remove-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>
 
 ## DESCRIPTION
 
-Removes firewall rules according to a with Export-FirewallRule generated list in a CSV or JSON file.
+Removes firewall rules according to Export-FirewallRule or Export-RegistryRule generated list in a
+CSV or JSON file.
 CSV files have to be separated with semicolons.
-Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.
+Only the field Name is used (or if Name is missing, DisplayName is used), all other fields can be omitted.
 
 ## EXAMPLES
 
@@ -46,7 +47,7 @@ Removes all firewall rules according to the list in the JSON file WmiRules.json.
 
 ### -Domain
 
-Policy store from which remove rules, default is local GPO.
+Computer name from which remove rules, default is local GPO.
 
 ```yaml
 Type: System.String
@@ -62,7 +63,8 @@ Accept wildcard characters: False
 
 ### -Path
 
-Folder in which file is located
+Folder in which file is located.
+Wildcard characters are supported.
 
 ```yaml
 Type: System.IO.DirectoryInfo
@@ -177,6 +179,11 @@ December 2020:
 Rename parameters according to standard name convention
 2.
 Support resolving path wildcard pattern
+January 2022:
+1.
+Added time measurement code
+2.
+Added progress bar
 TODO: implement removing rules not according to file
 
 ## RELATED LINKS

@@ -14,7 +14,7 @@ Get store apps installed system wide
 ## SYNTAX
 
 ```powershell
-Get-SystemApps [-User] <String> [[-Domain] <String>] [<CommonParameters>]
+Get-SystemApps [[-Name] <String>] [-User] <String> [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,6 +37,24 @@ Get-SystemApps "Administrator"
 
 ## PARAMETERS
 
+### -Name
+
+Specifies the name of a particular package.
+If specified, function returns results for this package only.
+Wildcards are permitted.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
 ### -User
 
 User name in form of:
@@ -52,7 +70,7 @@ Parameter Sets: (All)
 Aliases: UserName
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -68,7 +86,7 @@ Parameter Sets: (All)
 Aliases: ComputerName, CN
 
 Required: False
-Position: 2
+Position: 3
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False

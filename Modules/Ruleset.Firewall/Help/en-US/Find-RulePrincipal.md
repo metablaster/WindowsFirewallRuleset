@@ -9,34 +9,150 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get all firewall rules with or without LocalUser value
+Get all firewall rules without or with specified LocalUser value
 
 ## SYNTAX
 
+### None (Default)
+
 ```powershell
-Find-RulePrincipal [-Empty] [<CommonParameters>]
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-Direction <String>] [-Append]
+ [<CommonParameters>]
+```
+
+### Group
+
+```powershell
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-User <String>] -Group <String>
+ [-Direction <String>] [-Append] [<CommonParameters>]
+```
+
+### User
+
+```powershell
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] -User <String> [-Direction <String>] [-Append]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Get all rules which are either missing or not missing LocalUser value
-Rules which are missing LocalUser are considered weak and need to be updated
-This operation is slow, intended for debugging.
+Get all rules which are either missing missing LocalUser value or rules which match specified
+LocalUser value, and save the result into a JSON file.
+Intended purpose of this function is to find rules without LocalUser value set to be able
+to quickly sport incomplete rules and assign LocalUser value for security reasons.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Find-RulePrincipal -Empty
+Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
+```
+
+### EXAMPLE 2
+
+```powershell
+Find-RulePrincipal -Path $Exports -FileName "NoPrincipalRules"
 ```
 
 ## PARAMETERS
 
-### -Empty
+### -Path
 
-If specified, returns rules with no local user value
-Otherwise only rules with local user are returned
+Path into which to save file.
+Wildcard characters are supported.
+
+```yaml
+Type: System.IO.DirectoryInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -FileName
+
+Output file name, which is json file into which result is saved
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: PrincipalRules
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -User
+
+User for which to obtain rules
+
+```yaml
+Type: System.String
+Parameter Sets: Group
+Aliases: UserName
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: System.String
+Parameter Sets: User
+Aliases: UserName
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Group
+
+Group for which to obtain rules
+
+```yaml
+Type: System.String
+Parameter Sets: Group
+Aliases: UserGroup
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Direction
+
+Firewall rule direction, default is '*' both directions
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Append
+
+If specified, result is appended to json file instead of replacing file contents
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -60,10 +176,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### TODO: Describe outputs and OutputType
+### [System.Void]
 
 ## NOTES
 
-TODO: This needs improvement to export matching rules to JSON
+TODO: Should be able to query rules for multiple users or groups
 
 ## RELATED LINKS

@@ -149,7 +149,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, this function does nothing, ignores all other parameters and returns true</maml:para>
+            <maml:para>If specified, only module scope last context is set and the function returns true</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -295,7 +295,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:description>
-          <maml:para>If specified, this function does nothing, ignores all other parameters and returns true</maml:para>
+          <maml:para>If specified, only module scope last context is set and the function returns true</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -981,6 +981,17 @@ False</dev:code>
           </dev:type>
           <dev:defaultValue>[regex]::InfiniteMatchTimeout</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SkipAnchor</maml:name>
+          <maml:description>
+            <maml:para>If specified, does not add ^ and $ anchors to the result pattern.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>ConvertFrom-Wildcard</maml:name>
@@ -1105,6 +1116,18 @@ False</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[regex]::InfiniteMatchTimeout</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SkipAnchor</maml:name>
+        <maml:description>
+          <maml:para>If specified, does not add ^ and $ anchors to the result pattern.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -2050,7 +2073,7 @@ binary</dev:code>
       <command:verb>Resolve</command:verb>
       <command:noun>FileSystemPath</command:noun>
       <maml:description>
-        <maml:para>Resolve wildcard pattern of a directory or file location</maml:para>
+        <maml:para>Resolve wildcard pattern and\or relative location of a directory or file location</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.11.0
-Help Version: 0.11.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
+Help Version: 0.12.0
 Locale: en-US
 ---
 
@@ -52,7 +52,7 @@ Creates a DataTable from an object
 
 ### [Resolve-FileSystemPath](Resolve-FileSystemPath.md)
 
-Resolve wildcard pattern of a directory or file location
+Resolve wildcard pattern and\or relative location of a directory or file location
 
 ### [Select-EnvironmentVariable](Select-EnvironmentVariable.md)
 

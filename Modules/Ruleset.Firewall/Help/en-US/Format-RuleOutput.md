@@ -44,6 +44,12 @@ very fast, this function helps to output only relevant, formatted and colored ou
 Net-NewFirewallRule ... | Format-RuleOutput
 ```
 
+### EXAMPLE 2
+
+```powershell
+Net-NewFirewallRule ... | Format-RuleOutput -Import
+```
+
 ## PARAMETERS
 
 ### -Rule

@@ -238,7 +238,7 @@ Accept wildcard characters: False
 
 ### -Force
 
-If specified, this function does nothing, ignores all other parameters and returns true
+If specified, only module scope last context is set and the function returns true
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

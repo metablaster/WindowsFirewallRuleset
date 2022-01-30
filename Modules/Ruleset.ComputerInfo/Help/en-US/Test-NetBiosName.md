@@ -130,7 +130,7 @@ Accept wildcard characters: False
 ### -Force
 
 If specified, domain name isn't checked against reserved words, thus the length of domain
-name isn't check either since reserved words may exceed the limit.
+name isn't checked either since reserved words may exceed the limit.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

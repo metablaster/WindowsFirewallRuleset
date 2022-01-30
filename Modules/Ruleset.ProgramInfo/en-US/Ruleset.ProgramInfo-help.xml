@@ -16,11 +16,12 @@
       <command:syntaxItem>
         <maml:name>Confirm-Installation</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>Program</maml:name>
+          <maml:name>Application</maml:name>
           <maml:description>
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -39,8 +40,10 @@
             <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ColorMania</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MetaTrader</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AzureDataStudio</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
@@ -113,11 +116,33 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Interactive</maml:name>
+          <maml:description>
+            <maml:para>If requested program installation directory is not found, Confirm-Installation will ask user to specify program installation location.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, it suppresses warning, error or informationall messages if user specified or default program installation directory path does not exist or if it's of an invalid syntax needed for firewall.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>Program</maml:name>
+        <maml:name>Application</maml:name>
         <maml:description>
           <maml:para>Predefined program name for which to search</maml:para>
         </maml:description>
@@ -139,6 +164,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Interactive</maml:name>
+        <maml:description>
+          <maml:para>If requested program installation directory is not found, Confirm-Installation will ask user to specify program installation location.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, it suppresses warning, error or informationall messages if user specified or default program installation directory path does not exist or if it's of an invalid syntax needed for firewall.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -476,6 +525,14 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1201,7 +1258,19 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SystemApps</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -1217,7 +1286,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1232,7 +1301,19 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -1248,7 +1329,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1431,7 +1512,19 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-UserApps</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -1447,7 +1540,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1462,7 +1555,19 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -1478,7 +1583,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1968,6 +2073,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -1986,8 +2092,10 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ColorMania</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MetaTrader</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AzureDataStudio</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
@@ -2060,6 +2168,28 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Interactive</maml:name>
+          <maml:description>
+            <maml:para>If requested program installation directory is not found, Search-Installation will ask user to specify program installation location</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, it suppresses warning, error or informationall messages if default program installation directory path does not exist or if it's of an invalid syntax needed for firewall. Same applies for program path (if found) specified by -Application parameter.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -2086,6 +2216,30 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Interactive</maml:name>
+        <maml:description>
+          <maml:para>If requested program installation directory is not found, Search-Installation will ask user to specify program installation location</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, it suppresses warning, error or informationall messages if default program installation directory path does not exist or if it's of an invalid syntax needed for firewall. Same applies for program path (if found) specified by -Application parameter.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -2164,6 +2318,17 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
             <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test.</maml:para>
@@ -2188,6 +2353,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
@@ -2224,7 +2401,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: We should attempt to fix the path if invalid here, ex. Get-Command TODO: We should return true or false and conditionally load rule TODO: Verify file is executable file (and path formatted?)</maml:para>
+        <maml:para>TODO: We should attempt to fix the path if invalid here, ex. Get-Command (-Repair parameter) TODO: We should return true or false and conditionally load rule TODO: Verify file is executable file (and path formatted?)</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2314,7 +2491,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Firewall</maml:name>
           <maml:description>
-            <maml:para>Ensures path is valid for firewall rule</maml:para>
+            <maml:para>Ensures path is valid for firewall rule. When specified, for path to be reported as valid it must be compatible for firewall</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2325,7 +2502,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UserProfile</maml:name>
           <maml:description>
-            <maml:para>Checks if the path leads to user profile</maml:para>
+            <maml:para>Checks if the path leads to user profile. When specified, for path to be reported as valid it must lead to user profile.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2336,7 +2513,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Strict</maml:name>
           <maml:description>
-            <maml:para>If specified, this function produces errors instead of warnings.</maml:para>
+            <maml:para>If specified, this function produces errors instead of warnings</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2374,7 +2551,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Firewall</maml:name>
           <maml:description>
-            <maml:para>Ensures path is valid for firewall rule</maml:para>
+            <maml:para>Ensures path is valid for firewall rule. When specified, for path to be reported as valid it must be compatible for firewall</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2385,7 +2562,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UserProfile</maml:name>
           <maml:description>
-            <maml:para>Checks if the path leads to user profile</maml:para>
+            <maml:para>Checks if the path leads to user profile. When specified, for path to be reported as valid it must lead to user profile.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2396,7 +2573,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>If specified, does not write any warnings or errors, only true or false is returned.</maml:para>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2434,7 +2611,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Firewall</maml:name>
         <maml:description>
-          <maml:para>Ensures path is valid for firewall rule</maml:para>
+          <maml:para>Ensures path is valid for firewall rule. When specified, for path to be reported as valid it must be compatible for firewall</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2446,7 +2623,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>UserProfile</maml:name>
         <maml:description>
-          <maml:para>Checks if the path leads to user profile</maml:para>
+          <maml:para>Checks if the path leads to user profile. When specified, for path to be reported as valid it must lead to user profile.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2458,7 +2635,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Strict</maml:name>
         <maml:description>
-          <maml:para>If specified, this function produces errors instead of warnings.</maml:para>
+          <maml:para>If specified, this function produces errors instead of warnings</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2470,7 +2647,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
         <maml:description>
-          <maml:para>If specified, does not write any warnings or errors, only true or false is returned.</maml:para>
+          <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>

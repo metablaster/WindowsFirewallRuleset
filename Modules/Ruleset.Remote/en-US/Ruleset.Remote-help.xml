@@ -1754,7 +1754,7 @@ PS&gt; Disable-WinRMServer</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error</maml:para>
+        <maml:para>HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired TODO: Restoring old setup not implemented</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

@@ -141,3 +141,7 @@ TODO: Need better descriptive parameter name for -Authority switch
 [https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations](https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations)
 
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest)
+
+[https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability)
+
+[https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability)

@@ -39,7 +39,7 @@ Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM
 
 ### -User
 
-Array of user names
+One or more user names
 
 ```yaml
 Type: System.String[]

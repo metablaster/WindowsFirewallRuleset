@@ -61,7 +61,7 @@ param (
 
 if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip code analysis operation" -Force:$Force)
 {
-	Write-Information -Tags "Test" -MessageData "INFO: Starting code analysis..."
+	Write-Information -Tags "Test" -MessageData "INFO: Analysing code..."
 	Invoke-ScriptAnalyzer -Path $ProjectRoot -Recurse -Settings $ProjectRoot\Config\PSScriptAnalyzerSettings.psd1 |
 	Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath
 }

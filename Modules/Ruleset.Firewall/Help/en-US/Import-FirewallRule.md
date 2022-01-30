@@ -14,14 +14,15 @@ Imports firewall rules from a CSV or JSON file
 ## SYNTAX
 
 ```powershell
-Import-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [<CommonParameters>]
+Import-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-Overwrite]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Imports firewall rules generated with Export-FirewallRule, CSV or JSON file.
+Imports firewall rules exported with Export-FirewallRule, CSV or JSON file.
 CSV files have to be separated with semicolons.
-Existing rules with same name will be overwritten.
+Existing rules with same name will not be overwritten by default.
 
 ## EXAMPLES
 
@@ -46,7 +47,7 @@ Imports all firewall rules from the JSON file WmiRules
 
 ### -Domain
 
-Policy store into which to import rules, default is local GPO.
+Computer name onto which to import rules, default is local GPO.
 
 ```yaml
 Type: System.String
@@ -62,7 +63,8 @@ Accept wildcard characters: False
 
 ### -Path
 
-Path to directory where exported rules file is located
+Path to directory where the exported rules file is located.
+Wildcard characters are supported.
 
 ```yaml
 Type: System.IO.DirectoryInfo
@@ -78,7 +80,7 @@ Accept wildcard characters: True
 
 ### -FileName
 
-Input file
+Export file file containing firewall rules
 
 ```yaml
 Type: System.String
@@ -95,6 +97,22 @@ Accept wildcard characters: False
 ### -JSON
 
 Input from JSON instead of CSV format
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Overwrite
+
+Overwrite existing rules with same name as rules being imported
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

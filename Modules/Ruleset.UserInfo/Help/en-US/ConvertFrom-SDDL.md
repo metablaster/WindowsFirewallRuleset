@@ -14,7 +14,7 @@ Convert SDDL string to Principal
 ## SYNTAX
 
 ```powershell
-ConvertFrom-SDDL [-SDDL] <String[]> [<CommonParameters>]
+ConvertFrom-SDDL [-SDDL] <String[]> [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,6 +57,24 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified, does not perform name checking of converted string.
+This is useful for example to force spliting name like:
+"NT APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections from the Internet"
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

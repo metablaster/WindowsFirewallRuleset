@@ -15,10 +15,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-FirewallRule</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN, PolicyStore">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
+            <maml:para>Computer name from which to export rules, default is local GPO.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -30,7 +30,7 @@
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Path into which to save file</maml:para>
+            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -155,7 +155,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Append</maml:name>
           <maml:description>
-            <maml:para>Append exported rules to existing file instead of replacing</maml:para>
+            <maml:para>Append exported rules to existing file. By default file of same name is replaced with new content</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -166,10 +166,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN, PolicyStore">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Policy store from which to export rules, default is local GPO.</maml:para>
+          <maml:para>Computer name from which to export rules, default is local GPO.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -181,7 +181,7 @@
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Path into which to save file</maml:para>
+          <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -313,7 +313,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Append</maml:name>
         <maml:description>
-          <maml:para>Append exported rules to existing file instead of replacing</maml:para>
+          <maml:para>Append exported rules to existing file. By default file of same name is replaced with new content</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -346,11 +346,8 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern TODO: export to excel TODO: Following rulesets failed to export with "WARNING: Input is missing, result is empty string"</maml:para>
-        <maml:para>Outbound:</maml:para>
-        <maml:para>Broadcast Network Discovery File and Printer Sharing GitHub Development - Microsoft Visual Studio Software - Nvidia [Server - SQL] -&gt; SQL Server Management Studio [Microsoft - Office Windows System</maml:para>
-        <maml:para>Inbound:</maml:para>
-        <maml:para>Broadcast Network Discovery File and Printer Sharing Microsoft Office</maml:para>
+        <maml:para>Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern January 2022: 1. Implemented appending to json</maml:para>
+        <maml:para>TODO: Export to excel</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -389,23 +386,292 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Find-RulePrincipal</command:name>
-      <command:verb>Find</command:verb>
-      <command:noun>RulePrincipal</command:noun>
+      <command:name>Export-FirewallSetting</command:name>
+      <command:verb>Export</command:verb>
+      <command:noun>FirewallSetting</command:noun>
       <maml:description>
-        <maml:para>Get all firewall rules with or without LocalUser value</maml:para>
+        <maml:para>Export firewall settings and profile setup to file</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Get all rules which are either missing or not missing LocalUser value Rules which are missing LocalUser are considered weak and need to be updated This operation is slow, intended for debugging.</maml:para>
+      <maml:para>Export-FirewallSetting exports all firewall settings to file excluding firewall rules</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Find-RulePrincipal</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Empty</maml:name>
+        <maml:name>Export-FirewallSetting</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>If specified, returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
+            <maml:para>Computer name from which to export settings, default is local GPO.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:description>
+            <maml:para>Output file name, json format</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallSettings.json</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name from which to export settings, default is local GPO.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:description>
+          <maml:para>Output file name, json format</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallSettings.json</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Export-FirewallSetting</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Export-FirewallSetting does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Export-FirewallSetting</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallSetting.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallSetting.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Export-RegistryRule</command:name>
+      <command:verb>Export</command:verb>
+      <command:noun>RegistryRule</command:noun>
+      <maml:description>
+        <maml:para>Exports firewall rules to a CSV or JSON file from registry</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Export-RegistryRule exports firewall rules to a CSV or JSON file directly from registry. Only local GPO rules are exported by default. CSV files are semicolon separated. All rules are exported by default, you can filter with parameter -Name, -Inbound, -Outbound, -Enabled, -Disabled, -Allow and -Block. If the export file already exists it's content will be replaced by default.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Export-RegistryRule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name from which to export rules, default is local GPO.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:description>
+            <maml:para>Output file, default is CSV format</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayName</maml:name>
+          <maml:description>
+            <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayGroup</maml:name>
+          <maml:description>
+            <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>JSON</maml:name>
+          <maml:description>
+            <maml:para>Output in JSON instead of CSV format</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Inbound</maml:name>
+          <maml:description>
+            <maml:para>Export inbound rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Outbound</maml:name>
+          <maml:description>
+            <maml:para>Export outbound rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Enabled</maml:name>
+          <maml:description>
+            <maml:para>Export enabled rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Disabled</maml:name>
+          <maml:description>
+            <maml:para>Export disabled rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Allow</maml:name>
+          <maml:description>
+            <maml:para>Export allowing rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Block</maml:name>
+          <maml:description>
+            <maml:para>Export blocking rules</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Append</maml:name>
+          <maml:description>
+            <maml:para>Append exported rules to existing file. By default file of same name is replaced with new content</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -416,10 +682,437 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Empty</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>If specified, returns rules with no local user value Otherwise only rules with local user are returned</maml:para>
+          <maml:para>Computer name from which to export rules, default is local GPO.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:description>
+          <maml:para>Output file, default is CSV format</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallRules</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisplayName</maml:name>
+        <maml:description>
+          <maml:para>Display name of the rules to be processed. Wildcard character * is allowed.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisplayGroup</maml:name>
+        <maml:description>
+          <maml:para>Display group of the rules to be processed. Wildcard character * is allowed.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>JSON</maml:name>
+        <maml:description>
+          <maml:para>Output in JSON instead of CSV format</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Inbound</maml:name>
+        <maml:description>
+          <maml:para>Export inbound rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Outbound</maml:name>
+        <maml:description>
+          <maml:para>Export outbound rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Enabled</maml:name>
+        <maml:description>
+          <maml:para>Export enabled rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Disabled</maml:name>
+        <maml:description>
+          <maml:para>Export disabled rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Allow</maml:name>
+        <maml:description>
+          <maml:para>Export allowing rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Block</maml:name>
+        <maml:description>
+          <maml:para>Export blocking rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Append</maml:name>
+        <maml:description>
+          <maml:para>Append exported rules to existing file. By default file of same name is replaced with new content</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Export-RegistryRule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Export-RegistryRule does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Export to excel Excel is not friendly to CSV files</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Export-RegistryRule</dev:code>
+        <dev:remarks>
+          <maml:para>Exports all firewall rules to the CSV file FirewallRules.csv in the current directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Export-RegistryRule -Inbound -Allow</dev:code>
+        <dev:remarks>
+          <maml:para>Exports all inbound and allowing firewall rules to the CSV file FirewallRules.csv in the current directory.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Export-RegistryRule -DisplayGroup ICMP* ICMPRules.json -JSON</dev:code>
+        <dev:remarks>
+          <maml:para>Exports all ICMP firewall rules to the JSON file ICMPRules.json.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/MScholtes/Firewall-Manager</maml:linkText>
+        <maml:uri>https://github.com/MScholtes/Firewall-Manager</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Find-RulePrincipal</command:name>
+      <command:verb>Find</command:verb>
+      <command:noun>RulePrincipal</command:noun>
+      <maml:description>
+        <maml:para>Get all firewall rules without or with specified LocalUser value</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get all rules which are either missing missing LocalUser value or rules which match specified LocalUser value, and save the result into a JSON file. Intended purpose of this function is to find rules without LocalUser value set to be able to quickly sport incomplete rules and assign LocalUser value for security reasons.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Find-RulePrincipal</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:description>
+            <maml:para>Output file name, which is json file into which result is saved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>PrincipalRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User for which to obtain rules</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
+          <maml:name>Group</maml:name>
+          <maml:description>
+            <maml:para>Group for which to obtain rules</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Direction</maml:name>
+          <maml:description>
+            <maml:para>Firewall rule direction, default is '*' both directions</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Append</maml:name>
+          <maml:description>
+            <maml:para>If specified, result is appended to json file instead of replacing file contents</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Find-RulePrincipal</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:description>
+            <maml:para>Output file name, which is json file into which result is saved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>PrincipalRules</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User for which to obtain rules</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Direction</maml:name>
+          <maml:description>
+            <maml:para>Firewall rule direction, default is '*' both directions</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Append</maml:name>
+          <maml:description>
+            <maml:para>If specified, result is appended to json file instead of replacing file contents</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:description>
+          <maml:para>Output file name, which is json file into which result is saved</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>PrincipalRules</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <maml:name>User</maml:name>
+        <maml:description>
+          <maml:para>User for which to obtain rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
+        <maml:name>Group</maml:name>
+        <maml:description>
+          <maml:para>Group for which to obtain rules</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Direction</maml:name>
+        <maml:description>
+          <maml:para>Firewall rule direction, default is '*' both directions</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Append</maml:name>
+        <maml:description>
+          <maml:para>If specified, result is appended to json file instead of replacing file contents</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -442,7 +1135,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>TODO: Describe outputs and OutputType</maml:name>
+          <maml:name>[System.Void]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -451,13 +1144,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: This needs improvement to export matching rules to JSON</maml:para>
+        <maml:para>TODO: Should be able to query rules for multiple users or groups</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Find-RulePrincipal -Empty</dev:code>
+        <dev:code>Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Find-RulePrincipal -Path $Exports -FileName "NoPrincipalRules"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -607,11 +1307,294 @@
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Net-NewFirewallRule ... | Format-RuleOutput -Import</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-RegistryRule</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>RegistryRule</command:noun>
+      <maml:description>
+        <maml:para>Gets firewall rules directly from registry</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-RegistryRule gets firewall rules by drilling registry and parsing registry values. This method to retrieve rules results is very fast export compared to conventional way.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-RegistryRule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name from which rules are to be retrieved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Local</maml:name>
+          <maml:description>
+            <maml:para>Retrive rules from persistent store (control panel firewall)</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>GroupPolicy</maml:name>
+          <maml:description>
+            <maml:para>Retrive rules from local group policy store (GPO firewall)</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayName</maml:name>
+          <maml:description>
+            <maml:para>Specifies that only matching firewall rules of the indicated display name are retrieved Wildcard characters are accepted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisplayGroup</maml:name>
+          <maml:description>
+            <maml:para>Specifies that only matching firewall rules of the indicated group association are retrieved Wildcard characters are accepted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Direction</maml:name>
+          <maml:description>
+            <maml:para>Specifies that matching firewall rules of the indicated direction are retrieved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Action</maml:name>
+          <maml:description>
+            <maml:para>Specifies that matching firewall rules of the indicated action are retrieved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Enabled</maml:name>
+          <maml:description>
+            <maml:para>Specifies that matching firewall rules of the indicated state are retrieved</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name from which rules are to be retrieved</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Local</maml:name>
+        <maml:description>
+          <maml:para>Retrive rules from persistent store (control panel firewall)</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>GroupPolicy</maml:name>
+        <maml:description>
+          <maml:para>Retrive rules from local group policy store (GPO firewall)</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisplayName</maml:name>
+        <maml:description>
+          <maml:para>Specifies that only matching firewall rules of the indicated display name are retrieved Wildcard characters are accepted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DisplayGroup</maml:name>
+        <maml:description>
+          <maml:para>Specifies that only matching firewall rules of the indicated group association are retrieved Wildcard characters are accepted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Direction</maml:name>
+        <maml:description>
+          <maml:para>Specifies that matching firewall rules of the indicated direction are retrieved</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Action</maml:name>
+        <maml:description>
+          <maml:para>Specifies that matching firewall rules of the indicated action are retrieved</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Enabled</maml:name>
+        <maml:description>
+          <maml:para>Specifies that matching firewall rules of the indicated state are retrieved</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-RegistryRule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[PSCustomObject]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Getting rules from persistent store (-Local switch) needs testing. TODO: Design, Parameters -Local and -GroupPolicy must be converted to -PolicyStore? what about -Domain then? Not implementing more parameters because only those here are always present in registry in all rules. ParameterSetName = "NotAllowingEmptyString" is there because $DisplayName if not specified casts to empty string due to [string] declaration, which is the same thing as specifying -DisplayName "", we deny both with dummy parameter set name and setting default parameter set name to something else.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-RegistryRule -GroupPolicy</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-RegistryRule -Action Block -Enabled False</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-RegistryRule -Direction Outbound -DisplayName "Edge-Chromium HTTPS"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://stackoverflow.com/questions/53246271/get-netfirewallruleget-netfirewallportfilter-are-too-slow</maml:linkText>
+        <maml:uri>https://stackoverflow.com/questions/53246271/get-netfirewallruleget-netfirewallportfilter-are-too-slow</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -625,7 +1608,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Imports firewall rules generated with Export-FirewallRule, CSV or JSON file. CSV files have to be separated with semicolons. Existing rules with same name will be overwritten.</maml:para>
+      <maml:para>Imports firewall rules exported with Export-FirewallRule, CSV or JSON file. CSV files have to be separated with semicolons. Existing rules with same name will not be overwritten by default.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -633,7 +1616,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
+            <maml:para>Computer name onto which to import rules, default is local GPO.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -645,7 +1628,7 @@
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Path to directory where exported rules file is located</maml:para>
+            <maml:para>Path to directory where the exported rules file is located. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -657,7 +1640,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:description>
-            <maml:para>Input file</maml:para>
+            <maml:para>Export file file containing firewall rules</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -677,13 +1660,24 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Overwrite</maml:name>
+          <maml:description>
+            <maml:para>Overwrite existing rules with same name as rules being imported</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Policy store into which to import rules, default is local GPO.</maml:para>
+          <maml:para>Computer name onto which to import rules, default is local GPO.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -695,7 +1689,7 @@
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Path to directory where exported rules file is located</maml:para>
+          <maml:para>Path to directory where the exported rules file is located. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -707,7 +1701,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:description>
-          <maml:para>Input file</maml:para>
+          <maml:para>Export file file containing firewall rules</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -720,6 +1714,18 @@
         <maml:name>JSON</maml:name>
         <maml:description>
           <maml:para>Input from JSON instead of CSV format</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Overwrite</maml:name>
+        <maml:description>
+          <maml:para>Overwrite existing rules with same name as rules being imported</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -784,6 +1790,138 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Import-FirewallSetting</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>FirewallSetting</command:noun>
+      <maml:description>
+        <maml:para>Import firewall settings and profile setup to file</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Import-FirewallSetting imports all firewall settings from file previously exported by Export-FirewallSetting</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-FirewallSetting</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name onto which to import settings, default is local GPO.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path to directory where the exported settings file is located. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:description>
+            <maml:para>Input file</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>FirewallSettings</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name onto which to import settings, default is local GPO.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Path to directory where the exported settings file is located. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:description>
+          <maml:para>Input file</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>FirewallSettings</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Import-FirewallSetting</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Import-FirewallSetting does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Import-FirewallSetting</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Remove-FirewallRule</command:name>
       <command:verb>Remove</command:verb>
       <command:noun>FirewallRule</command:noun>
@@ -792,7 +1930,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Removes firewall rules according to a with Export-FirewallRule generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name or - if Name is missing - DisplayName is used, all other fields can be omitted.</maml:para>
+      <maml:para>Removes firewall rules according to Export-FirewallRule or Export-RegistryRule generated list in a CSV or JSON file. CSV files have to be separated with semicolons. Only the field Name is used (or if Name is missing, DisplayName is used), all other fields can be omitted.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -800,7 +1938,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
+            <maml:para>Computer name from which remove rules, default is local GPO.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -812,7 +1950,7 @@
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Folder in which file is located</maml:para>
+            <maml:para>Folder in which file is located. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -872,7 +2010,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Policy store from which remove rules, default is local GPO.</maml:para>
+          <maml:para>Computer name from which remove rules, default is local GPO.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -884,7 +2022,7 @@
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Folder in which file is located</maml:para>
+          <maml:para>Folder in which file is located. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -965,7 +2103,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern TODO: implement removing rules not according to file</maml:para>
+        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern January 2022: 1. Added time measurement code 2. Added progress bar TODO: implement removing rules not according to file</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

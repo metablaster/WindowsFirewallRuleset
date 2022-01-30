@@ -27,6 +27,17 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, does not perform name checking of converted string. This is useful for example to force spliting name like: "NT APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections from the Internet"</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -41,6 +52,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, does not perform name checking of converted string. This is useful for example to force spliting name like: "NT APPLICATION PACKAGE AUTHORITY\Your Internet connection, including incoming connections from the Internet"</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -594,7 +617,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Array of user names</maml:para>
+            <maml:para>One or more user names</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -632,7 +655,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
-          <maml:para>Array of user names</maml:para>
+          <maml:para>One or more user names</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -790,7 +813,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="UserGroup">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
           <maml:name>Group</maml:name>
           <maml:description>
             <maml:para>One or more user groups for which to obtain SDDL string</maml:para>
@@ -839,10 +862,10 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-SDDL</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Single file system or registry location for which to obtain SDDL</maml:para>
+            <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -900,7 +923,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="UserGroup">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
         <maml:name>Group</maml:name>
         <maml:description>
           <maml:para>One or more user groups for which to obtain SDDL string</maml:para>
@@ -912,10 +935,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Single file system or registry location for which to obtain SDDL</maml:para>
+          <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1285,6 +1308,17 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, does not perform name checking</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1304,6 +1338,18 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
         <maml:name>DomainName</maml:name>
         <maml:description>
           <maml:para>If specified, the result is domain name instead of user name</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, does not perform name checking</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>

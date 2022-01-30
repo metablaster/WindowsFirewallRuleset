@@ -105,12 +105,13 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: True
+Accept wildcard characters: False
 ```
 
 ### -Path
 
-Single file system or registry location for which to obtain SDDL
+Single file system or registry location for which to obtain SDDL.
+Wildcard characters are supported.
 
 ```yaml
 Type: System.String
@@ -121,7 +122,7 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -Domain

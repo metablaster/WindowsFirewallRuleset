@@ -14,7 +14,7 @@ Split principal to either user name or domain
 ## SYNTAX
 
 ```powershell
-Split-Principal [-Principal] <String[]> [-DomainName] [<CommonParameters>]
+Split-Principal [-Principal] <String[]> [-DomainName] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,6 +56,22 @@ Accept wildcard characters: False
 ### -DomainName
 
 If specified, the result is domain name instead of user name
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified, does not perform name checking
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

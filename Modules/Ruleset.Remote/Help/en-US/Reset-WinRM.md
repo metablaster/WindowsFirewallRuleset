@@ -21,8 +21,8 @@ Reset-WinRM [-WhatIf] [-Confirm] [<CommonParameters>]
 
 Reset-WinRM resets WinRM configuration to either system defaults or to previous settings
 that were exported by Export-WinRM.
-In addition PS remoting is disabled or restored and reset to PowerShell defaults, default firewall rules
-are removed and WinRM service is stopped and disabled.
+In addition PS remoting is disabled or restored and reset to PowerShell defaults,
+default firewall rules are removed and WinRM service is stopped and disabled.
 
 ## EXAMPLES
 
@@ -82,6 +82,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
+TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired
+TODO: Restoring old setup not implemented
 
 ## RELATED LINKS
 
