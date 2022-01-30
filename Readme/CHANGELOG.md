@@ -10,8 +10,9 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.12.0 (develop branch)](#v0120-develop-branch)
-  - [v0.11.0 (current release)](#v0110-current-release)
+  - [v0.13.0 (develop branch)](#v0130-develop-branch)
+  - [v0.12.0 (current release)](#v0120-current-release)
+  - [v0.11.0](#v0110)
   - [v0.10.0](#v0100)
   - [v0.9.0](#v090)
   - [v0.8.0](#v080)
@@ -23,9 +24,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.12.0 (develop branch)
+## v0.13.0 (develop branch)
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+
+## v0.12.0 (current release)
 
 - Rules
 
@@ -101,7 +104,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Revisited and updated for missing changes introduced since v0.10.0
 
-## v0.11.0 (current release)
+## v0.11.0
 
 - Rules
 
