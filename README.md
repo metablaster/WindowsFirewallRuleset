@@ -402,7 +402,7 @@ as follows:
 .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
 ```
 
-- To go step by step, to be prompted for confirmation on which rulesets to load
+- To go step by step and be prompted for confirmation on which rulesets to load
 and to attempt to resolve issues on the fly run:
 
 ```powershell
@@ -416,7 +416,7 @@ and to attempt to resolve issues on the fly run:
 ```
 
 To learn the meaning of parmaters to be able to combine them on your own see `Deploy-Firewall.ps1`
-script or run following command:
+script comment or run following command:
 
 ```powershell
 Get-Help .\Scripts\Deploy-Firewall.ps1 -Detailed

@@ -65,10 +65,12 @@ Todo's in this file are categorized into following sections:
     - Update markdown help and help content, run: `Update-HelpContent.ps1`
     - Verify links to repository are pointing to master except if develop branch is wanted,
     links should be then tested on master branch with `Test-MarkdownLinks.ps1`.
-    - There are 3 kinds of links to check:\
+    There are 3 kinds of links to check:\
     WindowsFirewallRuleset/develop\
     WindowsFirewallRuleset/blob/develop\
     WindowsFirewallRuleset/tree/develop
+    - Run module manifest test
+    - Update software and modules versions in `ProjectSettings.ps1`
     - Cleanup repository:
     - `git clean -d -x --dry-run` `git clean -d -x -f`
     - `git prune --dry-run` `git prune`
