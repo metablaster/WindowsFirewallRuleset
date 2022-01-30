@@ -58,7 +58,7 @@ None. You cannot pipe objects to Complete-Firewall.ps1
 None. Complete-Firewall.ps1 does not generate any output
 
 .NOTES
-TODO: OutputType attribute
+None.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -68,6 +68,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
+[OutputType([void])]
 param (
 	[Parameter()]
 	[switch] $Force
@@ -86,6 +87,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 #
 # TODO: it looks like private profile traffic is logged into public log and vice versa
+# Confirm this happens on VM default switch only which operates on public profile somehow
 #
 
 # NOTE: Reducing the default (4096 KB) log file size makes logs appear quicker but consumes more resources
@@ -158,8 +160,5 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 
 # Update Local Group Policy for changes to take effect
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-
-# Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Force:$Force
 
 Update-Log

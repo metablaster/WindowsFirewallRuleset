@@ -84,7 +84,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true)]
 [OutputType([void])]
 param (
 	[Parameter(Position = 0)]
@@ -133,8 +133,23 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $false
 Set-Variable -Name WarningStatus -Scope Global -Value $false
 Set-Variable -Name UpdateGPO -Scope Global -Value $false
 
+# Set -Confirm parameter
+$GrantLogsParams = @{
+	Force = $Force
+}
+$SetShortCutParams = @{
+}
+$SetScreenBufferParams = @{
+}
+if ($PSBoundParameters.ContainsKey("Confirm"))
+{
+	$SetScreenBufferParams.Confirm = $PSBoundParameters["Confirm"]
+	$GrantLogsParams.Confirm = $PSBoundParameters["Confirm"]
+	$SetShortCutParams.Confirm = $PSBoundParameters["Confirm"]
+}
+
 # Prompt to set screen buffer to recommended value
-Set-ScreenBuffer 3000
+Set-ScreenBuffer 3000 @SetScreenBufferParams
 
 # Check all rules which apply to windows services
 Build-ServiceList $ProjectRoot\Rules -Log | Test-Service | Out-Null
@@ -558,15 +573,17 @@ if (Approve-Execute @ExecuteParams)
 Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall rules is complete"
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
-# TODO: When -Force is specified it doesn't avoid confirmation prompts
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
+
+# Verify permissions to write firewall logs if needed
+& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
 
 # Set desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
-	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" -Confirm:(!$Force)
+	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
 
 # Show execution status
 if ($ErrorLogging -and $ErrorStatus)

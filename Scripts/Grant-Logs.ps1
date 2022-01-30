@@ -84,7 +84,7 @@ using namespace System.Security
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false)]
+[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true)]
 [OutputType([void])]
 param (
 	[Parameter(Position = 0)]
@@ -145,13 +145,19 @@ foreach ($File in $OldLogFiles)
 $UserControl = [AccessControl.FileSystemRights] "ReadAndExecute, WriteData, Write"
 $FullControl = [AccessControl.FileSystemRights]::FullControl
 
+if ($PSBoundParameters.ContainsKey("Confirm"))
+{
+	# NOTE: Not specifying -Force to Set-Permission because it's required only to perform recursive action
+	$PSDefaultParameterValues["Set-Permission:Confirm"] = $PSBoundParameters["Confirm"]
+}
+
 # Grant "FullControl" to firewall service for logs folder
 Write-Information -Tags $ThisScript -MessageData "INFO: Granting full control to firewall service for log directory"
 
-Set-Permission $TargetFolder -Owner "System" -Force:$Force | Out-Null
-Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected -Force:$Force | Out-Null
-Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected -Force:$Force | Out-Null
-Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected -Force:$Force | Out-Null
+Set-Permission $TargetFolder -Owner "System" | Out-Null
+Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
 
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
@@ -168,13 +174,13 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
-	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl -Force:$Force)
+	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl -Force:$Force | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
 		}
 	}
 }

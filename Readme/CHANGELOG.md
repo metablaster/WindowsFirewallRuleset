@@ -45,8 +45,9 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - Scripts
 
-  - Firewall deployment with `Deploy-Firewall.ps1` script can be fully automated by using `-Force`
-  and `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet` won't ask you any questions
+  - Firewall deployment with `Deploy-Firewall.ps1` script can be fully automated by using `-Force`,
+  `-Confirm` and `-Quiet` switches, ex. `.\Scripts\Deploy-Firewall -Force -Quiet -Confirm:$false`
+  won't ask you any questions
 
 - Modules
 
