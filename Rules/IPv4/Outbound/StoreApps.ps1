@@ -123,10 +123,19 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #
 # Block Administrators by default
 #
-$Principals = Get-GroupPrincipal "Administrators"
+$Users = Get-GroupPrincipal "Users"
+$Administrators = Get-GroupPrincipal "Administrators"
 
-foreach ($Principal in $Principals)
+foreach ($Principal in $Administrators)
 {
+	foreach ($Entry in $Users)
+	{
+		if ($Entry.User -eq $Principal.User)
+		{
+			Write-Warning -Message "[$ThisScript] $($Principal.User) is both Administrator and standard user, this will result in surplus rules for store apps"
+		}
+	}
+
 	# TODO: Somehow Admin will be able to create MS accounts when this rule is disabled,
 	# expected behavior is that default outbound should block (wwahost.exe)
 	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
@@ -147,9 +156,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 #
 # Create rules for all network apps for each standard user
 #
-
-$Principals = Get-GroupPrincipal "Users"
-foreach ($Principal in $Principals)
+foreach ($Principal in $Users)
 {
 	#
 	# Create rules for apps installed by user
@@ -177,6 +184,11 @@ foreach ($Principal in $Principals)
 				"Your home or work networks"
 				{
 					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+				"runFullTrust"
+				{
+					$RemoteAddress += "Internet4"
 					break
 				}
 			}
@@ -235,6 +247,11 @@ foreach ($Principal in $Principals)
 				"Your home or work networks"
 				{
 					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+				"runFullTrust"
+				{
+					$RemoteAddress += "Internet4"
 					break
 				}
 			}

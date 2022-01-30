@@ -49,10 +49,12 @@ The type of path to test, can be one of the following:
 3. Any - The path is either path to file or directory, this is default
 
 .PARAMETER Firewall
-Ensures path is valid for firewall rule
+Ensures path is valid for firewall rule.
+When specified, for path to be reported as valid it must be compatible for firewall
 
 .PARAMETER UserProfile
-Checks if the path leads to user profile
+Checks if the path leads to user profile.
+When specified, for path to be reported as valid it must lead to user profile.
 
 .PARAMETER Strict
 If specified, this function produces errors instead of warnings
@@ -148,7 +150,7 @@ function Test-FileSystemPath
 			}
 			else
 			{
-				Write-Warning -Message $Message
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Path '$LiteralPath'"

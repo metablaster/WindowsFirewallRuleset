@@ -39,7 +39,7 @@ Program installation directory
 
 .PARAMETER Quiet
 If specified suppresses warning, error or informationall messages if specified path does not exist
-or if it's an invalid syntax needed for firewall.
+or if it's of an invalid syntax needed for firewall
 
 .EXAMPLE
 PS> Edit-Table "%ProgramFiles(x86)%\TeamViewer"

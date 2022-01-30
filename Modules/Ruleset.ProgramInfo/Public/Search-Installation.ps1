@@ -346,6 +346,11 @@ function Search-Installation
 			Update-Table -Search "MSI Afterburner"
 			break
 		}
+		"MSI"
+		{
+			Edit-Table "%ProgramFiles(x86)%\MSI"
+			break
+		}
 		"GPG"
 		{
 			Update-Table -Search "GNU Privacy Guard"

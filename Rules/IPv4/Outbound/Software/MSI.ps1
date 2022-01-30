@@ -130,34 +130,24 @@ if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $For
 }
 
 # Test if installation exists on system
-if ((Confirm-Installation "MSIAfterburner" ([ref] $MSIAfterburnerRoot)) -or $ForceLoad)
+if ((Confirm-Installation "MSI" ([ref] $MSIRoot)) -or $ForceLoad)
 {
-	$Program = "$MSIRoot\Live Update\Live Update.exe"
+	$Program = "$MSIRoot\MSI Center\MSI.CentralServer.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "MSI live update" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Startup update" | Format-RuleOutput
-	}
+		# TODO: This is here to troubleshoot store app MSI Center which fails to connect
+		$MSIServerAccounts = $LocalSystem
+		Merge-SDDL ([ref] $MSIServerAccounts) -From $UsersGroupSDDL
 
-	$Program = "$MSIRoot\APP Manager\AppManager.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "MSI app manager" `
+		New-NetFirewallRule -DisplayName "MSI Center" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $MSIServerAccounts `
 			-InterfaceType $DefaultInterface `
-			-Description "Startup update" | Format-RuleOutput
+			-Description "MSI Center central server" | Format-RuleOutput
 	}
 }
 

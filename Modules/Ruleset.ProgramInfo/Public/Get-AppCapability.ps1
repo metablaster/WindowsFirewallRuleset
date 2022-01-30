@@ -82,6 +82,12 @@ https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declaratio
 
 .LINK
 https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest
+
+.LINK
+https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability
+
+.LINK
+https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability
 #>
 function Get-AppCapability
 {
@@ -149,7 +155,7 @@ function Get-AppCapability
 				catch
 				{
 					# NOTE: This will be the cause with Microsoft account (non local Windows account)
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Store app '$($App.Name)' is missing manifest 'Package' property"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is missing manifest 'Package' property"
 					continue
 				}
 			}
@@ -173,6 +179,9 @@ function Get-AppCapability
 
 				[string] $Name = switch ($Capability)
 				{
+					# Networking capabilities
+					# TODO: Unknown display name
+					"runFullTrust" { "runFullTrust" }
 					"internetClient" { "Your Internet connection"; break }
 					"internetClientServer" { "Your Internet connection, including incoming connections from the Internet"; break }
 					"privateNetworkClientServer" { "Your home or work networks"; break }
@@ -189,8 +198,8 @@ function Get-AppCapability
 							"videosLibrary" { "Your videos library"; break }
 							"musicLibrary" { "Your music library"; break }
 							"documentsLibrary" { "Your documents library"; break }
-							# TODO: there are multiple capabilities that could match this
-							# "" { "Your Windows credentials" }
+							# TODO: there are multiple capabilities that could match this?
+							"enterpriseAuthentication" { "Your Windows credentials" }
 							"sharedUserCertificates" { "Software and hardware certificates or a smart card"; break }
 							"removableStorage" { "Removable storage"; break }
 							"appointments" { "Your Appointments"; break }

@@ -148,7 +148,7 @@ function Resolve-Host
 				}
 				catch
 				{
-					Write-Warning -Message $_.Exception.Message
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 				}
 
 				[PSCustomObject] @{
@@ -200,7 +200,7 @@ function Resolve-Host
 				}
 				catch
 				{
-					Write-Warning -Message $_.Exception.Message
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 				}
 
 				if (!$IP)

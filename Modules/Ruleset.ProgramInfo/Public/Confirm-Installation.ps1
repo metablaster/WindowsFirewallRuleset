@@ -35,7 +35,7 @@ Test if given installation directory exists and is valid for firewall, and if no
 search system for valid path and return it trough reference parameter.
 If the installation directory can't be determined reference variable remains unchanged.
 
-.PARAMETER Program
+.PARAMETER Application
 Predefined program name for which to search
 
 .PARAMETER Directory
@@ -70,7 +70,7 @@ function Confirm-Installation
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[TargetProgram] $Program,
+		[TargetProgram] $Application,
 
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ref] $Directory,
@@ -92,10 +92,10 @@ function Confirm-Installation
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Program well known"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Application well known"
 		return $true # input path is correct
 	}
-	elseif (Search-Installation $Program -Interactive:$Interactive -Quiet:$Quiet)
+	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallLocation = "unknown install location"
@@ -106,7 +106,7 @@ function Confirm-Installation
 			# TODO: Duplicate of global todo, need to prompt to handle all cases or choose one,
 			# TODO: Prompts should be inserted into table, ex. abort, all
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Found multiple candidate installation directories for $Program"
+				-MessageData "INFO: Found multiple candidate installation directories for $Application"
 
 			# Sort the table by ID column in ascending order
 			# NOTE: not needed if table is not modified
@@ -158,7 +158,7 @@ function Confirm-Installation
 
 		$Directory.Value = $InstallLocation
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Program found"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation for $Application found"
 		return $true # installation path found
 	}
 	else

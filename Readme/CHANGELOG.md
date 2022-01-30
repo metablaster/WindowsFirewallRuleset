@@ -10,7 +10,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.12. (develop branch)](#v012-develop-branch)
+  - [v0.12.0 (develop branch)](#v0120-develop-branch)
   - [v0.11.0 (current release)](#v0110-current-release)
   - [v0.10.0](#v0100)
   - [v0.9.0](#v090)
@@ -39,6 +39,8 @@ If you would like to see fresh changes done since last release you can do so on 
     - Windows System
     - Simple DNS Crypt
     - KMS Connection broker (SppExtComObj.exe)
+    - MSI
+    - Store apps
 
   - Rule scripts, consistent rule formatting for all scripts
   - Rule scripts now support Interactive and Quiet switches
@@ -62,6 +64,10 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Import-FirewallRule`
     - `Remove-FirewallRule`
     - `Find-RulePrincipal`
+    - `Get-AppCapability`
+    - `Get-SystemApps`
+    - `Get-UserApps`
+    - `ConvertFrom-WildCard`
 
   - Improved or updated scripts:
 
@@ -87,6 +93,8 @@ If you would like to see fresh changes done since last release you can do so on 
     - `VSCode Json`
     - `Fix JSON`
     - `Sort JSON objects`
+
+  - Warnings messages now also include function name which is generating the warning
 
 - Documentation
 

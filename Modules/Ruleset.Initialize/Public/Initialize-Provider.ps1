@@ -108,7 +108,7 @@ function Initialize-Provider
 				return $false
 			}
 
-			Write-Warning -Message $Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 			return $true
 		}
 
@@ -230,7 +230,7 @@ function Initialize-Provider
 				return $false
 			}
 
-			Write-Warning -Message $Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 			return $true
 		}
 
@@ -311,7 +311,7 @@ function Initialize-Provider
 					return $false
 				}
 
-				Write-Warning -Message $Message
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 				return $true
 			}
 		}

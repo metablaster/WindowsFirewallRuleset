@@ -33,6 +33,11 @@ Get store apps for specific user
 .DESCRIPTION
 Search installed store apps in userprofile for specific user account
 
+.PARAMETER Name
+Specifies the name of a particular package.
+If specified, function returns results for this package only.
+Wildcards are permitted.
+
 .PARAMETER User
 User name in form of:
 
@@ -77,6 +82,10 @@ function Get-UserApps
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
+		[Parameter()]
+		[SupportsWildcards()]
+		[string] $Name = "*",
+
 		[Parameter(Mandatory = $true)]
 		[Alias("UserName")]
 		[string] $User,
@@ -93,7 +102,7 @@ function Get-UserApps
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-		Get-AppxPackage -User $User -PackageTypeFilter Bundle | Where-Object {
+		Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle | Where-Object {
 			# NOTE: This path will be missing for default apps on Windows server
 			# It may also be missing in fresh installed OS before connecting to internet
 			# TODO: See if "$_.Status" property can be used to determine if app is valid

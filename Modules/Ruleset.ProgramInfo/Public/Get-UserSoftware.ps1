@@ -109,7 +109,7 @@ function Get-UserSoftware
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Failed to open registry sub Key: $HKUSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKUSubKey"
 				continue
 			}
 
@@ -117,7 +117,7 @@ function Get-UserSoftware
 
 			if ([string]::IsNullOrEmpty($InstallLocation))
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]Failed to read registry entry $HKUSubKey\InstallLocation"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry entry $HKUSubKey\InstallLocation"
 				continue
 			}
 

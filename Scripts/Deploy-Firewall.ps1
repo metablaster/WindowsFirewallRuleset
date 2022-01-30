@@ -51,16 +51,17 @@ The default value is this machine (localhost)
 
 .PARAMETER Interactive
 If any program installation directory is not found, Deploy-Firewall will ask
-user to specify program installation location.
+user to optionally specify program installation location.
 
 .PARAMETER Quiet
-If specified, it suppresses warning, error or informationall messages if user specified or default
-program path does not exist or if it's of an invalid syntax needed for firewall.
+If specified, it suppresses warning, error and informationall messages if user specified or
+default program path does not exist or if it's of an invalid syntax needed for firewall.
 
 .PARAMETER Force
-If specified, firewall deployment is automated and no prompt for confirmation is shown to perform
-actions.
+If specified, firewall deployment is automated and no prompt to choose
+rulesets to load is shown.
 By default the user is present with a series of questions to fine tune deployment.
+To avoid all prompts completely combine this switch with -Confirm:$false
 
 .EXAMPLE
 PS> .\Deploy-Firewall.ps1
@@ -586,22 +587,16 @@ Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
 	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
 
 # Show execution status
-if ($ErrorLogging -and $ErrorStatus)
-{
-	# HACK: Will print when no errors were reported to console, could be because of -ErrorAction SilentlyContinue
-	Write-Information -MessageData "" -InformationVariable ThrowAway
-	Write-Warning -Message "[$ThisScript] Errors were generated and saved to: $("$ProjectRoot\Logs")"
-	Write-Information -Tags $ThisScript -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
-}
-
-if ($WarningLogging -and $WarningStatus)
-{
-	Write-Information -MessageData "" -InformationVariable ThrowAway
-	Write-Warning -Message "[$ThisScript] Warnings were generated and saved to: $("$ProjectRoot\Logs")"
-}
-
 if ($ErrorStatus)
 {
+	if ($ErrorLogging)
+	{
+		# HACK: Will print when no errors were reported to console
+		Write-Information -MessageData "" -InformationVariable ThrowAway
+		Write-Warning -Message "[$ThisScript] Errors were generated and saved to: $("$ProjectRoot\Logs")"
+		Write-Information -Tags $ThisScript -MessageData "INFO: You can review these logs to see if you want to resolve some of them"
+	}
+
 	Write-Warning -Message "[$ThisScript] Not all operations completed successfully"
 }
 else

@@ -210,7 +210,7 @@ function ConvertFrom-Wildcard
 		catch
 		{
 			Write-Error -Category InvalidArgument -TargetObject $Pattern -Message "Specified wildcard pattern could not be converted"
-			Write-Warning -Message $_.Exception.Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 			return
 		}
 
@@ -303,7 +303,7 @@ function ConvertFrom-Wildcard
 		catch
 		{
 			Write-Error -Category InvalidArgument -TargetObject $Pattern -Message "Wildcard pattern verification failed"
-			Write-Warning -Message $_.Exception.Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 			return
 		}
 
@@ -364,7 +364,7 @@ function ConvertFrom-Wildcard
 	catch [System.ArgumentException]
 	{
 		Write-Error -Category InvalidResult -TargetObject $Result -Message "Unable to convert wildcard pattern to regex equivalent"
-		Write-Warning -Message $_.Exception.Message
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 		return
 	}
 	catch

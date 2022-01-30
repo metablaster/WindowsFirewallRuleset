@@ -168,7 +168,7 @@ function Get-SDDL
 
 		if (!$ACL)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]The path is missing SDDL entry: $TargetPath"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing SDDL entry: $TargetPath"
 			return
 		}
 
@@ -219,7 +219,7 @@ function Get-SDDL
 
 		if ([string]::IsNullOrEmpty($DACL))
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]The path is missing DACL entry: $TargetPath"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing DACL entry: $TargetPath"
 			return
 		}
 	}

@@ -171,7 +171,7 @@ function Confirm-FileEncoding
 					exit
 				}
 
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] [$($MyInvocation.InvocationName)]$FileName, $TargetEncoding encoded might yield unexpected results"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $FileName, $TargetEncoding encoded might yield unexpected results"
 			}
 		}
 	}

@@ -33,6 +33,11 @@ Get store apps installed system wide
 .DESCRIPTION
 Search system wide installed store apps, those installed for all users or shipped with system.
 
+.PARAMETER Name
+Specifies the name of a particular package.
+If specified, function returns results for this package only.
+Wildcards are permitted.
+
 .PARAMETER User
 User name in form of:
 
@@ -70,6 +75,10 @@ function Get-SystemApps
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
+		[Parameter()]
+		[SupportsWildcards()]
+		[string] $Name = "*",
+
 		[Parameter(Mandatory = $true)]
 		[Alias("UserName")]
 		[string] $User,
@@ -86,7 +95,7 @@ function Get-SystemApps
 	{
 		# TODO: show warning instead of error when fail (ex. in non elevated run)
 		# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
-		Get-AppxPackage -User $User -PackageTypeFilter Main | Where-Object {
+		Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main | Where-Object {
 			$_.SignatureKind -eq "System" -and $_.Name -like "Microsoft*"
 		} | ForEach-Object {
 			# NOTE: This path will be missing for default apps on Windows server
