@@ -52,7 +52,8 @@ Todo's in this file are categorized into following sections:
     - ProjectSettings.ps1 disable variables: Develop, ForceLoad
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, TestDomain
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
-    - Increment project version in all places mentioning version
+    - Increment project version in all places mentioning version:
+    (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo)
     - Run PScriptAnalyzer and resolve issues.
     - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
     - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one admin),
