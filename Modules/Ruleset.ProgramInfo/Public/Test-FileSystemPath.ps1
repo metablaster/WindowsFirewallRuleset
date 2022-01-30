@@ -130,17 +130,15 @@ function Test-FileSystemPath
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	function Write-Conditional
-	{
-		# TODO: Convert to script block
-		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-			"PSProvideCommentHelp", "", Scope = "Function", Justification = "Self explanatory function")]
+
+	$InvocationInfo = $MyInvocation.InvocationName
+	$WriteConditional = {
 		param ([string] $Message)
 
 		if ($Quiet)
 		{
 			# Make sure -Quiet switch does not make troubleshooting hard
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Message"
+			Write-Debug -Message "[$InvocationInfo] $Message"
 		}
 		else
 		{
@@ -150,7 +148,7 @@ function Test-FileSystemPath
 			}
 			else
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
+				Write-Warning -Message "[$InvocationInfo] $Message"
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Path '$LiteralPath'"
@@ -159,7 +157,7 @@ function Test-FileSystemPath
 
 	if ([string]::IsNullOrEmpty($LiteralPath))
 	{
-		Write-Conditional "The path name is null or empty"
+		& $WriteConditional "The path name is null or empty"
 		return $false
 	}
 
@@ -217,7 +215,7 @@ function Test-FileSystemPath
 			{
 				if ($IsUserProfile)
 				{
-					Write-Conditional "A Path with environment variable which leads to user profile is not valid for firewall"
+					& $WriteConditional "A Path with environment variable which leads to user profile is not valid for firewall"
 					return $false
 				}
 
@@ -230,7 +228,7 @@ function Test-FileSystemPath
 				{
 					if ($RegexVariable.Value -notin $WhiteList)
 					{
-						Write-Conditional "Specified environment variable was not whitelisted for firewall"
+						& $WriteConditional "Specified environment variable was not whitelisted for firewall"
 						return $false
 					}
 
@@ -241,13 +239,13 @@ function Test-FileSystemPath
 				{
 					if ($Qualifier -notmatch "^[A-Za-z]:\\")
 					{
-						Write-Conditional "The path qualifier '$Qualifier' is not valid for firewall rules"
+						& $WriteConditional "The path qualifier '$Qualifier' is not valid for firewall rules"
 						return $false
 					}
 				}
 				else
 				{
-					Write-Conditional "File system qualifier is required for firewall rules"
+					& $WriteConditional "File system qualifier is required for firewall rules"
 					return $false
 				}
 			}
@@ -255,7 +253,7 @@ function Test-FileSystemPath
 			# NOTE: Public folder and it's subdirectories are not user profile
 			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -notmatch "^(($env:SystemDrive\\?)|\\)Users(?!\\+(Public$|Public\\+))\\"))
 			{
-				Write-Conditional "The path does not lead to user profile"
+				& $WriteConditional "The path does not lead to user profile"
 				return $false
 			}
 		}
@@ -289,6 +287,6 @@ function Test-FileSystemPath
 		}
 	}
 
-	Write-Conditional $Status
+	& $WriteConditional $Status
 	return $false
 }

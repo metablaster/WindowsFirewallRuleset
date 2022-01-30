@@ -121,6 +121,7 @@ function Test-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# TODO: Run Deploy-Firewall (will will disconnect and remove CIM) and then this will fail
 	if (Get-CimSession -Name RemoteCim)
 	{
 		$Status = $CimServer.TestConnection()

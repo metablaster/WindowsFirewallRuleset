@@ -321,5 +321,5 @@ function Export-RegistryRule
 		}
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules into: '$FileName' done"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules into '$FileName' done"
 }

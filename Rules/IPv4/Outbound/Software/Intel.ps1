@@ -101,7 +101,7 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 #
 # Intel installation directories
 #
-$IntelXTURoot = "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"
+$IntelXTURoot = "%ProgramFiles%\Intel\Intel(R) Extreme Tuning Utility\Client"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore

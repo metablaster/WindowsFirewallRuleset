@@ -41,6 +41,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - KMS Connection broker (SppExtComObj.exe)
     - MSI
     - Store apps
+    - Intel XTU
 
   - Rule scripts, consistent rule formatting for all scripts
   - Rule scripts now support Interactive and Quiet switches

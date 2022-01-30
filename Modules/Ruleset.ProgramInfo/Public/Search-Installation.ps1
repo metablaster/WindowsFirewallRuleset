@@ -211,7 +211,7 @@ function Search-Installation
 		}
 		"XTU"
 		{
-			Edit-Table "%ProgramFiles(x86)%\Intel\Intel(R) Extreme Tuning Utility\Client"
+			Edit-Table "%ProgramFiles%\Intel\Intel(R) Extreme Tuning Utility\Client"
 			break
 		}
 		"Chocolatey"
