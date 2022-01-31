@@ -33,7 +33,10 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for:
 
     - Microsoft Edge WebView2
-    - FTP client and nslookup
+
+  - Updated rules for:
+
+    - OS built-in programs
 
 - Modules
 

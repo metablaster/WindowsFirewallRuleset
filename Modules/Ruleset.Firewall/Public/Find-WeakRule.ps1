@@ -28,12 +28,12 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get weak firewall rules
+Get potentially weak firewall rules
 
 .DESCRIPTION
 Find-WeakRule gets all rules which are not restrictive enough, and saves the result into a JSON file.
-Intended purpose of this function is to find weak rules to be able to quickly sport incomplete
-rules to update them as needed for security reasons.
+Intended purpose of this function is to find potentially weak rules to be able to quickly sport
+incomplete rules to update them as needed for security reasons.
 
 .PARAMETER Path
 Path into which to save file.
@@ -122,7 +122,7 @@ function Find-WeakRule
 	if ($SelectRules.Length -eq 0) { return }
 
 	$SelectRules = $SelectRules |
-	Select-Object -Property DisplayName, DisplayGroup, Direction, Protocol, RemoteAddress, LocalPort, RemotePort, LocalUser |
+	Select-Object -Property DisplayName, DisplayGroup, Direction, Protocol, RemoteAddress, LocalPort, RemotePort, LocalUser, Program |
 	Sort-Object -Property Direction, DisplayGroup
 
 	$Path = Resolve-FileSystemPath $Path -Create

@@ -154,7 +154,7 @@ function Find-RulePrincipal
 
 	if ($SelectRules.Length -eq 0) { return }
 
-	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser |
+	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser, Program |
 	Sort-Object -Property Direction, DisplayGroup
 
 	$Path = Resolve-FileSystemPath $Path -Create

@@ -277,7 +277,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 22, 80, 443 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "backgroundTaskHost.exe is the process that starts background tasks.
 So Cortana and the other Microsoft app registered a background task which is now started by Windows.
@@ -629,10 +629,10 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	New-NetFirewallRule -DisplayName "Settings sync" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80, 443 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "Host process for setting synchronization. Open your PC Settings and go to the
 'Sync your Settings' section.
@@ -650,9 +650,10 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "" |
+		-Description "Checks downloaded files, webpages and it analyzes pages and determines if
+they might be suspicious" |
 	Format-RuleOutput
 }
 
@@ -682,7 +683,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser Any `
+		-LocalUser $LocalSystem `
 		-InterfaceType $DefaultInterface `
 		-Description "The main function of taskhostw.exe is to start the Windows Services based on
 DLLs whenever the computer boots up.
