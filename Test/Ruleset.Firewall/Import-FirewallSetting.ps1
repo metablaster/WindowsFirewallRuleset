@@ -63,13 +63,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Import-FirewallSetting"
-$Exports = "$ProjectRoot\Exports"
 
-Start-Test "default test"
-$Result = Import-FirewallSetting -Path $Exports -FileName "FirewallSettings.json"
-$Result
+if ($Force -or $PSCmdlet.ShouldContinue("Import firewall settings", "Accept dangerous unit test"))
+{
+	$Exports = "$ProjectRoot\Exports"
 
-Test-Output $Result -Command Import-FirewallSetting
+	Start-Test "default test"
+	$Result = Import-FirewallSetting -Path $Exports -FileName "FirewallSettings.json"
+	$Result
+
+	Test-Output $Result -Command Import-FirewallSetting
+}
 
 Update-Log
 Exit-Test

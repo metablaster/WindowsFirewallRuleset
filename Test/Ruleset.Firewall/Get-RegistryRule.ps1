@@ -67,13 +67,13 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-RegistryRule"
 
-$Group = "Test registry rule"
-
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction Ignore
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
-
 if ($false)
 {
+	$Group = "Test registry rule"
+
+	Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction Ignore
+	Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
+
 	New-NetFirewallRule -DisplayName "Test" -Direction Outbound `
 		-PolicyStore $PolicyStore -Group $Group -Enabled False `
 		-IcmpType 4 -Protocol ICMPv4 -Platform "10.0" |

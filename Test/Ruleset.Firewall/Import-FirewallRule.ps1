@@ -77,7 +77,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Import-FirewallRule"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Import firewall rules", "Accept slow and dangerous unit test"))
 {
 	$Exports = "$ProjectRoot\Exports"
 

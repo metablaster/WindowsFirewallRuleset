@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,29 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Remove-FirewallRule
+Unit test for Find-WeakRule
 
 .DESCRIPTION
-Test correctness of Remove-FirewallRule function
+Test correctness of Find-WeakRule function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Remove-FirewallRule.ps1
+PS> .\Find-WeakRule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Remove-FirewallRule.ps1
+None. You cannot pipe objects to Find-WeakRule.ps1
 
 .OUTPUTS
-None. Remove-FirewallRule.ps1 does not generate any output
+None. Find-WeakRule.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -66,38 +65,15 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Remove-FirewallRule"
+Enter-Test "Find-WeakRule"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Remove firewall rules according to file", "Accept slow and dangerous unit test"))
-{
-	$Exports = "$ProjectRoot\Exports"
+$Exports = "$ProjectRoot\Exports"
 
-	# TODO: need to test failure cases, see also module todo's for more info
+Start-Test "default test"
+$Result = Find-WeakRule -Path $Exports
+$Result
 
-	if ($true)
-	{
-		Start-Test "custom test"
-		Remove-FirewallRule -Path $Exports -FileName "InboundGPO.csv" -Confirm:$false
-		Remove-FirewallRule -Path $Exports -FileName "OutboundGPO.csv" -Confirm:$false
-	}
-	else
-	{
-		Start-Test "default"
-		$Result = Remove-FirewallRule -Path $Exports -FileName "RegGroupExport"
-		$Result
-
-		Start-Test "csv extension"
-		Remove-FirewallRule -Path $Exports -FileName "RegNamedExport1.csv"
-
-		Start-Test "-JSON"
-		Remove-FirewallRule -JSON -Path $Exports -FileName "RegNamedExport2.json"
-
-		Start-Test "csv extension"
-		Remove-FirewallRule -Path $Exports -FileName "RegStoreAppExport.csv"
-
-		Test-Output $Result -Command Remove-FirewallRule
-	}
-}
+Test-Output $Result -Command Find-WeakRule
 
 Update-Log
 Exit-Test

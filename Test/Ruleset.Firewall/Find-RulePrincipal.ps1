@@ -67,19 +67,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Find-RulePrincipal"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Export firewall rules", "Accept slow unit test"))
-{
-	$Exports = "$ProjectRoot\Exports"
+$Exports = "$ProjectRoot\Exports"
 
-	Start-Test "-Direction Outbound -Principal"
-	Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
+Start-Test "-Direction Outbound -Principal"
+Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
 
-	Start-Test "-Direction Outbound <no principal>"
-	$Result = Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "NoPrincipalRules"
-	$Result
+Start-Test "-Direction Outbound <no principal>"
+$Result = Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "NoPrincipalRules"
+$Result
 
-	Test-Output $Result -Command Find-RulePrincipal
-}
+Test-Output $Result -Command Find-RulePrincipal
 
 Update-Log
 Exit-Test
