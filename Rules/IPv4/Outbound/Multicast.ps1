@@ -101,6 +101,8 @@ $Group = "Multicast - IPv4"
 # TODO: We should exclude public profile conditionally when not essential (ex. no homegroup required)
 $LocalProfile = "Any" #"Private, Domain"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" -Merge
+# Users group is needed to handle program specific traffic, ex. MS edge 1900
+Merge-SDDL ([ref] $MulticastUsers) -From $UsersGroupSDDL
 $Accept = "Outbound rules for IPv4 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv4 multicast rules will not be loaded into firewall"
 

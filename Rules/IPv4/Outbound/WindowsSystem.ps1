@@ -286,7 +286,6 @@ https://docs.microsoft.com/en-us/windows/uwp/launch-resume/support-your-app-with
 	Format-RuleOutput
 }
 
-# NOTE: Was active while setting up MS account
 $Program = "%SystemRoot%\System32\BackgroundTransferHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
@@ -444,10 +443,11 @@ $Program = "%SystemRoot%\explorer.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	# TODO: remote to local subnet seen for shared folder access
+	# TODO: Action is temporarily block to learn LocalUser value
 	New-NetFirewallRule -DisplayName "File Explorer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 80 `
 		-LocalUser Any `
@@ -455,15 +455,13 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Description "File explorer checks for digital signatures verification, windows update." |
 	Format-RuleOutput
 
-	# TODO: possibly deprecated since Windows 10
-	# Seen outbound 443 while setting up MS account on fresh Windows account
 	New-NetFirewallRule -DisplayName "File Explorer" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "Smart Screen Filter" |
 	Format-RuleOutput

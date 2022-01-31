@@ -126,6 +126,8 @@ $Group = "Multicast - IPv6"
 $LocalProfile = "Any" # "Private, Domain"
 $Description = "https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-addresses.xhtml"
 $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCAL SERVICE" -Merge
+# Users group is needed to handle program specific traffic, ex. MS edge 1900
+Merge-SDDL ([ref] $MulticastUsers) -From $UsersGroupSDDL
 # NOTE: we probably need "Any" to include IPv6 loopback interface because IPv6 loopback rule
 # does not work on boot, (neither ::1 address nor interface alias)
 $LocalInterface = "Any"

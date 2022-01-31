@@ -37,6 +37,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Updated rules for:
 
     - OS built-in programs
+    - Multicast
 
 - Modules
 

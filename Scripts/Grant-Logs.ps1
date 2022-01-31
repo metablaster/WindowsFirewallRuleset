@@ -162,7 +162,7 @@ Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullCo
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
 {
-	if ($User -eq $Admin.User)
+	if ($Admin.User -eq $User)
 	{
 		Write-Warning -Message "[$ThisScript] User '$User' belongs to Administrators group, no need to grant permission"
 		$StandardUser = $false

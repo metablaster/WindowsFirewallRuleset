@@ -78,10 +78,6 @@ $Group = "Windows Services"
 $Accept = "Outbound rules for system services will be loaded, required for proper functioning of operating system"
 $Deny = "Skip operation, outbound rules for system services will not be loaded into firewall"
 
-# Extension rules are special rules for problematic services, see "ProblematicTraffic.md" for more info
-$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" -Merge
-Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
@@ -379,18 +375,25 @@ Format-RuleOutput
 # see "ProblematicTraffic.md" for more info
 #
 
-# TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
-# TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router
-# sometimes but receives data.
-New-NetFirewallRule -DisplayName "Extension rule for complex services" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	-Service Any -Program $ServiceHost -Group $Group `
-	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Internet4 `
-	-LocalPort Any -RemotePort 80, 443 `
-	-LocalUser $ExtensionAccounts `
-	-InterfaceType $DefaultInterface `
-	-Description "Extension rule for active users and NT localsystem, following services need
+if ($false)
+{
+	# TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
+	# TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router
+	# sometimes but receives data.
+	# Extension rules are special rules for problematic services, see "ProblematicTraffic.md" for more info
+	$ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE" -Merge
+	Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
+
+	# NOTE: Not used because not working
+	New-NetFirewallRule -DisplayName "Extension rule for complex services" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $ServiceHost -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $ExtensionAccounts `
+		-InterfaceType $DefaultInterface `
+		-Description "Extension rule for active users and NT localsystem, following services need
 access based on logged on user:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
@@ -398,13 +401,13 @@ Windows Update(wuauserv),
 Background Intelligent Transfer Service(BITS),
 BITS and CryptSvc in addition need System account and wlidsvc needs both Network Service and
 local service account" |
-Format-RuleOutput
+	Format-RuleOutput
+}
 
 #
 # Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
 
-# TODO: trying with localuser: Any
 New-NetFirewallRule -DisplayName "Background Intelligent Transfer Service" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service BITS -Program $ServiceHost -Group $Group `
