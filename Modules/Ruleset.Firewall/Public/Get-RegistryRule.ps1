@@ -302,7 +302,7 @@ function Get-RegistryRule
 					}
 				}
 
-				Write-Progress -Activity "Processing rules in registry" -CurrentOperation $RuleName `
+				Write-Progress -Activity "Getting rules from registry" -CurrentOperation $RuleName `
 					-PercentComplete (++$RuleCount / $RuleValueNames.Length * 100) `
 					-SecondsRemaining (($RuleValueNames.Length - $RuleCount + 1) / 10 * 60)
 

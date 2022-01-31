@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +28,12 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get all firewall rules without or with specified LocalUser value
+Get weak firewall rules
 
 .DESCRIPTION
-Get all rules which are either missing missing LocalUser value or rules which match specified
-LocalUser value, and save the result into a JSON file.
-Intended purpose of this function is to find rules without LocalUser value set to be able
-to quickly sport incomplete rules and assign LocalUser value for security reasons.
+Find-WeakRule gets all rules which are not restrictive enough, and saves the result into a JSON file.
+Intended purpose of this function is to find weak rules to be able to quickly sport incomplete
+rules to update them as needed for security reasons.
 
 .PARAMETER Path
 Path into which to save file.
@@ -43,34 +42,28 @@ Wildcard characters are supported.
 .PARAMETER FileName
 Output file name, which is json file into which result is saved
 
-.PARAMETER User
-User for which to obtain rules
-
-.PARAMETER Group
-Group for which to obtain rules
-
 .PARAMETER Direction
 Firewall rule direction, default is '*' both directions
 
 .EXAMPLE
-PS> Find-RulePrincipal -Path $Exports -Direction Outbound -FileName "PrincipalRules" -Group "Users"
+PS> Find-WeakRule -Path $Exports -Direction Outbound -FileName "WeakRules"
 
 .EXAMPLE
-PS> Find-RulePrincipal -Path $Exports -FileName "NoPrincipalRules"
+PS> Find-WeakRule -Path $Exports -FileName "WeakRules"
 
 .INPUTS
-None. You cannot pipe objects to Find-RulePrincipal
+None. You cannot pipe objects to Find-WeakRule
 
 .OUTPUTS
 [System.Void]
 
 .NOTES
-TODO: Should be able to query rules for multiple users or groups
+None.
 #>
-function Find-RulePrincipal
+function Find-WeakRule
 {
 	[CmdletBinding(DefaultParameterSetName = "None", PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Find-RulePrincipal.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Find-WeakRule.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -78,23 +71,11 @@ function Find-RulePrincipal
 		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
-		[string] $FileName = "PrincipalRules",
-
-		[Parameter(Mandatory = $true, ParameterSetName = "User")]
-		[Parameter(ParameterSetName = "Group")]
-		[Alias("UserName")]
-		[string] $User,
-
-		[Parameter(Mandatory = $true, ParameterSetName = "Group")]
-		[Alias("UserGroup")]
-		[string] $Group,
+		[string] $FileName = "WeakRules",
 
 		[Parameter()]
 		[ValidateSet("Inbound", "Outbound", "*")]
-		[string] $Direction = "*",
-
-		[Parameter()]
-		[switch] $Append
+		[string] $Direction = "*"
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -113,38 +94,24 @@ function Find-RulePrincipal
 			-PercentComplete (++$RuleCount / $RegistryRules.Length * 100) `
 			-SecondsRemaining (($RegistryRules.Length - $RuleCount + 1) / 10 * 60)
 
-		# Exclude rules for store app and services matching direction
+		# Select rules without protocol, remote address and local or remote port
 		# Block rules are not included because there are always strong
-		if (([string]::IsNullOrEmpty($Rule.Owner)) -and ([string]::IsNullOrEmpty($Rule.Service)) -and ($Rule.Action -ne "Block"))
+		if (([string]::IsNullOrEmpty($Rule.RemoteAddress)) -and ([string]::IsNullOrEmpty($Rule.Protocol)) -and ($Rule.Action -ne "Block"))
 		{
-			# Exclude rules with LocalUser set\unset
-			$SearchSDDL = $true
-
-			if ($PSCmdlet.ParameterSetName -eq "User")
+			if (($Rule.Direction -eq "Outbound") -and [string]::IsNullOrEmpty($Rule.RemotePort))
 			{
-				$SDDL = Get-SDDL -User $User
+				$RuleAdded = $true
+				$SelectRules += $Rule
 			}
-			elseif ($PSCmdlet.ParameterSetName -eq "Group")
+			elseif ([string]::IsNullOrEmpty($Rule.LocalPort))
 			{
-				$SDDL = Get-SDDL -Group $Group
-			}
-			else
-			{
-				$SearchSDDL = $false
-
-				if ([string]::IsNullOrEmpty($Rule.LocalUser))
-				{
-					$SelectRules += $Rule
-				}
+				$RuleAdded = $true
+				$SelectRules += $Rule
 			}
 
-			if ($SearchSDDL -and (![string]::IsNullOrEmpty($Rule.LocalUser)))
+			if ($RuleAdded -and ![string]::IsNullOrEmpty($Rule.LocalUser))
 			{
-				if ($Rule.LocalUser -like "*$SDDL*")
-				{
-					$Rule.LocalUser = (ConvertFrom-SDDL $Rule.LocalUser).Principal
-					$SelectRules += $Rule
-				}
+				$Rule.LocalUser = (ConvertFrom-SDDL $Rule.LocalUser).Principal
 			}
 		}
 	}
@@ -154,7 +121,8 @@ function Find-RulePrincipal
 
 	if ($SelectRules.Length -eq 0) { return }
 
-	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser |
+	$SelectRules = $SelectRules |
+	Select-Object -Property DisplayName, DisplayGroup, Direction, Protocol, RemoteAddress, LocalPort, RemotePort, LocalUser |
 	Sort-Object -Property Direction, DisplayGroup
 
 	$Path = Resolve-FileSystemPath $Path -Create

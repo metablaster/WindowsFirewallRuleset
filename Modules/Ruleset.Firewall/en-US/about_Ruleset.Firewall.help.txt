@@ -23,6 +23,9 @@ EXAMPLES
 	Find-RulePrincipal
 	Get all firewall rules with or without LocalUser value
 
+	Find-WeakRule
+	Get all rules which are not restrictive enough
+
 	Format-RuleOutput
 	Format output of the Net-NewFirewallRule commandlet
 

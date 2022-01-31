@@ -809,7 +809,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 22 `
-		-LocalUser Any `
+		-LocalUser $NetworkService `
 		-InterfaceType $DefaultInterface `
 		-Description "" |
 	Format-RuleOutput
@@ -824,7 +824,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Any `
 		-LocalPort Any -RemotePort 22 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "OpenSSH is connectivity tool for remote login with the SSH protocol,
 This rule applies to open source version of OpenSSH that is built into Windows." |

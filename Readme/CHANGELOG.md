@@ -39,6 +39,10 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
 
+- New features
+
+  - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
+
 ## v0.12.0 (current release)
 
 - Rules

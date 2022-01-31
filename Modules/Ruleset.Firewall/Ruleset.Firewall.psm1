@@ -77,6 +77,7 @@ $PublicScripts = @(
 	"Export-FirewallSetting"
 	"Export-RegistryRule"
 	"Find-RulePrincipal"
+	"Find-WeakRule"
 	"Format-RuleOutput"
 	"Get-RegistryRule"
 	"Import-FirewallRule"
