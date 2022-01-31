@@ -33,6 +33,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for:
 
     - Microsoft Edge WebView2
+    - FTP client and nslookup
+
+- Modules
+
+  - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
 
 ## v0.12.0 (current release)
 

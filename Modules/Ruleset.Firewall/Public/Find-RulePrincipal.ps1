@@ -105,7 +105,7 @@ function Find-RulePrincipal
 
 	# Counter for progress
 	[int32] $RuleCount = 0
-	$SelectRules = @()
+	[array] $SelectRules = @()
 
 	foreach ($Rule in $RegistryRules)
 	{
@@ -115,7 +115,7 @@ function Find-RulePrincipal
 			-SecondsRemaining (($RegistryRules.Length - $RuleCount + 1) / 10 * 60)
 
 		# Exclude rules for store app and services matching direction
-		if (($null -eq $Rule.Owner) -and ($null -eq $Rule.Service) -and	($Rule.Direction -like $Direction))
+		if (([string]::IsNullOrEmpty($Rule.Owner)) -and ([string]::IsNullOrEmpty($Rule.Service)) -and ($Rule.Direction -like $Direction))
 		{
 			# Exclude rules with LocalUser set\unset
 			$SearchSDDL = $true
@@ -131,10 +131,14 @@ function Find-RulePrincipal
 			else
 			{
 				$SearchSDDL = $false
-				$SelectRules += $Rule
+
+				if ([string]::IsNullOrEmpty($Rule.LocalUser))
+				{
+					$SelectRules += $Rule
+				}
 			}
 
-			if ($SearchSDDL -and ($null -ne $Rule.LocalUser))
+			if ($SearchSDDL -and (![string]::IsNullOrEmpty($Rule.LocalUser)))
 			{
 				if ($Rule.LocalUser -like "*$SDDL*")
 				{
@@ -145,11 +149,13 @@ function Find-RulePrincipal
 		}
 	}
 
+	Write-Information -Tags $MyInvocation.InvocationName `
+		-MessageData "INFO: In total there are $($SelectRules.Length) rules in the result"
+
+	if ($SelectRules.Length -eq 0) { return }
+
 	$SelectRules = $SelectRules | Select-Object -Property DisplayName, DisplayGroup, Direction, LocalUser |
 	Sort-Object -Property Direction, DisplayGroup
-
-	Write-Information -Tags $MyInvocation.InvocationName `
-		-MessageData "INFO: In total there are $(($SelectRules | Measure-Object).Count) rules in the result"
 
 	$Path = Resolve-FileSystemPath $Path -Create
 	if (!$Path)

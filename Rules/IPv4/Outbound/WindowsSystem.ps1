@@ -480,7 +480,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
 		-LocalPort Any -RemotePort 21 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "File transfer protocol client." |
 	Format-RuleOutput
@@ -594,7 +594,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 		-LocalAddress Any -RemoteAddress Internet4, DefaultGateway4 `
 		-LocalPort Any -RemotePort 53 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-LocalOnlyMapping $false -LooseSourceMapping $false `
 		-Description "Displays information that you can use to diagnose Domain Name System (DNS) infrastructure.
