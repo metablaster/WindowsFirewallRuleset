@@ -955,6 +955,25 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
+$EdgeWebView = "%ProgramFiles(x86)%\Microsoft\EdgeWebView\Application\97.0.1072.76"
+if ((Confirm-Installation "EdgeWebView" ([ref] $EdgeWebView)) -or $ForceLoad)
+{
+	$Program = "$EdgeWebView\msedgewebview2.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Microsoft Edge WebView2 Runtime" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Enables embedded web content (HTML, CSS, and JavaScript) in native applications" |
+		Format-RuleOutput
+	}
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"

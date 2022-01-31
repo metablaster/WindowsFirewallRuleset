@@ -28,6 +28,12 @@ If you would like to see fresh changes done since last release you can do so on 
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
 
+- Rules
+
+  - Added rules for:
+
+    - Microsoft Edge WebView2
+
 ## v0.12.0 (current release)
 
 - Rules

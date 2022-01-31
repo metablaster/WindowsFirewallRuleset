@@ -299,6 +299,29 @@ function Search-Installation
 			Update-Table -Search "Java"
 			break
 		}
+		"EdgeWebView"
+		{
+			Update-Table -Search "Microsoft Edge WebView"
+
+			if ($InstallTable.Rows.Count -eq 1)
+			{
+				$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
+				$VersionFolders = Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($InstallLocation)) |
+				Where-Object {
+					$_.BaseName -match "^\d+\."
+				}
+
+				$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
+				if ($VersionFoldersCount -gt 0)
+				{
+					$VersionFolder = $VersionFolders | Sort-Object | Select-Object -Last 1
+					Initialize-Table
+					Edit-Table "$InstallLocation\$($VersionFolder.BaseName)"
+				}
+			}
+
+			break
+		}
 		"AdobeARM"
 		{
 			Edit-Table "%SystemDrive%\Program Files (x86)\Common Files\Adobe\ARM\1.0"
