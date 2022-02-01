@@ -115,6 +115,9 @@ Todo's in this file are categorized into following sections:
     - Make it possible to deploy firewall to remote computers
     - For remoting `ComputerName` parameters are needed, this could be also
     specified/learned with/from PolicyStore parameter
+    - If there is change in remoting parameters PowerShell needs to be restarted, also running
+    remoting tests requires change in Domain parameter which is currently mutually exclusive with
+    local test cases. This must be avoided so that PS restart is not needed and tests should work.
 
 3. Rules
 

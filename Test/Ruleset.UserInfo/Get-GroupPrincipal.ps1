@@ -33,6 +33,9 @@ Unit test for Get-GroupPrincipal
 .DESCRIPTION
 Test correctness of Get-GroupPrincipal function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,12 +56,16 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -68,25 +75,33 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-GroupPrincipal"
 
-Start-Test "Users"
-$UsersTest = Get-GroupPrincipal "Users"
-$UsersTest
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Disabled Users, Administrators -CIM"
+	Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain -CIM
+}
+else
+{
+	Start-Test "Users -Domain localhost"
+	$UsersTest = Get-GroupPrincipal "Users" -Domain "localhost"
+	$UsersTest
 
-Start-Test "Disabled Administrators"
-Get-GroupPrincipal "Administrators" -Disabled
+	Start-Test "Disabled Administrators"
+	Get-GroupPrincipal "Administrators" -Disabled
 
-Start-Test "Users, Administrators -CIM"
-$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM
-$CIMTest
+	Start-Test "Users, Administrators -CIM"
+	$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM
+	$CIMTest
 
-Start-Test "Disabled Users, Administrators -CIM"
-Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM -Disabled
+	Start-Test "Disabled Users, Administrators -CIM"
+	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM -Disabled
 
-Start-Test "Failure test"
-$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue
-$FailedUsers
+	Start-Test "Failure test"
+	$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue
+	$FailedUsers
 
-Test-Output $UsersTest -Command Get-GroupPrincipal
+	Test-Output $UsersTest -Command Get-GroupPrincipal
+}
 
 Update-Log
 Exit-Test

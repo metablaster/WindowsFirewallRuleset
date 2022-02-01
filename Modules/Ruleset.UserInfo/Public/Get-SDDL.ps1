@@ -230,7 +230,7 @@ function Get-SDDL
 		foreach ($UserName in $User)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
-			$SID = Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM
+			$SID = (Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM).SID
 
 			if ($SID)
 			{
@@ -266,7 +266,7 @@ function Get-SDDL
 		foreach ($UserGroup in $Group)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting group principal SDDL: $Domain\$UserGroup"
-			$SID = Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM
+			$SID = (Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM).SID
 
 			if ($SID)
 			{

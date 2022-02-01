@@ -52,7 +52,7 @@ PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
 [string[]] One or more group names
 
 .OUTPUTS
-[string] SID's (security identifiers)
+[PSCustomObject]
 
 .NOTES
 None.
@@ -61,7 +61,7 @@ function Get-GroupSID
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md")]
-	[OutputType([string])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserGroup")]
@@ -78,6 +78,12 @@ function Get-GroupSID
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+		# Replace localhost and dot with actual computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
 	}
 	process
 	{
@@ -94,7 +100,7 @@ function Get-GroupSID
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
 
 					$GroupSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_Group -Property Name |
+						-Class Win32_Group -Property Name, SID |
 					Where-Object -Property Name -EQ $UserGroup | Select-Object -ExpandProperty SID
 				}
 				else
@@ -122,7 +128,12 @@ function Get-GroupSID
 			}
 			else
 			{
-				Write-Output $GroupSID
+				[PSCustomObject]@{
+					Domain = $Domain
+					Group = $UserGroup
+					SID = $GroupSID
+					PSTypeName = "Ruleset.GroupSID"
+				}
 			}
 		} # foreach ($UserGroup in $Group)
 	} # process

@@ -74,7 +74,7 @@ function Get-UserSoftware
 
 	if (Test-Computer $Domain)
 	{
-		$HKU = Get-PrincipalSID $User -Domain $Domain
+		$HKU = (Get-PrincipalSID $User -Domain $Domain).SID
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
 

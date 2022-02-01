@@ -146,7 +146,7 @@ foreach ($Principal in $Administrators)
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
-		-Owner (Get-PrincipalSID $Principal.User) -Package * `
+		-Owner (Get-PrincipalSID $Principal.User).SID -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |

@@ -76,7 +76,7 @@ Initialize-Project -Strict
 # Setup local variables
 $Group = "Template - TargetProgram"
 $PackageSID = "*"
-$PrincipalSID = Get-PrincipalSID $DefaultUser
+$PrincipalSID = (Get-PrincipalSID $DefaultUser).SID
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"

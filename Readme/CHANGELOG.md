@@ -42,6 +42,11 @@ If you would like to see fresh changes done since last release you can do so on 
 - Modules
 
   - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
+  - Implemented remoting functionality for the following functions:
+
+    - `Get-GroupPrincipal`
+    - `Get-GroupSID`
+    - `Get-PrincipalSID`
 
 - New features
 

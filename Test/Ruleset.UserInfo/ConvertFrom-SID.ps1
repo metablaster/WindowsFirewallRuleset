@@ -76,7 +76,7 @@ $UserAccounts
 Test-Output $UserAccounts[0] -Command Get-GroupPrincipal
 
 Start-Test "Get-PrincipalSID NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
-$NTAccounts = Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
+$NTAccounts = (Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE").SID
 $NTAccounts
 
 Start-Test "users and admins"

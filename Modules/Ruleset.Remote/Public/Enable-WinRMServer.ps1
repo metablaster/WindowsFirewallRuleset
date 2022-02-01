@@ -35,7 +35,7 @@ Configures local machine to accept remote CIM and PowerShell requests using WS-M
 In addition it initializes specialized remoting session configuration as well as most common
 issues are handled and attempted to be resolved or bypassed automatically.
 
-If specified -Protocol is set to HTTPS, it will export public key (DER encoded CER file)
+If -Protocol is set to HTTPS, it will export public key (DER encoded CER file)
 to default repository location (\Exports), which you should then copy to client machine
 to be picked up by Set-WinRMClient and used for communication over SSL.
 
@@ -191,7 +191,7 @@ function Enable-WinRMServer
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)
 		# for both Enable-WinRMServer and Set-WinRMClient
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment will not work over publick network profile"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment does not work over publick network profile"
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))

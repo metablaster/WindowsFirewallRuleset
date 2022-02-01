@@ -33,6 +33,9 @@ Unit test for Get-GroupSID
 .DESCRIPTION
 Test correctness of Get-GroupSID function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,6 +56,10 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
@@ -68,58 +75,66 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-GroupSID"
 
-#
-# Test single group
-#
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Disabled Users, Administrators -CIM"
+	Get-GroupSID "Users" -Domain $TestDomain -CIM
+}
+else
+{
+	#
+	# Test single group
+	#
 
-[string] $SingleGroup = "Users"
-Start-Test "$SingleGroup"
-$GroupsTest = Get-GroupSID $SingleGroup
-$GroupsTest
+	[string] $SingleGroup = "Users"
+	Start-Test "$SingleGroup -Domain ."
+	$GroupsTest = Get-GroupSID $SingleGroup -Domain "."
+	$GroupsTest
 
-Test-Output $GroupsTest -Command Get-GroupSID
+	Test-Output $GroupsTest -Command Get-GroupSID
 
-Start-Test "'Users' -CIM"
-$GroupsTest = Get-GroupSID $SingleGroup -CIM
-$GroupsTest
+	Start-Test "'Users' -CIM"
+	$GroupsTest = Get-GroupSID $SingleGroup -CIM
+	$GroupsTest
 
-#
-# Test array of groups
-#
+	#
+	# Test array of groups
+	#
 
-[string[]] $GroupArray = @("Users", "Hyper-V Administrators")
+	[string[]] $GroupArray = @("Users", "Hyper-V Administrators")
 
-Start-Test "$GroupArray"
-$GroupsTest = Get-GroupSID $GroupArray
-$GroupsTest
+	Start-Test "$GroupArray"
+	$GroupsTest = Get-GroupSID $GroupArray
+	$GroupsTest
 
-Test-Output $GroupsTest -Command Get-GroupSID
+	Test-Output $GroupsTest -Command Get-GroupSID
 
-Start-Test "$GroupArray -CIM"
-$GroupsTest = Get-GroupSID $GroupArray -CIM
-$GroupsTest
+	Start-Test "$GroupArray -CIM"
+	$GroupsTest = Get-GroupSID $GroupArray -CIM
+	$GroupsTest
 
-#
-# Test pipeline
-#
+	#
+	# Test pipeline
+	#
 
-$GroupArray = @("Users", "Administrators")
+	$GroupArray = @("Users", "Administrators")
 
-Start-Test "$GroupArray | Get-GroupSID"
-$GroupArray | Get-GroupSID
+	Start-Test "$GroupArray | Get-GroupSID"
+	$GroupArray | Get-GroupSID
 
-Start-Test "$GroupArray | Get-GroupSID -CIM"
-$GroupArray | Get-GroupSID -CIM
+	Start-Test "$GroupArray | Get-GroupSID -CIM"
+	$GroupArray | Get-GroupSID -CIM
 
-#
-# Test failure
-#
+	#
+	# Test failure
+	#
 
-Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
+	Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
 
-Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
+	Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
+	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
+}
 
 Update-Log
 Exit-Test

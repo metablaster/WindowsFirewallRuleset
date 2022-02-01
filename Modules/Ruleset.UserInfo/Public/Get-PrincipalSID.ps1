@@ -52,7 +52,7 @@ PS> Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM
 [string[]] One or more user names
 
 .OUTPUTS
-[string] SID's (security identifiers)
+[PSCustomObject]
 
 .NOTES
 None.
@@ -61,7 +61,7 @@ function Get-PrincipalSID
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PrincipalSID.md")]
-	[OutputType([string])]
+	[OutputType([PSCustomObject])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserName")]
@@ -78,6 +78,12 @@ function Get-PrincipalSID
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+		# Replace localhost and dot with actual computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
 
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq "$($args[0])" }))
@@ -146,7 +152,13 @@ function Get-PrincipalSID
 			}
 			else
 			{
-				Write-Output $PrincipalSID
+				[PSCustomObject]@{
+					Domain = $Domain
+					User = $UserName
+					Principal = "$Domain\$UserName"
+					SID = $PrincipalSID
+					PSTypeName = "Ruleset.PrincipalSID"
+				}
 			}
 		} # foreach ($Group in $UserGroups)
 	} # process

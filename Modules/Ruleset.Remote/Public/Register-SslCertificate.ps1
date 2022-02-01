@@ -229,7 +229,7 @@ function Register-SslCertificate
 				if ($ProductType -eq "Server")
 				{
 					$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-						"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Enter password for certificate $Domain.pfx"))
+						"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Please enter password for certificate $Domain.pfx"))
 
 					$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
 						-Password $CertPassword.Password -Exportable

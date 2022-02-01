@@ -33,6 +33,9 @@ Unit test for Get-PrincipalSID
 .DESCRIPTION
 Test correctness of Get-PrincipalSID function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,6 +56,10 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
@@ -68,22 +75,34 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-PrincipalSID"
 
-#
-# Test users
-#
-
 [string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
 
-Start-Test "-User $Users"
-$AccountSID1 = Get-PrincipalSID -User $Users
-$AccountSID1
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	$Domain = $TestDomain
+
+
+	Start-Test "-User $Users"
+	$AccountSID1 = Get-PrincipalSID -User $Users -CIM -Domain $Domain
+	$AccountSID1
+}
+else
+{
+	#
+	# Test users
+	#
+
+	Start-Test "-User $Users -Domain localhost"
+	$AccountSID1 = Get-PrincipalSID -User $Users -Domain "localhost"
+	$AccountSID1
+}
 
 Start-Test "-User $Users -CIM"
-$AccountSID1 = Get-PrincipalSID -User $Users -CIM
+$AccountSID1 = Get-PrincipalSID -User $Users -CIM -Domain $Domain
 $AccountSID1
 
 Start-Test "$Users | Get-PrincipalSID -CIM"
-$Users | Get-PrincipalSID -CIM
+$Users | Get-PrincipalSID -CIM -Domain $Domain
 
 Start-Test "Get-TypeName"
 $AccountSID1 | Get-TypeName

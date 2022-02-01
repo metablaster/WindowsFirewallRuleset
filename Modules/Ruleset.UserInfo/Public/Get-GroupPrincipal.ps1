@@ -115,6 +115,19 @@ function Get-GroupPrincipal
 
 			return $false
 		}
+
+		# Replace localhost and dot with actual computer name
+		$Domain = foreach ($Computer in $Domain)
+		{
+			if (($Computer -eq "localhost") -or ($Computer -eq "."))
+			{
+				[System.Environment]::MachineName
+			}
+			else
+			{
+				$Computer
+			}
+		}
 	}
 	process
 	{
@@ -147,7 +160,7 @@ function Get-GroupPrincipal
 
 						# Get either enabled or disabled users, these include SID but also non group users
 						$EnabledAccounts = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-							-Class Win32_UserAccount -Property LocalAccount, Disabled -Filter "LocalAccount = True" |
+							-Class Win32_UserAccount -Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
 						Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
 
 						if ([string]::IsNullOrEmpty($EnabledAccounts))
@@ -165,7 +178,8 @@ function Get-GroupPrincipal
 							}
 
 							$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-									# NOTE: Account.Domain Because $Computer may be set to "localhost"
+									Write-Debug "Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
+									# NOTE: Account.Domain or $Computer is same thing
 									$Account.Caption -eq "$($Account.Domain)\$($args[0])"
 								})
 
@@ -230,6 +244,8 @@ function Get-GroupPrincipal
 						}
 
 						$AccountName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
+								Write-Debug "Comparing $($args[0]) with $Computer\$($Account.Name)"
+								# NOTE: Account.Domain Because $Computer may be set to "localhost"
 								$args[0] -eq "$Computer\$($Account.Name)"
 							})
 

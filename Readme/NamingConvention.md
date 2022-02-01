@@ -224,6 +224,27 @@ SDDL = SDDL string of a principal
 PSTypeName = unique object type name for this module
 ```
 
+Special custom objects:
+
+Ruleset.PrincipalSID
+
+```none
+Domain
+User
+Principal
+SID
+PSTypeName
+```
+
+Ruleset.GroupSID
+
+```none
+Domain
+Group
+SID
+PSTypeName
+```
+
 [Table of Contents](#table-of-contents)
 
 [parameters]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/standard-cmdlet-parameter-names-and-types "Visit Microsoft docs"

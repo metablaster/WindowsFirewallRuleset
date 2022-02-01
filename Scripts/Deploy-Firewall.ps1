@@ -577,8 +577,12 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall r
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 
-# Verify permissions to write firewall logs if needed
-& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
+# TODO: This is a temporary measure because currently we change log file location only for develop mode
+if ($Develop)
+{
+	# Verify permissions to write firewall logs if needed
+	& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
+}
 
 # Set desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
