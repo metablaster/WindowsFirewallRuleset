@@ -49,6 +49,10 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Get-GroupSID`
     - `Get-PrincipalSID`
 
+  - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default
+  default session configurations active, needed to be able to specify `-ComputerName` parameter
+  instead of `-CimInstance` as exclusive.
+
 - New features
 
   - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
