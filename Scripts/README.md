@@ -18,7 +18,6 @@ Contains scripts which are not part of modules as follows:
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
 | Debug-FilteringPlatform.ps1 | Parse audit events from event log and write them to log file         |
-| Find-UnsignedFile.ps1       | Scan executables for digital signature and check virus total status  |
 | Get-CallerPreference.ps1    | Fetch preference variable values from the caller's scope.            |
 | Get-DevicePath.ps1          | Get mappings of disk volume letter and device path                   |
 | Get-ExportedType.ps1        | Get exported types in the current session                            |
@@ -28,6 +27,14 @@ Contains scripts which are not part of modules as follows:
 | Restart-Network.ps1         | Restart or reset network without the need for reboot                 |
 | Select-HiddenProperty.ps1   | Get a list of hidden properties for specified firewall rule group    |
 | Update-HelpContent.ps1      | Generate new or update existing help files for all project modules   |
+
+---
+
+| Security scripts            | Description                                                          |
+| --------------------------- | -------------------------------------------------------------------- |
+| Deploy-ASR.ps1              | Deploy attack surface reduction (ASR) rules                          |
+| Find-UnsignedFile.ps1       | Scan executables for digital signature and check virus total status  |
+| Show-ASR.ps1                | Show current attack surface reduction (ASR) rules configuration      |
 
 ---
 

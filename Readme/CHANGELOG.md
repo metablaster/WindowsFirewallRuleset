@@ -52,8 +52,10 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
-  - `Find-UnsignedFile` self contained script to help detect suspicious programs and drivers on
+  - `Find-UnsignedFile.ps1` self contained script to help detect suspicious programs and drivers on
   computer which may be a good candidate to tamper with firewall and security in general
+  - `Deploy-ASR.ps1` self contained script used to deploy attack surface reduction rules
+  - `Show-ASR.ps1` self contained script used to display ASR configuration
 
 ## v0.12.0 (current release)
 
