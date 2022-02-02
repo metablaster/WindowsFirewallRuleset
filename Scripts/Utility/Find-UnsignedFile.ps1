@@ -37,7 +37,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Scan executables for digital signature
+Scan executables for digital signature and check virus total status
 
 .DESCRIPTION
 Use Find-UnsignedFile.ps1 to scan executable files in specified directory for digital signature.
@@ -53,9 +53,13 @@ Directory which is to be scanned for executable files.
 The value of LiteralPath is used exactly as it's typed.
 No characters are interpreted as wildcards.
 
-.PARAMETER Type
+.PARAMETER Driver
+If specified, system drivers are checked for digital signature and
+uploaded to virus total if necessary.
+
+.PARAMETER Filter
 Specify executable program type (file extension) which is to be searched in path specified by -LiteralPath.
-The default is EXE.
+The default is *.exe
 
 .PARAMETER SigcheckLocation
 Specify path to sigcheck executable program.
@@ -122,6 +126,9 @@ None. Find-UnsignedFile.ps1 does not generate any output
 TODO: More functionality can be implemented by handling more sigcheck switches
 
 .LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+
+.LINK
 https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
 #>
 
@@ -137,9 +144,12 @@ param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "LiteralPath")]
 	[string] $LiteralPath,
 
-	[Parameter()]
-	[ValidateSet("exe", "com", "dll")]
-	[string] $Type = "exe",
+	[Parameter(ParameterSetName = "Driver")]
+	[switch] $Driver,
+
+	[Parameter(ParameterSetName = "Path")]
+	[Parameter(ParameterSetName = "LiteralPath")]
+	[string] $Filter = "*.exe",
 
 	[Parameter()]
 	[System.IO.DirectoryInfo] $SigcheckLocation = $PSScriptRoot,
@@ -148,12 +158,13 @@ param (
 	[switch] $Log,
 
 	[Parameter()]
-	[string] $LogName = ".\ScanStatus.json",
+	[string] $LogName = "$PSScriptRoot\..\..\Exports\ScanStatus.json",
 
 	[Parameter()]
 	[switch] $All,
 
-	[Parameter()]
+	[Parameter(ParameterSetName = "Path")]
+	[Parameter(ParameterSetName = "LiteralPath")]
 	[switch] $Recurse,
 
 	[Parameter()]
@@ -181,28 +192,43 @@ if ([string]::IsNullOrEmpty($Path))
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 }
+elseif ($Driver)
+{
+	$ExpandedPath = "Driver store"
+}
 else
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($Path)
 	$ExpandedPath = Resolve-Path -Path $ExpandedPath
 }
 
-if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '*.$Type' files"))
+if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$Filter' files"))
 {
 	$StopWatch = [System.Diagnostics.Stopwatch]::new()
 	$StopWatch.Start()
 
-	Write-Information -MessageData "INFO: Scanning $ExpandedPath for executable files with '*.$Type' extension"
-	$Files = Get-ChildItem -Path $ExpandedPath -Filter "*.$Type" -Recurse:$Recurse
+	if ($Driver)
+	{
+		$Filter = "*.sys"
+		$Files = Get-CimInstance -Class Win32_SystemDriver | Select-Object -ExpandProperty PathName
+	}
+	else
+	{
+		Write-Information -MessageData "INFO: Scanning $ExpandedPath for executable files with '$Filter' extension"
+
+		if (!$Filter.StartsWith("*.")) { $Filter = "*.$Filter" }
+		$Files = Get-ChildItem -Path $ExpandedPath -Filter $Filter -Recurse:$Recurse
+	}
+
 	$TotalFiles = ($Files | Measure-Object).Count
 
 	if ($TotalFiles -gt 0)
 	{
-		Write-Information -MessageData "INFO: Checking $TotalFiles '*.$Type' files in $ExpandedPath"
+		Write-Information -MessageData "INFO: Checking $TotalFiles '$Filter' files in $ExpandedPath"
 	}
 	else
 	{
-		Write-Warning -Message "No executable files with *.$type extension have been found in $ExpandedPath"
+		Write-Warning -Message "No executable files with '$Filter' extension have been found in $ExpandedPath"
 		return
 	}
 
@@ -217,7 +243,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '*.
 		$SigcheckPath = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation.FullName)
 		$SigcheckPath = Resolve-Path -Path $SigcheckPath
 
-		if ([System.Environment]::Is64BitOperatingSystem())
+		if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
 		{
 			$SigcheckExecutable = "sigcheck64.exe"
 		}
@@ -350,8 +376,16 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '*.
 
 	foreach ($File in $Files)
 	{
-		$FilePath = $File.FullName
-		$FileName = $File.Name
+		if ($Driver)
+		{
+			$FilePath = $File
+			$FileName = Split-Path -Path $File -Leaf
+		}
+		else
+		{
+			$FilePath = $File.FullName
+			$FileName = $File.Name
+		}
 
 		if ($TotalFiles -gt 50)
 		{
@@ -450,11 +484,11 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '*.
 
 						if ($Detection.Success)
 						{
-							Write-Information -MessageData "INFO: Virus total status is '$($Detection.Value)'"
+							Write-Information -MessageData "INFO: $FileName Virus total status is '$($Detection.Value)'"
 
 							if ($Log)
 							{
-								$ScanResult.Add("$FileName VT status is", $Detection.Value)
+								$ScanResult.Add("VT status is", $Detection.Value)
 							}
 						}
 
@@ -487,6 +521,8 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '*.
 								$ScanResult.Add("Description", $Description.Value)
 							}
 						}
+
+						$ScanResult.Add("FilePath", $FilePath)
 					}
 				}
 

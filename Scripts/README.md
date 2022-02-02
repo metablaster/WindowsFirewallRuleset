@@ -18,6 +18,7 @@ Contains scripts which are not part of modules as follows:
 | Utility scripts             | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
 | Debug-FilteringPlatform.ps1 | Parse audit events from event log and write them to log file         |
+| Find-UnsignedFile.ps1       | Scan executables for digital signature and check virus total status  |
 | Get-CallerPreference.ps1    | Fetch preference variable values from the caller's scope.            |
 | Get-DevicePath.ps1          | Get mappings of disk volume letter and device path                   |
 | Get-ExportedType.ps1        | Get exported types in the current session                            |
@@ -37,7 +38,3 @@ Contains scripts which are not part of modules as follows:
 | Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |
 
 ---
-
-**Warning:**\
-Export\Import of firewall rules might take a lot of time, it is recommended to either customize these\
-2 scripts to fine tune what to export or even better to use `secpol.msc` to export\import firewall.
