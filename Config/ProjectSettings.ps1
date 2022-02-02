@@ -472,7 +472,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			if (!$PolicyStoreStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol HTTP -Confirm:$false
+				Set-WinRMClient -Confirm:$false
 				Enable-WinRMServer -Protocol HTTP -Confirm:$false -KeepDefault
 				Disable-WinRMServer -Confirm:$false -KeepDefault
 			}

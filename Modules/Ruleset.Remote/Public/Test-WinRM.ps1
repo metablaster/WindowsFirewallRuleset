@@ -45,7 +45,7 @@ If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
 Specify protocol to use for test, HTTP, HTTPS or both.
-By default only HTTPS is tested.
+By default both HTTPS and HTTPS are tested.
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
@@ -108,7 +108,7 @@ function Test-WinRM
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "HTTPS",
+		[string] $Protocol = "Any",
 
 		[Parameter()]
 		[ValidateRange(1, 65535)]

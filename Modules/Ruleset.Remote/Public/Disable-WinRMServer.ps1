@@ -138,8 +138,9 @@ function Disable-WinRMServer
 
 			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			Get-PSSessionConfiguration | Where-Object {
-				($_.Name -ne "Microsoft.PowerShell*") -and
-				($_.Name -ne "PowerShell.$($PSVersionTable.PSVersion)*" )
+				($_.Name -notlike "Microsoft.PowerShell*") -and
+				# TODO: With or without wildcard PowerShell.$($PSVersionTable.PSVersion) gets disabled
+				($_.Name -notlike "PowerShell.$($PSVersionTable.PSVersion.Major)*") -and
 				($_.Name -ne $script:FirewallSession)
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}

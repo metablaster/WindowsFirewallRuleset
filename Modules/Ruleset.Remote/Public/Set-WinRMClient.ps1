@@ -52,6 +52,11 @@ If not found, default repository location (\Exports) is searched for DER encoded
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
+.PARAMETER TrustedHosts
+Optionally append computers or IP addresses to trusted hosts.
+To specify multiple hosts, separate then with comma without spaces.
+This is required for HTTP
+
 .PARAMETER Force
 If specified, does not prompt to set connected network adapters to private profile,
 and does not prompt to temporarily disable any non connected network adapter if needed.
@@ -69,9 +74,10 @@ Configures client machine to run commands remotely on computer Server2, using SS
 by installing specified certificate file into trusted root store.
 
 .EXAMPLE
-PS> Set-WinRMClient -Domain Server3 -Protocol HTTP
+PS> Set-WinRMClient -Domain Server3 -Protocol HTTP -TrustedHosts "172.64.9.4,RemoteComputer,192.168.2.155"
 
-Configures client machine to run commands remotely on computer Server3 using HTTP
+Configures client machine to run commands remotely on computer Server3 using HTTP, and allows
+connection to hosts specified by -TrustedHosts parameter.
 
 .INPUTS
 None. You cannot pipe objects to Set-WinRMClient
@@ -112,13 +118,16 @@ function Set-WinRMClient
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "HTTPS",
+		[string] $Protocol = "Any",
 
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "CertThumbprint")]
 		[string] $CertThumbprint,
+
+		[Parameter()]
+		[string] $TrustedHosts,
 
 		[Parameter()]
 		[switch] $Force
@@ -199,18 +208,18 @@ function Set-WinRMClient
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client options"
 
-		if (($Protocol -ne "HTTPS") -and ($Domain -ne ([System.Environment]::MachineName)))
+		if (![string]::IsNullOrEmpty($TrustedHosts) -and ($Protocol -ne "HTTPS"))
 		{
-			$TrustedHosts = (Get-Item WSMan:\localhost\Client\TrustedHosts).Value
-
-			if ([string]::IsNullOrEmpty($TrustedHosts))
+			if ([string]::IsNullOrEmpty($ClientOptions["TrustedHosts"]))
 			{
-				$ClientOptions["TrustedHosts"] = $Domain
+				$ClientOptions["TrustedHosts"] = $TrustedHosts
 			}
 			else
 			{
-				$ClientOptions["TrustedHosts"] = "$TrustedHosts, $Domain"
+				$ClientOptions["TrustedHosts"] = "$($ClientOptions["TrustedHosts"]), $TrustedHosts"
 			}
+
+			Write-Debug -Message "Client options set to $($ClientOptions["TrustedHosts"])" -Debug
 		}
 
 		if ($PSVersionTable.PSEdition -eq "Core")
@@ -218,7 +227,7 @@ function Set-WinRMClient
 			Set-Item -Path WSMan:\localhost\client\NetworkDelayms -Value $ClientOptions["NetworkDelayms"]
 			Set-Item -Path WSMan:\localhost\client\URLPrefix -Value $ClientOptions["URLPrefix"]
 			Set-Item -Path WSMan:\localhost\client\AllowUnencrypted -Value $ClientOptions["AllowUnencrypted"]
-			Set-Item -Path WSMan:\localhost\client\TrustedHosts -Value $ClientOptions["TrustedHosts"] -Force
+			Set-Item -Path WSMan:\localhost\client\TrustedHosts -Value $ClientOptions["TrustedHosts"] -Concatenate -Force
 		}
 		else
 		{

@@ -159,7 +159,7 @@ if (!$Default)
 
 			# MSDN: Allows the client computer to request unencrypted traffic.
 			# The default value is false
-			AllowUnencrypted = $Protocol -ne "HTTPS"
+			AllowUnencrypted = $false #$Protocol -ne "HTTPS"
 
 			# The TrustedHosts item can contain a comma-separated list of computer names,
 			# IP addresses, and fully-qualified domain names. Wildcards are permitted.
@@ -205,7 +205,7 @@ if (!$Default)
 
 			# Allows the client computer to request unencrypted traffic.
 			# The default value is false
-			AllowUnencrypted = $true
+			AllowUnencrypted = $false
 
 			# Specifies the IPv4 or IPv6 addresses that listeners can use.
 			# IPv4: An IPv4 literal string consists of four dotted decimal numbers, each in the range 0 through 255.
