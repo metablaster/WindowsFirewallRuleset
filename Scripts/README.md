@@ -34,6 +34,7 @@ Contains scripts which are not part of modules as follows:
 | --------------------------- | -------------------------------------------------------------------- |
 | Deploy-ASR.ps1              | Deploy attack surface reduction (ASR) rules                          |
 | Find-UnsignedFile.ps1       | Scan executables for digital signature and check virus total status  |
+| Set-ATP.ps1                 | Sets the Advanced Threat Protection (ATP) settings                   |
 | Show-ASR.ps1                | Show current attack surface reduction (ASR) rules configuration      |
 
 ---

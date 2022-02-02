@@ -41,6 +41,7 @@ Deploy attack surface reduction rules
 
 .DESCRIPTION
 Use Deploy-ASR.ps1 to deploy ASR rules.
+Use attack surface reduction rules to prevent malware infection.
 Your organization's attack surface includes all the places where an attacker could compromise your
 organization's devices or networks.
 Reducing your attack surface means protecting your organization's devices and network,
