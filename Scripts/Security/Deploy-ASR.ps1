@@ -73,7 +73,7 @@ https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack
 [OutputType([void])]
 param ()
 
-if ($PSCmdlet.ShouldProcess("GPO", "Deploy attack surface reduction rules"))
+if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surface reduction rules"))
 {
 	$Rules = @(
 		# Block abuse of exploited vulnerable signed drivers

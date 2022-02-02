@@ -68,10 +68,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 param ()
 
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Unblocking repository files" -INFA "Continue"
+Get-ChildItem -Path $PSScriptRoot\.. -Recurse | Unblock-File
 
-$Files = Get-ChildItem -Path $PSScriptRoot\.. -Recurse
-$Files | Unblock-File
-
-Write-Verbose -Message "[$ThisScript] $($Files.Count) repository files have been unblocked"
+Write-Verbose -Message "[$ThisScript] $($Files.Count) All repository files have been unblocked"

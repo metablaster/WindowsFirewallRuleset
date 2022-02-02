@@ -68,7 +68,7 @@ https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference
 [OutputType([void])]
 param ()
 
-if ($PSCmdlet.ShouldProcess("GPO", "Configure Microsoft Defender Antivirus"))
+if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy recommended settings"))
 {
 	# Block at first sight (MAPS)
 	Set-MpPreference -SubmitSamplesConsent 3 -MAPSReporting Basic -DisableBlockAtFirstSeen $false `
@@ -79,16 +79,18 @@ if ($PSCmdlet.ShouldProcess("GPO", "Configure Microsoft Defender Antivirus"))
 	Set-MpPreference -CloudExtendedTimeout 50 -CloudBlockLevel high -EnableFileHashComputation $true
 
 	# Scan
-	Set-MpPreference -ScanAvgCPULoadFactor 60 -ScanScheduleDay Sunday -ScanScheduleTime 900 `
-		-CheckForSignaturesBeforeRunningScan $true -ScanParameters QuickScan `
-		-DisableBehaviorMonitoring $false `
-		-DisableScriptScanning $false `
-		-DisableArchiveScanning $false `
+	Set-MpPreference -ScanAvgCPULoadFactor 60 -ScanScheduleDay Sunday -ScanScheduleTime 720 `
+		-CheckForSignaturesBeforeRunningScan $true -ScanParameters FullScan `
 		-DisableCatchupFullScan $false `
 		-DisableCatchupQuickScan $false `
-		-DisableEmailScanning $false `
+		-DisableRestorePoint $false `
+		-DisableScriptScanning $false `
+		-DisableArchiveScanning $false `
+		-DisableEmailScanning $true `
 		-DisableRemovableDriveScanning $true `
-		-DisableRestorePoint $true `
 		-DisableScanningMappedNetworkDrivesForFullScan $true `
 		-DisableScanningNetworkFiles $true
+
+	# Other
+	Set-MpPreference -DisableBehaviorMonitoring $false `
 }

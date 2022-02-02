@@ -41,6 +41,7 @@ Contains scripts which are not part of modules as follows:
 
 | Experimental scripts        | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
+| Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state         |
 | Initialize-Development.ps1  | Initialize development environment                                   |
 | Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis      |
 | Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |

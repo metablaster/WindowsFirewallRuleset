@@ -57,6 +57,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Deploy-ASR.ps1` self contained script used to deploy attack surface reduction rules
   - `Show-ASR.ps1` self contained script used to display ASR configuration
   - `Set-ATP.ps1` self contained script used to configure Microsoft Defender Antivirus
+  - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
 
 ## v0.12.0 (current release)
 
