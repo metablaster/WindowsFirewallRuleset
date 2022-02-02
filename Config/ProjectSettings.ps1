@@ -473,8 +473,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -Confirm:$false
-				Disable-WinRMServer -Confirm:$false
+				Enable-WinRMServer -Protocol HTTP -Confirm:$false -KeepDefault
+				Disable-WinRMServer -Confirm:$false -KeepDefault
 			}
 
 			$SessionOptionParams["NoEncryption"] = $true

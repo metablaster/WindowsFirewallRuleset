@@ -43,7 +43,7 @@ If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-
 
 .PARAMETER Protocol
 Specifies listener protocol to HTTP, HTTPS or both.
-By default only HTTPS is configured.
+By default both HTTP and HTTPS are configured.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -53,6 +53,10 @@ This must be PFX file.
 .PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
+
+.PARAMETER KeepDefault
+If specified, keeps default session configurations enabled.
+This is needed to be able to specify -ComputerName parameter in commands that support it
 
 .PARAMETER Force
 If specified, overwrites an existing exported certificate (*.cer) file,
@@ -128,13 +132,16 @@ function Enable-WinRMServer
 	param (
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "HTTPS",
+		[string] $Protocol = "Any",
 
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "ThumbPrint")]
 		[string] $CertThumbprint,
+
+		[Parameter()]
+		[switch] $KeepDefault,
 
 		[Parameter()]
 		[switch] $Force
@@ -295,7 +302,25 @@ function Enable-WinRMServer
 		Set-StrictMode -Version Latest
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+	# NOTE: False because, this is needed to be able to specify -ComputerName on commands that support it
+	if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable default session configurations"))
+	{
+		# Disable unused default session configurations
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling default session configurations"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			Enable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
+			Enable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion)" -NoServiceRestart -Force
+		}
+		else
+		{
+			Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force
+			Enable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
+			Enable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
+		}
+	}
+	elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 	{
 		# Disable unused default session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"

@@ -43,6 +43,10 @@ Administrators group on the computer.
 If specified, will disable WinRM service completely including loopback functionality,
 remove all listeners and disable all session configurations.
 
+.PARAMETER KeepDefault
+If specified, keeps default session configurations enabled.
+This is needed to be able to specify -ComputerName parameter in commands that support it
+
 .EXAMPLE
 PS> Disable-WinRMServer
 
@@ -80,7 +84,10 @@ function Disable-WinRMServer
 	[OutputType([void])]
 	param (
 		[Parameter(ParameterSetName = "All")]
-		[switch] $All
+		[switch] $All,
+
+		[Parameter()]
+		[switch] $KeepDefault
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -125,9 +132,20 @@ function Disable-WinRMServer
 	}
 	else
 	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded session configurations"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling session configurations"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded session configurations"
+
+			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
+			Get-PSSessionConfiguration | Where-Object {
+				($_.Name -ne "Microsoft.PowerShell*") -and
+				($_.Name -ne "PowerShell.$($PSVersionTable.PSVersion)*" )
+				($_.Name -ne $script:FirewallSession)
+			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+		}
+		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
 
 			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			Get-PSSessionConfiguration | Where-Object {
