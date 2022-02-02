@@ -251,21 +251,20 @@ process
 			# Define remote file path - computername, drive, folder path
 			$RemoteTempFile = "\\{0}\{1}`${2}" -f "$Computer", (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
 
-			# Delete previous results
 			try
 			{
-				Invoke-CimMethod -ClassName Win32_process -MethodName Create -ComputerName $Computer `
+				# Delete previous results
+				Invoke-CimMethod -ClassName Win32_Process -MethodName Create -ComputerName $Computer `
 					-Arguments @{ CommandLine = "cmd /c del $TempLocation" } -ErrorAction Stop | Out-Null
 			}
 			catch
 			{
-				Write-Warning -Message "[$ThisScript] Could not invoke create win32_process on $Computer to delete $TempLocation"
+				Write-Warning -Message "[$ThisScript] Could not invoke create Win32_Process on $Computer to delete $TempLocation"
 			}
 
-			# Run command
 			try
 			{
-				$ProcessID = (Invoke-CimMethod -ClassName Win32_process -MethodName Create `
+				$ProcessID = (Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
 						-Arguments @{ CommandLine = $cmd } -ComputerName $Computer -ErrorAction Stop).ProcessId
 			}
 			catch

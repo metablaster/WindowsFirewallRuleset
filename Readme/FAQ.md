@@ -268,6 +268,7 @@ them as follows:
     - [code.cmd][vscode] (To learn VSCode version)
     - [git.exe][git] (To learn git version or to set up git)
     - [makecab.exe][makecab] (To make online help content)
+    - [netstat.exe][netstat] (Used to get network statistics)
 
 10. There is nothing harmful
 
@@ -355,3 +356,4 @@ network settings as follows:
 [vscode]: https://code.visualstudio.com "Visual Studio Code"
 [git]: https://git-scm.com "Visit git homepage"
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
+[netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
