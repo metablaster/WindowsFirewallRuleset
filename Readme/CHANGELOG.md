@@ -54,9 +54,9 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
   - `Find-UnsignedFile.ps1` self contained script to help detect suspicious programs and drivers on
   computer which may be a good candidate to tamper with firewall and security in general
-  - `Deploy-ASR.ps1` self contained script used to deploy attack surface reduction rules
-  - `Show-ASR.ps1` self contained script used to display ASR configuration
-  - `Set-ATP.ps1` self contained script used to configure Microsoft Defender Antivirus
+  - `Deploy-ASR.ps1` new script used to deploy attack surface reduction rules
+  - `Show-ASR.ps1` new script used to display ASR configuration
+  - `Set-ATP.ps1` new script script used to configure Microsoft Defender Antivirus
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
 
 ## v0.12.0 (current release)

@@ -47,6 +47,12 @@ organization's devices or networks.
 Reducing your attack surface means protecting your organization's devices and network,
 which leaves attackers with fewer ways to perform attacks.
 
+.PARAMETER Domain
+Computer name onto which do deploy ASR rules
+
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Deploy-ASR.ps1
 
@@ -67,11 +73,29 @@ https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack
 #>
 
 #Requires -Version 5.1
+#Requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
-param ()
+param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+Initialize-Project -Strict
+
+# User prompt
+$Accept = "Accpet deploying ASR rules to target computer"
+$Deny = "Abort operation, no ASR rules will be deployed"
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
 
 if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surface reduction rules"))
 {
@@ -145,5 +169,6 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		"Disabled "
 	)
 
-	Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -AttackSurfaceReductionRules_Actions $Actions
+	Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -CimSession $CimServer `
+		-AttackSurfaceReductionRules_Actions $Actions
 }

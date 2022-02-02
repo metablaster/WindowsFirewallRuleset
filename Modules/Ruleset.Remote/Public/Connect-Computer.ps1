@@ -307,8 +307,9 @@ function Connect-Computer
 			}
 
 			# TODO: For VM without external switch use -VMName
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
-			Enter-PSSession -Name RemoteSession
+			# TODO: Temporarily not using because not in need to enter session
+			# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
+			# Enter-PSSession -Name RemoteSession
 		}
 		catch
 		{

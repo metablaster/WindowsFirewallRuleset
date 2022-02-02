@@ -42,6 +42,9 @@ Show ASR rules
 .DESCRIPTION
 Use Show-ASR.ps1 to show current configuration of attack surface reduction (ASR) rules
 
+.PARAMETER Domain
+Computer name which is to be queried for ASR rules
+
 .EXAMPLE
 PS> .\Show-ASR.ps1
 
@@ -62,10 +65,20 @@ https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack
 #>
 
 #Requires -Version 5.1
+#Requires -PSEdition Desktop
 
 [CmdletBinding()]
 [OutputType([void])]
-param ()
+param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName
+)
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+Initialize-Project -Strict
+#endregion
 
 $InformationPreference = "Continue"
 
@@ -96,7 +109,8 @@ $InformationPreference = "Continue"
 	}
 }
 
-$MpPreference = Get-MpPreference | Select-Object AttackSurfaceReductionRules_Ids, AttackSurfaceReductionRules_Actions
+$MpPreference = Get-MpPreference -CimSession $CimServer |
+Select-Object AttackSurfaceReductionRules_Ids, AttackSurfaceReductionRules_Actions
 
 foreach ($Entry in $MpPreference)
 {

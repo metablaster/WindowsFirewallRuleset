@@ -761,14 +761,14 @@ Following features are desired and might be available at some point in the futur
 
 1. Remote firewall administration
 
-   - Deploying firewall configuration to one or multiple remote computers on domain or home networks
+    - Deploying firewall configuration to one or multiple remote computers on domain or home networks
 
 2. Comprehensive firewall rulesets for Windows Server editions and dedicated gateway systems.
 
 3. On demand or scheduled registry scan to validate integrity of active firewall filtering policy
 
-   - Any firewall rule in the registry that is not part of this repository is reported for review
-   - Because, malware, hackers and even trusted software can attempt to bypass firewall at any time
+    - Any firewall rule in the registry that is not part of this repository is reported for review
+    - Because, malware, hackers and even trusted software can attempt to bypass firewall at any time
 
 4. Full functionality for the following not yet tested editions of Windows 10.0
    - Windows 10 Pro for Workstations

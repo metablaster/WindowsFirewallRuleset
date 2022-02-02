@@ -42,6 +42,12 @@ Set advanced threat protection settings
 .DESCRIPTION
 Use Set-ATP.ps1 to configure Microsoft Defender Antivirus.
 
+.PARAMETER Domain
+Computer name onto which do deploy ATP configuration
+
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> .\Set-ATP.ps1
 
@@ -62,21 +68,39 @@ https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference
 #>
 
 #Requires -Version 5.1
+#Requires -PSEdition Desktop
 #Requires -RunAsAdministrator
 
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
-param ()
+param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
+	[switch] $Force
+)
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+Initialize-Project -Strict
+
+# User prompt
+$Accept = "Accpet deploying ASR rules to target computer"
+$Deny = "Abort operation, no ASR rules will be deployed"
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
 
 if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy recommended settings"))
 {
 	# Block at first sight (MAPS)
 	Set-MpPreference -SubmitSamplesConsent 3 -MAPSReporting Basic -DisableBlockAtFirstSeen $false `
-		-DisableIOAVProtection $false -DisableRealtimeMonitoring $false
+		-DisableIOAVProtection $false -DisableRealtimeMonitoring $false -CimSession $CimServer
 
 	# Cloud protection
 	# https://docs.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-defendercloudblockleveltype
-	Set-MpPreference -CloudExtendedTimeout 50 -CloudBlockLevel high -EnableFileHashComputation $true
+	Set-MpPreference -CloudExtendedTimeout 50 -CloudBlockLevel high -EnableFileHashComputation $true -CimSession $CimServer
 
 	# Scan
 	Set-MpPreference -ScanAvgCPULoadFactor 60 -ScanScheduleDay Sunday -ScanScheduleTime 720 `
@@ -89,8 +113,9 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy recommended 
 		-DisableEmailScanning $true `
 		-DisableRemovableDriveScanning $true `
 		-DisableScanningMappedNetworkDrivesForFullScan $true `
-		-DisableScanningNetworkFiles $true
+		-DisableScanningNetworkFiles $true `
+		-CimSession $CimServer
 
 	# Other
-	Set-MpPreference -DisableBehaviorMonitoring $false `
+	Set-MpPreference -DisableBehaviorMonitoring $false -CimSession $CimServer
 }
