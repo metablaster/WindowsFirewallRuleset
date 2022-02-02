@@ -33,6 +33,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Added rules for:
 
     - Microsoft Edge WebView2
+    - Sysinternals sigcheck
 
   - Updated rules for:
 
@@ -51,6 +52,8 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
+  - `Find-UnsignedFile` self contained script to help detect suspicious programs and drivers on
+  computer which may be a good candidate to tamper with firewall and security in general
 
 ## v0.12.0 (current release)
 

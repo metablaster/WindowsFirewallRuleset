@@ -218,6 +218,36 @@ This rule serves to allow PSPing.exe to act as a client." | Format-RuleOutput
 Due to wide range of address and port options these should be set to Any.
 This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 	}
+
+	$Program = "$SysInternalsRoot\sigcheck.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Sysinternals sigcheck" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $SysInternalsUsers `
+			-InterfaceType $DefaultInterface `
+			-Description "Connection to virus total to upload file for scan" |
+		Format-RuleOutput
+	}
+
+	$Program = "$SysInternalsRoot\sigcheck64.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Sysinternals sigcheck64" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $SysInternalsUsers `
+			-InterfaceType $DefaultInterface `
+			-Description "Connection to virus total to upload file for scan" |
+		Format-RuleOutput
+	}
 }
 
 if ($UpdateGPO)
