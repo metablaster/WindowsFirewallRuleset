@@ -89,11 +89,12 @@ function Disconnect-Computer
 
 	if (Get-PSSession -Name RemoteSession -EA Ignore)
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSSession 'RemoteSession'"
 		Exit-PSSession
 
 		# NOTE: When you use Exit-PSSession or the EXIT keyword, the interactive session ends,
 		# but the PSSession that you created remains open and available for use.
-		Disconnect-PSSession -Name RemoteSession
+		Disconnect-PSSession -Name RemoteSession | Out-Null
 		Remove-PSSession -Name RemoteSession
 	}
 

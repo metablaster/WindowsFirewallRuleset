@@ -163,7 +163,7 @@ function Connect-Computer
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
-	$WSManParams = @{
+	$PSSessionParams = @{
 		# PS session name
 		Name = "RemoteSession"
 		Port = $Port
@@ -174,28 +174,28 @@ function Connect-Computer
 
 	if ($CertThumbprint)
 	{
-		$WSManParams["CertificateThumbprint"] = $CertThumbprint
+		$PSSessionParams["CertificateThumbprint"] = $CertThumbprint
 	}
 
 	if ($Protocol -eq "Any")
 	{
-		$WSManParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
+		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
 	}
 	else
 	{
-		$WSManParams["UseSSL"] = $Protocol -eq "HTTPS"
+		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	if ($WSManParams["UseSSL"])
+	if ($PSSessionParams["UseSSL"])
 	{
 		if (!$Port)
 		{
-			$WSManParams["Port"] = 5986
+			$PSSessionParams["Port"] = 5986
 		}
 
 		if (!$CimOptions)
 		{
-			# TODO: LocalStores needs a better place for adjustment
+			# TODO: LocalStore needs a better place for adjustment
 			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
 		}
 	}
@@ -203,7 +203,7 @@ function Connect-Computer
 	{
 		if (!$Port)
 		{
-			$WSManParams["Port"] = 5985
+			$PSSessionParams["Port"] = 5985
 		}
 
 		if (!$CimOptions)
@@ -216,7 +216,7 @@ function Connect-Computer
 		# CIM session name
 		Name = "RemoteCim"
 		Authentication = "Default"
-		Port = $WSManParams["Port"]
+		Port = $PSSessionParams["Port"]
 		SessionOption = $CimOptions
 		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	}
@@ -227,7 +227,7 @@ function Connect-Computer
 	}
 
 	# Remote computer or localhost over SSL
-	if (($Domain -ne ([System.Environment]::MachineName)) -or ($WSManParams["UseSSL"]))
+	if (($Domain -ne ([System.Environment]::MachineName)) -or ($PSSessionParams["UseSSL"]))
 	{
 		if (!$Credential)
 		{
@@ -250,8 +250,8 @@ function Connect-Computer
 		$CimParams["ComputerName"] = $Domain
 		$CimParams["Credential"] = $Credential
 
-		$WSManParams["ComputerName"] = $Domain
-		$WSManParams["Credential"] = $Credential
+		$PSSessionParams["ComputerName"] = $Domain
+		$PSSessionParams["Credential"] = $Credential
 	}
 
 	try
@@ -303,7 +303,7 @@ function Connect-Computer
 			if (!(Get-PSSession -Name RemoteSession -ErrorAction Ignore))
 			{
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating remote session to computer '$Domain'"
-				New-PSSession @WSManParams | Out-Null
+				New-PSSession @PSSessionParams | Out-Null
 			}
 
 			# TODO: For VM without external switch use -VMName

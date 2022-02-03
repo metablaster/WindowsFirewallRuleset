@@ -213,6 +213,8 @@ PSTypeName = unique object type name for this module
 
 Minimum properties if possible in this order:
 
+Ruleset.Userinfo
+
 ```none
 Domain = computer name
 User = user name
@@ -226,17 +228,16 @@ PSTypeName = unique object type name for this module
 
 Special custom objects:
 
-Ruleset.PrincipalSID
+Ruleset.Userinfo.Principal
 
 ```none
 Domain
-User
 Principal
 SID
 PSTypeName
 ```
 
-Ruleset.GroupSID
+Ruleset.Userinfo.Group
 
 ```none
 Domain

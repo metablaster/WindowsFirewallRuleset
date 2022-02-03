@@ -120,6 +120,7 @@ function Get-TypeName
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		$ScriptBlockCaller = $MyInvocation.InvocationName
 		# TODO: This scriptblock should probably be a separate function called "Trace-TypeName" which would serve for troubleshooting
 		[scriptblock] $CheckType = {
 			param (
@@ -137,12 +138,12 @@ function Get-TypeName
 					if (([version] $PSVersionTable.PSVersion) -ge "7.1")
 					{
 						# NOTE: $Assembly.GetTypes() not compatible
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation is not supported on PowerShell Core 7.1+"
+						Write-Warning -Message "[$ScriptBlockCaller] Operation is not supported on PowerShell Core 7.1+"
 						return
 					}
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching assemblies for type: $TypeName"
+				Write-Verbose -Message "[$ScriptBlockCaller] Searching assemblies for type: $TypeName"
 				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{
 					$AssemblyTypes = $Assembly.GetTypes() | Where-Object {
@@ -154,7 +155,7 @@ function Get-TypeName
 					if ($AssemblyTypes)
 					{
 						$AssemblyTypes | ForEach-Object {
-							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Found type $($_.FullName) in assembly: $($Assembly.Location)"
+							Write-Verbose -Message "[$ScriptBlockCaller] Found type $($_.FullName) in assembly: $($Assembly.Location)"
 							$_
 						} | Write-Output
 					}
@@ -162,7 +163,7 @@ function Get-TypeName
 
 				if (!$Result)
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Searching assemblies for .NET type failed"
+					Write-Debug -Message "[$ScriptBlockCaller)] Searching assemblies for .NET type failed"
 					return
 				}
 			}

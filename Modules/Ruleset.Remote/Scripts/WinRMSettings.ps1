@@ -45,6 +45,11 @@ Include settings that apply to WinRM client configuration
 .PARAMETER IncludeServer
 Include settings that apply to WinRM server configuration
 
+.PARAMETER AllowUnencrypted
+If specified, unencrypted traffic is allowed.
+This parameter is needed when configuring localhost over HTTP to be able to
+avoid specifying -Credential for localhost.
+
 .PARAMETER Default
 If specified default options are used instead of modified ones,
 this is to be used to restore WinRM to system defaults.
@@ -75,6 +80,7 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
+[CmdletBinding(DefaultParameterSetName = "Custom")]
 param (
 	[Parameter()]
 	[switch] $IncludeClient,
@@ -82,7 +88,10 @@ param (
 	[Parameter()]
 	[switch] $IncludeServer,
 
-	[Parameter()]
+	[Parameter(ParameterSetName = "Custom")]
+	[switch] $AllowUnencrypted,
+
+	[Parameter(ParameterSetName = "Default")]
 	[switch] $Default
 )
 
@@ -159,7 +168,7 @@ if (!$Default)
 
 			# MSDN: Allows the client computer to request unencrypted traffic.
 			# The default value is false
-			AllowUnencrypted = $false
+			AllowUnencrypted = $AllowUnencrypted
 
 			# The TrustedHosts item can contain a comma-separated list of computer names,
 			# IP addresses, and fully-qualified domain names. Wildcards are permitted.
@@ -205,7 +214,7 @@ if (!$Default)
 
 			# Allows the client computer to request unencrypted traffic.
 			# The default value is false
-			AllowUnencrypted = $false
+			AllowUnencrypted = $AllowUnencrypted
 
 			# Specifies the IPv4 or IPv6 addresses that listeners can use.
 			# IPv4: An IPv4 literal string consists of four dotted decimal numbers, each in the range 0 through 255.

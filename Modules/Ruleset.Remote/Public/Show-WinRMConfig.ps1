@@ -116,7 +116,7 @@ function Show-WinRMConfig
 	}
 
 	Write-Information -Tags $MyInvocation.InvocationName `
-		-MessageData "INFO: Service firewall rules present=$Present allenabled=$Enabled"
+		-MessageData "INFO: WinRM firewall rules present=$Present allenabled=$Enabled"
 
 	$Present = $false
 	$Enabled = $false
@@ -129,7 +129,7 @@ function Show-WinRMConfig
 	}
 
 	Write-Information -Tags $MyInvocation.InvocationName `
-		-MessageData "INFO: Service compatibility firewall rules present=$Present allenabled=$Enabled"
+		-MessageData "INFO: WinRM compatibility firewall rules present=$Present allenabled=$Enabled"
 
 	# To start it, it must not be disabled
 	if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)

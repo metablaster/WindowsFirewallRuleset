@@ -92,7 +92,7 @@ function Disable-WinRMServer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer
+	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer -AllowUnencrypted:(!$All)
 
 	<# MSDN: Disabling the session configurations does not undo all the changes made by the
 	Enable-PSRemoting or Enable-PSSessionConfiguration cmdlet.
@@ -124,11 +124,16 @@ function Disable-WinRMServer
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all WinRM session configurations"
 			Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
+		}
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Stopping WS-Management (WinRM) service"
-			Set-Service -Name WinRM -StartupType Disabled
-			$WinRM.Stop()
-			$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
+		if ($WmiPlugin.Value -eq $true)
+		{
+			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WMI Provider plugin"
+				Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
+			}
 		}
 	}
 	else
@@ -257,9 +262,10 @@ function Disable-WinRMServer
 				Set-WSManInstance -ResourceURI winrm/config -ValueSet $ProtocolOptions | Out-Null
 			}
 		}
+
+		Restore-NetProfile
 	}
 
-	Restore-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set WinRS options"))
 	{
@@ -304,7 +310,17 @@ function Disable-WinRMServer
 			-Direction Inbound -PolicyStore PersistentStore
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "restart service"))
+	if ($All)
+	{
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop service"))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Stopping WS-Management (WinRM) service"
+			Set-Service -Name WinRM -StartupType Disabled
+			$WinRM.Stop()
+			$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+		}
+	}
+	elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Restart service"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
 

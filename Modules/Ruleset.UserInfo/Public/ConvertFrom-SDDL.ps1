@@ -153,12 +153,10 @@ function ConvertFrom-SDDL
 						[PSCustomObject]@{
 							Domain = Split-Principal $Principal -DomainName -Force:$Force
 							User = Split-Principal $Principal -Force:$Force
-							# TODO: Group = ?, we have no clue about group, calling a function would be overhead
-							# the reason why to include group is consitency for "Ruleset.UserInfo" custom object
 							Principal = $Principal
 							SID = $SID
 							SDDL = $DACL
-							PSTypeName = "Ruleset.UserInfo"
+							PSTypeName = "Ruleset.UserInfo.Principal"
 						}
 					}
 					elseif ($RegMatch.Count -gt 1)

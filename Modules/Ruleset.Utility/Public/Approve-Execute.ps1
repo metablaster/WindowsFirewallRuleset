@@ -151,7 +151,7 @@ function Approve-Execute
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting up title message"
 		$Leaf = Split-Path -Path $MyInvocation.ScriptName -Leaf
 
-		if ($PolicyStore -in $LocalStores)
+		if ($PolicyStore -in $LocalStore)
 		{
 			$Title = "[localhost] Executing: $Leaf"
 		}

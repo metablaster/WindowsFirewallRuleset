@@ -157,7 +157,7 @@ function Get-PrincipalSID
 					User = $UserName
 					Principal = "$Domain\$UserName"
 					SID = $PrincipalSID
-					PSTypeName = "Ruleset.PrincipalSID"
+					PSTypeName = "Ruleset.Userinfo.Principal"
 				}
 			}
 		} # foreach ($Group in $UserGroups)

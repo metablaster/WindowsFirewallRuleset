@@ -33,6 +33,9 @@ Unit test for Get-UserGroup
 .DESCRIPTION
 Test correctness of Get-UserGroup function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,12 +56,16 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -68,18 +75,26 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-UserGroup"
 
-Start-Test "default"
-$Result = Get-UserGroup
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "default remote"
+	Get-UserGroup -Domain $Domain -CIM
+}
+else
+{
+	Start-Test "default"
+	$Result = Get-UserGroup
+	$Result
 
-Start-Test "CIM server"
-Get-UserGroup "localhost" -CIM
+	Start-Test "CIM server"
+	Get-UserGroup "localhost" -CIM
 
-Start-Test "Failure test"
-Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
-Write-Warning -Message "Ignored error: $Failure"
+	Start-Test "Failure test"
+	Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
+	Write-Warning -Message "Ignored error: $Failure"
 
-Test-Output $Result -Command Get-UserGroup
+	Test-Output $Result -Command Get-UserGroup
+}
 
 Update-Log
 Exit-Test

@@ -47,6 +47,9 @@ Wildcard characters are supported.
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
 
+.PARAMETER Credential
+Credential object to be used for remote authentication
+
 .PARAMETER CIM
 Whether to contact CIM server (required for remote computers)
 
@@ -98,6 +101,9 @@ function Get-SDDL
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
+		[PSCredential] $Credential,
+
+		[Parameter()]
 		[switch] $CIM,
 
 		[Parameter()]
@@ -143,14 +149,25 @@ function Get-SDDL
 	{
 		if ($CIM)
 		{
-			# TODO: Get-CimInstance something
-			Write-Error -Category NotImplemented -TargetObject $TargetPath `
-				-Message "Getting SDDL for path location from remote computers not implemented"
+			$TargetPath = Invoke-Command -ComputerName $Domain -ScriptBlock {
+				param (
+					[string] $Path
+				)
+				Resolve-Path -Path $Path -ErrorAction Ignore
+			} -ArgumentList $Path -Credential $Credential
+		}
+		elseif ($Domain -ne [System.Environment]::MachineName)
+		{
+			Write-Error -Category NotImplemented -TargetObject $Path `
+				-Message "Querying remote computers without CIM switch not supported"
 			return
 		}
+		else
+		{
+			# TODO: Multiple paths should be supported either here or trough path parameter
+			$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
+		}
 
-		# TODO: Multiple paths should be supported either here or trough path parameter
-		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
 		$ItemCount = ($TargetPath | Measure-Object).Count
 
 		if ($ItemCount -eq 0)
@@ -164,7 +181,12 @@ function Get-SDDL
 			return
 		}
 
-		$ACL = Get-Acl $TargetPath
+		$ACL = Invoke-Command -ComputerName $Domain -ScriptBlock {
+			param (
+				[string] $TargetPath
+			)
+			Get-Acl -Path $TargetPath
+		} -ArgumentList $TargetPath -Credential $Credential
 
 		if (!$ACL)
 		{

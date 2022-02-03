@@ -260,7 +260,7 @@ function Get-GroupPrincipal
 								Principal = $AccountName
 								SID = $Account.SID
 								LocalAccount = $Account.PrincipalSource -eq "Local"
-								PSTypeName = "Ruleset.UserInfo"
+								PSTypeName = "Ruleset.UserInfo.Principal"
 							}
 						}
 					}

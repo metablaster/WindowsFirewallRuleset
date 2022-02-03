@@ -362,7 +362,7 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
 	# Valid policy stores
-	New-Variable -Name LocalStores -Scope Global -Option Constant -Value @(
+	New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
 		([System.Environment]::MachineName)
 		"PersistentStore"
 		"ActiveStore"
@@ -397,22 +397,18 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	{
 		if ($TargetHost -and ($TargetHost -ne $PolicyStore))
 		{
-			# TODO: Temporarily while working on remoting
-			Write-Error -Category InvalidArgument -TargetObject $TargetHost -EA Stop `
-				-Message "Unexpected computer name '$TargetHost', remote already set to '$PolicyStore'"
+			Disconnect-Computer -Domain $PolicyStore
 		}
+	}
+
+	# Target machine onto which to deploy firewall (default: Local Group Policy)
+	if ([string]::IsNullOrEmpty($TargetHost) -or ($TargetHost -eq "localhost") -or ($TargetHost -eq [System.Environment]::MachineName))
+	{
+		Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value ([System.Environment]::MachineName)
 	}
 	else
 	{
-		# Target machine onto which to deploy firewall (default: Local Group Policy)
-		if ([string]::IsNullOrEmpty($TargetHost) -or ($TargetHost -eq "localhost"))
-		{
-			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value ([System.Environment]::MachineName)
-		}
-		else
-		{
-			New-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Value $TargetHost
-		}
+		Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value $TargetHost
 	}
 
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
@@ -451,12 +447,17 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 		$PolicyStoreStatus = $false
 
-		if ($PolicyStore -notin $LocalStores)
+		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
 
-			$RemoteCredential = Get-Credential -Message "Credentials are required to access '$PolicyStore'"
+			Set-Variable -Name RemoteCredential -Scope Global -Value (
+				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
+			)
+
 			$ConnectParams["Credential"] = $RemoteCredential
+
+			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."
 			Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
@@ -491,14 +492,15 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
 			Write-Debug -Message "[$SettingsScript] Establishing session to local computer"
-			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus)
+			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."
+			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			if (!$PolicyStoreStatus)
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -Confirm:$false -KeepDefault
-				Disable-WinRMServer -Confirm:$false -KeepDefault
+				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
+				Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
 			}
 
 			$SessionOptionParams["NoEncryption"] = $true

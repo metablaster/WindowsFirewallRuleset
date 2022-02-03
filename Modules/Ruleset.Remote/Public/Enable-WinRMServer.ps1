@@ -58,6 +58,10 @@ Use this parameter when there are multiple certificates with same DNS entries.
 If specified, keeps default session configurations enabled.
 This is needed to be able to specify -ComputerName parameter in commands that support it
 
+.PARAMETER Loopback
+If specified, only loopback server is enabled.
+Remote connections to this computer will not work.
+
 .PARAMETER Force
 If specified, overwrites an existing exported certificate (*.cer) file,
 unless it has the Read-only attribute set.
@@ -145,13 +149,25 @@ function Enable-WinRMServer
 		[switch] $KeepDefault,
 
 		[Parameter()]
+		[switch] $Loopback,
+
+		[Parameter()]
 		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer
+	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer -AllowUnencrypted:$Loopback
 	$Domain = [System.Environment]::MachineName
+
+	if ($Loopback)
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM loopback server..."
+	}
+	else
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM remoting server..."
+	}
 
 	<# MSDN: The Enable-PSRemoting cmdlet performs the following operations:
 	Runs the Set-WSManQuickConfig cmdlet, which performs the following tasks:
@@ -164,7 +180,6 @@ function Enable-WinRMServer
 	7. Changes the security descriptor of all session configurations to allow remote access.
 	Restarts the WinRM service to make the preceding changes effective.
 	#>
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM server..."
 	Initialize-WinRM
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove default session configurations"))
@@ -193,7 +208,6 @@ function Enable-WinRMServer
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
-	Unblock-NetProfile
 	if ($script:Workstation)
 	{
 		# For workstations remote registry works on private profile only
@@ -201,6 +215,8 @@ function Enable-WinRMServer
 		# for both Enable-WinRMServer and Set-WinRMClient
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment does not work over publick network profile"
 	}
+
+	Unblock-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
@@ -339,6 +355,28 @@ function Enable-WinRMServer
 		}
 	}
 
+	# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
+	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
+	if ($WmiPlugin.Value -eq $false)
+	{
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable WMI Provider plugin"))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WMI Provider plugin"
+			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
+		}
+	}
+
+	if ($Loopback)
+	{
+		# Restore-NetProfile
+
+		# NOTE: It's easier to continue with Disable-WinRMServer rather than copying
+		# sections of code there, also easier to maintain because of less code duplication
+		Disable-WinRMServer -Confirm:$false -KeepDefault:$KeepDefault
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM loopback server completed successfully!"
+		return
+	}
+
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure server listener"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server listener"
@@ -404,17 +442,6 @@ function Enable-WinRMServer
 						-ValueSet @{ Hostname = $Domain; Enabled = $true; CertificateThumbprint = $Cert.Thumbprint } | Out-Null
 				}
 			}
-		}
-	}
-
-	# NOTE: If this plugin is disabled, PS remoting will work but CIM commands will fail
-	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-	if ($WmiPlugin.Value -ne $true)
-	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable WMI Provider plugin"))
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WMI Provider plugin"
-			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
 		}
 	}
 
@@ -584,5 +611,5 @@ function Enable-WinRMServer
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM server completed successfully!"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM remoting server completed successfully!"
 }

@@ -136,7 +136,12 @@ function Set-WinRMClient
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
+	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient -AllowUnencrypted:($Domain -eq [System.Environment]::MachineName)
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client..."
 
 	# TODO: Initialize-WinRM and Unblock-NetProfile are called multiple times since multiple functions are needed for configuration

@@ -456,11 +456,12 @@ function ConvertFrom-SID
 			# Write out result
 			# TODO: we should also save system edition, authority, domain etc.
 			[PSCustomObject]@{
-				Type = $SidType
-				Principal = $LogonName
-				User = Split-Principal $LogonName
 				Domain = Split-Principal $LogonName -DomainName
+				User = Split-Principal $LogonName
+				Principal = $LogonName
 				SID = $InputSID
+				Type = $SidType
+				PSTypeName = "Ruleset.UserInfo.Principal"
 			}
 		} # foreach SID
 	} # process

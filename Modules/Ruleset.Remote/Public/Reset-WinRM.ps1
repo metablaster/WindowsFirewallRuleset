@@ -50,6 +50,7 @@ HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired
 TODO: Restoring old setup not implemented
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+TODO: Parameter which will allow resetting to custom settings in addition to factory reset
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Reset-WinRM.md
@@ -99,7 +100,7 @@ function Reset-WinRM
 	}
 
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-	if ($WmiPlugin.Value -ne $false)
+	if ($WmiPlugin.Value -eq $true)
 	{
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
 		{

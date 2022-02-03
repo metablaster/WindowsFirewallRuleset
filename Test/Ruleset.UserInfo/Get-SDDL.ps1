@@ -131,18 +131,26 @@ function Test-SDDL
 }
 
 Enter-Test "Get-SDDL"
-[string[]] $Groups = @("Users", "Administrators")
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Disabled Users, Administrators -CIM -Domain $Domain"
-	Get-SDDL -Group $Groups -Domain $Domain -CIM
+	Get-SDDL -User "User" -Domain $Domain -CIM
+
+	$RemotePath = "C:\Users\Public\Desktop\" # Inherited
+	Start-Test "-Path remote FileSystem"
+	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemoteCredential | Test-SDDL
+
+	$RemotePath = "\\$Domain\C$\Windows"
+	Start-Test "-Path remote UNC path"
+	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemoteCredential | Test-SDDL
 }
 else
 {
 	#
 	# Test groups
 	#
+	[string[]] $Groups = @("Users", "Administrators")
 
 	Start-Test "-Group $Groups"
 	$Result = Get-SDDL -Group $Groups

@@ -132,7 +132,7 @@ function Get-GroupSID
 					Domain = $Domain
 					Group = $UserGroup
 					SID = $GroupSID
-					PSTypeName = "Ruleset.GroupSID"
+					PSTypeName = "Ruleset.UserInfo.Group"
 				}
 			}
 		} # foreach ($UserGroup in $Group)
