@@ -51,6 +51,16 @@ By default both HTTPS and HTTPS are tested.
 Optionally specify port number if the WinRM server specified by
 -Domain parameter listens on non default port
 
+.PARAMETER Authentication
+Specify Authentication kind:
+None, no authentication is performed, request is anonymous.
+Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
+Default, use the authentication method implemented by the WS-Management protocol.
+Digest, a challenge-response scheme that uses a server-specified data string for the challenge.
+Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
+Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
+CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+
 .PARAMETER CertThumbprint
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
@@ -114,6 +124,9 @@ function Test-WinRM
 		[ValidateRange(1, 65535)]
 		[int32] $Port,
 
+		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
+		[string] $Authentication = "Default",
+
 		[Parameter(ParameterSetName = "ThumbPrint")]
 		[string] $CertThumbprint,
 
@@ -153,7 +166,7 @@ function Test-WinRM
 
 	$WSManParams = @{
 		Port = $Port
-		Authentication = "Default"
+		Authentication = $Authentication
 		ApplicationName = "wsman"
 		# NOTE: Only valid for Enter-PSSession
 		# SessionOption = $PSSessionOption
@@ -161,7 +174,7 @@ function Test-WinRM
 
 	$CimParams = @{
 		Name = "TestCim"
-		Authentication = "Default"
+		Authentication = $Authentication
 		Port = $WSManParams["Port"]
 		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
 		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,

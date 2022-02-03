@@ -43,15 +43,25 @@ If you would like to see fresh changes done since last release you can do so on 
 - Modules
 
   - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
+  - Fixed a bug in `Ruleset.Remote\TestWinRM` causing invalid result
   - Implemented remoting functionality for the following functions:
 
     - `Get-GroupPrincipal`
     - `Get-GroupSID`
     - `Get-PrincipalSID`
+    - `Get-SDDL`
+    - `Get-SystemSKU`
 
   - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default
   default session configurations active, needed to be able to specify `-ComputerName` parameter
   instead of `-CimInstance` as exclusive.
+  - `Enabled-WinRMServer` added `-Loopback` switch to be able to configure loopback only server
+  - Most functions in `Ruleset.Remote` improved
+
+  - Improved module functions
+
+    - `Test-Computer`
+    - `Test-Credential`
 
 - New features
 
@@ -62,6 +72,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Show-ASR.ps1` new script used to display ASR configuration
   - `Set-ATP.ps1` new script script used to configure Microsoft Defender Antivirus
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
+
+- Scripts
+
+  - Specifying remote domain or changing domain no longer requires PS restart
+  - Specifying HTTP for remoting is now possible in `Config\ProjectSettings`
 
 ## v0.12.0 (current release)
 

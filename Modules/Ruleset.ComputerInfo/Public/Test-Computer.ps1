@@ -43,6 +43,10 @@ Specify the kind of a test to perform.
 Acceptable values are WSMan and Ping
 The default is WSMan.
 
+.PARAMETER Port
+Optionally specify port number if the WinRM server specified by
+-Domain parameter listens on non default port
+
 .PARAMETER Credential
 Specify credentials required for authentication
 
@@ -55,6 +59,9 @@ Digest, a challenge-response scheme that uses a server-specified data string for
 Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
 Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
 CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+
+.PARAMETER CertThumbprint
+Optionally specify certificate thumbprint which is to be used for WinRM over SSL.
 
 .PARAMETER Retry
 Specifies the number of echo requests to send.
@@ -83,8 +90,6 @@ None. You cannot pipe objects to Test-Computer
 [bool] True if target host is responsive, false otherwise
 
 .NOTES
-NOTE: This function currently does nothing useful except testing if CIM session is still alive.
-TODO: Partially avoiding error messages, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)
 TODO: Test CIM and DCOM
 #>
@@ -99,8 +104,12 @@ function Test-Computer
 		[string] $Domain,
 
 		[Parameter()]
-		[ValidateSet("WSMan", "Ping")]
-		[string] $Protocol = "WSMan",
+		[ValidateSet("HTTP", "HTTPS", "Ping", "Any")]
+		[string] $Protocol = "Any",
+
+		[Parameter(ParameterSetName = "WSMan")]
+		[ValidateRange(1, 65535)]
+		[int32] $Port,
 
 		[Parameter(ParameterSetName = "WSMan")]
 		[PSCredential] $Credential,
@@ -109,6 +118,9 @@ function Test-Computer
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
 		[string] $Authentication = "Default",
 
+		[Parameter(ParameterSetName = "WSMan")]
+		[string] $CertThumbprint,
+
 		[Parameter(ParameterSetName = "Ping")]
 		[ValidateRange(1, [int16]::MaxValue)]
 		[int16] $Retry = $PSSessionOption.MaxConnectionRetryCount,
@@ -116,19 +128,117 @@ function Test-Computer
 		[Parameter(ParameterSetName = "Ping")]
 		[ValidateScript( { $PSVersionTable.PSEdition -eq "Core" } )]
 		[ValidateRange(1, [int16]::MaxValue)]
-		[int16] $Timeout = $null
+		[int16] $Timeout
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# TODO: Run Deploy-Firewall (will disconnect and remove CIM) and then this will fail
-	if (Get-CimSession -Name RemoteCim)
+	$Status = $false
+
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
 	{
-		$Status = $CimServer.TestConnection()
+		$Domain = [System.Environment]::MachineName
 	}
-	else
+
+	if (($PSCmdlet.ParameterSetName -eq "WSMan") -and ($Protocol -ne "Ping"))
 	{
-		$Status = $false
+		if (Get-CimSession -Name RemoteCim)
+		{
+			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing CIM session"
+			$Status = $CimServer.TestConnection()
+		}
+		else
+		{
+			$WSManParams = @{
+				Quiet = $true
+				Domain = $Domain
+				Authentication = $Authentication
+				ErrorAction = "SilentlyContinue"
+			}
+
+			if ($Credential)
+			{
+				$WSManParams["Credential"] = $Credential
+			}
+
+			if ($CertThumbprint)
+			{
+				$WSManParams["CertificateThumbprint"] = $CertThumbprint
+			}
+
+			if ($Protocol -ne "HTTPS")
+			{
+				$WSManParams["Protocol"] = "HTTP"
+
+				if (!$Port)
+				{
+					$WSManParams["Port"] = 5985
+				}
+
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WinRM"
+				Test-WinRM @WSManParams -Status ([ref] $Status)
+			}
+
+			if (!$Status -and ($Protocol -ne "HTTP"))
+			{
+				$WSManParams["Protocol"] = "HTTPS"
+
+				if (!$Port)
+				{
+					$WSManParams["Port"] = 5986
+				}
+
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WinRM"
+				Test-WinRM @WSManParams -Status ([ref] $Status)
+			}
+		}
+	}
+
+	if (!$Status -and ($PSCmdlet.ParameterSetName -eq "Ping") -and (($Protocol -eq "Any") -or ($Protocol -eq "Ping")))
+	{
+		# Test parameters depend on PowerShell edition
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			if (!$PSBoundParameters.ContainsKey("Timeout"))
+			{
+				# NOTE: The default value for Test-Connection is 5 seconds
+				$Timeout = 2
+			}
+
+			$PingParams = @{
+				TargetName = $Domain
+				Count = $Retry
+				TimeoutSeconds = $Timeout
+				Quiet = $true
+			}
+
+			if ($ConnectionIPv4)
+			{
+				$PingParams["IPv4"] = $true
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv4"
+			}
+			else
+			{
+				$PingParams["IPv6"] = $true
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv6"
+			}
+
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Ping params $($PingParams | Out-String)"
+
+			# [ManagementObject]
+			$Status = Test-Connection @PingParams
+		}
+		else
+		{
+			# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
+			# if you test NetBios name it will fail because NetBios works only over IPv4
+			# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
+			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping"
+
+			# [NetConnectionResults]
+			$Status = Test-NetConnection -ComputerName $Domain |
+			Select-Object -ExpandProperty PingSucceeded
+		}
 	}
 
 	if (!$Status)
@@ -137,85 +247,4 @@ function Test-Computer
 	}
 
 	return $Status
-
-	#######################################################################
-
-	if ($Protocol -eq "WSMan")
-	{
-		$Params = @{
-			UseSSL = $CimOptions.UseSsl
-			ComputerName = $Domain
-			ErrorAction = "SilentlyContinue"
-		}
-
-		if ($Authentication -ne "None")
-		{
-			# NOTE: Otherwise request is sent to the remote computer anonymously,
-			# without using authentication, it returns no information that is specific to
-			# the operating-system version
-			$Params["Authentication"] = $Authentication
-		}
-
-		if ($Credential)
-		{
-			$Params["Credential"] = $Credential
-		}
-		elseif ($Domain -ne [System.Environment]::MachineName)
-		{
-			$Params["Credential"] = $RemoteCredential
-		}
-
-		# [System.Xml.XmlElement]
-		$Status = Test-WSMan @Params
-	}
-	else
-	{
-		# Be quiet for localhost
-		if ($Domain -ne [System.Environment]::MachineName)
-		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Contacting computer $Domain"
-		}
-
-		# Test parameters depend on PowerShell edition
-		# TODO: Changes not reflected in calling code
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			# TODO: It will be set to 0
-			if (!$Timeout)
-			{
-				# TODO: Can't modify Timeout parameter
-				# TODO: Use $PSSessionOption to control this
-				# NOTE: The default value for Test-Connection is 5 seconds
-				$Timeout = 2
-			}
-
-			if ($ConnectionIPv4)
-			{
-				# [ManagementObject]
-				$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv4 -EA Stop
-			}
-			else
-			{
-				$Status = Test-Connection -TargetName $Domain -Count $Retry -TimeoutSeconds $Timeout -Quiet -IPv6 -EA Stop
-			}
-		}
-		else
-		{
-			# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
-			# if you test NetBios name it will fail because NetBios works only over IPv4
-			# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
-
-			# [NetConnectionResults]
-			$Status = Test-NetConnection -ComputerName $Domain |
-			Select-Object -ExpandProperty PingSucceeded
-		}
-	}
-
-	if (!$Status) # -and ($Domain -ne [System.Environment]::MachineName))
-	{
-		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer: $Domain"
-	}
-
-	Set-Variable -Name LastConnectionTest -Scope Script -Value ($null -ne $Status)
-	return $LastConnectionTest
 }

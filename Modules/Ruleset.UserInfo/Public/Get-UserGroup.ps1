@@ -102,7 +102,7 @@ function Get-UserGroup
 							Principal = $Group.Caption
 							SID = $Group.SID
 							LocalAccount = $Group.LocalAccount -eq "True"
-							PSTypeName = "Ruleset.UserInfo"
+							PSTypeName = "Ruleset.UserInfo.Group"
 						}
 					}
 				}

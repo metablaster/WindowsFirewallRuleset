@@ -33,6 +33,9 @@ Unit test for Test-Computer
 .DESCRIPTION
 Test correctness of Test-Computer function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,12 +56,15 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -70,20 +76,23 @@ Enter-Test "Test-Computer"
 if ($PSVersionTable.PSEdition -eq "Core")
 {
 	Start-Test "-Retry 2 -Timeout 1"
-	Test-Computer ([System.Environment]::MachineName) -Retry 2 -Timeout 1
+	Test-Computer $Domain -Retry 2 -Timeout 1
 }
 else
 {
 	Start-Test "-Retry 2"
-	Test-Computer ([System.Environment]::MachineName) -Retry 2
+	Test-Computer $Domain -Retry 2
 }
 
 Start-Test "-Retry" -Expected "FAIL"
-Test-Computer "FAILURE-COMPUTER" -Retry 2
+Test-Computer "FAILURE-COMPUTER" -Retry 2 -Verbose
 
 Start-Test "default"
-$Result = Test-Computer ([System.Environment]::MachineName)
+$Result = Test-Computer $Domain
 $Result
+
+Start-Test "WinRM $RemoteProtocol"
+Test-Computer $Domain -Protocol $RemoteProtocol
 
 Test-Output $Result -Command Test-Computer
 
