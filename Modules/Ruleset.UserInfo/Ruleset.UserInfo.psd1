@@ -123,6 +123,7 @@ SOFTWARE.
 		"Get-UserGroup"
 		"Merge-SDDL"
 		"Split-Principal"
+		"Test-Credential"
 		"Test-UPN"
 	)
 
@@ -167,6 +168,7 @@ SOFTWARE.
 		"Help\en-US\Get-UserGroup.md"
 		"Help\en-US\Merge-SDDL.md"
 		"Help\en-US\Split-Principal.md"
+		"Help\en-US\Test-Credential.md"
 		"Help\en-US\Ruleset.UserInfo.md"
 		"Help\en-US\Test-UPN.md"
 		"Help\README.md"
@@ -180,6 +182,7 @@ SOFTWARE.
 		"Public\Merge-SDDL.ps1"
 		"Public\README.md"
 		"Public\Split-Principal.ps1"
+		"Public\Test-Credential.ps1"
 		"Public\Test-UPN.ps1"
 		"Ruleset.UserInfo_136254f4-4730-4ed1-b9e9-1ccecfe09ee9_HelpInfo.xml"
 		"Ruleset.UserInfo.Format.ps1xml"
