@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Publish-SshKey"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Upload SSH key to remote computer", "Accept potentially dangerous unit test"))
 {
 	# TODO: Test case not implemented
 	Start-Test "Publish-SshKey"

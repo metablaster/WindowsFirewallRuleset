@@ -54,12 +54,16 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -68,12 +72,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Connect-Computer"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Connect to remote computer", "Accept potentially dangerous unit test"))
 {
 	$ConnectParams = @{
 		SessionOption = $PSSessionOption
 		ErrorAction = "Stop"
-		Domain = $PolicyStore
+		Domain = $Domain
 		Protocol = "HTTP"
 		ConfigurationName = $PSSessionConfigurationName
 		ApplicationName = $PSSessionApplicationName

@@ -159,7 +159,7 @@ if (!$Default)
 
 			# MSDN: Allows the client computer to request unencrypted traffic.
 			# The default value is false
-			AllowUnencrypted = $false #$Protocol -ne "HTTPS"
+			AllowUnencrypted = $false
 
 			# The TrustedHosts item can contain a comma-separated list of computer names,
 			# IP addresses, and fully-qualified domain names. Wildcards are permitted.

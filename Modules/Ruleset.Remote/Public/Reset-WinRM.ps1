@@ -49,6 +49,7 @@ None. Reset-WinRM does not generate any output
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired
 TODO: Restoring old setup not implemented
+TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Reset-WinRM.md
@@ -64,6 +65,7 @@ function Reset-WinRM
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient -IncludeServer -Default
 
 	Initialize-WinRM
+	Unblock-NetProfile
 
 	#
 	# PowerShell specific reset
@@ -109,7 +111,6 @@ function Reset-WinRM
 	#
 	# WinRM reset
 	#
-	Unblock-NetProfile
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset WinRM protocol options"))
 	{
@@ -133,12 +134,17 @@ function Reset-WinRM
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
+			# NOTE: Disable warnings which say:
+			# The updated configuration might affect the operation of the plugins having a per plugin quota value greater than
+			$PreviousPreference = $WarningPreference
+			$WarningPreference = "SilentlyContinue"
 			Set-Item -Path WSMan:\localhost\shell\AllowRemoteShellAccess -Value $WinRSOptions["AllowRemoteShellAccess"]
 			Set-Item -Path WSMan:\localhost\Shell\IdleTimeout -Value $WinRSOptions["IdleTimeout"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxConcurrentUsers -Value $WinRSOptions["MaxConcurrentUsers"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxProcessesPerShell -Value $WinRSOptions["MaxProcessesPerShell"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxMemoryPerShellMB -Value $WinRSOptions["MaxMemoryPerShellMB"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxShellsPerUser -Value $WinRSOptions["MaxShellsPerUser"]
+			$WarningPreference = $PreviousPreference
 		}
 		else
 		{

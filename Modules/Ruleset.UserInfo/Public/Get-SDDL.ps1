@@ -222,7 +222,7 @@ function Get-SDDL
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing DACL entry: $TargetPath"
 			return
 		}
-	}
+	} # if Path
 	else
 	{
 		$DACL = "D:"

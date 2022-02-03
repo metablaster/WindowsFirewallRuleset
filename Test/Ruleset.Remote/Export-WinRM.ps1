@@ -69,7 +69,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Export-WinRM"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Export WinRM settings", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"
 	$Result = Export-WinRM

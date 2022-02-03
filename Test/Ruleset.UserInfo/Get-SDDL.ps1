@@ -33,6 +33,9 @@ Unit test for Get-SDDL
 .DESCRIPTION
 Test correctness of Get-SDDL function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,12 +56,16 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -124,100 +131,107 @@ function Test-SDDL
 }
 
 Enter-Test "Get-SDDL"
-
-#
-# Test groups
-#
-
 [string[]] $Groups = @("Users", "Administrators")
 
-Start-Test "-Group $Groups"
-$Result = Get-SDDL -Group $Groups
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Disabled Users, Administrators -CIM -Domain $Domain"
+	Get-SDDL -Group $Groups -Domain $Domain -CIM
+}
+else
+{
+	#
+	# Test groups
+	#
 
-Test-SDDL $Result
-Test-Output $Result -Command Get-SDDL
+	Start-Test "-Group $Groups"
+	$Result = Get-SDDL -Group $Groups
 
-Start-Test "-Group $Groups -Merge"
-Get-SDDL -Group $Groups -Merge | Test-SDDL
+	Test-SDDL $Result
+	Test-Output $Result -Command Get-SDDL
 
-Start-Test "-Group $Groups -CIM"
-Get-SDDL -Group $Groups -CIM | Test-SDDL
+	Start-Test "-Group $Groups -Merge"
+	Get-SDDL -Group $Groups -Merge | Test-SDDL
 
-Start-Test "-Group $Groups -CIM -Merge"
-Get-SDDL -Group $Groups -CIM -Merge | Test-SDDL
+	Start-Test "-Group $Groups -CIM"
+	Get-SDDL -Group $Groups -CIM | Test-SDDL
 
-#
-# Test users
-#
+	Start-Test "-Group $Groups -CIM -Merge"
+	Get-SDDL -Group $Groups -CIM -Merge | Test-SDDL
 
-[string[]] $Users = "Administrator", $TestAdmin, $TestUser
+	#
+	# Test users
+	#
 
-Start-Test "-User $Users"
-Get-SDDL -User $Users | Test-SDDL
+	[string[]] $Users = "Administrator", $TestAdmin, $TestUser
 
-Start-Test "-User $Users -Merge"
-Get-SDDL -User $Users -Merge | Test-SDDL
+	Start-Test "-User $Users"
+	Get-SDDL -User $Users | Test-SDDL
 
-Start-Test "-User $Users -CIM"
-$Result = Get-SDDL -User $Users -CIM
+	Start-Test "-User $Users -Merge"
+	Get-SDDL -User $Users -Merge | Test-SDDL
 
-Test-SDDL $Result
-Test-Output $Result -Command Get-SDDL
+	Start-Test "-User $Users -CIM"
+	$Result = Get-SDDL -User $Users -CIM
 
-Start-Test "-User $Users -CIM -Merge"
-$Result = Get-SDDL -User $Users -CIM -Merge
-$Result | Test-SDDL
+	Test-SDDL $Result
+	Test-Output $Result -Command Get-SDDL
 
-Test-Output $Result -Command Get-SDDL
+	Start-Test "-User $Users -CIM -Merge"
+	$Result = Get-SDDL -User $Users -CIM -Merge
+	$Result | Test-SDDL
 
-#
-# Test NT AUTHORITY
-#
+	Test-Output $Result -Command Get-SDDL
 
-[string] $NTDomain = "NT AUTHORITY"
-[string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
+	#
+	# Test NT AUTHORITY
+	#
 
-Start-Test "-Domain $NTDomain -User $NTUsers"
-Get-SDDL -Domain $NTDomain -User $NTUsers | Test-SDDL
+	[string] $NTDomain = "NT AUTHORITY"
+	[string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
 
-Start-Test "-Domain $NTDomain -User $NTUsers -Merge"
-Get-SDDL -Domain $NTDomain -User $NTUsers -Merge | Test-SDDL
+	Start-Test "-Domain $NTDomain -User $NTUsers"
+	Get-SDDL -Domain $NTDomain -User $NTUsers | Test-SDDL
 
-#
-# Test APPLICATION PACKAGE AUTHORITY
-#
+	Start-Test "-Domain $NTDomain -User $NTUsers -Merge"
+	Get-SDDL -Domain $NTDomain -User $NTUsers -Merge | Test-SDDL
 
-[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
-[string[]] $AppUser = "Your Internet connection", "Your pictures library"
+	#
+	# Test APPLICATION PACKAGE AUTHORITY
+	#
 
-Start-Test "-Domain $AppDomain -User $AppUser"
-Get-SDDL -Domain $AppDomain -User $AppUser | Test-SDDL
+	[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+	[string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
-Start-Test "-Domain $AppDomain -User $AppUser -Merge"
-$Result = Get-SDDL -Domain $AppDomain -User $AppUser -Merge
-$Result | Test-SDDL
+	Start-Test "-Domain $AppDomain -User $AppUser"
+	Get-SDDL -Domain $AppDomain -User $AppUser | Test-SDDL
 
-Test-Output $Result -Command Get-SDDL
+	Start-Test "-Domain $AppDomain -User $AppUser -Merge"
+	$Result = Get-SDDL -Domain $AppDomain -User $AppUser -Merge
+	$Result | Test-SDDL
 
-#
-# Test paths
-#
+	Test-Output $Result -Command Get-SDDL
 
-$FileSystem = "C:\Users\Public\Desktop\" # Inherited
-$Registry1 = "HKCU:\" # Not Inherited
-$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
+	#
+	# Test paths
+	#
 
-Start-Test "-Path FileSystem"
-Get-SDDL -Path $FileSystem | Test-SDDL
+	$FileSystem = "C:\Users\Public\Desktop\" # Inherited
+	$Registry1 = "HKCU:\" # Not Inherited
+	$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Start-Test "-Path Registry1"
-Get-SDDL -Path $Registry1 | Test-SDDL
+	Start-Test "-Path FileSystem"
+	Get-SDDL -Path $FileSystem | Test-SDDL
 
-Start-Test "-Path Registry2 -Merge"
-$Result = Get-SDDL -Path $Registry2 -Merge
-$Result | Test-SDDL
+	Start-Test "-Path Registry1"
+	Get-SDDL -Path $Registry1 | Test-SDDL
 
-Test-Output $Result -Command Get-SDDL
+	Start-Test "-Path Registry2 -Merge"
+	$Result = Get-SDDL -Path $Registry2 -Merge
+	$Result | Test-SDDL
+
+	Test-Output $Result -Command Get-SDDL
+}
 
 Update-Log
 Exit-Test

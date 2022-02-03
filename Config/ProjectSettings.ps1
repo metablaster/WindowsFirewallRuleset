@@ -371,6 +371,12 @@ if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
 		"StaticServiceStore"
 		"ConfigurableServiceStore"
 	)
+
+	# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
+	New-Variable -Name RemoteProtocol -Scope Global -Value "HTTP"
+
+	# Credential object
+	New-Variable -Name RemoteCredential -Scope Global -Value $null
 }
 
 if ($Develop -and !$InModule)
@@ -420,7 +426,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		$ConnectParams = @{
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
-			Protocol = "HTTPS"
+			Protocol = $RemoteProtocol
 			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
 		}
@@ -447,32 +453,50 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		if ($PolicyStore -notin $LocalStores)
 		{
-			$ConnectParams["Credential"] = Get-Credential -Message "Credentials are required to access '$PolicyStore'"
-			Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Credential $ConnectParams["Credential"] -Status ([ref] $PolicyStoreStatus) -Quiet
+			Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
+
+			$RemoteCredential = Get-Credential -Message "Credentials are required to access '$PolicyStore'"
+			$ConnectParams["Credential"] = $RemoteCredential
+			Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
 			# TODO: If credentials are not valid, configuring WinRM won't make any difference
 			if (!$PolicyStoreStatus)
 			{
 				# Configure this machine for remote session over SSL
-				Set-WinRMClient -Domain $PolicyStore -Confirm:$false
-				Enable-RemoteRegistry -Confirm:$false
-				Test-WinRM -Protocol HTTPS -Domain $PolicyStore -Credential $ConnectParams["Credential"] `
-					-Status ([ref] $PolicyStoreStatus) -Quiet -ErrorAction Stop
+				if ($RemoteProtocol -eq "HTTPS")
+				{
+					Set-WinRMClient -Protocol $RemoteProtocol -Domain $PolicyStore -Confirm:$false
+				}
+				else
+				{
+					Set-WinRMClient -Protocol $RemoteProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
+				}
+
+				# Enable-RemoteRegistry -Confirm:$false
+				Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
 			}
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
-			$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+			if ($RemoteProtocol -eq "HTTP")
+			{
+				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+			}
+			else
+			{
+				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+			}
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
-			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
+			Write-Debug -Message "[$SettingsScript] Establishing session to local computer"
+			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus)
 
 			if (!$PolicyStoreStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Confirm:$false
+				Set-WinRMClient -Protocol HTTP -Confirm:$false
 				Enable-WinRMServer -Protocol HTTP -Confirm:$false -KeepDefault
 				Disable-WinRMServer -Confirm:$false -KeepDefault
 			}

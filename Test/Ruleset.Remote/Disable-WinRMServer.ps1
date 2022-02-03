@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Disable-WinRMServer"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Disable WinRM server configuration", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"
 	$Result = Disable-WinRMServer

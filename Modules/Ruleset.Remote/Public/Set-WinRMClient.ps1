@@ -40,7 +40,7 @@ If not specified local machine is the default.
 
 .PARAMETER Protocol
 Specifies protocol to HTTP, HTTPS or any.
-By default only HTTPS is configured.
+By default both HTTP and HTTPS is configured.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -93,6 +93,7 @@ WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Authenticate users using certificates optionally or instead of credential object
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
+TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Set-WinRMClient.md
@@ -219,7 +220,7 @@ function Set-WinRMClient
 				$ClientOptions["TrustedHosts"] = "$($ClientOptions["TrustedHosts"]), $TrustedHosts"
 			}
 
-			Write-Debug -Message "Client options set to $($ClientOptions["TrustedHosts"])" -Debug
+			Write-Debug -Message "Client options set to $($ClientOptions["TrustedHosts"])"
 		}
 
 		if ($PSVersionTable.PSEdition -eq "Core")
@@ -287,12 +288,17 @@ function Set-WinRMClient
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
+			# NOTE: Disable warnings which say:
+			# The updated configuration might affect the operation of the plugins having a per plugin quota value greater than
+			$PreviousPreference = $WarningPreference
+			$WarningPreference = "SilentlyContinue"
 			Set-Item -Path WSMan:\localhost\Shell\AllowRemoteShellAccess -Value $WinRSOptions["AllowRemoteShellAccess"]
 			Set-Item -Path WSMan:\localhost\Shell\IdleTimeout -Value $WinRSOptions["IdleTimeout"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxConcurrentUsers -Value $WinRSOptions["MaxConcurrentUsers"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxProcessesPerShell -Value $WinRSOptions["MaxProcessesPerShell"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxMemoryPerShellMB -Value $WinRSOptions["MaxMemoryPerShellMB"]
 			Set-Item -Path WSMan:\localhost\Shell\MaxShellsPerUser -Value $WinRSOptions["MaxShellsPerUser"]
+			$WarningPreference = $PreviousPreference
 		}
 		else
 		{

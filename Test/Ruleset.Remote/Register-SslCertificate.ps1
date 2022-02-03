@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Register-SslCertificate"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Configure WinRM server", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Configure SSL certificate", "Accept potentially dangerous unit test"))
 {
 	Start-Test "-Server"
 	$Result = Register-SslCertificate -ProductType Server -PassThru
