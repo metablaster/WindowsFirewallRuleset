@@ -33,6 +33,9 @@ Unit test for Get-SystemSKU
 .DESCRIPTION
 Test correctness of Get-SystemSKU function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -53,12 +56,15 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,40 +73,48 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-SystemSKU"
 
-Start-Test "default"
-Get-SystemSKU
-
-Start-Test "-SKU 4"
-$Result = Get-SystemSKU -SKU 48
-$Result
-
-try
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "34 | Get-SystemSKU"
-	34 | Get-SystemSKU -EA Stop
+	Start-Test "Remote default"
+	Get-SystemSKU -Domain $Domain
 }
-catch
+else
 {
-	Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
+	Start-Test "default"
+	Get-SystemSKU
+
+	Start-Test "-SKU 4"
+	$Result = Get-SystemSKU -SKU 48
+	$Result
+
+	try
+	{
+		Start-Test "34 | Get-SystemSKU"
+		34 | Get-SystemSKU -EA Stop
+	}
+	catch
+	{
+		Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
+	}
+
+	Start-Test 'multiple computers | Get-SystemSKU FAILURE TEST'
+	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
+
+	Start-Test "-Domain multiple computers"
+	Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue
+
+	try
+	{
+		Start-Test "-SKU 4 -Domain $([System.Environment]::MachineName)"
+		Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName) -ErrorAction Stop
+	}
+	catch
+	{
+		Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
+	}
+
+	Test-Output $Result -Command Get-SystemSKU
 }
-
-Start-Test 'multiple computers | Get-SystemSKU FAILURE TEST'
-@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
-
-Start-Test "-Domain multiple computers"
-Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue
-
-try
-{
-	Start-Test "-SKU 4 -Domain $([System.Environment]::MachineName)"
-	Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName) -ErrorAction Stop
-}
-catch
-{
-	Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
-}
-
-Test-Output $Result -Command Get-SystemSKU
 
 Update-Log
 Exit-Test

@@ -58,7 +58,6 @@ $PublicScripts = @(
 	"Get-UserGroup"
 	"Merge-SDDL"
 	"Split-Principal"
-	"Test-Credential"
 	"Test-UPN"
 )
 

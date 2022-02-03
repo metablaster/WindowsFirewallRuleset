@@ -138,11 +138,6 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 		Write-Error -Category InvalidArgument -Message "Windows credentials are required to proceed"
 		return
 	}
-	elseif (!(Test-Credential $Credential -Context Machine -Domain ([System.Environment]::MachineName)))
-	{
-		Write-Error -Category InvalidArgument -Message "Specified credentials are not valid"
-		return
-	}
 
 	$InvokeParams = @{
 		Credential = $Credential

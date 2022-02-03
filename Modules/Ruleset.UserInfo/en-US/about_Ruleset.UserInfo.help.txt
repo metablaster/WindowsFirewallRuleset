@@ -55,9 +55,6 @@ EXAMPLES
 	Split-Principal
 	Split principal to either user name or domain
 
-	Test-Credential
-	Takes a PSCredential object and validates it
-
 	Test-UPN
 	Validate Universal Principal Name syntax
 
