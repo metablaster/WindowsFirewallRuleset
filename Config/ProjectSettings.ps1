@@ -31,11 +31,14 @@ SOFTWARE.
 Global project settings and preferences
 
 .DESCRIPTION
-almost every script file and module dot sources this script before doing anything else.
-In this file project settings and preferences are set, these are grouped into
-1. settings for development
-2. settings for release
-3. settings which apply to both use cases
+Almost every script file and module dot sources this script before doing anything else.
+In this file project settings and preferences are set by setting various global variables.
+These variables represent:
+1. Settings for development
+2. Settings for release
+3. Settings for firewall deployment
+4. Settings for unit testing
+5. Settings which apply to multiple use cases
 
 .PARAMETER Cmdlet
 PSCmdlet object of the calling script
@@ -51,13 +54,13 @@ If specified, displays preferences and optionally variables in the calling scope
 To be used for debugging purposes
 
 .EXAMPLE
-PS> .\ProjectSettings.ps1 $PSCmdlet
+PS> ProjectSettings $PSCmdlet
 
 .EXAMPLE
-PS> .\ProjectSettings.ps1 -InModule
+PS> ProjectSettings -InModule
 
 .EXAMPLE
-PS> .\ProjectSettings.ps1 -InModule -ShowPreference
+PS> ProjectSettings -InModule -ShowPreference
 
 .INPUTS
 None. You cannot pipe objects to ProjectSettings.ps1
@@ -108,7 +111,11 @@ param (
 	[switch] $ListPreference
 )
 
+# Name of this script for debugging messages, do not modify!
+Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
+
 #region Preference variables
+Write-Debug -Message "[$SettingsScript] Setting up preference variables"
 
 <# Preference Variables default values (Core / Desktop)
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables?view=powershell-7
@@ -278,7 +285,7 @@ $PSSessionApplicationName = "wsman"
 # 3. Performs additional requirements checks needed or recommended for development
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
-# NOTE: If changed to $true, the change requires PowerShell restart
+# NOTE: If changed to $true, change requires PowerShell restart
 Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
@@ -316,9 +323,6 @@ if ($Develop)
 #endregion
 
 #region Initialization
-# Name of this script for debugging messages, do not modify!
-Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
-
 # Calling script name, to be used for Write-* operations
 if ($PSCmdlet.ParameterSetName -eq "Module")
 {
@@ -355,28 +359,51 @@ if ($Develop)
 # NOTE: Set-StrictMode is effective only in the scope in which it is set and in its child scopes
 Set-StrictMode -Version Latest
 
-if (!(Get-Variable -Name ProjectRoot -Scope Global -ErrorAction Ignore))
+# Path variables, these can be modified if definition allows
+if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 {
+	Write-Debug -Message "[$SettingsScript] Setting up path variables"
+
+	# Check if removable variables already initialized, do not modify!
+	Set-Variable -Name PathVariables -Scope Global -Option Constant -Value $null
+
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
 
-	# Valid policy stores
-	New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
-		([System.Environment]::MachineName)
-		"PersistentStore"
-		"ActiveStore"
-		"RSOP"
-		"SystemDefaults"
-		"StaticServiceStore"
-		"ConfigurableServiceStore"
-	)
+	# These drives will help to have shorter prompt and to be able to jump to them with less typing
+	# TODO: Should we use these drives instead of "ProjectRoot" variable?
+	# HACK: In some cases there is problem using those drives soon after being created, also running
+	# scripts while prompt is at drive will cause issues setting location
+	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
+	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
+	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
 
-	# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
-	New-Variable -Name RemoteProtocol -Scope Global -Value "HTTP"
+	# Add project module directory to session module path
+	# TODO: We can avoid using Import-Module in this script since this is executed earlier
+	New-Variable -Name PathEntry -Scope Private -Value (
+		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
 
-	# Credential object
-	New-Variable -Name RemoteCredential -Scope Global -Value $null
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
+	[System.Environment]::SetEnvironmentVariable("PSModulePath", $PathEntry)
+
+	# Add project script directory to session script path
+	$PathEntry = [System.Environment]::GetEnvironmentVariable("Path").TrimEnd(";") -replace (";;", ";")
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Experiment"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Security"
+	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Utility"
+	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
+
+	Remove-Variable -Name PathEntry -Scope Private
+
+	# Load format data into session
+	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
+		Update-FormatData -AppendPath $_.FullName
+	}
 }
 
 if ($Develop -and !$InModule)
@@ -393,6 +420,32 @@ if ($Develop -and !$InModule)
 #region Remote session initialization
 if ($PSCmdlet.ParameterSetName -eq "Script")
 {
+	# Remoting variables, these can be modified if definition allows
+	if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignore))
+	{
+		Write-Debug -Message "[$SettingsScript] Setting up remoting variables"
+
+		# Check if removable variables already initialized, do not modify!
+		New-Variable -Name CheckRemotingVariables -Scope Global -Option Constant -Value $null
+
+		# Valid policy stores
+		New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
+			([System.Environment]::MachineName)
+			"PersistentStore"
+			"ActiveStore"
+			"RSOP"
+			"SystemDefaults"
+			"StaticServiceStore"
+			"ConfigurableServiceStore"
+		)
+
+		# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
+		New-Variable -Name RemoteProtocol -Scope Global -Option Constant -Value "HTTPS"
+
+		# Credential object to be used for authentication to remote computer
+		New-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Value $null
+	}
+
 	if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
 	{
 		if ($TargetHost -and ($TargetHost -ne $PolicyStore))
@@ -444,18 +497,18 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			NoCompression = $false
 		}
 
-		Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
+		# TODO: Remove if not needed
+		# Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 		$PolicyStoreStatus = $false
 
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
 
-			Set-Variable -Name RemoteCredential -Scope Global -Value (
+			Set-Variable -Name RemoteCredential -Scope Global -Force -Value (
 				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
 			)
 
-			# TODO: Copied code, need to adjust
 			if (!$RemoteCredential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
@@ -487,7 +540,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 					Set-WinRMClient -Protocol $RemoteProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
 				}
 
-				# Enable-RemoteRegistry -Confirm:$false
+				# TODO: Enable-RemoteRegistry -Confirm:$false
 				Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
 			}
 
@@ -549,7 +602,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		catch
 		{
 			# To allow trying again
-			Remove-Variable -Name PolicyStore -Scope Global -Force
+			# TODO: Remove-Variable -Name PolicyStore -Scope Global -Force
 			Write-Error -ErrorRecord $_ -ErrorAction Stop
 		}
 	}
@@ -557,8 +610,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 #endregion
 
 #region Removable variables, these can be modified as follows:
-# 1. By project code at any time
-# 2. Only once by user before running any project scripts
+# 1. By code at any time
+# 2. Only once by user before running any scripts from repository
 # 3. Any amount of time by user if "develop" mode is ON
 # In all other cases changing variable values requires PowerShell restart
 if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -ErrorAction Ignore))
@@ -582,8 +635,8 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Specify path to sigcheck64.exe
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
-	# sigcheck64.exe is used to perform malware analysis on virus total
-	# You can get sigcheck64.exe from Microsoft sysinternals below:
+	# sigcheck64.exe is used to perform malware analysis via virus total service.
+	# You can get sigcheck64.exe from Microsoft sysinternals site below:
 	# https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
 	Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"
 }
@@ -593,6 +646,8 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 # Value of these preference variables depend on existing logging variables, do not modify!
 if (!$InModule)
 {
+	Write-Debug -Message "[$SettingsScript] Setting conditional preference variables"
+
 	# NOTE: Not using these parameters inside modules because they will be passed to module functions
 	# by top level advanced function in call stack which will pick up all Write-* streams in module functions
 	# NOTE: For functions outside module for same reason we need to declare PSDefaultParameterValues
@@ -620,8 +675,8 @@ if (!$InModule)
 #endregion
 
 #region Read only variables, these can be modified as follows:
-# 1. By project code at any time
-# 2. Only once by user before running any project scripts
+# 1. By code at any time
+# 2. Only once by user before running any scripts from repository
 # In all other cases changing variable values requires PowerShell restart
 if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignore))
 {
@@ -632,7 +687,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 
 	# Set to false to avoid checking system and environment requirements
 	# This will also disable checking for modules and required services
-	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $false
+	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
@@ -643,8 +698,8 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 #endregion
 
 #region Read only variables 2, these can be modified as follows:
-# 1. Never by project code
-# 2. Only once by user before running any project scripts
+# 1. Never by code
+# 2. Only once by user before running any scripts from repository
 # 3. Any amount of time by user if "develop" mode is ON
 # In all other cases changing variable values requires PowerShell restart
 if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore))
@@ -658,7 +713,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
 
 	# Default network interface card to use if not locally specified
-	# TODO: We can learn this value programatically but, problem is the same as with specifying local IP
+	# TODO: We can learn this value programatically, but problem is the same as with specifying local IP
 	Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value "Wired, Wireless"
 
 	# Default network profile to use if not locally specified.
@@ -680,7 +735,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# User account name for which to search executables in user profile and non standard paths by default
 	# Also used for other defaults where standard user account is expected, ex. development as standard user
 	# NOTE: If there are multiple users and to affect them all set this value to non existent user
-	# TODO: needs testing info messages for this value
+	# TODO: Needs testing info messages for this value
 	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
 	# TODO: This should be used for LocalUser rule parameter too
 	try
@@ -714,15 +769,15 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 #endregion
 
 #region Constant variables, these can be modified as follows:
-# 1. Never by project code
-# 2. Only once by user before running any project scripts
+# 1. Never by code
+# 2. Only once by user before running any scripts from repository
 # In all other cases changing variable values requires PowerShell restart
-if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore))
+if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setting up constant variables"
 
 	# Check if constants already initialized, used for module reloading, do not modify!
-	New-Variable -Name CheckProjectConstants -Scope Global -Option Constant -Value $null
+	New-Variable -Name CheckConstantVariables -Scope Global -Option Constant -Value $null
 
 	# Default remote registry permissions are:
 	# MSDN: Security checks are not performed when accessing subkeys or values
@@ -749,7 +804,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		[Microsoft.Win32.RegistryView]::Registry64)
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 12, 0))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 13, 0))
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019
@@ -759,17 +814,6 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 
 	# Project logs folder
 	New-Variable -Name LogsFolder -Scope Global -Option Constant -Value "$ProjectRoot\Logs"
-
-	# These drives will help to have shorter prompt and to be able to jump to them with less typing
-	# TODO: Should we use these drives instead of "ProjectRoot" variable?
-	# HACK: In some cases there is problem using those drives soon after being created, also running
-	# scripts while prompt at drive will cause issues setting location
-	# for more info see: https://github.com/dsccommunity/SqlServerDsc/issues/118
-	New-PSDrive -Name root -Root $ProjectRoot -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ip4 -Root "$ProjectRoot\Rules\IPv4" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name ip6 -Root "$ProjectRoot\Rules\IPv6" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name mod -Root "$ProjectRoot\Modules" -Scope Global -PSProvider FileSystem | Out-Null
-	New-PSDrive -Name test -Root "$ProjectRoot\Test" -Scope Global -PSProvider FileSystem | Out-Null
 
 	if ($PSVersionTable.PSEdition -eq "Core")
 	{
@@ -844,7 +888,7 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 34, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 35, 1))
 	}
 
 	if ($Develop)
@@ -875,35 +919,13 @@ if (!(Get-Variable -Name CheckProjectConstants -Scope Global -ErrorAction Ignore
 		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
 	}
 
-	# Add project module directory to session module path
-	# TODO: We can avoid using Import-Module in this script if this is executed earlier
-	New-Variable -Name PathEntry -Scope Private -Value (
-		[System.Environment]::GetEnvironmentVariable("PSModulePath").TrimEnd(";") -replace (";;", ";"))
-
-	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Modules"
-	[System.Environment]::SetEnvironmentVariable("PSModulePath", $PathEntry)
-
-	# Add project script directory to session script path
-	$PathEntry = [System.Environment]::GetEnvironmentVariable("Path").TrimEnd(";") -replace (";;", ";")
-	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts"
-	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Experiment"
-	$PathEntry += "$([System.IO.Path]::PathSeparator)$ProjectRoot\Scripts\Utility"
-	[System.Environment]::SetEnvironmentVariable("Path", $PathEntry)
-
-	Remove-Variable -Name PathEntry -Scope Private
-
-	# Load format data into session
-	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
-		Update-FormatData -AppendPath $_.FullName
-	}
-
 	# Default output location for unit tests that produce file system output
 	New-Variable -Name DefaultTestDrive -Scope Global -Option Constant -Value $ProjectRoot\Test\TestDrive
 }
 #endregion
 
 #region Protected variables, these can be modified as follows:
-# 1. By project code at any time
+# 1. By code at any time
 # 2. Never by user
 if (!(Get-Variable -Name CheckProtectedVariables -Scope Global -ErrorAction Ignore))
 {

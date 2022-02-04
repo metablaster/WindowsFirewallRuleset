@@ -5,10 +5,11 @@ This document explains how to disable Windows firewall in Control Panel and/or i
 It is not recommended to disable firewall for security reasons except to troubleshoot problems.
 
 Keep in mind that GPO firewall and Control Panel firewall are 2 distinct "firewalls" that let you
-manage the same filtering platform behind the scene.
+manage the same filtering platform behind the scene.\
+Technically speaking these are called policy stores.
 
 GPO firewall has higher priority which makes Control Panel firewall not active except if
-explicitly merged into GPO firewall in either GUI settings or with PowerShell.
+explicitly merged into GPO firewall either trough GUI settings or with PowerShell.
 
 **NOTE:** Disabling firewall does not delete rules, you can enable firewall back again by following
 same steps.
@@ -36,7 +37,7 @@ Disabling Control Panel firewall can be done in 2 ways with different results:
 
 ### Make Control Panel firewall not active by configuring GPO firewall
 
-Which means GPO firewall will be active only when GPO firewall is disbled.
+Which means Control panel firewall will be active only when GPO firewall is disbled.
 
 To disable Control Panel firewall so that only GPO firewall works follow steps below:
 
@@ -51,15 +52,15 @@ To disable Control Panel firewall so that only GPO firewall works follow steps b
 9. Under `Rule merging` set `Apply local firewall rules` to `No`
 
 **NOTE:** Rule merging means rules from both firewalls will be active as if it's one firewall,
-This is not recommended for security reasons except to troubleshoot problems.
+this is not recommended for security reasons except to troubleshoot problems.
 
 ### Make Control Panel firewall not active in Control Panel
 
-Which means it will not be active even if GPO firewall is disabled.
+Which means Control Panel firewall will not be active even if GPO firewall is disabled.
 
-To disable Control Panel firewall so that it's disabled only if GPO firewall is disabled then first
-step is to temporarily set GPO firewall to\
-`Not Configured` which is explained above in section "Disable GPO firewall"
+To disable Control Panel firewall so that it's disabled regardless of GPO firewall status then first
+step is to temporarily set GPO firewall to `Not Configured` which is explained above in section
+"Disable GPO firewall"
 
 Next follow steps below:
 

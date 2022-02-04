@@ -49,7 +49,7 @@ None. Disconnect-Computer does not generate any output
 
 .NOTES
 TODO: If there are multiple connections, remove only specific ones
-TODO: This function should be called at the end of each script since individual scripts may run,
+TODO: This function should be called at the end of each script since individual scripts may be run,
 implementation needed to prevent disconnection when Deploy-Firewall runs.
 #>
 function Disconnect-Computer
@@ -69,25 +69,38 @@ function Disconnect-Computer
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disconnecting host '$Domain'"
 
 	# TODO: Verify what happens if multiple instances of same name exist for PSDrive, PSSession and CimSession
-	if (Get-CimSession -Name RemoteCim -EA Ignore)
+	if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing CIM session 'RemoteCim'"
 		Remove-CimSession -Name RemoteCim
 	}
 
-	if (Get-Variable -Name CimServer -Scope Global -EA Ignore)
+	if (Get-Variable -Name CimServer -Scope Global -ErrorAction Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'CimServer'"
 		Remove-Variable -Name CimServer -Scope Global -Force
 	}
 
-	if (Get-PSDrive -Name RemoteRegistry -Scope Global -EA Ignore)
+	if (Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSDrive 'RemoteRegistry'"
 		Remove-PSDrive -Name RemoteRegistry -Scope Global
 	}
 
-	if (Get-PSSession -Name RemoteSession -EA Ignore)
+	# TODO: Not sure if needed here?
+	# if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
+	# {
+	# 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'PolicyStore'"
+	# 	Remove-Variable -Name PolicyStore -Scope Global -Force
+	# }
+
+	# if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
+	# {
+	# 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resetting variable 'RemoteCredential'"
+	# 	Set-Variable -Name RemoteCredential -Scope Global -Force -Value $null
+	# }
+
+	if (Get-PSSession -Name RemoteSession -ErrorAction Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSSession 'RemoteSession'"
 		Exit-PSSession
