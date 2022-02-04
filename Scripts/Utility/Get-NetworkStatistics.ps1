@@ -6,6 +6,7 @@ This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
 Copyright (C) 2016 Warren Frame
+Copyright (C) 2021-2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +33,7 @@ SOFTWARE.
 
 .GUID 0014338b-58f3-4d41-8a0b-dcaafef55c75
 
-.AUTHOR Warren Frame
+.AUTHOR metablaster zebal@protonmail.com
 #>
 
 <#
@@ -40,8 +41,8 @@ SOFTWARE.
 Display current TCP/IP connections for local or remote system
 
 .DESCRIPTION
-Display current TCP/IP connections for local or remote system.
-Includes the process ID (PID) and process name for each connection.
+Get-NetworkStatistics displays current TCP/IP connections for local or remote system.
+Includes the process ID (PID) and optionally process name for each connection.
 If the port is not yet established, the port number is shown as an asterisk (*).
 
 .PARAMETER ProcessName
@@ -55,17 +56,18 @@ Wildcard characters are supported.
 The default value is "*"
 
 .PARAMETER Port
-The port number of the local computer or remote computer.
+The port number of the local or remote computer.
 Wildcard characters are supported.
 The default value is "*"
 
 .PARAMETER Domain
-If defined, run this command on a remote system via CIM.
-\\Domain\C$\netstat.txt is created on that system and the results returned here
+Run this script against specified computer.
+The default value is local computer.
+\\$Domain\C$\netstat.txt is created on that system and the results are returned here
 
 .PARAMETER Protocol
 The name of the protocol (TCP or UDP).
-The default value is "*" (all)
+The default value is "*" (Any)
 
 .PARAMETER State
 Indicates the state of a TCP connection.
@@ -91,27 +93,25 @@ http://msdn.microsoft.com/en-us/library/system.net.networkinformation.tcpstate%2
 Cookie Monster - modified these to match netstat output per here:
 http://support.microsoft.com/kb/137984
 
-.PARAMETER ShowHostName
+.PARAMETER IncludeHostName
 If specified, will attempt to resolve local and remote addresses
 
-.PARAMETER ShowProcessName
+.PARAMETER IncludeProcessName
 If specified, includes process names involved in connection
 
 .PARAMETER TempLocation
 Temporary file to store results on remote system.
 Must be relative to remote system (not a file share).
-Default is "C:\netstat.txt"
+The default value is "C:\netstat.txt"
 
 .PARAMETER AddressFamily
-Filter by IP Address family: IPv4, IPv6 or Any (both).
-
-If specified, we display any result where both the localaddress and the remoteaddress is in the address family.
+If specified, displays result where both the localaddress and the remoteaddress is of address family.
 
 .EXAMPLE
 PS> Get-NetworkStatistics | Format-Table
 
 .EXAMPLE
-PS> Get-NetworkStatistics iexplore -Domain k-it-thin-02 -ShowHostName | Format-Table
+PS> Get-NetworkStatistics iexplore -Domain Server01 -ShowHostName | Format-Table
 
 .EXAMPLE
 PS> Get-NetworkStatistics -ProcessName md* -Protocol TCP
@@ -132,14 +132,15 @@ PS> 'Computer1', 'Computer2' | Get-NetworkStatistics
 [string[]]
 
 .OUTPUTS
-[System.Management.Automation.PSCustomObject]
+[PSCustomObject]
 
 .NOTES
 Author: Shay Levy, code butchered by Cookie Monster
 Shay's Blog: http://PowerShay.com
 Cookie Monster's Blog: http://ramblingcookiemonster.github.io/
 
-Modifications by metablaster January 2021:
+Modifications by metablaster:
+January 2021:
 Added #Requires statement, missing Parameter and SupportsWildcards attributes
 Replaced Invoke-WmiMethod with Invoke-CimMethod
 Updated formatting, casing and naming according to the rest of project
@@ -147,6 +148,14 @@ Converted to script by removing function
 Updated comment based help
 Fixed getting process list from remote computer with Invoke-Command instead of Get-Process
 Changed default for AddressFamily from * to Any
+
+February 2022:
+Addresses are resolved to host name by using Resolve-Host function from repository
+Invoke-Command and Invoke-CimMethod use -Credential and -CimSession to establish connection
+Bugfix where filtering by local and remote address would produce errors
+Verbose messages modified to be more precise in description
+Bugfix where Invoke-Command to get processes would return wrong process ID, needed to wait for process
+
 TODO: Need to handle multiple computers
 
 .LINK
@@ -177,7 +186,7 @@ param (
 	[ValidatePattern("[\*\d\?\[\]]")]
 	[string] $Port = "*",
 
-	[Parameter(ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True)]
+	[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
 
@@ -191,16 +200,16 @@ param (
 	[string] $State = "*",
 
 	[Parameter()]
-	[switch] $ShowHostName,
+	[switch] $IncludeHostName,
 
 	[Parameter()]
-	[switch] $ShowProcessName,
+	[switch] $IncludeProcessName,
 
 	[Parameter()]
 	[string] $TempLocation = "C:\netstat.txt",
 
 	[Parameter()]
-	[ValidateSet("Any", "IPv4", "IPv6")]
+	[ValidateSet("IPv4", "IPv6", "Any")]
 	[string] $AddressFamily = "Any"
 )
 
@@ -210,23 +219,8 @@ begin
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Initialize-Project -Strict
 
-	$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
-
-	# TODO: Credential should be global variable
-	if (!$Credential)
-	{
-		# Will happen if credential request was dismissed using ESC key.
-		Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
-	}
-	elseif ($Credential.Password.Length -eq 0)
-	{
-		# HACK: Will ask for password but won't be recorded
-		Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
-		$Credential = $null
-	}
-
 	# Define properties
-	$Properties = "ComputerName", "Protocol", "LocalAddress", "LocalPort", "RemoteAddress", "RemotePort", "State", "ProcessName", "PID"
+	$Properties = "Domain", "Protocol", "LocalAddress", "LocalPort", "RemoteAddress", "RemotePort", "State", "ProcessName", "PID"
 
 	# Store hostnames in array for quick lookup
 	$DnsCache = @{}
@@ -237,31 +231,35 @@ process
 	if ($Domain -eq [System.Environment]::MachineName)
 	{
 		# Collect processes
-		if ($ShowProcessName)
+		if ($IncludeProcessName)
 		{
-			$Processes = Get-Process -ErrorAction Stop | Select-Object Name, Id
+			Write-Information -Tags $ThisScript -MessageData "INFO: Getting list of processes on '$Domain'..."
+			$Processes = Get-Process | Select-Object Name, Id
 		}
 
 		# Gather results on local PC
-		$Results = netstat -ano | Select-String -Pattern "\s+(TCP|UDP)"
+		$NetstatData = netstat -ano | Select-String -Pattern "\s+(TCP|UDP)"
 	}
 	else
 	{
 		# Collect processes
-		if ($ShowProcessName)
+		if ($IncludeProcessName)
 		{
 			try
 			{
-				$Processes = Invoke-Command -ComputerName $Domain -ScriptBlock { Get-Process } -ErrorAction Stop | Select-Object Name, Id
+				Write-Information -Tags $ThisScript -MessageData "INFO: Getting list of processes on '$Domain'..."
+				$Processes = Invoke-Command -ComputerName $Domain -Credential $RemoteCredential -ErrorAction Stop -ScriptBlock {
+					Get-Process
+				} |	Select-Object -Property Name, Id
 			}
 			catch
 			{
-				Write-Warning -Message "[$ThisScript] Unable to run Get-Process on computer $Domain, defaulting to no ShowProcessNames"
-				$ShowProcessName = $false
+				Write-Warning -Message "[$ThisScript] Unable to run Get-Process on computer '$Domain', excluding IncludeProcessName"
+				$IncludeProcessName = $false
 			}
 		}
 
-		# Define command
+		# Define netstat command
 		[string] $cmd = "cmd /c c:\windows\system32\netstat.exe -ano >> $TempLocation"
 
 		# Define remote file path - computername, drive, folder path
@@ -270,51 +268,27 @@ process
 		try
 		{
 			# Delete previous results
-			Invoke-CimMethod -ClassName Win32_Process -MethodName Create -CimSession $CimServer `
-				-Arguments @{ CommandLine = "cmd /c del $TempLocation" } -ErrorAction Stop | Out-Null
+			Invoke-CimMethod -ClassName Win32_Process -MethodName Create -CimSession $CimServer -ErrorAction Stop `
+				-Arguments @{ CommandLine = "cmd /c del $TempLocation" } | Out-Null
 		}
 		catch
 		{
-			Write-Warning -Message "[$ThisScript] Could not invoke create Win32_Process on $Domain to delete $TempLocation"
+			Write-Warning -Message "[$ThisScript] Could not invoke create Win32_Process on '$Domain' to delete '$TempLocation'"
 		}
 
 		try
 		{
-			$ProcessID = (Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
-					-Arguments @{ CommandLine = $cmd } -CimSession $CimServer -ErrorAction Stop).ProcessId
+			Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
+				-Arguments @{ CommandLine = $cmd } -CimSession $CimServer -ErrorAction Stop | Out-Null
+
+			Invoke-Command -ComputerName $Domain -Credential $RemoteCredential -ScriptBlock {
+				Get-Process -Name netstat -ErrorAction SilentlyContinue | Wait-Process
+			}
 		}
 		catch
 		{
-			# If we didn't run netstat, continue with next computer
 			Write-Error -ErrorRecord $_
 			return
-		}
-
-		# TODO: Replace with Invoke-Process when updated for remoting
-		# Wait for process to complete
-		while (
-			# This while should return true until the process completes
-			$(
-				try
-				{
-					Invoke-Command -ComputerName $Domain -Credential $Credential -ScriptBlock {
-						param (
-							$ProcessID
-						)
-
-						Get-Process -Id $ProcessID -ErrorAction Stop
-					} -ArgumentList $ProcessID
-					# NOTE: Windows PowerShell only
-					# Get-Process -Id $ProcessID -ComputerName $Domain -ErrorAction Stop
-				}
-				catch
-				{
-					$false
-				}
-			)
-		)
-		{
-			Start-Sleep -Seconds 2
 		}
 
 		# Gather results
@@ -322,12 +296,12 @@ process
 		{
 			try
 			{
-				$Results = Get-Content -Path $RemoteTempFile -ErrorAction Stop | Select-String -Pattern "\s+(TCP|UDP)"
+				$NetstatData = Get-Content -Path $RemoteTempFile -ErrorAction Stop | Select-String -Pattern "\s+(TCP|UDP)"
 			}
 			catch
 			{
 				Write-Error -Category ReadError -TargetObject $RemoteTempFile `
-					-Message "Could not get content from $RemoteTempFile for results"
+					-Message "Could not get contents from $RemoteTempFile for results"
 				return
 			}
 
@@ -336,93 +310,108 @@ process
 		else
 		{
 			Write-Error -Category ReadError -TargetObject $RemoteTempFile `
-				-Message "'$TempLocation' on $Domain converted to '$RemoteTempFile', this path is not accessible from your system."
+				-Message "'$TempLocation' on '$Domain' converted to '$RemoteTempFile', this path is not accessible from your system."
 			return
 		}
 	}
 
 	# Initialize counter for progress
-	$TotalCount = $Results.Count
 	$Count = 0
+	$TotalCount = $NetstatData.Count
 
 	# Loop through each line of results
-	foreach ($Result in $Results)
+	foreach ($NetstatEntry in $NetstatData)
 	{
-		$Item = $Result.Line.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+		$Item = $NetstatEntry.Line.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
 
 		if ($Item[1] -notmatch "^\[::")
 		{
 			# Parse the netstat line for local address and port
-			$la = $Item[1] -as [IPAddress]
-			if ($la.AddressFamily -eq 'InterNetworkV6')
+			$LocalCapture = [regex]::Match($Item[1], "\d|\w.+(?=]:\d+$)|(\d+|\.)+")
+
+			if ($LocalCapture.Success)
 			{
-				$LocalAddress = $la.IPAddressToString
-				$LocalPort = $Item[1].Split("\]:")[-1]
-			}
-			else
-			{
-				$LocalAddress = $Item[1].Split(":")[0]
-				$LocalPort = $Item[1].Split(":")[-1]
+				$ItemAddress = $LocalCapture.Value -as [IPAddress]
+				$LocalAddress = $ItemAddress.IPAddressToString
+
+				if ($ItemAddress.AddressFamily -eq "InterNetworkV6")
+				{
+					$LocalPort = $Item[1].Split("]:")[1]
+				}
+				else
+				{
+					$LocalPort = $Item[1].Split(":")[1]
+				}
 			}
 
 			# Parse the netstat line for remote address and port
-			$ra = $Item[2] -as [IPAddress]
-			if ($ra.AddressFamily -eq 'InterNetworkV6')
+			$RemoteCapture = [regex]::Match($Item[2], "\d|\w.+(?=]:\d+$)|(\d+|\.)+")
+
+			if ($RemoteCapture.Success)
 			{
-				$RemoteAddress = $ra.IPAddressToString
-				$RemotePort = $Item[2].Split("\]:")[-1]
+				$ItemAddress = $RemoteCapture.Value -as [IPAddress]
+				$RemoteAddress = $ItemAddress.IPAddressToString
+
+				if ($ItemAddress.AddressFamily -eq "InterNetworkV6")
+				{
+					$RemotePort = $Item[2].Split("]:")[1]
+				}
+				else
+				{
+					$RemotePort = $Item[2].Split(":")[1]
+				}
 			}
-			else
+			elseif ($Item[2] -eq "*:*")
 			{
-				$RemoteAddress = $Item[2].Split(":")[0]
-				$RemotePort = $Item[2].Split(":")[-1]
+				$RemotePort = "*"
+				$RemoteAddress = "*"
 			}
 
 			# Filter IPv4/IPv6 if specified
 			if ($AddressFamily -ne "Any")
 			{
-				if (($AddressFamily -eq "IPv4") -and ($LocalAddress -match ":") -and ($RemoteAddress -match ":|\*" ))
+				if (($AddressFamily -eq "IPv4") -and ($LocalAddress -match ":"))
 				{
-					# Both are IPv6, or ipv6 and listening, skip
-					Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily:`n$Result"
+					# Skip IPv6 address entries
+					Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily $LocalAddress"
 					continue
 				}
-				elseif (($AddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":") -and (($RemoteAddress -notmatch ":") -or ($RemoteAddress -match "*" )))
+				elseif (($AddressFamily -eq "IPv6") -and ($LocalAddress -notmatch ":"))
 				{
-					# Both are IPv4, or ipv4 and listening, skip
-					Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily:`n$Result"
+					# Skip IPv4 address entries
+					Write-Verbose -Message "[$ThisScript] Filtered by AddressFamily $LocalAddress"
 					continue
 				}
 			}
 
 			# Parse the netstat line for other properties
+			# TODO: Better approach is needed to access last element
 			$ProcessID = $Item[-1]
-			$Proto = $Item[0]
-			$Status = if ($Item[0] -eq "tcp") { $Item[3] } else { $null }
+			$ItemProtocol = $Item[0]
+			$Status = if ($Item[0] -eq "TCP") { $Item[3] } else { $null }
 
 			# Filter the object
-			if (($RemotePort -notlike $Port) -and ($LocalPort -notlike $Port))
+			if (($LocalPort -notlike $Port) -and ($RemotePort -notlike $Port))
 			{
-				Write-Verbose -Message "[$ThisScript] remote $RemotePort local $localport port $Port"
-				Write-Verbose -Message "[$ThisScript] Filtered by Port:`n$Result"
+				Write-Verbose -Message "[$ThisScript] Filtered by Port, local $LocalPort remote $RemotePort"
 				continue
 			}
 
 			if (($RemoteAddress -notlike $IPAddress) -and ($LocalAddress -notlike $IPAddress))
 			{
-				Write-Verbose -Message "[$ThisScript] Filtered by Address:`n$Result"
+				Write-Verbose -Message "[$ThisScript] Filtered by Address, local $LocalAddress remote $RemoteAddress"
 				continue
 			}
 
 			if ($Status -notlike $State)
 			{
-				Write-Verbose -Message "[$ThisScript] Filtered by State:`n$Result"
+				Write-Verbose -Message "[$ThisScript] Filtered by State '$Status'"
 				continue
 			}
 
-			if ($Proto -notlike $Protocol)
+			if ($ItemProtocol -notlike $Protocol)
 			{
-				Write-Verbose -Message "[$ThisScript] Filtered by Protocol:`n$Result"
+				Write-Verbose -Message "[$ThisScript] Filtered by Protocol $ItemProtocol"
 				continue
 			}
 
@@ -431,90 +420,100 @@ process
 				-Status "Resolving process ID $ProcessID with remote address $RemoteAddress and local address $LocalAddress"`
 				-PercentComplete (( $Count / $TotalCount ) * 100)
 
-			# If we are running ShowProcessNames, get the matching name
-			if ($ShowProcessName -or ($PSBoundParameters.ContainsKey -eq "ProcessName"))
+			# If we are running IncludeProcessName, get the matching name
+			if ($IncludeProcessName)
 			{
 				# Handle case where process spun up in the time between running get-process and running netstat
-				if ($ProcName = $Processes | Where-Object { $_.id -eq $ProcessID } | Select-Object -ExpandProperty name ) { }
-				else { $ProcName = "Unknown" }
-			}
-			else { $ProcName = "NA" }
+				$ItemProcessName = $Processes | Where-Object {
+					$_.Id -eq $ProcessID
+				} | Select-Object -ExpandProperty Name
 
-			if ($ProcName -notlike $ProcessName)
+				if (!$ItemProcessName)
+				{
+					$ItemProcessName = "Unknown"
+				}
+			}
+			else
 			{
-				Write-Verbose -Message "[$ThisScript] Filtered by ProcessName:`n$Result"
+				$ItemProcessName = "NA"
+			}
+
+			if ($ItemProcessName -notlike $ProcessName)
+			{
+				Write-Verbose -Message "[$ThisScript] Filtered by ProcessName $ItemProcessName"
 				continue
 			}
 
-			# If the ShowHostName switch is specified, try to map IP to hostname
-			if ($ShowHostName)
+			# If the IncludeHostName switch is specified, try to map IP to hostname
+			if ($IncludeHostName)
 			{
 				$TempAddress = $null
-				try
+				Write-Debug -Message "[$ThisScript] Resolving remote address $RemoteAddress"
+
+				if (($RemoteAddress -eq "127.0.0.1") -or ($RemoteAddress -eq "0.0.0.0"))
 				{
-					if (($RemoteAddress -eq "127.0.0.1") -or ($RemoteAddress -eq "0.0.0.0"))
-					{
-						$RemoteAddress = $Domain
-					}
-					elseif ($RemoteAddress -match "\w")
-					{
-						# Check with dns cache first
-						if ($DnsCache.ContainsKey($RemoteAddress))
-						{
-							$RemoteAddress = $DnsCache[$RemoteAddress]
-							Write-Verbose -Message "[$ThisScript] Using cached REMOTE '$RemoteAddress'"
-						}
-						else
-						{
-							# If address isn't in the cache, resolve it and add it
-							$TempAddress = $RemoteAddress
-							$RemoteAddress = [System.Net.DNS]::GetHostByAddress($RemoteAddress).HostName
-							$DnsCache.Add($TempAddress, $RemoteAddress)
-							Write-Verbose -Message "[$ThisScript] Using non cached REMOTE '$RemoteAddress`t$TempAddress"
-						}
-					}
+					$RemoteAddress = $Domain
 				}
-				catch
+				elseif ($RemoteAddress -match "\w")
 				{
-					Write-Error -ErrorRecord $_
+					# Check with dns cache first
+					if ($DnsCache.ContainsKey($RemoteAddress))
+					{
+						$RemoteAddress = $DnsCache[$RemoteAddress]
+						Write-Verbose -Message "[$ThisScript] Using cached remote address '$RemoteAddress'"
+					}
+					else
+					{
+						# If address isn't in the cache, resolve it and add it
+						$TempAddress = $RemoteAddress
+						$HostInfo = Resolve-Host -IPAddress $RemoteAddress
+
+						if ($HostInfo)
+						{
+							$RemoteAddress = $HostInfo.IPAddress
+							$DnsCache.Add($TempAddress, $RemoteAddress)
+							Write-Verbose -Message "[$ThisScript] Using non cached remote address '$RemoteAddress`t$TempAddress"
+						}
+					}
 				}
 
-				try
+				$TempAddress = $null
+				Write-Debug -Message "[$ThisScript] Resolving local address $LocalAddress"
+
+				if (($LocalAddress -eq "127.0.0.1") -or ($LocalAddress -eq "0.0.0.0"))
 				{
-					if (($LocalAddress -eq "127.0.0.1") -or ($LocalAddress -eq "0.0.0.0"))
-					{
-						$LocalAddress = $Domain
-					}
-					elseif ($LocalAddress -match "\w")
-					{
-						# Check with dns cache first
-						if ($DnsCache.ContainsKey($LocalAddress))
-						{
-							$LocalAddress = $DnsCache[$LocalAddress]
-							Write-Verbose -Message "[$ThisScript] Using cached LOCAL '$LocalAddress'"
-						}
-						else
-						{
-							# If address isn't in the cache, resolve it and add it
-							$TempAddress = $LocalAddress
-							$LocalAddress = [System.Net.DNS]::GetHostByAddress("$LocalAddress").hostname
-							$DnsCache.Add($LocalAddress, $TempAddress)
-							Write-Verbose -Message "[$ThisScript] Using non cached LOCAL '$LocalAddress'`t'$TempAddress'"
-						}
-					}
+					$LocalAddress = $Domain
 				}
-				catch
+				elseif ($LocalAddress -match "\w")
 				{
-					Write-Error -ErrorRecord $_
+					# Check with dns cache first
+					if ($DnsCache.ContainsKey($LocalAddress))
+					{
+						$LocalAddress = $DnsCache[$LocalAddress]
+						Write-Verbose -Message "[$ThisScript] Using cached local address '$LocalAddress'"
+					}
+					else
+					{
+						# If address isn't in the cache, resolve it and add it
+						$TempAddress = $LocalAddress
+						$HostInfo = Resolve-Host -IPAddress $LocalAddress
+
+						if ($HostInfo)
+						{
+							$LocalAddress = $HostInfo.IPAddress
+							$DnsCache.Add($TempAddress, $LocalAddress)
+							Write-Verbose -Message "[$ThisScript] Using non cached local address '$LocalAddress'`t'$TempAddress'"
+						}
+					}
 				}
 			}
 
 			# Write the object
-			New-Object -TypeName PSCustomObject -Property @{
-				ComputerName = $Domain
+			[PSCustomObject]@{
+				Domain = $Domain
 				PID = $ProcessID
-				ProcessName = $ProcName
-				Protocol = $Proto
+				ProcessName = $ItemProcessName
+				Protocol = $ItemProtocol
 				LocalAddress = $LocalAddress
 				LocalPort = $LocalPort
 				RemoteAddress = $RemoteAddress

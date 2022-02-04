@@ -135,8 +135,14 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 
 	if (!$Credential)
 	{
-		Write-Error -Category InvalidArgument -Message "Windows credentials are required to proceed"
-		return
+		# Will happen if credential request was dismissed using ESC key.
+		Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
+	}
+	elseif ($Credential.Password.Length -eq 0)
+	{
+		# HACK: Will ask for password but won't be recorded
+		Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+		$Credential = $null
 	}
 
 	$InvokeParams = @{

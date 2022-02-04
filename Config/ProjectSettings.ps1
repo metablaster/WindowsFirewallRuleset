@@ -455,6 +455,19 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
 			)
 
+			# TODO: Copied code, need to adjust
+			if (!$RemoteCredential)
+			{
+				# Will happen if credential request was dismissed using ESC key.
+				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
+			}
+			elseif ($RemoteCredential.Password.Length -eq 0)
+			{
+				# HACK: Will ask for password but won't be recorded
+				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+				Set-Variable -Name RemoteCredential -Scope Global -Value $null
+			}
+
 			$ConnectParams["Credential"] = $RemoteCredential
 
 			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."

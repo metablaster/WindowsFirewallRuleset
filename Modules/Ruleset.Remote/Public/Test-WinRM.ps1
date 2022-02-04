@@ -192,6 +192,18 @@ function Test-WinRM
 			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
 		}
 
+		if (!$Credential)
+		{
+			# Will happen if credential request was dismissed using ESC key.
+			Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
+		}
+		elseif ($Credential.Password.Length -eq 0)
+		{
+			# HACK: Will ask for password but won't be recorded
+			Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+			$Credential = $null
+		}
+
 		$WSManParams["ComputerName"] = $Domain
 		$WSManParams["Credential"] = $Credential
 

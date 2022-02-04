@@ -45,7 +45,7 @@ Target IP which to resolve to host name
 Flush DNS resolver cache before resolving IP or host name
 
 .PARAMETER AddressFamily
-Obtain IP address for specified IP version
+Obtain IP address for the specified IP version
 
 .PARAMETER Physical
 Resolve local host name to IP of a physical adapter

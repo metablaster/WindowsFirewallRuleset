@@ -56,6 +56,7 @@ None.
 
 [CmdletBinding()]
 param (
+	[Parameter()]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
 
