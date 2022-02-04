@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 705cd3b9-ff1f-452d-bd44-09ed8e26a70d
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility, Ruleset.Firewall
 #>
 
 <#
@@ -54,7 +58,10 @@ Wildcard characters are supported.
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Restore-Firewall.ps1
+PS> Restore-Firewall
+
+.EXAMPLE
+PS> Restore-Firewall -Domain Server01 -Path "C:\MyExports"
 
 .INPUTS
 None. You cannot pipe objects to Restore-Firewall.ps1

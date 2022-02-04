@@ -33,6 +33,8 @@ SOFTWARE.
 .GUID 122f1ee2-ac42-4bd9-8dfb-9f21a5f3fd1f
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
 #>
 
 <#

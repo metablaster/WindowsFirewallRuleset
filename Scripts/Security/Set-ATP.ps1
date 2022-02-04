@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 181dea4a-4658-425e-904e-5f22f886af89
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -49,7 +53,10 @@ Computer name onto which do deploy ATP configuration
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Set-ATP.ps1
+PS> Set-ATP
+
+.EXAMPLE
+PS> Set-ATP -Domain Server01
 
 .INPUTS
 None. You cannot pipe objects to Set-ATP.ps1
@@ -119,3 +126,5 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy recommended 
 	# Other
 	Set-MpPreference -DisableBehaviorMonitoring $false -CimSession $CimServer
 }
+
+Update-Log

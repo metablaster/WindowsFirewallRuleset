@@ -14,7 +14,7 @@ If specified, the result is device path for given drive letter
 If specified, result is drive letter for given device path
 
 .EXAMPLE
-PS> .\Get-DevicePath.ps1
+PS> Get-DevicePath
 
 DevicePath              DriveLetter
 ----------              -----------
@@ -22,12 +22,12 @@ DevicePath              DriveLetter
 \Device\HarddiskVolume4 C:
 
 .EXAMPLE
-PS> .\Get-DevicePath.ps1 -DevicePath "\Device\HarddiskVolume4"
+PS> Get-DevicePath -DevicePath "\Device\HarddiskVolume4"
 
 C:
 
 .EXAMPLE
-PS> .\Get-DevicePath.ps1 -DriveLetter C:"
+PS> Get-DevicePath -DriveLetter C:"
 
 \Device\HarddiskVolume4
 

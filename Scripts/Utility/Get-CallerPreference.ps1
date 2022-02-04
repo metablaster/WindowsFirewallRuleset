@@ -57,6 +57,8 @@ or derivative works that you create that run on a Microsoft Windows operating sy
 .GUID d2826695-3fc1-47c9-80f1-6b7f80a2f26c
 
 .AUTHOR Microsoft Corporation
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
 #>
 
 <#
@@ -314,7 +316,4 @@ end
 			}
 		}
 	}
-
-	# TODO: Will produce duplicate entry
-	Update-Log
 }

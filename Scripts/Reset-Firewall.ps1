@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 1cfe2d15-b310-48ad-97ba-fbb46abea6c0
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility, Ruleset.Firewall
 #>
 
 <#
@@ -53,7 +57,10 @@ disabled remote registry in addition to firewall reset
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Reset-Firewall.ps1
+PS> Reset-Firewall
+
+.EXAMPLE
+PS> Reset-Firewall -Remoting -Force
 
 .INPUTS
 None. You cannot pipe objects to Reset-Firewall.ps1

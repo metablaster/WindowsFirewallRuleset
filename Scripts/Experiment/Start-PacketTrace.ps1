@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 1d12c983-4d53-4952-9cc6-281467032fc2
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -90,17 +94,17 @@ The provider filters for and logs network traffic that matches the ports that th
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Start-PacketTrace.ps1 6 -Level 3
+PS> Start-PacketTrace 6 -Level 3
 
 Captures TCP traffic up to Warning level
 
 .EXAMPLE
-PS> .\Start-PacketTrace.ps1 1, 58
+PS> Start-PacketTrace 1, 58
 
 Captures ICMP traffic for both IPv4 and IPv6
 
 .EXAMPLE
-PS> .\Start-PacketTrace.ps1 -LayerSet "IPv4Outbound" -TCPPorts 443
+PS> Start-PacketTrace -LayerSet "IPv4Outbound" -TCPPorts 443
 
 Captures Outbound IPv4 traffic to remote port 443, at WFP level
 

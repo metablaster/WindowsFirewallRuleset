@@ -65,7 +65,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain -ListPreference
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict

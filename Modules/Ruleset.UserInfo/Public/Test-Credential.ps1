@@ -88,6 +88,15 @@ via https://stackoverflow.com/q/10802850/45375
 WinAPI solution for local-account validation inspired by:
 https://stackoverflow.com/a/15644447/45375
 
+Modifications by metablaster:
+February 2022:
+Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
+Adapted code and comment formating and variable casing to be in line with the rest of code in repository
+Added OutputType attribute and additional links
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md
+
 .LINK
 https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce
 #>
@@ -96,7 +105,8 @@ function Test-Credential
 	# NOTE: SuppressMessageAttribute not working for manual analyzer run, type disabled in PSScriptAnalyzerSettings
 	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSUseCompatibleTypes", "", Scope = "Function", Justification = "PS 5.1.17763 is out of date")]
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md")]
 	[OutputType([bool])]
 	param(
 		[Parameter(Mandatory = $true, Position = 0)]

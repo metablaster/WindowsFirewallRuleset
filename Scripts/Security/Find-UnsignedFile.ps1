@@ -108,13 +108,13 @@ Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 
 .EXAMPLE
-PS> .\Find-UnsignedFile.ps1 C:\Windows\system32 -Log -VirusTotal
+PS> Find-UnsignedFile C:\Windows\system32 -Log -VirusTotal
 
 .EXAMPLE
-PS> .\Find-UnsignedFile.ps1 C:\Windows\system32 -Type com
+PS> Find-UnsignedFile C:\Windows\system32 -Type com
 
 .EXAMPLE
-PS> .\Find-UnsignedFile.ps1 C:\Windows\ -VirusTotal -Log -Recurse -SkipUpload
+PS> Find-UnsignedFile C:\Windows\ -VirusTotal -Log -Recurse -SkipUpload
 
 .INPUTS
 None. You cannot pipe objects to Find-UnsignedFile.ps1

@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 0390fb1d-bf61-441b-9746-63a34be384bb
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1, Unblock-Project.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Initialize
 #>
 
 <#
@@ -63,7 +67,13 @@ If not specified default SSH key locations are searched.
 If specified, skips prompts to run commands.
 
 .EXAMPLE
-PS> .\Initialize-Development.ps1
+PS> Initialize-Development
+
+.EXAMPLE
+PS> Initialize-Development -User UserName -Email mymail@mail.com
+
+.EXAMPLE
+PS> Initialize-Development -SshKey C:\Users\User\.ssh\id_pub -User UserName -Email mymail@mail.com
 
 .INPUTS
 None. You cannot pipe objects to Initialize-Development.ps1

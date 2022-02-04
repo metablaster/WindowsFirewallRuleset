@@ -44,7 +44,7 @@ Unblock project files that were downloaded from the Internet, this is needed to
 unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
 
 .EXAMPLE
-PS> .\Unblock-Project.ps1
+PS> Unblock-Project
 
 .INPUTS
 None. You cannot pipe objects to Unblock-Project.ps1

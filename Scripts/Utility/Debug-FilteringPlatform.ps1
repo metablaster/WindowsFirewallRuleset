@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 8d59584b-beeb-4ef3-8fa7-d1419034f088
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize
 #>
 
 <#
@@ -77,19 +81,19 @@ Event ID 5158: The Windows Filtering Platform has permitted a bind to a local po
 Event ID 5159: The Windows Filtering Platform has blocked a bind to a local port
 
 .EXAMPLE
-PS> .\Debug-FilteringPlatform.ps1 -Last 48
+PS> Debug-FilteringPlatform -Last 48
 Log last 48 packet drop entries for all directions, all protocols within 24 hours
 
 .EXAMPLE
-PS> .\Debug-FilteringPlatform.ps1 -Hours 48 -Direction Inbound -Protocol 6
+PS> Debug-FilteringPlatform -Hours 48 -Direction Inbound -Protocol 6
 Log last 50 packet drop entries for inbound direction, UDP within 24 hours
 
 .EXAMPLE
-PS> .\Debug-FilteringPlatform.ps1 -Last 14 -Protocol ICMP -Hours 2
+PS> Debug-FilteringPlatform -Last 14 -Protocol ICMP -Hours 2
 Log last 14 packet drop entries for all directions, ICMP within last 2 hours
 
 .EXAMPLE
-PS> .\Debug-FilteringPlatform.ps1 -Hours 48 -Direction Outbound -Protocol TCP -EventID 5159
+PS> Debug-FilteringPlatform -Hours 48 -Direction Outbound -Protocol TCP -EventID 5159
 Log last 50 blocking bind to local port entries for outbound direction, TCP protocol within 48 hours
 
 .INPUTS

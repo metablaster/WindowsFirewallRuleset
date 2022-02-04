@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID fc9b92ef-9756-4721-8cf4-28f9a04e6c49
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -52,7 +56,10 @@ TODO: document parameter
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Stop-PacketTrace.ps1
+PS> Stop-PacketTrace
+
+.EXAMPLE
+PS> Stop-PacketTrace -Name Traffic -WFP
 
 .INPUTS
 None. You cannot pipe objects to Stop-PacketTrace.ps1

@@ -34,6 +34,10 @@ SOFTWARE.
 .GUID 0014338b-58f3-4d41-8a0b-dcaafef55c75
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.ComputerInfo
 #>
 
 <#
@@ -41,7 +45,7 @@ SOFTWARE.
 Display current TCP/IP connections for local or remote system
 
 .DESCRIPTION
-Get-NetworkStatistics displays current TCP/IP connections for local or remote system.
+Get-NetworkStat.ps1 displays current TCP/IP connections for local or remote system.
 Includes the process ID (PID) and optionally process name for each connection.
 If the port is not yet established, the port number is shown as an asterisk (*).
 
@@ -108,25 +112,25 @@ The default value is "C:\netstat.txt"
 If specified, displays result where both the localaddress and the remoteaddress is of address family.
 
 .EXAMPLE
-PS> Get-NetworkStatistics | Format-Table
+PS> Get-NetworkStat | Format-Table
 
 .EXAMPLE
-PS> Get-NetworkStatistics iexplore -Domain Server01 -ShowHostName | Format-Table
+PS> Get-NetworkStat iexplore -Domain Server01 -ShowHostName | Format-Table
 
 .EXAMPLE
-PS> Get-NetworkStatistics -ProcessName md* -Protocol TCP
+PS> Get-NetworkStat -ProcessName md* -Protocol TCP
 
 .EXAMPLE
-PS> Get-NetworkStatistics -IPAddress 192* -State LISTENING
+PS> Get-NetworkStat -IPAddress 192* -State LISTENING
 
 .EXAMPLE
-PS> Get-NetworkStatistics -State LISTENING -Protocol TCP
+PS> Get-NetworkStat -State LISTENING -Protocol TCP
 
 .EXAMPLE
-PS> Get-NetworkStatistics -Domain Computer1, Computer2
+PS> Get-NetworkStat -Domain Computer1, Computer2
 
 .EXAMPLE
-PS> 'Computer1', 'Computer2' | Get-NetworkStatistics
+PS> 'Computer1', 'Computer2' | Get-NetworkStat
 
 .INPUTS
 [string[]]
@@ -525,4 +529,6 @@ process
 			++$Count
 		}
 	}
+
+	Update-Log
 }

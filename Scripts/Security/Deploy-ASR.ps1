@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 303c4ba1-9f8e-468b-b78d-637182d7e98d
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -54,7 +58,10 @@ Computer name onto which do deploy ASR rules
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Deploy-ASR.ps1
+PS> Deploy-ASR
+
+.EXAMPLE
+PS> Deploy-ASR -Domain Server01
 
 .INPUTS
 None. You cannot pipe objects to Deploy-ASR.ps1
@@ -172,3 +179,5 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 	Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -CimSession $CimServer `
 		-AttackSurfaceReductionRules_Actions $Actions
 }
+
+Update-Log

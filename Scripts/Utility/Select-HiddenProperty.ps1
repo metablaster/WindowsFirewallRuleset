@@ -57,10 +57,10 @@ PersistentStore means from control panel firewall
 Computer name means from GPO store.
 
 .EXAMPLE
-PS> .\Select-HiddenProperty.ps1 "Network Discovery"
+PS> Select-HiddenProperty "Network Discovery"
 
 .EXAMPLE
-PS> .\Select-HiddenProperty.ps1 "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
+PS> Select-HiddenProperty "Network Discovery" -PolicyStore ([System.Environment]::MachineName)
 
 .INPUTS
 None. You cannot pipe objects to Select-HiddenProperty.ps1

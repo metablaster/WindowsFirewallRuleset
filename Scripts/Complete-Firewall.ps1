@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID cd8db1a8-63cd-443d-bdab-baf91b787fe9
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -49,7 +53,10 @@ Optionally granting permissions to write and analyze firewall logs for debugging
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Complete-Firewall.ps1
+PS> Complete-Firewall
+
+.EXAMPLE
+PS> Complete-Firewall -Force
 
 .INPUTS
 None. You cannot pipe objects to Complete-Firewall.ps1

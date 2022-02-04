@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID d7809432-c822-4699-9244-97c8da8d64bf
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -64,10 +68,13 @@ By default the user is present with a series of questions to fine tune deploymen
 To avoid all prompts completely combine this switch with -Confirm:$false
 
 .EXAMPLE
-PS> .\Deploy-Firewall.ps1
+PS> Deploy-Firewall
 
 .EXAMPLE
-PS> .\Deploy-Firewall.ps1 -Force
+PS> Deploy-Firewall -Interactive
+
+.EXAMPLE
+PS> Deploy-Firewall -Domain Server01 -Quiet
 
 .INPUTS
 None. You cannot pipe objects to Deploy-Firewall.ps1

@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 251176c4-f476-4dda-a55c-7fb06f303a09
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -48,7 +52,10 @@ Verification is performed by scanning registry and any discrepancies are reporte
 Computer name on which firewall configuration is to be tested
 
 .EXAMPLE
-PS> .\Confirm-Firewall.ps1
+PS> Confirm-Firewall
+
+.EXAMPLE
+PS> Confirm-Firewall -Domain Server01
 
 .INPUTS
 None. You cannot pipe objects to Confirm-Firewall.ps1
@@ -226,3 +233,5 @@ if ($Value -ne 2) # RequireCrlCheck
 {
 	Write-Warning -Message "Firewall setting 'CertValidationLevel' is misconfigured"
 }
+
+Update-Log

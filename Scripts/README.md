@@ -21,7 +21,7 @@ Contains scripts which are not part of modules as follows:
 | Get-CallerPreference.ps1    | Fetch preference variable values from the caller's scope.            |
 | Get-DevicePath.ps1          | Get mappings of disk volume letter and device path                   |
 | Get-ExportedType.ps1        | Get exported types in the current session                            |
-| Get-NetworkStatistics.ps1   | Display current TCP/IP connections for local or remote system        |
+| Get-NetworkStat.ps1         | Display current TCP/IP connections for local or remote system        |
 | Get-ParameterAlias.ps1      | Gets parameter aliases of functions, commandlets, scripts or aliases |
 | Get-PropertyType.ps1        | Get .NET types for properties of one or more objects                 |
 | Restart-Network.ps1         | Restart or reset network without the need for reboot                 |

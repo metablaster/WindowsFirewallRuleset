@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID bdaf45b1-a6cf-48b8-a87d-cde4f30eb574
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility, Ruleset.Firewall
 #>
 
 <#
@@ -53,7 +57,13 @@ Wildcard characters are supported.
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Backup-Firewall.ps1
+PS> Backup-Firewall
+
+.EXAMPLE
+PS> Backup-Firewall -Domain Server01
+
+.EXAMPLE
+PS> Backup-Firewall -Path "C:\MyFolder" -Force
 
 .INPUTS
 None. You cannot pipe objects to Backup-Firewall.ps1

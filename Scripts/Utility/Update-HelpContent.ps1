@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID d1607417-03c5-4295-9b8d-a0b64fb06e7a
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -60,13 +64,13 @@ If specified, no prompt for confirmation is shown to perform actions, in additio
 are all removed and regenerated a new instead of being updated.
 
 .EXAMPLE
-PS> .\Update-HelpContent.ps1
+PS> Update-HelpContent
 
 .EXAMPLE
-PS> .\Update-HelpContent.ps1 -Module Ruleset.ProgramInfo
+PS> Update-HelpContent -Module Ruleset.ProgramInfo
 
 .EXAMPLE
-PS> .\Update-HelpContent.ps1 -UICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
+PS> Update-HelpContent -UICulture @(en-US, fr-FR, jp-JP) -Encoding utf8
 
 .INPUTS
 None. You cannot pipe objects to Update-HelpContent.ps1

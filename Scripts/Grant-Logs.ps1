@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 16cf3c56-2a61-4a72-8f06-6f8165ed6115
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -58,10 +62,10 @@ By default specified principal gets permission from local machine
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Grant-Logs.ps1 USERNAME
+PS> Grant-Logs USERNAME
 
 .EXAMPLE
-PS> .\Grant-Logs.ps1 USERNAME -Domain COMPUTERNAME
+PS> Grant-Logs USERNAME -Domain COMPUTERNAME
 
 .INPUTS
 None. You cannot pipe objects to Grant-Logs.ps1

@@ -52,7 +52,7 @@ The description of a parameter.
 Repeat ".PARAMETER" keyword for each parameter.
 
 .EXAMPLE
-PS> .\ScriptTemplate.ps1
+PS> ScriptTemplate
 
 Repeat ".EXAMPLE" keyword for each example
 

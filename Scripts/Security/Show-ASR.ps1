@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID a25eb685-36f4-4bb4-b825-61cf2e737a46
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize
 #>
 
 <#
@@ -46,7 +50,10 @@ Use Show-ASR.ps1 to show current configuration of attack surface reduction (ASR)
 Computer name which is to be queried for ASR rules
 
 .EXAMPLE
-PS> .\Show-ASR.ps1
+PS> Show-ASR
+
+.EXAMPLE
+PS> Show-ASR -Domain Server01
 
 .INPUTS
 None. You cannot pipe objects to Show-ASR.ps1
@@ -130,3 +137,5 @@ foreach ($Entry in $MpPreference)
 		Write-Information -MessageData $Enabled
 	}
 }
+
+Update-Log

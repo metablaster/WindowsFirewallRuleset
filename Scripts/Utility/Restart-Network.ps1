@@ -33,6 +33,10 @@ SOFTWARE.
 .GUID 51f98c20-9f7b-4be2-bb16-86c76c883dda
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
@@ -72,13 +76,13 @@ By default, all supported power management features are enabled
 If specified, no prompt for confirmation is shown to perform actions
 
 .EXAMPLE
-PS> .\Restart-Network.ps1
+PS> Restart-Network
 
 .EXAMPLE
-PS> .\Restart-Network.ps1 -KeepIP
+PS> Restart-Network -KeepIP
 
 .EXAMPLE
-PS> .\Restart-Network.ps1 MyUsername -KeepDNS -Reset
+PS> Restart-Network MyUsername -KeepDNS -Reset
 
 .INPUTS
 None. You cannot pipe objects to Restart-Network.ps1
