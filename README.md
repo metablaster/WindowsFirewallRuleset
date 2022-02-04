@@ -104,9 +104,10 @@ or restriction requirements.
 part of their installation process will have no effect on firewall unless you explicitly make an
 exception.
 
-3. Rules based on programs and services will have their involved executable file checked for digital
-signature, for security reasons rule is not created or loaded into firewall if this verification
-fails. (can be forced)
+3. Rules based on programs and services will have their specified executable file checked for digital
+signature and will be scanned on virus total if digital signature is missing,
+for security reasons rule is not created or loaded into firewall if this verification fails.
+(can be forced)
 
 4. Default outbound is "block" unless there is a rule to allow network traffic, in most firewalls
 this is not possible unless you maintain rules for every possible program or service,

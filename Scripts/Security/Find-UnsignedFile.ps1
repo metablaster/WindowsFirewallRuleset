@@ -240,8 +240,8 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 	if ($VirusTotal)
 	{
-		$SigcheckPath = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation.FullName)
-		$SigcheckPath = Resolve-Path -Path $SigcheckPath
+		$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation.FullName)
+		$SigcheckDir = Resolve-Path -Path $SigcheckDir
 
 		if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
 		{
@@ -253,9 +253,9 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		}
 
 		# Check if path to sigcheck executable is valid
-		if (Test-Path -Path "$SigcheckPath\$SigcheckExecutable")
+		if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable")
 		{
-			$SigCheckFile = "$SigcheckPath\$SigcheckExecutable"
+			$SigCheckFile = "$SigcheckDir\$SigcheckExecutable"
 		}
 		else
 		{
@@ -269,7 +269,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -Message "$SigcheckExecutable was not found in specified path '$SigcheckPath'"
+				Write-Error -Category ObjectNotFound -Message "$SigcheckExecutable was not found in specified path '$SigcheckDir'"
 				return
 			}
 		}
@@ -427,22 +427,28 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				}
 
 				# A collection of command-line arguments to use when starting the application
+				# -vt accept virus total license
 				$Process.StartInfo.Arguments = "-vt -accepteula -nobanner"
 
 				if ($SkipUpload)
 				{
+					# Open report in web browser
 					$Process.StartInfo.Arguments += " -vr"
 				}
 				else
 				{
+					# Open report in web browser and upload files never scanned by virus total
 					$Process.StartInfo.Arguments += " -vrs"
 				}
 
 				if (!$All)
 				{
+					# If VirusTotal check is enabled, show files that are unknown by VirusTotal or
+					# have non-zero detection, otherwise show only unsigned files.
 					$Process.StartInfo.Arguments += " -u"
 				}
 
+				# File which is to be scanned
 				$Process.StartInfo.Arguments += " `"$FilePath`""
 				Write-Debug -Message "Sigcheck arguments are $($Process.StartInfo.Arguments)"
 

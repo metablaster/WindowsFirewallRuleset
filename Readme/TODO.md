@@ -137,8 +137,8 @@ Todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Use try/catch in test scripts to avoid writing errors and write information instead,
-    so that `Run-AllTests.ps1` gets clean output, see `Get-SystemSKU` test
+    - Use try/catch or something similar in test scripts to avoid writing errors and write
+    information instead, so that `Run-AllTests.ps1` gets clean output, see `Get-SystemSKU` test
     - Program search test cases should test for either always installed program or certain failure
     - Unit test should have `TestData` which can be used to test pipeline support or to reduce the
     size of unit tests, another benefit is that tests will be easier to update to work on updated data.
@@ -156,8 +156,6 @@ Todo's in this file are categorized into following sections:
 
     - Most program query functions return (or could return) multiple program instances,
     need to select latest or add multiple rules.
-    - Installation variables must be empty in development mode only to be able to force program
-    searches, for release providing a path is needed to prevent "path fixed" info messages
     - Finish implementation for rule import/export, including rules without group (user made rules)
     - Store app rules for administrators, probably only those that break important functionalities
     - Revisit function parameters, their types, aliases, names are singular, consistent etc..
@@ -182,7 +180,7 @@ Todo's in this file are categorized into following sections:
 
 1. Modules
 
-    - Provide following keywords in function comments: `.LINK` `.COMPONENT` `.ROLE` `.FUNCTIONALITY`
+    - Provide following keywords in function comments: `.COMPONENT` `.ROLE` `.FUNCTIONALITY`
     - `DefaultParameterSetName` for functions with parameter sets is missing but might be desired,
     on another side many functions name default parameter set name to `None` which isn't descriptive.
     - Revisit function return statements, return keyword or Write-Output should be preferred for visibility
@@ -255,7 +253,6 @@ Todo's in this file are categorized into following sections:
 
     - Indentation doesn't work as expected for pipeline operators, currently using "NoIndentation",
     also there is no indentation for back ticks.
-    - A helper script to recursively invoke `PSScriptAnalyzer` formatter for entire repository
     - Set code regions where applicable
 
 6. Documentation
@@ -278,7 +275,6 @@ Todo's in this file are categorized into following sections:
 
 1. Modules
 
-    - `Test-Executable` function could optionally check for "virus total" hash
     - `localhost` != `[System.Environment]::MachineName` because localhost needs to resolve with `WinRM`
     - `Write-Error` streams should be extended to include exception record etc.
     - `Write-Error` categories should be checked, some are inconsistent with the actual error
@@ -320,7 +316,6 @@ Todo's in this file are categorized into following sections:
     (ex. doing something `$Variable v$Version` instead of doing `$Variable $Version`),
     also same convention regarding quotation of variables with `''` (single quotes)
     - Write a script to add right click context menus for Windows PowerShell
-    - Need variables that would avoid prompts and set up firewall with minimum user intervention
     - Adjust all scripts according to design in templates
     - First time user warnings and notices should be reduced, ex. handled with code if possible
     - Progress line or percentage in script context for master script
@@ -340,7 +335,7 @@ Todo's in this file are categorized into following sections:
     - Test cases to test templates
     - Some tests are very out of date because rarely useful, ex. `TestProjectSettings` or `TestGlobalVariables`
     - Almost all tests need more test cases and consistency improvements
-    - Test comment based help
+    - Function to test consistence of comment based help
 
 5. Code style and design
 
@@ -389,6 +384,7 @@ Todo's in this file are categorized into following sections:
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have dubious names
     - Change bool parameters to switch where possible
+    - `Test-Executable` function could optionally check for "virus total" hash
 
 2. Scripts
 
@@ -402,6 +398,9 @@ Todo's in this file are categorized into following sections:
     - For individual runs of rule scripts we should call `gpupdate.exe`
     - Instead of `Approve-Execute` we should use `ShouldProcess` or `ShouldContinue` passing in
     context variable and setting help if this is possible.
+    - Installation variables must be empty in development mode only to be able to force program
+    searches, for release providing a path is needed to prevent "path fixed" info messages
+    - Need variables that would avoid prompts and set up firewall with minimum user intervention
 
 3. Rules
 
@@ -439,6 +438,7 @@ Todo's in this file are categorized into following sections:
     - Separation of comment based keywords so that there is one line between a comment and next keyword
     - Need convention for variable naming, such as Group, Groups or User vs Principal, difference is
     that one can be expanded property and other could be custom object. Many similar cases for naming.
+    - A helper script to recursively invoke `PSScriptAnalyzer` formatter for entire repository
 
 7. Other
 

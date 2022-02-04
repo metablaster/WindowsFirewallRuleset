@@ -62,6 +62,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
     - `Test-Computer`
     - `Test-Credential`
+    - `Test-ExecutableFile` will now perform virus total check if digital signature is missing
 
 - New features
 
