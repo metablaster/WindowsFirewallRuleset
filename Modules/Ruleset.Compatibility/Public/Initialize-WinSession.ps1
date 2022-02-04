@@ -81,6 +81,9 @@ January 2021:
 
 - Added parameter debugging stream
 
+February 2022:
+Added check to confirm session configuration is present and enabled
+
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md
 
@@ -134,6 +137,16 @@ function Initialize-WinSession
 	else
 	{
 		$ConfigurationName = $script:SessionConfigurationName
+	}
+
+	# Confirm specified session configuration is present and enabled
+	$Command = "Get-PSSessionConfiguration -Name $ConfigurationName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Enabled"
+	$SessionAvailable = & C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe $Command
+	if (!$SessionAvailable -or ($SessionAvailable -eq "False"))
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $ConfigurationName `
+			-Message "[$($MyInvocation.InvocationName)] Please enable '$ConfigurationName' session in Windows PowerShell in order for Ruleset.Compatibility module to work"
+		return
 	}
 
 	if ($Credential)

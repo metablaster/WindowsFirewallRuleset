@@ -162,9 +162,9 @@ PowerShell the solution is to open network drive as follows:
 
 ```powershell
 $RemoteComputer = "COMPUTERNAME"
-$RemoteCredential = Get-Credential
+$RemotingCredential = Get-Credential
 
-New-PSDrive -Credential $RemoteCredential -PSProvider FileSystem -Name RemoteRegistry `
+New-PSDrive -Credential $RemotingCredential -PSProvider FileSystem -Name RemoteRegistry `
     -Root \\$RemoteComputer\C$ -Description "Remote registry authentication" | Out-Null
 ```
 
@@ -197,7 +197,7 @@ catch [System.UnauthorizedAccessException]
 catch [System.Security.SecurityException]
 {
     Write-Error -Category SecurityError -TargetObject $RegistryHive -Message $_.Exception.Message
-    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemotingCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
     return
 }
 catch
@@ -219,7 +219,7 @@ try
 catch [System.Security.SecurityException]
 {
     Write-Error -Category SecurityError -TargetObject $HKLM -Message $_.Exception.Message
-    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemoteCredential.UserName) does not have the requested ACL permissions for $HKLM key"
+    Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemotingCredential.UserName) does not have the requested ACL permissions for $HKLM key"
 }
 catch
 {

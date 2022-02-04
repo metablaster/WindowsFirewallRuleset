@@ -81,7 +81,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Connect to remote computer", "Accept po
 		Protocol = "HTTP"
 		ConfigurationName = $PSSessionConfigurationName
 		ApplicationName = $PSSessionApplicationName
-		CimOptions = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+		CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 	}
 
 	Start-Test "Default"

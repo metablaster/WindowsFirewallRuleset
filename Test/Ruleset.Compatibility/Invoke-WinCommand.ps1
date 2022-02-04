@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test template to test firewall rules
+Unit test for Invoke-WinCommand
 
 .DESCRIPTION
-Use TestRule.ps1 as a template to test out firewall rules
+Test correctness of Invoke-WinCommand function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> TestRule
+PS> Invoke-WinCommand
 
 .INPUTS
-None. You cannot pipe objects to TestRule.ps1.
+None. You cannot pipe objects to Invoke-WinCommand
 
 .OUTPUTS
-None. TestRule.ps1 does not generate any output.
+None. Invoke-WinCommand does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -60,43 +58,17 @@ param (
 )
 
 #region Initialization
-# TODO: adjust path to project settings
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
+. $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-# Setup local variables
-$Group = "Test - Template rule"
-$LocalProfile = "Any"
+Enter-Test "Invoke-WinCommand"
 
-Enter-Test
-
-# Remove previous test rule
-Start-Test "Remove-NetFirewallRule"
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
-
-Start-Test "Test rule"
-
-# Outbound TCP test rule template
-# NOTE: for more rule templates see Inbound.ps1 and Outbound.ps1
-New-NetFirewallRule -DisplayName "Test rule" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
-	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Description "Test rule description" |
-Format-RuleOutput
-
-if ($UpdateGPO)
-{
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-}
+Start-Test "Default test"
+Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
 
 Update-Log
 Exit-Test

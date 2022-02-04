@@ -43,7 +43,7 @@ By default an error is generated and rule isn't loaded.
 If specified, the script runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\OutboundRule.ps1
+PS> OutboundRule
 
 .INPUTS
 None. You cannot pipe objects to OutboundRule.ps1

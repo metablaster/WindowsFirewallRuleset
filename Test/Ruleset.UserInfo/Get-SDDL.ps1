@@ -139,11 +139,11 @@ if ($Domain -ne [System.Environment]::MachineName)
 
 	$RemotePath = "C:\Users\Public\Desktop\" # Inherited
 	Start-Test "-Path remote FileSystem"
-	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemoteCredential | Test-SDDL
+	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemotingCredential | Test-SDDL
 
 	$RemotePath = "\\$Domain\C$\Windows"
 	Start-Test "-Path remote UNC path"
-	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemoteCredential | Test-SDDL
+	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemotingCredential | Test-SDDL
 }
 else
 {

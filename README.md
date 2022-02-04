@@ -139,7 +139,8 @@ you much valuable administration time.
 
 This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
-License and Copyright notices are maintained **"per file"**.
+Some scripts, files or modules are not MIT licensed or may have their own Copyright holders
+for this reason license and Copyright notices are maintained **"per file"**.
 
 ## Requirements
 
@@ -359,7 +360,9 @@ It is recommended to close down all other programs before running master script 
 
     Hit enter and you'll be asked questions such as what kind of rulesets you want.\
     If you need help to decide whether to run some ruleset or not, type `?` when prompted to run
-    ruleset and press enter to get more info.
+    ruleset and press enter to get more info.\
+    If for what ever reason you want to interrupt and abort deployment (ex. to start a new) press
+    `CTRL + C` on your keyboard and restart PowerShell console.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take at least 15 minutes of your attention.

@@ -52,7 +52,7 @@ The description of a parameter.
 Repeat ".PARAMETER" keyword for each parameter.
 
 .EXAMPLE
-PS> .\PipelineScript.ps1
+PS> PipelineScript
 
 Repeat ".EXAMPLE" keyword for each example
 

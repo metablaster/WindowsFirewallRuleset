@@ -196,7 +196,7 @@ function Connect-Computer
 		if (!$CimOptions)
 		{
 			# TODO: LocalStore needs a better place for adjustment
-			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 	}
 	else
@@ -208,7 +208,7 @@ function Connect-Computer
 
 		if (!$CimOptions)
 		{
-			$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+			$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 	}
 
@@ -241,7 +241,7 @@ function Connect-Computer
 			}
 			elseif ($Credential.Password.Length -eq 0)
 			{
-				# HACK: Will ask for password but won't be recorded
+				# Will happen when no password is specified
 				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
 				$Credential = $null
 			}

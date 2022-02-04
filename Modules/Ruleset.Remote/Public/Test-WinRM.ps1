@@ -131,12 +131,10 @@ function Test-WinRM
 		[string] $CertThumbprint,
 
 		[Parameter()]
-		[System.Globalization.CultureInfo] $UICulture =
-		[System.Globalization.CultureInfo]::new("en-US", $false),
+		[System.Globalization.CultureInfo] $UICulture = $DefaultUICulture,
 
 		[Parameter()]
-		[System.Globalization.CultureInfo] $Culture =
-		[System.Globalization.CultureInfo]::new("en-US", $false),
+		[System.Globalization.CultureInfo] $Culture = $DefaultCulture,
 
 		[Parameter()]
 		[ref] $Status,
@@ -190,18 +188,18 @@ function Test-WinRM
 		if (!$Credential)
 		{
 			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
-		}
 
-		if (!$Credential)
-		{
-			# Will happen if credential request was dismissed using ESC key.
-			Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
-		}
-		elseif ($Credential.Password.Length -eq 0)
-		{
-			# HACK: Will ask for password but won't be recorded
-			Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
-			$Credential = $null
+			if (!$Credential)
+			{
+				# Will happen if credential request was dismissed using ESC key.
+				Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
+			}
+			elseif ($Credential.Password.Length -eq 0)
+			{
+				# Will happen when no password is specified
+				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+				$Credential = $null
+			}
 		}
 
 		$WSManParams["ComputerName"] = $Domain

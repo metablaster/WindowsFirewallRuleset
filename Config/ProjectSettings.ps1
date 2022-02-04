@@ -404,6 +404,17 @@ if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
 		Update-FormatData -AppendPath $_.FullName
 	}
+
+	# TODO: Culture variables belong to "constants" secion but we need them in "remote session" section
+	# Controls the language that should be used for UI elements and end-user messages, such as error messages.
+	New-Variable -Name DefaultUICulture -Scope Global -Option Constant -Value (
+		[System.Globalization.CultureInfo]::new("en-US", $false)
+	)
+
+	# Controls the formats used to represent numbers, currency values, and date/time values
+	New-Variable -Name DefaultCulture -Scope Global -Option Constant -Value (
+		[System.Globalization.CultureInfo]::new("en-US", $false)
+	)
 }
 
 if ($Develop -and !$InModule)
@@ -440,10 +451,10 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		)
 
 		# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
-		New-Variable -Name RemoteProtocol -Scope Global -Option Constant -Value "HTTPS"
+		New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
 
 		# Credential object to be used for authentication to remote computer
-		New-Variable -Name RemoteCredential -Scope Global -Option ReadOnly -Value $null
+		New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
 	}
 
 	if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
@@ -475,7 +486,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		$ConnectParams = @{
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
-			Protocol = $RemoteProtocol
+			Protocol = $RemotingProtocol
 			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
 		}
@@ -486,8 +497,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 
 		$SessionOptionParams = @{
-			UICulture = "en-US"
-			Culture = "en-US"
+			UICulture = $DefaultUICulture
+			Culture = $DefaultCulture
 			OpenTimeout = 3000
 			CancelTimeout = 5000
 			OperationTimeout = 10000
@@ -497,62 +508,58 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			NoCompression = $false
 		}
 
-		# TODO: Remove if not needed
-		# Import-Module -Name $ProjectRoot\Modules\Ruleset.Remote -Scope Global
 		$PolicyStoreStatus = $false
-
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
 
-			Set-Variable -Name RemoteCredential -Scope Global -Force -Value (
+			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
 				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
 			)
 
-			if (!$RemoteCredential)
+			if (!$RemotingCredential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
 				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
 			}
-			elseif ($RemoteCredential.Password.Length -eq 0)
+			elseif ($RemotingCredential.Password.Length -eq 0)
 			{
-				# HACK: Will ask for password but won't be recorded
-				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
-				Set-Variable -Name RemoteCredential -Scope Global -Value $null
+				# Will happen when no password is specified
+				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
+				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
 			}
 
-			$ConnectParams["Credential"] = $RemoteCredential
+			$ConnectParams["Credential"] = $RemotingCredential
 
 			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -Quiet
+			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
-			# TODO: If credentials are not valid, configuring WinRM won't make any difference
 			if (!$PolicyStoreStatus)
 			{
 				# Configure this machine for remote session over SSL
-				if ($RemoteProtocol -eq "HTTPS")
+				if ($RemotingProtocol -eq "HTTPS")
 				{
-					Set-WinRMClient -Protocol $RemoteProtocol -Domain $PolicyStore -Confirm:$false
+					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false
 				}
 				else
 				{
-					Set-WinRMClient -Protocol $RemoteProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
+					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
 				}
 
 				# TODO: Enable-RemoteRegistry -Confirm:$false
-				Test-WinRM -Protocol $RemoteProtocol -Domain $PolicyStore -Credential $RemoteCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
+				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
 			}
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 			# There is global variable that controls encoding, see if it can be used here
-			if ($RemoteProtocol -eq "HTTP")
+			if ($RemotingProtocol -eq "HTTP")
 			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 			}
 			else
 			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture en-US -Culture en-US
+				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 			}
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
@@ -573,8 +580,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 			$SessionOptionParams["NoCompression"] = $true
 
 			$ConnectParams["Protocol"] = "HTTP"
-			# TODO: Culture default values project wide
-			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture en-US -Culture en-US
+			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 		else
 		{
@@ -601,8 +607,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		}
 		catch
 		{
-			# To allow trying again
-			# TODO: Remove-Variable -Name PolicyStore -Scope Global -Force
 			Write-Error -ErrorRecord $_ -ErrorAction Stop
 		}
 	}

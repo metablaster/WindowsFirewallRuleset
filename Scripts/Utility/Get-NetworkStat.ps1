@@ -252,7 +252,7 @@ process
 			try
 			{
 				Write-Information -Tags $ThisScript -MessageData "INFO: Getting list of processes on '$Domain'..."
-				$Processes = Invoke-Command -ComputerName $Domain -Credential $RemoteCredential -ErrorAction Stop -ScriptBlock {
+				$Processes = Invoke-Command -ComputerName $Domain -Credential $RemotingCredential -ErrorAction Stop -ScriptBlock {
 					Get-Process
 				} |	Select-Object -Property Name, Id
 			}
@@ -285,7 +285,7 @@ process
 			Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
 				-Arguments @{ CommandLine = $cmd } -CimSession $CimServer -ErrorAction Stop | Out-Null
 
-			Invoke-Command -ComputerName $Domain -Credential $RemoteCredential -ScriptBlock {
+			Invoke-Command -ComputerName $Domain -Credential $RemotingCredential -ScriptBlock {
 				Get-Process -Name netstat -ErrorAction SilentlyContinue | Wait-Process
 			}
 		}

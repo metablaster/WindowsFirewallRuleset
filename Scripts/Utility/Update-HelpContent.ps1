@@ -112,7 +112,7 @@ param (
 	[string[]] $Module,
 
 	[Parameter()]
-	[string[]] $UICulture = @("en-US"),
+	[string[]] $UICulture = $DefaultUICulture,
 
 	[Parameter()]
 	$Encoding = $null,

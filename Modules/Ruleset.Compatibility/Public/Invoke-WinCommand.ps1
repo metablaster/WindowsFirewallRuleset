@@ -56,7 +56,7 @@ The credential to use when connecting to the compatibility session.
 Arguments to pass to the scriptblock
 
 .EXAMPLE
-PS> Invoke-WinCommand {param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion} Jeffrey
+PS> Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
 
 Hello Jeffrey, how are you?
 Major  Minor  Build  Revision PSComputerName
@@ -79,6 +79,8 @@ None. You cannot pipe objects to Invoke-WinCommand
 [PSObject]
 
 .NOTES
+OutputType can't be declared because output may be anything
+
 Following modifications by metablaster November 2020:
 
 - Added comment based help based on original comments
@@ -100,7 +102,6 @@ function Invoke-WinCommand
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md")]
-	[OutputType([PSObject])]
 	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[scriptblock] $ScriptBlock,
@@ -121,6 +122,7 @@ function Invoke-WinCommand
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Remove from PSBoundParameters variable, but parameters stay intact
 	$PSBoundParameters.Remove("ScriptBlock") | Out-Null
 	$PSBoundParameters.Remove("ArgumentList") | Out-Null
 

@@ -92,8 +92,8 @@ Start-Test "default"
 $Result = Test-Computer $Domain
 $Result
 
-Start-Test "WinRM $RemoteProtocol"
-Test-Computer $Domain -Protocol $RemoteProtocol
+Start-Test "WinRM $RemotingProtocol"
+Test-Computer $Domain -Protocol $RemotingProtocol
 
 Test-Output $Result -Command Test-Computer
 

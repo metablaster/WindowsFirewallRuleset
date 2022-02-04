@@ -39,7 +39,7 @@ Use TestTemplate.ps1 as a template to test out scripts and module functions
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\TestTemplate.ps1
+PS> TestTemplate
 
 .INPUTS
 None. You cannot pipe objects to TestTemplate.ps1

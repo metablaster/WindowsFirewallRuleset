@@ -311,7 +311,7 @@ function Enable-WinRMServer
 			# RunAsCredential = Get-Credential
 		}
 
-		# TODO: -RunAsCredential $RemoteCredential -UseSharedProcess -SessionTypeOption `
+		# TODO: -RunAsCredential $RemotingCredential -UseSharedProcess -SessionTypeOption `
 		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
 		Set-StrictMode -Off
@@ -368,7 +368,7 @@ function Enable-WinRMServer
 
 	if ($Loopback)
 	{
-		# Restore-NetProfile
+		# TODO: Restore-NetProfile is needed here?
 
 		# NOTE: It's easier to continue with Disable-WinRMServer rather than copying
 		# sections of code there, also easier to maintain because of less code duplication

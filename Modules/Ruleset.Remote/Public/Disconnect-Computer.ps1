@@ -87,18 +87,17 @@ function Disconnect-Computer
 		Remove-PSDrive -Name RemoteRegistry -Scope Global
 	}
 
-	# TODO: Not sure if needed here?
-	# if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
-	# {
-	# 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'PolicyStore'"
-	# 	Remove-Variable -Name PolicyStore -Scope Global -Force
-	# }
+	if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'PolicyStore'"
+		Remove-Variable -Name PolicyStore -Scope Global -Force
+	}
 
-	# if (Get-Variable -Name RemoteCredential -Scope Global -ErrorAction Ignore)
-	# {
-	# 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resetting variable 'RemoteCredential'"
-	# 	Set-Variable -Name RemoteCredential -Scope Global -Force -Value $null
-	# }
+	if (Get-Variable -Name RemotingCredential -Scope Global -ErrorAction Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resetting variable 'RemotingCredential'"
+		Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
+	}
 
 	if (Get-PSSession -Name RemoteSession -ErrorAction Ignore)
 	{
