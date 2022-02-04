@@ -77,6 +77,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Specifying remote domain or changing domain no longer requires PS restart
   - Specifying HTTP for remoting is now possible in `Config\ProjectSettings`
+  - Added script info to scripts, REQUIREDSCRIPTS and EXTERNALMODULEDEPENDENCIES
+  - Fixed `Get-NetworkStats.ps1` scripts so that it's functional for local and remote
 
 ## v0.12.0 (current release)
 
