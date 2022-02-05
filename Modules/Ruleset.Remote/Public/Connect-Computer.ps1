@@ -134,6 +134,12 @@ function Connect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	# The $PSSenderInfo automatic variable includes a user-configurable property, ApplicationArguments,
 	# that by default, contains only the $PSVersionTable from the originating session.
 	if (Get-Variable -Name PSSenderInfo -ErrorAction Ignore)

@@ -77,6 +77,13 @@ function Export-FirewallSetting
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall profile..."
 
 	$Setting = Get-NetFirewallProfile -PolicyStore $PolicyStore -Name Private

@@ -116,7 +116,7 @@ function Get-GroupPrincipal
 			return $false
 		}
 
-		# Replace localhost and dot with actual computer name
+		# Replace localhost and dot with NETBIOS computer name
 		$Domain = foreach ($Computer in $Domain)
 		{
 			if (($Computer -eq "localhost") -or ($Computer -eq "."))

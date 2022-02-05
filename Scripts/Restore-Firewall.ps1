@@ -99,6 +99,12 @@ param (
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
+# Replace localhost and dot with NETBIOS computer name
+if (($Domain -eq "localhost") -or ($Domain -eq "."))
+{
+	$Domain = [System.Environment]::MachineName
+}
+
 # User prompt
 $Accept = "Accpet importing firewall rules and settings from file"
 $Deny = "Abort operation, no firewall rules or settings will be imported"

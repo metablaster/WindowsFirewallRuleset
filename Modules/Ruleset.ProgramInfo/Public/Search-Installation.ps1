@@ -87,6 +87,13 @@ function Search-Installation
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
+
 	Initialize-Table
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
 

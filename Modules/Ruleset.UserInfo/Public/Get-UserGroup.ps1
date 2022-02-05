@@ -68,74 +68,75 @@ function Get-UserGroup
 		[switch] $CIM
 	)
 
-	begin
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	foreach ($Computer in $Domain)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	}
-	process
-	{
-		foreach ($Computer in $Domain)
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Computer -eq "localhost") -or ($Computer -eq "."))
 		{
-			if ($CIM)
+			$Computer = [System.Environment]::MachineName
+		}
+
+		if ($CIM)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+
+			# Core: -TimeoutSeconds -IPv4
+			if (Test-Computer $Computer)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-				# Core: -TimeoutSeconds -IPv4
-				if (Test-Computer $Computer)
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+				$RemoteGroups = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+					-Class Win32_Group -Property LocalAccount |
+				Where-Object -Property LocalAccount -EQ "True"
 
-					$RemoteGroups = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_Group -Property LocalAccount |
-					Where-Object -Property LocalAccount -EQ "True"
-
-					if ([string]::IsNullOrEmpty($RemoteGroups))
-					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
-					}
-
-					foreach ($Group in $RemoteGroups)
-					{
-						[PSCustomObject]@{
-							Domain = $Group.Domain
-							Group = $Group.Name
-							Principal = $Group.Caption
-							SID = $Group.SID
-							LocalAccount = $Group.LocalAccount -eq "True"
-							PSTypeName = "Ruleset.UserInfo.Group"
-						}
-					}
-				}
-			} # if ($CIM)
-			elseif ($Computer -eq [System.Environment]::MachineName)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
-
-				# Querying local machine
-				$LocalGroups = Get-LocalGroup
-
-				if ([string]::IsNullOrEmpty($LocalGroups))
+				if ([string]::IsNullOrEmpty($RemoteGroups))
 				{
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
 				}
 
-				foreach ($Group in $LocalGroups)
+				foreach ($Group in $RemoteGroups)
 				{
 					[PSCustomObject]@{
-						Domain = $Computer
+						Domain = $Group.Domain
 						Group = $Group.Name
-						Principal = Join-Path -Path $Computer -ChildPath $Group.Name
+						Principal = $Group.Caption
 						SID = $Group.SID
-						LocalAccount = $Group.PrincipalSource -eq "Local"
-						PSTypeName = "Ruleset.UserInfo"
+						LocalAccount = $Group.LocalAccount -eq "True"
+						PSTypeName = "Ruleset.UserInfo.Group"
 					}
 				}
-			} # if ($CIM)
-			else
+			}
+		} # if ($CIM)
+		elseif ($Computer -eq [System.Environment]::MachineName)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
+
+			# Querying local machine
+			$LocalGroups = Get-LocalGroup
+
+			if ([string]::IsNullOrEmpty($LocalGroups))
 			{
-				Write-Error -Category NotImplemented -TargetObject $Computer `
-					-Message "Querying remote computers without CIM switch not supported"
-			} # if ($CIM)
-		} # foreach ($Computer in $Domain)
-	} # process
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
+			}
+
+			foreach ($Group in $LocalGroups)
+			{
+				[PSCustomObject]@{
+					Domain = $Computer
+					Group = $Group.Name
+					Principal = Join-Path -Path $Computer -ChildPath $Group.Name
+					SID = $Group.SID
+					LocalAccount = $Group.PrincipalSource -eq "Local"
+					PSTypeName = "Ruleset.UserInfo"
+				}
+			}
+		} # if ($CIM)
+		else
+		{
+			Write-Error -Category NotImplemented -TargetObject $Computer `
+				-Message "Querying remote computers without CIM switch not supported"
+		} # if ($CIM)
+	} # foreach ($Computer in $Domain)
 }

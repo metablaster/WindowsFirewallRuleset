@@ -212,6 +212,12 @@ function Get-SystemSKU
 		{
 			foreach ($Computer in $Domain)
 			{
+				# Replace localhost and dot with NETBIOS computer name
+				if (($Computer -eq "localhost") -or ($Computer -eq "."))
+				{
+					$Computer = [System.Environment]::MachineName
+				}
+
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
 
 				if (Test-Computer $Computer)

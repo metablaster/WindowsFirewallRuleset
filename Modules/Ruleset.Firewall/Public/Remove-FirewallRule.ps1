@@ -118,6 +118,12 @@ function Remove-FirewallRule
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
 		$Path = Resolve-FileSystemPath $Path

@@ -185,6 +185,12 @@ function Export-FirewallRule
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	# Filter rules?
 	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
 	# Filter by direction

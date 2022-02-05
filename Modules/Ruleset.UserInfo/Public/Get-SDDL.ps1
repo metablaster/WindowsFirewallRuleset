@@ -112,6 +112,12 @@ function Get-SDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	# Glossary:
 	# SDDL: Security Descriptor Definition Language
 	# ACE: Access Control Entry (Describes what access rights a security principal has to the secured object)

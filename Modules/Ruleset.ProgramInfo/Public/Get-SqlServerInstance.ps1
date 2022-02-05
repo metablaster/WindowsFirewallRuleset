@@ -179,6 +179,19 @@ function Get-SqlServerInstance
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		# Replace localhost and dot with NETBIOS computer name
+		$Domain = foreach ($Computer in $Domain)
+		{
+			if (($Computer -eq "localhost") -or ($Computer -eq "."))
+			{
+				[System.Environment]::MachineName
+			}
+			else
+			{
+				$Computer
+			}
+		}
+
 		# TODO: begin scope for all registry functions
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 

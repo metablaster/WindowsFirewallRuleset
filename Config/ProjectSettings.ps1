@@ -114,6 +114,12 @@ param (
 # Name of this script for debugging messages, do not modify!
 Set-Variable -Name SettingsScript -Scope Private -Option ReadOnly -Force -Value ((Get-Item $PSCommandPath).Basename)
 
+# Replace localhost and dot with NETBIOS computer name
+if (($TargetHost -eq "localhost") -or ($TargetHost -eq "."))
+{
+	$TargetHost = [System.Environment]::MachineName
+}
+
 #region Preference variables
 Write-Debug -Message "[$SettingsScript] Setting up preference variables"
 
@@ -365,7 +371,7 @@ if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 	Write-Debug -Message "[$SettingsScript] Setting up path variables"
 
 	# Check if removable variables already initialized, do not modify!
-	Set-Variable -Name PathVariables -Scope Global -Option Constant -Value $null
+	New-Variable -Name PathVariables -Scope Global -Option Constant -Value $null
 
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
@@ -404,17 +410,6 @@ if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 	Get-ChildItem -Path "$ProjectRoot\Scripts" -Filter *.ps1xml -Recurse | ForEach-Object {
 		Update-FormatData -AppendPath $_.FullName
 	}
-
-	# TODO: Culture variables belong to "constants" secion but we need them in "remote session" section
-	# Controls the language that should be used for UI elements and end-user messages, such as error messages.
-	New-Variable -Name DefaultUICulture -Scope Global -Option Constant -Value (
-		[System.Globalization.CultureInfo]::new("en-US", $false)
-	)
-
-	# Controls the formats used to represent numbers, currency values, and date/time values
-	New-Variable -Name DefaultCulture -Scope Global -Option Constant -Value (
-		[System.Globalization.CultureInfo]::new("en-US", $false)
-	)
 }
 
 if ($Develop -and !$InModule)
@@ -473,142 +468,6 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 	else
 	{
 		Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value $TargetHost
-	}
-
-	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
-	{
-		Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
-
-		# NOTE: Global object RemoteRegistry (PSDrive), RemoteCim (CimSession) and RemoteSession (PSSession) are created by Connect-Computer function
-		# NOTE: Global variable CimServer is set by Connect-Computer function
-		# Destruction of these is done by Disconnect-Computer
-
-		$ConnectParams = @{
-			ErrorAction = "Stop"
-			Domain = $PolicyStore
-			Protocol = $RemotingProtocol
-			ConfigurationName = $PSSessionConfigurationName
-			ApplicationName = $PSSessionApplicationName
-		}
-
-		# PSPrimitiveDictionary, data to send to remote computer
-		$SenderArguments = @{
-			Domain = $PolicyStore
-		}
-
-		$SessionOptionParams = @{
-			UICulture = $DefaultUICulture
-			Culture = $DefaultCulture
-			OpenTimeout = 3000
-			CancelTimeout = 5000
-			OperationTimeout = 10000
-			MaxConnectionRetryCount = 2
-			ApplicationArguments = $SenderArguments
-			NoEncryption = $false
-			NoCompression = $false
-		}
-
-		$PolicyStoreStatus = $false
-		if ($PolicyStore -notin $LocalStore)
-		{
-			Write-Debug -Message "[$SettingsScript] Establishing session to remote computer"
-
-			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
-				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
-			)
-
-			if (!$RemotingCredential)
-			{
-				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
-			}
-			elseif ($RemotingCredential.Password.Length -eq 0)
-			{
-				# Will happen when no password is specified
-				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
-				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
-			}
-
-			$ConnectParams["Credential"] = $RemotingCredential
-
-			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -Quiet
-
-			# TODO: A new function needed to conditionally configure remote host here
-			if (!$PolicyStoreStatus)
-			{
-				# Configure this machine for remote session over SSL
-				if ($RemotingProtocol -eq "HTTPS")
-				{
-					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false
-				}
-				else
-				{
-					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
-				}
-
-				# TODO: Enable-RemoteRegistry -Confirm:$false
-				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
-			}
-
-			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-			# There is global variable that controls encoding, see if it can be used here
-			if ($RemotingProtocol -eq "HTTP")
-			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
-			}
-			else
-			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
-			}
-		}
-		elseif ($PolicyStore -eq [System.Environment]::MachineName)
-		{
-			Write-Debug -Message "[$SettingsScript] Establishing session to local computer"
-			Write-Information -Tags $SettingsScript -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
-
-			if (!$PolicyStoreStatus)
-			{
-				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
-			}
-
-			$SessionOptionParams["NoEncryption"] = $true
-			$SessionOptionParams["NoCompression"] = $true
-
-			$ConnectParams["Protocol"] = "HTTP"
-			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
-		}
-		else
-		{
-			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
-				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
-		}
-
-		Remove-Variable -Name PolicyStoreStatus
-
-		# TODO: Not all options are used, ex. -NoCompression and -NoEncryption could be used for loopback
-		$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
-
-		try
-		{
-			Connect-Computer @ConnectParams
-
-			# Check if session is already initialized and established, do not modify!
-			# TODO: Connect-Computer may fail without throwing
-			Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Force -Value $true
-
-			Remove-Variable -Name ConnectParams
-			Remove-Variable -Name SenderArguments
-			Remove-Variable -Name SessionOptionParams
-		}
-		catch
-		{
-			Write-Error -ErrorRecord $_ -ErrorAction Stop
-		}
 	}
 }
 #endregion
@@ -925,6 +784,16 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 	# Default output location for unit tests that produce file system output
 	New-Variable -Name DefaultTestDrive -Scope Global -Option Constant -Value $ProjectRoot\Test\TestDrive
+
+	# Controls the language that should be used for UI elements and end-user messages, such as error messages.
+	New-Variable -Name DefaultUICulture -Scope Global -Option Constant -Value (
+		[System.Globalization.CultureInfo]::new("en-US", $false)
+	)
+
+	# Controls the formats used to represent numbers, currency values, and date/time values
+	New-Variable -Name DefaultCulture -Scope Global -Option Constant -Value (
+		[System.Globalization.CultureInfo]::new("en-US", $false)
+	)
 }
 #endregion
 
