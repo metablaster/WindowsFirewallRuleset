@@ -51,6 +51,8 @@ TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is 
 TODO: Restoring old setup not implemented
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 TODO: Parameter which will allow resetting to custom settings in addition to factory reset
+TODO: Somewhere it asks for confirmation to start WinRM service, to repro reset in Windows Powershell
+and then again in Core
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Reset-WinRM.md

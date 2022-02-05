@@ -102,6 +102,13 @@ TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (S
 TODO: Remote registry test
 TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
+TODO: Test PS session
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md
+
+.LINK
+https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.authenticationmechanism
 #>
 function Test-WinRM
 {
@@ -345,5 +352,24 @@ function Test-WinRM
 		{
 			$Status.Value = $StatusHTTP -or $StatusHTTPS
 		}
+	}
+
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking localhost plugin status"
+
+	if ($PSVersionTable.PSEdition -eq "Desktop")
+	{
+		$DefaultSession = "Microsoft.PowerShell"
+	}
+	else
+	{
+		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
+	}
+
+	$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
+	if ($PluginStatus.Value -eq $false)
+	{
+		# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
+		# If disabled New-PSSession to localhost will not work
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
 	}
 }

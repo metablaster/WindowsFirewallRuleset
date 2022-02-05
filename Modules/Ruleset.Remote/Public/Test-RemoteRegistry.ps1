@@ -49,7 +49,7 @@ None. You cannot pipe objects to Test-RemoteRegistry
 [bool]
 
 .NOTES
-None.
+TODO: Need to test if there is authentication with PSDrive
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-RemoteRegistry.md
@@ -71,7 +71,7 @@ function Test-RemoteRegistry
 	if ($PSCmdlet.ShouldProcess($Domain, "Test remote registry service"))
 	{
 		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartupType
-		
+
 		if ($StartupType -eq "Disabled")
 		{
 			if (!$Quiet)

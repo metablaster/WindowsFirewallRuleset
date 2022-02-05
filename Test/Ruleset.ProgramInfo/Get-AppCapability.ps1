@@ -33,6 +33,9 @@ Unit test for Get-AppCapability
 .DESCRIPTION
 Test correctness of Get-AppCapability function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,26 +74,38 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
+# TODO: Once we handle all app capabilities remove SilentlyContinue
+$PSDefaultParameterValues["Get-AppCapability:ErrorAction"] = "SilentlyContinue"
 
-Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking"
-Get-SystemApps -User $TestAdmin | Get-AppCapability -Networking
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Get-AppCapability -Domain $Domain -PackageTypeFilter Main -Name "*AccountsControl*"
 
-Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
-Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking
+	Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
+	Get-SystemApps -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
+}
+else
+{
+	# NOTE: Using "AccountsControl" because "Microsoft.AccountsControl" is available on all OS editions
+	Start-Test 'Get-AppCapability -Name "*AccountsControl*"'
+	Get-AppCapability "*AccountsControl*"
 
-# TODO: Once these specifics are implemented uncomment -EA SilentlyContinue
-# NOTE: Using "AccountsControl" because "Microsoft.AccountsControl" is available on all OS editions
-Start-Test 'Get-AppxPackage -Name "*AccountsControl*" | Get-AppCapability'
-Get-AppxPackage -Name "*AccountsControl*" | Get-AppCapability -EA SilentlyContinue
+	Start-Test 'Get-AppCapability -Name "*AccountsControl*" -PackageTypeFilter Main'
+	Get-AppCapability "*AccountsControl*" -PackageTypeFilter Main
 
-Start-Test 'Get-AppCapability (Get-AppxPackage -Name "*AccountsControl*") -Networking'
-Get-AppCapability (Get-AppxPackage -Name "*AccountsControl*") -Networking
+	Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking"
+	Get-SystemApps -User $TestAdmin | Get-AppCapability -Networking
 
-Start-Test "Get-AppxPackage -Name '*AccountsControl*' | Get-AppCapability -Authority"
-$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -Authority -EA SilentlyContinue
-$Result
+	Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
+	Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking
 
-Test-Output $Result -Command Get-AppCapability
+	Start-Test "Get-AppxPackage -InputObject '*AccountsControl*' | Get-AppCapability -IncludeAuthority"
+	$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -IncludeAuthority
+	$Result
+
+	Test-Output $Result -Command Get-AppCapability
+}
 
 Update-Log
 Exit-Test

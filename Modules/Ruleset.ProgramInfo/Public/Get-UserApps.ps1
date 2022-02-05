@@ -64,8 +64,6 @@ None. You cannot pipe objects to Get-UserApps
 [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 .NOTES
-TODO: Query remote computer not implemented
-TODO: Multiple domains
 TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
 TODO: See also -AllUsers and other parameters in related links
 TODO: Format.ps1xml not applied in Windows PowerShell
@@ -92,7 +90,7 @@ function Get-UserApps
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -112,13 +110,13 @@ function Get-UserApps
 
 	foreach ($Computer in $Domain)
 	{
-		if (Test-Computer $Domain)
+		if (Test-Computer $Computer)
 		{
 			if ($Computer -eq [System.Environment]::MachineName)
 			{
 				# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 				# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
+				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
 				$DomainPath = $env:SystemDrive
 			}
 			else

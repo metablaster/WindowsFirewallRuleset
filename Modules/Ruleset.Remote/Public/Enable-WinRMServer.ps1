@@ -320,10 +320,10 @@ function Enable-WinRMServer
 	}
 
 	# NOTE: False because, this is needed to be able to specify -ComputerName on commands that support it
-	if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable default session configurations"))
+	if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable all default session configurations"))
 	{
 		# Disable unused default session configurations
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling default session configurations"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling all default session configurations"
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
@@ -344,8 +344,8 @@ function Enable-WinRMServer
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
 			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion)" -NoServiceRestart -Force
+			Disable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
 		}
 		else
 		{
@@ -366,9 +366,32 @@ function Enable-WinRMServer
 		}
 	}
 
+	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Verify registry setting"))
+	{
+		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
+		# In this case, Enable-PSRemoting does not create the key,
+		# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
+
+		# Ensure registry setting was updated
+		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
+
+		if ($TokenValue -ne 1)
+		{
+			# In some cases Enable-PSRemoting did not set it
+			# TODO: On fresh W10 system TokenValue was blank, why or how?
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
+
+			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
+				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		}
+	}
+
 	if ($Loopback)
 	{
 		# TODO: Restore-NetProfile is needed here?
+		# TODO: Protocol parameter is ignored
 
 		# NOTE: It's easier to continue with Disable-WinRMServer rather than copying
 		# sections of code there, also easier to maintain because of less code duplication
@@ -557,27 +580,6 @@ function Enable-WinRMServer
 		else
 		{
 			Set-WSManInstance -ResourceURI winrm/config/winrs -ValueSet $WinRSOptions | Out-Null
-		}
-	}
-
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Verify registry setting"))
-	{
-		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
-		# In this case, Enable-PSRemoting does not create the key,
-		# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
-
-		# Ensure registry setting was updated
-		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
-
-		if ($TokenValue -ne 1)
-		{
-			# In some cases Enable-PSRemoting did not set it
-			# TODO: On fresh W10 system TokenValue was blank, why or how?
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
-
-			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
-				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 		}
 	}
 

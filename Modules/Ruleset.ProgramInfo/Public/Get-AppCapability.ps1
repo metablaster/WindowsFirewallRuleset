@@ -35,14 +35,34 @@ Get-AppCapability returns a list of capabilities for an app in one of the follow
 1. Principal display name
 2. Principal full reference name
 
+.PARAMETER Name
+Specifies the name of a particular package.
+If specified, function returns results for this package only.
+Wildcards are permitted.
+
+.PARAMETER PackageTypeFilter
+Specifies one or more comma-separated types of packages to gets from the package repository.
+If not specified processes only packages of types Main and Framework.
+
+Valid values are:
+Bundle
+Framework
+Main
+Resource
+None
+
 .PARAMETER InputObject
 One or more Windows store apps for which to retrieve capabilities
 
-.PARAMETER User
-Specify user name for which to query app capabilities, this parameter
-is required only if input app is not obtained from the main store
+.PARAMETER Domain
+Computer name which to check
 
-.PARAMETER Authority
+.PARAMETER User
+Specify user name for which to query app capabilities.
+This parameter is required only if input app or the app specified by -Name parameter is
+not from the main store.
+
+.PARAMETER IncludeAuthority
 If specified, outputs full reference name.
 By default only capability display name is returned.
 
@@ -58,7 +78,7 @@ Your music library
 Removable storage
 
 .EXAMPLE
-PS> Get-AppCapability -Authority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
+PS> Get-AppCapability -IncludeAuthority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 
 APPLICATION PACKAGE AUTHORITY\Your Internet connection
 APPLICATION PACKAGE AUTHORITY\Your home or work networks
@@ -72,7 +92,6 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 
 .NOTES
 TODO: According to unit test there are some capabilities not implemented here
-TODO: Need better descriptive parameter name for -Authority switch
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md
@@ -88,6 +107,9 @@ https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/elem
 
 .LINK
 https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability
+
+.LINK
+https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes
 #>
 function Get-AppCapability
 {
@@ -95,15 +117,27 @@ function Get-AppCapability
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
+		[Parameter(Position = 0, ParameterSetName = "Name")]
+		[SupportsWildcards()]
+		[string] $Name = "*",
+
+		[Parameter(ParameterSetName = "Name")]
+		[ValidateSet("Bundle", "Framework", "Main", "Resource", "None")]
+		[string[]] $PackageTypeFilter,
+
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "InputObject")]
 		[Alias("App", "StoreApp")]
 		[object[]] $InputObject,
+
+		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
 		[string] $User,
 
 		[Parameter()]
-		[switch] $Authority,
+		[switch] $IncludeAuthority,
 
 		[Parameter()]
 		[switch] $Networking
@@ -112,128 +146,177 @@ function Get-AppCapability
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	}
-	process
-	{
-		foreach ($StoreApp in $InputObject)
+
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
 		{
-			# Need a copy because of possible modification
-			$App = $StoreApp
+			$Domain = [System.Environment]::MachineName
+		}
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing store app: '$($App.Name)'"
+		$RemoteSession = Get-PSSession -Name RemoteSession
+		if (!$RemoteSession)
+		{
+			return
+		}
 
-			[string[]] $OutputObject = @()
+		if ($PSCmdlet.ParameterSetName -eq "Name")
+		{
+			# Get it from main store to be able to query package manifest
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Getting app from main store"
 
-			if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
+			$AppxParams = @{
+				Name = $Name
+			}
+
+			if ($PackageTypeFilter)
 			{
-				if ([string]::IsNullOrEmpty($User))
-				{
-					Write-Error -Category InvalidArgument -TargetObject $User `
-						-Message "The app '$($StoreApp.Name)' is not from the main store, please specify 'User' parameter"
-					continue
-				}
+				$AppxParams["PackageTypeFilter"] = $PackageTypeFilter
+			}
 
-				# If input app was not obtained from main store, get it from main store to be able to query package manifest
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Input app is not from main store, querying main store"
-				$App = Get-AppxPackage -User $User -PackageTypeFilter Main -Name $StoreApp.Name
+			if ($User)
+			{
+				$AppxParams["User"] = $User
+			}
 
-				if (!$App)
-				{
-					Write-Error -Category ObjectNotFound -TargetObject $StoreApp `
-						-Message "The app $($StoreApp.Name) not found in main store, unable to query package manifest"
-					continue
-				}
-
-				$PackageManifest = ($App | Get-AppxPackageManifest -User $User).Package
+			if ($Domain -eq [System.Environment]::MachineName)
+			{
+				$InputObject = Get-AppxPackage @AppxParams
 			}
 			else
 			{
-				try
-				{
-					$PackageManifest = ($App | Get-AppxPackageManifest).Package
-				}
-				catch
-				{
-					# NOTE: This will be the cause with Microsoft account (non local Windows account)
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is missing manifest 'Package' property"
-					continue
-				}
+				$InputObject = Invoke-Command -Session $RemoteSession -ScriptBlock {
+					param([hashtable] $AppxParams)
+
+					Get-AppxPackage @AppxParams
+				} -ArgumentList $AppxParams
 			}
+		}
+	}
+	process
+	{
+		Invoke-Command -Session $RemoteSession -ArgumentList $InputObject -ScriptBlock {
+			param ($InputObject)
 
-			if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
+			foreach ($StoreApp in $InputObject)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) has no capabilities"
-				continue
-			}
-			elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) is missing capabilities"
-				continue
-			}
+				# Need a copy because of possible modification
+				# [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+				$App = $StoreApp
+				[string[]] $OutputObject = @()
 
-			[string[]] $AppCapabilities = ($PackageManifest.Capabilities | Select-Object -ExpandProperty Capability).Name
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing store app: '$($App.Name)'"
 
-			foreach ($Capability in $AppCapabilities)
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing capability: '$Capability'"
-
-				[string] $Name = switch ($Capability)
+				if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
 				{
-					# Networking capabilities
-					# TODO: Unknown display name
-					"runFullTrust" { "runFullTrust" }
-					"internetClient" { "Your Internet connection"; break }
-					"internetClientServer" { "Your Internet connection, including incoming connections from the Internet"; break }
-					"privateNetworkClientServer" { "Your home or work networks"; break }
-					default
+					if ([string]::IsNullOrEmpty($User))
 					{
-						if ($Networking)
-						{
-							break
-						}
-
-						switch ($Capability)
-						{
-							"picturesLibrary" { "Your pictures library"; break }
-							"videosLibrary" { "Your videos library"; break }
-							"musicLibrary" { "Your music library"; break }
-							"documentsLibrary" { "Your documents library"; break }
-							# TODO: there are multiple capabilities that could match this?
-							"enterpriseAuthentication" { "Your Windows credentials" }
-							"sharedUserCertificates" { "Software and hardware certificates or a smart card"; break }
-							"removableStorage" { "Removable storage"; break }
-							"appointments" { "Your Appointments"; break }
-							"contacts" { "Your Contacts"; break }
-							default
-							{
-								Write-Error -Category NotImplemented -TargetObject $Capability `
-									-Message "Getting capability for '$Capability' not implemented"
-							}
-						}
+						Write-Error -Category InvalidArgument -TargetObject "User" `
+							-Message "The app '$($App.Name)' is not from the main store, please specify 'User' parameter"
+						continue
 					}
-				}
 
-				if ([string]::IsNullOrEmpty($Name))
-				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' not resolved"
-					continue
+					# If input app was not obtained from main store, get it from main store to be able to query package manifest
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input app is not from main store, querying main store"
+					$App = Get-AppxPackage -Name $App.Name -User $User -PackageTypeFilter Main
+
+					if (!$App)
+					{
+						Write-Error -Category ObjectNotFound -TargetObject $StoreApp `
+							-Message "The app $($StoreApp.Name) not found in main store, unable to query package manifest"
+						continue
+					}
+
+					$PackageManifest = ($App | Get-AppxPackageManifest -User $User).Package
 				}
 				else
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' resolved to: $Name"
-
-					if ($Authority)
+					try
 					{
-						$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $Name)
+						$PackageManifest = ($App | Get-AppxPackageManifest).Package
+					}
+					catch
+					{
+						# NOTE: This will be the cause with Microsoft account (non local Windows account)
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is missing manifest 'Package' property"
+						continue
+					}
+				}
+
+				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) has no capabilities"
+					continue
+				}
+				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) is missing capabilities"
+					continue
+				}
+
+				[string[]] $AppCapabilities = ($PackageManifest.Capabilities | Select-Object -ExpandProperty Capability).Name
+
+				foreach ($Capability in $AppCapabilities)
+				{
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing capability: '$Capability'"
+
+					[string] $Name = switch ($Capability)
+					{
+						# Networking capabilities
+						# TODO: Unknown display name
+						"runFullTrust" { "runFullTrust" }
+						"internetClient" { "Your Internet connection"; break }
+						"internetClientServer" { "Your Internet connection, including incoming connections from the Internet"; break }
+						"privateNetworkClientServer" { "Your home or work networks"; break }
+						default
+						{
+							if ($Networking)
+							{
+								break
+							}
+
+							switch ($Capability)
+							{
+								"picturesLibrary" { "Your pictures library"; break }
+								"videosLibrary" { "Your videos library"; break }
+								"musicLibrary" { "Your music library"; break }
+								"documentsLibrary" { "Your documents library"; break }
+								# TODO: there are multiple capabilities that could match this?
+								"enterpriseAuthentication" { "Your Windows credentials" }
+								"sharedUserCertificates" { "Software and hardware certificates or a smart card"; break }
+								"removableStorage" { "Removable storage"; break }
+								"appointments" { "Your Appointments"; break }
+								"contacts" { "Your Contacts"; break }
+								default
+								{
+									Write-Error -Category NotImplemented -TargetObject $Capability `
+										-Message "Getting capability for '$Capability' not implemented"
+								}
+							}
+						}
+					}
+
+					if ([string]::IsNullOrEmpty($Name))
+					{
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' not resolved"
+						continue
 					}
 					else
 					{
-						$OutputObject += $Name
-					}
-				}
-			} # foreach capability
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' resolved to: $Name"
 
-			Write-Output $OutputObject
+						if ($IncludeAuthority)
+						{
+							$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $Name)
+						}
+						else
+						{
+							$OutputObject += $Name
+						}
+					}
+				} # foreach capability
+
+				Write-Output $OutputObject
+			}
 		} # foreach app
 	} # process
 }

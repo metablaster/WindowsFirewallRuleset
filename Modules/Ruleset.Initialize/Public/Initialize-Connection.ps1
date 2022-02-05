@@ -110,7 +110,7 @@ function Initialize-Connection
 				{
 					# Enable loopback only HTTP
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-					Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
+					Test-WinRM -Protocol HTTP -ErrorAction Stop
 				}
 			}
 
@@ -148,7 +148,7 @@ function Initialize-Connection
 					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
 				}
 
-				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
+				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -ErrorAction Stop
 			}
 
 			if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
@@ -178,8 +178,8 @@ function Initialize-Connection
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
+				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false -Verbose
+				Test-WinRM -Protocol HTTP -ErrorAction Stop
 			}
 
 			$SessionOptionParams["NoEncryption"] = $true

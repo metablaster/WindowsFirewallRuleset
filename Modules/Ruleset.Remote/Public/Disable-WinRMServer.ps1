@@ -120,7 +120,7 @@ function Disable-WinRMServer
 
 	if ($All)
 	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all session configurations and stop WinRM service"))
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all session configurations"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all WinRM session configurations"
 			Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
@@ -138,11 +138,11 @@ function Disable-WinRMServer
 	}
 	else
 	{
-		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded session configurations"))
+		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable non default session configurations"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded session configurations"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling non default session configurations"
 
-			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
+			# Disable all custom session configurations
 			Get-PSSessionConfiguration | Where-Object {
 				($_.Name -notlike "Microsoft.PowerShell*") -and
 				# TODO: With or without wildcard PowerShell.$($PSVersionTable.PSVersion) gets disabled
@@ -264,7 +264,7 @@ function Disable-WinRMServer
 		}
 
 		Restore-NetProfile
-	}
+	} # if not All
 
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Set WinRS options"))
@@ -291,7 +291,8 @@ function Disable-WinRMServer
 		}
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Update registry setting"))
+	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
+	if ($All -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Update registry setting"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
 

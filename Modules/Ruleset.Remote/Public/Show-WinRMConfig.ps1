@@ -173,6 +173,17 @@ function Show-WinRMConfig
 		EnableCompatibilityHttpListener, EnableCompatibilityHttpsListener, CertificateThumbprint,
 		AllowRemoteAccess, IsReadOnly, IsEmpty, HasChildNodes
 
+		# winrm get winrm/config/service/auth
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server authentication"
+		Get-WSManInstance -ResourceURI winrm/config/Service/Auth |
+		Select-Object -Property LocalName, lang, Basic, Kerberos, Negotiate, Certificate, CredSSP,
+		CbtHardeningLevel, IsReadOnly, IsEmpty, HasChildNodes
+
+		# winrm get winrm/config/service/defaultports
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server default ports"
+		Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts |
+		Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
+
 		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
 
@@ -186,17 +197,6 @@ function Show-WinRMConfig
 			# For example on fresh installed system
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy value is not present in the registry"
 		}
-
-		# winrm get winrm/config/service/auth
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server authentication"
-		Get-WSManInstance -ResourceURI winrm/config/Service/Auth |
-		Select-Object -Property LocalName, lang, Basic, Kerberos, Negotiate, Certificate, CredSSP,
-		CbtHardeningLevel, IsReadOnly, IsEmpty, HasChildNodes
-
-		# winrm get winrm/config/service/defaultports
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing server default ports"
-		Get-WSManInstance -ResourceURI winrm/config/Service/DefaultPorts |
-		Select-Object -Property LocalName, lang, HTTP, HTTPS, IsReadOnly, IsEmpty, HasChildNodes
 	}
 
 	if ($Client)

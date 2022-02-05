@@ -90,8 +90,7 @@ None. You cannot pipe objects to Connect-Computer
 None. Connect-Computer does not generate any output
 
 .NOTES
-TODO: When localhost or dot (.) is specified it should be treated as localhost which means localhost
-requirements must be met.
+None.
 #>
 function Connect-Computer
 {
@@ -291,8 +290,12 @@ function Connect-Computer
 				# Authentication is required to access remote registry
 				# NOTE: Registry provider does not support credentials
 				# TODO: More limited drive would be better
+				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+				Select-Object -ExpandProperty SystemDrive
+				$SystemDrive = $SystemDrive.TrimEnd(":")
+
 				New-PSDrive -Credential $Credential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
-					-Root \\$Domain\C$ -Description "Remote registry authentication" | Out-Null
+					-Root "\\$Domain\$SystemDrive$" -Description "Remote registry authentication" | Out-Null
 			}
 		}
 		catch
@@ -303,28 +306,42 @@ function Connect-Computer
 			Write-Error -Category AuthenticationError -TargetObject $Credential `
 				-Message "Authenticating $($Credential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
 		}
+	}
 
-		try
+	try
+	{
+		if (!(Get-PSSession -Name RemoteSession -ErrorAction Ignore))
 		{
-			if (!(Get-PSSession -Name RemoteSession -ErrorAction Ignore))
-			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating remote session to computer '$Domain'"
-				New-PSSession @PSSessionParams | Out-Null
-			}
-
-			# TODO: For VM without external switch use -VMName
-			# TODO: Temporarily not using because not in need to enter session
-			# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
-			# Enter-PSSession -Name RemoteSession
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
+			New-PSSession @PSSessionParams | Out-Null
 		}
-		catch
+
+		# TODO: For VM without external switch use -VMName
+		# TODO: Temporarily not using because not in need to enter session
+		# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
+		# Enter-PSSession -Name RemoteSession
+	}
+	catch
+	{
+		if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing CIM session 'RemoteCim'"
 			Remove-CimSession -Name RemoteCim
-			Remove-PSDrive -Name RemoteRegistry -Scope Global
-			Remove-Variable -Name CimServer -Scope Global -Force
-
-			Write-Error -Category ConnectionError -TargetObject $Domain `
-				-Message "Entering remote session to computer '$Domain' failed with: $($_.Exception.Message)"
 		}
+
+		if (Get-Variable -Name CimServer -Scope Global -ErrorAction Ignore)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'CimServer'"
+			Remove-Variable -Name CimServer -Scope Global -Force
+		}
+
+		if (Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSDrive 'RemoteRegistry'"
+			Remove-PSDrive -Name RemoteRegistry -Scope Global
+		}
+
+		Write-Error -Category ConnectionError -TargetObject $Domain `
+			-Message "Creating PS session to computer '$Domain' failed with: $($_.Exception.Message)"
 	}
 }

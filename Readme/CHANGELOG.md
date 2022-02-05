@@ -51,6 +51,9 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Get-PrincipalSID`
     - `Get-SDDL`
     - `Get-SystemSKU`
+    - `Get-AppCapability`
+    - `Get-UserApps`
+    - `Get-SystemApps`
 
   - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default
   default session configurations active, needed to be able to specify `-ComputerName` parameter
