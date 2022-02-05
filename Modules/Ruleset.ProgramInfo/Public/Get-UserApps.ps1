@@ -98,32 +98,65 @@ function Get-UserApps
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$Domain = foreach ($Computer in $Domain)
 	{
-		$Domain = [System.Environment]::MachineName
+		if (($Computer -eq "localhost") -or ($Computer -eq "."))
+		{
+			[System.Environment]::MachineName
+		}
+		else
+		{
+			$Computer
+		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
-	if (Test-Computer $Domain)
+	foreach ($Computer in $Domain)
 	{
-		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
-		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-		Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle | Where-Object {
-			# NOTE: This path will be missing for default apps on Windows server
-			# It may also be missing in fresh installed OS before connecting to internet
-			# TODO: See if "$_.Status" property can be used to determine if app is valid
-			if (Test-Path -PathType Container -Path "$env:SystemDrive\Users\$User\AppData\Local\Packages\$($_.PackageFamilyName)\AC")
+		if (Test-Computer $Domain)
+		{
+			if ($Computer -eq [System.Environment]::MachineName)
 			{
-				# There is no Domain property, so add one, PSComputerName property is of no use here
-				Add-Member -InputObject $_ -PassThru -Type NoteProperty -Name Domain -Value $Domain
+				# TODO: PackageTypeFilter is not clear, why only "Bundle"?
+				# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
+				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
+				$DomainPath = $env:SystemDrive
 			}
 			else
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($_.Name)' is not installed by user '$User' or the app is missing"
-				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+				# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
+				$Apps = Invoke-Command -Session (Get-PSSession -Name RemoteSession) -ScriptBlock {
+					param (
+						[string] $Name,
+						[string] $User
+					)
+
+					Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
+				} -ArgumentList $Name, $User
+
+				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+				Select-Object -ExpandProperty SystemDrive
+
+				$SystemDrive = $SystemDrive.TrimEnd(":")
+				$DomainPath = "\\$Computer\$SystemDrive`$\"
 			}
-		}
-	}
+
+			foreach ($App in $Apps)
+			{
+				# NOTE: This path will be missing for default apps on Windows server
+				# It may also be missing in fresh installed OS before connecting to internet
+				# TODO: See if "$_.Status" property can be used to determine if app is valid
+				if (Test-Path -PathType Container -Path "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC")
+				{
+					# There is no Domain property, so add one, PSComputerName property is of no use here
+					Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
+				}
+				else
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
+					Write-Information -Tags $MyInvocation.InvocationName `
+						-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+				}
+			}
+		} # if Test-Computer
+	} # foreach Computer
 }

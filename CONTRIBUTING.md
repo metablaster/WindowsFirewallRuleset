@@ -4,8 +4,6 @@
 Use this document to see how to contribute code or to prepare yourself to extend this firewall
 for your personal or corporate needs.
 
-Here is a list of most relevant things to keep in mind.
-
 ## Table of Contents
 
 - [How to contribute](#how-to-contribute)
@@ -16,7 +14,7 @@ Here is a list of most relevant things to keep in mind.
     - [Automatic formatting](#automatic-formatting)
     - [Development Guidelines](#development-guidelines)
     - [Naming convention](#naming-convention)
-    - [Script desing](#script-desing)
+    - [Script design](#script-design)
     - [Rule design](#rule-design)
     - [Module design](#module-design)
   - [Static analysis](#static-analysis)
@@ -36,6 +34,8 @@ Here is a list of most relevant things to keep in mind.
   - [Where to start](#where-to-start)
 
 ## General guidelines
+
+Here is a list of most relevant things to keep in mind.
 
 It's recommended to read up to date version of this document which is located on "develop" branch
 [here][contributing develop]
@@ -85,10 +85,10 @@ specific to Visual Studio Code, aka "Workspace", these settings include:
 
 1. Code formatting settings which are automatically enforced, and can also be manually applied
 2. List of recommended extensions which are automatically listed for installation once you open\
-repository root folder with VSCode
+repository folder with VSCode
 3. Debugging and code analysis settings which you can use to debug code
 4. Settings for recommended extensions, ex. markdown and script formatting
-5. Spelling settings such as random good words which would be otherwise detected as misspelled.
+5. Spelling settings such as random valid words which would be otherwise detected as misspelled.
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any directory see:
@@ -185,7 +185,7 @@ Following 2 extensions are optional and will not be automatically offerred for i
     Review and manage your GitHub pull requests and issues directly in VS Code
 
 Once your environment is set, next step is to visit `Config\ProjectSettings.ps1`
-located in project root directory, at a minimum you should set following variables to `$true`
+located in repository root directory, at a minimum you should set following variables to `$true`
 before doing anything else:
 
 1. Develop
@@ -202,7 +202,7 @@ In addition verify following variables are set to desired user
 3. TestUser
 
 Note that some of these may be auto adjusted after setting `Develop` variable to `$true`\
-Then restart PowerShell and run `.\Deploy-Firewall.ps1` to deploy firewall, or at least run
+Then restart PowerShell and run `.\Deploy-Firewall.ps1 -Force` to deploy firewall, or at least run
 `Initialize-Project` function which will prompt you to perform recommended and required checks.
 
 Detailed description of variables is located in `Config\ProjectSettings.ps1`
@@ -283,7 +283,7 @@ For function nouns prefer 1 word or maximum 3 (distinguished by uppercase letter
 
 Sometimes this is not possible, for example `Get-SqlServer` function may collide with existing
 PowerShell commandlets, in this case it's better to use 3 words rather than naming your function to
-something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too although
+something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too, although
 such exceptions should be rare.
 
 Noun word must be singular not plural, regardless if input or output is an array of objects.\
@@ -291,7 +291,7 @@ For more information about naming see [Naming Convention](/Readme/NamingConventi
 
 [Table of Contents](#table-of-contents)
 
-### Script desing
+### Script design
 
 All of the scripts should use the same code style and order of code, without writing a long list
 of preferred code style it should be enough to take a look at the existing scripts and figure it
@@ -301,12 +301,13 @@ Code in scripts is ordered into "sections" which depends on script and purpose, 
 way and may be different if needed for what ever reason:
 
 1. License notice
-2. Comment based help
-3. Initialization (ex. imports of modules and scripts)
-4. User input
-5. Script local variables (ex. default installation directories)
-6. Removal of exiting rules / Unit test startup etc..
-7. Rules / functions / code etc..
+2. Script info comment (if it's script file)
+3. Comment based help
+4. Initialization (ex. imports of modules and scripts)
+5. User input
+6. Script local variables (ex. default installation directories)
+7. Removal of exiting rules / Unit test startup etc..
+8. Rules / functions / code etc..
 
 [Table of Contents](#table-of-contents)
 
@@ -327,7 +328,7 @@ result in bugs or random issues.
 Repository contains few custom modules of various purpose, module functionality is grouped by
 relevance on what the module is supposed to expose.
 
-Try to limit dependency on 3rd party modules.\
+Try to limit dependency on 3rd party modules and module code.\
 If needed existing modules can be extended or new written without introducing dependencies or new
 languages.
 
@@ -400,7 +401,7 @@ block comments only if comment spans 5 or more lines.
 ### In rules (rule description)
 
 It is important that each firewall rule contains good description of it's purpose,
-when the user clicks on rule in firewall GUI he/she wants to see what this rule is about and
+when a user clicks on rule in firewall GUI he/she wants to see what this rule is about and
 easily conclude whether to enable/disable rule or allow/block network traffic.
 
 In general regarding firewall rules, provide documentation and official reference for your rules
@@ -413,7 +414,7 @@ Every script that's being executed either directly or called by other script wil
 until the user accepts the prompt to run script.\
 Similar prompts may appear at various points in code during execution.
 
-Each of these prompts have `?` which the user can type to get more information about prompt choices.
+Each of these prompts have `?` which a user can type to get more information about prompt choices.
 
 Functions `ShouldProcess` and `ShouldContinue` do not support customizing command line help, for
 that reason there is `Approve-Execute` function which allows you to customize prompt help.
@@ -488,10 +489,10 @@ pester isn't used as much is that I just didn't have enough time and will to lea
 Tests must pass both Desktop and Core editions of PowerShell on multiple Windows editions to be
 successful.
 
-To test code on different OS editions you should use Hyper-V and set up virtual machines, to help
-you initialize development environment on target VM there is a script `Initialize-Development.ps1`
-which will set up git, gpg, ssh, update or install missing modules and start requires system
-services.
+To test code on different OS editions you should use Hyper-V and set up virtual machines, there is
+experimental script called `Initialize-Development.ps1` which will attempt to set up git, gpg, ssh,
+update or install missing modules and start requires system services.\
+It's recommended to do this manually because this script is unfinished.
 
 A hint to quickly run any function from any module in this repository is to run following command
 in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
@@ -526,8 +527,8 @@ At the moment focus is on Windows Firewall, if you want to extend code base to o
 or operating systems go ahead, it surely won't be easy!
 
 If you decide to do so it is mandatory that these code additions are done on separate branch, which
-should then be regularly maintained and merged with develop branch for new changes, up until you are
-done.
+should then be regularly maintained up until you are done.\
+And only when done it could be merged with develop branch for new changes.
 
 It is desired to expand this project to manage [nftables][nftables] firewall on linux and other
 systems, but this likely won't happen any time soon.
@@ -555,7 +556,7 @@ here, significant portion of code was written before this `CONTRIBUTING.md` file
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-I recommend you to take a look into [TODO](Readme/TODO.md) list and also use `todo-tree`
+It's recommended to take a look into [TODO](Readme/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
 
 [Table of Contents](#table-of-contents)

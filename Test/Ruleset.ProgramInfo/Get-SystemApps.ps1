@@ -33,6 +33,9 @@ Unit test for Get-SystemApps
 .DESCRIPTION
 Test correctness of Get-SystemApps function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -69,20 +76,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-SystemApps"
 
-Start-Test "$TestAdmin"
-Get-SystemApps -User $TestAdmin
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Get-SystemApps -User $TestUser -Domain $Domain
+}
+else
+{
+	Start-Test $TestAdmin
+	Get-SystemApps -User $TestAdmin
 
-Start-Test "$TestUser"
-$Result = Get-SystemApps -User $TestUser
-$Result
+	Start-Test $TestUser
+	$Result = Get-SystemApps -User $TestUser
+	$Result
 
-Start-Test "Format-List"
-$Result | Format-List
+	Start-Test "Format-List"
+	$Result | Format-List
 
-Start-Test "Format-Wide"
-$Result | Format-Wide
+	Start-Test "Format-Wide"
+	$Result | Format-Wide
 
-Test-Output $Result -Command Get-SystemApps
+	Test-Output $Result -Command Get-SystemApps
+}
 
 Update-Log
 Exit-Test
