@@ -39,8 +39,16 @@ their networking requirements.
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
+.PARAMETER Interactive
+If program installation directory is not found, script will ask user to
+specify program installation location.
+
+.PARAMETER Quiet
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program path does not exist or if it's of an invalid syntax needed for firewall.
+
 .PARAMETER Force
-If specified, the script runs without prompt to allow execute
+If specified, no prompt to run script is shown
 
 .EXAMPLE
 PS> InboundRule
@@ -61,7 +69,14 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Parameter()]
 	[switch] $Trusted,
+
+	[Parameter()]
+	[switch] $Interactive,
+
+	[Parameter()]
+	[switch] $Quiet,
 
 	[Parameter()]
 	[switch] $Force
@@ -82,6 +97,9 @@ $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
 $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 

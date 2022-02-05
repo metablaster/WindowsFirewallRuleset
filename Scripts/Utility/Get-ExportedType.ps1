@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#PSScriptInfo
 
-.VERSION 0.12.0
+.VERSION 0.13.0
 
 .GUID 0186fc8f-feff-44f7-84a9-4053993ef6a2
 
