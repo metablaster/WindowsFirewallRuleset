@@ -70,6 +70,18 @@ function Test-RemoteRegistry
 
 	if ($PSCmdlet.ShouldProcess($Domain, "Test remote registry service"))
 	{
+		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartupType
+		
+		if ($StartupType -eq "Disabled")
+		{
+			if (!$Quiet)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry service is disabled"
+			}
+
+			return $false
+		}
+
 		$HKLM = "SOFTWARE\Microsoft\Windows"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 

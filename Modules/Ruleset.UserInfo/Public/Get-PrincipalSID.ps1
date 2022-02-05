@@ -94,11 +94,9 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			# TODO: should we query system accounts remotely?
+			# TODO: we should query certain 'system' accounts such as SQL users remotely
 			if ($CIM -and !$IsKnownDomain)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 				if (Test-Computer $Domain)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"

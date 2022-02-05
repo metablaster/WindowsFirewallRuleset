@@ -33,6 +33,9 @@ Unit test for Get-SqlManagementStudio
 .DESCRIPTION
 Test correctness of Get-SqlManagementStudio function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,14 +74,22 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "SqlManagementStudio"
 
-Start-Test "default"
-$Instances = Get-SqlManagementStudio
-$Instances
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Get-SqlManagementStudio -Domain $Domain
+}
+else
+{
+	Start-Test "default"
+	$Instances = Get-SqlManagementStudio
+	$Instances
 
-Start-Test "Install path Format-Wide"
-$Instances | Format-Wide
+	Start-Test "Install path Format-Wide"
+	$Instances | Format-Wide
 
-Test-Output $Instances -Command Get-SqlManagementStudio
+	Test-Output $Instances -Command Get-SqlManagementStudio
+}
 
 Update-Log
 Exit-Test

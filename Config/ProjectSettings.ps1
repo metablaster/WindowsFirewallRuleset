@@ -617,14 +617,28 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	}
 
 	# Administrative user account name which will perform unit testing
-	Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
-		Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
-				$_.ObjectClass -EQ "User" -and
-				($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
-			} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+	if ($PolicyStore -ne [System.Environment]::MachineName)
+	{
+		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
+	}
+	else
+	{
+		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
+			Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
+					$_.ObjectClass -EQ "User" -and
+					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+				} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+	}
 
 	# Standard user account name which will perform unit testing
-	Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
+	if ($PolicyStore -ne [System.Environment]::MachineName)
+	{
+		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
+	}
+	else
+	{
+		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
+	}
 
 	# Remote test computer which will perform unit testing
 	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"

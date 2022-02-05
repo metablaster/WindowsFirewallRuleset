@@ -33,6 +33,9 @@ Unit test for Get-OneDrive
 .DESCRIPTION
 Test correctness of Get-OneDrive function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -70,32 +77,40 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-OneDrive"
 
-# NOTE: Invoke access denied to registry if test run as standard user
-$UserGroup = @("Users", "Administrators")
-
-Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
-$Principals = Get-GroupPrincipal $UserGroup
-# TODO: see also @Get-UserSoftware,
-# This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
-$Principals | Format-Table
-
-foreach ($Principal in $Principals)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "$($Principal.User)"
-	Get-OneDrive $Principal.User
+	Start-Test "Remote default"
+	Get-OneDrive -Domain $Domain -User $TestUser
 }
-
-foreach ($Principal in $Principals)
+else
 {
-	Start-Test "$($Principal.User) | InstallLocation"
-	Get-OneDrive $Principal.User | Select-Object -ExpandProperty InstallLocation
+	# NOTE: Invoke access denied to registry if test run as standard user
+	$UserGroup = @("Users", "Administrators")
+
+	Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
+	$Principals = Get-GroupPrincipal $UserGroup
+	# TODO: see also @Get-UserSoftware,
+	# This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
+	$Principals | Format-Table
+
+	foreach ($Principal in $Principals)
+	{
+		Start-Test "$($Principal.User)"
+		Get-OneDrive $Principal.User
+	}
+
+	foreach ($Principal in $Principals)
+	{
+		Start-Test "$($Principal.User) | InstallLocation"
+		Get-OneDrive $Principal.User | Select-Object -ExpandProperty InstallLocation
+	}
+
+	Start-Test "Get-TypeName - $($Principals[0].User)"
+	$Result = Get-OneDrive $Principals[0].User
+	$Result
+
+	Test-Output $Result -Command Get-OneDrive
 }
-
-Start-Test "Get-TypeName - $($Principals[0].User)"
-$Result = Get-OneDrive $Principals[0].User
-$Result
-
-Test-Output $Result -Command Get-OneDrive
 
 Update-Log
 Exit-Test

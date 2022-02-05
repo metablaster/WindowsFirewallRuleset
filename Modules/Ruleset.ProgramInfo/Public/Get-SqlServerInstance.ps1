@@ -200,7 +200,8 @@ function Get-SqlServerInstance
 			# 64 bit system
 			$HKLM = @(
 				"SOFTWARE\Microsoft\Microsoft SQL Server"
-				"SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server")
+				"SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server"
+			)
 		}
 		else
 		{
@@ -219,7 +220,7 @@ function Get-SqlServerInstance
 			$Computer = $Computer -replace '(.*?)\..+', '$1'
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
 
-			if (!(Test-Connection -ComputerName $Computer -Count 2 -Quiet))
+			if (!(Test-Computer $Computer))
 			{
 				continue
 			}

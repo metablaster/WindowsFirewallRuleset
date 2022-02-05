@@ -33,6 +33,9 @@ Unit test for Get-SqlServerInstance
 .DESCRIPTION
 Test correctness of Get-SqlServerInstance function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ TODO: Test not working in Windows PowerShell
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,20 +74,28 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-SqlServerInstance"
 
-Start-Test "default"
-$Instances = Get-SqlServerInstance
-$Instances
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Get-SqlServerInstance -Domain $Domain
+}
+else
+{
+	Start-Test "default"
+	$Instances = Get-SqlServerInstance
+	$Instances
 
-Start-Test "CIM"
-Get-SqlServerInstance -CIM
+	Start-Test "CIM"
+	Get-SqlServerInstance -CIM
 
-Start-Test "binn directory - InstallLocation"
-Get-SqlServerInstance | Format-Wide
+	Start-Test "binn directory - InstallLocation"
+	Get-SqlServerInstance | Format-Wide
 
-Start-Test "DTS directory"
-Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
+	Start-Test "DTS directory"
+	Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
 
-Test-Output $Instances -Command Get-SqlServerInstance
+	Test-Output $Instances -Command Get-SqlServerInstance
+}
 
 Update-Log
 Exit-Test

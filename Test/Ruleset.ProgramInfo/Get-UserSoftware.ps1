@@ -33,6 +33,9 @@ Unit test for Get-UserSoftware
 .DESCRIPTION
 Test correctness of Get-UserSoftware function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,24 +74,31 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Get-UserSoftware"
-
-# NOTE: Invoke access denied to registry if test run as standard user
-$UserGroup = @("Users", "Administrators")
-
-Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
-$Principals = Get-GroupPrincipal $UserGroup
-# TODO: This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
-$Principals | Format-Table
-
-foreach ($Principal in $Principals)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "$($Principal.User)"
-	$Result = Get-UserSoftware $Principal.User
-	$Result
+	Start-Test "Remote default"
+	Get-UserSoftware -Domain $Domain -User $TestUser
 }
+else
+{
+	# NOTE: Invoke access denied to registry if test run as standard user
+	$UserGroup = @("Users", "Administrators")
 
-# NOTE: Test won't work unless there are programs installed in user profile
-Test-Output $Result -Command Get-UserSoftware
+	Start-Test "$UserGroup" -Command "Get-GroupPrincipal"
+	$Principals = Get-GroupPrincipal $UserGroup
+	# TODO: This Format-Table won't be needed once we have consistent outputs, formats and better pipelines
+	$Principals | Format-Table
+
+	foreach ($Principal in $Principals)
+	{
+		Start-Test "$($Principal.User)"
+		$Result = Get-UserSoftware $Principal.User
+		$Result
+	}
+
+	# NOTE: Test won't work unless there are programs installed in user profile
+	Test-Output $Result -Command Get-UserSoftware
+}
 
 Update-Log
 Exit-Test

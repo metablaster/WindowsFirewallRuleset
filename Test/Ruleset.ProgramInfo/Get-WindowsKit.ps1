@@ -33,6 +33,9 @@ Unit test for Get-WindowsKit
 .DESCRIPTION
 Test correctness of Get-WindowsKit function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,22 +74,30 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-WindowsKit"
 
-Start-Test "default"
-$WindowsKits = Get-WindowsKit
-$WindowsKits
-
-Start-Test "DebuggersRoot latest"
-if ($null -ne $WindowsKits)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
-	Sort-Object -Property Product |
-	Select-Object -Last 1 -ExpandProperty InstallLocation
+	Start-Test "Remote default"
+	Get-WindowsKit -Domain $Domain
 }
+else
+{
+	Start-Test "default"
+	$WindowsKits = Get-WindowsKit
+	$WindowsKits
 
-Start-Test "default"
-$WindowsKits | Format-List *
+	Start-Test "DebuggersRoot latest"
+	if ($null -ne $WindowsKits)
+	{
+		$WindowsKits | Where-Object { $_.Product -like "WindowsDebuggersRoot*" } |
+		Sort-Object -Property Product |
+		Select-Object -Last 1 -ExpandProperty InstallLocation
+	}
 
-Test-Output $WindowsKits -Command Get-WindowsKit
+	Start-Test "default"
+	$WindowsKits | Format-List *
+
+	Test-Output $WindowsKits -Command Get-WindowsKit
+}
 
 Update-Log
 Exit-Test

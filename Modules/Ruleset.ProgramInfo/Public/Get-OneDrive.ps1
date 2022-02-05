@@ -84,7 +84,10 @@ function Get-OneDrive
 
 	if (Test-Computer $Domain)
 	{
-		$UserSID = (Get-PrincipalSID $User -Domain $Domain).SID
+		$Principal = Get-PrincipalSID $User -Domain $Domain -CIM
+		if (!$Principal) { return }
+
+		$UserSID = $Principal.SID
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users
 
 		try

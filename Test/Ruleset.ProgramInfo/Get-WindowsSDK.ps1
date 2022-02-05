@@ -33,6 +33,9 @@ Unit test for Get-WindowsSDK
 .DESCRIPTION
 Test correctness of Get-WindowsSDK function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,19 +74,27 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-WindowsSDK"
 
-Start-Test "default"
-$WindowsSDK = Get-WindowsSDK
-$WindowsSDK
-
-Start-Test "latest"
-if ($null -ne $WindowsSDK)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	$WindowsSDK | Sort-Object -Property Version |
-	Where-Object { $_.InstallLocation } |
-	Select-Object -Last 1 -ExpandProperty InstallLocation
+	Start-Test "Remote default"
+	Get-WindowsSDK -Domain $Domain
 }
+else
+{
+	Start-Test "default"
+	$WindowsSDK = Get-WindowsSDK
+	$WindowsSDK
 
-Test-Output $WindowsSDK -Command Get-WindowsSDK
+	Start-Test "latest"
+	if ($null -ne $WindowsSDK)
+	{
+		$WindowsSDK | Sort-Object -Property Version |
+		Where-Object { $_.InstallLocation } |
+		Select-Object -Last 1 -ExpandProperty InstallLocation
+	}
+
+	Test-Output $WindowsSDK -Command Get-WindowsSDK
+}
 
 Update-Log
 Exit-Test
