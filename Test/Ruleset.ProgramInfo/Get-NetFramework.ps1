@@ -33,6 +33,9 @@ Unit test for Get-NetFramework
 .DESCRIPTION
 Test correctness of Get-NetFramework function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,22 +74,30 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-NetFramework"
 
-Start-Test "default"
-$NETFramework = Get-NetFramework
-$NETFramework
-
-Start-Test "latest"
-if ($null -ne $NETFramework)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	$NETFrameworkRoot = $NETFramework |
-	Sort-Object -Property Version |
-	Where-Object { $_.InstallLocation } |
-	Select-Object -Last 1 -ExpandProperty InstallLocation
-
-	$NETFrameworkRoot
+	Start-Test "Remote default"
+	Get-NetFramework -Domain $Domain
 }
+else
+{
+	Start-Test "default"
+	$NETFramework = Get-NetFramework
+	$NETFramework
 
-Test-Output $NETFramework -Command Get-NetFramework
+	Start-Test "latest"
+	if ($null -ne $NETFramework)
+	{
+		$NETFrameworkRoot = $NETFramework |
+		Sort-Object -Property Version |
+		Where-Object { $_.InstallLocation } |
+		Select-Object -Last 1 -ExpandProperty InstallLocation
+
+		$NETFrameworkRoot
+	}
+
+	Test-Output $NETFramework -Command Get-NetFramework
+}
 
 Update-Log
 Exit-Test

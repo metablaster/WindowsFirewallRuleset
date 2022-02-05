@@ -148,8 +148,13 @@ function Initialize-Connection
 					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
 				}
 
-				Enable-RemoteRegistry -Confirm:$false
 				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -ErrorAction Stop
+			}
+
+			if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
+			{
+				Enable-RemoteRegistry -Confirm:$false
+				Test-RemoteRegistry -Domain $PolicyStore
 			}
 
 			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16

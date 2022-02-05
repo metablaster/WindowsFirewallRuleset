@@ -126,6 +126,7 @@ SOFTWARE.
 		"Reset-WinRM"
 		"Set-WinRMClient"
 		"Show-WinRMConfig"
+		"Test-RemoteRegistry"
 		"Test-WinRM"
 		"Unregister-SslCertificate"
 	)
@@ -165,6 +166,7 @@ SOFTWARE.
 		"Help\en-US\Reset-WinRM.md"
 		"Help\en-US\Set-WinRMClient.md"
 		"Help\en-US\Show-WinRMConfig.md"
+		"Help\en-US\Test-RemoteRegistry.md"
 		"Help\en-US\Test-WinRM.md"
 		"Help\en-US\Unregister-SslCertificate.md"
 		"Help\README.md"
@@ -183,6 +185,7 @@ SOFTWARE.
 		"Public\Reset-WinRM.ps1"
 		"Public\Set-WinRMClient.ps1"
 		"Public\Show-WinRMConfig.ps1"
+		"Public\Test-RemoteRegistry.ps1"
 		"Public\Test-WinRM.ps1"
 		"Public\Unregister-SslCertificate.ps1"
 		"Scripts\README.md"

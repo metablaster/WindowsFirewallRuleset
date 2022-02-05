@@ -162,7 +162,7 @@ Following table lists currently tested operating systems
 
 ***
 
-1. Windows PowerShell 5.1 or PowerShell Core 7.1 [Download PowerShell Core][download core]
+1. Windows PowerShell 5.1 or PowerShell Core 7.2 [Download PowerShell Core][download core]
 2. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
 3. Git (Optional) [Download Git][download git]
 4. Visual Studio Code (Recommended) [Download VSCode][vscode]
@@ -173,24 +173,24 @@ Following table lists currently tested operating systems
 
 ### Requirements details
 
-- All Windows 10.0 systems (Major 10, Minor 0) are supported,
+- All Windows 10.0 systems (Major 10, Minor 0) and above are supported,
 but only those editions listed in the table above are actively tested.\
 The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 - PowerShell "Core" is not built into Windows, you will need to install it separately or use
 [Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
-- .NET Framework version 4.5 is required if using Windows PowerShell (Desktop edition)
+- .NET Framework min. version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
-Windows 10 ships with min .NET 4.6 (which includes .NET 4.5)
+Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
-- VS Code is preferred and recommended editor to navigate project and edit scripts for your
+- VS Code is preferred and recommended editor to navigate code and edit scripts for your
 own needs or contribution.
 - If you get VSCode, you'll also need PowerShell extension for code navigation and PowerShell
 language features.
 - To navigate and edit code with VSCode `PSScriptAnalyzer` is requirement, otherwise editing
 experience may behave really odd due to various repository settings.
-- There are no hardware requirements but if you plan to write code recommendation is min. 8GB of
+- There are no hardware requirements, but if you plan to write code recommendation is min. 8GB of
 memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your personal
 firewall less than that will work just fine.
 
@@ -213,7 +213,7 @@ Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
 
 ## First time user
 
-Following are brief warnings and notes first time user should be aware of
+Following are brief warnings and notices first time user should be aware of before deploying firewall
 
 ### Warning
 
@@ -229,7 +229,7 @@ will clear GPO rules completely and leave only those in control panel.
 - If you want to be 100% sure please export your GPO rules as explained in
 [Export\Import rules](#exportimport-rules)
 - You will be asked which rules to load, to minimize internet connectivity trouble you should
-deploy at least all generic networking and OS related rules such as "CoreNetworking", "ICMP",
+deploy at least all generic networking and OS related rules called "CoreNetworking", "ICMP",
 "WindowsSystem", "WindowsServices", "Multicast" including all rules for which you have programs
 installed on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4
 network.\
@@ -239,7 +239,7 @@ what you have missed.
 such as `Stateful FTP` and `PPTP` or global `IPSec` settings, if you need specific setup please
 visit `Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\Deploy-Firewall.ps1`
-- Some scripts require network adapter to be connected to network, for example to determine
+- Some scripts require you (network adapter) to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
 
 [Table of Contents](#table-of-contents)
@@ -276,7 +276,7 @@ needed to update firewall for system changes that may happen at any time.
 ### Quick start
 
 1. If you don't have ssh keys and other setup required to clone via SSH then either clone with HTTPS
-or just download released zip file from [Releases][releases], and then for latest
+or just download released zip file from [Releases][releases], and then for the latest
 release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 
@@ -307,7 +307,7 @@ something else:
     cd WindowsFirewallRuleset-master
     ```
 
-7. To see current execution policy run following command:\
+7. To see current execution policy type the following command and hit enter:\
 (**hint:** *you can use `TAB` key to auto complete commands*)
 
     ```powershell
@@ -327,7 +327,7 @@ something else:
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all project files first by executing the script called
+9. At this point you should "unblock" all project files first by executing the script called\
 `Scripts\Unblock-Project.ps1`, btw. project files were blocked by Windows to prevent users from
 running untrusted script code downloaded from internet:
 
@@ -338,7 +338,7 @@ running untrusted script code downloaded from internet:
     If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
     project. (approx. up to 8 times)
 
-10. Once project files are unblocked set execution policy to `RemoteSigned`:
+10. Once project files are unblocked change execution policy to `RemoteSigned`:
 
     ```powershell
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
@@ -347,8 +347,8 @@ running untrusted script code downloaded from internet:
     You may be again prompted to accept execution policy change, type `Y` and press enter to accept.
 
 11. Rules for programs such as your web browser, games etc. depend on installation variables.\
-Most paths are auto-searched and variables are updated, otherwise you get warning and description
-on how to fix the problem.\
+Most paths are auto-searched and variables are updated transparently, otherwise you get warning and
+description on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step.
 
@@ -365,7 +365,7 @@ It is recommended to close down all other programs before running master script 
     `CTRL + C` on your keyboard and restart PowerShell console.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
-it will take at least 15 minutes of your attention.
+it will take some 15 minutes of your attention.
 
 14. If you encounter errors, you can either ignore errors or update script that produced the error
 then re-run that specific script once again later.
@@ -441,16 +441,8 @@ What ever your plan or setup is, you will surely want to perform additional work
 rules, or adding new rules for programs not yet covered by this firewall.
 
 Rules are loaded into local group policy, if during firewall setup you accepted creating shortcut to
-personalized firewall management console you can run the schortcut, otherwise follow steps below to
-open local group policy.
-
-1. Press Windows key and type: `secpol.msc`
-2. Right click on `secpol.msc` and click `Run as administrator`
-3. If prompted for password, enter administrator password and click "Yes" to continue
-4. Expand node: `Windows Defender Firewall with Advanced Security`
-5. Expand node: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
-6. Click on either `Inbound`, `Outbound` or `Windows Defender Firewall...` node to view and manage
-rules and settings applied with PowerShell.
+personalized firewall management console you can run the schortcut, otherwise follow steps mentioned
+in [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
 
 For more information about GPO see:
 [Configure security policy settings][configure security policy settings]
@@ -473,8 +465,8 @@ if it's not already set, or you can do it manually in GPO but with limited power
 "limited power" means `Scripts\Complete-Firewall.ps1` configures some firewall parameters which
 can't be adjusted in firewall GUI.
 
-In both cases all rules that match ruleset display group will be deleted before loading rules into
-GPO.
+In both cases all rules that match ruleset group, `DisplayGroup`, will be deleted before loading
+rules into GPO.
 
 [Table of Contents](#table-of-contents)
 
@@ -486,8 +478,7 @@ At the moment there are 3 options to delete firewall rules:
 
 2. To delete rules according to file there is a function for this purpose, located in:\
 `Modules\Ruleset.Firewall\Public\Remove-FirewallRule.ps1`\
-however you're advised to perform some tests before using it due to it's
-experimental state.
+however you first need to export firewall to file before using it.
 
 3. To revert to your old firewall state (the one in control panel), you'll need to delete all off
 the rules from GPO, and set all properties to `Not configured` after right click on node:\
@@ -505,8 +496,9 @@ If you want to export rules from GPO there are 2 methods available:
 1. Export in local group policy by clicking on `Export Policy...` menu, after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
-2. To export using PowerShell run `Scripts\Backup-Firewall.ps1` which is much slower process but
-unlike method from point 1 you can customize your export in almost any way you want.
+2. To export using PowerShell run `Scripts\Backup-Firewall.ps1`\
+If you want to customize your export run `Export-RegistryRule` function located in `Ruleset.Firewall`
+module, which let's you customize your export in almost any way you want.
 
 If you want to import rules, importing by using GPO is same as for export, and to import with
 PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previous export file.
@@ -514,7 +506,8 @@ PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previ
 To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
 which is where you'll find description on how to use export\import module functions.
 
-**NOTE:** Method 2 is experimental and really slow, you're advised to verify results.
+**NOTE:** `Export-FirewallRule` function is really slow, you're advised to run `Export-RegistryRule`
+function instead which is as fast as it can be.
 
 [Table of Contents](#table-of-contents)
 
@@ -525,7 +518,7 @@ This section and functionality is currently under construction and incomplete
 ![Under construction](Readme/Screenshots/UnderConstruction.gif)
 
 In remote firewall deployment there are at least 2 computers involved,\
-one is management computer (client) and all others are managed computers (servers).
+one is called management computer (client) and all others are called managed computers (servers).
 
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
 configured on multiple server computers simultaneously.
@@ -536,6 +529,7 @@ At the moment following rudimentary remoting capabilities are implemented:
 2. Drilling registry remotely
 3. Configuring WinRM service
 4. Establishing encrypted session to remote host
+5. Gethering information about remote computers
 
 For implementation details see `Modules\Ruleset.Remote` module
 
@@ -551,12 +545,13 @@ connection, example on how to establish SSL connection as follows:
 # On server computer
 cd C:\Path\to\WindowsFirewallRuleset
 Import-Module .\Modules\Ruleset.Remote
-Enable-WinRMServer -Protocol HTTPS -Confirm:$false
+Enable-WinRMServer -Protocol HTTPS -Confirm:$false -KeepDefault
 Enable-RemoteRegistry -Confirm:$false
 ```
 
 After performing these steps, inside `\Exports` directory you'll find SSL certificate (*.cer) file
-which needs to be copied to management computer also into `\Exports` directory.
+which needs to be copied to management computer also into `\Exports` directory.\
+By default self signed SSL certificate is created if the server computer does not already have one.
 
 **NOTE:** Configuring server computer manually is performed only once for initial setup,
 you don't need to repeat it for subsequent deployments.
@@ -566,14 +561,14 @@ you don't need to repeat it for subsequent deployments.
 ```powershell
 # On management computer
 cd C:\Path\to\WindowsFirewallRuleset
-Deploy-Firewall -Domain "Server01"
+Deploy-Firewall -Domain "ServerComputerName"
 ```
 
 This is how remote deployment is going to work once this functionality gets fully implemented.
 
 Remote deployment can be customized in a great detail in the following locations:
 
-- To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`\
+- To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`
 - To customize WSMan session configuration see: `Modules\Ruleset.Remote\Scripts\Enable-WinRMServer.ps1`
 - To customize self signed SSL certificate see: `Modules\Ruleset.Remote\Scripts\Register-SslCertificate.ps1`
 - To customize PS and CIM session configuration see: `Config\RemoteFirewall.pssc`
@@ -591,8 +586,8 @@ unlike "master" branch which is updated from develop once in a while and not bef
 are thoroughly tested on fresh installed systems, which is what makes master brach stable.
 
 If you want to experiment with development version to check out new stuff, switch to "develop"
-branch and try it out, however if it produces errors, you can either fix problems or switch back to
-"master".
+branch and try it out, however if it produces errors, you can either attempt to fix problems or
+switch back to "master".
 
 There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
 
@@ -624,8 +619,8 @@ This method requires you to simply download released zip file which can be found
 ### Manual beta download
 
 This method is good if you want to download from "develop" branch, to do so, use the `branch` button
-here on this site and switch to develop branch, next use `Code` button and either clone or download
-zip.
+here on this site and switch to develop branch, next use `Code` button and choose option to either
+clone or download zip file .
 
 [Table of Contents](#table-of-contents)
 
@@ -674,6 +669,7 @@ For this to work, you need to make sure your working tree is "clean", which mean
 you need to save and upload your modifications to your fork, for example:
 
  ```cpp
+ cd Path\To\WindowsFirewallRuleset
  git add .
  git commit -m "my changes"
  git push
@@ -748,7 +744,7 @@ If you would like to customize how scripts run, such as force loading rules and 
 then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for
 this.
 
-If you would like to customize project code or add more firewall rules to suit your private or
+If you would like to customize code or add more firewall rules to suit your private or
 corporate interests then first step is to set up development environment and learn about best
 practices used by this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
@@ -770,8 +766,10 @@ Following features are desired and might be available at some point in the futur
 2. Comprehensive firewall rulesets for Windows Server editions and dedicated gateway systems.
 
 3. On demand or scheduled registry scan to validate integrity of active firewall filtering policy
+and firewall settings
 
-    - Any firewall rule in the registry that is not part of this repository is reported for review
+    - Any firewall rule or setting in the registry that is not part of this repository is reported
+    for review.
     - Because, malware, hackers and even trusted software can attempt to bypass firewall at any time
 
 4. Full functionality for the following not yet tested editions of Windows 10.0

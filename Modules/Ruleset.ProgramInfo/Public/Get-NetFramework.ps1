@@ -137,25 +137,37 @@ function Get-NetFramework
 			}
 			else # go one key down
 			{
-				foreach ($HKLMKey in $SubKey.GetSubKeyNames())
+				$SubkeyNames = $SubKey.GetSubKeyNames()
+				if (($SubkeyNames -contains "Full") -and ($SubkeyNames -contains "Client"))
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMKey"
+					$SubkeyNames = $SubkeyNames | Where-Object { $_ -ne "Client" }
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing sub key: $HKLMSubKey\Client to avoid duplicate entries"
+				}
+
+				foreach ($HKLMKey in $SubkeyNames)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey\$HKLMKey"
 					$Key = $SubKey.OpenSubkey($HKLMKey)
 
 					if (!$Key)
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKLMKey"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKLMSubKey\$HKLMKey"
 						continue
 					}
 
 					$Version = $Key.GetValue("Version")
 					if ([string]::IsNullOrEmpty($Version))
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $HKLMKey\Version"
+						# NOTE: CDF subkeys never contain version
+						if ($HKLMSubKey -ne "CDF")
+						{
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry key entry: $HKLMSubKey\$HKLMKey\Version"
+						}
+
 						continue
 					}
 
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMKey"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey\$HKLMKey"
 
 					$InstallLocation = $Key.GetValue("InstallPath")
 

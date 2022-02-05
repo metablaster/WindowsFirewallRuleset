@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,65 +28,58 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-InstallProperties
+Unit test for Test-RemoteRegistry
 
 .DESCRIPTION
-Test correctness of Get-InstallProperties function
+Test correctness of Test-RemoteRegistry functions
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Get-InstallProperties.ps1
+PS> Test-RemoteRegistry
 
 .INPUTS
-None. You cannot pipe objects to Get-InstallProperties.ps1
+None. You cannot pipe objects to Test-RemoteRegistry.ps1
 
 .OUTPUTS
-None. Get-InstallProperties.ps1 does not generate any output
+None. Test-RemoteRegistry.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
 	[Parameter()]
 	[Alias("ComputerName", "CN")]
-	[string] $Domain = [System.Environment]::MachineName,
+	[string] $Domain = $TestDomain,
 
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-Enter-Test "Get-InstallProperties"
+Enter-Test "Test-RemoteRegistry"
 
-if ($Domain -ne [System.Environment]::MachineName)
-{
-	Start-Test "Remote default"
-	Get-InstallProperties -Domain $Domain
-}
-else
-{
-	Start-Test "default"
-	$Result = Get-InstallProperties
-	$Result
+Start-Test "Remote default"
+$Result = Test-RemoteRegistry -Domain $Domain
+$Result
 
-	Test-Output $Result -Command Get-InstallProperties
-}
+Test-Output $Result -Command Test-RemoteRegistry
 
 Update-Log
 Exit-Test

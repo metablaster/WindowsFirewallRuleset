@@ -35,6 +35,9 @@ Unit test for Test-Function or Test-Script.ps1
 Test correctness of Test-Function function or Test-Script script
 Use TestTemplate.ps1 as a template to test out scripts and module functions
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
@@ -58,12 +61,16 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
 # TODO: Adjust paths
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -87,11 +94,19 @@ Enter-Test "Test-Function"
 # yesToAll, noToAll
 if ($Force -or $PSCmdlet.ShouldContinue("Query", "Accept dangerous unit test", $true, [ref] $YesToAll, [ref] $NoToAll))
 {
-	Start-Test "Default test"
-	$Result = Test-Function
-	$Result
+	if ($Domain -ne [System.Environment]::MachineName)
+	{
+		Start-Test "Remote default"
+		Test-Function -Domain $Domain
+	}
+	else
+	{
+		Start-Test "Default test"
+		$Result = Test-Function
+		$Result
 
-	Test-Output $Result -Command Test-Function
+		Test-Output $Result -Command Test-Function
+	}
 }
 
 Update-Log

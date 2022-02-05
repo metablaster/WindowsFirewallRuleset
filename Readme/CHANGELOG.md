@@ -63,6 +63,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Test-Computer`
     - `Test-Credential`
     - `Test-ExecutableFile` will now perform virus total check if digital signature is missing
+    - `Get-NetFramework`
 
 - New features
 
@@ -73,6 +74,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Show-ASR.ps1` new script used to display ASR configuration
   - `Set-ATP.ps1` new script script used to configure Microsoft Defender Antivirus
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
+  - `Test-RemoteRegistry` new function to test for functioning remote registry
 
 - Scripts
 

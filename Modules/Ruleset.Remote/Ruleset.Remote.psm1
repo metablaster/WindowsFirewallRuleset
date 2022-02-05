@@ -34,7 +34,7 @@ param (
 	[switch] $ListPreference
 )
 
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
 
 if ($ListPreference)
 {
@@ -86,6 +86,7 @@ $PublicScripts = @(
 	"Reset-WinRM"
 	"Set-WinRMClient"
 	"Show-WinRMConfig"
+	"Test-RemoteRegistry"
 	"Test-WinRM"
 	"Unregister-SslCertificate"
 )
