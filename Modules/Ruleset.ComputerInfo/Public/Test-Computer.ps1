@@ -142,7 +142,7 @@ function Test-Computer
 
 	if (($PSCmdlet.ParameterSetName -eq "WSMan") -and ($Protocol -ne "Ping"))
 	{
-		if (Get-CimSession -Name RemoteCim)
+		if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 		{
 			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing CIM session"
 			$Status = $CimServer.TestConnection()

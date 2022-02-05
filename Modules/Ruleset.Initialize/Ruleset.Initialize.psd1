@@ -114,6 +114,7 @@ SOFTWARE.
 	# NOTE: When the value of any *ToExport key is an empty array,
 	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
+		"Initialize-Connection"
 		"Initialize-Module"
 		"Initialize-Project"
 		"Initialize-Provider"
@@ -145,6 +146,7 @@ SOFTWARE.
 		"en-US\about_Ruleset.Initialize.help.txt"
 		"en-US\Ruleset.Initialize-help.xml"
 		"Help\en-US\about_Ruleset.Initialize.md"
+		"Help\en-US\Initialize-Connection.md"
 		"Help\en-US\Initialize-Module.md"
 		"Help\en-US\Initialize-Project.md"
 		"Help\en-US\Initialize-Provider.md"
@@ -154,6 +156,7 @@ SOFTWARE.
 		"Private\Find-UpdatableModule.ps1"
 		"Private\README.md"
 		"Private\Uninstall-DuplicateModule.ps1"
+		"Public\Initialize-Connection.ps1"
 		"Public\Initialize-Module.ps1"
 		"Public\Initialize-Project.ps1"
 		"Public\Initialize-Provider.ps1"

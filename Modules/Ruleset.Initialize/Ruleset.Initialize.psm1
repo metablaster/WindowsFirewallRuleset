@@ -69,6 +69,7 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
+	"Initialize-Connection"
 	"Initialize-Module"
 	"Initialize-Project"
 	"Initialize-Provider"
