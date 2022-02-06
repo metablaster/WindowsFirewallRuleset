@@ -142,7 +142,7 @@ process
 		# "Template MESSAGE"
 
 		$TemplateVariable
-		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("DynamicParamName"))
+		if ($PSBoundParameters.ContainsKey("DynamicParamName"))
 		{
 			$PSBoundParameters["DynamicParamName"]
 		}

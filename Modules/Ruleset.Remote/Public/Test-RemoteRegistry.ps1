@@ -70,7 +70,7 @@ function Test-RemoteRegistry
 
 	if ($PSCmdlet.ShouldProcess($Domain, "Test remote registry service"))
 	{
-		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartupType
+		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartType
 
 		if ($StartupType -eq "Disabled")
 		{

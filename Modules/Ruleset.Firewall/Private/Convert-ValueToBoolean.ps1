@@ -83,7 +83,7 @@ function Convert-ValueToBoolean
 
 	if ([string]::IsNullOrEmpty($Value))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'" -Verbose
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Input is missing, using default value of: '$DefaultValue'"
 		return $DefaultValue
 	}
 

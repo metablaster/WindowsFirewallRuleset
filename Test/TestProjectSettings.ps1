@@ -83,18 +83,18 @@ else
 	$DebugPreference = "Continue"
 }
 
-Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference" # -Debug
+Write-Debug -Message "[$ThisScript] DebugPreference before: $DebugPreference"
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -ListPreference
-Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference" # -Debug
+Write-Debug -Message "[$ThisScript] DebugPreference after: $DebugPreference"
 
 # NOTE: For this test to show correct result $DebugPreference in ProjectSettings must be "Continue"
 Start-Test "Script module preferences"
 $TestModule = New-Module -Name Dynamic.TestPreference -ErrorAction Stop -ScriptBlock {
-	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference" # -Debug
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference before: $DebugPreference"
 
 	. $PSScriptRoot\..\Config\ProjectSettings.ps1 -InModule -ListPreference
 
-	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference" # -Debug
+	Write-Debug -Message "[Dynamic.TestPreference] DebugPreference after: $DebugPreference"
 } | Import-Module -Scope Global -PassThru
 
 Start-Test "Script module no exports"

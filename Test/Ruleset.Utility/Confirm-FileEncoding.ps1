@@ -132,7 +132,7 @@ Start-Test "binary file"
 Confirm-FileEncoding "$env:SystemRoot\regedit.exe"
 
 Start-Test "binary file -Binary"
-Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -Binary -Debug
+Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -Binary
 
 Test-Output $Result -Command Confirm-FileEncoding
 

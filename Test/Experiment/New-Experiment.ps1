@@ -66,7 +66,7 @@ begin
 
 	$DebugPreference = "Continue"
 	Write-Debug -Message "[$ThisScript] Run module function"
-	Debug-Experiment # -Debug
+	Debug-Experiment
 }
 
 process

@@ -182,7 +182,7 @@ function Test-WinRM
 		$InformationPreference = "SilentlyContinue"
 	}
 
-	if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+	if ($PSBoundParameters.ContainsKey("Status"))
 	{
 		$Status.Value = $false
 	}
@@ -285,7 +285,7 @@ function Test-WinRM
 		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult)
 		if ($Protocol -ne "Any")
 		{
-			if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+			if ($PSBoundParameters.ContainsKey("Status"))
 			{
 				$Status.Value = $StatusHTTPS
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM HTTPS test result is '$StatusHTTPS'"
@@ -347,7 +347,7 @@ function Test-WinRM
 		$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2)
 		if ($Protocol -ne "Any")
 		{
-			if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+			if ($PSBoundParameters.ContainsKey("Status"))
 			{
 				$Status.Value = $StatusHTTP
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM HTTP test result is '$StatusHTTP'"
@@ -357,7 +357,7 @@ function Test-WinRM
 
 	if ($Protocol -eq "Any")
 	{
-		if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey("Status"))
+		if ($PSBoundParameters.ContainsKey("Status"))
 		{
 			$Status.Value = $StatusHTTP -or $StatusHTTPS
 		}

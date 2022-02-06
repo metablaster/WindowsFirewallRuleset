@@ -223,7 +223,7 @@ function Invoke-Process
 			[scriptblock] $OutputDataReceived = {
 				if (![string]::IsNullOrEmpty($EventArgs.Data))
 				{
-					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($EventArgs.Data)" # -Debug
+					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
 					$Event.MessageData.AppendLine($EventArgs.Data)
 				}
 			}
@@ -231,7 +231,7 @@ function Invoke-Process
 			[scriptblock] $ErrorDataReceived = {
 				if (![string]::IsNullOrEmpty($EventArgs.Data))
 				{
-					Write-Debug -Message "[& ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)" # -Debug
+					Write-Debug -Message "[& ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
 					$Event.MessageData.AppendLine($EventArgs.Data)
 				}
 			}
@@ -254,7 +254,7 @@ function Invoke-Process
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
 					# NOTE: Explicit -Debug or INFA is needed inside event
-					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($OutLine.Data)" # -Debug
+					Write-Debug -Message "[& OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
 					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
 				}
 			}
@@ -275,7 +275,7 @@ function Invoke-Process
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
 					# NOTE: Explicit -Debug is needed inside event
-					Write-Debug -Message "[& ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)" # -Debug
+					Write-Debug -Message "[& ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)"
 					Write-Error -Category FromStdErr -TargetObject $Process -MessageData $OutLine.Data
 				}
 			}

@@ -108,7 +108,9 @@ remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 HACK: For loopback New-PSSession to work in PS Core this function must be called from Windows PowerShell,
-if not working Reset-WinRM should be called first
+if not working Reset-WinRM should be called first.
+Problem is when LocalAccountTokenFilterPolicy is set to 0, it can be effectively enabled only in Windows PowerShell,
+likely registry setting change isn't picked up, test with system reboot.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -378,7 +380,7 @@ function Enable-WinRMServer
 		# TODO: Protocol parameter is ignored
 		if ($Protocol -ne "Any")
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Protocol switch was ignored" -Verbose
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Protocol switch was ignored"
 		}
 
 		# NOTE: It's easier to continue with Disable-WinRMServer rather than copying

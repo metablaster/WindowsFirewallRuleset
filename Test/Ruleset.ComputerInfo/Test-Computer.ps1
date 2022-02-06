@@ -86,7 +86,7 @@ else
 }
 
 Start-Test "-Retry" -Expected "FAIL"
-Test-Computer "FAILURE-COMPUTER" -Retry 2 -Verbose
+Test-Computer "FAILURE-COMPUTER" -Retry 2
 
 Start-Test "default"
 $Result = Test-Computer $Domain
