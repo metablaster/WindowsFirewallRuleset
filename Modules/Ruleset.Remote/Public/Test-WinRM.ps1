@@ -75,6 +75,14 @@ Controls the formats used to represent numbers, currency values, and date/time v
 in Windows this setting is known as "Region and regional format"
 The default value is en-US, current value can be obtained with Get-Culture
 
+.PARAMETER ApplicationName
+Specifies the application name in the connection.
+The system default application name is wsman
+
+.PARAMETER SessionOption
+Specify custom PSSessionOption object to use for remoting.
+The default value is controlled with PSSessionOption variable from caller scope
+
 .PARAMETER Status
 Boolean reference variable used for return value which indicates whether the test was success
 
@@ -144,6 +152,13 @@ function Test-WinRM
 		[System.Globalization.CultureInfo] $Culture = $DefaultCulture,
 
 		[Parameter()]
+		[string] $ApplicationName = $PSSessionApplicationName,
+
+		[Parameter()]
+		[System.Management.Automation.Remoting.PSSessionOption]
+		$SessionOption = $PSSessionOption,
+
+		[Parameter()]
 		[ref] $Status,
 
 		[Parameter()]
@@ -172,27 +187,21 @@ function Test-WinRM
 		$Status.Value = $false
 	}
 
-	$PSSessionOption = New-PSSessionOption -UICulture $UICulture -Culture $Culture `
-		-OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
-
 	$WSManParams = @{
-		Port = $Port
 		Authentication = $Authentication
-		ApplicationName = "wsman"
-		# NOTE: Only valid for Enter-PSSession
-		# SessionOption = $PSSessionOption
+		ApplicationName = $ApplicationName
 	}
 
 	$CimParams = @{
 		Name = "TestCim"
 		Authentication = $Authentication
-		Port = $WSManParams["Port"]
-		OperationTimeoutSec = $PSSessionOption.OperationTimeout.TotalSeconds
+		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 		# verification is accomplished using a standard WS-Identity operation.
+		# TODO: -SkipTestConnection could be used for Test-Credential function
 	}
 
-	if (($Domain -ne ([System.Environment]::MachineName)) -and ($Domain -ne "localhost"))
+	if ($Domain -ne [System.Environment]::MachineName)
 	{
 		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
 		# authentication otherwise the error is:

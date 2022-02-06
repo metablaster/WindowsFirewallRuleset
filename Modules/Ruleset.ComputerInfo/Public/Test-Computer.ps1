@@ -40,8 +40,8 @@ Target computer which to test for connectivity
 
 .PARAMETER Protocol
 Specify the kind of a test to perform.
-Acceptable values are WSMan and Ping
-The default is WSMan.
+Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Any
+The default is Any which tries connectivity in this order: HTTPS\HTTP\Ping
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by

@@ -63,7 +63,7 @@ function Initialize-Connection
 
 	# Establish WinRM connection to local or remote computer
 	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to remote computer and enable remote registry") -and
-		!(Get-Variable -Name SessionEstablished -Scope Script -ErrorAction Ignore))
+		!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
 		# NOTE: Global object RemoteRegistry (PSDrive), RemoteCim (CimSession) and RemoteSession (PSSession) are created by Connect-Computer function
@@ -78,27 +78,48 @@ function Initialize-Connection
 			ApplicationName = $PSSessionApplicationName
 		}
 
-		# PSPrimitiveDictionary, data to send to remote computer
-		$SenderArguments = @{
-			Domain = $PolicyStore
-		}
-
-		$SessionOptionParams = @{
-			UICulture = $DefaultUICulture
-			Culture = $DefaultCulture
-			OpenTimeout = 3000
-			CancelTimeout = 5000
-			OperationTimeout = 10000
-			MaxConnectionRetryCount = 2
-			ApplicationArguments = $SenderArguments
-			NoEncryption = $false
-			NoCompression = $false
-		}
+		# [System.Management.Automation.Remoting.PSSessionOption]
+		$PSSessionOption.Culture = $DefaultCulture
+		$PSSessionOption.UICulture = $DefaultUICulture
+		# OpenTimeout (in milliseconds), affects only PS sessions
+		# Determines how long the client computer waits for the session connection to be established.
+		# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out.
+		$PSSessionOption.OpenTimeout = 3000
+		# CancelTimeout (in milliseconds), affects only PS sessions
+		# Determines how long PowerShell waits for a cancel operation (CTRL+C) to finish before ending it.
+		# The default value is 60000 (one minute). A value of 0 (zero) means no time-out.
+		$PSSessionOption.CancelTimeout = 5000
+		# OperationTimeout (in milliseconds), affects both the PS and CIM sessions.
+		# The maximum time that any operation in the session can run.
+		# When the interval expires, the operation fails.
+		# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out for PS sessions,
+		# for CIM sessions it means use the default timeout value for the server (usually 3 minutes)
+		$PSSessionOption.OperationTimeout = 10000
+		# MaxConnectionRetryCount, affects PS session, Test-NetConnection and Invoke-WebRequest
+		# Specifies count of attempts to make a connection to a target host if the current attempt
+		# fails due to network issues.
+		# The default value is 5 for PS session.
+		# The default value is 4 for Test-NetConnection which specifies echo requests
+		$PSSessionOption.MaxConnectionRetryCount = 2
 
 		$PolicyStoreStatus = $false
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
+			$PSSessionOption.NoCompression = $false
+
+			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
+			# There is global variable that controls encoding, see if it can be used here
+			if ($RemotingProtocol -ne "HTTP")
+			{
+				$PSSessionOption.NoEncryption = $false
+				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
+			}
+			else
+			{
+				$PSSessionOption.NoEncryption = $true
+				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
+			}
 
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
@@ -156,36 +177,29 @@ function Initialize-Connection
 				Enable-RemoteRegistry -Confirm:$false
 				Test-RemoteRegistry -Domain $PolicyStore
 			}
-
-			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-			# There is global variable that controls encoding, see if it can be used here
-			if ($RemotingProtocol -eq "HTTP")
-			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
-			}
-			else
-			{
-				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
-			}
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
+			$PSSessionOption.NoEncryption = $true
+			$PSSessionOption.NoCompression = $true
+
+			# For loopback using only HTTP
+			# TODO: For completeness, implement use of HTTPS, credentials will be needed
+			Set-Variable -Name RemotingProtocol -Scope Global -Force -Value "HTTP"
+
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to local computer"
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
+			Test-WinRM -Protocol $RemotingProtocol -Status ([ref] $PolicyStoreStatus) -Quiet
 
 			if (!$PolicyStoreStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol HTTP -ErrorAction Stop
+				Set-WinRMClient -Protocol $RemotingProtocol -Confirm:$false
+				Enable-WinRMServer -Protocol $RemotingProtocol -KeepDefault -Loopback -Confirm:$false
+				Test-WinRM -Protocol $RemotingProtocol -ErrorAction Stop
 			}
 
-			$SessionOptionParams["NoEncryption"] = $true
-			$SessionOptionParams["NoCompression"] = $true
-
-			$ConnectParams["Protocol"] = "HTTP"
+			$ConnectParams["Protocol"] = $RemotingProtocol
 			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 		else
@@ -194,16 +208,9 @@ function Initialize-Connection
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
 
-		# TODO: Not all options are used, ex. -NoCompression and -NoEncryption could be used for loopback
-		$ConnectParams["SessionOption"] = New-PSSessionOption @SessionOptionParams
-
 		try
 		{
 			Connect-Computer @ConnectParams
-
-			# Check if session is already initialized and established, do not modify!
-			# TODO: Connect-Computer may fail without throwing
-			Set-Variable -Name SessionEstablished -Scope Script -Value $true
 		}
 		catch
 		{

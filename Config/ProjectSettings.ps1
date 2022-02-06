@@ -264,25 +264,9 @@ $PSSessionConfigurationName = "RemoteFirewall.$($PSVersionTable.PSEdition)"
 $PSSessionApplicationName = "wsman"
 
 # Advanced options for a user-managed remote session
-# HACK: These options don't seem to be respected in regard to timeouts
-# NOTE: OperationTimeout (in milliseconds), affects both the PS and CIM sessions.
-# The maximum time that any operation in the session can run.
-# When the interval expires, the operation fails.
-# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out for PS sessions,
-# for CIM sessions it means use the default timeout value for the server (usually 3 minutes)
-# NOTE: CancelTimeout (in milliseconds), affects only PS sessions
-# Determines how long PowerShell waits for a cancel operation (CTRL+C) to finish before ending it.
-# The default value is 60000 (one minute). A value of 0 (zero) means no time-out.
-# NOTE: OpenTimeout (in milliseconds), affects only PS sessions
-# Determines how long the client computer waits for the session connection to be established.
-# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out.
-# NOTE: MaxConnectionRetryCount, affects PS session, Test-NetConnection and Invoke-WebRequest
-# Specifies count of attempts to make a connection to a target host if the current attempt
-# fails due to network issues.
-# The default value is 5 for PS session.
-# The default value is 4 for Test-NetConnection which specifies echo requests
-# [System.Management.Automation.Remoting.PSSessionOption]
-# NOTE: Used later, $PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
+# HACK: Setting PSSessionOption here does not affect PSSessionOption in other scopes
+# We set these values in Initialize-Connection function
+# $PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
 # -OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 
 # Set to true to enable development features, it does following at a minimum:
@@ -446,7 +430,8 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		)
 
 		# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
-		New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
+		# NOTE: For loopback sessions HTTP is used regardless of this setting
+		New-Variable -Name RemotingProtocol -Scope Global -Option ReadOnly -Value "HTTPS"
 
 		# Credential object to be used for authentication to remote computer
 		New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
@@ -853,10 +838,16 @@ if ($ListPreference)
 
 		.DESCRIPTION
 		Showing values of preference variables in different scopes is useful to troubleshoot
-		problems with preferences or just to confirm preferences are set as expected.
+		problems with preferences or just to confirm preferences or variables are set as expected.
+
+		.PARAMETER Name
+		Also shows variable of specified name
 
 		.PARAMETER All
 		If specified, shows all variables from this script including Path and PSModulePath values
+
+		.PARAMETER SessionOption
+		Also shows PSSessionOption values
 
 		.EXAMPLE
 		PS> Show-Preference ModuleName
@@ -868,7 +859,13 @@ if ($ListPreference)
 		{
 			param (
 				[Parameter()]
-				[switch] $All
+				[switch] $Name,
+
+				[Parameter()]
+				[switch] $All,
+
+				[Parameter()]
+				[switch] $SessionOption
 			)
 
 			# Get base name of script that called this function
@@ -887,6 +884,8 @@ if ($ListPreference)
 			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference: $InformationPreference" -Debug
 
 			$Variables = Get-ChildItem -Path Variable:\*Preference
+			$Variables += Get-ChildItem -Path Variable:\PSSessionApplicationName
+			$Variables += Get-ChildItem -Path Variable:\PSSessionConfigurationName
 
 			# NOTE: Sorting before -All and -Name to have preference variables listed first
 			$AllVariables = $Variables.GetEnumerator() | Sort-Object -Property Name
@@ -943,6 +942,35 @@ if ($ListPreference)
 				{
 					Write-Host "[$Caller] Path = $Entry" -ForegroundColor Cyan
 				}
+			}
+
+			if ($SessionOption)
+			{
+				# HACK: Find better way to enumerate PSSessionOption and use foreach
+				$Option = (Get-ChildItem -Path Variable:\PSSessionOption).Value
+				Write-Host "[$Caller.PSSessionOption.MaximumConnectionRedirectionCount] $($Option.MaximumConnectionRedirectionCount)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.NoCompression] $($Option.NoCompression)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.NoMachineProfile] $($Option.NoMachineProfile)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.ProxyAccessType] $($Option.ProxyAccessType)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.ProxyAuthentication] $($Option.ProxyAuthentication)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.ProxyCredential] $($Option.ProxyCredential)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.SkipCACheck] $($Option.SkipCACheck)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.SkipCNCheck] $($Option.SkipCNCheck)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.SkipRevocationCheck] $($Option.SkipRevocationCheck)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.OperationTimeout] $($Option.OperationTimeout)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.NoEncryption] $($Option.NoEncryption)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.UseUTF16] $($Option.UseUTF16)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.IncludePortInSPN] $($Option.IncludePortInSPN)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.OutputBufferingMode] $($Option.OutputBufferingMode)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.MaxConnectionRetryCount] $($Option.MaxConnectionRetryCount)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.Culture] $($Option.Culture)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.UICulture] $($Option.UICulture)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.MaximumReceivedDataSizePerCommand] $($Option.MaximumReceivedDataSizePerCommand)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.MaximumReceivedObjectSize] $($Option.MaximumReceivedObjectSize)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.ApplicationArguments] $($Option.ApplicationArguments)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.OpenTimeout] $($Option.OpenTimeout)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.CancelTimeout] $($Option.CancelTimeout)" -ForegroundColor Cyan
+				Write-Host "[$Caller.PSSessionOption.IdleTimeout] $($Option.IdleTimeout)" -ForegroundColor Cyan
 			}
 		}
 	} | Import-Module -Scope Global

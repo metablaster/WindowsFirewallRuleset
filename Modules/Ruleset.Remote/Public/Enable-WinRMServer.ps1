@@ -107,6 +107,8 @@ TODO: Configure server remotely either with WSMan or trough SSH, to test and con
 remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+HACK: For loopback New-PSSession to work in PS Core this function must be called from Windows PowerShell,
+if not working Reset-WinRM should be called first
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -319,25 +321,7 @@ function Enable-WinRMServer
 		Set-StrictMode -Version Latest
 	}
 
-	# NOTE: False because, this is needed to be able to specify -ComputerName on commands that support it
-	if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable all default session configurations"))
-	{
-		# Disable unused default session configurations
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling all default session configurations"
-
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			Enable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion.Major)" -NoServiceRestart -Force
-			Enable-PSSessionConfiguration -Name "PowerShell.$($PSVersionTable.PSVersion)" -NoServiceRestart -Force
-		}
-		else
-		{
-			Enable-PSSessionConfiguration -Name Microsoft.PowerShell -NoServiceRestart -Force
-			Enable-PSSessionConfiguration -Name Microsoft.PowerShell32 -NoServiceRestart -Force
-			Enable-PSSessionConfiguration -Name Microsoft.Powershell.Workflow -NoServiceRestart -Force
-		}
-	}
-	elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+	if (!$KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 	{
 		# Disable unused default session configurations
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
@@ -392,10 +376,15 @@ function Enable-WinRMServer
 	{
 		# TODO: Restore-NetProfile is needed here?
 		# TODO: Protocol parameter is ignored
+		if ($Protocol -ne "Any")
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Protocol switch was ignored" -Verbose
+		}
 
 		# NOTE: It's easier to continue with Disable-WinRMServer rather than copying
 		# sections of code there, also easier to maintain because of less code duplication
-		Disable-WinRMServer -Confirm:$false -KeepDefault:$KeepDefault
+		Disable-WinRMServer -KeepDefault:$KeepDefault
+
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM loopback server completed successfully!"
 		return
 	}

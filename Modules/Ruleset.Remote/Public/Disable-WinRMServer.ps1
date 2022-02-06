@@ -103,7 +103,15 @@ function Disable-WinRMServer
 	4. Restore the value of the LocalAccountTokenFilterPolicy to 0, which restricts remote access to
 	members of the Administrators group on the computer.
 	#>
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM server..."
+	if ($All)
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM remoting and loopback server..."
+	}
+	else
+	{
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Disabling WinRM remoting server..."
+	}
+
 	Initialize-WinRM
 
 	if (!(Get-PSSessionConfiguration -Name $script:FirewallSession -EA Ignore))
@@ -142,23 +150,38 @@ function Disable-WinRMServer
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling non default session configurations"
 
-			# Disable all custom session configurations
-			Get-PSSessionConfiguration | Where-Object {
-				($_.Name -notlike "Microsoft.PowerShell*") -and
-				# TODO: With or without wildcard PowerShell.$($PSVersionTable.PSVersion) gets disabled
-				($_.Name -notlike "PowerShell.$($PSVersionTable.PSVersion.Major)*") -and
-				($_.Name -ne $script:FirewallSession)
-			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+			# Disable all custom session configurations, keep default ones
+			# NOTE: Using Where-Object here to combine a,b and c would not work
+			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
+			{
+				$a = $Session -notlike "Microsoft.PowerShell*"
+				$b = $Session -notlike "PowerShell.$($PSVersionTable.PSVersion.Major)*"
+				$c = $Session -ne $script:FirewallSession
+
+				if ($a -and $b -and $c)
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling custom session configuration '$Session'"
+					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
+				}
+			}
 		}
 		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
 
-			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
-			Get-PSSessionConfiguration | Where-Object {
-				($_.Name -ne "Microsoft.PowerShell") -and
-				($_.Name -ne $script:FirewallSession)
-			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+			# Disable all session configurations except what's needed for firewall management and Ruleset.Compatibility module
+			# NOTE: Using Where-Object here to combine a,b and c would not work
+			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
+			{
+				$a = $Session -ne "Microsoft.PowerShell"
+				$b = $Session -ne $script:FirewallSession
+
+				if ($a -and $b)
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling unneeded session configuration '$Session'"
+					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
+				}
+			}
 		}
 
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure loopback listener"))

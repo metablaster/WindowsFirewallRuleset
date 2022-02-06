@@ -22,7 +22,8 @@
 		"zainchen.json",
 		"oliversturm.fix-json",
 		"richie5um2.vscode-sort-json",
-		"andyyaldoo.vscode-json"
+		"andyyaldoo.vscode-json",
+		"shardulm94.trailing-spaces"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

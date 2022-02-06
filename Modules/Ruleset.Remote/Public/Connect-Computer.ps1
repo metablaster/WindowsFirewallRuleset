@@ -64,7 +64,7 @@ Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER SessionOption
 Specify custom PSSessionOption object to use for remoting.
-The default value is controlled with PSSessionOption preference variable
+The default value is controlled with PSSessionOption variable from caller scope
 
 .PARAMETER ConfigurationName
 Specify session configuration to use for remoting, this session configuration must
@@ -139,18 +139,27 @@ function Connect-Computer
 		$Domain = [System.Environment]::MachineName
 	}
 
-	# The $PSSenderInfo automatic variable includes a user-configurable property, ApplicationArguments,
-	# that by default, contains only the $PSVersionTable from the originating session.
-	if (Get-Variable -Name PSSenderInfo -ErrorAction Ignore)
+	if (($Domain -eq $PolicyStore) -and (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
 		Write-Error -Category ConnectionError -TargetObject $Domain `
-			-Message "Connection already established to $($PSSenderInfo.ApplicationArguments.Domain), run Disconnect-Computer to disconnect"
+			-Message "Connection already established to $Domain, run Disconnect-Computer to disconnect"
 		return
+	}
+
+	if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
+	{
+		Disconnect-Computer $PolicyStore
 	}
 
 	if ($PSSessionConfigurationName -ne $script:FirewallSession)
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $PSSessionConfigurationName"
+	}
+
+	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
+	{
+		Write-Error -Category NotImplemented -TargetObject $Protocol `
+			-Message "HTTPS for localhost not implemented"
 	}
 
 	# WinRM service must be running at this point
@@ -171,20 +180,19 @@ function Connect-Computer
 	$PSSessionParams = @{
 		# PS session name
 		Name = "RemoteSession"
-		Port = $Port
 		Authentication = "Default"
 		ApplicationName = $ApplicationName
 		SessionOption = $SessionOption
 	}
 
-	if ($CertThumbprint)
+	if (![string]::IsNullOrEmpty($CertThumbprint))
 	{
 		$PSSessionParams["CertificateThumbprint"] = $CertThumbprint
 	}
 
 	if ($Protocol -eq "Any")
 	{
-		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
+		$PSSessionParams["UseSSL"] = $Domain -ne [System.Environment]::MachineName
 	}
 	else
 	{
@@ -201,6 +209,7 @@ function Connect-Computer
 		if (!$CimOptions)
 		{
 			# TODO: LocalStore needs a better place for adjustment
+			# TODO: There is global variable for encoding
 			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 	}
@@ -232,7 +241,7 @@ function Connect-Computer
 	}
 
 	# Remote computer or localhost over SSL
-	if (($Domain -ne ([System.Environment]::MachineName)) -or ($PSSessionParams["UseSSL"]))
+	if ($PSSessionParams["UseSSL"])
 	{
 		if (!$Credential)
 		{
@@ -252,11 +261,11 @@ function Connect-Computer
 			}
 		}
 
-		$CimParams["ComputerName"] = $Domain
 		$CimParams["Credential"] = $Credential
+		$CimParams["ComputerName"] = $Domain
 
-		$PSSessionParams["ComputerName"] = $Domain
 		$PSSessionParams["Credential"] = $Credential
+		$PSSessionParams["ComputerName"] = $Domain
 	}
 
 	try
@@ -276,6 +285,7 @@ function Connect-Computer
 	{
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
+		return
 	}
 
 	if ($Domain -ne ([System.Environment]::MachineName))
@@ -305,6 +315,7 @@ function Connect-Computer
 
 			Write-Error -Category AuthenticationError -TargetObject $Credential `
 				-Message "Authenticating $($Credential.UserName) to '$Domain' failed with: $($_.Exception.Message)"
+			return
 		}
 	}
 
@@ -343,5 +354,9 @@ function Connect-Computer
 
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating PS session to computer '$Domain' failed with: $($_.Exception.Message)"
+
+		return
 	}
+
+	Set-Variable -Name SessionEstablished -Scope Global -Option ReadOnly -Value $true
 }

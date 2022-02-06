@@ -104,7 +104,7 @@ if (!$Default)
 
 		# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
 		# The default value is 60000.
-		MaxTimeoutms = $PSSessionOption.OperationTimeout.TotalMilliseconds
+		MaxTimeoutms = 60000
 
 		# Specifies the maximum number of elements that can be used in a Pull response.
 		# The default is 32000.
@@ -164,7 +164,7 @@ if (!$Default)
 
 			# Specifies a URL prefix on which to accept HTTP or HTTPS requests.
 			# The default URL prefix is "wsman".
-			URLPrefix = "wsman"
+			URLPrefix = $PSSessionApplicationName
 
 			# MSDN: Allows the client computer to request unencrypted traffic.
 			# The default value is false

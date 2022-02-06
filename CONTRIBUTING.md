@@ -174,6 +174,10 @@ Recommended workspace extensions are as follows:
 
     This vscode extension beautify/uglify/escape/unescape JSON.
 
+19. [Trailing Spaces][extension trailing spaces]
+
+    Highlight trailing spaces and delete them in a flash!
+
 Following 2 extensions are optional and will not be automatically offerred for installation:
 
 - [GitLens][extension gitlens]
@@ -594,6 +598,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
 [extension fix json]: https://marketplace.visualstudio.com/items?itemName=oliversturm.fix-json "Visit Marketplace"
 [extension vscode json]: https://marketplace.visualstudio.com/items?itemName=andyyaldoo.vscode-json "Visit Marketplace"
+[extension trailing spaces]: https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
