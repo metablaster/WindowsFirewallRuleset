@@ -178,7 +178,7 @@ function Initialize-Connection
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
-				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false -Verbose
+				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 				Test-WinRM -Protocol HTTP -ErrorAction Stop
 			}
 

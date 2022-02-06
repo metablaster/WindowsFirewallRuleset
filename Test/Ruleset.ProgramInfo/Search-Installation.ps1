@@ -33,6 +33,9 @@ Unit test for Search-Installation
 .DESCRIPTION
 Test correctness of Search-Installation function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -58,11 +61,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
@@ -79,37 +86,47 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-Start-Test "Search-Installation 'EdgeChromium'"
-Search-Installation "EdgeChromium"
-$global:InstallTable | Format-Table -AutoSize
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	# Uses Update-Table
+	Start-Test "Remote 'EdgeChromium'"
+	Search-Installation "EdgeChromium" -Domain $Domain
+	$global:InstallTable | Format-Table -AutoSize
+}
+else
+{
+	Start-Test "Search-Installation 'EdgeChromium'"
+	Search-Installation "EdgeChromium"
+	$global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Install Root EdgeChromium"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Start-Test "Install Root EdgeChromium"
+	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Search-Installation 'FailureTest'"
-Search-Installation "FailureTest"
-$global:InstallTable | Format-Table -AutoSize
+	Start-Test "Search-Installation 'FailureTest'"
+	Search-Installation "FailureTest"
+	$global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Search-Installation 'VisualStudio'"
-Search-Installation "VisualStudio"
-$global:InstallTable | Format-Table -AutoSize
+	Start-Test "Search-Installation 'VisualStudio'"
+	Search-Installation "VisualStudio"
+	$global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Search-Installation 'Greenshot'"
-Search-Installation "Greenshot"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Start-Test "Search-Installation 'Greenshot'"
+	Search-Installation "Greenshot"
+	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Install Root Greenshot"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Start-Test "Install Root Greenshot"
+	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Start-Test "Search-Installation 'OneDrive'"
-$Result = Search-Installation "OneDrive"
-$Result
-$global:InstallTable | Format-Table -AutoSize
+	Start-Test "Search-Installation 'OneDrive'"
+	$Result = Search-Installation "OneDrive"
+	$Result
+	$global:InstallTable | Format-Table -AutoSize
 
-Start-Test "Install Root OneDrive"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Start-Test "Install Root OneDrive"
+	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
-Test-Output $Result -Command Search-Installation
+	Test-Output $Result -Command Search-Installation
+}
 
 Update-Log
 Exit-Test

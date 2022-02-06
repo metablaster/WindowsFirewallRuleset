@@ -165,6 +165,9 @@ else
 	New-Variable -Name InstallTable -Scope Script -Value $null
 }
 
+# If PolicyStore changed to another computer name script scope cache need to be updated
+New-Variable -Name LastPolicyStore -Scope Script -Option ReadOnly -Value $PolicyStore
+
 # Programs installed system wide
 New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (
 	Get-SystemSoftware -Domain $PolicyStore

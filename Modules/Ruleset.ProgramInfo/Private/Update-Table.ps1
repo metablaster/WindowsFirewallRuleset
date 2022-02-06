@@ -39,6 +39,9 @@ This information is sufficient to make a firewall rule based on executable.
 Search string which is a partial name of the program name as shown in the Name property of
 program search functions.
 
+.PARAMETER Domain
+Computer name which to check for installed programs
+
 .PARAMETER UserProfile
 True if user profile is to be searched in addition to system wide installations
 
@@ -79,6 +82,10 @@ function Update-Table
 		[Parameter(Mandatory = $true, ParameterSetName = "Search")]
 		[string] $Search,
 
+		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
 		[Parameter(ParameterSetName = "Search")]
 		[switch] $UserProfile,
 
@@ -91,8 +98,17 @@ function Update-Table
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
+		if ($script:LastPolicyStore -ne $Domain)
+		{
+			# If domain changed, need to update script cache
+			$script:LastPolicyStore = $Domain
+			$ExecutablePaths = Get-ExecutablePath -Domain $Domain
+			$SystemPrograms = Get-SystemSoftware -Domain $Domain
+			$AllUserPrograms = Get-InstallProperties -Domain $Domain
+		}
+
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup -Domain $PolicyStore
+		$UserGroups = Get-UserGroup -Domain $PolicyStore -CIM:($PolicyStore -notin $LocalStore)
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
@@ -224,13 +240,14 @@ function Update-Table
 				if ($Search -eq "OneDrive")
 				{
 					# NOTE: For one drive registry drilling procedure is different
-					$UserPrograms = Get-OneDrive $UserInfo.User
+					$UserPrograms = Get-OneDrive $UserInfo.User -Domain $Domain
 				}
 				else
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
-					$UserPrograms = Get-UserSoftware $UserInfo.User | Where-Object -Property Name -Like $SearchString
+					$UserPrograms = Get-UserSoftware $UserInfo.User -Domain $Domain |
+					Where-Object -Property Name -Like $SearchString
 				}
 
 				if ($UserPrograms)

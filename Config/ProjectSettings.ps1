@@ -883,7 +883,7 @@ if ($ListPreference)
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"
 			Write-Debug -Message "[Show-Preference] InformationPreference before Get-CallerPreference: $InformationPreference" -Debug
 
-			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState # -Verbose -Debug
+			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference: $InformationPreference" -Debug
 
 			$Variables = Get-ChildItem -Path Variable:\*Preference

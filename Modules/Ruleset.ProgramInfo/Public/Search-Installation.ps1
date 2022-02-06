@@ -38,7 +38,7 @@ fails then this method kicks in
 Predefined program name
 
 .PARAMETER Domain
-Computer name on which to look for program installation
+Computer name on which to search for program installations
 
 .PARAMETER Interactive
 If requested program installation directory is not found, Search-Installation will ask
@@ -96,6 +96,7 @@ function Search-Installation
 
 	Initialize-Table
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
+	$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
@@ -120,7 +121,7 @@ function Search-Installation
 		{
 			# TODO: Once returning a table is implemented, SQL search should get both SQLPath and InstallLocation directories
 			# $SQLServerBinnRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SQLBinRoot
-			$SqlPathRoot = Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
+			$SqlPathRoot = Get-SqlServerInstance $Domain | Select-Object -ExpandProperty SqlPath
 			if ($SqlPathRoot)
 			{
 				Edit-Table $SqlPathRoot
@@ -129,7 +130,7 @@ function Search-Installation
 		}
 		"SqlServer"
 		{
-			$SqlServerRoot = Get-SqlServerInstance | Select-Object -ExpandProperty InstallLocation
+			$SqlServerRoot = Get-SqlServerInstance $Domain | Select-Object -ExpandProperty InstallLocation
 			if ($SqlServerRoot)
 			{
 				Edit-Table $SqlServerRoot
@@ -138,7 +139,7 @@ function Search-Installation
 		}
 		"SqlManagementStudio"
 		{
-			$SqlManagementStudioRoot = Get-SqlManagementStudio |
+			$SqlManagementStudioRoot = Get-SqlManagementStudio $Domain |
 			Select-Object -ExpandProperty InstallLocation
 
 			if ($SqlManagementStudioRoot)
@@ -583,7 +584,6 @@ function Search-Installation
 			if (Test-Path $ExpandedPath)
 			{
 				$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Name
-
 				foreach ($VersionFolder in $VersionFolders)
 				{
 					Edit-Table "$ExpandedPath\$VersionFolder\Engine"
