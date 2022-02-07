@@ -39,8 +39,8 @@ Computer name which is to be managed remotely from this machine.
 If not specified local machine is the default.
 
 .PARAMETER Protocol
-Specifies protocol to HTTP, HTTPS or any.
-By default both HTTP and HTTPS is configured.
+Specifies protocol to HTTP, HTTPS or Any.
+The default value is Any which configures client for both HTTP and HTTPS.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.

@@ -545,7 +545,7 @@ connection, example on how to establish SSL connection as follows:
 # On server computer
 cd C:\Path\to\WindowsFirewallRuleset
 Import-Module .\Modules\Ruleset.Remote
-Enable-WinRMServer -Protocol HTTPS -Confirm:$false -KeepDefault
+Enable-WinRMServer -Protocol HTTPS -KeepDefault -Confirm:$false
 Enable-RemoteRegistry -Confirm:$false
 ```
 
@@ -560,7 +560,7 @@ you don't need to repeat it for subsequent deployments.
 
 ```powershell
 # On management computer
-cd C:\Path\to\WindowsFirewallRuleset
+cd C:\Path\to\WindowsFirewallRuleset\Scripts
 Deploy-Firewall -Domain "ServerComputerName"
 ```
 

@@ -31,10 +31,9 @@ SOFTWARE.
 Reset WinRM and PS remoting configuration
 
 .DESCRIPTION
-Reset-WinRM resets WinRM configuration to either system defaults or to previous settings
-that were exported by Export-WinRM.
-In addition PS remoting is disabled or restored and reset to PowerShell defaults,
-default firewall rules are removed and WinRM service is stopped and disabled.
+Reset-WinRM resets WinRM configuration to system defaults.
+PS remoting is disabled and WinRM service is reset to defaults,
+default firewall rules are disabled and WinRM service is stopped and set to manual.
 
 .EXAMPLE
 PS> Reset-WinRM
@@ -78,10 +77,22 @@ function Reset-WinRM
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting session configurations"
 
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# Exclude non Core default sessions
+			$ExcludeSession = "Microsoft.PowerShell*"
+		}
+		else
+		{
+			# Exclude non Desktop default sessions
+			$ExcludeSession = "PowerShell.$($PSVersionTable.PSVersion.Major)*"
+		}
+
 		# Recreating default sessions involves removing existing ones and then
 		# populating fresh ones with Enable-PSRemoting
-		Get-PSSessionConfiguration -Name * |
-		Unregister-PSSessionConfiguration -NoServiceRestart -Force
+		Get-PSSessionConfiguration -Name * | Where-Object {
+			$_.Name -notlike $ExcludeSession
+		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 
 		# NOTE: Enable-PSRemoting may fail in Windows PowerShell
 		Set-StrictMode -Off
@@ -91,23 +102,23 @@ function Reset-WinRM
 		Disable-PSRemoting -Force -WarningAction Ignore
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting to allow remote access to Administrators"))
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
 
 		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
 		# allows remote access to members of the Administrators group on the computer.
-		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-			-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		# By default this value does not exist
+		Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy -ErrorAction Ignore
 	}
 
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-	if ($WmiPlugin.Value -eq $true)
+	if ($WmiPlugin.Value -eq $false)
 	{
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WMI Provider plugin"
-			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
+			Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true -WA Ignore
 		}
 	}
 
@@ -168,7 +179,7 @@ function Reset-WinRM
 			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Attempt to set client 'Negotiate' authentication"))
 			{
 				# NOTE: If this fails, registry fix must precede all other authentication edits
-				Set-Item -Path WSMan:\localhost\Client\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
+				Set-Item -Path WSMan:\localhost\Client\Auth\Negotiate -Value $ClientAuthenticationOptions["Negotiate"]
 			}
 		}
 		catch
@@ -177,16 +188,16 @@ function Reset-WinRM
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Enabling 'Negotiate' authentication failed, doing trough registry"
 				Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ -Name auth_negotiate -Value (
-					[int32] ($AuthenticationOptions["Negotiate"] -eq $true))
+					[int32] ($ClientAuthenticationOptions["Negotiate"] -eq $true))
 			}
 		}
 
 		# HACK: Not using Set-WSManInstance because it would brick the WinRM service
-		Set-Item -Path WSMan:\localhost\client\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
-		Set-Item -Path WSMan:\localhost\client\auth\Certificate -Value $AuthenticationOptions["Certificate"]
-		Set-Item -Path WSMan:\localhost\client\auth\Basic -Value $AuthenticationOptions["Basic"]
-		Set-Item -Path WSMan:\localhost\client\auth\CredSSP -Value $AuthenticationOptions["CredSSP"]
-		Set-Item -Path WSMan:\localhost\client\auth\Digest -Value $AuthenticationOptions["Digest"]
+		Set-Item -Path WSMan:\localhost\client\auth\Kerberos -Value $ClientAuthenticationOptions["Kerberos"]
+		Set-Item -Path WSMan:\localhost\client\auth\Certificate -Value $ClientAuthenticationOptions["Certificate"]
+		Set-Item -Path WSMan:\localhost\client\auth\Basic -Value $ClientAuthenticationOptions["Basic"]
+		Set-Item -Path WSMan:\localhost\client\auth\CredSSP -Value $ClientAuthenticationOptions["CredSSP"]
+		Set-Item -Path WSMan:\localhost\client\auth\Digest -Value $ClientAuthenticationOptions["Digest"]
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset WinRM client port options"))
@@ -230,12 +241,12 @@ function Reset-WinRM
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting WinRM server authentication options"
 
 		# HACK: Not using Set-WSManInstance because it would brick the WinRM service
-		Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $AuthenticationOptions["Kerberos"]
-		Set-Item -Path WSMan:\localhost\service\auth\Certificate -Value $AuthenticationOptions["Certificate"]
-		Set-Item -Path WSMan:\localhost\service\auth\Basic -Value $AuthenticationOptions["Basic"]
-		Set-Item -Path WSMan:\localhost\service\auth\CredSSP -Value $AuthenticationOptions["CredSSP"]
-		Set-Item -Path WSMan:\localhost\service\auth\CbtHardeningLevel -Value $AuthenticationOptions["CbtHardeningLevel"]
-		Set-Item -Path WSMan:\localhost\service\Auth\Negotiate -Value $AuthenticationOptions["Negotiate"]
+		Set-Item -Path WSMan:\localhost\service\auth\Kerberos -Value $ServerAuthenticationOptions["Kerberos"]
+		Set-Item -Path WSMan:\localhost\service\auth\Certificate -Value $ServerAuthenticationOptions["Certificate"]
+		Set-Item -Path WSMan:\localhost\service\auth\Basic -Value $ServerAuthenticationOptions["Basic"]
+		Set-Item -Path WSMan:\localhost\service\auth\CredSSP -Value $ServerAuthenticationOptions["CredSSP"]
+		Set-Item -Path WSMan:\localhost\service\auth\CbtHardeningLevel -Value $ServerAuthenticationOptions["CbtHardeningLevel"]
+		Set-Item -Path WSMan:\localhost\service\Auth\Negotiate -Value $ServerAuthenticationOptions["Negotiate"]
 	}
 
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset WinRM server port options"))
@@ -283,28 +294,39 @@ function Reset-WinRM
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Removing all listeners"
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			New-Item -Path WSMan:\localhost\Listener -Address "*" -Transport HTTP -Enabled $true -Force | Out-Null
+		}
+		else
+		{
+			New-WSManInstance -SelectorSet @{ Address = "*"; Transport = "HTTP" } `
+				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
+		}
 	}
 
 	#
 	# Rules and service Reset
 	#
 
-	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove all WinRM predefined rules"))
+	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Disable all WinRM predefined rules"))
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Removing all WinRM predefined rules"
 
-		# Remove all WinRM predefined rules
-		Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
-			-Direction Inbound -PolicyStore PersistentStore
+		# Disable all WinRM predefined rules
+		# NOTE: By default rules should be present but disabled, we just handle disabling then if present
+		Get-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) -Direction Inbound `
+			-PolicyStore PersistentStore -ErrorAction Ignore | Disable-NetFirewallRule
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop and disable WinRM service"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop WinRM service and set to manual"))
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
 
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
-		Set-Service -Name WinRM -StartupType Disabled
+		Set-Service -Name WinRM -StartupType Manual
 	}
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM reset completed successfully!"

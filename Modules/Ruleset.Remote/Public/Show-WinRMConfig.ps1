@@ -38,7 +38,7 @@ desired results or values from sub containers.
 Some of the WinRM options are advanced and not easily discoverable or often used, as such these
 can cause isssues hard to debug due to WinRM service misconfiguration.
 
-This scripts does all this, by harvesting all important and relevant information and
+Show-WinRMConfig does all this, by harvesting all important and relevant information and
 excludes\includes containers by specifying few switches, all of which is then sorted so that it
 can be compared with other working configurations to quickly discover problems.
 

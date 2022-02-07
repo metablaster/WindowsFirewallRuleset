@@ -99,7 +99,7 @@ if (!$Default)
 {
 	[hashtable] $ProtocolOptions = @{
 		# Specifies the maximum Simple Object Access Protocol (SOAP) data in kilobytes.
-		# The default is 150 kilobytes.
+		# The default according to docs is 150 kilobytes, according to fresh OS 500
 		MaxEnvelopeSizekb = 150
 
 		# Specifies the maximum time-out, in milliseconds, that can be used for any request other than Pull requests.
@@ -117,10 +117,11 @@ if (!$Default)
 	}
 
 	# NOTE: HTTP traffic by default only allows messages encrypted with the Negotiate or Kerberos SSP
+	# NOTE: Server and client may differently define authentication options, we use same settings for both
 	[hashtable] $AuthenticationOptions = @{
 		# The user name and password are sent in clear text.
 		# Basic authentication cannot be used with domain accounts
-		# The default value is true according to docs, false according to fresh system.
+		# The default value is true.
 		Basic = $false
 		# Authentication by using Kerberos certificates.
 		# By default WinRM uses Kerberos for authentication, which does not support IP addresses.
@@ -246,6 +247,7 @@ if (!$Default)
 		HTTPS = 5986
 	}
 
+	# NOTE: Default values for WinRS according to fresh system seem to be undefined (too large numbers)
 	[hashtable] $WinRSOptions = @{
 		# Enables access to remote shells.
 		# The default is True.
@@ -292,17 +294,16 @@ else
 		MaxBatchItems = 32000
 	}
 
-	[hashtable] $AuthenticationOptions = @{
-		Basic = $true
-		Kerberos = $true
-		Negotiate = $true
-		Certificate = $true
-		CredSSP = $false
-	}
-
 	if ($IncludeClient)
 	{
-		$AuthenticationOptions["Digest"] = $true
+		[hashtable] $ClientAuthenticationOptions = @{
+			Basic = $true
+			Digest = $true
+			Kerberos = $true
+			Negotiate = $true
+			Certificate = $true
+			CredSSP = $false
+		}
 
 		[hashtable] $ClientOptions = @{
 			NetworkDelayms = 5000
@@ -314,7 +315,14 @@ else
 
 	if ($IncludeServer)
 	{
-		$AuthenticationOptions["CbtHardeningLevel"] = "Relaxed"
+		[hashtable] $ServerAuthenticationOptions = @{
+			Basic = $false
+			Kerberos = $true
+			Negotiate = $true
+			Certificate = $false
+			CredSSP = $false
+			CbtHardeningLevel = "Relaxed"
+		}
 
 		[hashtable] $ServerOptions = @{
 			RootSDDL = "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;ER)S:P(AU;FA;GA;;;WD)(AU;SA;GWGX;;;WD)"

@@ -605,7 +605,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	}
 
 	# Administrative user account name which will perform unit testing
-	if ($PolicyStore -ne [System.Environment]::MachineName)
+	if (![string]::IsNullOrEmpty($TargetHost) -and ($TargetHost -ne [System.Environment]::MachineName))
 	{
 		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
 	}
@@ -619,7 +619,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	}
 
 	# Standard user account name which will perform unit testing
-	if ($PolicyStore -ne [System.Environment]::MachineName)
+	if (![string]::IsNullOrEmpty($TargetHost) -and ($TargetHost -ne [System.Environment]::MachineName))
 	{
 		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
 	}

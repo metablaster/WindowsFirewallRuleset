@@ -31,19 +31,17 @@ SOFTWARE.
 Configure WinRM server for CIM and PowerShell remoting
 
 .DESCRIPTION
-Configures local machine to accept remote CIM and PowerShell requests using WS-Management.
+Configures local machine to accept local or remote CIM and PowerShell requests using WS-Management.
 In addition it initializes specialized remoting session configuration as well as most common
-issues are handled and attempted to be resolved or bypassed automatically.
+issues are handled and attempted to be resolved automatically.
 
-If -Protocol is set to HTTPS, it will export public key (DER encoded CER file)
+If -Protocol parameter is set to HTTPS, it will export public key (DER encoded CER file)
 to default repository location (\Exports), which you should then copy to client machine
 to be picked up by Set-WinRMClient and used for communication over SSL.
 
-If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-WinRMServer
-
 .PARAMETER Protocol
-Specifies listener protocol to HTTP, HTTPS or both.
-By default both HTTP and HTTPS are configured.
+Specifies listener protocol to HTTP, HTTPS or Any.
+The default value is Any, which configures both HTTP and HTTPS.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -67,7 +65,7 @@ If specified, overwrites an existing exported certificate (*.cer) file,
 unless it has the Read-only attribute set.
 
 .EXAMPLE
-PS> Enable-WinRMServer
+PS> Enable-WinRMServer -Confirm:$false
 
 Configures server machine to accept remote commands using SSL.
 If there is no server certificate a new one self signed is made and put into trusted root.
@@ -84,10 +82,9 @@ PS> Enable-WinRMServer -Protocol HTTP
 Configures server machine to accept remoting commands trough HTTP.
 
 .EXAMPLE
-PS> Enable-WinRMServer
-PS> Disable-WinRMServer
+PS> Enable-WinRMServer -Loopback -Confirm:$false -KeepDefault
 
-Will make WinRM work only on loopback
+Will make WinRM work only on loopback and default session configurations stay enabled
 
 .INPUTS
 None. You cannot pipe objects to Enable-WinRMServer
@@ -107,10 +104,9 @@ TODO: Configure server remotely either with WSMan or trough SSH, to test and con
 remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
-HACK: For loopback New-PSSession to work in PS Core this function must be called from Windows PowerShell,
+HACK: If loopback New-PSSession does not work in PS Core this function should be called from Windows PowerShell,
 if not working Reset-WinRM should be called first.
-Problem is when LocalAccountTokenFilterPolicy is set to 0, it can be effectively enabled only in Windows PowerShell,
-likely registry setting change isn't picked up, test with system reboot.
+Problem is when LocalAccountTokenFilterPolicy is set to 0 or when using custom session configuration.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -353,7 +349,7 @@ function Enable-WinRMServer
 		}
 	}
 
-	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
+	# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable registry setting to allow remote access to Administrators"))
 	{
 		# TODO: This registry key does not affect computers that are members of an Active Directory domain.

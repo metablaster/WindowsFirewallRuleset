@@ -50,6 +50,12 @@ This is needed to be able to specify -ComputerName parameter in commands that su
 .EXAMPLE
 PS> Disable-WinRMServer
 
+.EXAMPLE
+PS> Disable-WinRMServer -KeepDefault
+
+.EXAMPLE
+PS> Disable-WinRMServer -All
+
 .INPUTS
 None. You cannot pipe objects to Disable-WinRMServer
 
@@ -133,16 +139,6 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all WinRM session configurations"
 			Disable-PSSessionConfiguration -Name * -NoServiceRestart -Force
 		}
-
-		$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled
-		if ($WmiPlugin.Value -eq $true)
-		{
-			if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable WMI Provider plugin"))
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WMI Provider plugin"
-				Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $false -WA Ignore
-			}
-		}
 	}
 	else
 	{
@@ -151,16 +147,18 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling non default session configurations"
 
 			# Disable all custom session configurations, keep default ones
-			# NOTE: Using Where-Object here to combine a,b and c would not work
+			# NOTE: Using Where-Object here to combine a,b and c results in same issue below
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
 			{
 				$a = $Session -notlike "Microsoft.PowerShell*"
+				# HACK: -notlike does not work in Windows PowerShell, it resulted in $true for PowerShell.7.2.1 and PowerShell.7
+				# Not the case for Core because Desktop edition default sessions are not reported in Core
 				$b = $Session -notlike "PowerShell.$($PSVersionTable.PSVersion.Major)*"
 				$c = $Session -ne $script:FirewallSession
 
 				if ($a -and $b -and $c)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling custom session configuration '$Session'"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling non default session configuration '$Session'"
 					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
 				}
 			}
@@ -170,7 +168,6 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
 
 			# Disable all session configurations except what's needed for firewall management and Ruleset.Compatibility module
-			# NOTE: Using Where-Object here to combine a,b and c would not work
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
 			{
 				$a = $Session -ne "Microsoft.PowerShell"
@@ -314,7 +311,7 @@ function Disable-WinRMServer
 		}
 	}
 
-	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
+	# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
 	if ($All -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable registry setting to deny remote access to Administrators"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
@@ -331,12 +328,12 @@ function Disable-WinRMServer
 
 		# Remove all WinRM predefined rules
 		Remove-NetFirewallRule -Group @($WinRMRules, $WinRMCompatibilityRules) `
-			-Direction Inbound -PolicyStore PersistentStore
+			-Direction Inbound -PolicyStore PersistentStore -ErrorAction Ignore
 	}
 
 	if ($All)
 	{
-		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop service"))
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop and disable service"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Stopping WS-Management (WinRM) service"
 			Set-Service -Name WinRM -StartupType Disabled

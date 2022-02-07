@@ -173,6 +173,7 @@ function Test-WinRM
 		[switch] $Quiet
 	)
 
+	# $DebugPreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Replace localhost and dot with NETBIOS computer name
@@ -240,7 +241,6 @@ function Test-WinRM
 	try
 	{
 		$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
-
 		if ($PluginStatus.Value -eq $false)
 		{
 			# Default plugin needs to be enabled, this is equivalent to enabling default session configuration

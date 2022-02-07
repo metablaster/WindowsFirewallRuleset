@@ -143,6 +143,7 @@ function Connect-Computer
 		$CimOptions
 	)
 
+	# $DebugPreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Replace localhost and dot with NETBIOS computer name
@@ -240,7 +241,7 @@ function Connect-Computer
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	# Remote computer or localhost over SSL
+	# Remote computer or localhost over HTTPS
 	if ($PSSessionParams["UseSSL"])
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS connection"

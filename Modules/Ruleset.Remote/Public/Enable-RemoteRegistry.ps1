@@ -32,7 +32,7 @@ Enable remote registry
 
 .DESCRIPTION
 Starts the RemoteRegistry service and adds required firewall rules
-which enables remote users to modify registry settings on this computer.
+which enables remote users to modify registry settings on this computer and conversely.
 
 .EXAMPLE
 PS> Enable-RemoteRegistry
@@ -49,7 +49,7 @@ must enable File and Printer sharing and Network Discovery for both inbound and 
 and must operate on private profile if either one is workstation machine.
 
 In addition to make it work in PS, administrative authentication must be done by opening a share
-to server by client computer.
+to server by client computer by using New-PSDrive
 #>
 function Enable-RemoteRegistry
 {
@@ -66,7 +66,7 @@ function Enable-RemoteRegistry
 		$RuleProfile = "*Private*"
 
 		# For workstations remote registry works on private profile only
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry does not work over public network profile"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry will not work over public network profile"
 	}
 	else
 	{

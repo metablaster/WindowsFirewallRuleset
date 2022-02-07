@@ -109,11 +109,11 @@ function Initialize-Connection
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
 			$PSSessionOption.NoCompression = $false
 
-			# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-			# There is global variable that controls encoding, see if it can be used here
 			if ($RemotingProtocol -ne "HTTP")
 			{
 				$PSSessionOption.NoEncryption = $false
+				# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
+				# There is global variable that controls encoding, see if it can be used here
 				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 			}
 			else
