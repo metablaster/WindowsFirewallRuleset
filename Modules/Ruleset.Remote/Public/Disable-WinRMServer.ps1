@@ -315,7 +315,7 @@ function Disable-WinRMServer
 	}
 
 	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
-	if ($All -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Update registry setting"))
+	if ($All -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable registry setting to deny remote access to Administrators"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
 

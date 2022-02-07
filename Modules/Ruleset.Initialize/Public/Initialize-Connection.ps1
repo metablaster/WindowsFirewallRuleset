@@ -103,7 +103,7 @@ function Initialize-Connection
 		# The default value is 4 for Test-NetConnection which specifies echo requests
 		$PSSessionOption.MaxConnectionRetryCount = 2
 
-		$PolicyStoreStatus = $false
+		$ConnectionStatus = $false
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
@@ -126,9 +126,9 @@ function Initialize-Connection
 			{
 				# Loopback WinRM is required for Ruleset.Compatibility module
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
-				Test-WinRM -Protocol HTTP -Status ([ref] $PolicyStoreStatus) -Quiet
+				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet
 
-				if (!$PolicyStoreStatus)
+				if (!$ConnectionStatus)
 				{
 					# Enable loopback only HTTP
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
@@ -155,10 +155,10 @@ function Initialize-Connection
 			$ConnectParams["Credential"] = $RemotingCredential
 
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $PolicyStoreStatus) -Quiet
+			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $ConnectionStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
-			if (!$PolicyStoreStatus)
+			if (!$ConnectionStatus)
 			{
 				# Configure this machine for remote session over SSL
 				if ($RemotingProtocol -eq "HTTPS")
@@ -190,9 +190,9 @@ function Initialize-Connection
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to local computer"
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Status ([ref] $PolicyStoreStatus) -Quiet
+			Test-WinRM -Protocol $RemotingProtocol -Status ([ref] $ConnectionStatus) -Quiet
 
-			if (!$PolicyStoreStatus)
+			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol $RemotingProtocol -Confirm:$false

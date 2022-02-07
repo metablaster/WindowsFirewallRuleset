@@ -31,22 +31,20 @@ SOFTWARE.
 Connect to remote computer
 
 .DESCRIPTION
-Connect to remote computer onto which to deploy firewall.
-This script will perform necessary initialization to enter PS session to remote computer,
-in addition required authentication is made to use remote registry service and to run commands
-against remote CIM server.
+Connect local machine to local (loopback) or remote computer onto which to deploy firewall.
 
 Following global variables or objects are created:
+RemoteCim (CimSession), CIM session object
 CimServer (variable), to be used by CIM commandlets to specify cim session to use
 RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
 RemoteSession (PSSession), PS session object which represent remote session
-RemoteCim (CimSession), CIM session object
 
 .PARAMETER Domain
 Computer name with which to connect for remoting
 
 .PARAMETER Credential
-Specify credentials which to use to connect to remote computer.
+Specify credentials which to use to test connection to remote computer.
+Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
@@ -59,11 +57,11 @@ Optionally specify port number if the WinRM server specified by
 -Domain parameter listens on non default port
 
 .PARAMETER CertThumbprint
-Optionally specify certificate thumbprint which is to be used for SSL.
+Optionally specify certificate thumbprint which is to be used for HTTPS.
 Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER Authentication
-Specify Authentication kind:
+Optionally specify Authentication kind:
 None, no authentication is performed, request is anonymous.
 Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
 Default, use the authentication method implemented by the WS-Management protocol.
@@ -71,6 +69,7 @@ Digest, a challenge-response scheme that uses a server-specified data string for
 Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
 Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
 CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+The default value is "Default"
 
 .PARAMETER SessionOption
 Specify custom PSSessionOption object to use for remoting.
@@ -87,8 +86,8 @@ Currently only "wsman" is supported.
 The default value is controlled with PSSessionApplicationName preference variable
 
 .PARAMETER CimOptions
-Specify custom CIM session object to fine tune CIM sessions.
-By default new blank CIM options object is made and set to use SSL if protocol is HTTPS
+Optionally specify custom CIM session options to fine tune CIM session.
+By default new CIM options object is made and set to use SSL if protocol is HTTPS
 
 .EXAMPLE
 PS> Connect-Computer COMPUTERNAME
@@ -193,17 +192,34 @@ function Connect-Computer
 		# PS session name
 		Name = "RemoteSession"
 		ErrorAction = "Stop"
+		Port = $Port
 		Authentication = $Authentication
 		ApplicationName = $ApplicationName
 		SessionOption = $SessionOption
+		# MSDN: If you specify only the configuration name, the following schema URI is prepended: http://schemas.microsoft.com/PowerShell
+		ConfigurationName = $ConfigurationName
+	}
+
+	if ($Domain -eq [System.Environment]::MachineName)
+	{
+		if ($PSVersionTable.PSEdition -eq "Desktop")
+		{
+			$DefaultSession = "Microsoft.PowerShell"
+		}
+		else
+		{
+			$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
+		}
+
 		# HACK: RemoteFirewall configuration will not work for New-PSSession on localhost
-		# ConfigurationName = $ConfigurationName
+		$PSSessionParams["ConfigurationName"] = $DefaultSession
 	}
 
 	$CimParams = @{
 		# CIM session name
 		Name = "RemoteCim"
 		ErrorAction = "Stop"
+		Port = $Port
 		Authentication = $Authentication
 		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	}
@@ -230,6 +246,7 @@ function Connect-Computer
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS connection"
 		if (!$Port)
 		{
+			$CimParams["Port"] = 5986
 			$PSSessionParams["Port"] = 5986
 		}
 
@@ -237,7 +254,7 @@ function Connect-Computer
 		{
 			# TODO: LocalStore needs a better place for adjustment
 			# TODO: There is global variable for encoding
-			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
+			$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 
 		if (!$Credential)
@@ -269,19 +286,18 @@ function Connect-Computer
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTP connection"
 		if (!$Port)
 		{
+			$CimParams["Port"] = 5985
 			$PSSessionParams["Port"] = 5985
 		}
 
 		if (!$CimOptions)
 		{
-			$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
+			$CimParams["SessionOption"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 	}
 
-	$CimParams["Port"] = $PSSessionParams["Port"]
-	$CimParams["SessionOption"] = $CimOptions
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimOptions | Out-String)"
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] PS sssion options: $($SessionOption | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimParams["SessionOption"] | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] PS session options: $($SessionOption | Out-String)"
 
 	try
 	{
@@ -334,6 +350,11 @@ function Connect-Computer
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
+		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
+			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
+		}
 
 		New-PSSession @PSSessionParams | Out-Null
 

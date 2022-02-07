@@ -33,26 +33,28 @@ Test WinRM service configuration
 .DESCRIPTION
 Test WinRM service (server) configuration on either client or server computer.
 WinRM service is tested for functioning connectivity which includes
-PowerShell remoting, remoting with CIM commandlets and user authentication.
+PowerShell remoting, remoting with CIM commandlets and creation of PS session.
 
 .PARAMETER Domain
-Target host which is to be tested.
+Computer name which is to be tested for functioning WinRM.
 If not specified, local machine is the default
 
 .PARAMETER Credential
 Specify credentials which to use to test connection to remote computer.
+Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
-Specify protocol to use for test, HTTP, HTTPS or both.
-By default both HTTPS and HTTPS are tested.
+Specify protocol to use for test, HTTP, HTTPS or Any.
+The default value is Any, which means HTTPS is tested first and if failed HTTP is tested.
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
--Domain parameter listens on non default port
+-Domain parameter listens on non default port.
+The default value if 5985 for HTTP and 5986 for HTTPS.
 
 .PARAMETER Authentication
-Specify Authentication kind:
+Optionally specify Authentication kind:
 None, no authentication is performed, request is anonymous.
 Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
 Default, use the authentication method implemented by the WS-Management protocol.
@@ -60,9 +62,10 @@ Digest, a challenge-response scheme that uses a server-specified data string for
 Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
 Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
 CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+The default value is "Default"
 
 .PARAMETER CertThumbprint
-Optionally specify certificate thumbprint which is to be used for SSL.
+Optionally specify certificate thumbprint which is to be used for HTTPS.
 Use this parameter when there are multiple certificates with same DNS entries.
 
 .PARAMETER UICulture
@@ -77,11 +80,16 @@ The default value is en-US, current value can be obtained with Get-Culture
 
 .PARAMETER ApplicationName
 Specifies the application name in the connection.
-The system default application name is wsman
+The default value is controlled with PSSessionApplicationName preference variable
 
 .PARAMETER SessionOption
 Specify custom PSSessionOption object to use for remoting.
 The default value is controlled with PSSessionOption variable from caller scope
+
+.PARAMETER ConfigurationName
+Specify session configuration to use for remoting, this session configuration must
+be registered and enabled on remote computer.
+The default value is controlled with PSSessionConfigurationName preference variable
 
 .PARAMETER Status
 Boolean reference variable used for return value which indicates whether the test was success
@@ -107,9 +115,7 @@ None. Test-WinRM does not generate any output
 
 .NOTES
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
-TODO: Test PS session
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md
@@ -119,9 +125,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspac
 #>
 function Test-WinRM
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md")]
-	[OutputType([void], [System.Xml.XmlElement])]
+	[OutputType([void], [System.Xml.XmlElement], [System.String], [System.URI], [System.Management.Automation.Runspaces.PSSession])]
 	param (
 		[Parameter(Position = 0)]
 		[Alias("ComputerName", "CN")]
@@ -130,7 +136,7 @@ function Test-WinRM
 		[Parameter()]
 		[PSCredential] $Credential,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Protocol")]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
 		[string] $Protocol = "Any",
 
@@ -158,6 +164,9 @@ function Test-WinRM
 		$SessionOption = $PSSessionOption,
 
 		[Parameter()]
+		[string] $ConfigurationName = $PSSessionConfigurationName,
+
+		[Parameter()]
 		[ref] $Status,
 
 		[Parameter()]
@@ -172,6 +181,7 @@ function Test-WinRM
 		$Domain = [System.Environment]::MachineName
 	}
 
+	# HTTP\S connectivity status
 	$StatusHTTP = $false
 	$StatusHTTPS = $false
 
@@ -181,18 +191,23 @@ function Test-WinRM
 		$InformationPreference = "SilentlyContinue"
 	}
 
+	# Reset caller supplied status to false
 	if ($PSBoundParameters.ContainsKey("Status"))
 	{
 		$Status.Value = $false
 	}
 
+	# Parameters for Test-WSMan
 	$WSManParams = @{
+		Port = $Port
 		Authentication = $Authentication
 		ApplicationName = $ApplicationName
 	}
 
+	# Parameters for CIM session object
 	$CimParams = @{
 		Name = "TestCim"
+		Port = $Port
 		Authentication = $Authentication
 		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
@@ -200,7 +215,51 @@ function Test-WinRM
 		# TODO: -SkipTestConnection could be used for Test-Credential function
 	}
 
-	if ($Domain -ne [System.Environment]::MachineName)
+	# Parameters for PS Session
+	$PSSessionParams = @{
+		# PS session name
+		Name = "TestSession"
+		Port = $Port
+		Authentication = $Authentication
+		ApplicationName = $ApplicationName
+		SessionOption = $SessionOption
+		# MSDN: If you specify only the configuration name, the following schema URI is prepended: http://schemas.microsoft.com/PowerShell
+		ConfigurationName = $ConfigurationName
+	}
+
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking localhost plugin status"
+	if ($PSVersionTable.PSEdition -eq "Desktop")
+	{
+		$DefaultSession = "Microsoft.PowerShell"
+	}
+	else
+	{
+		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
+	}
+
+	try
+	{
+		$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
+
+		if ($PluginStatus.Value -eq $false)
+		{
+			# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
+			# If disabled New-PSSession to localhost will not work
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
+		}
+	}
+	catch
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $DefaultSession `
+			-Message "Default session plugin '$DefaultSession' is missing"
+	}
+
+	if ($Domain -eq [System.Environment]::MachineName)
+	{
+		# HACK: RemoteFirewall configuration will not work for New-PSSession on localhost
+		$PSSessionParams["ConfigurationName"] = $DefaultSession
+	}
+	else
 	{
 		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
 		# authentication otherwise the error is:
@@ -224,45 +283,48 @@ function Test-WinRM
 		}
 
 		$WSManParams["ComputerName"] = $Domain
-		$WSManParams["Credential"] = $Credential
-
 		$CimParams["ComputerName"] = $Domain
+		$PSSessionParams["ComputerName"] = $Domain
+
+		$WSManParams["Credential"] = $Credential
 		$CimParams["Credential"] = $Credential
+		$PSSessionParams["Credential"] = $Credential
 	}
 
+	# Test HTTPS connectivity
 	if ($Protocol -ne "HTTP")
 	{
-		$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimOptions $($CimOptions | Out-String)"
+		$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimParams["SessionOption"] | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] PS session options: $($SessionOption | Out-String)"
 
 		$WSManParams["UseSsl"] = $true
-		$CimParams["SessionOption"] = $CimOptions
+		$PSSessionParams["UseSSL"] = $true
 
-		if ($CertThumbprint)
+		if (![string]::IsNullOrEmpty($CertThumbprint))
 		{
 			$WSManParams["CertificateThumbprint"] = $CertThumbprint
 			$CimParams["CertificateThumbprint"] = $CertThumbprint
+			$PSSessionParams["CertificateThumbprint"] = $CertThumbprint
 		}
 
 		if (!$Port)
 		{
 			$WSManParams["Port"] = 5986
-			$CimParams["Port"] = $WSManParams["Port"]
+			$CimParams["Port"] = 5986
+			$PSSessionParams["Port"] = 5986
 		}
 
+		# Test WSMan connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTPS on '$Domain'"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] WSManParams $($WSManParams | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] WSManParams: $($WSManParams | Out-String)"
 
 		$WSManResult = Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 		if (!$Quiet) { $WSManResult }
 
-		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
-		{
-			Remove-CimSession -Name $CimParams["Name"]
-		}
-
+		# Test CIM connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTPS on '$Domain'"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimParams $($CimParams | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimParams: $($CimParams | Out-String)"
 
 		$CimResult = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to '$Domain'"
@@ -272,7 +334,7 @@ function Test-WinRM
 		{
 			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] CimServer $($CimServer | Out-String)"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] CimServer: $($CimServer | Out-String)"
 
 			$CimResult = Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 			Select-Object CSName, Caption | Format-Table
@@ -281,7 +343,21 @@ function Test-WinRM
 			Remove-CimSession -Name $CimParams["Name"]
 		}
 
-		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult)
+		# Test PS Session connectivity
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing PS session over HTTPS on '$Domain'"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
+		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
+			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
+		}
+
+		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
+		$PSSessionResult = New-PSSession @PSSessionParams
+		if (!$Quiet) { $PSSessionResult }
+		Remove-PSSession -Name TestSession
+
+		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 		if ($Protocol -ne "Any")
 		{
 			if ($PSBoundParameters.ContainsKey("Status"))
@@ -292,39 +368,40 @@ function Test-WinRM
 		}
 	}
 
+	# Test HTTP connectivity
 	if ($Protocol -ne "HTTPS")
 	{
-		$CimOptions = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimOptions $($CimOptions | Out-String)"
+		$CimParams["SessionOption"] = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimParams["SessionOption"] | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] PS session options: $($SessionOption | Out-String)"
 
 		$WSManParams["UseSsl"] = $false
-		$CimParams["SessionOption"] = $CimOptions
+		$PSSessionParams["UseSSL"] = $false
 
-		if ($CertThumbprint)
+		if (![string]::IsNullOrEmpty($CertThumbprint))
 		{
 			$WSManParams.Remove("CertificateThumbprint")
 			$CimParams.Remove("CertificateThumbprint")
+			$PSSessionParams.Remove("CertificateThumbprint")
 		}
 
 		if (!$Port)
 		{
 			$WSManParams["Port"] = 5985
-			$CimParams["Port"] = $WSManParams["Port"]
+			$CimParams["Port"] = 5985
+			$PSSessionParams["Port"] = 5985
 		}
 
+		# Test WSMan connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing WinRM service over HTTP on '$Domain'"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] WSManParams $($WSManParams | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] WSManParams: $($WSManParams | Out-String)"
 
 		$WSManResult2 = Test-WSMan @WSManParams | Select-Object ProductVendor, ProductVersion | Format-List
 		if (!$Quiet) { $WSManResult2 }
 
-		if (Get-CimSession -Name $CimParams["Name"] -ErrorAction Ignore)
-		{
-			Remove-CimSession -Name $CimParams["Name"]
-		}
-
+		# Test CIM connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing CIM server over HTTP on '$Domain'"
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimParams $($CimParams | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimParams: $($CimParams | Out-String)"
 
 		$CimResult2 = $null
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new CIM session to '$Domain'"
@@ -334,7 +411,7 @@ function Test-WinRM
 		{
 			# MSDN: Get-CimInstance, if the InputObject parameter is not specified then:
 			# Works against the CIM server specified by either the ComputerName or the CimSession parameter
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] CimServer $($CimServer | Out-String)"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] CimServer: $($CimServer | Out-String)"
 
 			$CimResult2 = Get-CimInstance -CimSession $CimServer -Class Win32_OperatingSystem |
 			Select-Object CSName, Caption | Format-Table
@@ -343,7 +420,21 @@ function Test-WinRM
 			Remove-CimSession -Name $CimParams["Name"]
 		}
 
-		$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2)
+		# Test PS Session connectivity
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing PS session over HTTP on '$Domain'"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
+		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
+			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
+		}
+
+		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
+		$PSSessionResult = New-PSSession @PSSessionParams
+		if (!$Quiet) { $PSSessionResult }
+		Remove-PSSession -Name TestSession
+
+		$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2) -and ($null -ne $PSSessionResult)
 		if ($Protocol -ne "Any")
 		{
 			if ($PSBoundParameters.ContainsKey("Status"))
@@ -360,34 +451,5 @@ function Test-WinRM
 		{
 			$Status.Value = $StatusHTTP -or $StatusHTTPS
 		}
-	}
-
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking localhost plugin status"
-
-	if ($PSVersionTable.PSEdition -eq "Desktop")
-	{
-		$DefaultSession = "Microsoft.PowerShell"
-	}
-	else
-	{
-		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
-	}
-
-	try
-	{
-		$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
-		if ($PluginStatus.Value -eq $false)
-		{
-			# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
-			# If disabled New-PSSession to localhost will not work
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
-			$Status.Value = $false
-		}
-	}
-	catch
-	{
-		Write-Error -Category ResourceUnavailable -TargetObject $DefaultSession `
-			-Message "Default session plugin '$DefaultSession' is missing"
-		$Status.Value = $false
 	}
 }

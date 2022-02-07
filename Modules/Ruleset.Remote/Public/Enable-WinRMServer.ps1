@@ -217,7 +217,7 @@ function Enable-WinRMServer
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)
 		# for both Enable-WinRMServer and Set-WinRMClient
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment does not work over publick network profile"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment will not work over publick network profile"
 	}
 
 	Unblock-NetProfile
@@ -320,7 +320,7 @@ function Enable-WinRMServer
 		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
 		Set-StrictMode -Off
 		# [Microsoft.WSMan.Management.WSManConfigContainerElement]
-		Register-PSSessionConfiguration @SessionConfigParams -Force | Out-Null
+		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
 		Set-StrictMode -Version Latest
 	}
 
@@ -354,7 +354,7 @@ function Enable-WinRMServer
 	}
 
 	# TODO: LocalAccountTokenFilterPolicy must be enabled for New-PSSession on loopback to work?
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Verify registry setting"))
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable registry setting to allow remote access to Administrators"))
 	{
 		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
 		# In this case, Enable-PSRemoting does not create the key,
