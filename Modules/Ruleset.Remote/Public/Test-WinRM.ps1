@@ -91,6 +91,10 @@ Specify session configuration to use for remoting, this session configuration mu
 be registered and enabled on remote computer.
 The default value is controlled with PSSessionConfigurationName preference variable
 
+.PARAMETER CimOptions
+Optionally specify custom CIM session options to fine tune CIM session test.
+By default new CIM options object is made and set to use SSL if protocol is HTTPS
+
 .PARAMETER Status
 Boolean reference variable used for return value which indicates whether the test was success
 
@@ -167,6 +171,10 @@ function Test-WinRM
 		[string] $ConfigurationName = $PSSessionConfigurationName,
 
 		[Parameter()]
+		[Microsoft.Management.Infrastructure.Options.CimSessionOptions]
+		$CimOptions,
+
+		[Parameter()]
 		[ref] $Status,
 
 		[Parameter()]
@@ -209,6 +217,7 @@ function Test-WinRM
 	$CimParams = @{
 		Name = "TestCim"
 		Port = $Port
+		SessionOption = $CimOptions
 		Authentication = $Authentication
 		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
@@ -294,7 +303,11 @@ function Test-WinRM
 	# Test HTTPS connectivity
 	if ($Protocol -ne "HTTP")
 	{
-		$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
+		if (!$CimOptions)
+		{
+			$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $UICulture -Culture $Culture
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimParams["SessionOption"] | Out-String)"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PS session options: $($SessionOption | Out-String)"
 
@@ -371,7 +384,11 @@ function Test-WinRM
 	# Test HTTP connectivity
 	if ($Protocol -ne "HTTPS")
 	{
-		$CimParams["SessionOption"] = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
+		if (!$CimOptions)
+		{
+			$CimParams["SessionOption"] = New-CimSessionOption -Protocol Wsman -UICulture $UICulture -Culture $Culture
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimParams["SessionOption"] | Out-String)"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PS session options: $($SessionOption | Out-String)"
 

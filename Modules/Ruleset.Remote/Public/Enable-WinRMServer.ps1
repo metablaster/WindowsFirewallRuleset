@@ -257,7 +257,7 @@ function Enable-WinRMServer
 			# Limits the number of sessions that use the session configuration.
 			# The MaxSessions parameter corresponds to the MaxShells property of a session configuration.
 			# The default value is 25.
-			MaxSessions = 1
+			MaxSessions = 25
 
 			# Determines how command output is managed in disconnected sessions when the output buffer becomes full
 			# "Block", When the output buffer is full, execution is suspended until the buffer is clear

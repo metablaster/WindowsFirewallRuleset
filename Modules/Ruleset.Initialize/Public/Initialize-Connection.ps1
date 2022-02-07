@@ -186,21 +186,19 @@ function Initialize-Connection
 
 			# For loopback using only HTTP
 			# TODO: For completeness, implement use of HTTPS, credentials will be needed
-			Set-Variable -Name RemotingProtocol -Scope Global -Force -Value "HTTP"
-
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to local computer"
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Status ([ref] $ConnectionStatus) -Quiet
+			Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet
 
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol $RemotingProtocol -Confirm:$false
-				Enable-WinRMServer -Protocol $RemotingProtocol -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol $RemotingProtocol -ErrorAction Stop
+				Set-WinRMClient -Protocol HTTP -Confirm:$false
+				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
+				Test-WinRM -Protocol HTTP -ErrorAction Stop
 			}
 
-			$ConnectParams["Protocol"] = $RemotingProtocol
+			$ConnectParams["Protocol"] = "HTTP"
 			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 		else

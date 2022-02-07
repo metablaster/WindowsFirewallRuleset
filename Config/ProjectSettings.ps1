@@ -431,7 +431,7 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 
 		# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
 		# NOTE: For loopback sessions HTTP is used regardless of this setting
-		New-Variable -Name RemotingProtocol -Scope Global -Option ReadOnly -Value "HTTPS"
+		New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
 
 		# Credential object to be used for authentication to remote computer
 		New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"

@@ -82,8 +82,8 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote default"
 	Get-AppCapability -Domain $Domain -PackageTypeFilter Main -Name "*AccountsControl*"
 
-	Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
-	Get-SystemApps -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
+	# Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
+	# Get-SystemApps -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
 }
 else
 {

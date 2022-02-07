@@ -221,6 +221,7 @@ function Connect-Computer
 		Name = "RemoteCim"
 		ErrorAction = "Stop"
 		Port = $Port
+		SessionOption = $CimOptions
 		Authentication = $Authentication
 		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	}
