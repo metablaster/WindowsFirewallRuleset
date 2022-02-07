@@ -144,9 +144,10 @@ if ((Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $LocalSystem `
 			-InterfaceType $DefaultInterface `
-			-Description "Required for updates to work. Click-to-Run is an alternative to the traditional Windows Installer-based (MSI) method
-of installing and updating Office, that utilizes streaming and virtualization technology
-to reduce the time required to install Office and help run multiple versions of Office on the same computer." | Format-RuleOutput
+			-Description "Required for updates to work. Click-to-Run is an alternative to the
+traditional Windows Installer-based (MSI) method of installing and updating Office, that utilizes
+streaming and virtualization technology to reduce the time required to install Office and help run
+multiple versions of Office on the same computer." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeShared\ClickToRun\OfficeC2RClient.exe"
@@ -160,7 +161,8 @@ to reduce the time required to install Office and help run multiple versions of 
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $LocalSystem `
 			-InterfaceType $DefaultInterface `
-			-Description "Allows users to check for and install updates for Office on demand." | Format-RuleOutput
+			-Description "Allows users to check for and install updates for Office on demand." |
+		Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\MSOSYNC.EXE"
@@ -175,7 +177,8 @@ to reduce the time required to install Office and help run multiple versions of 
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "The Office Document Cache is a concept used in Microsoft Office Upload Center
-to give you a way to see the state of files you are uploading to a SharePoint server. " | Format-RuleOutput
+to give you a way to see the state of files you are uploading to a SharePoint server. " |
+		Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\EXCEL.EXE"
@@ -326,12 +329,12 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-Description "" | Format-RuleOutput
 	}
 
-	# NOTE: If you load office rules soon after it has been installed sdxhelper may be missing
+	# NOTE: If you load office rules soon after it has been installed SDXHelper may be missing
 	# reload again later when it appears
 	$Program = "$OfficeRoot\SDXHelper.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "sdxhelper" `
+		New-NetFirewallRule -DisplayName "SDXHelper" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -339,7 +342,8 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "this executable is used when later Office versions are installed in parallel with an earlier version so that they can peacefully coexist." | Format-RuleOutput
+			-Description "this executable is used when later Office versions are installed in
+parallel with an earlier version so that they can peacefully coexist." | Format-RuleOutput
 	}
 
 	$Program = "$OfficeRoot\lync.exe"
@@ -368,7 +372,8 @@ to give you a way to see the state of files you are uploading to a SharePoint se
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "The telemetry agent collects several types of telemetry data for Office.
-https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" | Format-RuleOutput
+https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-agent-collects-in-office" |
+		Format-RuleOutput
 	}
 
 	# TODO: Visio and Project are not part of office by default

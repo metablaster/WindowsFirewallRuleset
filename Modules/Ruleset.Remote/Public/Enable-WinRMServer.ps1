@@ -319,7 +319,8 @@ function Enable-WinRMServer
 		# -SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GR;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
 		# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
 		Set-StrictMode -Off
-		Register-PSSessionConfiguration @SessionConfigParams -NoServiceRestart -Force | Out-Null
+		# [Microsoft.WSMan.Management.WSManConfigContainerElement]
+		Register-PSSessionConfiguration @SessionConfigParams -Force | Out-Null
 		Set-StrictMode -Version Latest
 	}
 

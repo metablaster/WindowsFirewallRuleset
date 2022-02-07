@@ -62,6 +62,16 @@ Optionally specify port number if the WinRM server specified by
 Optionally specify certificate thumbprint which is to be used for SSL.
 Use this parameter when there are multiple certificates with same DNS entries.
 
+.PARAMETER Authentication
+Specify Authentication kind:
+None, no authentication is performed, request is anonymous.
+Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
+Default, use the authentication method implemented by the WS-Management protocol.
+Digest, a challenge-response scheme that uses a server-specified data string for the challenge.
+Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
+Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
+CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+
 .PARAMETER SessionOption
 Specify custom PSSessionOption object to use for remoting.
 The default value is controlled with PSSessionOption variable from caller scope
@@ -94,7 +104,7 @@ None.
 #>
 function Connect-Computer
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Connect-Computer.md")]
 	[OutputType([void])]
 	param (
@@ -105,7 +115,7 @@ function Connect-Computer
 		[Parameter()]
 		[PSCredential] $Credential,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Protocol")]
 		[ValidateSet("HTTP", "HTTPS", "Any")]
 		[string] $Protocol = "Any",
 
@@ -115,6 +125,9 @@ function Connect-Computer
 
 		[Parameter(ParameterSetName = "ThumbPrint")]
 		[string] $CertThumbprint,
+
+		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
+		[string] $Authentication = "Default",
 
 		[Parameter()]
 		[System.Management.Automation.Remoting.PSSessionOption]
@@ -141,8 +154,7 @@ function Connect-Computer
 
 	if (($Domain -eq $PolicyStore) -and (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
-		Write-Error -Category ConnectionError -TargetObject $Domain `
-			-Message "Connection already established to $Domain, run Disconnect-Computer to disconnect"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Connection already established to '$Domain', run Disconnect-Computer to disconnect"
 		return
 	}
 
@@ -151,9 +163,9 @@ function Connect-Computer
 		Disconnect-Computer $PolicyStore
 	}
 
-	if ($PSSessionConfigurationName -ne $script:FirewallSession)
+	if ($ConfigurationName -ne $script:FirewallSession)
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $PSSessionConfigurationName"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
 
 	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
@@ -165,7 +177,7 @@ function Connect-Computer
 	# WinRM service must be running at this point
 	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] WS-Management service supposed to be already running, starting now..."
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] WinRM service supposed to be already running, starting now..."
 
 		# NOTE: Unable to start if it's disabled
 		if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)
@@ -180,27 +192,42 @@ function Connect-Computer
 	$PSSessionParams = @{
 		# PS session name
 		Name = "RemoteSession"
-		Authentication = "Default"
+		ErrorAction = "Stop"
+		Authentication = $Authentication
 		ApplicationName = $ApplicationName
 		SessionOption = $SessionOption
+		# HACK: RemoteFirewall configuration will not work for New-PSSession on localhost
+		# ConfigurationName = $ConfigurationName
+	}
+
+	$CimParams = @{
+		# CIM session name
+		Name = "RemoteCim"
+		ErrorAction = "Stop"
+		Authentication = $Authentication
+		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
 	}
 
 	if (![string]::IsNullOrEmpty($CertThumbprint))
 	{
+		$Protocol = "HTTPS"
+		$CimParams["CertificateThumbprint"] = $CertThumbprint
 		$PSSessionParams["CertificateThumbprint"] = $CertThumbprint
 	}
 
 	if ($Protocol -eq "Any")
 	{
-		$PSSessionParams["UseSSL"] = $Domain -ne [System.Environment]::MachineName
+		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
 	}
 	else
 	{
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
+	# Remote computer or localhost over SSL
 	if ($PSSessionParams["UseSSL"])
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS connection"
 		if (!$Port)
 		{
 			$PSSessionParams["Port"] = 5986
@@ -212,9 +239,34 @@ function Connect-Computer
 			# TODO: There is global variable for encoding
 			$CimOptions = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
+
+		if (!$Credential)
+		{
+			# TODO: -Credential param, specify SERVER\UserName
+			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
+
+			if (!$Credential)
+			{
+				# Will happen if credential request was dismissed using ESC key.
+				Write-Error -Category InvalidOperation -TargetObject $Domain -Message "Credentials are required for remote session on '$Domain'"
+			}
+			elseif ($Credential.Password.Length -eq 0)
+			{
+				# Will happen when no password is specified
+				Write-Error -Category InvalidData -TargetObject $Domain -Message "User '$($Credential.UserName)' must have a password"
+				$Credential = $null
+			}
+		}
+
+		$CimParams["Credential"] = $Credential
+		$CimParams["ComputerName"] = $Domain
+
+		$PSSessionParams["Credential"] = $Credential
+		$PSSessionParams["ComputerName"] = $Domain
 	}
 	else
 	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTP connection"
 		if (!$Port)
 		{
 			$PSSessionParams["Port"] = 5985
@@ -226,60 +278,21 @@ function Connect-Computer
 		}
 	}
 
-	$CimParams = @{
-		# CIM session name
-		Name = "RemoteCim"
-		Authentication = "Default"
-		Port = $PSSessionParams["Port"]
-		SessionOption = $CimOptions
-		OperationTimeoutSec = $SessionOption.OperationTimeout.TotalSeconds
-	}
-
-	if ($CertThumbprint)
-	{
-		$CimParams["CertificateThumbprint"] = $CertThumbprint
-	}
-
-	# Remote computer or localhost over SSL
-	if ($PSSessionParams["UseSSL"])
-	{
-		if (!$Credential)
-		{
-			# TODO: -Credential param, specify SERVER\UserName
-			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
-
-			if (!$Credential)
-			{
-				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
-			}
-			elseif ($Credential.Password.Length -eq 0)
-			{
-				# Will happen when no password is specified
-				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
-				$Credential = $null
-			}
-		}
-
-		$CimParams["Credential"] = $Credential
-		$CimParams["ComputerName"] = $Domain
-
-		$PSSessionParams["Credential"] = $Credential
-		$PSSessionParams["ComputerName"] = $Domain
-	}
+	$CimParams["Port"] = $PSSessionParams["Port"]
+	$CimParams["SessionOption"] = $CimOptions
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM options: $($CimOptions | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] PS sssion options: $($SessionOption | Out-String)"
 
 	try
 	{
-		# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
-		if (!(Get-CimSession -Name RemoteCim -ErrorAction Ignore))
-		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new CIM session to $Domain"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new CIM session to $Domain"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] CimParams: $($CimParams | Out-String)"
 
-			# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
-			# verification is accomplished using a standard WS-Identity operation.
-			# NOTE: Specifying computer name may fail if WinRM listens on loopback only
-			Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (New-CimSession @CimParams)
-		}
+		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
+		# verification is accomplished using a standard WS-Identity operation.
+		# MSDN: A CIM session is a client-side object representing a connection to a local computer or a remote computer.
+		# NOTE: Specifying computer name may fail if WinRM listens on loopback only
+		Set-Variable -Name CimServer -Scope Global -Option ReadOnly -Force -Value (New-CimSession @CimParams)
 	}
 	catch
 	{
@@ -292,21 +305,19 @@ function Connect-Computer
 	{
 		try
 		{
-			if (!(Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore))
-			{
-				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Authenticating '$($Credential.UserName)' to computer '$Domain'"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Authenticating '$($Credential.UserName)' to computer '$Domain'"
 
-				# Authentication is required to access remote registry
-				# NOTE: Registry provider does not support credentials
-				# TODO: More limited drive would be better
-				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
-				Select-Object -ExpandProperty SystemDrive
-				$SystemDrive = $SystemDrive.TrimEnd(":")
+			# Authentication is required to access remote registry
+			# NOTE: Registry provider does not support credentials
+			# TODO: More limited drive would be better
+			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+			Select-Object -ExpandProperty SystemDrive
+			$SystemDrive = $SystemDrive.TrimEnd(":")
 
-				New-PSDrive -Credential $Credential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
-					-Root "\\$Domain\$SystemDrive$" -Description "Remote registry authentication" | Out-Null
-			}
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Remote system drive is $SystemDrive"
+			New-PSDrive -Credential $Credential -PSProvider FileSystem -Scope Global -Name RemoteRegistry `
+				-Root "\\$Domain\$SystemDrive$" -Description "Remote registry authentication" | Out-Null
 		}
 		catch
 		{
@@ -321,11 +332,10 @@ function Connect-Computer
 
 	try
 	{
-		if (!(Get-PSSession -Name RemoteSession -ErrorAction Ignore))
-		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
-			New-PSSession @PSSessionParams | Out-Null
-		}
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
+
+		New-PSSession @PSSessionParams | Out-Null
 
 		# TODO: For VM without external switch use -VMName
 		# TODO: Temporarily not using because not in need to enter session
@@ -334,27 +344,16 @@ function Connect-Computer
 	}
 	catch
 	{
-		if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing CIM session 'RemoteCim'"
-			Remove-CimSession -Name RemoteCim
-		}
-
-		if (Get-Variable -Name CimServer -Scope Global -ErrorAction Ignore)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'CimServer'"
-			Remove-Variable -Name CimServer -Scope Global -Force
-		}
+		Remove-CimSession -Name RemoteCim
+		Remove-Variable -Name CimServer -Scope Global -Force
 
 		if (Get-PSDrive -Name RemoteRegistry -Scope Global -ErrorAction Ignore)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSDrive 'RemoteRegistry'"
 			Remove-PSDrive -Name RemoteRegistry -Scope Global
 		}
 
 		Write-Error -Category ConnectionError -TargetObject $Domain `
 			-Message "Creating PS session to computer '$Domain' failed with: $($_.Exception.Message)"
-
 		return
 	}
 

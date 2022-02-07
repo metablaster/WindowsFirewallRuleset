@@ -125,9 +125,7 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		# NOTE: According to scheduled task the updating user is SYSTEM
-		# TODO: Rule (probably also) needed for user profile, path blocked in process explorer was:
-		# C:\Users\<USERNAME>\AppData\Local\Microsoft\OneDrive\OneDriveStandaloneUpdater.exe
-		# the rest of rule properties was the same, possibly run by schedules task, in which case SYSTEM not needed
+		# TODO: Not sure if rule for SYSTEM account is needed since there is rule for user below
 		New-NetFirewallRule -DisplayName "OneDrive Update" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
@@ -135,6 +133,17 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $LocalSystem `
+			-InterfaceType $DefaultInterface `
+			-Description "Updater for OneDrive" | Format-RuleOutput
+
+		# TODO: Not sure if port 80 is needed
+		New-NetFirewallRule -DisplayName "OneDrive Update" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "Updater for OneDrive" | Format-RuleOutput
 	}

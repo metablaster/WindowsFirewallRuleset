@@ -434,6 +434,9 @@ if ($PSCmdlet.ParameterSetName -eq "Script")
 		New-Variable -Name RemotingProtocol -Scope Global -Option ReadOnly -Value "HTTPS"
 
 		# Credential object to be used for authentication to remote computer
+		New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"
+
+		# Credential object to be used for authentication to remote computer
 		New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
 	}
 

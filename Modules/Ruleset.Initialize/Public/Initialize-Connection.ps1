@@ -76,6 +76,7 @@ function Initialize-Connection
 			Protocol = $RemotingProtocol
 			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
+			Authentication = $RemotingAuthentication
 		}
 
 		# [System.Management.Automation.Remoting.PSSessionOption]

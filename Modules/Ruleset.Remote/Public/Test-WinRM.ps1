@@ -107,7 +107,6 @@ None. Test-WinRM does not generate any output
 
 .NOTES
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Remote registry test
 TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
 TODO: Test PS session
@@ -374,11 +373,21 @@ function Test-WinRM
 		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
 	}
 
-	$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
-	if ($PluginStatus.Value -eq $false)
+	try
 	{
-		# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
-		# If disabled New-PSSession to localhost will not work
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
+		$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
+		if ($PluginStatus.Value -eq $false)
+		{
+			# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
+			# If disabled New-PSSession to localhost will not work
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
+			$Status.Value = $false
+		}
+	}
+	catch
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $DefaultSession `
+			-Message "Default session plugin '$DefaultSession' is missing"
+		$Status.Value = $false
 	}
 }

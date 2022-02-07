@@ -33,6 +33,9 @@ Unit test for Select-EnvironmentVariable
 .DESCRIPTION
 Test correctness of Select-EnvironmentVariable function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -70,145 +77,154 @@ Enter-Test "Select-EnvironmentVariable"
 
 # $private:PSDefaultParameterValues.Add("Select-EnvironmentVariable:IncludeFile", $true)
 
-#
-# Scope test
-#
-New-Section "Scope test"
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote UserProfile -Force"
+	# Only one -Force is needed
+	Select-EnvironmentVariable -From UserProfile -Force -Domain $Domain
+}
+else
+{
+	#
+	# Scope test
+	#
+	New-Section "Scope test"
 
-Start-Test "UserProfile -Force"
-# Only one -Force is needed
-Select-EnvironmentVariable -From UserProfile -Force
+	Start-Test "UserProfile -Force"
+	# Only one -Force is needed
+	Select-EnvironmentVariable -From UserProfile -Force
 
-Start-Test "WhiteList"
-$Result = Select-EnvironmentVariable -From WhiteList
-$Result
+	Start-Test "WhiteList"
+	$Result = Select-EnvironmentVariable -From WhiteList
+	$Result
 
-Start-Test "FullyQualified"
-Select-EnvironmentVariable -From FullyQualified
+	Start-Test "FullyQualified"
+	Select-EnvironmentVariable -From FullyQualified
 
-Start-Test "Rooted"
-Select-EnvironmentVariable -From Rooted
+	Start-Test "Rooted"
+	Select-EnvironmentVariable -From Rooted
 
-Start-Test "FileSystem -Exact"
-Select-EnvironmentVariable -From FileSystem -Exact
+	Start-Test "FileSystem -Exact"
+	Select-EnvironmentVariable -From FileSystem -Exact
 
-Start-Test "Relative"
-Select-EnvironmentVariable -From Relative
+	Start-Test "Relative"
+	Select-EnvironmentVariable -From Relative
 
-Start-Test "BlackList"
-Select-EnvironmentVariable -From BlackList
+	Start-Test "BlackList"
+	Select-EnvironmentVariable -From BlackList
 
-Start-Test "All"
-Select-EnvironmentVariable -From All
+	Start-Test "All"
+	Select-EnvironmentVariable -From All
 
-#
-# By value
-#
-New-Section "By value"
+	#
+	# By value
+	#
+	New-Section "By value"
 
-Start-Test "for C:"
-Select-EnvironmentVariable -Value "C:"
+	Start-Test "for C:"
+	Select-EnvironmentVariable -Value "C:"
 
-Start-Test "for C:\Program Files -Exact"
-Select-EnvironmentVariable -Value "C:\Program Files" -Exact
+	Start-Test "for C:\Program Files -Exact"
+	Select-EnvironmentVariable -Value "C:\Program Files" -Exact
 
-# Try again name select with Exact names
-Start-Test "All -Force -Exact | Out-Null"
-Select-EnvironmentVariable -From All -Force -Exact | Out-Null
+	# Try again name select with Exact names
+	Start-Test "All -Force -Exact | Out-Null"
+	Select-EnvironmentVariable -From All -Force -Exact | Out-Null
 
-# Make sure input works for both cases with and without: %%
-Start-Test "for C: -Exact"
-Select-EnvironmentVariable -Value "C:" -Exact
+	# Make sure input works for both cases with and without: %%
+	Start-Test "for C: -Exact"
+	Select-EnvironmentVariable -Value "C:" -Exact
 
-Start-Test "for C:\Program Files"
-Select-EnvironmentVariable -Value "C:\Program Files"
+	Start-Test "for C:\Program Files"
+	Select-EnvironmentVariable -Value "C:\Program Files"
 
-#
-# By name
-#
-New-Section "By name"
+	#
+	# By name
+	#
+	New-Section "By name"
 
-Start-Test "-Name DOESNOTEXIST" -Expected "FAIL"
-Select-EnvironmentVariable -Name "DOESNOTEXIST"
+	Start-Test "-Name DOESNOTEXIST" -Expected "FAIL"
+	Select-EnvironmentVariable -Name "DOESNOTEXIST"
 
-Start-Test "-Name LOGONSERVER"
-Select-EnvironmentVariable -Name "LOGONSERVER"
+	Start-Test "-Name LOGONSERVER"
+	Select-EnvironmentVariable -Name "LOGONSERVER"
 
-Start-Test "-Name %HOMEPATH% -Exact" -Expected "FAIL"
-Select-EnvironmentVariable -Name "%HOMEPATH%" -Exact
+	Start-Test "-Name %HOMEPATH% -Exact" -Expected "FAIL"
+	Select-EnvironmentVariable -Name "%HOMEPATH%" -Exact
 
-Test-Output $Result -Command Select-EnvironmentVariable
+	Test-Output $Result -Command Select-EnvironmentVariable
 
-#
-# Select and sort example
-#
-New-Section "Select and sort example"
+	#
+	# Select and sort example
+	#
+	New-Section "Select and sort example"
 
-Start-Test "Select Name (WhiteList)"
-$Result | Select-Object -ExpandProperty Name
+	Start-Test "Select Name (WhiteList)"
+	$Result | Select-Object -ExpandProperty Name
 
-Start-Test "Select Value (WhiteList)"
-$Result | Select-Object -ExpandProperty Value
+	Start-Test "Select Value (WhiteList)"
+	$Result | Select-Object -ExpandProperty Value
 
-Start-Test "WhiteList | Sort"
-Select-EnvironmentVariable -From WhiteList | Sort-Object -Descending { $_.Value.Length }
+	Start-Test "WhiteList | Sort"
+	Select-EnvironmentVariable -From WhiteList | Sort-Object -Descending { $_.Value.Length }
 
-#
-# null or empty
-#
-New-Section "null or empty"
+	#
+	# null or empty
+	#
+	New-Section "null or empty"
 
-Start-Test "Select Name null"
-Select-EnvironmentVariable -Name $null
+	Start-Test "Select Name null"
+	Select-EnvironmentVariable -Name $null
 
-Start-Test "Select Name empty"
-Select-EnvironmentVariable -Name ""
+	Start-Test "Select Name empty"
+	Select-EnvironmentVariable -Name ""
 
-Start-Test "Select Value null"
-Select-EnvironmentVariable -Value $null
+	Start-Test "Select Value null"
+	Select-EnvironmentVariable -Value $null
 
-Start-Test "Select Value empty"
-Select-EnvironmentVariable -Value ""
+	Start-Test "Select Value empty"
+	Select-EnvironmentVariable -Value ""
 
-#
-# Wildcard pattern
-#
-New-Section "Wildcard pattern"
+	#
+	# Wildcard pattern
+	#
+	New-Section "Wildcard pattern"
 
-Start-Test "-Name *"
-Select-EnvironmentVariable -Name *
+	Start-Test "-Name *"
+	Select-EnvironmentVariable -Name *
 
-Start-Test "*proces[so]o?*"
-Select-EnvironmentVariable -Name "*proces[so]o?*"
+	Start-Test "*proces[so]o?*"
+	Select-EnvironmentVariable -Name "*proces[so]o?*"
 
-Start-Test "-Value *Program* -Exact"
-Select-EnvironmentVariable -Value "*Program*" -Exact
+	Start-Test "-Value *Program* -Exact"
+	Select-EnvironmentVariable -Value "*Program*" -Exact
 
-Start-Test "-Value C:\uSe[er]?*"
-Select-EnvironmentVariable -Value "C:\uSe[er]?*"
+	Start-Test "-Value C:\uSe[er]?*"
+	Select-EnvironmentVariable -Value "C:\uSe[er]?*"
 
-#
-# Selection
-#
-New-Section "Selection"
+	#
+	# Selection
+	#
+	New-Section "Selection"
 
-Start-Test "-Name *user* -Property Name"
-Select-EnvironmentVariable -Name *user* -Property Name
+	Start-Test "-Name *user* -Property Name"
+	Select-EnvironmentVariable -Name *user* -Property Name
 
-Start-Test "-Name *user* -Property Name -From WhiteList"
-Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList
+	Start-Test "-Name *user* -Property Name -From WhiteList"
+	Select-EnvironmentVariable -Name *user* -Property Name -From WhiteList
 
-Start-Test "-Name *user* -Property Value"
-Select-EnvironmentVariable -Name *user* -Property Value
+	Start-Test "-Name *user* -Property Value"
+	Select-EnvironmentVariable -Name *user* -Property Value
 
-Start-Test "-Name *user* -Property Value -From WhiteList"
-Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList
+	Start-Test "-Name *user* -Property Value -From WhiteList"
+	Select-EnvironmentVariable -Name *user* -Property Value -From WhiteList
 
-Start-Test "-Name AND -Value should FAIL"
-Select-EnvironmentVariable -Name *user* -Property Value -Value *DESKTOP* -From All
+	Start-Test "-Name AND -Value should FAIL"
+	Select-EnvironmentVariable -Name *user* -Property Value -Value *DESKTOP* -From All
 
-Start-Test "-From UserProfile -Property Name"
-Select-EnvironmentVariable -From UserProfile -Property Name
+	Start-Test "-From UserProfile -Property Name"
+	Select-EnvironmentVariable -From UserProfile -Property Name
+}
 
 Update-Log
 Exit-Test
