@@ -51,6 +51,12 @@ None. Disconnect-Computer does not generate any output
 TODO: If there are multiple connections, remove only specific ones
 TODO: This function should be called at the end of each script since individual scripts may be run,
 implementation needed to prevent disconnection when Deploy-Firewall runs.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md
+
+.LINK
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_disconnected_sessions
 #>
 function Disconnect-Computer
 {
@@ -69,6 +75,12 @@ function Disconnect-Computer
 	if (($Domain -eq "localhost") -or ($Domain -eq "."))
 	{
 		$Domain = [System.Environment]::MachineName
+	}
+
+	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Not connecting computer '$Domain' because it's not connected"
+		return
 	}
 
 	# TODO: This message should depend on whether connection is established
@@ -108,11 +120,14 @@ function Disconnect-Computer
 	if (Get-PSSession -Name RemoteSession -ErrorAction Ignore)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing PSSession 'RemoteSession'"
-		Exit-PSSession
-
-		# NOTE: When you use Exit-PSSession or the EXIT keyword, the interactive session ends,
+		# TODO: Temporarily not using because not in need to enter session
+		# Exit-PSSession
+		# MSDN: When you use Exit-PSSession or the EXIT keyword, the interactive session ends,
 		# but the PSSession that you created remains open and available for use.
-		Disconnect-PSSession -Name RemoteSession | Out-Null
+		# Disconnect-PSSession -Name RemoteSession | Out-Null
+
+		# MSDN: If the PSSession is connected to a remote computer, this cmdlet also closes the
+		# connection between the local and remote computers.
 		Remove-PSSession -Name RemoteSession
 	}
 

@@ -55,7 +55,7 @@ Use this parameter when there are multiple certificates with same DNS entries.
 .PARAMETER TrustedHosts
 Optionally append computers or IP addresses to trusted hosts.
 To specify multiple hosts, separate then with comma without spaces.
-This is required for HTTP
+This option is required for non loopback HTTP remoting
 
 .PARAMETER Force
 If specified, does not prompt to set connected network adapters to private profile,
@@ -90,7 +90,7 @@ None. You cannot pipe objects to Set-WinRMClient
 .NOTES
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: Authenticate users using certificates optionally or instead of credential object
+TODO: Optionally authenticate users using certificates in addition to credentials
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
@@ -214,19 +214,29 @@ function Set-WinRMClient
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM client options"
 
-		if (![string]::IsNullOrEmpty($TrustedHosts) -and ($Protocol -ne "HTTPS"))
+		if ($Protocol -eq "HTTPS")
 		{
-			if ([string]::IsNullOrEmpty($ClientOptions["TrustedHosts"]))
+			if (![string]::IsNullOrEmpty($TrustedHosts))
 			{
-				$ClientOptions["TrustedHosts"] = $TrustedHosts
-			}
-			else
-			{
-				$ClientOptions["TrustedHosts"] = "$($ClientOptions["TrustedHosts"]), $TrustedHosts"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] -TrustedHosts parameter ignored for HTTPS setup"
 			}
 
-			Write-Debug -Message "Client options set to $($ClientOptions["TrustedHosts"])"
+			if (![string]::IsNullOrEmpty($ClientOptions["TrustedHosts"]))
+			{
+				$ClientOptions["TrustedHosts"] = ""
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] TrustedHosts setting ignored for HTTPS setup"
+			}
 		}
+		elseif ([string]::IsNullOrEmpty($ClientOptions["TrustedHosts"]))
+		{
+			$ClientOptions["TrustedHosts"] = $TrustedHosts
+		}
+		elseif (![string]::IsNullOrEmpty($TrustedHosts))
+		{
+			$ClientOptions["TrustedHosts"] = "$($ClientOptions["TrustedHosts"]), $TrustedHosts"
+		}
+
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Trusted hosts set to '$($ClientOptions["TrustedHosts"])'"
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
@@ -273,7 +283,7 @@ function Set-WinRMClient
 
 		Restore-NetProfile
 
-		if ($Protocol -eq "HTTPS")
+		if ($Protocol -ne "HTTP")
 		{
 			# SSL certificate
 			[hashtable] $SSLCertParams = @{

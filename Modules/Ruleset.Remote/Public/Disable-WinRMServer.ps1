@@ -93,7 +93,7 @@ function Disable-WinRMServer
 		[Parameter(ParameterSetName = "All")]
 		[switch] $All,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Default")]
 		[switch] $KeepDefault
 	)
 
@@ -142,30 +142,32 @@ function Disable-WinRMServer
 	}
 	else
 	{
-		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable non default session configurations"))
+		# NOTE: Do not use Set-PSSessionConfiguration -AccessMode Local because "Remote" access mode is required to create PSSession
+		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable custom session configurations"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling non default session configurations"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling custom session configurations"
 
 			# Disable all custom session configurations, keep default ones
 			# NOTE: Using Where-Object here to combine a,b and c results in same issue below
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
 			{
 				$a = $Session -notlike "Microsoft.PowerShell*"
-				# HACK: -notlike does not work in Windows PowerShell, it resulted in $true for PowerShell.7.2.1 and PowerShell.7
-				# Not the case for Core because Desktop edition default sessions are not reported in Core
-				$b = $Session -notlike "PowerShell.$($PSVersionTable.PSVersion.Major)*"
-				$c = $Session -ne $script:FirewallSession
+				# NOTE: PS Core major needs to be updated when the version increments
+				$b = $Session -notlike "PowerShell.7*"
+				$c = $Session -ne "RemoteFirewall.Core"
+				$d = $Session -ne "RemoteFirewall.Desktop"
 
-				if ($a -and $b -and $c)
+				if ($a -and $b -and $c -and $d)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling non default session configuration '$Session'"
+					# TODO: Temporarily warning while troubleshooting
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling custom session configuration '$Session'"
 					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
 				}
 			}
 		}
-		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
+		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all unneeded session configurations"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling unneeded default session configurations"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all unneeded session configurations"
 
 			# Disable all session configurations except what's needed for firewall management and Ruleset.Compatibility module
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
@@ -175,6 +177,7 @@ function Disable-WinRMServer
 
 				if ($a -and $b)
 				{
+					# TODO: Temporarily warning while troubleshooting
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling unneeded session configuration '$Session'"
 					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
 				}
@@ -186,7 +189,6 @@ function Disable-WinRMServer
 			# Enable only localhost on loopback
 			# NOTE: -NoServiceRestart will issue a warning to restart WinRM, while not needed we'll restart anyway later
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
-			Set-PSSessionConfiguration -Name $script:FirewallSession -AccessMode Local -NoServiceRestart -Force -WA Ignore
 
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
 			if ($PSVersionTable.PSEdition -eq "Core")

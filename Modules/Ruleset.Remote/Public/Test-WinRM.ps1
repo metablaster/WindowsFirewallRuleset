@@ -263,12 +263,7 @@ function Test-WinRM
 			-Message "Default session plugin '$DefaultSession' is missing"
 	}
 
-	if ($Domain -eq [System.Environment]::MachineName)
-	{
-		# HACK: RemoteFirewall configuration will not work for New-PSSession on localhost
-		$PSSessionParams["ConfigurationName"] = $DefaultSession
-	}
-	else
+	if ($Domain -ne [System.Environment]::MachineName)
 	{
 		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
 		# authentication otherwise the error is:

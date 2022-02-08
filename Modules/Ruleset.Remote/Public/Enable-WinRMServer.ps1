@@ -98,7 +98,7 @@ None. You cannot pipe objects to Enable-WinRMServer
 NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed
 TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: Authenticate users using certificates optionally or instead of credential object
+TODO: Optionally authenticate users using certificates in addition to credentials
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server
 remotely use Connect-WSMan and New-WSManSessionOption
@@ -218,34 +218,6 @@ function Enable-WinRMServer
 
 	Unblock-NetProfile
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
-
-		try
-		{
-			# NOTE: Enable-PSRemoting may fail in Windows PowerShell
-			Set-StrictMode -Off
-
-			# NOTE: For Register-PSSessionConfiguration to succeed Enable-PSRemoting must have been called at least once to avoid error:
-			# The WinRM plugin DLL pwrshplugin.dll is missing for PowerShell.
-			# Please run Enable-PSRemoting and then retry this command.
-			# TODO: See if pwrshplugin.dll could be installed manually without running Enable-PSRemoting
-			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
-			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
-			Enable-PSRemoting -Force | Out-Null
-			Set-StrictMode -Version Latest
-		}
-		catch [System.OperationCanceledException]
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation incomplete because $($_.Exception.Message)"
-		}
-		catch
-		{
-			Write-Error -ErrorRecord $_
-		}
-	}
-
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
 	{
 		# Re-register repository specific session configuration
@@ -320,6 +292,35 @@ function Enable-WinRMServer
 		Set-StrictMode -Version Latest
 	}
 
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
+
+		try
+		{
+			# NOTE: Enable-PSRemoting may fail in Windows PowerShell
+			Set-StrictMode -Off
+
+			# NOTE: For Register-PSSessionConfiguration to succeed Enable-PSRemoting must have been called at least once to avoid error:
+			# The WinRM plugin DLL pwrshplugin.dll is missing for PowerShell.
+			# Please run Enable-PSRemoting and then retry this command.
+			# TODO: See if pwrshplugin.dll could be installed manually without running Enable-PSRemoting
+			# Current workaround is to run Enable-PSRemoting before calling Register-PSSessionConfiguration
+			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
+			# TODO: Since it creates HTTP listener we should probably remove all listeners before creating our own
+			Enable-PSRemoting -Force | Out-Null
+			Set-StrictMode -Version Latest
+		}
+		catch [System.OperationCanceledException]
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation incomplete because $($_.Exception.Message)"
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+		}
+	}
+
 	if (!$KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))
 	{
 		# Disable unused default session configurations
@@ -352,6 +353,8 @@ function Enable-WinRMServer
 	# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable registry setting to allow remote access to Administrators"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enable registry setting to allow remote access to Administrators"
+
 		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
 		# In this case, Enable-PSRemoting does not create the key,
 		# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting

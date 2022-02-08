@@ -131,7 +131,8 @@ New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
 New-Variable -Name AdapterProfile -Scope Script -Value $null
 New-Variable -Name VirtualAdapter -Scope Script -Value $null
 
-New-Variable -Name FirewallSession -Scope Script -Value "RemoteFirewall.$($PSVersionTable.PSEdition)"
+# PS edition specific remoting session, do not modify!
+New-Variable -Name FirewallSession -Scope Script -Option Constant -Value "RemoteFirewall.$($PSVersionTable.PSEdition)"
 
 # TODO: Temporarily enable verbose output
 # $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true

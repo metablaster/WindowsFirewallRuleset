@@ -201,21 +201,6 @@ function Connect-Computer
 		ConfigurationName = $ConfigurationName
 	}
 
-	if ($Domain -eq [System.Environment]::MachineName)
-	{
-		if ($PSVersionTable.PSEdition -eq "Desktop")
-		{
-			$DefaultSession = "Microsoft.PowerShell"
-		}
-		else
-		{
-			$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
-		}
-
-		# HACK: RemoteFirewall configuration will not work for New-PSSession on localhost
-		$PSSessionParams["ConfigurationName"] = $DefaultSession
-	}
-
 	$CimParams = @{
 		# CIM session name
 		Name = "RemoteCim"

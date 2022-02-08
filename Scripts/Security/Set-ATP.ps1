@@ -131,6 +131,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy recommended 
 
 	# Other
 	Set-MpPreference -DisableBehaviorMonitoring $false -CimSession $CimServer
+	Set-MpPreference -EnableNetworkProtection Enabled -CimSession $CimServer
 }
 
 Update-Log
