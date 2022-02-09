@@ -40,8 +40,8 @@ to default repository location (\Exports), which you should then copy to client 
 to be picked up by Set-WinRMClient and used for communication over SSL.
 
 .PARAMETER Protocol
-Specifies listener protocol to HTTP, HTTPS or Any.
-The default value is Any, which configures both HTTP and HTTPS.
+Specifies listener protocol to HTTP, HTTPS or Default.
+The default value is "Default", which configures both HTTP and HTTPS.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -71,7 +71,7 @@ Configures server machine to accept remote commands using SSL.
 If there is no server certificate a new one self signed is made and put into trusted root.
 
 .EXAMPLE
-PS> Enable-WinRMServer -CertFile C:\Cert\Server2.pfx -Protocol Any
+PS> Enable-WinRMServer -CertFile C:\Cert\Server2.pfx -Protocol Default
 
 Configures server machine to accept remote commands using using either HTTPS or HTTP.
 Client will authenticate with specified certificate for HTTPS.
@@ -133,13 +133,13 @@ function Enable-WinRMServer
 	[OutputType([void], [System.Xml.XmlElement])]
 	param (
 		[Parameter()]
-		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "Any",
+		[ValidateSet("HTTP", "HTTPS", "Default")]
+		[string] $Protocol = "Default",
 
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
 
-		[Parameter(ParameterSetName = "ThumbPrint")]
+		[Parameter(ParameterSetName = "Thumbprint")]
 		[string] $CertThumbprint,
 
 		[Parameter()]
@@ -399,7 +399,7 @@ function Enable-WinRMServer
 	{
 		# TODO: Restore-NetProfile is needed here?
 		# TODO: Protocol parameter is ignored
-		if ($Protocol -ne "Any")
+		if ($Protocol -ne "Default")
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Protocol switch was ignored"
 		}

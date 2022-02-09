@@ -153,12 +153,6 @@ function Get-AppCapability
 			$Domain = [System.Environment]::MachineName
 		}
 
-		$RemoteSession = Get-PSSession -Name RemoteSession
-		if (!$RemoteSession)
-		{
-			return
-		}
-
 		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
 			# Get it from main store to be able to query package manifest
@@ -184,7 +178,7 @@ function Get-AppCapability
 			}
 			else
 			{
-				$InputObject = Invoke-Command -Session $RemoteSession -ScriptBlock {
+				$InputObject = Invoke-Command -Session $SessionInstance -ScriptBlock {
 					param([hashtable] $AppxParams)
 
 					Get-AppxPackage @AppxParams
@@ -194,7 +188,7 @@ function Get-AppCapability
 	}
 	process
 	{
-		Invoke-Command -Session $RemoteSession -ArgumentList $InputObject -ScriptBlock {
+		Invoke-Command -Session $SessionInstance -ArgumentList $InputObject -ScriptBlock {
 			param ($InputObject)
 
 			foreach ($StoreApp in $InputObject)

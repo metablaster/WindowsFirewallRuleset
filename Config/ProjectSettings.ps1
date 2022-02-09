@@ -416,16 +416,23 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 		"ConfigurableServiceStore"
 	)
 
-	# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
-	# A value "Any" means, use HTTPS, and if not working use HTTP
-	# NOTE: For loopback sessions HTTP is used regardless of this setting
-	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
+	# Specify protocol for WinRM configuration and remote deployment, acceptable values are HTTP, HTTPS or Default
+	# A value "Default" for remoting means, use HTTPS for remote deployment and if not working fallback to HTTP
+	# for local deployment "Default" means use HTTP
+	# NOTE: For localhost sessions only HTTP is supported and this setting is ignored for localhost
+	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "Default"
 
 	# Credential object to be used for authentication to remote computer
 	New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"
 
 	# Credential object to be used for authentication to remote computer
 	New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
+
+	# CIM session holder which is to be used for commands accepting CIM sessions
+	New-Variable -Name CimServer -Scope Global -Option ReadOnly -Value $null
+
+	# PS session holder which is to be used for commands accepting PS sessions
+	New-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Value $null
 }
 
 if ($PSCmdlet.ParameterSetName -eq "Script")

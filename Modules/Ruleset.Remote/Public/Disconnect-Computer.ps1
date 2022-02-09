@@ -131,5 +131,11 @@ function Disconnect-Computer
 		Remove-PSSession -Name RemoteSession
 	}
 
+	if (Get-Variable -Name SessionInstance -Scope Global -ErrorAction Ignore)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable 'SessionInstance'"
+		Remove-Variable -Name SessionInstance -Scope Global -Force
+	}
+
 	Remove-Variable -Name SessionEstablished -Scope Global -Force -ErrorAction Ignore
 }

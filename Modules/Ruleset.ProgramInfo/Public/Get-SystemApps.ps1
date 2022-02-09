@@ -116,7 +116,7 @@ function Get-SystemApps
 			else
 			{
 				# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
-				$Apps = Invoke-Command -Session (Get-PSSession -Name RemoteSession) -ScriptBlock {
+				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
 					param (
 						[string] $Name,
 						[string] $User

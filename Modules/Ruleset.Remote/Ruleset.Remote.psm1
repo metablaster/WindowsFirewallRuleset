@@ -137,5 +137,9 @@ New-Variable -Name RemoteFirewallSession -Scope Script -Option Constant -Value "
 # PS edition specific local session, do not modify!
 New-Variable -Name LocalFirewallSession -Scope Script -Option Constant -Value "LocalFirewall.$($PSVersionTable.PSEdition)"
 
-# TODO: Temporarily enable verbose output
-# $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true
+# These functions are too verbose, disabling to be able use -Verbose on user code
+$PSDefaultParameterValues["Get-PSSessionConfiguration:Verbose"] = $false
+$PSDefaultParameterValues["Unregister-PSSessionConfiguration:Verbose"] = $false
+$PSDefaultParameterValues["Register-PSSessionConfiguration:Verbose"] = $false
+$PSDefaultParameterValues["Disable-PSSessionConfiguration:Verbose"] = $false
+$PSDefaultParameterValues["Enable-PSRemoting:Verbose"] = $false

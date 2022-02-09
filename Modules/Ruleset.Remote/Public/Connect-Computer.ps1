@@ -33,11 +33,12 @@ Connect to remote computer
 .DESCRIPTION
 Connect local machine to local (loopback) or remote computer onto which to deploy firewall.
 
-Following global variables or objects are created:
+Following global variables are set and objects created:
 RemoteCim (CimSession), CIM session object
-CimServer (variable), to be used by CIM commandlets to specify cim session to use
-RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
 RemoteSession (PSSession), PS session object which represent remote session
+RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)
+CimServer (variable), to be used by CIM commandlets to access "RemoteCim" object for -CimSession parameter
+SessionInstance (variable), to be used by Invoke-Command to access "RemoteSession" object for -Session parameter
 
 .PARAMETER Domain
 Computer name with which to connect for remoting
@@ -48,9 +49,9 @@ Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
-Specify protocol to use for connection, HTTP, HTTPS or any.
-The default value is "Any" which means HTTPS is used for connection to remote computer
-and HTTP for local machine.
+Specify protocol to use for connection, HTTP, HTTPS or Default.
+The default value is "Default" which means HTTPS is used for connection to remote computer
+and if not working fallback to HTTP, for localhost "Default" means use HTTP.
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
@@ -115,14 +116,14 @@ function Connect-Computer
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Protocol")]
-		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "Any",
+		[ValidateSet("HTTP", "HTTPS", "Default")]
+		[string] $Protocol = "Default",
 
 		[Parameter()]
 		[ValidateRange(1, 65535)]
 		[int32] $Port,
 
-		[Parameter(ParameterSetName = "ThumbPrint")]
+		[Parameter(ParameterSetName = "Thumbprint")]
 		[string] $CertThumbprint,
 
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
@@ -143,7 +144,6 @@ function Connect-Computer
 		$CimOptions
 	)
 
-	# $DebugPreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Replace localhost and dot with NETBIOS computer name
@@ -161,12 +161,6 @@ function Connect-Computer
 		}
 
 		Disconnect-Computer $PolicyStore
-	}
-
-	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
-	{
-		Write-Error -Category NotImplemented -TargetObject $Protocol `
-			-Message "HTTPS for localhost not implemented"
 	}
 
 	$PSSessionParams = @{
@@ -198,7 +192,7 @@ function Connect-Computer
 		$PSSessionParams["CertificateThumbprint"] = $CertThumbprint
 	}
 
-	if ($Protocol -eq "Any")
+	if ($Protocol -eq "Default")
 	{
 		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
 	}
@@ -280,8 +274,28 @@ function Connect-Computer
 	}
 	catch
 	{
+		# Fallback to HTTP
+		if ((($PSCmdlet.ParameterSetName -eq "Thumbprint") -or ($Protocol -eq "Default")) -and ($Domain -ne ([System.Environment]::MachineName)))
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] HTTPS connection to '$Domain' failed, fallback to HTTP"
+
+			try
+			{
+				$PSSessionParams["UseSSL"] = $false
+				$PSSessionParams["Port"] = 5985
+				$CimParams["Port"] = 5985
+				$CimParams["SessionOption"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
+			}
+			catch
+			{
+				Write-Error -Category ConnectionError -TargetObject $Domain `
+					-Message "Creating CIM session over HTTP to '$Domain' failed with: $($_.Exception.Message)"
+				return
+			}
+		}
+
 		Write-Error -Category ConnectionError -TargetObject $Domain `
-			-Message "Creating CIM session to '$Domain' failed with: $($_.Exception.Message)"
+			-Message "Creating CIM session over HTTPS to '$Domain' failed with: $($_.Exception.Message)"
 		return
 	}
 
@@ -319,7 +333,7 @@ function Connect-Computer
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
-		New-PSSession @PSSessionParams | Out-Null
+		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)
 
 		# TODO: For VM without external switch use -VMName
 		# TODO: Temporarily not using because not in need to enter session

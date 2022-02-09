@@ -45,8 +45,8 @@ Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
-Specify protocol to use for test, HTTP, HTTPS or Any.
-The default value is Any, which means HTTPS is tested first and if failed HTTP is tested.
+Specify protocol to use for test, HTTP, HTTPS or Default.
+The default value is "Default", which means HTTPS is tested first and if failed HTTP is tested.
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
@@ -141,8 +141,8 @@ function Test-WinRM
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Protocol")]
-		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "Any",
+		[ValidateSet("HTTP", "HTTPS", "Default")]
+		[string] $Protocol = "Default",
 
 		[Parameter()]
 		[ValidateRange(1, 65535)]
@@ -151,7 +151,7 @@ function Test-WinRM
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
 		[string] $Authentication = "Default",
 
-		[Parameter(ParameterSetName = "ThumbPrint")]
+		[Parameter(ParameterSetName = "Thumbprint")]
 		[string] $CertThumbprint,
 
 		[Parameter()]
@@ -181,7 +181,6 @@ function Test-WinRM
 		[switch] $Quiet
 	)
 
-	# $DebugPreference = "Continue"
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Replace localhost and dot with NETBIOS computer name
@@ -212,6 +211,12 @@ function Test-WinRM
 	{
 		Write-Error -Category NotImplemented -TargetObject $Protocol `
 			-Message "WinRM service is not running, please run Set-WinRMClient for configuration"
+	}
+
+	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
+	{
+		Write-Error -Category NotImplemented -TargetObject $Protocol `
+			-Message "HTTPS for localhost not implemented"
 	}
 
 	$ConfigurationEnabled = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction SilentlyContinue |
@@ -368,7 +373,7 @@ function Test-WinRM
 
 		Remove-PSSession -Name TestSession
 
-		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
+		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
 		{
 			$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 			$Status.Value = $StatusHTTPS
@@ -446,7 +451,7 @@ function Test-WinRM
 
 		Remove-PSSession -Name TestSession
 
-		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
+		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
 		{
 			$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2) -and ($null -ne $PSSessionResult)
 			$Status.Value = $StatusHTTP
@@ -454,7 +459,7 @@ function Test-WinRM
 		}
 	}
 
-	if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -eq "Any"))
+	if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -eq "Default"))
 	{
 		$Status.Value = $StatusHTTP -or $StatusHTTPS
 	}

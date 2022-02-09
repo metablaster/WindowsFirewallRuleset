@@ -118,7 +118,7 @@ function Register-SslCertificate
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
 
-		[Parameter(ParameterSetName = "ThumbPrint")]
+		[Parameter(ParameterSetName = "Thumbprint")]
 		[string] $CertThumbprint,
 
 		[Parameter()]

@@ -220,8 +220,6 @@ function Select-EnvironmentVariable
 		$Domain = [System.Environment]::MachineName
 	}
 
-	$RemoteSession = Get-PSSession -Name RemoteSession
-
 	# Make sure null or empty Name or Value arguments don't cause any overhead
 	switch ($PsCmdlet.ParameterSetName)
 	{
@@ -248,7 +246,7 @@ function Select-EnvironmentVariable
 		}
 	}
 
-	$TargetScope = Invoke-Command -Session $RemoteSession -ArgumentList $From, $Exact, $IncludeFile, $Force -ScriptBlock {
+	$TargetScope = Invoke-Command -Session $SessionInstance -ArgumentList $From, $Exact, $IncludeFile, $Force -ScriptBlock {
 		param (
 			[string] $From,
 			[switch] $Exact,

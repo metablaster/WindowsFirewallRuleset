@@ -39,8 +39,8 @@ Computer name which is to be managed remotely from this machine.
 If not specified local machine is the default.
 
 .PARAMETER Protocol
-Specifies protocol to HTTP, HTTPS or Any.
-The default value is Any which configures client for both HTTP and HTTPS.
+Specifies protocol to HTTP, HTTPS or Default.
+The default value is "Default" which configures client for both HTTP and HTTPS.
 
 .PARAMETER CertFile
 Optionally specify custom certificate file.
@@ -118,8 +118,8 @@ function Set-WinRMClient
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
-		[ValidateSet("HTTP", "HTTPS", "Any")]
-		[string] $Protocol = "Any",
+		[ValidateSet("HTTP", "HTTPS", "Default")]
+		[string] $Protocol = "Default",
 
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,
