@@ -70,8 +70,10 @@ function Test-RemoteRegistry
 
 	if ($PSCmdlet.ShouldProcess($Domain, "Test remote registry service"))
 	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking remote registry service"
 		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartType
 
+		# Manual and automatic will trigger service start
 		if ($StartupType -eq "Disabled")
 		{
 			if (!$Quiet)
@@ -90,28 +92,50 @@ function Test-RemoteRegistry
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 		}
+		catch [System.UnauthorizedAccessException]
+		{
+			Write-Error -Category AuthenticationError -TargetObject $RegistryHive -Message $_.Exception.Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry access was denied by $Domain"
+			return $false
+		}
+		catch [System.Security.SecurityException]
+		{
+			Write-Error -Category SecurityError -TargetObject $RegistryHive -Message $_.Exception.Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemotingCredential.UserName) does not have the requested ACL permissions for $RegistryHive hive"
+			return $false
+		}
 		catch
 		{
-			if (!$Quiet)
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry test failed with $($_.Exception.Message)"
-			}
-
+			Write-Error -ErrorRecord $_
 			return $false
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
-		$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
-
-		if (!$RootKey)
+		try
 		{
-			if (!$Quiet)
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry test failed"
-			}
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
+			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 
+			if (!$RootKey)
+			{
+				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLM")
+			}
+		}
+		catch [System.Security.SecurityException]
+		{
+			Write-Error -Category SecurityError -TargetObject $HKLM -Message $_.Exception.Message
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemotingCredential.UserName) does not have the requested ACL permissions for $HKLM key"
 			$RemoteKey.Dispose()
 			return $false
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			$RemoteKey.Dispose()
+			return $false
+		}
+		finally
+		{
+			$RemoteKey.Dispose()
 		}
 
 		return $true

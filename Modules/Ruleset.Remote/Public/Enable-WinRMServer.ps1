@@ -104,9 +104,6 @@ TODO: Configure server remotely either with WSMan or trough SSH, to test and con
 remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
-HACK: If loopback New-PSSession does not work in PS Core this function should be called from Windows PowerShell,
-if not working Reset-WinRM should be called first.
-Problem is when LocalAccountTokenFilterPolicy is set to 0 or when using custom session configuration.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
@@ -373,27 +370,28 @@ function Enable-WinRMServer
 		}
 	}
 
-	# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable registry setting to allow remote access to Administrators"))
+	# NOTE: This registry key does not affect computers that are members of an Active Directory domain.
+	# In this case, Enable-PSRemoting does not create the key,
+	# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
+	if (!(Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enable registry setting to allow remote access to Administrators"
-
-		# TODO: This registry key does not affect computers that are members of an Active Directory domain.
-		# In this case, Enable-PSRemoting does not create the key,
-		# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
-
-		# Ensure registry setting was updated
-		$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-		$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
-
-		if ($TokenValue -ne 1)
+		# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Enable registry setting to allow remote access to Administrators"))
 		{
-			# In some cases Enable-PSRemoting did not set it
-			# TODO: On fresh W10 system TokenValue was blank, why or how?
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enable registry setting to allow remote access to Administrators"
 
-			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
-				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+			# Ensure registry setting was updated
+			$TokenKey = Get-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+			$TokenValue = $TokenKey.GetValue("LocalAccountTokenFilterPolicy")
+
+			if (!$TokenValue -or ($TokenValue -ne 1))
+			{
+				# In some cases Enable-PSRemoting did not set it
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] LocalAccountTokenFilterPolicy was not enabled (value = '$TokenValue'), setting manually"
+
+				Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
+					-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+			}
 		}
 	}
 

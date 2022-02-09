@@ -102,14 +102,20 @@ function Reset-WinRM
 		Disable-PSRemoting -Force -WarningAction Ignore
 	}
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting to allow remote access to Administrators"))
+	# NOTE: This registry key does not affect computers that are members of an Active Directory domain.
+	# In this case, Enable-PSRemoting does not create the key,
+	# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
+	if (!(Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain))
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Reset registry setting to allow remote access to Administrators"))
+		{
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
 
-		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
-		# allows remote access to members of the Administrators group on the computer.
-		# By default this value does not exist
-		Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy -ErrorAction Ignore
+			# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+			# allows remote access to members of the Administrators group on the computer.
+			# By default this value does not exist
+			Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy -ErrorAction Ignore
+		}
 	}
 
 	$WmiPlugin = Get-Item WSMan:\localhost\Plugin\"WMI Provider"\Enabled

@@ -199,12 +199,6 @@ function Initialize-Connection
 				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -ErrorAction Stop `
 					-ConfigurationName $PSSessionConfigurationName -Credential $RemotingCredential
 			}
-
-			# if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
-			# {
-			# 	Enable-RemoteRegistry -Confirm:$false
-			# 	Test-RemoteRegistry -Domain $PolicyStore
-			# }
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
@@ -239,6 +233,17 @@ function Initialize-Connection
 		try
 		{
 			Connect-Computer @ConnectParams
+
+			if ($PolicyStore -notin $LocalStore)
+			{
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if remote registry requires configuration..."
+
+				if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
+				{
+					Enable-RemoteRegistry -Confirm:$false
+					Test-RemoteRegistry -Domain $PolicyStore
+				}
+			}
 		}
 		catch
 		{

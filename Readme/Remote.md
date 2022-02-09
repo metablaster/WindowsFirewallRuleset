@@ -19,7 +19,9 @@ design used in this repository.
     - [Exception handling](#exception-handling)
   - [Troubleshooting](#troubleshooting)
     - [Troubleshooting WinRM](#troubleshooting-winrm)
+      - ["Negotiate" authentication is not enabled](#negotiate-authentication-is-not-enabled)
       - [Encountered an internal error in the SSL library](#encountered-an-internal-error-in-the-ssl-library)
+      - [Access is denied](#access-is-denied)
     - [Troubleshooting CIM](#troubleshooting-cim)
       - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
       - [The service is configured to reject remote connection requests for this plugin](#the-service-is-configured-to-reject-remote-connection-requests-for-this-plugin)
@@ -251,8 +253,22 @@ Following section lists other not so common problems and how to resolve them.
 
 TODO: missing resolutions for the following known problems:
 
-- system cannot find file because it does not exist
-- "Negotiate" authentication is not enabled
+- System cannot find file because it does not exist
+
+#### "Negotiate" authentication is not enabled
+
+```powershell
+Set-Item -Path WSMan:\localhost\Client\Auth\Negotiate -Value $true
+Restart-Service -Name WinRM
+```
+
+If not working then:
+
+```powershell
+Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Client\ `
+     -Name auth_negotiate -Value ([int32] ($AuthenticationOptions["Negotiate"] -eq $true))
+Restart-Service -Name WinRM
+```
 
 #### Encountered an internal error in the SSL library
 
@@ -261,6 +277,31 @@ TODO: missing resolutions for the following known problems:
 
 If using SSL on localhost, it would go trough network stack and for this you need authentication,
 which means specifying host name, user name and password.
+
+#### Access is denied
+
+> [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
+
+Check following 3 things:
+
+1. Ensure PS session configuration which is being used is enabled
+
+    ```powershell
+    Get-PSSessionConfiguration -Name "NameOfTheSession" | Enable-PSSessionConfiguration
+    ```
+
+2. Ensure access mode of the session PS configuration is set to `Remote`
+
+    ```powershell
+    Set-PSSessionConfiguration  -Name "NameOfTheSession" -AccessMode Remote
+    ```
+
+3. Ensure `LocalAccountTokenFilterPolicy` is enabled (set to 1)
+
+    ```powershell
+    Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
+        -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+    ```
 
 ### Troubleshooting CIM
 

@@ -419,7 +419,7 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 	# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
 	# A value "Any" means, use HTTPS, and if not working use HTTP
 	# NOTE: For loopback sessions HTTP is used regardless of this setting
-	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTP"
+	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
 
 	# Credential object to be used for authentication to remote computer
 	New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"

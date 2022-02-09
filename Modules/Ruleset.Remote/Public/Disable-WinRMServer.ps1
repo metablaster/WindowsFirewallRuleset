@@ -143,48 +143,29 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling custom session configurations"
 
 			# Disable all custom session configurations, keep default ones
-			# TODO: Use Where-Object
-			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
-			{
-				$a = $Session -notlike "Microsoft.PowerShell*"
-				# NOTE: PS Core major needs to be updated when the version increments
-				$b = $Session -notlike "PowerShell.7*"
-				$c = $Session -notmatch "(Local|Remote)Firewall.(Core|Desktop)"
-
-				if ($a -and $b -and $c)
-				{
-					# TODO: Temporarily warning while troubleshooting
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling custom session configuration '$Session'"
-					Disable-PSSessionConfiguration -Name $Session -NoServiceRestart -Force
-				}
-			}
+			Get-PSSessionConfiguration | Where-Object {
+				($_.Name -notlike "Microsoft.PowerShell*") -and
+				# TODO: PS Core major is hardcoded
+				($_.Name -notlike "PowerShell.7*") -and
+				($_.Name -notmatch "(Local|Remote)Firewall\.(Core|Desktop)")
+			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all unneeded session configurations"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all unneeded session configurations"
 
 			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
-			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
-			{
-				$a = $Session -ne "Microsoft.PowerShell"
-				$b = $Session -ne $script:LocalFirewallSession
-
-				if ($a -and $b)
-				{
-					# TODO: Temporarily warning while troubleshooting
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling unneeded session configuration '$Session'"
-					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
-				}
-			}
+			Get-PSSessionConfiguration | Where-Object {
+				($_.Name -ne "Microsoft.PowerShell") -and
+				($_.Name -ne $script:LocalFirewallSession)
+			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
 
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Configure loopback listener"))
 		{
-			# Enable only localhost on loopback
-			# NOTE: -NoServiceRestart will issue a warning to restart WinRM, while not needed we'll restart anyway later
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM localhost"
-
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring WinRM server loopback listener"
+
+			# Enable only localhost on loopback
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				New-Item -Path WSMan:\localhost\Listener -Address "IP:[::1]" -Transport HTTP -Enabled $true -Force | Out-Null
@@ -307,15 +288,21 @@ function Disable-WinRMServer
 		}
 	}
 
-	# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
-	if ($All -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable registry setting to deny remote access to Administrators"))
+	# NOTE: This registry key does not affect computers that are members of an Active Directory domain.
+	# In this case, Enable-PSRemoting does not create the key,
+	# and you don't have to set it to 0 after disabling remoting with Disable-PSRemoting
+	if ($All -and !(Get-CimInstance -Class Win32_ComputerSystem | Select-Object -ExpandProperty PartOfDomain))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
+		# NOTE: LocalAccountTokenFilterPolicy must be enabled for New-PSSession to work
+		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable registry setting to deny remote access to Administrators"))
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
 
-		# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
-		# allows remote access to members of the Administrators group on the computer.
-		Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
-			-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+			# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+			# allows remote access to members of the Administrators group on the computer.
+			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
+				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+		}
 	}
 
 	if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Remove all WinRM predefined rules"))

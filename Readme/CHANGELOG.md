@@ -54,12 +54,14 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Get-AppCapability`
     - `Get-UserApps`
     - `Get-SystemApps`
+    - `Select-EnvironmentVariable`
 
   - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default
-  default session configurations active, needed to be able to specify `-ComputerName` parameter
+  session configurations active, needed to be able to specify `-ComputerName` parameter
   instead of `-CimInstance` as exclusive.
-  - `Enabled-WinRMServer` added `-Loopback` switch to be able to configure loopback only server
+  - `Enable-WinRMServer` added `-Loopback` switch to be able to configure loopback only server
   - Most functions in `Ruleset.Remote` improved
+  - Added separate PS session configuration for localhost deployment
 
   - Improved module functions
 

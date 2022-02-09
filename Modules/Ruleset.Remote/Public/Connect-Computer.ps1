@@ -152,45 +152,21 @@ function Connect-Computer
 		$Domain = [System.Environment]::MachineName
 	}
 
-	if (($Domain -eq $PolicyStore) -and (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Connection already established to '$Domain', run Disconnect-Computer to disconnect"
-		return
-	}
-
 	if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 	{
-		Disconnect-Computer $PolicyStore
-	}
+		if ($Domain -eq $PolicyStore)
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Connection already established to '$Domain', run Disconnect-Computer to disconnect"
+			return
+		}
 
-	if (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
-	}
-	elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+		Disconnect-Computer $PolicyStore
 	}
 
 	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		Write-Error -Category NotImplemented -TargetObject $Protocol `
 			-Message "HTTPS for localhost not implemented"
-	}
-
-	# WinRM service must be running at this point
-	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] WinRM service supposed to be already running, starting now..."
-
-		# NOTE: Unable to start if it's disabled
-		if ($WinRM.StartType -eq [ServiceStartMode]::Disabled)
-		{
-			Set-Service -InputObject $WinRM -StartupType Manual
-		}
-
-		$WinRM.Start()
-		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
 	$PSSessionParams = @{
@@ -235,7 +211,6 @@ function Connect-Computer
 	{
 		if (!$Credential)
 		{
-			# TODO: -Credential param, specify SERVER\UserName
 			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
 
 			if (!$Credential)
@@ -270,7 +245,6 @@ function Connect-Computer
 
 		if (!$CimOptions)
 		{
-			# TODO: LocalStore needs a better place for adjustment
 			# TODO: There is global variable for encoding
 			$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}

@@ -207,6 +207,34 @@ function Test-WinRM
 		$Status.Value = $false
 	}
 
+	# WinRM service must be running at this point
+	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
+	{
+		Write-Error -Category NotImplemented -TargetObject $Protocol `
+			-Message "WinRM service is not running, please run Set-WinRMClient for configuration"
+	}
+
+	$ConfigurationEnabled = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction SilentlyContinue |
+	Select-Object -ExpandProperty Enabled
+
+	# If specified session configuration is disabled or missing New-PSSession will not work
+	if ($null -eq $ConfigurationEnabled)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is missing"
+	}
+	elseif ($ConfigurationEnabled -eq $false)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
+	}
+	elseif (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+	}
+	elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+	}
+
 	# Parameters for Test-WSMan
 	$WSManParams = @{
 		Port = $Port
@@ -224,30 +252,6 @@ function Test-WinRM
 		# MSDN: -SkipTestConnection, by default it verifies port is open and credentials are valid,
 		# verification is accomplished using a standard WS-Identity operation.
 		# TODO: -SkipTestConnection could be used for Test-Credential function
-	}
-
-	$ConfigurationEnabled = Get-PSSessionConfiguration -Name $ConfigurationName -ErrorAction SilentlyContinue |
-	Select-Object -ExpandProperty Enabled
-
-	# If specified session is disabled or missing New-PSSession will not work
-	if ($null -eq $ConfigurationEnabled)
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is missing"
-	}
-	elseif ($ConfigurationEnabled -eq $false)
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
-	}
-	else
-	{
-		if (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
-		}
-		elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
-		}
 	}
 
 	# Parameters for PS Session
@@ -356,7 +360,12 @@ function Test-WinRM
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		$PSSessionResult = New-PSSession @PSSessionParams
-		if (!$Quiet) { $PSSessionResult }
+
+		if (!$Quiet)
+		{
+			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
+		}
+
 		Remove-PSSession -Name TestSession
 
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
@@ -368,7 +377,7 @@ function Test-WinRM
 	}
 
 	# Test HTTP connectivity
-	if ($Protocol -ne "HTTPS")
+	if (!$StatusHTTPS -and ($Protocol -ne "HTTPS"))
 	{
 		if (!$CimOptions)
 		{
@@ -429,7 +438,12 @@ function Test-WinRM
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		$PSSessionResult = New-PSSession @PSSessionParams
-		if (!$Quiet) { $PSSessionResult }
+
+		if (!$Quiet)
+		{
+			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
+		}
+
 		Remove-PSSession -Name TestSession
 
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
