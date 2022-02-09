@@ -73,11 +73,10 @@ If you would like to see fresh changes done since last release you can do so on 
 - New features
 
   - `Find-WeakRule` new function which finds weak (not restrictive enough) firewall rules
-  - `Find-UnsignedFile.ps1` self contained script to help detect suspicious programs and drivers on
-  computer which may be a good candidate to tamper with firewall and security in general
+  - `Find-UnsignedFile.ps1` self contained script to scan digital signatures of programs and drivers
   - `Deploy-ASR.ps1` new script used to deploy attack surface reduction rules
   - `Show-ASR.ps1` new script used to display ASR configuration
-  - `Set-ATP.ps1` new script script used to configure Microsoft Defender Antivirus
+  - `Set-ATP.ps1` new script used to configure Microsoft Defender Antivirus
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
   - `Test-RemoteRegistry` new function to test for functioning remote registry
 
@@ -85,7 +84,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Specifying remote domain or changing domain no longer requires PS restart
   - Specifying HTTP for remoting is now possible in `Config\ProjectSettings`
-  - Added script info to scripts, REQUIREDSCRIPTS and EXTERNALMODULEDEPENDENCIES
+  - Added script info to scripts, `REQUIREDSCRIPTS` and `EXTERNALMODULEDEPENDENCIES`
   - Fixed `Get-NetworkStats.ps1` scripts so that it's functional for local and remote
 
 ## v0.12.0 (current release)

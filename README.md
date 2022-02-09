@@ -539,11 +539,12 @@ localhost by design requires working WinRM and PS remoting configuration as well
 Before remote deployment can be performed, remote computer (server) needs to be configured to accept
 connection, example on how to establish SSL connection as follows:
 
-- To configure WinRM service and remote registry on server computer, run:
+- To allow execution, set WinRM service and remote registry on server computer, run:
 
 ```powershell
 # On server computer
-cd C:\Path\to\WindowsFirewallRuleset
+Set-ExecutionPolicy -Scope LocalMachine RemoteSigned
+Set-Location C:\Path\to\WindowsFirewallRuleset
 Import-Module .\Modules\Ruleset.Remote
 Enable-WinRMServer -Protocol HTTPS -KeepDefault -Confirm:$false
 Enable-RemoteRegistry -Confirm:$false

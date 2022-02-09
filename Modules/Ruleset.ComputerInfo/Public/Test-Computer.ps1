@@ -40,8 +40,8 @@ Target computer which to test for connectivity
 
 .PARAMETER Protocol
 Specify the kind of a test to perform.
-Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Any
-The default is Any which tries connectivity in this order: HTTPS\HTTP\Ping
+Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default
+The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
@@ -91,7 +91,6 @@ None. You cannot pipe objects to Test-Computer
 
 .NOTES
 TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)
-TODO: Test CIM and DCOM
 #>
 function Test-Computer
 {
@@ -104,8 +103,8 @@ function Test-Computer
 		[string] $Domain,
 
 		[Parameter()]
-		[ValidateSet("HTTP", "HTTPS", "Ping", "Any")]
-		[string] $Protocol = "Any",
+		[ValidateSet("HTTP", "HTTPS", "Ping", "Default")]
+		[string] $Protocol = "Default",
 
 		[Parameter(ParameterSetName = "WSMan")]
 		[ValidateRange(1, 65535)]
@@ -151,36 +150,30 @@ function Test-Computer
 		{
 			$WSManParams = @{
 				Quiet = $true
-				Domain = $Domain
+				Port = $Port
 				Authentication = $Authentication
+				ApplicationName = "wsman"
 				ErrorAction = "SilentlyContinue"
 			}
 
-			if ($Credential)
+			if ($Domain -ne [System.Environment]::MachineName)
 			{
-				$WSManParams["Credential"] = $Credential
-			}
-
-			if ($CertThumbprint)
-			{
-				$WSManParams["CertificateThumbprint"] = $CertThumbprint
-			}
-
-			if ($Protocol -ne "HTTPS")
-			{
-				$WSManParams["Protocol"] = "HTTP"
-
-				if (!$Port)
+				if ($Credential)
 				{
-					$WSManParams["Port"] = 5985
+					$WSManParams["Credential"] = $Credential
 				}
 
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WinRM"
-				Test-WinRM @WSManParams -Status ([ref] $Status)
+				$WSManParams["ComputerName"] = $Domain
 			}
 
-			if (!$Status -and ($Protocol -ne "HTTP"))
+			if ($Protocol -ne "HTTP")
 			{
+				if (![string]::IsNullOrEmpty($CertThumbprint))
+				{
+					$WSManParams["CertificateThumbprint"] = $CertThumbprint
+				}
+
+				$WSManParams["UseSsl"] = $true
 				$WSManParams["Protocol"] = "HTTPS"
 
 				if (!$Port)
@@ -188,13 +181,34 @@ function Test-Computer
 					$WSManParams["Port"] = 5986
 				}
 
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WinRM"
-				Test-WinRM @WSManParams -Status ([ref] $Status)
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WSMan"
+				$WSManResult = Test-WSMan @WSManParams
+				if ($null -ne $WSManResult) { $Status = $true }
+			}
+
+			if (!$Status -and ($Protocol -ne "HTTPS"))
+			{
+				if (![string]::IsNullOrEmpty($CertThumbprint))
+				{
+					$WSManParams.Remove("CertificateThumbprint")
+				}
+
+				$WSManParams["UseSsl"] = $false
+				$WSManParams["Protocol"] = "HTTP"
+
+				if (!$Port)
+				{
+					$WSManParams["Port"] = 5985
+				}
+
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WSMan"
+				$WSManResult = Test-WSMan @WSManParams
+				if ($null -ne $WSManResult) { $Status = $true }
 			}
 		}
 	}
 
-	if (!$Status -and ($PSCmdlet.ParameterSetName -eq "Ping") -and (($Protocol -eq "Any") -or ($Protocol -eq "Ping")))
+	if (!$Status -and ($PSCmdlet.ParameterSetName -eq "Ping") -and (($Protocol -eq "Default") -or ($Protocol -eq "Ping")))
 	{
 		# Test parameters depend on PowerShell edition
 		if ($PSVersionTable.PSEdition -eq "Core")

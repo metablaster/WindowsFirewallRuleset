@@ -153,6 +153,7 @@ function Get-AppCapability
 			$Domain = [System.Environment]::MachineName
 		}
 
+		$ThisFunction = $MyInvocation.InvocationName
 		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
 			# Get it from main store to be able to query package manifest
@@ -188,8 +189,14 @@ function Get-AppCapability
 	}
 	process
 	{
-		Invoke-Command -Session $SessionInstance -ArgumentList $InputObject -ScriptBlock {
-			param ($InputObject)
+		Invoke-Command -Session $SessionInstance -ArgumentList $InputObject, $User, $IncludeAuthority, $Networking, $ThisFunction -ScriptBlock {
+			param (
+				[object[]] $InputObject,
+				[string] $User,
+				[switch] $IncludeAuthority,
+				[switch] $Networking,
+				[string] $ThisFunction
+			)
 
 			foreach ($StoreApp in $InputObject)
 			{
@@ -198,7 +205,7 @@ function Get-AppCapability
 				$App = $StoreApp
 				[string[]] $OutputObject = @()
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing store app: '$($App.Name)'"
+				Write-Verbose -Message "[$ThisFunction] Processing store app: '$($App.Name)'"
 
 				if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
 				{
@@ -210,7 +217,7 @@ function Get-AppCapability
 					}
 
 					# If input app was not obtained from main store, get it from main store to be able to query package manifest
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input app is not from main store, querying main store"
+					Write-Debug -Message "[$ThisFunction] Input app is not from main store, querying main store"
 					$App = Get-AppxPackage -Name $App.Name -User $User -PackageTypeFilter Main
 
 					if (!$App)
@@ -231,19 +238,19 @@ function Get-AppCapability
 					catch
 					{
 						# NOTE: This will be the cause with Microsoft account (non local Windows account)
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is missing manifest 'Package' property"
+						Write-Warning -Message "[$ThisFunction] Store app '$($App.Name)' is missing manifest 'Package' property"
 						continue
 					}
 				}
 
 				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) has no capabilities"
+					Write-Verbose -Message "[$ThisFunction] Store app '$($App.Name) has no capabilities"
 					continue
 				}
 				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name) is missing capabilities"
+					Write-Verbose -Message "[$ThisFunction] Store app '$($App.Name) is missing capabilities"
 					continue
 				}
 
@@ -251,9 +258,9 @@ function Get-AppCapability
 
 				foreach ($Capability in $AppCapabilities)
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing capability: '$Capability'"
+					Write-Debug -Message "[$ThisFunction] Processing capability: '$Capability'"
 
-					[string] $Name = switch ($Capability)
+					[string] $DisplayName = switch ($Capability)
 					{
 						# Networking capabilities
 						# TODO: Unknown display name
@@ -289,28 +296,28 @@ function Get-AppCapability
 						}
 					}
 
-					if ([string]::IsNullOrEmpty($Name))
+					if ([string]::IsNullOrEmpty($DisplayName))
 					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' not resolved"
+						Write-Debug -Message "[$ThisFunction] Capability: '$Capability' not resolved"
 						continue
 					}
 					else
 					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Capability: '$Capability' resolved to: $Name"
+						Write-Debug -Message "[$ThisFunction] Capability: '$Capability' resolved to: $DisplayName"
 
 						if ($IncludeAuthority)
 						{
-							$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $Name)
+							$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $DisplayName)
 						}
 						else
 						{
-							$OutputObject += $Name
+							$OutputObject += $DisplayName
 						}
 					}
 				} # foreach capability
 
 				Write-Output $OutputObject
-			}
-		} # foreach app
+			} # foreach app
+		} # invoke-command
 	} # process
 }

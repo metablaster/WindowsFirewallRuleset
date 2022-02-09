@@ -243,6 +243,7 @@ function Enable-WinRMServer
 				ProcessorArchitecture = "amd64"
 				MaximumReceivedDataSizePerCommandMB = 50
 				MaximumReceivedObjectSizeMB = 10
+				# NOTE: Remote is required for New-PSSession
 				AccessMode = "Remote"
 				ThreadApartmentState = "Unknown"
 				ThreadOptions = "UseCurrentThread"

@@ -84,10 +84,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 }
 else
 {
-	Start-Test "$TestAdmin"
+	Start-Test $TestAdmin
 	Get-UserApps -User $TestAdmin
 
-	Start-Test "$TestUser"
+	Start-Test $TestUser
 	$Result = Get-UserApps -User $TestUser
 	$Result
 

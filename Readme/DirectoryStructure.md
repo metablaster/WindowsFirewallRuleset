@@ -16,8 +16,9 @@ the meaning is same or similar.
   - [Config](#config)
     - [HelpContent](#helpcontent)
     - [mTail](#mtail)
-    - [sysinternals](#sysinternals)
-    - [Windows](#windows)
+    - [procmon](#procmon)
+    - [SSH](#ssh)
+    - [System](#system)
     - [WPA](#wpa)
   - [Exports](#exports)
   - [Logs](#logs)
@@ -30,7 +31,7 @@ the meaning is same or similar.
     - [Help](#help)
     - [Private](#private)
     - [Public](#public)
-      - [Scripts](#scripts)
+    - [Scripts](#scripts)
   - [Readme](#readme)
     - [LAN Setup](#lan-setup)
     - [Screenshots](#screenshots)
@@ -46,6 +47,7 @@ the meaning is same or similar.
       - [Inbound rules](#inbound-rules)
   - [Scripts](#scripts-1)
     - [Experiment](#experiment)
+    - [Security](#security)
     - [Utility](#utility)
   - [Templates](#templates)
   - [Test](#test-1)
@@ -70,11 +72,15 @@ Contains CAB files for `Update-Help` commandlet
 
 Configurations files for mTail program
 
-### sysinternals
+### procmon
 
-Configurations files for programs downloaded from sysinternals site
+Configurations files for process monitor from sysinternals site
 
-### Windows
+### SSH
+
+SSH configuration files
+
+### System
 
 Settings for OS related software
 
@@ -126,7 +132,7 @@ Functions private to module
 
 Functions exposed by module
 
-#### Scripts
+### Scripts
 
 Contains module scripts that are not functions
 
@@ -189,6 +195,10 @@ Scripts which are not part of modules
 ### Experiment
 
 Experimental scripts, can be used for study and arequire improvements
+
+### Security
+
+Contains scripts used to manage Windows security
 
 ### Utility
 

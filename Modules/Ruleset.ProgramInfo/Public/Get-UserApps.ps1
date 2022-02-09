@@ -121,7 +121,6 @@ function Get-UserApps
 			}
 			else
 			{
-				# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
 				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
 					param (
 						[string] $Name,

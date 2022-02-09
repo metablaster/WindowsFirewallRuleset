@@ -68,9 +68,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Config" -Filter *.pssc
+$ConfigFile = Get-ChildItem -Recurse -Path "$ProjectRoot\Config" -Filter *.pssc
 
-foreach ($File in $Scripts)
+foreach ($File in $ConfigFile)
 {
 	Write-Information -Tags "Project" -MessageData "INFO: Testing $File"
 	if (!(Test-PSSessionConfigurationFile -Path $File.FullName))

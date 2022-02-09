@@ -38,7 +38,6 @@ SOFTWARE.
 #
 
 @{
-
 	# Version number of the schema used for this document
 	SchemaVersion = "2.0.0.0"
 

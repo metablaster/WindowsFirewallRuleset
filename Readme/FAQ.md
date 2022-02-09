@@ -203,18 +203,17 @@ So here is an overview to help you see what they do hopefully answering all of y
 5. WS-Management service (Windows Remote Management) configuration is modified
 
     - WinRM configuration is completely modified
-    - PowerShell remoting is enabled which does the following
+    - PowerShell remoting may be enabled either for loopback or remote sessions which does the following:
       - Starts the WinRM service.
       - Sets the startup type on the WinRM service to Automatic.
-      - Creates a listener to accept requests on any IP address.
-      - Enables a firewall exception for WS-Management communications.
+      - Creates a listener to accept requests on loopback IP address.
+      - Temporarily enables a firewall exception for WS-Management communications.
       - Creates the simple and long name session endpoint configurations if needed.
       - Enables all session configurations.
-      - Changes the security descriptor of all session configurations to allow remote access.
+      - Optionally changes the security descriptor of all session configurations to allow remote access.
 
-    - Default PowerShell session configurations are recreated and disabled
-    - Custom session configuration is created which is used for firewall deployment
-    - WMI Provider plugin is enabled which is required for CIM to work
+    - Default PowerShell session configurations are recreated and optionally disabled
+    - Custom session configurations are created which is used for local and remote firewall deployment
 
 6. Following default firewall rules are recreated or removed in control panel firewall
 
@@ -259,7 +258,7 @@ them as follows:
 
     By default none of these scripts (except scripts in `Ruleset.Remote`) run on their own,
     except as explained in point 5.\
-    Those scripts listed above which begin with `...\` exist in at least `Modules` and `Test` subdirectories.
+    Those scripts listed above which begin with `...\` exist in `Modules` and `Test` subdirectories.
 
 9. Following is a list of external executables that are run by some scripts
 
@@ -269,6 +268,7 @@ them as follows:
     - [git.exe][git] (To learn git version or to set up git)
     - [makecab.exe][makecab] (To make online help content)
     - [netstat.exe][netstat] (Used to get network statistics)
+    - [sigcheck64.exe][sigcheck] (Used to scan digital signature of executable files)
 
 10. There is nothing harmful
 
@@ -298,6 +298,9 @@ modifying settings/rules)
 
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to deploy firewall and try again.
+
+The "access is denied" error may also happen with remoting, see [Remote.md](/Readme/Remote.md) to
+resolve issues with remoting.
 
 [Table of Contents](#table-of-contents)
 
@@ -357,3 +360,4 @@ network settings as follows:
 [git]: https://git-scm.com "Visit git homepage"
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
 [netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
+[sigcheck]: https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck "Visit Microsoft docs"
