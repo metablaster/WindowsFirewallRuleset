@@ -145,11 +145,11 @@ function Initialize-Connection
 					$WinRMClientSet = $true
 					if ($RemotingProtocol -eq "HTTPS")
 					{
-						Set-WinRMClient -Protocol Any -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
 					}
 					else
 					{
-						Set-WinRMClient -Protocol Any -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
 					}
 
 					# Enable loopback only HTTP
@@ -188,11 +188,11 @@ function Initialize-Connection
 					# Configure this machine for remote session over SSL
 					if ($RemotingProtocol -eq "HTTPS")
 					{
-						Set-WinRMClient -Protocol Any -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
 					}
 					else
 					{
-						Set-WinRMClient -Protocol Any -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
 					}
 				}
 

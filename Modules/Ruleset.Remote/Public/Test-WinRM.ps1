@@ -373,9 +373,9 @@ function Test-WinRM
 
 		Remove-PSSession -Name TestSession
 
+		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
 		{
-			$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 			$Status.Value = $StatusHTTPS
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] HTTPS test result is '$StatusHTTPS'"
 		}

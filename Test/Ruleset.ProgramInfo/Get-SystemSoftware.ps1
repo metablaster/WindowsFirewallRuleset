@@ -93,12 +93,6 @@ else
 	Start-Test "| Select *"
 	$SystemPrograms | Sort-Object -Property Name | Select-Object *
 
-	Start-Test "Remote"
-	Connect-Computer $TestDomain
-	$SystemPrograms = Get-SystemSoftware -Domain $TestDomain
-	$SystemPrograms
-	Disconnect-Computer $TestDomain
-
 	Test-Output $SystemPrograms -Command Get-SystemSoftware
 }
 
