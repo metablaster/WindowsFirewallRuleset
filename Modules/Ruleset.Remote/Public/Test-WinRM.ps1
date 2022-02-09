@@ -197,6 +197,7 @@ function Test-WinRM
 	if ($Quiet)
 	{
 		$ErrorActionPreference = "SilentlyContinue"
+		$WarningPreference = "SilentlyContinue"
 		$InformationPreference = "SilentlyContinue"
 	}
 
@@ -225,6 +226,30 @@ function Test-WinRM
 		# TODO: -SkipTestConnection could be used for Test-Credential function
 	}
 
+	$ConfigurationEnabled = Get-PSSessionConfiguration -Name $ConfigurationName -ErrorAction SilentlyContinue |
+	Select-Object -ExpandProperty Enabled
+
+	# If specified session is disabled or missing New-PSSession will not work
+	if ($null -eq $ConfigurationEnabled)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is missing"
+	}
+	elseif ($ConfigurationEnabled -eq $false)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
+	}
+	else
+	{
+		if (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+		}
+		elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+		}
+	}
+
 	# Parameters for PS Session
 	$PSSessionParams = @{
 		# PS session name
@@ -235,32 +260,6 @@ function Test-WinRM
 		SessionOption = $SessionOption
 		# MSDN: If you specify only the configuration name, the following schema URI is prepended: http://schemas.microsoft.com/PowerShell
 		ConfigurationName = $ConfigurationName
-	}
-
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking localhost plugin status"
-	if ($PSVersionTable.PSEdition -eq "Desktop")
-	{
-		$DefaultSession = "Microsoft.PowerShell"
-	}
-	else
-	{
-		$DefaultSession = "PowerShell.$($PSVersionTable.PSVersion)"
-	}
-
-	try
-	{
-		$PluginStatus = Get-Item WSMan:\localhost\Plugin\$DefaultSession\Enabled
-		if ($PluginStatus.Value -eq $false)
-		{
-			# Default plugin needs to be enabled, this is equivalent to enabling default session configuration
-			# If disabled New-PSSession to localhost will not work
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Default session plugin '$DefaultSession' is disabled"
-		}
-	}
-	catch
-	{
-		Write-Error -Category ResourceUnavailable -TargetObject $DefaultSession `
-			-Message "Default session plugin '$DefaultSession' is missing"
 	}
 
 	if ($Domain -ne [System.Environment]::MachineName)
@@ -354,25 +353,17 @@ function Test-WinRM
 		# Test PS Session connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing PS session over HTTPS on '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
-		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
-			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
-		}
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		$PSSessionResult = New-PSSession @PSSessionParams
 		if (!$Quiet) { $PSSessionResult }
 		Remove-PSSession -Name TestSession
 
-		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
-		if ($Protocol -ne "Any")
+		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
 		{
-			if ($PSBoundParameters.ContainsKey("Status"))
-			{
-				$Status.Value = $StatusHTTPS
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM HTTPS test result is '$StatusHTTPS'"
-			}
+			$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
+			$Status.Value = $StatusHTTPS
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] HTTPS test result is '$StatusHTTPS'"
 		}
 	}
 
@@ -435,33 +426,22 @@ function Test-WinRM
 		# Test PS Session connectivity
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Testing PS session over HTTP on '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
-		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
-			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
-		}
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		$PSSessionResult = New-PSSession @PSSessionParams
 		if (!$Quiet) { $PSSessionResult }
 		Remove-PSSession -Name TestSession
 
-		$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2) -and ($null -ne $PSSessionResult)
-		if ($Protocol -ne "Any")
+		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Any"))
 		{
-			if ($PSBoundParameters.ContainsKey("Status"))
-			{
-				$Status.Value = $StatusHTTP
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] CIM HTTP test result is '$StatusHTTP'"
-			}
+			$StatusHTTP = ($null -ne $WSManResult2) -and ($null -ne $CimResult2) -and ($null -ne $PSSessionResult)
+			$Status.Value = $StatusHTTP
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] HTTP test result is '$StatusHTTP'"
 		}
 	}
 
-	if ($Protocol -eq "Any")
+	if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -eq "Any"))
 	{
-		if ($PSBoundParameters.ContainsKey("Status"))
-		{
-			$Status.Value = $StatusHTTP -or $StatusHTTPS
-		}
+		$Status.Value = $StatusHTTP -or $StatusHTTPS
 	}
 }

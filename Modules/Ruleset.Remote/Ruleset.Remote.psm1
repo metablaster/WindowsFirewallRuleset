@@ -132,7 +132,10 @@ New-Variable -Name AdapterProfile -Scope Script -Value $null
 New-Variable -Name VirtualAdapter -Scope Script -Value $null
 
 # PS edition specific remoting session, do not modify!
-New-Variable -Name FirewallSession -Scope Script -Option Constant -Value "RemoteFirewall.$($PSVersionTable.PSEdition)"
+New-Variable -Name RemoteFirewallSession -Scope Script -Option Constant -Value "RemoteFirewall.$($PSVersionTable.PSEdition)"
+
+# PS edition specific local session, do not modify!
+New-Variable -Name LocalFirewallSession -Scope Script -Option Constant -Value "LocalFirewall.$($PSVersionTable.PSEdition)"
 
 # TODO: Temporarily enable verbose output
 # $PSDefaultParameterValues["Write-Verbose:Verbose"] = $true

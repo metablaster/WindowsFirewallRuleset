@@ -33,7 +33,7 @@ Disable WinRM server for CIM and PowerShell remoting
 .DESCRIPTION
 Disable WinRM server for remoting previously enabled by Enable-WinRMServer.
 WinRM service will continue to run but will accept only loopback HTTP and only if
-using "RemoteFirewall.PSedition" session configuration.
+using "LocalFirewall.PSedition" session configuration.
 
 In addition unlike Disable-PSRemoting, it will also remove default firewall rules
 and restore registry setting which restricts remote access to members of the
@@ -41,7 +41,8 @@ Administrators group on the computer.
 
 .PARAMETER All
 If specified, will disable WinRM service completely including loopback functionality,
-remove all listeners and disable all session configurations.
+remove all listeners, disable all session configurations and disable registry setting to
+deny remote access to Administrators
 
 .PARAMETER KeepDefault
 If specified, keeps default session configurations enabled.
@@ -120,12 +121,6 @@ function Disable-WinRMServer
 
 	Initialize-WinRM
 
-	if (!(Get-PSSessionConfiguration -Name $script:FirewallSession -EA Ignore))
-	{
-		Write-Error -Category InvalidOperation -Message "Enable-WinRMServer must run before calling Disable-WinRMServer"
-		return
-	}
-
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Remove all listeners"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing all WinRM server listeners"
@@ -148,20 +143,19 @@ function Disable-WinRMServer
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling custom session configurations"
 
 			# Disable all custom session configurations, keep default ones
-			# NOTE: Using Where-Object here to combine a,b and c results in same issue below
+			# TODO: Use Where-Object
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
 			{
 				$a = $Session -notlike "Microsoft.PowerShell*"
 				# NOTE: PS Core major needs to be updated when the version increments
 				$b = $Session -notlike "PowerShell.7*"
-				$c = $Session -ne "RemoteFirewall.Core"
-				$d = $Session -ne "RemoteFirewall.Desktop"
+				$c = $Session -notmatch "(Local|Remote)Firewall.(Core|Desktop)"
 
-				if ($a -and $b -and $c -and $d)
+				if ($a -and $b -and $c)
 				{
 					# TODO: Temporarily warning while troubleshooting
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Disabling custom session configuration '$Session'"
-					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session
+					Disable-PSSessionConfiguration -Name $Session -NoServiceRestart -Force
 				}
 			}
 		}
@@ -169,11 +163,11 @@ function Disable-WinRMServer
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all unneeded session configurations"
 
-			# Disable all session configurations except what's needed for firewall management and Ruleset.Compatibility module
+			# Disable all session configurations except what's needed for local firewall management and Ruleset.Compatibility module
 			foreach ($Session in (Get-PSSessionConfiguration | Select-Object -ExpandProperty Name))
 			{
 				$a = $Session -ne "Microsoft.PowerShell"
-				$b = $Session -ne $script:FirewallSession
+				$b = $Session -ne $script:LocalFirewallSession
 
 				if ($a -and $b)
 				{

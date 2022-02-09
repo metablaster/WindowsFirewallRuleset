@@ -79,7 +79,7 @@ function Disconnect-Computer
 
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Not connecting computer '$Domain' because it's not connected"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Not disconnecting computer '$Domain' because it's not connected"
 		return
 	}
 

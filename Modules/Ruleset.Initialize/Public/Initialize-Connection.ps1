@@ -74,12 +74,12 @@ function Initialize-Connection
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
 			Protocol = $RemotingProtocol
-			ConfigurationName = $PSSessionConfigurationName
 			ApplicationName = $PSSessionApplicationName
 			Authentication = $RemotingAuthentication
 		}
 
 		# [System.Management.Automation.Remoting.PSSessionOption]
+		# Advanced options for a user-managed remote session
 		$PSSessionOption.Culture = $DefaultCulture
 		$PSSessionOption.UICulture = $DefaultUICulture
 		# OpenTimeout (in milliseconds), affects only PS sessions
@@ -107,32 +107,54 @@ function Initialize-Connection
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
-			$PSSessionOption.NoCompression = $false
 
-			if ($RemotingProtocol -ne "HTTP")
+			$PSSessionOption.NoCompression = $false
+			# MSDN: Specifies the default session configuration that is used for PSSessions created in the current session.
+			# The default value http://schemas.microsoft.com/PowerShell/microsoft.PowerShell indicates
+			# the "Microsoft.PowerShell" session configuration on the remote computer.
+			# If you specify only a configuration name, the following schema URI is prepended:
+			# http://schemas.microsoft.com/PowerShell/
+			$PSSessionConfigurationName = "RemoteFirewall.$($PSVersionTable.PSEdition)"
+			$ConnectParams["ConfigurationName"] = $PSSessionConfigurationName
+
+			if ($RemotingProtocol -eq "HTTP")
+			{
+				$PSSessionOption.NoEncryption = $true
+				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
+			}
+			else
 			{
 				$PSSessionOption.NoEncryption = $false
 				# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 				# There is global variable that controls encoding, see if it can be used here
 				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 			}
-			else
-			{
-				$PSSessionOption.NoEncryption = $true
-				$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
-			}
+
+			# If Set-WinRMClient is run during loopback testing then it doesn't need to run during remote testing
+			$WinRMClientSet = $false
 
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				# Loopback WinRM is required for Ruleset.Compatibility module
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
-				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet
+				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName "Microsoft.PowerShell"
 
 				if (!$ConnectionStatus)
 				{
+					# Set client by the way for both, loopback HTTP and remote HTTPS
+					$WinRMClientSet = $true
+					if ($RemotingProtocol -eq "HTTPS")
+					{
+						Set-WinRMClient -Protocol Any -Domain $PolicyStore -Confirm:$false
+					}
+					else
+					{
+						Set-WinRMClient -Protocol Any -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+					}
+
 					# Enable loopback only HTTP
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-					Test-WinRM -Protocol HTTP -ErrorAction Stop
+					Test-WinRM -Protocol HTTP -ErrorAction Stop -ConfigurationName "Microsoft.PowerShell"
 				}
 			}
 
@@ -154,51 +176,58 @@ function Initialize-Connection
 
 			$ConnectParams["Credential"] = $RemotingCredential
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -Status ([ref] $ConnectionStatus) -Quiet
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if remoting WinRM requires configuration..."
+			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential `
+				-Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName $PSSessionConfigurationName
 
 			# TODO: A new function needed to conditionally configure remote host here
 			if (!$ConnectionStatus)
 			{
-				# Configure this machine for remote session over SSL
-				if ($RemotingProtocol -eq "HTTPS")
+				if (!$WinRMClientSet)
 				{
-					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false
-				}
-				else
-				{
-					Set-WinRMClient -Protocol $RemotingProtocol -Domain $PolicyStore -Confirm:$false -TrustedHosts $PolicyStore
+					# Configure this machine for remote session over SSL
+					if ($RemotingProtocol -eq "HTTPS")
+					{
+						Set-WinRMClient -Protocol Any -Domain $PolicyStore -Confirm:$false
+					}
+					else
+					{
+						Set-WinRMClient -Protocol Any -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+					}
 				}
 
-				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential -ErrorAction Stop
+				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -ErrorAction Stop `
+					-ConfigurationName $PSSessionConfigurationName -Credential $RemotingCredential
 			}
 
-			if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
-			{
-				Enable-RemoteRegistry -Confirm:$false
-				Test-RemoteRegistry -Domain $PolicyStore
-			}
+			# if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
+			# {
+			# 	Enable-RemoteRegistry -Confirm:$false
+			# 	Test-RemoteRegistry -Domain $PolicyStore
+			# }
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
 			$PSSessionOption.NoEncryption = $true
 			$PSSessionOption.NoCompression = $true
+			$PSSessionConfigurationName = "LocalFirewall.$($PSVersionTable.PSEdition)"
 
 			# For loopback using only HTTP
 			# TODO: For completeness, implement use of HTTPS, credentials will be needed
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to local computer"
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if WinRM requires configuration..."
-			Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
+			Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName $PSSessionConfigurationName
 
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
 				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol HTTP -ErrorAction Stop
+				Test-WinRM -Protocol HTTP -ConfigurationName $PSSessionConfigurationName -ErrorAction Stop
 			}
 
 			$ConnectParams["Protocol"] = "HTTP"
+			$ConnectParams["ConfigurationName"] = $PSSessionConfigurationName
 			$ConnectParams["CimOptions"] = New-CimSessionOption -Protocol Wsman -UICulture $DefaultUICulture -Culture $DefaultCulture
 		}
 		else

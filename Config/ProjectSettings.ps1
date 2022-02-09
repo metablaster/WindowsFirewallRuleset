@@ -81,6 +81,8 @@ TODO: Check parameter naming convention
 TODO: Remoting using SSH and DCOM\RPC, see Enter-PSSession
 HACK: This script become too big and too depending, move non variable code somewhere else
 HACK: -Domain parameter would override because script is dot sourced
+HACK: Setting PSSessionOption in this script does not affect PSSessionOption in other scopes
+NOTE: $PSSessionConfigurationName and $PSSessionOption are handled in Initialize-Connection
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsessionoption
@@ -251,23 +253,10 @@ $ProgressPreference = "Continue"
 # Values: All, ModuleQualified or None
 $PSModuleAutoLoadingPreference = "All"
 
-# Specifies the default session configuration that is used for PSSessions created in the current session.
-# The default value http://schemas.microsoft.com/PowerShell/microsoft.PowerShell indicates
-# the "Microsoft.PowerShell" session configuration on the remote computer.
-# If you specify only a configuration name, the following schema URI is prepended:
-# http://schemas.microsoft.com/PowerShell/
-$PSSessionConfigurationName = "RemoteFirewall.$($PSVersionTable.PSEdition)"
-
 # The $PSSessionApplicationName preference variable is set on the local computer,
 # but it specifies a listener on the remote computer.
 # The system default application name is wsman
 $PSSessionApplicationName = "wsman"
-
-# Advanced options for a user-managed remote session
-# HACK: Setting PSSessionOption here does not affect PSSessionOption in other scopes
-# We set these values in Initialize-Connection function
-# $PSSessionOption = New-PSSessionOption -UICulture en-US -Culture en-US `
-# -OpenTimeout 3000 -CancelTimeout 5000 -OperationTimeout 10000 -MaxConnectionRetryCount 2
 
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
@@ -408,48 +397,50 @@ if ($Develop -and !$InModule)
 #endregion
 
 #region Remote session initialization
+# Remoting variables, these can be modified if definition allows
+if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignore))
+{
+	Write-Debug -Message "[$SettingsScript] Setting up remoting variables"
+
+	# Check if removable variables already initialized, do not modify!
+	New-Variable -Name CheckRemotingVariables -Scope Global -Option Constant -Value $null
+
+	# Valid policy stores
+	New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
+		([System.Environment]::MachineName)
+		"PersistentStore"
+		"ActiveStore"
+		"RSOP"
+		"SystemDefaults"
+		"StaticServiceStore"
+		"ConfigurableServiceStore"
+	)
+
+	# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
+	# A value "Any" means, use HTTPS, and if not working use HTTP
+	# NOTE: For loopback sessions HTTP is used regardless of this setting
+	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTP"
+
+	# Credential object to be used for authentication to remote computer
+	New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"
+
+	# Credential object to be used for authentication to remote computer
+	New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
+}
+
 if ($PSCmdlet.ParameterSetName -eq "Script")
 {
-	# Remoting variables, these can be modified if definition allows
-	if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignore))
-	{
-		Write-Debug -Message "[$SettingsScript] Setting up remoting variables"
-
-		# Check if removable variables already initialized, do not modify!
-		New-Variable -Name CheckRemotingVariables -Scope Global -Option Constant -Value $null
-
-		# Valid policy stores
-		New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
-			([System.Environment]::MachineName)
-			"PersistentStore"
-			"ActiveStore"
-			"RSOP"
-			"SystemDefaults"
-			"StaticServiceStore"
-			"ConfigurableServiceStore"
-		)
-
-		# Specify protocol for remote deployment, acceptable value is HTTP, HTTPS or Any
-		# NOTE: For loopback sessions HTTP is used regardless of this setting
-		New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "HTTPS"
-
-		# Credential object to be used for authentication to remote computer
-		New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"
-
-		# Credential object to be used for authentication to remote computer
-		New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
-	}
-
 	if (Get-Variable -Name PolicyStore -Scope Global -ErrorAction Ignore)
 	{
 		if ($TargetHost -and ($TargetHost -ne $PolicyStore))
 		{
+			# TODO: This will invoke module load before calling Initialize-Project
 			Disconnect-Computer -Domain $PolicyStore
 		}
 	}
 
 	# Target machine onto which to deploy firewall (default: Local Group Policy)
-	if ([string]::IsNullOrEmpty($TargetHost) -or ($TargetHost -eq "localhost") -or ($TargetHost -eq [System.Environment]::MachineName))
+	if ([string]::IsNullOrEmpty($TargetHost) -or ($TargetHost -eq [System.Environment]::MachineName))
 	{
 		Set-Variable -Name PolicyStore -Scope Global -Option ReadOnly -Force -Value ([System.Environment]::MachineName)
 	}

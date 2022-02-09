@@ -48,7 +48,7 @@ Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 .PARAMETER Protocol
-Specify protocol to use for test, HTTP, HTTPS or any.
+Specify protocol to use for connection, HTTP, HTTPS or any.
 The default value is "Any" which means HTTPS is used for connection to remote computer
 and HTTP for local machine.
 
@@ -163,7 +163,11 @@ function Connect-Computer
 		Disconnect-Computer $PolicyStore
 	}
 
-	if ($ConfigurationName -ne $script:FirewallSession)
+	if (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+	}
+	elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
@@ -227,23 +231,8 @@ function Connect-Computer
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	# Remote computer or localhost over HTTPS
-	if ($PSSessionParams["UseSSL"])
+	if ($Domain -ne [System.Environment]::MachineName)
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS connection"
-		if (!$Port)
-		{
-			$CimParams["Port"] = 5986
-			$PSSessionParams["Port"] = 5986
-		}
-
-		if (!$CimOptions)
-		{
-			# TODO: LocalStore needs a better place for adjustment
-			# TODO: There is global variable for encoding
-			$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
-		}
-
 		if (!$Credential)
 		{
 			# TODO: -Credential param, specify SERVER\UserName
@@ -267,6 +256,24 @@ function Connect-Computer
 
 		$PSSessionParams["Credential"] = $Credential
 		$PSSessionParams["ComputerName"] = $Domain
+	}
+
+	# Remote computer or localhost over HTTPS
+	if ($PSSessionParams["UseSSL"])
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Configuring HTTPS connection"
+		if (!$Port)
+		{
+			$CimParams["Port"] = 5986
+			$PSSessionParams["Port"] = 5986
+		}
+
+		if (!$CimOptions)
+		{
+			# TODO: LocalStore needs a better place for adjustment
+			# TODO: There is global variable for encoding
+			$CimParams["SessionOption"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
+		}
 	}
 	else
 	{
@@ -337,11 +344,6 @@ function Connect-Computer
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
-		if ($PSBoundParameters.ContainsKey("Debug") -and ($PSBoundParameters["Debug"] -eq $true))
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Session configuration:"
-			Get-PSSessionConfiguration -Name $PSSessionParams["ConfigurationName"].Split("/")[-1] | Select-Object -Property * | Format-List
-		}
 
 		New-PSSession @PSSessionParams | Out-Null
 
