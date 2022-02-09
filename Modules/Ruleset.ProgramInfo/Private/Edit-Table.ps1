@@ -37,6 +37,9 @@ Module scope installation table is updated
 .PARAMETER Path
 Program installation directory
 
+.PARAMETER Domain
+Remote computer for which installation path is added to the table
+
 .PARAMETER Quiet
 If specified suppresses warning, error or informationall messages if specified path does not exist
 or if it's of an invalid syntax needed for firewall
@@ -65,6 +68,10 @@ function Edit-Table
 		[string] $Path,
 
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
 		[switch] $Quiet
 	)
 
@@ -72,13 +79,17 @@ function Edit-Table
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Check if input path leads to user profile and is compatible with firewall
-	if (Test-FileSystemPath $Path -UserProfile -Firewall -Quiet -PathType Directory)
+	if (Test-FileSystemPath $Path -UserProfile -Firewall -Quiet -PathType Directory -Domain $Domain)
 	{
+		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+		Select-Object -ExpandProperty SystemDrive
+		$SystemDrive = $SystemDrive.TrimEnd(":")
+
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
-		$UserInfo = Get-GroupPrincipal "Users" | Where-Object {
-			$Path -match "^$Env:SystemDrive\\+Users\\+$($_.User)\\+"
+		$UserInfo = Get-GroupPrincipal "Users" -Domain $Domain | Where-Object {
+			$Path -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
 		# Make sure user profile variables are not present
@@ -104,12 +115,12 @@ function Edit-Table
 	# Check if input path is valid for firewall, since this path is manually specified by developer
 	# in Search-Installation we need to test it just like in Confirm-Installation where path is
 	# manually specified by the user
-	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory -Quiet:$Quiet)
+	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain)
 	{
 		$Path = Format-Path $Path
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup -Domain $PolicyStore | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup -Domain $Domain | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

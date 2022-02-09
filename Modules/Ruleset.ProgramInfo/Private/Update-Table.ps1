@@ -197,7 +197,7 @@ function Update-Table
 				$Row = $InstallTable.NewRow()
 
 				# Let see who owns the sub key which is the SID
-				$KeyOwner = ConvertFrom-SID $Program.SIDKey
+				$KeyOwner = ConvertFrom-SID $Program.SIDKey -Domain $Domain
 				if ($KeyOwner -eq "Users")
 				{
 					$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
@@ -229,7 +229,7 @@ function Update-Table
 		# NOTE: User profile should be searched even if there is an installation system wide
 		if ($UserProfile)
 		{
-			$Principals = Get-GroupPrincipal "Users"
+			$Principals = Get-GroupPrincipal "Users" -Domain $Domain
 
 			foreach ($UserInfo in $Principals)
 			{

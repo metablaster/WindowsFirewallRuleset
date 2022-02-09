@@ -96,6 +96,7 @@ function Search-Installation
 
 	Initialize-Table
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
+	$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
 	$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
@@ -314,9 +315,11 @@ function Search-Installation
 			if ($InstallTable.Rows.Count -eq 1)
 			{
 				$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
-				$VersionFolders = Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($InstallLocation)) |
-				Where-Object {
-					$_.BaseName -match "^\d+\."
+				$VersionFolders = Invoke-Command -Session $SessionInstance -ScriptBlock {
+					Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($using:InstallLocation)) |
+					Where-Object {
+						$_.BaseName -match "^\d+\."
+					}
 				}
 
 				$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
@@ -583,7 +586,10 @@ function Search-Installation
 
 			if (Test-Path $ExpandedPath)
 			{
-				$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Name
+				$VersionFolders = Invoke-Command -Session $SessionInstance -ScriptBlock {
+					Get-ChildItem -Directory -Path $using:ExpandedPath -Name
+				}
+
 				foreach ($VersionFolder in $VersionFolders)
 				{
 					Edit-Table "$ExpandedPath\$VersionFolder\Engine"

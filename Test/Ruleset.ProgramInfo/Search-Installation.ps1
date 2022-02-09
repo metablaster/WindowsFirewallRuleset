@@ -92,6 +92,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote 'EdgeChromium'"
 	Search-Installation "EdgeChromium" -Domain $Domain
 	$global:InstallTable | Format-Table -AutoSize
+
+	Start-Test "Remote 'dotnet'"
+	Search-Installation "dotnet" -Domain $Domain
+	$global:InstallTable | Format-Table -AutoSize
 }
 else
 {

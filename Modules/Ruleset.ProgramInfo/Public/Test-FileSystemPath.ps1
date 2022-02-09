@@ -42,6 +42,9 @@ All of which can be limited to either container or leaf path type.
 Path to directory or file which to test.
 Allows null or empty since it may come from commandlets which may return empty string or null
 
+.PARAMETER Domain
+Computer name on which to test path
+
 .PARAMETER PathType
 The type of path to test, can be one of the following:
 1. File - The path is path to file
@@ -112,6 +115,10 @@ function Test-FileSystemPath
 		[string] $LiteralPath,
 
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
 		[Alias("Type")]
 		[ValidateSet("File", "Directory", "Any")]
 		[string] $PathType = "Any",
@@ -151,7 +158,7 @@ function Test-FileSystemPath
 				Write-Warning -Message "[$InvocationInfo] $Message"
 			}
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Path '$LiteralPath'"
+			Write-Information -Tags $InvocationInfo -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
 
@@ -161,7 +168,10 @@ function Test-FileSystemPath
 		return $false
 	}
 
-	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
+	$ExpandedPath = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
+	}
+
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
 
 	[string] $Status = ""
@@ -197,7 +207,7 @@ function Test-FileSystemPath
 	}
 	else
 	{
-		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name
+		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name -Domain $Domain
 		if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "*$($args[0])*" }))
 		{
 			$Status = "Specified environment variable was blacklisted"
@@ -208,7 +218,7 @@ function Test-FileSystemPath
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name
+			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name -Domain $Domain
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall)
@@ -222,7 +232,7 @@ function Test-FileSystemPath
 				# Verify path environment variables are whitelisted
 				# NOTE: This check must be before qualifier check to get precise error description
 				$RegexVariable = [regex]::Match($LiteralPath, "(?<=%)[^%\\]+(?=%)")
-				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact
+				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact -Domain $Domain
 
 				while ($RegexVariable.Success)
 				{
@@ -258,35 +268,57 @@ function Test-FileSystemPath
 			}
 		}
 
-		if ($PathType -eq "Any")
-		{
-			if ([System.IO.Directory]::Exists($ExpandedPath) -or [System.IO.File]::Exists($ExpandedPath))
+		Invoke-Command -Session $SessionInstance -ArgumentList $PathType -ScriptBlock {
+			param ($PathType)
+
+			if ($PathType -eq "Any")
 			{
-				return $true
+				if ([System.IO.Directory]::Exists($using:ExpandedPath) -or [System.IO.File]::Exists($using:ExpandedPath))
+				{
+					return $true
+				}
+
+				$Status = "Specified file or directory does not exist"
+			}
+			elseif ($PathType -eq "Directory")
+			{
+				if ([System.IO.Directory]::Exists($using:ExpandedPath))
+				{
+					return $true
+				}
+
+				$Status = "Specified directory does not exist"
+			}
+			elseif ($PathType -eq "File")
+			{
+				if ([System.IO.File]::Exists($using:ExpandedPath))
+				{
+					return $true
+				}
+
+				$Status = "Specified file does not exist"
 			}
 
-			$Status = "Specified file or directory does not exist"
-		}
-		elseif ($PathType -eq "Directory")
-		{
-			if ([System.IO.Directory]::Exists($ExpandedPath))
+			if ($using:Quiet)
 			{
-				return $true
+				# Make sure -Quiet switch does not make troubleshooting hard
+				Write-Debug -Message "[$using:InvocationInfo] $Status"
+			}
+			else
+			{
+				if ($using:Strict)
+				{
+					Write-Error -Category InvalidArgument -TargetObject $using:LiteralPath -Message $Status
+				}
+				else
+				{
+					Write-Warning -Message "[$using:InvocationInfo] $Status"
+				}
+
+				Write-Information -Tags $using:InvocationInfo -MessageData "INFO: Path '$using:LiteralPath'"
 			}
 
-			$Status = "Specified directory does not exist"
-		}
-		elseif ($PathType -eq "File")
-		{
-			if ([System.IO.File]::Exists($ExpandedPath))
-			{
-				return $true
-			}
-
-			$Status = "Specified file does not exist"
+			return $false
 		}
 	}
-
-	& $WriteConditional $Status
-	return $false
 }
