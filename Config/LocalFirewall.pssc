@@ -85,7 +85,7 @@ SOFTWARE.
 
 	# Optional maximum size in bytes of user drive created with MountUserDrive parameter.
 	# Default maximum size for User drive is 50MB.
-	# UserDriveMaximumSize = 50000000
+	UserDriveMaximumSize = 50000000
 
 	# Group managed service account name under which the configuration will run.
 	# The machine where this session configuration is registered must have permission to request
@@ -137,6 +137,7 @@ SOFTWARE.
 	# NOTE: For loopback firewall session importing modules is required when functions from modules
 	# are called from within -ScriptBlock parameter of Invoke-Command
 	ModulesToImport = @(
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"

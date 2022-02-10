@@ -456,6 +456,12 @@ function Search-Installation
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
 			# Update-Table -Search "Microsoft Office"
 
+			if ($Domain -ne $script:LastPolicyStore)
+			{
+				# If domain changed, need to update script cache
+				$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
+			}
+
 			$OfficeRoot = $ExecutablePaths | Where-Object -Property Name -EQ "Winword.exe" |
 			Select-Object -ExpandProperty InstallLocation
 

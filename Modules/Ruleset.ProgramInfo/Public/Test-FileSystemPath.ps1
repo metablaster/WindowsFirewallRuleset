@@ -287,7 +287,8 @@ function Test-FileSystemPath
 		}
 
 		Invoke-Command -Session $SessionInstance -ArgumentList $WriteConditional -ScriptBlock {
-			param ([scriptblock] $WriteConditional)
+			# NOTE: Must not be declared as [scriptblock], otherwise [ScriptBlock]::Create() (later) fails
+			param ($WriteConditional)
 
 			if ($using:PathType -eq "Any")
 			{

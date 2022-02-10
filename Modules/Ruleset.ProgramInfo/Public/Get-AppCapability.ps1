@@ -189,7 +189,10 @@ function Get-AppCapability
 	}
 	process
 	{
-		Invoke-Command -Session $SessionInstance -ScriptBlock {
+		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
+			param ([string] $InvocationName)
+			# TODO: This should be handled in session configuration
+			Import-WinModule -Name Appx -ErrorAction Stop
 
 			foreach ($StoreApp in $using:InputObject)
 			{
@@ -210,7 +213,7 @@ function Get-AppCapability
 					}
 
 					# If input app was not obtained from main store, get it from main store to be able to query package manifest
-					Write-Debug -Message "[$InvocationName] Input app is not from main store, querying main store"
+					Write-Debug -Message "[$InvocationName] Input app is not from the main store, querying main store"
 					$App = Get-AppxPackage -Name $App.Name -User $using:User -PackageTypeFilter Main
 
 					if (!$App)
@@ -220,30 +223,33 @@ function Get-AppCapability
 						continue
 					}
 
+					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
+					# [System.XML.XMLDocument]
 					$PackageManifest = ($App | Get-AppxPackageManifest -User $using:User).Package
 				}
 				else
 				{
 					try
 					{
+						Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
 						$PackageManifest = ($App | Get-AppxPackageManifest).Package
 					}
 					catch
 					{
 						# NOTE: This will be the cause with Microsoft account (non local Windows account)
-						Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing manifest 'Package' property"
+						Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing manifest 'Package' property because $($_.Exception.Message)"
 						continue
 					}
 				}
 
 				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities" -Verbose
 					continue
 				}
 				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities" -Verbose
 					continue
 				}
 

@@ -157,9 +157,9 @@ $SetScreenBufferParams = @{
 }
 if ($PSBoundParameters.ContainsKey("Confirm"))
 {
-	$SetScreenBufferParams.Confirm = $PSBoundParameters["Confirm"]
-	$GrantLogsParams.Confirm = $PSBoundParameters["Confirm"]
-	$SetShortCutParams.Confirm = $PSBoundParameters["Confirm"]
+	$SetScreenBufferParams["Confirm"] = $PSBoundParameters["Confirm"]
+	$GrantLogsParams["Confirm"] = $PSBoundParameters["Confirm"]
+	$SetShortCutParams["Confirm"] = $PSBoundParameters["Confirm"]
 }
 
 # Prompt to set screen buffer to recommended value

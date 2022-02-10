@@ -29,5 +29,7 @@ SOFTWARE.
 # Appx module must be imported in compatibility mode for PowerShell version 7.1+
 if ($PSVersionTable.PSVersion -ge "7.1")
 {
+	# TODO: Importing Compatibility module here is not needed
+	Import-Module -Name "$PSScriptRoot\..\..\Ruleset.Compatibility" -Scope Global
 	Import-WinModule -Name Appx -ErrorAction Stop
 }

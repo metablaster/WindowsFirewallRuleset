@@ -91,7 +91,12 @@ SOFTWARE.
 	ProcessorArchitecture = "None"
 
 	# Modules that must be imported into the global environment prior to importing this module
-	# RequiredModules = @()
+	# RequiredModules = @(
+	# 	"Ruleset.Compatibility"
+	# 	"Ruleset.ComputerInfo"
+	# 	"Ruleset.UserInfo"
+	# 	"Ruleset.Utility"
+	# )
 
 	# Assemblies that must be loaded prior to importing this module
 	RequiredAssemblies = @(
@@ -271,6 +276,7 @@ SOFTWARE.
 
 			# A list of external modules that this module is dependent upon.
 			ExternalModuleDependencies = @(
+				"Ruleset.Compatibility"
 				"Ruleset.ComputerInfo"
 				"Ruleset.UserInfo"
 				"Ruleset.Utility"

@@ -104,7 +104,7 @@ function Update-Table
 			$Domain = [System.Environment]::MachineName
 		}
 
-		if ($script:LastPolicyStore -ne $Domain)
+		if ($Domain -ne $script:LastPolicyStore)
 		{
 			# If domain changed, need to update script cache
 			$script:LastPolicyStore = $Domain
