@@ -33,6 +33,9 @@ Unit test for Test-ExecutableFile
 .DESCRIPTION
 Test correctness of Test-ExecutableFile function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -66,7 +73,6 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
-
 $ValidFile = "%SystemRoot%\regedit.exe"
 $Directory = "%SystemDrive%\Windows\System32"
 $BlacklistedExtension = New-Item -ItemType File -Path $DefaultTestDrive\badfile.scr -Force
@@ -75,66 +81,77 @@ $NoExtension = New-Item -ItemType File -Path $DefaultTestDrive\fileonly -Force
 $UnsignedFile = New-Item -ItemType File -Path $DefaultTestDrive\unsigned.exe -Force
 $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
 
-Start-Test "Valid executable"
-$Result = Test-ExecutableFile $ValidFile
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Valid executable"
+	Test-ExecutableFile $ValidFile -Domain $Domain
 
-Start-Test "Directory"
-Test-ExecutableFile $Directory
+	Start-Test "Remote directory"
+	Test-ExecutableFile $Directory -Domain $Domain
+}
+else
+{
+	Start-Test "Valid executable"
+	$Result = Test-ExecutableFile $ValidFile
+	$Result
 
-Start-Test "Blacklisted extension" -Expected "FAIL"
-Test-ExecutableFile $BlacklistedExtension.FullName
+	Start-Test "Directory"
+	Test-ExecutableFile $Directory
 
-Start-Test "Unknown extension" -Expected "FAIL"
-Test-ExecutableFile $UnknownExtension.FullName
+	Start-Test "Blacklisted extension" -Expected "FAIL"
+	Test-ExecutableFile $BlacklistedExtension.FullName
 
-Start-Test "No extension" -Expected "FAIL"
-Test-ExecutableFile $NoExtension.FullName
+	Start-Test "Unknown extension" -Expected "FAIL"
+	Test-ExecutableFile $UnknownExtension.FullName
 
-Start-Test "Unsigned file" -Expected "FAIL"
-Test-ExecutableFile $UnsignedFile.FullName
+	Start-Test "No extension" -Expected "FAIL"
+	Test-ExecutableFile $NoExtension.FullName
 
-Start-Test "Force unsigned file" -Expected "WARNING"
-Test-ExecutableFile $UnsignedFile.FullName -Force
+	Start-Test "Unsigned file" -Expected "FAIL"
+	Test-ExecutableFile $UnsignedFile.FullName
 
-Start-Test "Non existent directory"
-Test-ExecutableFile "C:\Unknown\Directory\"
+	Start-Test "Force unsigned file" -Expected "WARNING"
+	Test-ExecutableFile $UnsignedFile.FullName -Force
 
-Start-Test "Non existent file"
-Test-ExecutableFile "C:\Unknown\Directory\file.exe"
+	Start-Test "Non existent directory"
+	Test-ExecutableFile "C:\Unknown\Directory\"
 
-Start-Test "Unresolved path"
-Test-ExecutableFile "C:\Unk[n]own\*tory"
+	Start-Test "Non existent file"
+	Test-ExecutableFile "C:\Unknown\Directory\file.exe"
 
-Start-Test "Relative path to directory"
-Test-ExecutableFile ".\.."
+	Start-Test "Unresolved path"
+	Test-ExecutableFile "C:\Unk[n]own\*tory"
 
-Start-Test "Relative path to this directory: ."
-Test-ExecutableFile "."
+	Start-Test "Relative path to directory"
+	Test-ExecutableFile ".\.."
 
-Start-Test "Relative path to root drive: \"
-Test-ExecutableFile "\"
+	Start-Test "Relative path to this directory: ."
+	Test-ExecutableFile "."
 
-Start-Test "Relative path to valid file 1"
-Copy-Item -Path ([System.Environment]::ExpandEnvironmentVariables($ValidFile)) -Destination $DefaultTestDrive
-Test-ExecutableFile "..\TestDrive\regedit.exe"
+	Start-Test "Relative path to root drive: \"
+	Test-ExecutableFile "\"
 
-Start-Test "Relative path to valid file 2"
-Test-ExecutableFile "C:\Windows\System32\..\regedit.exe"
+	Start-Test "Relative path to valid file 1"
+	Copy-Item -Path ([System.Environment]::ExpandEnvironmentVariables($ValidFile)) -Destination $DefaultTestDrive
+	Test-ExecutableFile "..\TestDrive\regedit.exe"
 
-Start-Test "Relative path to unsigned file"
-Test-ExecutableFile "..\TestDrive\$($UnsignedFile.Name)"
+	Start-Test "Relative path to valid file 2"
+	Test-ExecutableFile "C:\Windows\System32\..\regedit.exe"
 
-Start-Test "Bad path syntax"
-Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
+	Start-Test "Relative path to unsigned file"
+	Test-ExecutableFile "..\TestDrive\$($UnsignedFile.Name)"
 
-Start-Test "Path to registry"
-Test-ExecutableFile "HKLM:\SOFTWARE\Microsoft\Clipboard"
+	Start-Test "Bad path syntax"
+	Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
 
-Start-Test "UNC path"
-Test-ExecutableFile $UNCPath
+	Start-Test "Path to registry"
+	Test-ExecutableFile "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-Test-Output $Result -Command Test-ExecutableFile
+	Start-Test "UNC path"
+	Test-ExecutableFile $UNCPath
+
+	Test-Output $Result -Command Test-ExecutableFile
+}
 
 Update-Log
 Exit-Test

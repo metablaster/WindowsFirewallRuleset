@@ -113,6 +113,7 @@ $PublicScripts = @(
 	"Test-ExecutableFile"
 	"Test-FileSystemPath"
 	"Test-Service"
+	"Test-VirusTotal"
 )
 
 foreach ($Script in $PublicScripts)

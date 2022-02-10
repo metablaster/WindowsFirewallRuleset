@@ -138,9 +138,24 @@ function Test-FileSystemPath
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	$InvocationInfo = $MyInvocation.InvocationName
-	$WriteConditional = {
-		param ([string] $Message)
+	[scriptblock] $WriteConditional = {
+		param (
+			[Parameter(Mandatory = $true)]
+			[string] $Message,
+
+			# Following parameters are needed only in remote execution context
+			[switch] $Quiet = $Quiet,
+			[switch] $Strict = $Strict,
+			[string] $LiteralPath = $LiteralPath,
+			[string] $InvocationInfo = $InvocationInfo
+		)
 
 		if ($Quiet)
 		{
@@ -271,8 +286,11 @@ function Test-FileSystemPath
 			}
 		}
 
-		Invoke-Command -Session $SessionInstance -ArgumentList $PathType -ScriptBlock {
-			param ($PathType)
+		Invoke-Command -Session $SessionInstance -ArgumentList $PathType, $WriteConditional -ScriptBlock {
+			param (
+				$PathType,
+				$WriteConditional
+			)
 
 			if ($PathType -eq "Any")
 			{
@@ -302,26 +320,8 @@ function Test-FileSystemPath
 				$Status = "Specified file does not exist"
 			}
 
-			if ($using:Quiet)
-			{
-				# Make sure -Quiet switch does not make troubleshooting hard
-				Write-Debug -Message "[$using:InvocationInfo] $Status"
-			}
-			else
-			{
-				if ($using:Strict)
-				{
-					Write-Error -Category InvalidArgument -TargetObject $using:LiteralPath -Message $Status
-				}
-				else
-				{
-					Write-Warning -Message "[$using:InvocationInfo] $Status"
-				}
-
-				Write-Information -Tags $using:InvocationInfo -MessageData "INFO: Path '$using:LiteralPath'"
-			}
-
+			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:Strict, $using:LiteralPath, $using:InvocationInfo)
 			return $false
-		}
-	}
+		} # Invoke-Command
+	} # if ([string]::IsNullOrEmpty($Status))
 }

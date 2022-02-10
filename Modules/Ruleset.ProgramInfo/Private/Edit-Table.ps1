@@ -34,7 +34,7 @@ Manually add new program installation directory to the table
 Based on path and if it's valid path fill the table with it and add principals and other information
 Module scope installation table is updated
 
-.PARAMETER Path
+.PARAMETER LiteralPath
 Program installation directory
 
 .PARAMETER Domain
@@ -65,7 +65,7 @@ function Edit-Table
 	param (
 		[Parameter(Mandatory = $true)]
 		[Alias("InstallLocation")]
-		[string] $Path,
+		[string] $LiteralPath,
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
@@ -76,23 +76,30 @@ function Edit-Table
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
+	}
+
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Check if input path leads to user profile and is compatible with firewall
-	if (Test-FileSystemPath $Path -UserProfile -Firewall -Quiet -PathType Directory -Domain $Domain)
+	if (Test-FileSystemPath $LiteralPath -UserProfile -Firewall -Quiet -PathType Directory -Domain $Domain)
 	{
 		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 		Select-Object -ExpandProperty SystemDrive
 
 		# Get a list of users to choose from, 3rd element in the path is user name
-		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
+		# NOTE: | Where-Object -Property User -EQ ($LiteralPath.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
 		$UserInfo = Get-GroupPrincipal "Users" -Domain $Domain | Where-Object {
-			$Path -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
+			$LiteralPath -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
 		# Make sure user profile variables are not present
-		$Path = Format-Path $Path
+		$LiteralPath = Format-Path $LiteralPath
 
 		# Create a row
 		$Row = $InstallTable.NewRow()
@@ -104,9 +111,9 @@ function Edit-Table
 		$Row.Group = $UserInfo.Group
 		$Row.Principal = $UserInfo.Principal
 		$Row.SID = $UserInfo.SID
-		$Row.InstallLocation = $Path
+		$Row.InstallLocation = $LiteralPath
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $LiteralPath"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -114,9 +121,9 @@ function Edit-Table
 	# Check if input path is valid for firewall, since this path is manually specified by developer
 	# in Search-Installation we need to test it just like in Confirm-Installation where path is
 	# manually specified by the user
-	elseif (Test-FileSystemPath $Path -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain)
+	elseif (Test-FileSystemPath $LiteralPath -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain)
 	{
-		$Path = Format-Path $Path
+		$LiteralPath = Format-Path $LiteralPath
 
 		# Not user profile path, so it applies to all users
 		$UserInfo = Get-UserGroup -Domain $Domain -CIM | Where-Object -Property Group -EQ "Users"
@@ -130,9 +137,9 @@ function Edit-Table
 		$Row.Group = $UserInfo.Group
 		$Row.Principal = $UserInfo.Principal
 		$Row.SID = $UserInfo.SID
-		$Row.InstallLocation = $Path
+		$Row.InstallLocation = $LiteralPath
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $Path"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Editing table for $($UserInfo.Principal) with $LiteralPath"
 
 		# Add the row to the table
 		$InstallTable.Rows.Add($Row)
@@ -141,7 +148,7 @@ function Edit-Table
 	{
 		# TODO: will be true also for user profile, we should try to fix the path if it leads to user profile instead of doing nothing.
 		# NOTE: This may be best done with Format-Path by reformatting
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] $Path not found or invalid"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] $LiteralPath not found or invalid"
 		return
 	}
 }

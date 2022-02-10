@@ -143,6 +143,7 @@ SOFTWARE.
 		"Test-ExecutableFile"
 		"Test-FileSystemPath"
 		"Test-Service"
+		"Test-VirusTotal"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -195,6 +196,7 @@ SOFTWARE.
 		"Help\en-US\Test-ExecutableFile.md"
 		"Help\en-US\Test-FileSystemPath.md"
 		"Help\en-US\Test-Service.md"
+		"Help\en-US\Test-VirusTotal.md"
 		"Help\README.md"
 		"Private\Edit-Table.ps1"
 		"Private\Initialize-Table.ps1"
@@ -223,6 +225,7 @@ SOFTWARE.
 		"Public\Test-ExecutableFile.ps1"
 		"Public\Test-FileSystemPath.ps1"
 		"Public\Test-Service.ps1"
+		"Public\Test-VirusTotal.ps1"
 		"Scripts\README.md"
 		"Scripts\TargetProgram.ps1"
 		"Ruleset.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"

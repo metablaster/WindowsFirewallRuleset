@@ -111,7 +111,7 @@ else
 	# Expanded paths
 	#
 
-	# New-Section "Expanded paths"
+	New-Section "Expanded paths"
 
 	$TestPath = "C:\\Windows\System32"
 	Start-Test "$TestPath"

@@ -98,6 +98,12 @@ function Update-Table
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
 		if ($script:LastPolicyStore -ne $Domain)
 		{
 			# If domain changed, need to update script cache
