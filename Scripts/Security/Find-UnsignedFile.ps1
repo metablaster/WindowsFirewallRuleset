@@ -99,7 +99,7 @@ By default existing file (if any) is replaced.
 .PARAMETER FileSize
 Maximum file size to be sent to virus total expressed in MB.
 Files which exceed this value won't be sent to virus total for malware analysis.
-The default value is 2 MB.
+The default value is 10 MB.
 Virus total maximum file size is 650 MB.
 
 .PARAMETER Timeout
@@ -124,6 +124,7 @@ None. Find-UnsignedFile.ps1 does not generate any output
 
 .NOTES
 TODO: More functionality can be implemented by handling more sigcheck switches
+TODO: Json output is not perfect, it includes empty braces for file not scanned by virus total
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -178,7 +179,7 @@ param (
 
 	[Parameter()]
 	[ValidateRange(1, 650)]
-	[int32] $FileSize = 2,
+	[int32] $FileSize = 10,
 
 	[Parameter()]
 	[ValidateRange(1, 650)]
@@ -188,9 +189,14 @@ param (
 Write-Debug -Message "ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 $InformationPreference = "Continue"
 
-if ([string]::IsNullOrEmpty($Path))
+if ($PSCmdlet.ParameterSetName -eq "LiteralPath")
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
+	if (!(Test-Path -LiteralPath $ExpandedPath -PathType Container))
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $LiteralPath -Message "Directory location not found '$ExpandedPath'"
+		return
+	}
 }
 elseif ($Driver)
 {
@@ -200,6 +206,12 @@ else
 {
 	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($Path)
 	$ExpandedPath = Resolve-Path -Path $ExpandedPath
+
+	if (!(Test-Path -LiteralPath $ExpandedPath -PathType Container))
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "Directory location not found '$ExpandedPath'"
+		return
+	}
 }
 
 if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$Filter' files"))
@@ -495,6 +507,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 							if ($Log)
 							{
 								$ScanResult.Add("VT status is", $Detection.Value)
+								$ScanResult.Add("FilePath", $FilePath)
 							}
 						}
 
@@ -527,10 +540,8 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 								$ScanResult.Add("Description", $Description.Value)
 							}
 						}
-
-						$ScanResult.Add("FilePath", $FilePath)
-					}
-				}
+					} # if (![string]::IsNullOrEmpty($StreamLine))
+				} # while (!$Process.StandardOutput.EndOfStream)
 
 				if ($Log)
 				{
