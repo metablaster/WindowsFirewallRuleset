@@ -183,7 +183,7 @@ function Import-WinModule
 	$Exclude = ($Exclude -replace "\*", ".*") -join "|"
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting module list..."
-	$ImportNames = Invoke-Command -Session $Session {
+	$ImportNames = Invoke-Command -Session $Session -ScriptBlock {
 		# Running on the Remote Machine
 		$Module = (Get-Module -ListAvailable -Name $using:Name).Where{
 			$_.Name -notin $using:NeverImportList

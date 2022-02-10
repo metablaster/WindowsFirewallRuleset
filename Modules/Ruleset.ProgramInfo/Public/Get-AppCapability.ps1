@@ -153,7 +153,7 @@ function Get-AppCapability
 			$Domain = [System.Environment]::MachineName
 		}
 
-		$ThisFunction = $MyInvocation.InvocationName
+		$InvocationName = $MyInvocation.InvocationName
 		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
 			# Get it from main store to be able to query package manifest
@@ -189,27 +189,20 @@ function Get-AppCapability
 	}
 	process
 	{
-		Invoke-Command -Session $SessionInstance -ArgumentList $InputObject, $User, $IncludeAuthority, $Networking, $ThisFunction -ScriptBlock {
-			param (
-				[object[]] $InputObject,
-				[string] $User,
-				[switch] $IncludeAuthority,
-				[switch] $Networking,
-				[string] $ThisFunction
-			)
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
 
-			foreach ($StoreApp in $InputObject)
+			foreach ($StoreApp in $using:InputObject)
 			{
 				# Need a copy because of possible modification
 				# [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 				$App = $StoreApp
 				[string[]] $OutputObject = @()
 
-				Write-Verbose -Message "[$ThisFunction] Processing store app: '$($App.Name)'"
+				Write-Verbose -Message "[$InvocationName] Processing store app: '$($App.Name)'"
 
 				if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
 				{
-					if ([string]::IsNullOrEmpty($User))
+					if ([string]::IsNullOrEmpty($using:User))
 					{
 						Write-Error -Category InvalidArgument -TargetObject "User" `
 							-Message "The app '$($App.Name)' is not from the main store, please specify 'User' parameter"
@@ -217,8 +210,8 @@ function Get-AppCapability
 					}
 
 					# If input app was not obtained from main store, get it from main store to be able to query package manifest
-					Write-Debug -Message "[$ThisFunction] Input app is not from main store, querying main store"
-					$App = Get-AppxPackage -Name $App.Name -User $User -PackageTypeFilter Main
+					Write-Debug -Message "[$InvocationName] Input app is not from main store, querying main store"
+					$App = Get-AppxPackage -Name $App.Name -User $using:User -PackageTypeFilter Main
 
 					if (!$App)
 					{
@@ -227,7 +220,7 @@ function Get-AppCapability
 						continue
 					}
 
-					$PackageManifest = ($App | Get-AppxPackageManifest -User $User).Package
+					$PackageManifest = ($App | Get-AppxPackageManifest -User $using:User).Package
 				}
 				else
 				{
@@ -238,19 +231,19 @@ function Get-AppCapability
 					catch
 					{
 						# NOTE: This will be the cause with Microsoft account (non local Windows account)
-						Write-Warning -Message "[$ThisFunction] Store app '$($App.Name)' is missing manifest 'Package' property"
+						Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing manifest 'Package' property"
 						continue
 					}
 				}
 
 				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
 				{
-					Write-Verbose -Message "[$ThisFunction] Store app '$($App.Name) has no capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities"
 					continue
 				}
 				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
-					Write-Verbose -Message "[$ThisFunction] Store app '$($App.Name) is missing capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities"
 					continue
 				}
 
@@ -258,7 +251,7 @@ function Get-AppCapability
 
 				foreach ($Capability in $AppCapabilities)
 				{
-					Write-Debug -Message "[$ThisFunction] Processing capability: '$Capability'"
+					Write-Debug -Message "[$InvocationName] Processing capability: '$Capability'"
 
 					[string] $DisplayName = switch ($Capability)
 					{
@@ -270,7 +263,7 @@ function Get-AppCapability
 						"privateNetworkClientServer" { "Your home or work networks"; break }
 						default
 						{
-							if ($Networking)
+							if ($using:Networking)
 							{
 								break
 							}
@@ -298,14 +291,14 @@ function Get-AppCapability
 
 					if ([string]::IsNullOrEmpty($DisplayName))
 					{
-						Write-Debug -Message "[$ThisFunction] Capability: '$Capability' not resolved"
+						Write-Debug -Message "[$InvocationName] Capability: '$Capability' not resolved"
 						continue
 					}
 					else
 					{
-						Write-Debug -Message "[$ThisFunction] Capability: '$Capability' resolved to: $DisplayName"
+						Write-Debug -Message "[$InvocationName] Capability: '$Capability' resolved to: $DisplayName"
 
-						if ($IncludeAuthority)
+						if ($using:IncludeAuthority)
 						{
 							$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $DisplayName)
 						}

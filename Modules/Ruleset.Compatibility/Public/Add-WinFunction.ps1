@@ -123,7 +123,7 @@ function Add-WinFunction
 
 	# the session variable will be captured in the closure
 	$Session = Initialize-WinSession @PSBoundParameters -PassThru
-	$Wrapper = {
+	[scriptblock] $Wrapper = {
 		Invoke-Command -Session $Session -ScriptBlock $ScriptBlock -ArgumentList $args
 	}
 

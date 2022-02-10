@@ -122,13 +122,8 @@ function Get-UserApps
 			else
 			{
 				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
-					param (
-						[string] $Name,
-						[string] $User
-					)
-
-					Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
-				} -ArgumentList $Name, $User
+					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
+				}
 
 				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 				Select-Object -ExpandProperty SystemDrive

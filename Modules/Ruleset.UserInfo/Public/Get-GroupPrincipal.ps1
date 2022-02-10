@@ -102,7 +102,7 @@ function Get-GroupPrincipal
 
 		# Include/Exclude filter
 		[scriptblock] $SkipUser = {
-			param ($User)
+			param ([string] $User)
 
 			if ($User -notlike $Include)
 			{

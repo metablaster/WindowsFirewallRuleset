@@ -92,15 +92,9 @@ function Test-VirusTotal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		Invoke-Command -Session $SessionInstance -ArgumentList $LiteralPath, $SigcheckLocation, $TimeOut -ScriptBlock {
-			param (
-				$LiteralPath,
-				$SigcheckLocation,
-				$TimeOut
-			)
-
-			$Executable = Split-Path -Path $LiteralPath -Leaf
-			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$Executable = Split-Path -Path $using:LiteralPath -Leaf
+			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($using:SigcheckLocation)
 			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
 
 			if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
@@ -168,7 +162,7 @@ function Test-VirusTotal
 				$Process.StartInfo.Arguments += " -vrs"
 
 				# File which is to be scanned
-				$Process.StartInfo.Arguments += " `"$LiteralPath`""
+				$Process.StartInfo.Arguments += " `"$using:LiteralPath`""
 				Write-Debug -Message "Sigcheck arguments are $($Process.StartInfo.Arguments)"
 
 				$FileIsMalware = $false
@@ -249,7 +243,7 @@ function Test-VirusTotal
 					# True if the associated process has exited, otherwise false
 					# The amount of time, in milliseconds, to wait for the associated process to exit.
 					# Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
-					$StatusWait = $Process.WaitForExit($TimeOut * 1000)
+					$StatusWait = $Process.WaitForExit($using:TimeOut * 1000)
 
 					if (!$StatusWait)
 					{
@@ -275,6 +269,6 @@ function Test-VirusTotal
 
 				return $FileIsMalware
 			} # if sigcheckfile
-		} # scriptblock
+		} # Invoke-Command
 	}
 }

@@ -117,13 +117,8 @@ function Get-SystemApps
 			{
 				# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
 				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
-					param (
-						[string] $Name,
-						[string] $User
-					)
-
-					Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
-				} -ArgumentList $Name, $User
+					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
+				}
 
 				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 				Select-Object -ExpandProperty SystemDrive

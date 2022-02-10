@@ -26,6 +26,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Text.RegularExpressions
+using namespace System.Management.Automation
+
 <#
 .SYNOPSIS
 Convert wildcard pattern to regex
@@ -115,7 +118,7 @@ function ConvertFrom-Wildcard
 		[Parameter()]
 		[ValidateSet("Compiled", "CultureInvariant", "ECMAScript", "ExplicitCapture", "IgnoreCase",
 			"IgnorePatternWhitespace", "Multiline", "None", "RightToLeft", "Singleline")]
-		[System.Text.RegularExpressions.RegexOptions] $Options = "None",
+		[RegexOptions] $Options = "None",
 
 		[Parameter()]
 		[System.TimeSpan] $TimeSpan = [regex]::InfiniteMatchTimeout,
@@ -125,9 +128,10 @@ function ConvertFrom-Wildcard
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	$InvocationInfo = $MyInvocation.InvocationName
 
 	# Optimize dots and stars excluding escaped dots
-	$Optimize = {
+	[scriptblock] $Optimize = {
 		param ([string] $Target)
 
 		[regex] $Regex = [regex]::new("(\*|\.(?<!\\\.)){2,}", $Options)
@@ -136,8 +140,8 @@ function ConvertFrom-Wildcard
 		if ($Match.Success)
 		{
 			# Algorithm to optimize dots and stars
-			$LocalOptimize = {
-				param ([System.Text.RegularExpressions.Match] $Match)
+			[MatchEvaluator] $LocalOptimize = {
+				param ([Match] $Match)
 
 				$Dots = [regex]::Matches($Match.Value, "\.", $Options).Count
 				$Stars = [regex]::Matches($Match.Value, "\*", $Options).Count
@@ -161,8 +165,8 @@ function ConvertFrom-Wildcard
 
 			while ($Match.Success)
 			{
-				Write-Debug -Message "[& Optimize] Processing $NewResult"
-				Write-Debug -Message "[& Optimize] Match at index ($Index) was $($Match.Value)"
+				Write-Debug -Message "[$InvocationInfo & Optimize] Processing $NewResult"
+				Write-Debug -Message "[$InvocationInfo & Optimize] Match at index ($Index) was $($Match.Value)"
 
 				$NewResult = $Regex.Replace($NewResult, $LocalOptimize, 1, $Index)
 
@@ -178,18 +182,18 @@ function ConvertFrom-Wildcard
 	}
 
 	# Escape captured data
-	[System.Text.RegularExpressions.MatchEvaluator] $EscapeEvaluator = {
-		param ([System.Text.RegularExpressions.Match] $Match)
+	[MatchEvaluator] $EscapeEvaluator = {
+		param ([Match] $Match)
 
-		Write-Debug -Message "[& Escape] Processing $($Match.Groups["data"].Value)"
+		Write-Debug -Message "[$InvocationInfo & Escape] Processing $($Match.Groups["data"].Value)"
 		[regex]::Escape($Match.Groups["data"].Value)
 	}
 
 	# UnEscape captured data
-	[System.Text.RegularExpressions.MatchEvaluator] $UnescapeEvaluator = {
-		param ([System.Text.RegularExpressions.Match] $Match)
+	[MatchEvaluator] $UnescapeEvaluator = {
+		param ([Match] $Match)
 
-		Write-Debug -Message "[& UnEscape] Processing $($Match.Groups["data"].Value)"
+		Write-Debug -Message "[$InvocationInfo & UnEscape] Processing $($Match.Groups["data"].Value)"
 		[regex]::Unescape($Match.Groups["data"].Value)
 	}
 
@@ -221,15 +225,15 @@ function ConvertFrom-Wildcard
 
 		# Convert WQL escape codes _ and % to regex equivalent characters . and .*
 		# taking into account to escape existing dots for the second time
-		[System.Text.RegularExpressions.MatchEvaluator] $ConvertWQL = {
-			param ([System.Text.RegularExpressions.Match] $Match)
+		[MatchEvaluator] $ConvertWQL = {
+			param ([Match] $Match)
 
 			# TODO: dots within [] should not be escaped, same case when converting string pattern
 			$NewResult = [regex]::Replace($Match.Value, "\\\.", "\\\.", $Options)
 			$NewResult = [regex]::Replace($NewResult, "%", ".*", $Options)
 			$NewResult = [regex]::Replace($NewResult, "_", ".", $Options)
 
-			Write-Debug -Message "[& ConvertWQL] Processing (index $($Match.Index)) $($Match.Value) to $NewResult"
+			Write-Debug -Message "[$InvocationInfo & ConvertWQL] Processing (index $($Match.Index)) $($Match.Value) to $NewResult"
 			return $NewResult
 		}
 
@@ -276,24 +280,24 @@ function ConvertFrom-Wildcard
 		{
 			$WildCardOptions = switch ($Options)
 			{
-				[System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+				[RegexOptions]::IgnoreCase
 				{
-					[System.Management.Automation.WildcardOptions]::IgnoreCase
+					[WildcardOptions]::IgnoreCase
 					break
 				}
-				[System.Text.RegularExpressions.RegexOptions]::CultureInvariant
+				[RegexOptions]::CultureInvariant
 				{
-					[System.Management.Automation.WildcardOptions]::CultureInvariant
+					[WildcardOptions]::CultureInvariant
 					break
 				}
-				[System.Text.RegularExpressions.RegexOptions]::Compiled
+				[RegexOptions]::Compiled
 				{
-					[System.Management.Automation.WildcardOptions]::Compiled
+					[WildcardOptions]::Compiled
 					break
 				}
 				default
 				{
-					[System.Management.Automation.WildcardOptions]::None
+					[WildcardOptions]::None
 				}
 			}
 

@@ -169,13 +169,13 @@ function Copy-WinModule
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching for compatible modules..."
-	$ModulesToCopy = Invoke-Command $Session {
+	$ModulesToCopy = Invoke-Command $Session -ScriptBlock {
 		Get-Module -ListAvailable -Name $using:CompatibleModules |
 		Select-Object Name, ModuleBase
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching for CIM modules..."
-	$ModulesToCopy += Invoke-Command $Session {
+	$ModulesToCopy += Invoke-Command $Session -ScriptBlock {
 		Get-Module -ListAvailable |
 		Where-Object { $_.NestedModules[0].path -match '\.cdxml$' } |
 		Select-Object Name, ModuleBase

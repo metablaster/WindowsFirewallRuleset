@@ -96,10 +96,7 @@ if (($Domain -eq "localhost") -or ($Domain -eq "."))
 $InformationPreference = "Continue"
 
 [scriptblock] $Convert = {
-	param(
-		[Parameter()]
-		[string] $Value
-	)
+	param([string] $Value)
 
 	switch ($Value)
 	{

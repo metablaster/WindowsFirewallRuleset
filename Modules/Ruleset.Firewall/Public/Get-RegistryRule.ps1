@@ -172,7 +172,7 @@ function Get-RegistryRule
 			return
 		}
 
-		$ParseAddressKeyword = {
+		[scriptblock] $ParseAddressKeyword = {
 			param ([string] $EntryValue)
 
 			switch ($EntryValue)
@@ -185,7 +185,7 @@ function Get-RegistryRule
 			}
 		}
 
-		$ParsePortKeyword = {
+		[scriptblock] $ParsePortKeyword = {
 			param ([string] $EntryValue)
 
 			switch ($EntryValue)

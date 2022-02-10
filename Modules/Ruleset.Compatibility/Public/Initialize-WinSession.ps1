@@ -211,7 +211,7 @@ function Initialize-WinSession
 		if ($Session.ComputerName -eq "localhost")
 		{
 			$UsingPath = (Get-Location).Path
-			Invoke-Command $Session { Set-Location $using:usingPath }
+			Invoke-Command $Session -ScriptBlock { Set-Location $using:usingPath }
 		}
 	}
 	else

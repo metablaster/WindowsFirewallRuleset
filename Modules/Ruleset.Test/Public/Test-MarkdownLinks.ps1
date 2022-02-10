@@ -225,7 +225,7 @@ function Test-MarkdownLinks
 	$DefaultProgress = $ProgressPreference
 
 	[scriptblock] $GetElapsedTime = {
-		param ($SecondsElapsed)
+		param ([timespan] $SecondsElapsed)
 
 		# Convert elapsed time to short time string: [double] -> [string] -> [System.DateTime] -> [string]
 		$DmftTime = [System.Management.ManagementDateTimeConverter]::ToDmtfDateTime($SecondsElapsed.ToString())

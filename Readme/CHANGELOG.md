@@ -46,11 +46,11 @@ If you would like to see fresh changes done since last release you can do so on 
   - Fixed a bug in `Ruleset.Remote\TestWinRM` causing invalid result
   - Implemented remoting functionality for the following public functions:
 
+    - `Get-SystemSKU`
     - `Get-GroupPrincipal`
     - `Get-GroupSID`
     - `Get-PrincipalSID`
     - `Get-SDDL`
-    - `Get-SystemSKU`
     - `Get-AppCapability`
     - `Get-UserApps`
     - `Get-SystemApps`

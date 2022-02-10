@@ -160,7 +160,7 @@ function Test-FileSystemPath
 		if ($Quiet)
 		{
 			# Make sure -Quiet switch does not make troubleshooting hard
-			Write-Debug -Message "[$InvocationInfo] $Message"
+			Write-Debug -Message "[$InvocationInfo & WriteConditional] $Message"
 		}
 		else
 		{
@@ -170,10 +170,10 @@ function Test-FileSystemPath
 			}
 			else
 			{
-				Write-Warning -Message "[$InvocationInfo] $Message"
+				Write-Warning -Message "[$InvocationInfo & WriteConditional] $Message"
 			}
 
-			Write-Information -Tags $InvocationInfo -MessageData "INFO: Path '$LiteralPath'"
+			Write-Information -Tags "$InvocationInfo & WriteConditional" -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
 
@@ -286,13 +286,10 @@ function Test-FileSystemPath
 			}
 		}
 
-		Invoke-Command -Session $SessionInstance -ArgumentList $PathType, $WriteConditional -ScriptBlock {
-			param (
-				$PathType,
-				$WriteConditional
-			)
+		Invoke-Command -Session $SessionInstance -ArgumentList $WriteConditional -ScriptBlock {
+			param ([scriptblock] $WriteConditional)
 
-			if ($PathType -eq "Any")
+			if ($using:PathType -eq "Any")
 			{
 				if ([System.IO.Directory]::Exists($using:ExpandedPath) -or [System.IO.File]::Exists($using:ExpandedPath))
 				{
@@ -301,7 +298,7 @@ function Test-FileSystemPath
 
 				$Status = "Specified file or directory does not exist"
 			}
-			elseif ($PathType -eq "Directory")
+			elseif ($using:PathType -eq "Directory")
 			{
 				if ([System.IO.Directory]::Exists($using:ExpandedPath))
 				{
@@ -310,7 +307,7 @@ function Test-FileSystemPath
 
 				$Status = "Specified directory does not exist"
 			}
-			elseif ($PathType -eq "File")
+			elseif ($using:PathType -eq "File")
 			{
 				if ([System.IO.File]::Exists($using:ExpandedPath))
 				{

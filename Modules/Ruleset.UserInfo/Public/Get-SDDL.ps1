@@ -155,12 +155,9 @@ function Get-SDDL
 	{
 		if ($CIM)
 		{
-			$TargetPath = Invoke-Command -ComputerName $Domain -ScriptBlock {
-				param (
-					[string] $Path
-				)
-				Resolve-Path -Path $Path -ErrorAction Ignore
-			} -ArgumentList $Path -Credential $Credential
+			$TargetPath = Invoke-Command -ComputerName $Domain -Credential $Credential -ScriptBlock {
+				Resolve-Path -Path $using:Path -ErrorAction Ignore
+			}
 		}
 		elseif ($Domain -ne [System.Environment]::MachineName)
 		{
@@ -187,12 +184,9 @@ function Get-SDDL
 			return
 		}
 
-		$ACL = Invoke-Command -ComputerName $Domain -ScriptBlock {
-			param (
-				[string] $TargetPath
-			)
-			Get-Acl -Path $TargetPath
-		} -ArgumentList $TargetPath -Credential $Credential
+		$ACL = Invoke-Command -ComputerName $Domain -Credential $Credential -ScriptBlock {
+			Get-Acl -Path $using:TargetPath
+		}
 
 		if (!$ACL)
 		{

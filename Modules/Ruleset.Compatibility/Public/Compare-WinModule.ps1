@@ -107,7 +107,6 @@ function Compare-WinModule
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
-
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing compatibility session"
 
 	$InitializeWinSessionParameters = @{
@@ -128,7 +127,7 @@ function Compare-WinModule
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting remote modules..."
 	# Use Invoke-Command here instead of the -PSSession option on Get-Module because
 	# we're only returning a subset of the data
-	$RemoteModule = @(Invoke-Command -Session $Session {
+	$RemoteModule = @(Invoke-Command -Session $Session -ScriptBlock {
 			(Get-Module -ListAvailable).Where{
 				$_.Name -notin $using:NeverImportList -and $_.Name -like $using:Name
 			} |	Select-Object Name, Version
