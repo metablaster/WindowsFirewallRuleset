@@ -42,6 +42,9 @@ Predefined program name for which to search
 Reference to variable which should be updated with the path to program installation directory
 excluding executable file name.
 
+.PARAMETER Domain
+Computer name on which to verify for program installation
+
 .PARAMETER Interactive
 If requested program installation directory is not found, Confirm-Installation will ask
 user to specify program installation location.
@@ -76,6 +79,10 @@ function Confirm-Installation
 		[ref] $Directory,
 
 		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
 		[switch] $Interactive,
 
 		[Parameter()]
@@ -87,7 +94,7 @@ function Confirm-Installation
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet))
+	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value
@@ -95,7 +102,7 @@ function Confirm-Installation
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Application well known"
 		return $true # input path is correct
 	}
-	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet)
+	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet -Domain $Domain)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallLocation = "unknown install location"

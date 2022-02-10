@@ -164,6 +164,7 @@ TODO: Need to see if UNC, single backslash and relative paths without a qualifie
 a new group 'Firewall' is needed since whitelist excludes some valid variables
 TODO: Implement -AsCustomObject that will give consistent output for formatting purposes
 TODO: Implement -Unique switch since some variable Values may be duplicates (with different name)
+TODO: Output should include domain name from which variables were retrieved
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md
@@ -246,329 +247,341 @@ function Select-EnvironmentVariable
 		}
 	}
 
-	$TargetScope = Invoke-Command -Session $SessionInstance -ArgumentList $From, $Exact, $IncludeFile, $Force -ScriptBlock {
-		param (
-			[string] $From,
-			[switch] $Exact,
-			[switch] $IncludeFile,
-			[switch] $Force
-		)
+	# Check if cache needs to be updated
+	$LastState = Get-Variable -Name LastExactState -Scope Script -ErrorAction Ignore
 
-		# Check if cache needs to be updated
-		$LastState = Get-Variable -Name LastExactState -Scope Script -ErrorAction Ignore
-
-		if ($Force -or !$LastState)
+	if ($Force -or !$LastState)
+	{
+		if ($LastState)
 		{
-			if ($LastState)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating environment variable cache"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating environment variable cache"
+		}
+		else
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Populating new environment variable cache"
+		}
+
+		# Any directory that leads to user profile either directly or indirectly, ex:
+		# "C:\Users\User\AppData", "\Users\User", "User"
+		# The path does not have to exist
+		Set-Variable -Name UserProfile -Scope Script -Value @()
+
+		# Indicates whether the given path is whitelisted to be included in firewall rules
+		# The path must exist, be rooted, fully qualified, not relative and contain no dot notation
+		Set-Variable -Name WhiteList -Scope Script -Value @()
+
+		# Indicates whether the specified file path is fixed to a specific drive or UNC path, ex:
+		# "\\COMPUTERNAME\Share\file", "C:\\Windows", "C:\", "C:\Windows\.\Help", "C:\Windows\.."
+		# The path does not have to exist
+		Set-Variable -Name FullyQualified -Scope Script -Value @()
+
+		# Indicates whether the specified path string contains a root, ex:
+		# "\\COMPUTERNAME\Share\file", "C:\\Windows", "C:Windows", "\Users\User", "C:", "\", "\\.\", "\Users\User"
+		# The path does not have to exist
+		Set-Variable -Name Rooted -Scope Script -Value @()
+
+		# Indicates whether the given path refers to an existing directory on disk, ex:
+		# "C:\\Windows", "C:Windows", ".", "..\", "C:\Windows\..", "C:\Windows\System32\..\Help", "C:\Windows\.\Help"
+		Set-Variable -Name FileSystem -Scope Script -Value @()
+
+		# Indicates whether the given path is relative, ex:
+		# ".", "..\", "C:", "C:Windows", "..", ".\"
+		# The path does not have to exist
+		Set-Variable -Name Relative -Scope Script -Value @()
+
+		# Any environment variable that that is not syntactically valid directory or UNC path
+		Set-Variable -Name BlackList -Scope Script -Value @()
+
+		# All system environment variables
+		Set-Variable -Name AllVariables -Scope Script -Value @()
+
+		# Preselected user profile variables
+		New-Variable -Name WellKnownUserProfile -Scope Local -Option Constant -Value @(
+			"%APPDATA%"
+			"%HOME%"
+			"%LOCALAPPDATA%"
+			"%OneDrive%"
+			"%TEMP%"
+			"%TMP%"
+			"%USERPROFILE%"
+			"%OneDriveConsumer%"
+			"%HOMEPATH%"
+			# NOTE: Not a path or file
+			# "%USERNAME%"
+		)
+	}
+
+	# Check if cache needs to be updated
+	$LastState = Get-Variable -Name LastExactState -Scope Script -ErrorAction Ignore
+
+	if ($Force -or !$LastState)
+	{
+		if ($Exact)
+		{
+			$script:AllVariables = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				Get-ChildItem Env:
 			}
-			else
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Populating new environment variable cache"
-			}
-
-			# Any directory that leads to user profile either directly or indirectly, ex:
-			# "C:\Users\User\AppData", "\Users\User", "User"
-			# The path does not have to exist
-			Set-Variable -Name UserProfile -Scope Script -Value @()
-
-			# Indicates whether the given path is whitelisted to be included in firewall rules
-			# The path must exist, be rooted, fully qualified, not relative and contain no dot notation
-			Set-Variable -Name WhiteList -Scope Script -Value @()
-
-			# Indicates whether the specified file path is fixed to a specific drive or UNC path, ex:
-			# "\\COMPUTERNAME\Share\file", "C:\\Windows", "C:\", "C:\Windows\.\Help", "C:\Windows\.."
-			# The path does not have to exist
-			Set-Variable -Name FullyQualified -Scope Script -Value @()
-
-			# Indicates whether the specified path string contains a root, ex:
-			# "\\COMPUTERNAME\Share\file", "C:\\Windows", "C:Windows", "\Users\User", "C:", "\", "\\.\", "\Users\User"
-			# The path does not have to exist
-			Set-Variable -Name Rooted -Scope Script -Value @()
-
-			# Indicates whether the given path refers to an existing directory on disk, ex:
-			# "C:\\Windows", "C:Windows", ".", "..\", "C:\Windows\..", "C:\Windows\System32\..\Help", "C:\Windows\.\Help"
-			Set-Variable -Name FileSystem -Scope Script -Value @()
-
-			# Indicates whether the given path is relative, ex:
-			# ".", "..\", "C:", "C:Windows", "..", ".\"
-			# The path does not have to exist
-			Set-Variable -Name Relative -Scope Script -Value @()
-
-			# Any environment variable that that is not syntactically valid directory or UNC path
-			Set-Variable -Name BlackList -Scope Script -Value @()
-
-			# All system environment variables
-			Set-Variable -Name AllVariables -Scope Script -Value @()
-
-			# Preselected user profile variables
-			New-Variable -Name WellKnownUserProfile -Scope Local -Option Constant -Value @(
-				"%APPDATA%"
-				"%HOME%"
-				"%LOCALAPPDATA%"
-				"%OneDrive%"
-				"%TEMP%"
-				"%TMP%"
-				"%USERPROFILE%"
-				"%OneDriveConsumer%"
-				"%HOMEPATH%"
-				# NOTE: Not a path or file
-				# "%USERNAME%"
-			)
-
-			if ($Exact)
-			{
-				$script:AllVariables = Get-ChildItem Env:
-			}
-			else
-			{
-				$script:AllVariables = Get-ChildItem Env: | ForEach-Object {
+		}
+		else
+		{
+			$script:AllVariables = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				Get-ChildItem Env: | ForEach-Object {
 					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
 				}
 			}
+		}
 
-			# Make an array of (environment variable/path) name/value pair
-			foreach ($Entry in $script:AllVariables)
+		# Make an array of (environment variable/path) name/value pair
+		foreach ($Entry in $script:AllVariables)
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing entry: $($Entry.Name)"
+
+			$IsUserProfile = $false
+			$FileExists = $false
+
+			# A variable name may include any of the following characters:
+			# A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
+			# The first character of the name must not be numeric.
+			# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
+			# NETBIOS invalid characters: " / \ [ ] : | < > + = ; ,
+			# UPN name invalid characters: ~ ! # $ % ^ & * ( ) + = [ ] { } \ / | ; : " < > ? ,
+			# Invalid characters to name a directory: / \ : < > ? * | "
+			if ($Entry.Value -match "(;\w:\\\w)+")
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing entry: $($Entry.Name)"
+				# Not valid path even if it mentions userprofile
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting path with multiple directories $($Entry.Value)"
+				$script:BlackList += $Entry
+				continue
+			}
+			elseif ($Entry.Value -match '<>\?\|":')
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Blacklisting environment variable with bad character $($Entry.Value)"
+				$script:BlackList += $Entry
+				continue
+			}
 
-				$IsUserProfile = $false
-				$FileExists = $false
-
-				# A variable name may include any of the following characters:
-				# A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
-				# The first character of the name must not be numeric.
-				# Reserved characters that must be escaped: [ ] ( ) . \ ^ $ | ? * + { }
-				# NETBIOS invalid characters: " / \ [ ] : | < > + = ; ,
-				# UPN name invalid characters: ~ ! # $ % ^ & * ( ) + = [ ] { } \ / | ; : " < > ? ,
-				# Invalid characters to name a directory: / \ : < > ? * | "
-				if ($Entry.Value -match "(;\w:\\\w)+")
+			# Match file extension
+			if ($Entry.Value -match '\.[^./\\:<>?*|"]+$')
+			{
+				if ($IncludeFile)
 				{
-					# Not valid path even if it mentions userprofile
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting path with multiple directories $($Entry.Value)"
-					$script:BlackList += $Entry
-					continue
-				}
-				elseif ($Entry.Value -match '<>\?\|":')
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Blacklisting environment variable with bad character $($Entry.Value)"
-					$script:BlackList += $Entry
-					continue
-				}
-
-				# Match file extension
-				if ($Entry.Value -match '\.[^./\\:<>?*|"]+$')
-				{
-					if ($IncludeFile)
-					{
-						# TODO: This may include variables that are not meant to point to files
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Including file path $($Entry.Value)"
-						$FileExists = [System.IO.File]::Exists($Entry.Value)
+					# TODO: This may include variables that are not meant to point to files
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Including file path $($Entry.Value)"
+					$FileExists = Invoke-Command -Session $SessionInstance -ScriptBlock {
+						[System.IO.File]::Exists($using:Entry.Value)
 					}
-					else
-					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting file path $($Entry.Value)"
-						$script:BlackList += $Entry
-						continue
-					}
-				}
-
-				if ($WellKnownUserProfile -match $Entry.Name)
-				{
-					# We only care to know userprofile variables regradless if valid or not
-					$IsUserProfile = $true
-					$script:UserProfile += $Entry
-				}
-				elseif ($Entry.Value -match "^($env:SystemDrive\\?|\\)Users(?!\\+Public\\*)")
-				{
-					# Anything that mentions or leads to user profile that is not already in the UserProfile variable
-					$IsUserProfile = $true
-					$script:UserProfile += $Entry
-				}
-
-				if ([System.IO.Path]::IsPathRooted($Entry.Value))
-				{
-					$script:Rooted += $Entry
-
-					if (($Entry.Value -match "^[a-z]:"))
-					{
-						if (($Entry.Value -match "^[a-z]:\\"))
-						{
-							$script:FullyQualified += $Entry
-
-							if ($FileExists -or [System.IO.Directory]::Exists($Entry.Value))
-							{
-								$script:FileSystem += $Entry
-
-								# Exclude paths containing notation for "this directory" or "parent directory"
-								if (!($IsUserProfile -or $FileExists -or ($Entry.Value -match "\\+\.+\\*")))
-								{
-									$script:WhiteList += $Entry
-								}
-							}
-						}
-						elseif (($Entry.Value -match "^[a-z]:$"))
-						{
-							# Root drives without path separator are relative
-							$script:Relative += $Entry
-
-							if ($FileExists -or [System.IO.Directory]::Exists($Entry.Value))
-							{
-								$script:FileSystem += $Entry
-
-								if (!($IsUserProfile -or $FileExists))
-								{
-									# Allow to be able to format root drive
-									$script:WhiteList += $Entry
-								}
-							}
-						}
-						else # Rooted but relative, ex: "C:Windows"
-						{
-							$script:Relative += $Entry
-
-							if ($FileExists -or [System.IO.Directory]::Exists($Entry.Value))
-							{
-								$script:FileSystem += $Entry
-							}
-						}
-					}
-					elseif (Test-UNC $Entry.Value -Quiet)
-					{
-						$script:FullyQualified += $Entry
-					}
-				}
-				elseif ($FileExists -or [System.IO.Directory]::Exists($Entry.Value))
-				{
-					$script:Relative += $Entry
-					$script:FileSystem += $Entry
 				}
 				else
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting entry: $($Entry.Name)"
-
-					# Excluding anything that does not have directory syntax
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting file path $($Entry.Value)"
 					$script:BlackList += $Entry
+					continue
 				}
 			}
-		}
-		elseif ($LastState.Value -ne $Exact)
-		{
-			# Update cache if the -Exact switch is different from what was used to create the cache
-			if ($Exact)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable format because current exact state '$($Exact)' does not match previous state '$($LastState.Value)'"
 
-				$script:UserProfile = $script:UserProfile | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
+			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+			Select-Object -ExpandProperty SystemDrive
+
+			if ($WellKnownUserProfile -match $Entry.Name)
+			{
+				# We only care to know userprofile variables regradless if valid or not
+				$IsUserProfile = $true
+				$script:UserProfile += $Entry
+			}
+			elseif ($Entry.Value -match "^($SystemDrive\\?|\\)Users(?!\\+Public\\*)")
+			{
+				# Anything that mentions or leads to user profile that is not already in the UserProfile variable
+				$IsUserProfile = $true
+				$script:UserProfile += $Entry
+			}
+
+			$IsPathRooted = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				[System.IO.Path]::IsPathRooted($using:Entry.Value)
+			}
+
+			$DirectoryExists = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				[System.IO.Directory]::Exists($using:Entry.Value)
+			}
+
+			if ($IsPathRooted)
+			{
+				$script:Rooted += $Entry
+
+				if (($Entry.Value -match "^[a-z]:"))
+				{
+					if (($Entry.Value -match "^[a-z]:\\"))
+					{
+						$script:FullyQualified += $Entry
+
+						if ($FileExists -or $DirectoryExists)
+						{
+							$script:FileSystem += $Entry
+
+							# Exclude paths containing notation for "this directory" or "parent directory"
+							if (!($IsUserProfile -or $FileExists -or ($Entry.Value -match "\\+\.+\\*")))
+							{
+								$script:WhiteList += $Entry
+							}
+						}
+					}
+					elseif (($Entry.Value -match "^[a-z]:$"))
+					{
+						# Root drives without path separator are relative
+						$script:Relative += $Entry
+
+						if ($FileExists -or $DirectoryExists)
+						{
+							$script:FileSystem += $Entry
+
+							if (!($IsUserProfile -or $FileExists))
+							{
+								# Allow to be able to format root drive
+								$script:WhiteList += $Entry
+							}
+						}
+					}
+					else # Rooted but relative, ex: "C:Windows"
+					{
+						$script:Relative += $Entry
+
+						if ($FileExists -or $DirectoryExists)
+						{
+							$script:FileSystem += $Entry
+						}
+					}
 				}
-				$script:WhiteList = $script:WhiteList | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
+				elseif (Test-UNC $Entry.Value -Quiet)
+				{
+					$script:FullyQualified += $Entry
 				}
-				$script:FullyQualified = $script:FullyQualified | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
-				$script:Rooted = $script:Rooted | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
-				$script:FileSystem = $script:FileSystem | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
-				$script:Relative = $script:Relative | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
-				$script:BlackList = $script:BlackList | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
-				$script:AllVariables = $script:AllVariables | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
-				}
+			}
+			elseif ($FileExists -or $DirectoryExists)
+			{
+				$script:Relative += $Entry
+				$script:FileSystem += $Entry
 			}
 			else
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting variables because current exact state '$($Exact)' does not match previous state '$($LastState.Value)'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Blacklisting entry: $($Entry.Name)"
 
-				$script:UserProfile = $script:UserProfile | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:WhiteList = $script:WhiteList | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:FullyQualified = $script:FullyQualified | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:Rooted = $script:Rooted | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:FileSystem = $script:FileSystem | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:Relative = $script:Relative | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:BlackList = $script:BlackList | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
-				$script:AllVariables = $script:AllVariables | ForEach-Object {
-					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
-				}
+				# Excluding anything that does not have directory syntax
+				$script:BlackList += $Entry
 			}
 		}
-
-		Set-Variable -Name LastExactState -Scope Script -Value $Exact
-
-		$TargetScope = switch ($From)
+	}
+	elseif ($LastState.Value -ne $Exact)
+	{
+		# Update cache if the -Exact switch is different from what was used to create the cache
+		if ($Exact)
 		{
-			"UserProfile"
-			{
-				$script:UserProfile
-				break
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing variable format because current exact state '$($Exact)' does not match previous state '$($LastState.Value)'"
+
+			$script:UserProfile = $script:UserProfile | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"WhiteList"
-			{
-				$script:WhiteList
-				break
+			$script:WhiteList = $script:WhiteList | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"FullyQualified"
-			{
-				$script:FullyQualified
-				break
+			$script:FullyQualified = $script:FullyQualified | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"Rooted"
-			{
-				$script:Rooted
-				break
+			$script:Rooted = $script:Rooted | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"FileSystem"
-			{
-				$script:FileSystem
-				break
+			$script:FileSystem = $script:FileSystem | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"Relative"
-			{
-				$script:Relative
-				break
+			$script:Relative = $script:Relative | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			"BlackList"
-			{
-				$script:BlackList
-				break
+			$script:BlackList = $script:BlackList | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
-			default # All
-			{
-				$script:AllVariables
+			$script:AllVariables = $script:AllVariables | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new($_.Name.Trim("%"), $_.Value)
 			}
 		}
-
-		if (!$TargetScope)
+		else
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $From `
-				-Message "Environment variable group '$From' contains no entries"
-			return
-		}
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Formatting variables because current exact state '$($Exact)' does not match previous state '$($LastState.Value)'"
 
-		return $TargetScope
+			$script:UserProfile = $script:UserProfile | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:WhiteList = $script:WhiteList | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:FullyQualified = $script:FullyQualified | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:Rooted = $script:Rooted | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:FileSystem = $script:FileSystem | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:Relative = $script:Relative | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:BlackList = $script:BlackList | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+			$script:AllVariables = $script:AllVariables | ForEach-Object {
+				[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
+			}
+		}
+	}
+
+	Set-Variable -Name LastExactState -Scope Script -Value $Exact
+
+	$TargetScope = switch ($From)
+	{
+		"UserProfile"
+		{
+			$script:UserProfile
+			break
+		}
+		"WhiteList"
+		{
+			$script:WhiteList
+			break
+		}
+		"FullyQualified"
+		{
+			$script:FullyQualified
+			break
+		}
+		"Rooted"
+		{
+			$script:Rooted
+			break
+		}
+		"FileSystem"
+		{
+			$script:FileSystem
+			break
+		}
+		"Relative"
+		{
+			$script:Relative
+			break
+		}
+		"BlackList"
+		{
+			$script:BlackList
+			break
+		}
+		default # All
+		{
+			$script:AllVariables
+		}
+	}
+
+	if (!$TargetScope)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $From `
+			-Message "Environment variable group '$From' contains no entries"
+		return
 	}
 
 	switch ($PsCmdlet.ParameterSetName)

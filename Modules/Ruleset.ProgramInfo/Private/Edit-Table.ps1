@@ -83,7 +83,6 @@ function Edit-Table
 	{
 		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 		Select-Object -ExpandProperty SystemDrive
-		$SystemDrive = $SystemDrive.TrimEnd(":")
 
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($Path.Split("\"))[2]
@@ -120,7 +119,7 @@ function Edit-Table
 		$Path = Format-Path $Path
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup -Domain $Domain | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup -Domain $Domain -CIM | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

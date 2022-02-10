@@ -166,20 +166,20 @@ else
 }
 
 # If PolicyStore changed to another computer name script scope cache need to be updated
-New-Variable -Name LastPolicyStore -Scope Script -Option ReadOnly -Value $PolicyStore
+New-Variable -Name LastPolicyStore -Scope Script -Value $PolicyStore
 
 # Programs installed system wide
-New-Variable -Name SystemPrograms -Scope Script -Option ReadOnly -Value (
+New-Variable -Name SystemPrograms -Scope Script -Value (
 	Get-SystemSoftware -Domain $PolicyStore
 )
 
 # Executable paths
-New-Variable -Name ExecutablePaths -Scope Script -Option ReadOnly -Value (
+New-Variable -Name ExecutablePaths -Scope Script -Value (
 	Get-ExecutablePath -Domain $PolicyStore
 )
 
 # Program data
-New-Variable -Name AllUserPrograms -Scope Script -Option ReadOnly -Value (
+New-Variable -Name AllUserPrograms -Scope Script -Value (
 	Get-InstallProperties -Domain $PolicyStore
 )
 

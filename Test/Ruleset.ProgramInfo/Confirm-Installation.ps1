@@ -33,6 +33,9 @@ Unit test for Confirm-Installation
 .DESCRIPTION
 Test correctness of Confirm-Installation function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -69,28 +76,48 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Confirm-Installation"
 
 $VSCodeRoot = ""
+$PowerShell86Root = ""
+$NETFrameworkRoot = ""
+
 $OneDrive = "unknown"
 $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
-Start-Test "'VSCode' $VSCodeRoot"
-$Result = Confirm-Installation "VSCode" ([ref] $VSCodeRoot)
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	# Uses Update-Table
+	Start-Test "Remote VSCode"
+	Confirm-Installation "VSCode" ([ref] $VSCodeRoot) -Domain $Domain
 
-Start-Test "'OneDrive' $OneDrive"
-Confirm-Installation "OneDrive" ([ref] $OneDrive)
+	# Uses Edit-Table
+	Start-Test "Remote 'PowerShell86'"
+	Confirm-Installation "PowerShell86" ([ref] $PowerShell86Root) -Domain $Domain
 
-Start-Test "'MicrosoftOffice' $OfficeRoot"
-Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
+	# Uses custom case
+	Start-Test "Remote 'NETFramework'"
+	Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot) -Domain $Domain
+}
+else
+{
+	Start-Test "'VSCode' $VSCodeRoot"
+	$Result = Confirm-Installation "VSCode" ([ref] $VSCodeRoot)
+	$Result
 
-Start-Test "'VisualStudio' $TestBadVariable"
-Confirm-Installation "VisualStudio" ([ref] $TestBadVariable)
+	Start-Test "'OneDrive' $OneDrive"
+	Confirm-Installation "OneDrive" ([ref] $OneDrive)
 
-Start-Test "'FailureTest' $TestBadVariable2"
-Confirm-Installation "FailureTest" ([ref] $TestBadVariable2)
+	Start-Test "'MicrosoftOffice' $OfficeRoot"
+	Confirm-Installation "MicrosoftOffice" ([ref] $OfficeRoot)
 
-Test-Output $Result -Command Confirm-Installation
+	Start-Test "'VisualStudio' $TestBadVariable"
+	Confirm-Installation "VisualStudio" ([ref] $TestBadVariable)
+
+	Start-Test "'FailureTest' $TestBadVariable2"
+	Confirm-Installation "FailureTest" ([ref] $TestBadVariable2)
+
+	Test-Output $Result -Command Confirm-Installation
+}
 
 Update-Log
 Exit-Test

@@ -102,9 +102,9 @@ function Update-Table
 		{
 			# If domain changed, need to update script cache
 			$script:LastPolicyStore = $Domain
-			$ExecutablePaths = Get-ExecutablePath -Domain $Domain
-			$SystemPrograms = Get-SystemSoftware -Domain $Domain
-			$AllUserPrograms = Get-InstallProperties -Domain $Domain
+			$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
+			$script:SystemPrograms = Get-SystemSoftware -Domain $Domain
+			$script:AllUserPrograms = Get-InstallProperties -Domain $Domain
 		}
 
 		# To reduce typing and make code clear

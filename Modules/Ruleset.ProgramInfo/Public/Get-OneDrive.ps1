@@ -112,8 +112,9 @@ function Get-OneDrive
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$User' is not logged into system"
 
-			# TODO: Environment variable needed for remote computer
-			$UserRegConfig = "$env:SystemDrive\Users\$User\NTUSER.DAT"
+			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+			Select-Object -ExpandProperty SystemDrive
+			$UserRegConfig = "$SystemDrive\Users\$User\NTUSER.DAT"
 
 			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
 			$TempKey = "User-$User" # $UserSID

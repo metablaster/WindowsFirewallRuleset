@@ -202,6 +202,8 @@ Todo's in this file are categorized into following sections:
     A major issue to solution is module interdependency and dependency on global variables.
     - Module files (*psm1) could generate hashes for scripts to be dot sourced, and compare
     result to predefined hashes to ensure scripts were not modified externally, or sign whole module.
+    - For functions which use remoting and call other functions which use remoting there must be
+    well established way whether to specify -CIM switch, so that for localhost -CIM is not used
 
 2. Scripts
 

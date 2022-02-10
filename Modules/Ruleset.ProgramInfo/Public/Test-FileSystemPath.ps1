@@ -260,8 +260,11 @@ function Test-FileSystemPath
 				}
 			}
 
+			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+			Select-Object -ExpandProperty SystemDrive
+
 			# NOTE: Public folder and it's subdirectories are not user profile
-			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -notmatch "^(($env:SystemDrive\\?)|\\)Users(?!\\+(Public$|Public\\+))\\"))
+			if (!$IsUserProfile -and $UserProfile -and ($ExpandedPath -notmatch "^(($SystemDrive\\?)|\\)Users(?!\\+(Public$|Public\\+))\\"))
 			{
 				& $WriteConditional "The path does not lead to user profile"
 				return $false
