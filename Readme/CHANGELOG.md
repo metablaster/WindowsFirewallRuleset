@@ -54,11 +54,11 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Get-AppCapability`
     - `Get-UserApps`
     - `Get-SystemApps`
-    - `Select-EnvironmentVariable`
     - `Test-FileSystemPath`
     - `Search-Installation`
     - `Confirm-Installation`
     - `Test-ExecutableFile`
+    - `Select-EnvironmentVariable`
 
   - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default
   session configurations active, needed to be able to specify `-ComputerName` parameter

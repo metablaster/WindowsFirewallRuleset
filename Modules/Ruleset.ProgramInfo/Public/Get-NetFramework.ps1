@@ -71,8 +71,6 @@ function Get-NetFramework
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"

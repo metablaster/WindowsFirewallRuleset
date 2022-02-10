@@ -77,11 +77,9 @@ function Get-UserSoftware
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
-		$Principal = Get-PrincipalSID $User -Domain $Domain -CIM
+		$Principal = Get-PrincipalSID $User -Domain $Domain
 		if (!$Principal) { return }
 
 		$HKU = $Principal.SID

@@ -48,14 +48,11 @@ Specifies a username as a wildcard pattern that this function excludes from oper
 .PARAMETER Disabled
 If specified, result is disabled accounts instead
 
-.PARAMETER CIM
-Whether to contact CIM server (required for remote computers)
-
 .EXAMPLE
 PS> Get-GroupPrincipal "Users", "Administrators"
 
 .EXAMPLE
-PS> Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP) -CIM
+PS> Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)
 
 .INPUTS
 [string[]] User groups
@@ -90,10 +87,7 @@ function Get-GroupPrincipal
 		[string] $Exclude,
 
 		[Parameter()]
-		[switch] $Disabled,
-
-		[Parameter()]
-		[switch] $CIM
+		[switch] $Disabled
 	)
 
 	begin
@@ -133,80 +127,7 @@ function Get-GroupPrincipal
 	{
 		foreach ($Computer in $Domain)
 		{
-			if ($CIM)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
-
-				# Core: -TimeoutSeconds -IPv4
-				if (Test-Computer $Computer)
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
-
-					foreach ($UserGroup in $Group)
-					{
-						# Get all users that belong to requested group,
-						# this includes non local principal source and non "user" users
-						# it is also missing SID
-						$GroupUsers = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-							-Class Win32_GroupUser -Property GroupComponent, PartComponent |
-						Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
-						Select-Object -ExpandProperty PartComponent
-
-						if ([string]::IsNullOrEmpty($GroupUsers))
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
-							continue
-						}
-
-						# Get either enabled or disabled users, these include SID but also non group users
-						$EnabledAccounts = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-							-Class Win32_UserAccount -Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
-						Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
-
-						if ([string]::IsNullOrEmpty($EnabledAccounts))
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
-							continue
-						}
-
-						# Finally compare these 2 results and assemble group users which are active, also includes SID
-						foreach ($Account in $EnabledAccounts)
-						{
-							if (& $SkipUser $Account.Name)
-							{
-								continue
-							}
-
-							$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-									Write-Debug "Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
-									# NOTE: Account.Domain or $Computer is same thing
-									$Account.Caption -eq "$($Account.Domain)\$($args[0])"
-								})
-
-							if ($UserName)
-							{
-								Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
-
-								[PSCustomObject]@{
-									Domain = $Account.Domain
-									User = $Account.Name
-									Group = $UserGroup
-									Principal = $Account.Caption
-									SID = $Account.SID
-									# TODO: Figure out if it's MS account using CIM
-									LocalAccount = $Account.LocalAccount -eq "True"
-									PSTypeName = "Ruleset.UserInfo"
-								}
-							}
-							else
-							{
-								Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring account: $Account"
-							}
-						}
-					}
-				}
-			} # if ($CIM)
-			elseif ($Computer -eq [System.Environment]::MachineName)
+			if ($Computer -eq [System.Environment]::MachineName)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -265,12 +186,72 @@ function Get-GroupPrincipal
 						}
 					}
 				} # foreach ($UserGroup in $Group)
-			} # if ($CIM)
-			else
+			}
+			# Core: -TimeoutSeconds -IPv4
+			elseif (Test-Computer $Computer)
 			{
-				# NOTE: In case of implementation, Computer != $Computer
-				Write-Error -Category NotImplemented -TargetObject $Computer `
-					-Message "Querying remote computers without CIM switch not supported"
+				foreach ($UserGroup in $Group)
+				{
+					# Get all users that belong to requested group,
+					# this includes non local principal source and non "user" users
+					# it is also missing SID
+					$GroupUsers = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+						-Class Win32_GroupUser -Property GroupComponent, PartComponent |
+					Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
+					Select-Object -ExpandProperty PartComponent
+
+					if ([string]::IsNullOrEmpty($GroupUsers))
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
+						continue
+					}
+
+					# Get either enabled or disabled users, these include SID but also non group users
+					$EnabledAccounts = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+						-Class Win32_UserAccount -Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
+					Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
+
+					if ([string]::IsNullOrEmpty($EnabledAccounts))
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
+						continue
+					}
+
+					# Finally compare these 2 results and assemble group users which are active, also includes SID
+					foreach ($Account in $EnabledAccounts)
+					{
+						if (& $SkipUser $Account.Name)
+						{
+							continue
+						}
+
+						$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
+								Write-Debug "Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
+								# NOTE: Account.Domain or $Computer is same thing
+								$Account.Caption -eq "$($Account.Domain)\$($args[0])"
+							})
+
+						if ($UserName)
+						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
+
+							[PSCustomObject]@{
+								Domain = $Account.Domain
+								User = $Account.Name
+								Group = $UserGroup
+								Principal = $Account.Caption
+								SID = $Account.SID
+								# TODO: Figure out if it's MS account using CIM
+								LocalAccount = $Account.LocalAccount -eq "True"
+								PSTypeName = "Ruleset.UserInfo"
+							}
+						}
+						else
+						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring account: $Account"
+						}
+					}
+				}
 			}
 		} # foreach ($Computer in $Domain)
 	} # process

@@ -57,6 +57,7 @@ PS> @("msiserver", "Spooler", "WSearch") | Test-Service
 .NOTES
 TODO: Implement accept ServiceController object, should be called InputObject, a good design needed,
 however it doesn't make much sense since the function is to test existence of a service too.
+TODO: Virus total check no implemented
 #>
 function Test-Service
 {

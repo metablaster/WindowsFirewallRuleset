@@ -83,7 +83,7 @@ if ($Domain -ne [System.Environment]::MachineName)
 
 
 	Start-Test "-User $Users"
-	$AccountSID1 = Get-PrincipalSID -User $Users -CIM -Domain $Domain
+	$AccountSID1 = Get-PrincipalSID -User $Users -Domain $Domain
 	$AccountSID1
 }
 else
@@ -97,12 +97,12 @@ else
 	$AccountSID1
 }
 
-Start-Test "-User $Users -CIM"
-$AccountSID1 = Get-PrincipalSID -User $Users -CIM -Domain $Domain
+Start-Test "-User $Users"
+$AccountSID1 = Get-PrincipalSID -User $Users -Domain $Domain
 $AccountSID1
 
-Start-Test "$Users | Get-PrincipalSID -CIM"
-$Users | Get-PrincipalSID -CIM -Domain $Domain
+Start-Test "$Users | Get-PrincipalSID"
+$Users | Get-PrincipalSID -Domain $Domain
 
 Start-Test "Get-TypeName"
 $AccountSID1 | Get-TypeName
@@ -119,8 +119,8 @@ $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers #
 $AccountSID2
 
 # NOTE: not valid
-# Start-Test "-Domain $NTDomain -User $NTUsers -CIM"
-# $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers -CIM
+# Start-Test "-Domain $NTDomain -User $NTUsers"
+# $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers
 # $AccountSID2
 
 Start-Test "Get-TypeName"
@@ -138,8 +138,8 @@ $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
 $AccountSID3
 
 # NOTE: not valid
-# Start-Test "-Domain $AppDomain -User $AppUser -CIM"
-# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser -CIM
+# Start-Test "-Domain $AppDomain -User $AppUser"
+# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
 # $AccountSID3
 
 Test-Output $AccountSID3 -Command Get-PrincipalSID

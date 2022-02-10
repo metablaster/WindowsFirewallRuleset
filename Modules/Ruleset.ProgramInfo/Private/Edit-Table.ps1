@@ -126,7 +126,7 @@ function Edit-Table
 		$LiteralPath = Format-Path $LiteralPath
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup -Domain $Domain -CIM | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup -Domain $Domain | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

@@ -36,14 +36,11 @@ Get a list of all available user groups on target computers
 .PARAMETER Domain
 One or more computers which to query for user groups
 
-.PARAMETER CIM
-Whether to contact CIM server (required for remote computers)
-
 .EXAMPLE
 PS> Get-UserGroup "ServerPC"
 
 .EXAMPLE
-PS> Get-UserGroup @(DESKTOP, LAPTOP) -CIM
+PS> Get-UserGroup @(DESKTOP, LAPTOP)
 
 .INPUTS
 None. You cannot pipe objects to Get-UserGroup
@@ -56,16 +53,13 @@ None.
 #>
 function Get-UserGroup
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter(Position = 0)]
-		[Alias("ComputerName", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName,
-
 		[Parameter()]
-		[switch] $CIM
+		[Alias("ComputerName", "CN")]
+		[string[]] $Domain = [System.Environment]::MachineName
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -78,38 +72,7 @@ function Get-UserGroup
 			$Computer = [System.Environment]::MachineName
 		}
 
-		if ($CIM)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
-
-			# Core: -TimeoutSeconds -IPv4
-			if (Test-Computer $Computer)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
-
-				$RemoteGroups = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-					-Class Win32_Group -Property LocalAccount |
-				Where-Object -Property LocalAccount -EQ "True"
-
-				if ([string]::IsNullOrEmpty($RemoteGroups))
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
-				}
-
-				foreach ($Group in $RemoteGroups)
-				{
-					[PSCustomObject]@{
-						Domain = $Group.Domain
-						Group = $Group.Name
-						Principal = $Group.Caption
-						SID = $Group.SID
-						LocalAccount = $Group.LocalAccount -eq "True"
-						PSTypeName = "Ruleset.UserInfo.Group"
-					}
-				}
-			}
-		} # if ($CIM)
-		elseif ($Computer -eq [System.Environment]::MachineName)
+		if ($Computer -eq [System.Environment]::MachineName)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -132,11 +95,32 @@ function Get-UserGroup
 					PSTypeName = "Ruleset.UserInfo"
 				}
 			}
-		} # if ($CIM)
-		else
+		}
+		# Core: -TimeoutSeconds -IPv4
+		elseif (Test-Computer $Computer)
 		{
-			Write-Error -Category NotImplemented -TargetObject $Computer `
-				-Message "Querying remote computers without CIM switch not supported"
-		} # if ($CIM)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+
+			$RemoteGroups = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+				-Class Win32_Group -Property LocalAccount |
+			Where-Object -Property LocalAccount -EQ "True"
+
+			if ([string]::IsNullOrEmpty($RemoteGroups))
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
+			}
+
+			foreach ($Group in $RemoteGroups)
+			{
+				[PSCustomObject]@{
+					Domain = $Group.Domain
+					Group = $Group.Name
+					Principal = $Group.Caption
+					SID = $Group.SID
+					LocalAccount = $Group.LocalAccount -eq "True"
+					PSTypeName = "Ruleset.UserInfo.Group"
+				}
+			}
+		}
 	} # foreach ($Computer in $Domain)
 }

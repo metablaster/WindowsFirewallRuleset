@@ -77,8 +77,8 @@ Enter-Test "Get-GroupSID"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Disabled Users, Administrators -CIM"
-	Get-GroupSID "Users" -Domain $TestDomain -CIM
+	Start-Test "Disabled Users, Administrators"
+	Get-GroupSID "Users" -Domain $TestDomain
 }
 else
 {
@@ -93,8 +93,8 @@ else
 
 	Test-Output $GroupsTest -Command Get-GroupSID
 
-	Start-Test "'Users' -CIM"
-	$GroupsTest = Get-GroupSID $SingleGroup -CIM
+	Start-Test "'Users'"
+	$GroupsTest = Get-GroupSID $SingleGroup
 	$GroupsTest
 
 	#
@@ -109,8 +109,8 @@ else
 
 	Test-Output $GroupsTest -Command Get-GroupSID
 
-	Start-Test "$GroupArray -CIM"
-	$GroupsTest = Get-GroupSID $GroupArray -CIM
+	Start-Test $GroupArray
+	$GroupsTest = Get-GroupSID $GroupArray
 	$GroupsTest
 
 	#
@@ -122,8 +122,8 @@ else
 	Start-Test "$GroupArray | Get-GroupSID"
 	$GroupArray | Get-GroupSID
 
-	Start-Test "$GroupArray | Get-GroupSID -CIM"
-	$GroupArray | Get-GroupSID -CIM
+	Start-Test "$GroupArray | Get-GroupSID"
+	$GroupArray | Get-GroupSID
 
 	#
 	# Test failure
@@ -133,7 +133,7 @@ else
 	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
 
 	Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -CIM -ErrorAction SilentlyContinue
+	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
 }
 
 Update-Log

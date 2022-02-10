@@ -70,8 +70,6 @@ function Get-InstallProperties
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
 		# TODO: this key may not exist on fresh installed systems, tested in fresh installed Windows Server 2019

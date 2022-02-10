@@ -70,8 +70,6 @@ function Get-WindowsDefender
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
 		$HKLM = "SOFTWARE\Microsoft\Windows Defender"

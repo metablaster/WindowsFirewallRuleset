@@ -104,6 +104,8 @@ Todo's in this file are categorized into following sections:
     - If there is `Path` parameter then also `LiteralPath` is required
     - Run `Get-Command -Syntax` for each function and script to verify parameter set names are as expected
     - Compatibility module takes long time to load, need to add streams to module
+    - Functions which make use of remoting should implement parameter sets for Credential and Session
+    to be able to specify either PS session or computername + credential
 
 2. Scripts
 

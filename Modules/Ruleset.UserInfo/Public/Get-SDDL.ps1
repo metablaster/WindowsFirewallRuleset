@@ -47,17 +47,11 @@ Wildcard characters are supported.
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
 
-.PARAMETER Credential
-Credential object to be used for remote authentication
-
-.PARAMETER CIM
-Whether to contact CIM server (required for remote computers)
-
 .PARAMETER Merge
 If specified, combines resultant SDDL strings into one
 
 .EXAMPLE
-PS> Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM
+PS> Get-SDDL -User USERNAME -Domain COMPUTERNAME
 
 .EXAMPLE
 PS> Get-SDDL -Group @("Users", "Administrators") -Merge
@@ -99,12 +93,6 @@ function Get-SDDL
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
-
-		[Parameter()]
-		[PSCredential] $Credential,
-
-		[Parameter()]
-		[switch] $CIM,
 
 		[Parameter()]
 		[switch] $Merge
@@ -153,23 +141,18 @@ function Get-SDDL
 
 	if ($Path)
 	{
-		if ($CIM)
-		{
-			$TargetPath = Invoke-Command -ComputerName $Domain -Credential $Credential -ScriptBlock {
-				Resolve-Path -Path $using:Path -ErrorAction Ignore
-			}
-		}
-		elseif ($Domain -ne [System.Environment]::MachineName)
-		{
-			Write-Error -Category NotImplemented -TargetObject $Path `
-				-Message "Querying remote computers without CIM switch not supported"
-			return
-		}
-		else
+		if ($Domain -eq [System.Environment]::MachineName)
 		{
 			# TODO: Multiple paths should be supported either here or trough path parameter
 			$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
 		}
+		elseif (Test-Computer $Domain)
+		{
+			$TargetPath = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				Resolve-Path -Path $using:Path -ErrorAction Ignore
+			}
+		}
+		else { return }
 
 		$ItemCount = ($TargetPath | Measure-Object).Count
 
@@ -184,7 +167,7 @@ function Get-SDDL
 			return
 		}
 
-		$ACL = Invoke-Command -ComputerName $Domain -Credential $Credential -ScriptBlock {
+		$ACL = Invoke-Command -Session $SessionInstance -ScriptBlock {
 			Get-Acl -Path $using:TargetPath
 		}
 
@@ -252,7 +235,7 @@ function Get-SDDL
 		foreach ($UserName in $User)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
-			$SID = (Get-PrincipalSID $UserName -Domain $Domain -CIM:$CIM).SID
+			$SID = (Get-PrincipalSID $UserName -Domain $Domain).SID
 
 			if ($SID)
 			{
@@ -288,7 +271,7 @@ function Get-SDDL
 		foreach ($UserGroup in $Group)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting group principal SDDL: $Domain\$UserGroup"
-			$SID = (Get-GroupSID $UserGroup -Domain $Domain -CIM:$CIM).SID
+			$SID = (Get-GroupSID $UserGroup -Domain $Domain).SID
 
 			if ($SID)
 			{

@@ -72,8 +72,6 @@ function Get-SqlManagementStudio
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine

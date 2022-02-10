@@ -39,14 +39,11 @@ Array of user groups or single group name
 .PARAMETER Domain
 Computer name which to query for group users
 
-.PARAMETER CIM
-Whether to contact CIM server (required for remote computers)
-
 .EXAMPLE
 PS> Get-GroupSID "USERNAME" -Domain "COMPUTERNAME"
 
 .EXAMPLE
-PS> Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
+PS> Get-GroupSID @("USERNAME1", "USERNAME2")
 
 .INPUTS
 [string[]] One or more group names
@@ -69,10 +66,7 @@ function Get-GroupSID
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName,
-
-		[Parameter()]
-		[switch] $CIM
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	begin
@@ -91,35 +85,21 @@ function Get-GroupSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
-			if ($CIM)
-			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
-				if (Test-Computer $Domain)
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
-
-					$GroupSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_Group -Property Name, SID |
-					Where-Object -Property Name -EQ $UserGroup | Select-Object -ExpandProperty SID
-				}
-				else
-				{
-					continue
-				}
-			}
-			elseif ($Domain -eq [System.Environment]::MachineName)
+			if ($Domain -eq [System.Environment]::MachineName)
 			{
 				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |
 				Select-Object -ExpandProperty Value
 			}
-			else
+			elseif (Test-Computer $Domain)
 			{
-				Write-Error -Category NotImplemented -TargetObject $Domain `
-					-Message "Querying remote computers without CIM switch not supported"
-				return
-			} # if ($CIM)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
+
+				$GroupSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+					-Class Win32_Group -Property Name, SID |
+				Where-Object -Property Name -EQ $UserGroup | Select-Object -ExpandProperty SID
+			}
+			else { continue }
 
 			if ([string]::IsNullOrEmpty($GroupSID))
 			{

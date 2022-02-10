@@ -39,14 +39,11 @@ One or more user names
 .PARAMETER Domain
 Target computer on which to perform query
 
-.PARAMETER CIM
-Whether to contact CIM server (required for remote computers)
-
 .EXAMPLE
 PS> Get-PrincipalSID "User" -Server "Server01"
 
 .EXAMPLE
-PS> Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM
+PS> Get-PrincipalSID @("USERNAME1", "USERNAME2")
 
 .INPUTS
 [string[]] One or more user names
@@ -69,10 +66,7 @@ function Get-PrincipalSID
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName,
-
-		[Parameter()]
-		[switch] $CIM
+		[string] $Domain = [System.Environment]::MachineName
 	)
 
 	begin
@@ -86,7 +80,7 @@ function Get-PrincipalSID
 		}
 
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
-			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq "$($args[0])" }))
+			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq $args[0] }))
 	}
 	process
 	{
@@ -94,23 +88,7 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			# TODO: we should query certain 'system' accounts such as SQL users remotely
-			if ($CIM -and !$IsKnownDomain)
-			{
-				if (Test-Computer $Domain)
-				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"
-
-					$PrincipalSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_UserAccount -Property Name, SID |
-					Where-Object -Property Name -EQ $UserName | Select-Object -ExpandProperty SID
-				}
-				else
-				{
-					return
-				}
-			}
-			elseif (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain)
+			if (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 
@@ -132,16 +110,20 @@ function Get-PrincipalSID
 				catch
 				{
 					Write-Error -Category $_.CategoryInfo.Category -TargetObject $NTAccount `
-						-Message "[$($MyInvocation.InvocationName)] Principal '$Domain\$UserName' cannot be resolved to a SID`n $($_.Exception.Message)"
+						-Message "Principal '$Domain\$UserName' cannot be resolved to a SID`n $($_.Exception.Message)"
 					continue
 				}
-			} # if ($CIM)
-			else
+			}
+			# TODO: we should query certain 'system' accounts such as SQL users remotely
+			elseif (Test-Computer $Domain)
 			{
-				Write-Error -Category NotImplemented -TargetObject $Domain `
-					-Message "Querying remote computers without CIM switch not supported"
-				return
-			} # if ($CIM)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"
+
+				$PrincipalSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+					-Class Win32_UserAccount -Property Name, SID |
+				Where-Object -Property Name -EQ $UserName | Select-Object -ExpandProperty SID
+			}
+			else { continue }
 
 			if ([string]::IsNullOrEmpty($PrincipalSID))
 			{

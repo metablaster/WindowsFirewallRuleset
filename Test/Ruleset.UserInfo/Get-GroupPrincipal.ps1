@@ -77,8 +77,8 @@ Enter-Test "Get-GroupPrincipal"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Disabled Users, Administrators -CIM"
-	Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain -CIM
+	Start-Test "Disabled Users, Administrators"
+	Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain
 }
 else
 {
@@ -89,12 +89,12 @@ else
 	Start-Test "Disabled Administrators"
 	Get-GroupPrincipal "Administrators" -Disabled
 
-	Start-Test "Users, Administrators -CIM"
-	$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM
+	Start-Test "Users, Administrators"
+	$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost"
 	$CIMTest
 
-	Start-Test "Disabled Users, Administrators -CIM"
-	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -CIM -Disabled
+	Start-Test "Disabled Users, Administrators"
+	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -Disabled
 
 	Start-Test "Failure test"
 	$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue

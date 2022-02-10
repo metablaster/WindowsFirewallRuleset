@@ -218,8 +218,6 @@ function Get-SqlServerInstance
 
 			# TODO: what is this?
 			$Computer = $Computer -replace '(.*?)\..+', '$1'
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Computer"
-
 			if (!(Test-Computer $Computer))
 			{
 				continue

@@ -142,8 +142,6 @@ function Get-RegistryRule
 		$Domain = [System.Environment]::MachineName
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer: $Domain"
-
 	if (Test-Computer $Domain)
 	{
 		# If no switches are set the script defaults to GPO store

@@ -114,7 +114,7 @@ function Update-Table
 		}
 
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup -Domain $PolicyStore -CIM:($PolicyStore -notin $LocalStore)
+		$UserGroups = Get-UserGroup -Domain $PolicyStore
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{

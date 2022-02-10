@@ -134,16 +134,16 @@ Enter-Test "Get-SDDL"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Disabled Users, Administrators -CIM -Domain $Domain"
-	Get-SDDL -User "User" -Domain $Domain -CIM
+	Start-Test "Disabled Users, Administrators -Domain $Domain"
+	Get-SDDL -User "User" -Domain $Domain
 
 	$RemotePath = "C:\Users\Public\Desktop\" # Inherited
 	Start-Test "-Path remote FileSystem"
-	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemotingCredential | Test-SDDL
+	Get-SDDL -Path $RemotePath -Domain $Domain -Credential $RemotingCredential | Test-SDDL
 
 	$RemotePath = "\\$Domain\C$\Windows"
 	Start-Test "-Path remote UNC path"
-	Get-SDDL -Path $RemotePath -Domain $Domain -CIM -Credential $RemotingCredential | Test-SDDL
+	Get-SDDL -Path $RemotePath -Domain $Domain -Credential $RemotingCredential | Test-SDDL
 }
 else
 {
@@ -161,11 +161,11 @@ else
 	Start-Test "-Group $Groups -Merge"
 	Get-SDDL -Group $Groups -Merge | Test-SDDL
 
-	Start-Test "-Group $Groups -CIM"
-	Get-SDDL -Group $Groups -CIM | Test-SDDL
+	Start-Test "-Group $Groups"
+	Get-SDDL -Group $Groups | Test-SDDL
 
-	Start-Test "-Group $Groups -CIM -Merge"
-	Get-SDDL -Group $Groups -CIM -Merge | Test-SDDL
+	Start-Test "-Group $Groups -Merge"
+	Get-SDDL -Group $Groups -Merge | Test-SDDL
 
 	#
 	# Test users
@@ -179,14 +179,14 @@ else
 	Start-Test "-User $Users -Merge"
 	Get-SDDL -User $Users -Merge | Test-SDDL
 
-	Start-Test "-User $Users -CIM"
-	$Result = Get-SDDL -User $Users -CIM
+	Start-Test "-User $Users"
+	$Result = Get-SDDL -User $Users
 
 	Test-SDDL $Result
 	Test-Output $Result -Command Get-SDDL
 
-	Start-Test "-User $Users -CIM -Merge"
-	$Result = Get-SDDL -User $Users -CIM -Merge
+	Start-Test "-User $Users -Merge"
+	$Result = Get-SDDL -User $Users -Merge
 	$Result | Test-SDDL
 
 	Test-Output $Result -Command Get-SDDL

@@ -78,7 +78,7 @@ Enter-Test "Get-UserGroup"
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "default remote"
-	Get-UserGroup -Domain $Domain -CIM
+	Get-UserGroup -Domain $Domain
 }
 else
 {
@@ -87,7 +87,7 @@ else
 	$Result
 
 	Start-Test "CIM server"
-	Get-UserGroup "localhost" -CIM
+	Get-UserGroup "localhost"
 
 	Start-Test "Failure test"
 	Get-UserGroup "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
