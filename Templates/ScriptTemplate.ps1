@@ -36,6 +36,10 @@ SOFTWARE.
 .GUID 66e38822-834d-4a90-b9c6-9e600a472a0a
 
 .AUTHOR metablaster zebal@protonmail.com
+
+.REQUIREDSCRIPTS ProjectSettings.ps1
+
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
