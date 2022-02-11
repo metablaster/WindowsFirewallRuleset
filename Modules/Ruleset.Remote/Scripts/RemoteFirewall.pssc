@@ -135,6 +135,7 @@ SOFTWARE.
 
 	# Modules to import when applied to a session
 	ModulesToImport = @(
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"

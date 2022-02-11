@@ -162,7 +162,7 @@ foreach ($Principal in $Users)
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApps -User $Principal.User | ForEach-Object -Process {
+	Get-UserApp -User $Principal.User | ForEach-Object -Process {
 		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
 		if (!$NetworkCapabilities)
@@ -225,7 +225,7 @@ foreach ($Principal in $Users)
 	# Create rules for system apps
 	#
 
-	Get-SystemApps -User $Principal.User | ForEach-Object -Process {
+	Get-SystemApp -User $Principal.User | ForEach-Object -Process {
 		$NetworkCapabilities = $_ | Get-AppCapability -Networking
 
 		if (!$NetworkCapabilities)

@@ -81,7 +81,8 @@ if (!$Default)
 		# Limits the idle time-out set for each session to the specified value.
 		# Corresponds to the MaxIdleTimeoutMs property of a session configuration.
 		# The default value is [Int]::MaxValue (~25 days).
-		MaxIdleTimeoutSec = [Int]::MaxValue
+		# NOTE: The [Int]::MaxValue argument is greater than the maximum allowed range of 2147483
+		MaxIdleTimeoutSec = 2147483
 
 		# Determines how long each session stays open if the remote computer does not receive any communication from the local computer.
 		# This includes the heartbeat signal. When the interval expires, the session closes.
@@ -194,7 +195,7 @@ if (!$Default)
 else
 {
 	[hashtable] $TransportConfigParams = @{
-		MaxIdleTimeoutSec = [Int]::MaxValue
+		MaxIdleTimeoutSec = 2147483
 		IdleTimeoutSec = 7200
 		ProcessIdleTimeoutSec = 0
 		MaxSessions = 25

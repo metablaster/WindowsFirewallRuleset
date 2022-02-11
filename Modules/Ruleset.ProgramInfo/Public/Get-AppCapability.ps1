@@ -191,8 +191,13 @@ function Get-AppCapability
 	{
 		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
+
 			# TODO: This should be handled in session configuration
-			Import-WinModule -Name Appx -ErrorAction Stop
+			# Appx module must be imported in compatibility mode for PowerShell version 7.1+
+			if ($PSVersionTable.PSVersion -ge "7.1")
+			{
+				Import-WinModule -Name Appx -ErrorAction Stop
+			}
 
 			foreach ($StoreApp in $using:InputObject)
 			{

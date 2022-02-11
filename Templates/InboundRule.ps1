@@ -69,7 +69,6 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[Parameter()]
 	[switch] $Trusted,
 
 	[Parameter()]

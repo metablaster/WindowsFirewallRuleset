@@ -41,13 +41,13 @@ EXAMPLES
 	Get-SqlServerInstance
 	Get SQL server information from a local or remote servers
 
-	Get-SystemApps
+	Get-SystemApp
 	Get store apps installed system wide
 
 	Get-SystemSoftware
 	Search installed programs for all users, system wide
 
-	Get-UserApps
+	Get-UserApp
 	Get store apps for specific user
 
 	Get-UserSoftware

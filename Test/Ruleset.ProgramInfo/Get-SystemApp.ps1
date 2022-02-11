@@ -79,15 +79,15 @@ Enter-Test "Get-SystemApps"
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Remote default"
-	Get-SystemApps -User $TestUser -Domain $Domain
+	Get-SystemApp -User $TestUser -Domain $Domain
 }
 else
 {
 	Start-Test $TestAdmin
-	Get-SystemApps -User $TestAdmin
+	Get-SystemApp -User $TestAdmin
 
 	Start-Test $TestUser
-	$Result = Get-SystemApps -User $TestUser
+	$Result = Get-SystemApp -User $TestUser
 	$Result
 
 	Start-Test "Format-List"

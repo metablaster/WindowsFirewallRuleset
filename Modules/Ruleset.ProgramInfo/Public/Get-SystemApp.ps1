@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get store apps for specific user
+Get store apps installed system wide
 
 .DESCRIPTION
-Search installed store apps in userprofile for specific user account
+Search system wide installed store apps, those installed for all users or shipped with system.
 
 .PARAMETER Name
 Specifies the name of a particular package.
@@ -50,34 +50,28 @@ User name in form of:
 NETBIOS Computer name in form of "COMPUTERNAME"
 
 .EXAMPLE
-PS> Get-UserApps "User" -Domain "Server01"
+PS> Get-SystemApp "User" -Domain "Server01"
 
 .EXAMPLE
-PS> Get-UserApps "Administrator"
+PS> Get-SystemApp "Administrator"
 
 .INPUTS
-None. You cannot pipe objects to Get-UserApps
+None. You cannot pipe objects to Get-SystemApp
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
-[object] if using PowerShell Core which outputs deserialized object:
-[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+[object] In Windows PowerShell
+[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] In PowerShell Core
 
 .NOTES
+TODO: Query multiple computers
 TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
-TODO: See also -AllUsers and other parameters in related links
 TODO: Format.ps1xml not applied in Windows PowerShell
-
-.LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md
-
-.LINK
-https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps
 #>
-function Get-UserApps
+function Get-SystemApp
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApp.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
 		[Parameter()]
@@ -112,17 +106,18 @@ function Get-UserApps
 	{
 		if (Test-Computer $Computer)
 		{
+			# TODO: show warning instead of error when fail (ex. in non elevated run)
+			# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
 			if ($Computer -eq [System.Environment]::MachineName)
 			{
-				# TODO: PackageTypeFilter is not clear, why only "Bundle"?
-				# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
+				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
 				$DomainPath = $env:SystemDrive
 			}
 			else
 			{
+				# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
 				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
-					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
+					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
 				}
 
 				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
@@ -134,19 +129,22 @@ function Get-UserApps
 
 			foreach ($App in $Apps)
 			{
-				# NOTE: This path will be missing for default apps on Windows server
-				# It may also be missing in fresh installed OS before connecting to internet
-				# TODO: See if "$_.Status" property can be used to determine if app is valid
-				if (Test-Path -PathType Container -Path "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC")
+				if (($App.SignatureKind -eq "System") -and ($App.Name -like "Microsoft*"))
 				{
-					# There is no Domain property, so add one, PSComputerName property is of no use here
-					Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
-				}
-				else
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
-					Write-Information -Tags $MyInvocation.InvocationName `
-						-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+					# NOTE: This path will be missing for default apps on Windows server
+					# It may also be missing in fresh installed OS before connecting to internet
+					# TODO: See if "$_.Status" property can be used to determine if app is valid
+					if (Test-Path -PathType Container -Path "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC")
+					{
+						# There is no Domain property, so add one, PSComputerName property is of no use here
+						Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Computer
+					}
+					else
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
+						Write-Information -Tags $MyInvocation.InvocationName `
+							-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+					}
 				}
 			}
 		} # if Test-Computer

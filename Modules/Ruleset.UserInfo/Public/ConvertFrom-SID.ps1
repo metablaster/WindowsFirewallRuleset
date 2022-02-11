@@ -353,8 +353,8 @@ function ConvertFrom-SID
 									Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing username: '$User'"
 
 									# TODO: instead of many for loops probably create hash table or array for match
-									$StoreApps = Get-UserApps -Domain $Computer -User $User
-									$StoreApps += Get-SystemApps -Domain $Computer -User $User
+									$StoreApps = Get-UserApp -Domain $Computer -User $User
+									$StoreApps += Get-SystemApp -Domain $Computer -User $User
 
 									foreach ($App in $StoreApps)
 									{

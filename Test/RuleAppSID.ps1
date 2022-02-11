@@ -89,7 +89,7 @@ foreach ($Account in $Principals)
 	$OwnerSID = (Get-PrincipalSID $Account.User -Domain $Account.Domain).SID
 	$OwnerSID
 
-	Get-UserApps -User $Account.User | ForEach-Object {
+	Get-UserApp -User $Account.User | ForEach-Object {
 		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 		$PackageSID
 	}

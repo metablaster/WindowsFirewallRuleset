@@ -77,7 +77,7 @@ $GroupAccounts
 foreach ($Account in $GroupAccounts)
 {
 	Start-Test "$($Account.User)"
-	Get-UserApps -User $Account.User | ForEach-Object {
+	Get-UserApp -User $Account.User | ForEach-Object {
 		[PSCustomObject]@{
 			PackageFamilyName = $_.PackageFamilyName
 			SID = Get-AppSID -FamilyName $_.PackageFamilyName
@@ -86,7 +86,7 @@ foreach ($Account in $GroupAccounts)
 }
 
 Start-Test "system apps"
-$Result = Get-SystemApps -User $TestAdmin | ForEach-Object {
+$Result = Get-SystemApp -User $TestAdmin | ForEach-Object {
 	[PSCustomObject]@{
 		PackageFamilyName = $_.PackageFamilyName
 		SID = Get-AppSID -FamilyName $_.PackageFamilyName
