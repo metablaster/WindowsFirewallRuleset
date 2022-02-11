@@ -85,7 +85,7 @@ function Initialize-Connection
 		# OpenTimeout (in milliseconds), affects only PS sessions
 		# Determines how long the client computer waits for the session connection to be established.
 		# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out.
-		$PSSessionOption.OpenTimeout = 3000
+		$PSSessionOption.OpenTimeout = 10000
 		# CancelTimeout (in milliseconds), affects only PS sessions
 		# Determines how long PowerShell waits for a cancel operation (CTRL+C) to finish before ending it.
 		# The default value is 60000 (one minute). A value of 0 (zero) means no time-out.
@@ -95,13 +95,13 @@ function Initialize-Connection
 		# When the interval expires, the operation fails.
 		# The default value is 180000 (3 minutes). A value of 0 (zero) means no time-out for PS sessions,
 		# for CIM sessions it means use the default timeout value for the server (usually 3 minutes)
-		$PSSessionOption.OperationTimeout = 10000
+		$PSSessionOption.OperationTimeout = 120000
 		# MaxConnectionRetryCount, affects PS session, Test-NetConnection and Invoke-WebRequest
 		# Specifies count of attempts to make a connection to a target host if the current attempt
 		# fails due to network issues.
 		# The default value is 5 for PS session.
 		# The default value is 4 for Test-NetConnection which specifies echo requests
-		$PSSessionOption.MaxConnectionRetryCount = 2
+		$PSSessionOption.MaxConnectionRetryCount = 4
 
 		$ConnectionStatus = $false
 		if ($PolicyStore -notin $LocalStore)

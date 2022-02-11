@@ -5,6 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
+TODO: Update Copyright date and author
 Copyright (C) 2021, 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,11 +27,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+<#
+.SYNOPSIS
+Settings template.
+A brief description of the script.
+
+.DESCRIPTION
+Use SettingsScript.ps1 as a template to write settings.
+A detailed description of the script.
+
+.PARAMETER Force
+The description of a parameter.
+Repeat ".PARAMETER" keyword for each parameter.
+
+.EXAMPLE
+PS> ScriptTemplate
+
+Repeat ".EXAMPLE" keyword for each example
+
+.INPUTS
+None. You cannot pipe objects to ScriptTemplate.ps1
+
+.OUTPUTS
+None. ScriptTemplate.ps1 does not generate any output
+
+.NOTES
+None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+#>
+
 #Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
-param ()
+[CmdletBinding()]
+param (
+	[Parameter()]
+	[switch] $Force
+)
 
 # Utility or settings scripts don't do anything on their own
 if ($MyInvocation.InvocationName -ne '.')

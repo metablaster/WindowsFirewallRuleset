@@ -570,9 +570,9 @@ This is how remote deployment is going to work once this functionality gets full
 Remote deployment can be customized in a great detail in the following locations:
 
 - To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`
-- To customize WSMan session configuration see: `Modules\Ruleset.Remote\Scripts\Enable-WinRMServer.ps1`
-- To customize self signed SSL certificate see: `Modules\Ruleset.Remote\Scripts\Register-SslCertificate.ps1`
-- To customize PS and CIM session configuration see: `Config\RemoteFirewall.pssc`
+- To customize WSMan session configuration see: `Modules\Ruleset.Remote\Scripts\*Firewall.pssc`
+- To customize self signed SSL certificate see: `Modules\Ruleset.Remote\Public\Register-SslCertificate.ps1`
+- To customize PS and CIM session configuration see: `Modules\Ruleset.Remote\Scripts\SessionSettings.ps1`
 
 For additional information and troubleshooting tips see also [Remoting help](Readme/Remote.md)
 

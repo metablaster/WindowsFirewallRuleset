@@ -78,6 +78,8 @@ TODO: Client settings are missing for server and vice versa
 https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
 #>
 
+#Requires -Version 5.1
+
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
 [CmdletBinding(DefaultParameterSetName = "Custom")]
@@ -94,6 +96,13 @@ param (
 	[Parameter(ParameterSetName = "Default")]
 	[switch] $Default
 )
+
+# Utility or settings scripts don't do anything on their own
+if ($MyInvocation.InvocationName -ne '.')
+{
+	Write-Error -Category NotEnabled -TargetObject $MyInvocation.InvocationName `
+		-Message "This is settings script and must be dot sourced where needed" -EA Stop
+}
 
 if (!$Default)
 {
