@@ -120,7 +120,7 @@ function Compare-WinModule
 	[PSSession] $Session = Initialize-WinSession @InitializeWinSessionParameters
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting local modules..."
-	$LocalModule = (Get-Module -ListAvailable -Verbose:$false).Where{
+	$LocalModule = Get-Module -ListAvailable -Verbose:$false | Where-Object {
 		$_.Name -like $Name
 	}
 
@@ -128,7 +128,7 @@ function Compare-WinModule
 	# Use Invoke-Command here instead of the -PSSession option on Get-Module because
 	# we're only returning a subset of the data
 	$RemoteModule = @(Invoke-Command -Session $Session -ScriptBlock {
-			(Get-Module -ListAvailable).Where{
+			Get-Module -ListAvailable | Where-Object {
 				$_.Name -notin $using:NeverImportList -and $_.Name -like $using:Name
 			} |	Select-Object Name, Version
 		})

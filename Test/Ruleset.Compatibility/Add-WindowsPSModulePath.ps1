@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Initialize-WinSession
+Unit test for Add-WindowsPSModulePath
 
 .DESCRIPTION
-Test correctness of Initialize-WinSession function
+Test correctness of Add-WindowsPSModulePath function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> TestTemplate
+PS> Add-WindowsPSModulePath
 
 .INPUTS
-None. You cannot pipe objects to TestTemplate.ps1
+None. You cannot pipe objects to Add-WindowsPSModulePath
 
 .OUTPUTS
-None. TestTemplate.ps1 does not generate any output
+None. Add-WindowsPSModulePath does not generate any output
 
 .NOTES
 None.
@@ -54,7 +54,6 @@ None.
 
 #Requires -Version 7.1
 #Requires -PSEdition Core
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -74,21 +73,19 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Initialize-WinSession"
-$ConfigurationName = "Microsoft.PowerShell"
+Enter-Test "Add-WindowsPSModulePath"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote default"
-	Initialize-WinSession -ConfigurationName $ConfigurationName -Domain $Domain -PassThru
+	# Start-Test "Remote default"
+	# Add-WindowsPSModulePath
+	# Import-Module Hyper-V
 }
 else
 {
 	Start-Test "Default test"
-	$Result = Initialize-WinSession -ConfigurationName $ConfigurationName -PassThru
-	$Result
-
-	Test-Output $Result -Command Initialize-WinSession
+	Add-WindowsPSModulePath
+	Import-Module Hyper-V
 }
 
 Update-Log

@@ -112,7 +112,6 @@ function Get-WinModule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session"
@@ -128,7 +127,7 @@ function Get-WinModule
 
 	if ($Name -ne "*")
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules matching '$Name'."
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting the list of available modules matching '$Name'"
 	}
 	else
 	{

@@ -52,7 +52,7 @@ None. TestTemplate.ps1 does not generate any output
 None.
 #>
 
-#Requires -Version 5.1
+#Requires -Version 7.1
 #Requires -PSEdition Core
 
 [CmdletBinding()]

@@ -33,6 +33,9 @@ Unit test for Invoke-WinCommand
 .DESCRIPTION
 Test correctness of Invoke-WinCommand function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
@@ -49,17 +52,21 @@ None. Invoke-WinCommand does not generate any output
 None.
 #>
 
-#Requires -Version 5.1
+#Requires -Version 7.1
 #Requires -PSEdition Core
 
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -68,8 +75,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Invoke-WinCommand"
 
-Start-Test "Default test"
-Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey -Domain $Domain
+}
+else
+{
+	Start-Test "Default test"
+	Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+}
 
 Update-Log
 Exit-Test

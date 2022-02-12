@@ -129,7 +129,7 @@ function Import-WinModule
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Import-WinModule.md")]
-	[OutputType([PSObject])]
+	[OutputType([System.Management.Automation.PSModuleInfo])]
 	Param (
 		[Parameter(Position = 0)]
 		[SupportsWildcards()]
@@ -165,10 +165,9 @@ function Import-WinModule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
 	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session."
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Connecting to compatibility session"
 	$InitializeWinSessionParameters = @{
 		Verbose = $VerboseFlag
 		ComputerName = $Domain
@@ -185,14 +184,14 @@ function Import-WinModule
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting module list..."
 	$ImportNames = Invoke-Command -Session $Session -ScriptBlock {
 		# Running on the Remote Machine
-		$Module = (Get-Module -ListAvailable -Name $using:Name).Where{
+		$Module = (Get-Module -ListAvailable -Name $using:Name) | Where-Object {
 			$_.Name -notin $using:NeverImportList
 		}
 
 		# These can use wildcards e.g. Az*,x* will probably be common
 		if ($using:Exclude)
 		{
-			$Module = $Module.Where{ $_.Name -NotMatch $using:Exclude }
+			$Module = $Module | Where-Object { $_.Name -NotMatch $using:Exclude }
 		}
 
 		$Module.Name | Select-Object -Unique
@@ -221,8 +220,8 @@ function Import-WinModule
 	if ($ImportNames)
 	{
 		# Extract the "never clobber" modules from the list
-		$NoClobberNames = $ImportNames.Where{ $_ -in $script:NeverClobberList }
-		$ImportNames = $ImportNames.Where{ $_ -notin $script:NeverClobberList }
+		$NoClobberNames = $ImportNames | Where-Object { $_ -in $script:NeverClobberList }
+		$ImportNames = $ImportNames | Where-Object { $_ -notin $script:NeverClobberList }
 
 		if ($ImportNames)
 		{
@@ -232,13 +231,13 @@ function Import-WinModule
 		if ($NoClobberNames)
 		{
 			$ImportModuleParameters.PassThru = $true
-			foreach ($name in $NoClobberNames)
+			foreach ($Name in $NoClobberNames)
 			{
-				$Module = Import-Module -Name $name -NoClobber @ImportModuleParameters
+				$Module = Import-Module -Name $Name -NoClobber @ImportModuleParameters
 
 				# Hack using private reflection to keep the proxy module from shadowing the real module.
-				$null = [PSModuleInfo].GetMethod("SetName",
-					[System.Reflection.BindingFlags]"Instance, NonPublic").Invoke($Module, @($Module.Name + ".WinModule"))
+				[PSModuleInfo].GetMethod("SetName", [System.Reflection.BindingFlags] "Instance, NonPublic").Invoke(
+					$Module, @($Module.Name + ".WinModule")) | Out-Null
 
 				if ($PassThru.IsPresent)
 				{

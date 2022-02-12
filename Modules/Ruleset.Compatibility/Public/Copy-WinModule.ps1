@@ -163,7 +163,7 @@ function Copy-WinModule
 		Recurse = $true
 	}
 
-	if (($Domain -ne "localhost") -and ($Domain -ne "."))
+	if (($Domain -ne "localhost") -and ($Domain -ne ".") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		$CopyItemParameters.FromSession = $Session
 	}
@@ -187,7 +187,7 @@ function Copy-WinModule
 	foreach ($Module in $ModulesToCopy)
 	{
 		# Skip modules that aren't on the named module list
-		if (!($Name.Where{ $Module.Name -like $_ }))
+		if (!($Name | Where-Object { $Module.Name -like $_ }))
 		{
 			continue
 		}
