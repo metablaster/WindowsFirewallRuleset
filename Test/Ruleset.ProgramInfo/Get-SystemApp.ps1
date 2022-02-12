@@ -78,7 +78,7 @@ Enter-Test "Get-SystemApp"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote default"
+	Start-Test "Remote Get-SystemApp -User $TestUser -Domain $Domain"
 	Get-SystemApp -User $TestUser -Domain $Domain
 }
 else

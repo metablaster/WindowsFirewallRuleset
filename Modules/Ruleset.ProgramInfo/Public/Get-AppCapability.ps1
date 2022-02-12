@@ -122,8 +122,8 @@ function Get-AppCapability
 		[string] $Name = "*",
 
 		[Parameter(ParameterSetName = "Name")]
-		[ValidateSet("Bundle", "Framework", "Main", "Resource", "None")]
-		[string[]] $PackageTypeFilter,
+		[ValidateSet("Bundle", "Framework", "Main", "Resource", "None", "Xap")]
+		[string] $PackageTypeFilter,
 
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "InputObject")]
 		[Alias("App", "StoreApp")]
@@ -166,12 +166,12 @@ function Get-AppCapability
 				Name = $Name
 			}
 
-			if ($PackageTypeFilter)
+			if (![string]::IsNullOrEmpty($PackageTypeFilter))
 			{
 				$AppxParams["PackageTypeFilter"] = $PackageTypeFilter
 			}
 
-			if ($User)
+			if (![string]::IsNullOrEmpty($User))
 			{
 				$AppxParams["User"] = $User
 			}
@@ -182,7 +182,7 @@ function Get-AppCapability
 			}
 			else
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Session is '$($SessionInstance.State)' and '$($SessionInstance.Availability)'" -Debug
+				# HACK: No apps are returned from remote
 				$InputObject = Invoke-Command -Session $SessionInstance -ArgumentList $AppxParams -ScriptBlock {
 					param ([hashtable] $AppxParams)
 
@@ -193,7 +193,6 @@ function Get-AppCapability
 	}
 	process
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Session is '$($SessionInstance.State)' and '$($SessionInstance.Availability)'" -Debug
 		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 

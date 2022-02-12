@@ -135,16 +135,16 @@ SOFTWARE.
 
 	# Modules to import when applied to a session
 	ModulesToImport = @(
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Logging"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Remote"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\VSSetup"
 	)
 
@@ -184,18 +184,8 @@ SOFTWARE.
 	# TypesToProcess = 'C:\ConfigData\MyTypes.ps1xml', 'C:\ConfigData\OtherTypes.ps1xml'
 
 	# Format files (.ps1xml) to load when applied to a session
-	# FormatsToProcess = @(
-	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo\Ruleset.ComputerInfo.Format.ps1xml"
-	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP\Ruleset.IP.Format.ps1xml"
-	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo\Ruleset.ProgramInfo.Format.ps1xml"
-	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo\Ruleset.UserInfo.Format.ps1xml"
-	# )
+	# FormatsToProcess = 'C:\ConfigData\MyFormats.ps1xml', 'C:\ConfigData\OtherFormats.ps1xml'
 
 	# Assemblies to load when applied to a session
-	# AssembliesToLoad = @(
-	# 	"System.Data.Entity"
-	# 	"Microsoft.Windows.Appx.PackageManager.Commands"
-	# 	"Microsoft.WSMan.Management"
-	# 	"System.DirectoryServices.AccountManagement"
-	# )
+	# AssembliesToLoad = 'System.Web', 'System.OtherAssembly, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'
 }
