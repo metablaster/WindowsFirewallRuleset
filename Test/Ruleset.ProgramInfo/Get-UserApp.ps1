@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-UserApps
+Unit test for Get-UserApp
 
 .DESCRIPTION
-Test correctness of Get-UserApps function
+Test correctness of Get-UserApp function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-UserApps.ps1
+PS> .\Get-UserApp.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-UserApps.ps1
+None. You cannot pipe objects to Get-UserApp.ps1
 
 .OUTPUTS
-None. Get-UserApps.ps1 does not generate any output
+None. Get-UserApp.ps1 does not generate any output
 
 .NOTES
 None.
@@ -75,7 +75,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 
-Enter-Test "Get-UserApps"
+Enter-Test "Get-UserApp"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
@@ -97,7 +97,7 @@ else
 	Start-Test "Format-Wide"
 	$Result | Format-Wide
 
-	Test-Output $Result -Command Get-UserApps
+	Test-Output $Result -Command Get-UserApp
 }
 
 Update-Log

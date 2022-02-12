@@ -122,6 +122,12 @@ function Get-UserApp
 			else
 			{
 				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
+					# TODO: This should be handled in session configuration
+					if ($PSVersionTable.PSVersion -ge "7.1")
+					{
+						Import-WinModule -Name Appx -ErrorAction Stop
+					}
+
 					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
 				}
 

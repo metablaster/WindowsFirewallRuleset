@@ -80,6 +80,7 @@ function Initialize-Connection
 
 		# [System.Management.Automation.Remoting.PSSessionOption]
 		# Advanced options for a user-managed remote session
+		# TODO: More options are available with New-PSSessionOption
 		$PSSessionOption.Culture = $DefaultCulture
 		$PSSessionOption.UICulture = $DefaultUICulture
 		# OpenTimeout (in milliseconds), affects only PS sessions

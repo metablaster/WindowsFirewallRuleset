@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-SystemApps
+Unit test for Get-SystemApp
 
 .DESCRIPTION
-Test correctness of Get-SystemApps function
+Test correctness of Get-SystemApp function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-SystemApps.ps1
+PS> .\Get-SystemApp.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-SystemApps.ps1
+None. You cannot pipe objects to Get-SystemApp.ps1
 
 .OUTPUTS
-None. Get-SystemApps.ps1 does not generate any output
+None. Get-SystemApp.ps1 does not generate any output
 
 .NOTES
 None.
@@ -74,7 +74,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 
-Enter-Test "Get-SystemApps"
+Enter-Test "Get-SystemApp"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
@@ -96,7 +96,7 @@ else
 	Start-Test "Format-Wide"
 	$Result | Format-Wide
 
-	Test-Output $Result -Command Get-SystemApps
+	Test-Output $Result -Command Get-SystemApp
 }
 
 Update-Log

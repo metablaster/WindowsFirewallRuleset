@@ -143,7 +143,7 @@ SOFTWARE.
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Logging"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
+		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Remote"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
 		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"

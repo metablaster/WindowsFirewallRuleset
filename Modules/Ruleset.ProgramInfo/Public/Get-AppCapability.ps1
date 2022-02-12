@@ -147,6 +147,9 @@ function Get-AppCapability
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		# $DebugPreference = "Continue"
+		$VerbosePreference = "Continue"
+
 		# Replace localhost and dot with NETBIOS computer name
 		if (($Domain -eq "localhost") -or ($Domain -eq "."))
 		{
@@ -179,21 +182,28 @@ function Get-AppCapability
 			}
 			else
 			{
-				$InputObject = Invoke-Command -Session $SessionInstance -ScriptBlock {
-					param([hashtable] $AppxParams)
+				"$($SessionInstance.State) $($SessionInstance.Availability)"
+				$InputObject = Invoke-Command -Session $SessionInstance -ArgumentList $AppxParams -ScriptBlock {
+					param ([hashtable] $AppxParams)
+
+					# TODO: This should be handled in session configuration
+					if ($PSVersionTable.PSVersion -ge "7.1")
+					{
+						Import-WinModule -Name Appx -ErrorAction Stop
+					}
 
 					Get-AppxPackage @AppxParams
-				} -ArgumentList $AppxParams
+				}
 			}
 		}
 	}
 	process
 	{
+		"$($SessionInstance.State) $($SessionInstance.Availability)"
 		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 
 			# TODO: This should be handled in session configuration
-			# Appx module must be imported in compatibility mode for PowerShell version 7.1+
 			if ($PSVersionTable.PSVersion -ge "7.1")
 			{
 				Import-WinModule -Name Appx -ErrorAction Stop
@@ -205,7 +215,6 @@ function Get-AppCapability
 				# [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 				$App = $StoreApp
 				[string[]] $OutputObject = @()
-
 				Write-Verbose -Message "[$InvocationName] Processing store app: '$($App.Name)'"
 
 				if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
@@ -228,7 +237,7 @@ function Get-AppCapability
 						continue
 					}
 
-					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
+					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name) user $using:User"
 					# [System.XML.XMLDocument]
 					$PackageManifest = ($App | Get-AppxPackageManifest -User $using:User).Package
 				}
@@ -249,12 +258,12 @@ function Get-AppCapability
 
 				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities" -Verbose
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities"
 					continue
 				}
 				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities" -Verbose
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities"
 					continue
 				}
 

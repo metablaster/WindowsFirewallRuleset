@@ -82,8 +82,8 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote default"
 	Get-AppCapability -Domain $Domain -PackageTypeFilter Main -Name "*AccountsControl*"
 
-	# Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
-	# Get-SystemApps -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
+	# Start-Test "Get-SystemApp $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
+	# Get-SystemApp -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
 }
 else
 {
@@ -94,11 +94,15 @@ else
 	Start-Test 'Get-AppCapability -Name "*AccountsControl*" -PackageTypeFilter Main'
 	Get-AppCapability "*AccountsControl*" -PackageTypeFilter Main
 
-	Start-Test "Get-SystemApps $TestAdmin | Get-AppCapability -Networking"
-	Get-SystemApps -User $TestAdmin | Get-AppCapability -Networking
+	Start-Test "Get-SystemApp $TestAdmin | Get-AppCapability -Networking"
+	# HACK: Get-SystemApp -User $TestAdmin | Get-AppCapability -Networking
+	$Apps = Get-SystemApp -User $TestAdmin
+	Get-AppCapability -Networking -InputObject $Apps
 
-	Start-Test "Get-UserApps -User $TestUser | Get-AppCapability -Networking"
-	Get-UserApps -User $TestUser | Get-AppCapability -User $TestUser -Networking
+	Start-Test "Get-UserApp -User $TestUser | Get-AppCapability -Networking"
+	# HACK: Get-UserApp -User $TestUser | Get-AppCapability -User $TestUser -Networking
+	$Apps2 = Get-UserApp -User $TestUser
+	Get-AppCapability -User $TestUser -Networking -InputObject $Apps2
 
 	Start-Test "Get-AppxPackage -InputObject '*AccountsControl*' | Get-AppCapability -IncludeAuthority"
 	$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -IncludeAuthority
