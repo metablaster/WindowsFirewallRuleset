@@ -94,15 +94,12 @@ else
 	Start-Test 'Get-AppCapability -Name "*AccountsControl*" -PackageTypeFilter Main'
 	Get-AppCapability "*AccountsControl*" -PackageTypeFilter Main
 
-	Start-Test "Get-SystemApp $TestAdmin | Get-AppCapability -Networking"
-	# HACK: Get-SystemApp -User $TestAdmin | Get-AppCapability -Networking
+	Start-Test "Get-SystemApp $TestAdmin + Get-AppCapability -Networking -InputObject"
 	$Apps = Get-SystemApp -User $TestAdmin
 	Get-AppCapability -Networking -InputObject $Apps
 
 	Start-Test "Get-UserApp -User $TestUser | Get-AppCapability -Networking"
-	# HACK: Get-UserApp -User $TestUser | Get-AppCapability -User $TestUser -Networking
-	$Apps2 = Get-UserApp -User $TestUser
-	Get-AppCapability -User $TestUser -Networking -InputObject $Apps2
+	Get-UserApp -User $TestUser | Get-AppCapability -User $TestUser -Networking
 
 	Start-Test "Get-AppxPackage -InputObject '*AccountsControl*' | Get-AppCapability -IncludeAuthority"
 	$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -IncludeAuthority

@@ -333,12 +333,23 @@ function Connect-Computer
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
+		# TODO: Will create new blank console windows, see also:
+		# https://github.com/PowerShell/PowerShell/issues/16763
 		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)
 
 		# TODO: For VM without external switch use -VMName
 		# TODO: Temporarily not using because not in need to enter session
 		# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
 		# Enter-PSSession -Name RemoteSession
+
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Initializing '$($SessionInstance.Name) session with compatibility session"
+		# HACK: Unable to setup this in session configuration in "ScriptsToProcess" key
+		Invoke-Command -Session $SessionInstance -ScriptBlock {
+			if ($PSVersionTable.PSVersion -ge "7.1")
+			{
+				Import-WinModule -Name Appx -ErrorAction Stop
+			}
+		}
 	}
 	catch
 	{

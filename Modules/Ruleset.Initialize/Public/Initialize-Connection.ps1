@@ -137,8 +137,9 @@ function Initialize-Connection
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				# Loopback WinRM is required for Ruleset.Compatibility module
+				# TODO: This test should be against Microsoft.PowreShell configuration but it is not accessible from Core
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
-				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName Microsoft.PowerShell
+				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName "LocalFirewall.$($PSVersionTable.PSEdition)"
 
 				if (!$ConnectionStatus)
 				{
@@ -155,7 +156,7 @@ function Initialize-Connection
 
 					# Enable loopback only HTTP
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-					Test-WinRM -Protocol HTTP -ErrorAction Stop -ConfigurationName Microsoft.PowerShell
+					Test-WinRM -Protocol HTTP -ErrorAction Stop -ConfigurationName "LocalFirewall.$($PSVersionTable.PSEdition)"
 				}
 			}
 

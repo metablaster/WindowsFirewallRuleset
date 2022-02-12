@@ -182,15 +182,9 @@ function Get-AppCapability
 			}
 			else
 			{
-				"$($SessionInstance.State) $($SessionInstance.Availability)"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Session is '$($SessionInstance.State)' and '$($SessionInstance.Availability)'" -Debug
 				$InputObject = Invoke-Command -Session $SessionInstance -ArgumentList $AppxParams -ScriptBlock {
 					param ([hashtable] $AppxParams)
-
-					# TODO: This should be handled in session configuration
-					if ($PSVersionTable.PSVersion -ge "7.1")
-					{
-						Import-WinModule -Name Appx -ErrorAction Stop
-					}
 
 					Get-AppxPackage @AppxParams
 				}
@@ -199,15 +193,9 @@ function Get-AppCapability
 	}
 	process
 	{
-		"$($SessionInstance.State) $($SessionInstance.Availability)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Session is '$($SessionInstance.State)' and '$($SessionInstance.Availability)'" -Debug
 		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
-
-			# TODO: This should be handled in session configuration
-			if ($PSVersionTable.PSVersion -ge "7.1")
-			{
-				Import-WinModule -Name Appx -ErrorAction Stop
-			}
 
 			foreach ($StoreApp in $using:InputObject)
 			{
