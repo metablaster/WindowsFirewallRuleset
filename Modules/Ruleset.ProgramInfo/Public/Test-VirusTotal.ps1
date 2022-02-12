@@ -92,7 +92,10 @@ function Test-VirusTotal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		Invoke-Command -Session $SessionInstance -ScriptBlock {
+		$InvocationName = $MyInvocation.InvocationName
+		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
+			param ([string] $InvocationName)
+
 			$Executable = Split-Path -Path $using:LiteralPath -Leaf
 			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($using:SigcheckLocation)
 			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
@@ -115,18 +118,18 @@ function Test-VirusTotal
 			else
 			{
 				# Check if sigcheck is in path
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if sigcheck is in path"
+				Write-Debug -Message "[$InvocationName] Checking if sigcheck is in path"
 				$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore
 
 				# Can be, not found or there are multiple matches
 				if (($Command | Measure-Object).Count -eq 1)
 				{
 					$SigCheckFile = $Command.Name
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] $SigcheckExecutable found in path"
+					Write-Debug -Message "[$InvocationName] $SigcheckExecutable found in path"
 				}
 				else
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] $SigcheckExecutable was not found in specified path '$SigcheckDir', virus total scan will not be performed"
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in specified path '$SigcheckDir', virus total scan will not be performed"
 				}
 			}
 
@@ -179,7 +182,7 @@ function Test-VirusTotal
 
 						if (![string]::IsNullOrEmpty($StreamLine))
 						{
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing $SigCheckFile output: $StreamLine"
+							Write-Debug -Message "[$InvocationName] Processing $SigCheckFile output: $StreamLine"
 
 							$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")
 							$VTLink = [regex]::Match($StreamLine, "(?<VTlink>VT link:\s+)(?<link>.*)")
@@ -202,7 +205,7 @@ function Test-VirusTotal
 								{
 									if ([int32] $TotalDetections.Value -gt 0)
 									{
-										Write-Warning -Message "[$($MyInvocation.InvocationName)] '$Executable' is infected with malware"
+										Write-Warning -Message "[$InvocationName] '$Executable' is infected with malware"
 										$FileIsMalware = $true
 									}
 								}
@@ -215,19 +218,19 @@ function Test-VirusTotal
 
 							if ($Link.Success)
 							{
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Executable VT Link is $($Link.Value)"
+								Write-Verbose -Message "[$InvocationName] $Executable VT Link is $($Link.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "VT link", $Link.Value
 							}
 
 							if ($Publisher.Success)
 							{
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Executable Publisher is $($Publisher.Value)"
+								Write-Verbose -Message "[$InvocationName] $Executable Publisher is $($Publisher.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Publisher", $Publisher.Value
 							}
 
 							if ($Description.Success)
 							{
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Executable Description is $($Description.Value)"
+								Write-Verbose -Message "[$InvocationName] $Executable Description is $($Description.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Description", $Description.Value
 							}
 						}
@@ -247,7 +250,7 @@ function Test-VirusTotal
 
 					if (!$StatusWait)
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$SigCheckFile' failed to exit, killing process"
+						Write-Warning -Message "[$InvocationName] Process '$SigCheckFile' failed to exit, killing process"
 
 						# Immediately stops the associated process, and optionally its child/descendent processes (true)
 						$Process.Kill()
@@ -257,7 +260,7 @@ function Test-VirusTotal
 					# closes the process handle, and clears process-specific properties.
 					# NOTE: Close does not close the standard output, input, and error readers and writers in
 					# case they are being referenced externally
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Closing $SigcheckFile process"
+					Write-Debug -Message "[$InvocationName] Closing $SigcheckFile process"
 					$Process.Close()
 
 					$HeaderStack.Pop() | Out-Null

@@ -53,12 +53,13 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Get-PrincipalSID`
     - `Get-SDDL`
     - `Get-AppCapability`
-    - `Get-UserApps`
-    - `Get-SystemApps`
+    - `Get-UserApp`
+    - `Get-SystemApp`
     - `Test-FileSystemPath`
     - `Search-Installation`
     - `Confirm-Installation`
     - `Test-ExecutableFile`
+    - `Test-Service`
     - `Select-EnvironmentVariable`
 
   - `Enable-WinRMServer` and `Disable-WinRMServer` added `-KeepDefault` switch to leave default

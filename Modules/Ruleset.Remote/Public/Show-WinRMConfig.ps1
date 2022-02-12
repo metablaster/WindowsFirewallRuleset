@@ -153,11 +153,25 @@ function Show-WinRMConfig
 		# winrm get winrm/config
 		Write-Information -Tags $MyInvocation.InvocationName `
 			-MessageData "INFO: Showing all enabled session configurations (short version)"
-		# TODO: Detailed switch should show more information about session configuration
-		Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
-		Select-Object -Property Name, lang, Enabled, PSVersion, SDKVersion, Architecture,
-		Capability, SupportsOptions, AutoRestart, OutputBufferingMode, RunAsUser, RunAsPassword,
-		RunAsVirtualAccount, RunAsVirtualAccountGroups, Permission
+
+		if ($Detailed)
+		{
+			Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
+			Select-Object -Property Name, Enabled, ExecutionPolicy, SessionType, LanguageMode,
+			OutputBufferingMode, AutoRestart, SupportsOptions, UseSharedProcess, lang, Capability,
+			PSVersion, SDKVersion, Architecture, MountUserDrive, UserDriveMaximumSize,
+			MaxShells, MaxProcessesPerShell, MaxConcurrentCommandsPerShell, MaxShellsPerUser,
+			MaxConcurrentUsers,	MaxMemoryPerShellMB, psmaximumreceivedobjectsizemb,
+			psmaximumreceiveddatasizepercommandmb, MaxIdleTimeoutms, IdleTimeoutms, ProcessIdleTimeoutSec,
+			RunAsUser, RunAsPassword, RunAsVirtualAccount, RunAsVirtualAccountGroups, Permission
+		}
+		else
+		{
+			Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
+			Select-Object -Property Name, Enabled, ExecutionPolicy, SessionType, LanguageMode,
+			OutputBufferingMode, Capability, PSVersion, Architecture,
+			RunAsVirtualAccount, RunAsVirtualAccountGroups, Permission
+		}
 
 		# winrm enumerate winrm/config/listener
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Showing configured listeners"

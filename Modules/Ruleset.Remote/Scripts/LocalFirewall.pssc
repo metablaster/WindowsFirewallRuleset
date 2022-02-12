@@ -80,7 +80,8 @@ SOFTWARE.
 
 	# Creates a "User" PSDrive in the session for use with Copy-Item when File System provider is not visible.
 	# TODO: Test if could be used for remote registry authentication instead of using New-PSDrive manually
-	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
+	# $env:SYSTEMROOT\System32\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
+	# https://github.com/MicrosoftDocs/PowerShell-Docs/issues/8583
 	MountUserDrive = $false
 
 	# Optional maximum size in bytes of user drive created with MountUserDrive parameter.

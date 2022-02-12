@@ -33,6 +33,9 @@ Unit test for Test-Service
 .DESCRIPTION
 Test correctness of Test-Service function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,32 +74,33 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Test-Service"
 
-Start-Test "dnscache"
-$Result = Test-Service dnscache
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "remote dnscache"
+	Test-Service dnscache -Domain $Domain
+}
+else
+{
+	Start-Test "dnscache"
+	$Result = Test-Service dnscache
+	$Result
 
-Start-Test "array to pipeline"
-@("msiserver", "DOESNOTEXIST", "Spooler", "WSearch") | Test-Service
+	Start-Test "*xbox*" -Command "Get-Service" -Expected "FAIL"
+	Test-Service (Get-Service -Name "*xbox*")
 
-Start-Test "*xbox*" -Command "Get-Service" -Expected "FAIL"
-Test-Service (Get-Service -Name *xbox*)
+	Start-Test "*xbox*"
+	Test-Service "*xbox*"
 
-Start-Test "*xbox* to pipeline" -Command "Get-Service" -Expected "FAIL"
-Get-Service -Name *xbox* | Test-Service
+	Start-Test "FailureTest"
+	Test-Service "FailureTest"
 
-Start-Test "*xbox*"
-Test-Service "*xbox*"
+	Start-Test "project rules"
+	Build-ServiceList $ProjectRoot\Rules | ForEach-Object {
+		Test-Service $_
+	}
 
-Start-Test "*xbox* pipeline"
-"*xbox*" | Test-Service
-
-Start-Test "FailureTest"
-Test-Service "FailureTest"
-
-Start-Test "project rules"
-Build-ServiceList $ProjectRoot\Rules | Test-Service | Measure-Object
-
-Test-Output $Result -Command Test-Service
+	Test-Output $Result -Command Test-Service
+}
 
 Update-Log
 Exit-Test

@@ -38,6 +38,24 @@ If the service can't be found or verified, an error is genrated.
 .PARAMETER Name
 Service short name (not display name)
 
+.PARAMETER Domain
+Computer name on which service to be tested is located
+
+.PARAMETER SigcheckLocation
+Specify path to sigcheck executable program.
+Do not specify sigcheck file, only path to where sigcheck is located.
+By default working directory and PATH is searched for sigcheck64.exe.
+On 32 bit operating system sigcheck.exe is searched instead.
+If location to sigcheck executable is not found then no virus total scan and report is done.
+
+.PARAMETER Timeout
+Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
+The default wait time is 300 (5 minutes).
+
+.PARAMETER Quiet
+If specified, no information, warning or error message is shown, only true or false is returned
+
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in passed test.
@@ -46,7 +64,10 @@ instead of an error resulting in passed test.
 PS> Test-Service dnscache
 
 .EXAMPLE
-PS> @("msiserver", "Spooler", "WSearch") | Test-Service
+PS> Test-Service WSearch -Domain Server01
+
+.EXAMPLE
+PS> Test-Service SomeService -Quiet -Force
 
 .INPUTS
 [string[]]
@@ -57,112 +78,146 @@ PS> @("msiserver", "Spooler", "WSearch") | Test-Service
 .NOTES
 TODO: Implement accept ServiceController object, should be called InputObject, a good design needed,
 however it doesn't make much sense since the function is to test existence of a service too.
-TODO: Virus total check no implemented
 #>
 function Test-Service
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md")]
 	[OutputType([bool])]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("ServiceName")]
 		[SupportsWildcards()]
 		[ValidateScript( { $_ -ne "System.ServiceProcess.ServiceController" } )]
-		[string[]] $Name,
+		[string] $Name,
+
+		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[System.IO.DirectoryInfo] $SigcheckLocation = $SigcheckPath,
+
+		[Parameter()]
+		[ValidateRange(1, 650)]
+		[int32] $TimeOut = 300,
+
+		[Parameter()]
+		[switch] $Quiet,
 
 		[Parameter()]
 		[switch] $Force
 	)
 
-	begin
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# Keep track of already checked service signatures
-		[hashtable] $BinaryPathCache = @{}
+	# Replace localhost and dot with NETBIOS computer name
+	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	{
+		$Domain = [System.Environment]::MachineName
 	}
-	process
-	{
-		$Services = Get-Service -Name $Name -ErrorAction Ignore
 
-		if (!$Services)
+	if ($Quiet)
+	{
+		$ErrorActionPreference = "SilentlyContinue"
+		$WarningPreference = "SilentlyContinue"
+		$InformationPreference = "SilentlyContinue"
+	}
+
+	# Keep track of already checked service signatures
+	[hashtable] $BinaryPathCache = @{}
+
+	$Services = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		Get-Service -Name $using:Name -ErrorAction Ignore
+	}
+
+	if (!$Services)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$Name' was not found or could not be resolved, rules for '$Name' service won't have any effect"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: To silence this warning, update or comment out all firewall rules for '$Name' service"
+	}
+
+	foreach ($Service in $Services)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Testing service '$($Service.DisplayName)'"
+
+		if ($PSVersionTable.PSEdition -eq "Core")
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$Name' was not found, rules for '$Name' service won't have any effect"
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: To silence this warning, update or comment out all firewall rules for '$Name' service"
-			return $false
+			$BinaryPath = $Service.BinaryPathName
+		}
+		else
+		{
+			$BinaryPath = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
+				-Class Win32_Service -Property Name, PathName -Filter "Name = '$($Service.Name)'" |
+			Select-Object -ExpandProperty PathName
 		}
 
-		foreach ($Service in $Services)
+		if ([string]::IsNullOrEmpty($BinaryPath))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Testing service '$($Service.DisplayName)'"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Binary path of the service '$($Service.Name)' was not found"
+			Write-Output $false
+			continue
+		}
 
-			if ($PSVersionTable.PSEdition -eq "Core")
+		# regex out ex. "C:\WINDOWS\system32\svchost.exe -k netsvcs -p"
+		$Executable = [regex]::Match($BinaryPath.TrimStart('"'), ".+(?=\.exe)")
+
+		if ($Executable.Success)
+		{
+			$BinaryPath = $Executable.Value + ".exe"
+			if ($BinaryPathCache[$BinaryPath])
 			{
-				$BinaryPath = $Service.BinaryPathName
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Signature already checked for service binary '$BinaryPath'"
+				Write-Output $true
+				continue
 			}
-			else
-			{
-				# TODO: This should probably be updated for remote computer
-				$BinaryPath = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-					-Class Win32_Service -Property Name, PathName -Filter "Name = '$($Service.Name)'" |
-				Select-Object -ExpandProperty PathName
+
+			# [System.Management.Automation.Signature]
+			$Signature = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				Get-AuthenticodeSignature -LiteralPath $using:BinaryPath
 			}
 
-			if ([string]::IsNullOrEmpty($BinaryPath))
+			if ($Signature.Status -ne "Valid")
 			{
-				return $false
-			}
-
-			# regex out ex. "C:\WINDOWS\system32\svchost.exe -k netsvcs -p"
-			$Executable = [regex]::Match($BinaryPath.TrimStart('"'), ".+(?=\.exe)")
-
-			if ($Executable.Success)
-			{
-				$BinaryPath = $Executable.Value + ".exe"
-
-				if ($BinaryPathCache["$BinaryPath"])
+				if ($Force)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Signature already checked for service binary '$BinaryPath'"
-					Write-Output $true
-					continue
-				}
-
-				# [System.Management.Automation.Signature]
-				$Signature = Get-AuthenticodeSignature -LiteralPath $BinaryPath
-
-				if ($Signature -and (($Signature.Status -eq "Valid") -or $Force))
-				{
-					if ($Signature.Status -ne "Valid")
-					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
-						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
-					}
-					else
-					{
-						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Service '$($Service.Name)' $($Signature.StatusMessage)"
-					}
-
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
 					$BinaryPathCache.Add($BinaryPath, $true)
+
+					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain)
+					{
+						Write-Output $false
+						continue
+					}
+
 					Write-Output $true
 					continue
 				}
 				else
 				{
-					Write-Error -Category SecurityError -TargetObject $LiteralPath `
+					Write-Error -Category SecurityError -TargetObject $BinaryPath `
 						-Message "Digital signature verification failed for service '$($Service.Name)'"
 					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
+
+					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain | Out-Null
 				}
 			}
-			elseif ($Signature) # else Get-AuthenticodeSignature should show the error (ex. file not found)
+			else
 			{
-				Write-Error -Category InvalidResult -TargetObject $Service `
-					-Message "Unable to determine binary path for '$($Service.Name)' service"
-			}
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Service '$($Service.Name)' $($Signature.StatusMessage)"
 
-			Write-Output $false
-			continue
-		} # foreach
-	}
+				$BinaryPathCache.Add($BinaryPath, $true)
+				Write-Output $true
+				continue
+			}
+		}
+		else
+		{
+			Write-Error -Category InvalidResult -TargetObject $Service `
+				-Message "Unable to determine binary path for '$($Service.Name)' service"
+		}
+
+		Write-Output $false
+		continue
+	} # foreach service
 }

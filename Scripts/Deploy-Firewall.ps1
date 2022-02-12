@@ -166,7 +166,10 @@ if ($PSBoundParameters.ContainsKey("Confirm"))
 Set-ScreenBuffer 3000 @SetScreenBufferParams
 
 # Check all rules which apply to windows services
-Build-ServiceList $ProjectRoot\Rules -Log | Test-Service | Out-Null
+# TODO: Failed test does not exclude rules from loading?
+Build-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
+	Test-Service $_ | Out-Null
+}
 Update-Log
 #endregion
 
