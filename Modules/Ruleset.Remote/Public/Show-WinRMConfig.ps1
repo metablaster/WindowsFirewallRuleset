@@ -153,6 +153,7 @@ function Show-WinRMConfig
 		# winrm get winrm/config
 		Write-Information -Tags $MyInvocation.InvocationName `
 			-MessageData "INFO: Showing all enabled session configurations (short version)"
+		# TODO: Detailed switch should show more information about session configuration
 		Get-PSSessionConfiguration | Where-Object -Property Enabled -EQ True |
 		Select-Object -Property Name, lang, Enabled, PSVersion, SDKVersion, Architecture,
 		Capability, SupportsOptions, AutoRestart, OutputBufferingMode, RunAsUser, RunAsPassword,

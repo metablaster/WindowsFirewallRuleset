@@ -122,7 +122,7 @@ if (!$Default)
 		# Limits the memory used (in megabytes) by each session to the specified value.
 		# Corresponds to the MaxMemoryPerShellMB property of a session configuration.
 		# The default value is 1024 megabytes (1 GB).
-		MaxMemoryPerSessionMB = 1024
+		MaxMemoryPerSessionMB = 3072
 
 		# Determines how command output is managed in disconnected sessions when the output buffer becomes full
 		# "Block", When the output buffer is full, execution is suspended until the buffer is clear

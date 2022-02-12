@@ -551,7 +551,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 # 2. Only once by user before running any scripts from repository
 # 3. Any amount of time by user if "develop" mode is ON
 # In all other cases changing variable values requires PowerShell restart
-if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore))
+if (($PSCmdlet.ParameterSetName -eq "Script") -and ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore)))
 {
 	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
 

@@ -170,7 +170,7 @@ if (!$Default)
 		[hashtable] $ClientOptions = @{
 			# Specifies the extra time in milliseconds that the client computer waits to accommodate for network delay time.
 			# The default value is 5000 milliseconds.
-			NetworkDelayms = 1000
+			NetworkDelayms = 5000
 
 			# Specifies a URL prefix on which to accept HTTP or HTTPS requests.
 			# The default URL prefix is "wsman".
@@ -286,7 +286,7 @@ if (!$Default)
 
 		# Specifies the maximum amount of memory allocated per shell, including the shell's child processes.
 		# The default is 150 MB.
-		MaxMemoryPerShellMB = 150
+		MaxMemoryPerShellMB = 3072
 
 		# Specifies the maximum number of concurrent shells that any user can remotely open on the same computer.
 		# The default is 5 remote shells per user.
