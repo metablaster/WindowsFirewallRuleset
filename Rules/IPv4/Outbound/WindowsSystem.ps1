@@ -196,6 +196,23 @@ if ((Confirm-Installation "WindowsDefender" ([ref] $WindowsDefenderRoot)) -or $F
 Antivirus use." |
 		Format-RuleOutput
 	}
+
+	# NisSrv.exe is active when "Network protection" is enabled
+	$Program = "$WindowsDefenderRoot\NisSrv.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Microsoft Network Realtime Inspection Service" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service WdNisSvc -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser Any `
+			-InterfaceType $DefaultInterface `
+			-Description "Helps guard against intrusion attempts targeting known and newly
+discovered vulnerabilities in network protocols" |
+		Format-RuleOutput
+	}
 }
 
 # TODO: Missing description

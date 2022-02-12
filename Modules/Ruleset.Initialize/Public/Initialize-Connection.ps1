@@ -242,7 +242,7 @@ function Initialize-Connection
 				if (!(Test-RemoteRegistry -Domain $PolicyStore -Quiet))
 				{
 					Enable-RemoteRegistry -Confirm:$false
-					Test-RemoteRegistry -Domain $PolicyStore
+					Test-RemoteRegistry -Domain $PolicyStore | Out-Null
 				}
 			}
 		}

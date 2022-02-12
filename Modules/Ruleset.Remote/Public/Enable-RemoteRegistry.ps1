@@ -59,7 +59,7 @@ function Enable-RemoteRegistry
 	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking remote registry requirements"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling remote registry"
 
 	if ($script:Workstation)
 	{
