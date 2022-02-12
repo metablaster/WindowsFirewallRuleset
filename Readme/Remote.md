@@ -19,6 +19,7 @@ design used in this repository.
     - [Exception handling](#exception-handling)
   - [Troubleshooting](#troubleshooting)
     - [Troubleshooting WinRM](#troubleshooting-winrm)
+      - [The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available](#the-winrm-client-sent-a-request-to-an-http-server-and-got-a-response-saying-the-requested-http-url-was-not-available)
       - ["Negotiate" authentication is not enabled](#negotiate-authentication-is-not-enabled)
       - [Encountered an internal error in the SSL library](#encountered-an-internal-error-in-the-ssl-library)
       - [Access is denied](#access-is-denied)
@@ -254,6 +255,25 @@ Following section lists other not so common problems and how to resolve them.
 TODO: missing resolutions for the following known problems:
 
 - System cannot find file because it does not exist
+
+#### The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available
+
+> Connecting to remote server MSI-DESKTOP failed with the following error message :
+> The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available.
+> This is usually returned by a HTTP server that does not support the WS-Management protocol.
+
+Service is not listening on HTTP address, to add listener:
+
+```powershell
+New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null
+```
+
+or alternatively:
+
+```powershell
+New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $true } `
+     -SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
+```
 
 #### "Negotiate" authentication is not enabled
 

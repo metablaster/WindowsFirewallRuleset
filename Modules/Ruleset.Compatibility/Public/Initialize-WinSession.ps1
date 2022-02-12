@@ -83,6 +83,7 @@ January 2021:
 
 February 2022:
 Added check to confirm session configuration is present and enabled
+Added logic to convert local computer name to localhost
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Initialize-WinSession.md
@@ -112,37 +113,38 @@ function Initialize-WinSession
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
-
-	if ($Domain -eq ".")
+	if (($Domain -eq ".") -or ($Domain -eq [System.Environment]::MachineName))
 	{
+		# NOTE: Setting $Domain to default to "[System.Environment]::MachineName" would require a WinRM listener on local IP address
 		$Domain = "localhost"
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on host '$Domain'."
+	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
-	if ($Domain)
-	{
-		$script:SessionComputerName = $Domain
-	}
-	else
+	if ([string]::IsNullOrEmpty($Domain))
 	{
 		$Domain = $script:SessionComputerName
 	}
-
-	if ($ConfigurationName)
-	{
-		$script:SessionConfigurationName = $ConfigurationName
-	}
 	else
+	{
+		$script:SessionComputerName = $Domain
+	}
+
+	if ([string]::IsNullOrEmpty($ConfigurationName))
 	{
 		$ConfigurationName = $script:SessionConfigurationName
 	}
+	else
+	{
+		$script:SessionConfigurationName = $ConfigurationName
+	}
 
-	# Confirm specified session configuration is present and enabled
+	# Confirm specified session configuration is present and enabled in Windows PowerShell
 	$Command = "Get-PSSessionConfiguration -Name $ConfigurationName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Enabled"
-	$SessionAvailable = & C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe $Command
-	if (!$SessionAvailable -or ($SessionAvailable -eq "False"))
+	$SessionAvailable = & C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command $Command
+
+	if (!$SessionAvailable -or ($SessionAvailable -eq $false))
 	{
 		Write-Error -Category ResourceUnavailable -TargetObject $ConfigurationName `
 			-Message "[$($MyInvocation.InvocationName)] Please enable '$ConfigurationName' session in Windows PowerShell in order for Ruleset.Compatibility module to work"
@@ -151,19 +153,19 @@ function Initialize-WinSession
 
 	if ($Credential)
 	{
-		$script:SessionName = "wincompat-$Domain-$($Credential.UserName)"
+		$script:SessionName = "Ruleset.Compatibility-$Domain-$($Credential.UserName)"
 	}
 	else
 	{
-		$script:SessionName = "wincompat-$Domain-$([System.Environment]::UserName)"
+		$script:SessionName = "Ruleset.Compatibility-$Domain-$([System.Environment]::UserName)"
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] The compatibility session name is '$script:SessionName'."
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] The compatibility session name is '$script:SessionName'"
 
 	$Session = Get-PSSession | Where-Object {
-		$_.ComputerName -eq $Domain -and
-		$_.ConfigurationName -eq $ConfigurationName -and
-		$_.Name -eq $script:SessionName
+		($_.ComputerName -eq $Domain) -and
+		($_.ConfigurationName -eq $ConfigurationName) -and
+		($_.Name -eq $script:SessionName)
 	} | Select-Object -First 1
 
 	# Deal with the possibilities of multiple sessions. This might arise
@@ -174,13 +176,14 @@ function Initialize-WinSession
 	{
 		foreach ($Entry in $Rest)
 		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing stale compatibility session '$Entry'"
 			Remove-PSSession $Entry
 		}
 	}
 
-	if ($Session -and $Session.State -ne "Opened")
+	if ($Session -and ($Session.State -ne "Opened"))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing closed compatibility session."
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing closed compatibility session"
 		Remove-PSSession $Session
 		$Session = $null
 	}
@@ -200,23 +203,29 @@ function Initialize-WinSession
 			$NewPSSessionParameters.Credential = $Credential
 		}
 
-		if ($Domain -eq "localhost" -or $Domain -eq [System.Environment]::MachineName)
+		if ($Domain -eq "localhost")
 		{
+			# MSDN: EnableNetworkAccess, indicates that this cmdlet adds an interactive security token to loopback sessions.
+			# The interactive token lets you run commands in the loopback session that get data from other computers
+			# The EnableNetworkAccess parameter is effective only in loopback sessions.
 			$NewPSSessionParameters.EnableNetworkAccess = $true
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on host '$Domain'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on computer '$Domain'"
 		$Session = New-PSSession @NewPSSessionParameters | Select-Object -First 1
 
+		# keep the compatibility session PWD in sync with the parent PWD.
+		# This only applies on localhost.
 		if ($Session.ComputerName -eq "localhost")
 		{
+			# TODO: Why is this needed?
 			$UsingPath = (Get-Location).Path
 			Invoke-Command $Session -ScriptBlock { Set-Location $using:usingPath }
 		}
 	}
 	else
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reusing the existing compatibility session; 'host = $script:SessionComputerName'."
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Reusing the existing compatibility session, 'computer = $script:SessionComputerName'"
 	}
 
 	if ($PassThru)

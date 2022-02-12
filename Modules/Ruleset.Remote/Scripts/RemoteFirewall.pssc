@@ -135,21 +135,21 @@ SOFTWARE.
 
 	# Modules to import when applied to a session
 	ModulesToImport = @(
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP"
 		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Logging"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Remote"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\VSSetup"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Remote"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"
+		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\VSSetup"
 	)
 
 	# Aliases to make visible when applied to a session
-	VisibleAliases = "gt", "Add-WinPSModulePath"
+	# VisibleAliases = "gt", "Add-WinPSModulePath"
 
 	# Cmdlets to make visible when applied to a session
 	# VisibleCmdlets = 'Invoke-Cmdlet1', @{ Name = 'Invoke-Cmdlet2';
@@ -184,18 +184,18 @@ SOFTWARE.
 	# TypesToProcess = 'C:\ConfigData\MyTypes.ps1xml', 'C:\ConfigData\OtherTypes.ps1xml'
 
 	# Format files (.ps1xml) to load when applied to a session
-	FormatsToProcess = @(
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo\Ruleset.ComputerInfo.Format.ps1xml"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP\Ruleset.IP.Format.ps1xml"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo\Ruleset.ProgramInfo.Format.ps1xml"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo\Ruleset.UserInfo.Format.ps1xml"
-	)
+	# FormatsToProcess = @(
+	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo\Ruleset.ComputerInfo.Format.ps1xml"
+	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP\Ruleset.IP.Format.ps1xml"
+	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo\Ruleset.ProgramInfo.Format.ps1xml"
+	# 	"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo\Ruleset.UserInfo.Format.ps1xml"
+	# )
 
 	# Assemblies to load when applied to a session
-	AssembliesToLoad = @(
-		"System.Data.Entity"
-		"Microsoft.Windows.Appx.PackageManager.Commands"
-		"Microsoft.WSMan.Management"
-		"System.DirectoryServices.AccountManagement"
-	)
+	# AssembliesToLoad = @(
+	# 	"System.Data.Entity"
+	# 	"Microsoft.Windows.Appx.PackageManager.Commands"
+	# 	"Microsoft.WSMan.Management"
+	# 	"System.DirectoryServices.AccountManagement"
+	# )
 }

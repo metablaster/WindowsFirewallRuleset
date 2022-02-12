@@ -372,20 +372,6 @@ function Enable-WinRMServer
 		Get-ChildItem WSMan:\localhost\listener | Remove-Item -Recurse
 
 		# NOTE: -Force is used for "New-Item" to avoid prompting for acceptance to create listener
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			New-Item -Path WSMan:\localhost\Listener -Address "IP:[::1]" -Transport HTTP -Enabled $true -Force | Out-Null
-			New-Item -Path WSMan:\localhost\Listener -Address "IP:127.0.0.1" -Transport HTTP -Enabled $true -Force | Out-Null
-		}
-		else
-		{
-			New-WSManInstance -SelectorSet @{ Address = "IP:[::1]"; Transport = "HTTP" } `
-				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
-
-			New-WSManInstance -SelectorSet @{ Address = "IP:127.0.0.1"; Transport = "HTTP" } `
-				-ValueSet @{ Enabled = $true } -ResourceURI winrm/config/Listener | Out-Null
-		}
-
 		if ($Protocol -ne "HTTPS")
 		{
 			# Add new HTTP listener

@@ -28,22 +28,25 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Invoke-WinCommand
+Unit test for Import-WinModule
 
 .DESCRIPTION
-Test correctness of Invoke-WinCommand function
+Test correctness of Import-WinModule function
+
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> Invoke-WinCommand
+PS> TestTemplate
 
 .INPUTS
-None. You cannot pipe objects to Invoke-WinCommand
+None. You cannot pipe objects to TestTemplate.ps1
 
 .OUTPUTS
-None. Invoke-WinCommand does not generate any output
+None. TestTemplate.ps1 does not generate any output
 
 .NOTES
 None.
@@ -55,21 +58,36 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Invoke-WinCommand"
+Enter-Test "Import-WinModule"
 
-Start-Test "Default test"
-Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote default"
+	Import-WinModule -Name Appx -Domain $Domain -PassThru
+}
+else
+{
+	Start-Test "Default test"
+	$Result = Import-WinModule -Name Appx -PassThru
+	$Result
+
+	Test-Output $Result -Command Import-WinModule
+}
 
 Update-Log
 Exit-Test

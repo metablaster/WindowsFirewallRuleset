@@ -150,7 +150,7 @@ function Disable-WinRMServer
 				($_.Name -notmatch "(Local|Remote)Firewall\.(Core|Desktop)")
 			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
 		}
-		elseif ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all unneeded session configurations"))
+		elseif (!$KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all unneeded session configurations"))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling all unneeded session configurations"
 
