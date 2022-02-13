@@ -82,11 +82,11 @@ https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win
 #>
 function Get-UserApp
 {
-	[CmdletBinding(DefaultParameterSetName = "Domain",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[SupportsWildcards()]
 		[string] $Name = "*",
 
@@ -107,10 +107,8 @@ function Get-UserApp
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-	}
-
-	if ($Session)
+	[hashtable] $SessionParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
 		$Domain = $Session.ComputerName
 		$SessionParams.Session = $Session

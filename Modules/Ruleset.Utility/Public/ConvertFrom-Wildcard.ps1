@@ -128,7 +128,7 @@ function ConvertFrom-Wildcard
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$InvocationInfo = $MyInvocation.InvocationName
+	$InvocationName = $MyInvocation.InvocationName
 
 	# Optimize dots and stars excluding escaped dots
 	[scriptblock] $Optimize = {
@@ -165,8 +165,8 @@ function ConvertFrom-Wildcard
 
 			while ($Match.Success)
 			{
-				Write-Debug -Message "[$InvocationInfo & Optimize] Processing $NewResult"
-				Write-Debug -Message "[$InvocationInfo & Optimize] Match at index ($Index) was $($Match.Value)"
+				Write-Debug -Message "[$InvocationName & Optimize] Processing $NewResult"
+				Write-Debug -Message "[$InvocationName & Optimize] Match at index ($Index) was $($Match.Value)"
 
 				$NewResult = $Regex.Replace($NewResult, $LocalOptimize, 1, $Index)
 
@@ -185,7 +185,7 @@ function ConvertFrom-Wildcard
 	[MatchEvaluator] $EscapeEvaluator = {
 		param ([Match] $Match)
 
-		Write-Debug -Message "[$InvocationInfo & Escape] Processing $($Match.Groups["data"].Value)"
+		Write-Debug -Message "[$InvocationName & Escape] Processing $($Match.Groups["data"].Value)"
 		[regex]::Escape($Match.Groups["data"].Value)
 	}
 
@@ -193,7 +193,7 @@ function ConvertFrom-Wildcard
 	[MatchEvaluator] $UnescapeEvaluator = {
 		param ([Match] $Match)
 
-		Write-Debug -Message "[$InvocationInfo & UnEscape] Processing $($Match.Groups["data"].Value)"
+		Write-Debug -Message "[$InvocationName & UnEscape] Processing $($Match.Groups["data"].Value)"
 		[regex]::Unescape($Match.Groups["data"].Value)
 	}
 
@@ -233,7 +233,7 @@ function ConvertFrom-Wildcard
 			$NewResult = [regex]::Replace($NewResult, "%", ".*", $Options)
 			$NewResult = [regex]::Replace($NewResult, "_", ".", $Options)
 
-			Write-Debug -Message "[$InvocationInfo & ConvertWQL] Processing (index $($Match.Index)) $($Match.Value) to $NewResult"
+			Write-Debug -Message "[$InvocationName & ConvertWQL] Processing (index $($Match.Index)) $($Match.Value) to $NewResult"
 			return $NewResult
 		}
 

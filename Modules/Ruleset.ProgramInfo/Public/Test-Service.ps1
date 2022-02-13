@@ -87,7 +87,7 @@ however it doesn't make much sense since the function is to test existence of a 
 #>
 function Test-Service
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md")]
 	[OutputType([bool])]
 	param (
@@ -105,7 +105,7 @@ function Test-Service
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Session")]
-		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
 		[System.IO.DirectoryInfo] $SigcheckLocation = $SigcheckPath,
@@ -123,13 +123,9 @@ function Test-Service
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$ConnectParams = @{
-		ErrorAction = "Stop"
-	}
-
-	if ($Session)
+	[hashtable] $ConnectParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$Domain = $Session.ComputerName
 		$ConnectParams.Session = $Session
 	}
 	else
@@ -141,7 +137,6 @@ function Test-Service
 		}
 
 		$ConnectParams.ComputerName = $Domain
-
 		if ($Credential)
 		{
 			$ConnectParams.Credential = $Credential

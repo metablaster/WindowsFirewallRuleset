@@ -82,7 +82,7 @@ function Get-PrincipalSID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		$CimParams = @{
+		[hashtable] $CimParams = @{
 			Namespace = "root\cimv2"
 		}
 
@@ -111,7 +111,7 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			if (!$CimSession -and (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 

@@ -120,7 +120,7 @@ https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTy
 #>
 function Get-AppCapability
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md")]
 	[OutputType([string])]
 	param (
@@ -160,10 +160,8 @@ function Get-AppCapability
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		$SessionParams = @{
-		}
-
-		if ($Session)
+		[hashtable] $SessionParams = @{}
+		if ($PsCmdlet.ParameterSetName -eq "Session")
 		{
 			$Domain = $Session.ComputerName
 			$SessionParams.Session = $Session

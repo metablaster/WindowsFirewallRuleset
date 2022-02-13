@@ -75,7 +75,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 #>
 function Test-VirusTotal
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false, DefaultParameterSetName = "Domain",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain", SupportsShouldProcess = $true, ConfirmImpact = "Medium",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md")]
 	[OutputType([bool])]
 	param (
@@ -90,7 +90,7 @@ function Test-VirusTotal
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Session")]
-		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter(Mandatory = $true)]
 		[string] $SigcheckLocation,
@@ -104,14 +104,10 @@ function Test-VirusTotal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		$ConnectParams = @{
-			ErrorAction = "Stop"
-		}
-
-		if ($Session)
+		[hashtable] $SessionParams = @{}
+		if ($PsCmdlet.ParameterSetName -eq "Session")
 		{
-			$Domain = $Session.ComputerName
-			$ConnectParams.Session = $Session
+			$SessionParams.Session = $Session
 		}
 		else
 		{
@@ -121,16 +117,15 @@ function Test-VirusTotal
 				$Domain = [System.Environment]::MachineName
 			}
 
-			$ConnectParams.ComputerName = $Domain
-
+			$SessionParams.ComputerName = $Domain
 			if ($Credential)
 			{
-				$ConnectParams.Credential = $Credential
+				$SessionParams.Credential = $Credential
 			}
 		}
 
 		$InvocationName = $MyInvocation.InvocationName
-		Invoke-Command @ConnectParams -ArgumentList $InvocationName -ScriptBlock {
+		Invoke-Command @SessionParams -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 
 			$Executable = Split-Path -Path $using:LiteralPath -Leaf

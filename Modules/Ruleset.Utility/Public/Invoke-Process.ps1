@@ -214,7 +214,7 @@ function Invoke-Process
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] $CommandName argument list is '$ArgumentList'"
 	}
 
-	$InvocationInfo = $MyInvocation.InvocationName
+	$InvocationName = $MyInvocation.InvocationName
 
 	if ($Async)
 	{
@@ -225,7 +225,7 @@ function Invoke-Process
 			[scriptblock] $OutputDataReceived = {
 				if (![string]::IsNullOrEmpty($EventArgs.Data))
 				{
-					Write-Debug -Message "[$InvocationInfo & OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
+					Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
 					$Event.MessageData.AppendLine($EventArgs.Data)
 				}
 			}
@@ -233,7 +233,7 @@ function Invoke-Process
 			[scriptblock] $ErrorDataReceived = {
 				if (![string]::IsNullOrEmpty($EventArgs.Data))
 				{
-					Write-Debug -Message "[$InvocationInfo & ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
+					Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
 					$Event.MessageData.AppendLine($EventArgs.Data)
 				}
 			}
@@ -256,8 +256,8 @@ function Invoke-Process
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
 					# NOTE: Explicit -Debug or INFA is needed inside event
-					Write-Debug -Message "[$InvocationInfo & OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
-					Write-Information -Tags $InvocationInfo -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
+					Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
+					Write-Information -Tags $InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
 				}
 			}
 
@@ -277,7 +277,7 @@ function Invoke-Process
 				if (![string]::IsNullOrEmpty($OutLine.Data))
 				{
 					# NOTE: Explicit -Debug is needed inside event
-					Write-Debug -Message "[$InvocationInfo & ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)"
+					Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)"
 					Write-Error -Category FromStdErr -TargetObject $Process -MessageData $OutLine.Data
 				}
 			}
@@ -312,7 +312,7 @@ function Invoke-Process
 		$ErrorEvent = Register-ObjectEvent @ErrorEventParams
 
 		[scriptblock] $UnregisterEvents = {
-			Write-Debug -Message "[$InvocationInfo & UnregisterEvents] Unregistering asynchronous operations"
+			Write-Debug -Message "[$InvocationName & UnregisterEvents] Unregistering asynchronous operations"
 
 			try
 			{

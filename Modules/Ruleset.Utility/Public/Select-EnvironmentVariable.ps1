@@ -181,7 +181,7 @@ https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
 #>
 function Select-EnvironmentVariable
 {
-	[CmdletBinding(DefaultParameterSetName = "Scope", PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Scope",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md")]
 	[OutputType([System.Collections.DictionaryEntry])]
 	param (
@@ -195,9 +195,7 @@ function Select-EnvironmentVariable
 		[Parameter()]
 		[System.Management.Automation.Runspaces.PSSession] $Session,
 
-		[Parameter(ParameterSetName = "Scope")]
-		[Parameter(ParameterSetName = "Name")]
-		[Parameter(ParameterSetName = "Value")]
+		[Parameter()]
 		[ValidateSet("UserProfile", "Whitelist", "FullyQualified", "Rooted", "FileSystem", "Relative", "BlackList", "All")]
 		[string] $From = "All",
 
@@ -228,9 +226,7 @@ function Select-EnvironmentVariable
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-	}
-
+	[hashtable] $SessionParams = @{}
 	if ($Session)
 	{
 		$SessionParams.Session = $Session
@@ -408,6 +404,7 @@ function Select-EnvironmentVariable
 				}
 			}
 
+			# HACK: Hardcoded, a new functioned needed to get remote shares
 			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 			Select-Object -ExpandProperty SystemDrive
 

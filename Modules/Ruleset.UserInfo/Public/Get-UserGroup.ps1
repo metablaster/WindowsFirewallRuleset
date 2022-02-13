@@ -59,7 +59,7 @@ None.
 #>
 function Get-UserGroup
 {
-	[CmdletBinding(DefaultParameterSetName = "Domain",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -73,7 +73,7 @@ function Get-UserGroup
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$CimParams = @{
+	[hashtable] $CimParams = @{
 		Namespace = "root\cimv2"
 	}
 
@@ -96,7 +96,7 @@ function Get-UserGroup
 			$CimParams.ComputerName = $Computer
 		}
 
-		if (!$CimSession -and ($Computer -eq [System.Environment]::MachineName))
+		if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Computer -eq [System.Environment]::MachineName))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 

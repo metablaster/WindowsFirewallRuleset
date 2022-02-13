@@ -73,7 +73,7 @@ TODO: Mandatory parameter is impossible to make
 #>
 function Get-SDDL
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "User",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md")]
 	[OutputType([string])]
 	param (
@@ -98,11 +98,11 @@ function Get-SDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$PrincipalSIDParams = @{}
-
+	[hashtable] $ConnectParams = @{}
 	if ($PSCmdlet.ParameterSetName -eq "CimSession")
 	{
-		$PrincipalSIDParams.CimSession = $CimSession
+		$Domain = $CimSession.ComputerName
+		$ConnectParams.CimSession = $CimSession
 	}
 	else
 	{
@@ -112,7 +112,7 @@ function Get-SDDL
 			$Domain = [System.Environment]::MachineName
 		}
 
-		$PrincipalSIDParams.Domain = $Domain
+		$ConnectParams.Domain = $Domain
 	}
 
 	# Glossary:
@@ -150,7 +150,7 @@ function Get-SDDL
 	foreach ($UserName in $User)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
-		$SID = (Get-PrincipalSID $UserName @PrincipalSIDParams).SID
+		$SID = (Get-PrincipalSID $UserName @ConnectParams).SID
 
 		if ($SID)
 		{
@@ -186,7 +186,7 @@ function Get-SDDL
 	foreach ($UserGroup in $Group)
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting group principal SDDL: $Domain\$UserGroup"
-		$SID = (Get-GroupSID $UserGroup @PrincipalSIDParams).SID
+		$SID = (Get-GroupSID $UserGroup @ConnectParams).SID
 
 		if ($SID)
 		{

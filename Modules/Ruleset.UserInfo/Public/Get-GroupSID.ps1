@@ -82,7 +82,7 @@ function Get-GroupSID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		$CimParams = @{
+		[hashtable] $CimParams = @{
 			Namespace = "root\cimv2"
 		}
 
@@ -108,7 +108,7 @@ function Get-GroupSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
-			if (!$CimSession -and ($Domain -eq [System.Environment]::MachineName))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 			{
 				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |

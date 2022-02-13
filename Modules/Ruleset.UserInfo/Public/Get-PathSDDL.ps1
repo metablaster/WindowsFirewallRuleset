@@ -73,7 +73,7 @@ function Get-PathSDDL
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PathSDDL.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[SupportsWildcards()]
 		[string] $Path,
 
@@ -93,9 +93,7 @@ function Get-PathSDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-	}
-
+	[hashtable] $SessionParams = @{}
 	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
 		$Domain = $Session.ComputerName
@@ -149,7 +147,7 @@ function Get-PathSDDL
 
 	[string] $DACL = $null
 
-	if (!$Session -and ($Domain -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		# TODO: Multiple paths should be supported either here or trough path parameter
 		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
@@ -175,7 +173,7 @@ function Get-PathSDDL
 		return
 	}
 
-	if (!$Session -and ($Domain -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		$ACL = Get-Acl -Path $TargetPath
 	}

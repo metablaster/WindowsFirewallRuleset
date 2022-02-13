@@ -84,7 +84,7 @@ function Get-GroupPrincipal
 		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "CimSession")]
+		[Parameter(Mandatory = $true, ParameterSetName = "CimSession")]
 		[CimSession] $CimSession,
 
 		[Parameter()]
@@ -119,7 +119,7 @@ function Get-GroupPrincipal
 			return $false
 		}
 
-		$CimParams = @{
+		[hashtable] $CimParams = @{
 			Namespace = "root\cimv2"
 		}
 
@@ -144,7 +144,7 @@ function Get-GroupPrincipal
 				$CimParams.ComputerName = $Computer
 			}
 
-			if (!$CimSession -and ($Computer -eq [System.Environment]::MachineName))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Computer -eq [System.Environment]::MachineName))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 

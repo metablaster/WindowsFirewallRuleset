@@ -76,11 +76,11 @@ TODO: Format.ps1xml not applied in Windows PowerShell
 #>
 function Get-SystemApp
 {
-	[CmdletBinding(DefaultParameterSetName = "Domain",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApp.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
-		[Parameter()]
+		[Parameter(Position = 0)]
 		[SupportsWildcards()]
 		[string] $Name = "*",
 
@@ -101,10 +101,8 @@ function Get-SystemApp
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-	}
-
-	if ($Session)
+	[hashtable] $SessionParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
 		$Domain = $Session.ComputerName
 		$SessionParams.Session = $Session

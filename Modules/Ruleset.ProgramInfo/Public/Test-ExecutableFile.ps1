@@ -113,7 +113,7 @@ TODO: Verify file is executable file (and path formatted?)
 #>
 function Test-ExecutableFile
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md")]
 	[OutputType([bool])]
 	param (
@@ -128,7 +128,7 @@ function Test-ExecutableFile
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Session")]
-		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
 		[System.IO.DirectoryInfo] $SigcheckLocation = $SigcheckPath,
@@ -146,13 +146,9 @@ function Test-ExecutableFile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$ConnectParams = @{
-		ErrorAction = "Stop"
-	}
-
-	if ($Session)
+	[hashtable] $ConnectParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$Domain = $Session.ComputerName
 		$ConnectParams.Session = $Session
 	}
 	else
@@ -164,7 +160,6 @@ function Test-ExecutableFile
 		}
 
 		$ConnectParams.ComputerName = $Domain
-
 		if ($Credential)
 		{
 			$ConnectParams.Credential = $Credential

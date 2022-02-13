@@ -108,7 +108,7 @@ TODO: This should proably be part of Utility or ComputerInfo module, it's here s
 #>
 function Test-FileSystemPath
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-FileSystemPath.md")]
 	[OutputType([bool])]
 	param (
@@ -125,7 +125,7 @@ function Test-FileSystemPath
 		[PSCredential] $Credential,
 
 		[Parameter(ParameterSetName = "Session")]
-		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
 		[Alias("Type")]
@@ -144,13 +144,9 @@ function Test-FileSystemPath
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$ConnectParams = @{
-		ErrorAction = "Stop"
-	}
-
-	if ($Session)
+	[hashtable] $ConnectParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$Domain = $Session.ComputerName
 		$ConnectParams.Session = $Session
 	}
 	else
@@ -162,14 +158,13 @@ function Test-FileSystemPath
 		}
 
 		$ConnectParams.ComputerName = $Domain
-
 		if ($Credential)
 		{
 			$ConnectParams.Credential = $Credential
 		}
 	}
 
-	$InvocationInfo = $MyInvocation.InvocationName
+	$InvocationName = $MyInvocation.InvocationName
 	[scriptblock] $WriteConditional = {
 		param (
 			[Parameter(Mandatory = $true)]
@@ -178,18 +173,18 @@ function Test-FileSystemPath
 			# Following parameters are needed only in remote execution context
 			[switch] $Quiet = $Quiet,
 			[string] $LiteralPath = $LiteralPath,
-			[string] $InvocationInfo = $InvocationInfo
+			[string] $InvocationName = $InvocationName
 		)
 
 		if ($Quiet)
 		{
 			# Make sure -Quiet switch does not make troubleshooting hard
-			Write-Debug -Message "[$InvocationInfo & WriteConditional] $Message"
+			Write-Debug -Message "[$InvocationName & WriteConditional] $Message"
 		}
 		else
 		{
-			Write-Warning -Message "[$InvocationInfo & WriteConditional] $Message"
-			Write-Information -Tags "$InvocationInfo & WriteConditional" -MessageData "INFO: Path '$LiteralPath'"
+			Write-Warning -Message "[$InvocationName & WriteConditional] $Message"
+			Write-Information -Tags "$InvocationName & WriteConditional" -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
 
@@ -335,7 +330,7 @@ function Test-FileSystemPath
 				$Status = "Specified file does not exist"
 			}
 
-			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:LiteralPath, $using:InvocationInfo)
+			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:LiteralPath, $using:InvocationName)
 			return $false
 		} # Invoke-Command
 	} # if ([string]::IsNullOrEmpty($Status))

@@ -41,6 +41,9 @@ One or more SIDs to convert
 .PARAMETER Domain
 One or more computers to check if SID is not known, the default is localhost
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
 PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
 
@@ -98,7 +101,7 @@ https://docs.microsoft.com/en-us/windows/security/identity-protection/access-con
 #>
 function ConvertFrom-SID
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -106,26 +109,26 @@ function ConvertFrom-SID
 		[ValidatePattern("^S-1-(\d+-)*\d+$")]
 		[string[]] $SID,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("Computer", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# Replace localhost and dot with NETBIOS computer name
-		$Domain = foreach ($Computer in $Domain)
+		[hashtable] $ConnectParams = @{
+			Namespace = "root\cimv2"
+		}
+
+		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
-			if (($Computer -eq "localhost") -or ($Computer -eq "."))
-			{
-				[System.Environment]::MachineName
-			}
-			else
-			{
-				$Computer
-			}
+			$Domain = $CimSession.ComputerName
+			$ConnectParams.CimSession = $CimSession
 		}
 	}
 	process
@@ -340,12 +343,23 @@ function ConvertFrom-SID
 									continue
 								}
 
+								if ($PSCmdlet.ParameterSetName -eq "Domain")
+								{
+									# Replace localhost and dot with NETBIOS computer name
+									if (($Computer -eq "localhost") -or ($Computer -eq "."))
+									{
+										$Computer = [System.Environment]::MachineName
+									}
+
+									$ConnectParams.ComputerName = $Computer
+								}
+
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer: '$Computer'"
 
 								# Find to which store app this SID belongs
-								$Groups = Get-UserGroup -Domain $Computer | Select-Object -ExpandProperty Group
+								$Groups = Get-UserGroup @ConnectParams | Select-Object -ExpandProperty Group
 								# NOTE: ignore warnings to reduce spam
-								$Users = Get-GroupPrincipal -Domain $Computer -Group $Groups -WA SilentlyContinue |
+								$Users = Get-GroupPrincipal @ConnectParams -Group $Groups -WA SilentlyContinue |
 								Select-Object -ExpandProperty User
 
 								foreach ($User in $Users)
@@ -400,6 +414,17 @@ function ConvertFrom-SID
 								if (!(Test-Computer $Computer))
 								{
 									continue
+								}
+
+								if ($PSCmdlet.ParameterSetName -eq "Domain")
+								{
+									# Replace localhost and dot with NETBIOS computer name
+									if (($Computer -eq "localhost") -or ($Computer -eq "."))
+									{
+										$Computer = [System.Environment]::MachineName
+									}
+
+									$ConnectParams.ComputerName = $Computer
 								}
 
 								try # to translate the SID to an account on target computer

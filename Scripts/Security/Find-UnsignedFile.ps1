@@ -313,7 +313,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	{
 		# JSON root file data
 		[hashtable] $JsonData = @{}
-		$InvocationInfo = $MyInvocation.InvocationName
+		$InvocationName = $MyInvocation.InvocationName
 
 		# Script block used to write scan results into JSON file
 		[scriptblock] $WriteFile = {
@@ -333,7 +333,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				[switch] $Append
 			)
 
-			Write-Debug -Message "[$InvocationInfo & WriteFile] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+			Write-Debug -Message "[$InvocationName & WriteFile] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 			$ParentPath = Split-Path -Path $FilePath -Parent
 			$ParrentPath = (Resolve-Path -Path $ParentPath).Path
@@ -352,7 +352,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			# Verify extension is *.json, if not add it
 			if (!$FileExtension -or ($FileExtension -ne ".json"))
 			{
-				Write-Debug -Message "[$InvocationInfo & WriteFile] Adding extension to file"
+				Write-Debug -Message "[$InvocationName & WriteFile] Adding extension to file"
 				$FileName += ".json"
 			}
 
@@ -360,19 +360,19 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			{
 				if (Test-Path -PathType Leaf -Path $FileName)
 				{
-					Write-Debug -Message "[$InvocationInfo & WriteFile] Appending JSON data to file"
+					Write-Debug -Message "[$InvocationName & WriteFile] Appending JSON data to file"
 					$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path $FileName -Raw)
 					@($JsonFile; $FileData) | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 				}
 				else
 				{
-					Write-Debug -Message "[$InvocationInfo & WriteFile] Not appending to JSON file because no existing file"
+					Write-Debug -Message "[$InvocationName & WriteFile] Not appending to JSON file because no existing file"
 					$FileData | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 				}
 			}
 			else
 			{
-				Write-Debug -Message "[$InvocationInfo & WriteFile] Replacing contents in JSON file"
+				Write-Debug -Message "[$InvocationName & WriteFile] Replacing contents in JSON file"
 				$FileData | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 			}
 		} # scriptblock
