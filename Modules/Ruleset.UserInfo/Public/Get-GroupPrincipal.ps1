@@ -39,6 +39,9 @@ User group on local or remote computer
 .PARAMETER Domain
 One or more computers which to query for group users
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER Include
 Specifies a username as a wildcard pattern that this function includes in the operation.
 
@@ -54,6 +57,9 @@ PS> Get-GroupPrincipal "Users", "Administrators"
 .EXAMPLE
 PS> Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)
 
+.EXAMPLE
+PS> Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)
+
 .INPUTS
 [string[]] User groups
 
@@ -66,7 +72,7 @@ See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAcc
 #>
 function Get-GroupPrincipal
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -74,9 +80,12 @@ function Get-GroupPrincipal
 		[Alias("UserGroup")]
 		[string[]] $Group,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession,
 
 		[Parameter()]
 		[SupportsWildcards()]
@@ -110,24 +119,32 @@ function Get-GroupPrincipal
 			return $false
 		}
 
-		# Replace localhost and dot with NETBIOS computer name
-		$Domain = foreach ($Computer in $Domain)
+		$CimParams = @{
+			Namespace = "root\cimv2"
+		}
+
+		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
-			if (($Computer -eq "localhost") -or ($Computer -eq "."))
-			{
-				[System.Environment]::MachineName
-			}
-			else
-			{
-				$Computer
-			}
+			$Domain = $CimSession.ComputerName
+			$CimParams.CimSession = $CimSession
 		}
 	}
 	process
 	{
 		foreach ($Computer in $Domain)
 		{
-			if ($Computer -eq [System.Environment]::MachineName)
+			if ($PSCmdlet.ParameterSetName -eq "Domain")
+			{
+				# Replace localhost and dot with NETBIOS computer name
+				if (($Computer -eq "localhost") -or ($Computer -eq "."))
+				{
+					$Computer = [System.Environment]::MachineName
+				}
+
+				$CimParams.ComputerName = $Computer
+			}
+
+			if (!$CimSession -and ($Computer -eq [System.Environment]::MachineName))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -195,8 +212,7 @@ function Get-GroupPrincipal
 					# Get all users that belong to requested group,
 					# this includes non local principal source and non "user" users
 					# it is also missing SID
-					$GroupUsers = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_GroupUser -Property GroupComponent, PartComponent |
+					$GroupUsers = Get-CimInstance @CimParams -Class Win32_GroupUser -Property GroupComponent, PartComponent |
 					Where-Object { $_.GroupComponent.Name -eq $UserGroup } |
 					Select-Object -ExpandProperty PartComponent
 
@@ -207,8 +223,8 @@ function Get-GroupPrincipal
 					}
 
 					# Get either enabled or disabled users, these include SID but also non group users
-					$EnabledAccounts = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-						-Class Win32_UserAccount -Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
+					$EnabledAccounts = Get-CimInstance @CimParams -Class Win32_UserAccount `
+						-Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
 					Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))

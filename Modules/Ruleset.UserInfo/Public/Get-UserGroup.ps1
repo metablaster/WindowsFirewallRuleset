@@ -36,11 +36,17 @@ Get a list of all available user groups on target computers
 .PARAMETER Domain
 One or more computers which to query for user groups
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
 PS> Get-UserGroup "ServerPC"
 
 .EXAMPLE
 PS> Get-UserGroup @(DESKTOP, LAPTOP)
+
+.EXAMPLE
+PS> Get-UserGroup -CimSession (New-CimSession)
 
 .INPUTS
 None. You cannot pipe objects to Get-UserGroup
@@ -53,26 +59,44 @@ None.
 #>
 function Get-UserGroup
 {
-	[CmdletBinding(
+	[CmdletBinding(DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	$CimParams = @{
+		Namespace = "root\cimv2"
+	}
+
+	if ($PSCmdlet.ParameterSetName -eq "CimSession")
+	{
+		$Domain = $CimSession.ComputerName
+		$CimParams.CimSession = $CimSession
+	}
+
 	foreach ($Computer in $Domain)
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Computer -eq "localhost") -or ($Computer -eq "."))
+		if ($PSCmdlet.ParameterSetName -eq "Domain")
 		{
-			$Computer = [System.Environment]::MachineName
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Computer -eq "localhost") -or ($Computer -eq "."))
+			{
+				$Computer = [System.Environment]::MachineName
+			}
+
+			$CimParams.ComputerName = $Computer
 		}
 
-		if ($Computer -eq [System.Environment]::MachineName)
+		if (!$CimSession -and ($Computer -eq [System.Environment]::MachineName))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -101,8 +125,7 @@ function Get-UserGroup
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
 
-			$RemoteGroups = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-				-Class Win32_Group -Property LocalAccount |
+			$RemoteGroups = Get-CimInstance @CimParams -Class Win32_Group -Property LocalAccount |
 			Where-Object -Property LocalAccount -EQ "True"
 
 			if ([string]::IsNullOrEmpty($RemoteGroups))

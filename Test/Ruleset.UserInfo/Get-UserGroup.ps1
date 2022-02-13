@@ -77,8 +77,11 @@ Enter-Test "Get-UserGroup"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "default remote"
-	Get-UserGroup -Domain $Domain
+	Start-Test "default remote CimSession"
+	Get-UserGroup -CimSession $CimServer
+
+	# Start-Test "default remote"
+	# Get-UserGroup -Domain $Domain
 }
 else
 {

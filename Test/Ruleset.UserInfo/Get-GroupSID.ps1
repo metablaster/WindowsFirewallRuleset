@@ -77,8 +77,11 @@ Enter-Test "Get-GroupSID"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Disabled Users, Administrators"
-	Get-GroupSID "Users" -Domain $TestDomain
+	Start-Test "Remote -CimSession"
+	Get-GroupSID "Users" -CimSession $CimServer
+
+	# Start-Test "Remote Domain"
+	# Get-GroupSID "Users" -Domain $TestDomain
 }
 else
 {

@@ -35,10 +35,13 @@ Get the SKU (Stock Keeping Unit) information for one or multiple target computer
 or translate SKU number to SKU string
 
 .PARAMETER SKU
-Operating system SKU number
+Operating system SKU number to convert to SKU string
 
 .PARAMETER Domain
-One or more computer names
+One or more computer names for which to obtain SKU
+
+.PARAMETER CimSession
+Specifies the CIM session to use
 
 .EXAMPLE
 PS> Get-SystemSKU
@@ -83,7 +86,7 @@ https://docs.microsoft.com/en-us/surface/surface-system-sku-reference
 #>
 function Get-SystemSKU
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -91,14 +94,24 @@ function Get-SystemSKU
 		[ValidatePattern("^[0-9]{1,3}$")]
 		[int32] $SKU,
 
-		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = "Computer")]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName
+		[string[]] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Session")]
+		[CimSession] $CimSession
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+		$CimParams = @{
+			ErrorAction = "Stop"
+			Namespace = "root\cimv2"
+			Class = "Win32_OperatingSystem"
+			Property = "OperatingSystemSku"
+		}
 
 		[scriptblock] $GetStringSKU = {
 			param ([int32] $SKU)
@@ -210,12 +223,23 @@ function Get-SystemSKU
 		}
 		else
 		{
+			if ($PSCmdlet.ParameterSetName -eq "CimSession")
+			{
+				$Domain = $CimSession.ComputerName
+				$CimParams.CimSession = $CimSession
+			}
+
 			foreach ($Computer in $Domain)
 			{
-				# Replace localhost and dot with NETBIOS computer name
-				if (($Computer -eq "localhost") -or ($Computer -eq "."))
+				if ($PSCmdlet.ParameterSetName -eq "Domain")
 				{
-					$Computer = [System.Environment]::MachineName
+					# Replace localhost and dot with NETBIOS computer name
+					if (($Computer -eq "localhost") -or ($Computer -eq "."))
+					{
+						$Computer = [System.Environment]::MachineName
+					}
+
+					$CimParams.ComputerName = $Computer
 				}
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
@@ -224,8 +248,7 @@ function Get-SystemSKU
 				{
 					try
 					{
-						$CimSKU = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-							-Class Win32_OperatingSystem -Property OperatingSystemSku |
+						$CimSKU = Get-CimInstance @CimParams |
 						Select-Object -ExpandProperty OperatingSystemSku
 
 						[PSCustomObject] @{

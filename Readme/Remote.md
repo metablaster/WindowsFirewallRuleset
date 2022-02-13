@@ -26,6 +26,7 @@ design used in this repository.
     - [Troubleshooting CIM](#troubleshooting-cim)
       - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
       - [The service is configured to reject remote connection requests for this plugin](#the-service-is-configured-to-reject-remote-connection-requests-for-this-plugin)
+      - [Access id denied](#access-id-denied)
     - [Troubleshooting remote registry](#troubleshooting-remote-registry)
 
 ## Commandlets breakdown
@@ -304,19 +305,19 @@ which means specifying host name, user name and password.
 
 Check following 3 things:
 
-1. Ensure PS session configuration which is being used is enabled
+1. Verify PS session configuration which is being used is enabled
 
     ```powershell
     Get-PSSessionConfiguration -Name "NameOfTheSession" | Enable-PSSessionConfiguration
     ```
 
-2. Ensure access mode of the session PS configuration is set to `Remote`
+2. Verify access mode of the session PS configuration is set to `Remote`
 
     ```powershell
     Set-PSSessionConfiguration  -Name "NameOfTheSession" -AccessMode Remote
     ```
 
-3. Ensure `LocalAccountTokenFilterPolicy` is enabled (set to 1)
+3. Verify `LocalAccountTokenFilterPolicy` is enabled (set to 1)
 
     ```powershell
     Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 1 `
@@ -395,6 +396,10 @@ Restart-Service -Name WinRM
 ```
 
 For more information see [WMI plug-in configuration notes][WMI plugin]
+
+#### Access id denied
+
+Specify credentials
 
 ### Troubleshooting remote registry
 

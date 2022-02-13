@@ -39,11 +39,17 @@ Array of user groups or single group name
 .PARAMETER Domain
 Computer name which to query for group users
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
 PS> Get-GroupSID "USERNAME" -Domain "COMPUTERNAME"
 
 .EXAMPLE
 PS> Get-GroupSID @("USERNAME1", "USERNAME2")
+
+.EXAMPLE
+PS> Get-GroupSID "USERNAME" -CimSession (New-CimSession)
 
 .INPUTS
 [string[]] One or more group names
@@ -56,7 +62,7 @@ None.
 #>
 function Get-GroupSID
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md")]
 	[OutputType([PSCustomObject])]
 	param (
@@ -64,19 +70,36 @@ function Get-GroupSID
 		[Alias("UserGroup")]
 		[string[]] $Group,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		$CimParams = @{
+			Namespace = "root\cimv2"
+		}
+
+		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
-			$Domain = [System.Environment]::MachineName
+			$Domain = $CimSession.ComputerName
+			$CimParams.CimSession = $CimSession
+		}
+		else
+		{
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Domain -eq "localhost") -or ($Domain -eq "."))
+			{
+				$Domain = [System.Environment]::MachineName
+			}
+
+			$CimParams.ComputerName = $Domain
 		}
 	}
 	process
@@ -85,7 +108,7 @@ function Get-GroupSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
-			if ($Domain -eq [System.Environment]::MachineName)
+			if (!$CimSession -and ($Domain -eq [System.Environment]::MachineName))
 			{
 				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |
@@ -95,8 +118,7 @@ function Get-GroupSID
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Domain"
 
-				$GroupSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-					-Class Win32_Group -Property Name, SID |
+				$GroupSID = Get-CimInstance @CimParams -Class Win32_Group -Property Name, SID |
 				Where-Object -Property Name -EQ $UserGroup | Select-Object -ExpandProperty SID
 			}
 			else { continue }

@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-SDDL
+Unit test for Get-PathSDDL
 
 .DESCRIPTION
-Test correctness of Get-SDDL function
+Test correctness of Get-PathSDDL function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-SDDL.ps1
+PS> .\Get-PathSDDL.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-SDDL.ps1
+None. You cannot pipe objects to Get-PathSDDL.ps1
 
 .OUTPUTS
-None. Get-SDDL.ps1 does not generate any output
+None. Get-PathSDDL.ps1 does not generate any output
 
 .NOTES
 None.
@@ -87,7 +87,7 @@ Security Descriptor Definition Language string
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> Get-SDDL -Group @("Users", "Administrators") | Test-SDDL
+PS> Get-PathSDDL -Group @("Users", "Administrators") | Test-SDDL
 
 .INPUTS
 [string]
@@ -130,93 +130,39 @@ function Test-SDDL
 	}
 }
 
-Enter-Test "Get-SDDL"
+Enter-Test "Get-PathSDDL"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote User -CimSession"
-	Get-SDDL -User "User" -CimSession $CimServer
+	$RemotePath = "C:\Users\Public\Desktop\" # Inherited
+	$RemoteUNCPath = "\\$Domain\C$\Windows"
 
-	Start-Test "Remote Group -CimSession"
-	Get-SDDL -Group "Users" -CimSession $CimServer
+	Start-Test "-Path remote FileSystem -Domain"
+	Get-PathSDDL -Path $RemotePath -Domain $Domain -Credential $RemotingCredential | Test-SDDL
 
-	# Start-Test "Remote -Domain $Domain"
-	# Get-SDDL -User "User" -Domain $Domain
+	Start-Test "-Path remote FileSystem Session -Merge"
+	Get-PathSDDL -Path $RemotePath -Session $SessionInstance -Merge | Test-SDDL
+
+	Start-Test "-Path remote UNC path Session"
+	Get-PathSDDL -Path $RemoteUNCPath -Session $SessionInstance | Test-SDDL
 }
 else
 {
-	#
-	# Test groups
-	#
-	[string[]] $Groups = @("Users", "Administrators")
+	$FileSystem = "C:\Users\Public\Desktop\" # Inherited
+	$Registry1 = "HKCU:\" # Not Inherited
+	$Registry2 = "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
-	Start-Test "-Group $Groups"
-	$Result = Get-SDDL -Group $Groups
+	Start-Test "-Path FileSystem"
+	Get-PathSDDL -Path $FileSystem | Test-SDDL
 
-	Test-SDDL $Result
-	Test-Output $Result -Command Get-SDDL
+	Start-Test "-Path Registry1"
+	Get-PathSDDL -Path $Registry1 | Test-SDDL
 
-	Start-Test "-Group $Groups -Merge"
-	Get-SDDL -Group $Groups -Merge | Test-SDDL
-
-	Start-Test "-Group $Groups"
-	Get-SDDL -Group $Groups | Test-SDDL
-
-	Start-Test "-Group $Groups -Merge"
-	Get-SDDL -Group $Groups -Merge | Test-SDDL
-
-	#
-	# Test users
-	#
-
-	[string[]] $Users = "Administrator", $TestAdmin, $TestUser
-
-	Start-Test "-User $Users"
-	Get-SDDL -User $Users | Test-SDDL
-
-	Start-Test "-User $Users -Merge"
-	Get-SDDL -User $Users -Merge | Test-SDDL
-
-	Start-Test "-User $Users"
-	$Result = Get-SDDL -User $Users
-
-	Test-SDDL $Result
-	Test-Output $Result -Command Get-SDDL
-
-	Start-Test "-User $Users -Merge"
-	$Result = Get-SDDL -User $Users -Merge
+	Start-Test "-Path Registry2 -Merge"
+	$Result = Get-PathSDDL -Path $Registry2 -Merge
 	$Result | Test-SDDL
 
-	Test-Output $Result -Command Get-SDDL
-
-	#
-	# Test NT AUTHORITY
-	#
-
-	[string] $NTDomain = "NT AUTHORITY"
-	[string[]] $NTUsers = "SYSTEM", "LOCAL SERVICE"
-
-	Start-Test "-Domain $NTDomain -User $NTUsers"
-	Get-SDDL -Domain $NTDomain -User $NTUsers | Test-SDDL
-
-	Start-Test "-Domain $NTDomain -User $NTUsers -Merge"
-	Get-SDDL -Domain $NTDomain -User $NTUsers -Merge | Test-SDDL
-
-	#
-	# Test APPLICATION PACKAGE AUTHORITY
-	#
-
-	[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
-	[string[]] $AppUser = "Your Internet connection", "Your pictures library"
-
-	Start-Test "-Domain $AppDomain -User $AppUser"
-	Get-SDDL -Domain $AppDomain -User $AppUser | Test-SDDL
-
-	Start-Test "-Domain $AppDomain -User $AppUser -Merge"
-	$Result = Get-SDDL -Domain $AppDomain -User $AppUser -Merge
-	$Result | Test-SDDL
-
-	Test-Output $Result -Command Get-SDDL
+	Test-Output $Result -Command Get-PathSDDL
 }
 
 Update-Log

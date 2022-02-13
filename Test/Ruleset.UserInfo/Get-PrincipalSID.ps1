@@ -79,12 +79,11 @@ Enter-Test "Get-PrincipalSID"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$Domain = $TestDomain
+	Start-Test "Remote CimSession"
+	Get-PrincipalSID -User $Users -CimSession $CimServer
 
-
-	Start-Test "-User $Users"
-	$AccountSID1 = Get-PrincipalSID -User $Users -Domain $Domain
-	$AccountSID1
+	# Start-Test "Remote Domain"
+	# Get-PrincipalSID -User $Users -Domain $Domain
 }
 else
 {
@@ -95,54 +94,54 @@ else
 	Start-Test "-User $Users -Domain localhost"
 	$AccountSID1 = Get-PrincipalSID -User $Users -Domain "localhost"
 	$AccountSID1
+
+	Start-Test "-User $Users"
+	$AccountSID1 = Get-PrincipalSID -User $Users -Domain $Domain
+	$AccountSID1
+
+	Start-Test "$Users | Get-PrincipalSID"
+	$Users | Get-PrincipalSID -Domain $Domain
+
+	Start-Test "Get-TypeName"
+	$AccountSID1 | Get-TypeName
+
+	#
+	# Test NT AUTHORITY
+	#
+
+	[string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE", "USER MODE DRIVERS")
+	[string] $NTDomain = "NT AUTHORITY"
+
+	Start-Test "-Domain $NTDomain -User $NTUsers"
+	$AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers #
+	$AccountSID2
+
+	# NOTE: not valid
+	# Start-Test "-Domain $NTDomain -User $NTUsers"
+	# $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers
+	# $AccountSID2
+
+	Start-Test "Get-TypeName"
+	$AccountSID2 | Get-TypeName
+
+	#
+	# Test APPLICATION PACKAGE AUTHORITY
+	#
+
+	[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+	[string] $AppUser = "Your Internet connection"
+
+	Start-Test "-Domain $AppDomain -User $AppUser"
+	$AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
+	$AccountSID3
+
+	# NOTE: not valid
+	# Start-Test "-Domain $AppDomain -User $AppUser"
+	# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
+	# $AccountSID3
+
+	Test-Output $AccountSID3 -Command Get-PrincipalSID
 }
-
-Start-Test "-User $Users"
-$AccountSID1 = Get-PrincipalSID -User $Users -Domain $Domain
-$AccountSID1
-
-Start-Test "$Users | Get-PrincipalSID"
-$Users | Get-PrincipalSID -Domain $Domain
-
-Start-Test "Get-TypeName"
-$AccountSID1 | Get-TypeName
-
-#
-# Test NT AUTHORITY
-#
-
-[string[]] $NTUsers = @("SYSTEM", "LOCAL SERVICE", "USER MODE DRIVERS")
-[string] $NTDomain = "NT AUTHORITY"
-
-Start-Test "-Domain $NTDomain -User $NTUsers"
-$AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers #
-$AccountSID2
-
-# NOTE: not valid
-# Start-Test "-Domain $NTDomain -User $NTUsers"
-# $AccountSID2 = Get-PrincipalSID -Domain $NTDomain -User $NTUsers
-# $AccountSID2
-
-Start-Test "Get-TypeName"
-$AccountSID2 | Get-TypeName
-
-#
-# Test APPLICATION PACKAGE AUTHORITY
-#
-
-[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
-[string] $AppUser = "Your Internet connection"
-
-Start-Test "-Domain $AppDomain -User $AppUser"
-$AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
-$AccountSID3
-
-# NOTE: not valid
-# Start-Test "-Domain $AppDomain -User $AppUser"
-# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
-# $AccountSID3
-
-Test-Output $AccountSID3 -Command Get-PrincipalSID
 
 Update-Log
 Exit-Test

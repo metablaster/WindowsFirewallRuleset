@@ -40,11 +40,14 @@ EXAMPLES
 	Get-GroupSID
 	Get SID of user groups on local or remote computers
 
+	Get-PathSDDL
+	Get SDDL string of a path
+
 	Get-PrincipalSID
 	Get SID for specified user account
 
 	Get-SDDL
-	Get SDDL string of a user, group or from path
+	Get SDDL string of a user or group
 
 	Get-UserGroup
 	Get user groups on target computers

@@ -53,6 +53,7 @@ $PublicScripts = @(
 	"ConvertFrom-SID"
 	"Get-GroupPrincipal"
 	"Get-GroupSID"
+	"Get-PathSDDL"
 	"Get-PrincipalSID"
 	"Get-SDDL"
 	"Get-UserGroup"

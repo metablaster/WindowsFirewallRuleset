@@ -76,8 +76,11 @@ Enter-Test "Get-SystemSKU"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote default"
-	Get-SystemSKU -Domain $Domain
+	Start-Test "Remote CimSession"
+	Get-SystemSKU -CimSession $CimServer
+
+	# Start-Test "Remote computer"
+	# Get-SystemSKU -Domain $Domain
 }
 else
 {

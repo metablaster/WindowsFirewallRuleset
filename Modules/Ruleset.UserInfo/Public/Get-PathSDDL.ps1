@@ -28,69 +28,64 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get SDDL string of a user, group or from path
+Get SDDL string for a path
 
 .DESCRIPTION
-Get SDDL string for single or multiple user names and/or user groups, file system or registry
-locations on a single target computer
-
-.PARAMETER User
-One or more users for which to obtain SDDL string
-
-.PARAMETER Group
-One or more user groups for which to obtain SDDL string
+Get SDDL string for file system or registry locations on a single target computer
 
 .PARAMETER Path
 Single file system or registry location for which to obtain SDDL.
 Wildcard characters are supported.
 
 .PARAMETER Domain
-Single domain or computer such as remote computer name or builtin computer domain
+Computer name on which specified path is located
 
-.PARAMETER CimSession
-Specifies the CIM session to use
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
 
 .PARAMETER Merge
 If specified, combines resultant SDDL strings into one
 
 .EXAMPLE
-PS> Get-SDDL -User USERNAME -Domain COMPUTERNAME
+PS> Get-PathSDDL -Path "C:\Users\Public\Desktop\" -Domain Server01 -Credential (Get-Credential)
 
 .EXAMPLE
-PS> Get-SDDL -Group @("Users", "Administrators") -Merge
+PS> Get-PathSDDL -Path "C:\Users" -Session (New-PSSession)
 
 .EXAMPLE
-PS> Get-SDDL -Domain "NT AUTHORITY" -User "System"
+Get-PathSDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"
 
 .INPUTS
-None. You cannot pipe objects to Get-SDDL
+None. You cannot pipe objects to Get-PathSDDL
 
 .OUTPUTS
 [string]
 
 .NOTES
-TODO: Mandatory parameter is impossible to make
+None.
 #>
-function Get-SDDL
+function Get-PathSDDL
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "User",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-SDDL.md")]
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PathSDDL.md")]
 	[OutputType([string])]
 	param (
-		[Parameter()]
-		[Alias("UserName")]
-		[string[]] $User,
-
-		[Parameter()]
-		[Alias("UserGroup")]
-		[string[]] $Group,
+		[Parameter(Mandatory = $true)]
+		[SupportsWildcards()]
+		[string] $Path,
 
 		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "CimSession")]
-		[CimSession] $CimSession,
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
 		[switch] $Merge
@@ -98,11 +93,13 @@ function Get-SDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$PrincipalSIDParams = @{}
+	$SessionParams = @{
+	}
 
-	if ($PSCmdlet.ParameterSetName -eq "CimSession")
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
-		$PrincipalSIDParams.CimSession = $CimSession
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
@@ -112,7 +109,11 @@ function Get-SDDL
 			$Domain = [System.Environment]::MachineName
 		}
 
-		$PrincipalSIDParams.Domain = $Domain
+		$SessionParams.ComputerName = $Domain
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
 	}
 
 	# Glossary:
@@ -146,61 +147,100 @@ function Get-SDDL
 	ACE: A string that describes an ACE in the security descriptor's DACL or SACL
 	#>
 
-	[string] $DACL = "D:"
-	foreach ($UserName in $User)
+	[string] $DACL = $null
+
+	if (!$Session -and ($Domain -eq [System.Environment]::MachineName))
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user principal SDDL: $Domain\$UserName"
-		$SID = (Get-PrincipalSID $UserName @PrincipalSIDParams).SID
+		# TODO: Multiple paths should be supported either here or trough path parameter
+		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
+	}
+	elseif (Test-Computer $Domain)
+	{
+		$TargetPath = Invoke-Command @SessionParams -ScriptBlock {
+			Resolve-Path -Path $using:Path -ErrorAction Ignore
+		}
+	}
+	else { return }
 
-		if ($SID)
-		{
-			# https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/access-mask
-			# https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-addaccessallowedace
-			# To simplify specifying all access rights that correspond to a general notion such as reading or writing,
-			# the system provides generic access rights.
-			# The system maps a generic access right to the appropriate set of specific access rights for the object.
-			# The meaning of each generic access right is specific to that type of object.
+	$ItemCount = ($TargetPath | Measure-Object).Count
 
-			# ace_type
-			# "A"	ACCESS_ALLOWED_ACE_TYPE		The access is granted to a specified security identifier (SID)
+	if ($ItemCount -eq 0)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path could not be resolved: $Path"
+		return
+	}
+	elseif ($ItemCount -gt 1)
+	{
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path resolves to multiple $($ItemCount) paths: $Path"
+		return
+	}
 
-			# rights (Generic access rights)
-			# "GA"	GENERIC_ALL			The caller can perform all normal operations on the object.
-			# "GR"	GENERIC_READ		The caller can perform normal read operations on the object.
-			# "GW"	GENERIC_WRITE		The caller can perform normal write operations on the object.
-			# "GX"	GENERIC_EXECUTE		The caller can execute the object.
-			# TODO: generic access rights wont work, ex. GA
-			$ACE = "(A;;CC;;;$SID)"
-
-			if ($Merge)
-			{
-				$DACL += $ACE
-			}
-			else
-			{
-				Write-Output ($DACL + $ACE)
-			}
+	if (!$Session -and ($Domain -eq [System.Environment]::MachineName))
+	{
+		$ACL = Get-Acl -Path $TargetPath
+	}
+	else
+	{
+		$ACL = Invoke-Command @SessionParams -ScriptBlock {
+			Get-Acl -Path $using:TargetPath
 		}
 	}
 
-	foreach ($UserGroup in $Group)
+	if (!$ACL)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting group principal SDDL: $Domain\$UserGroup"
-		$SID = (Get-GroupSID $UserGroup @PrincipalSIDParams).SID
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing SDDL entry: $TargetPath"
+		return
+	}
 
-		if ($SID)
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL of a path: $TargetPath"
+
+	if ($Merge)
+	{
+		# Get entry DACL value, already merged
+		$RegMatch = [regex]::Matches($ACL.Sddl, "D\:\w+\(.+\)")
+
+		if ($RegMatch.Count -eq 1)
 		{
-			$ACE = "(A;;CC;;;$SID)"
-
-			if ($Merge)
-			{
-				$DACL += $ACE
-			}
-			else
-			{
-				Write-Output ($DACL + $ACE)
-			}
+			$DACL = $RegMatch.Captures.Value
 		}
+	}
+	else
+	{
+		# Get DACL flags
+		$RegMatch = [regex]::Matches($ACL.Sddl, "D\:\w+")
+
+		if ($RegMatch.Count -eq 1)
+		{
+			# Break down ACE's
+			$SDDLSplit = $ACL.Sddl.Split("(").TrimEnd(")")
+
+			# Iterate DACL entry for each ACE
+			# Index 0 - 6 (where index 6 is optional) are as follows:
+			# ace_type;ace_flags;rights;object_guid;inherit_object_guid;account_sid;(resource_attribute)
+			for ($Index = 1; $Index -lt $SDDLSplit.Length; ++$Index)
+			{
+				# For each ACE, combine DACL flags with ACE
+				$DACL = $RegMatch.Captures.Value + "($($SDDLSplit[$Index]))"
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] $($ACL.Sddl) resolved to: $DACL"
+				Write-Output $DACL
+			}
+
+			return
+		}
+	}
+
+	if ($RegMatch.Count -gt 1)
+	{
+		# TODO: This must be always false, confirm maximum one SID can be in there
+		Write-Error -Category NotImplemented -TargetObject $RegMatch -Message "Expected 1 regex match, got multiple"
+		exit
+	}
+
+	if ([string]::IsNullOrEmpty($DACL))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing DACL entry: $TargetPath"
+		return
 	}
 
 	if ($Merge)

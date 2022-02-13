@@ -39,11 +39,17 @@ One or more user names
 .PARAMETER Domain
 Target computer on which to perform query
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
-PS> Get-PrincipalSID "User" -Server "Server01"
+PS> Get-PrincipalSID "User" -Domain "Server01"
 
 .EXAMPLE
 PS> Get-PrincipalSID @("USERNAME1", "USERNAME2")
+
+.EXAMPLE
+PS> Get-PrincipalSID "User" -CimSession (New-CimSession)
 
 .INPUTS
 [string[]] One or more user names
@@ -56,7 +62,7 @@ None.
 #>
 function Get-PrincipalSID
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PrincipalSID.md")]
 	[OutputType([PSCustomObject])]
 	param (
@@ -64,19 +70,36 @@ function Get-PrincipalSID
 		[Alias("UserName")]
 		[string[]] $User,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		$CimParams = @{
+			Namespace = "root\cimv2"
+		}
+
+		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
-			$Domain = [System.Environment]::MachineName
+			$Domain = $CimSession.ComputerName
+			$CimParams.CimSession = $CimSession
+		}
+		else
+		{
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Domain -eq "localhost") -or ($Domain -eq "."))
+			{
+				$Domain = [System.Environment]::MachineName
+			}
+
+			$CimParams.ComputerName = $Domain
 		}
 
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
@@ -88,7 +111,7 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			if (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain)
+			if (!$CimSession -and (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 
@@ -119,8 +142,7 @@ function Get-PrincipalSID
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying CIM server on $Domain"
 
-				$PrincipalSID = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
-					-Class Win32_UserAccount -Property Name, SID |
+				$PrincipalSID = Get-CimInstance @CimParams -Class Win32_UserAccount -Property Name, SID |
 				Where-Object -Property Name -EQ $UserName | Select-Object -ExpandProperty SID
 			}
 			else { continue }

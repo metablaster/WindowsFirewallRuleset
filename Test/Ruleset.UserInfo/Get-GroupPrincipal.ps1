@@ -77,8 +77,11 @@ Enter-Test "Get-GroupPrincipal"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Disabled Users, Administrators"
-	Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain
+	Start-Test "Remote CimSession"
+	Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer
+
+	# Start-Test "Remote Domain"
+	# Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain
 }
 else
 {
