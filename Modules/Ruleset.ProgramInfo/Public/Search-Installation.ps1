@@ -40,6 +40,12 @@ Predefined program name
 .PARAMETER Domain
 Computer name on which to search for program installations
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER Interactive
 If requested program installation directory is not found, Search-Installation will ask
 user to specify program installation location
@@ -66,7 +72,7 @@ None.
 #>
 function Search-Installation
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Search-Installation.md")]
 	[OutputType([bool])]
 	param (
@@ -74,9 +80,18 @@ function Search-Installation
 		[Alias("Program")]
 		[TargetProgram] $Application,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[CimSession] $CimSession,
 
 		[Parameter()]
 		[switch] $Interactive,
@@ -87,12 +102,35 @@ function Search-Installation
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
+	$SessionParams = @{
+		ErrorAction = "Stop"
 	}
 
+	$CimParams = @{
+		Namespace = "root\cimv2"
+	}
+
+	if ($Session)
+	{
+		$SessionParams.Session = $Session
+		$CimParams.CimSession = $CimSession
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$SessionParams.ComputerName = $Domain
+		$CimParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
+	}
 
 	Initialize-Table
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet

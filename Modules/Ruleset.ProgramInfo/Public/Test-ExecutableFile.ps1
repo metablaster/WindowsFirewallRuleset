@@ -47,6 +47,12 @@ Fully qualified path to executable file
 .PARAMETER Domain
 Computer name on which executable file to be tested is located
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER SigcheckLocation
 Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
@@ -107,16 +113,22 @@ TODO: Verify file is executable file (and path formatted?)
 #>
 function Test-ExecutableFile
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md")]
 	[OutputType([bool])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $LiteralPath,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
 
 		[Parameter()]
 		[System.IO.DirectoryInfo] $SigcheckLocation = $SigcheckPath,
@@ -134,10 +146,29 @@ function Test-ExecutableFile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$ConnectParams = @{
+		ErrorAction = "Stop"
+	}
+
+	if ($Session)
 	{
-		$Domain = [System.Environment]::MachineName
+		$Domain = $Session.ComputerName
+		$ConnectParams.Session = $Session
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$ConnectParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$ConnectParams.Credential = $Credential
+		}
 	}
 
 	if ($Quiet)
@@ -147,7 +178,7 @@ function Test-ExecutableFile
 		$InformationPreference = "SilentlyContinue"
 	}
 
-	$ExpandedPath = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	$ExpandedPath = Invoke-Command @ConnectParams -ScriptBlock {
 		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
 	}
 
@@ -157,7 +188,7 @@ function Test-ExecutableFile
 	# NOTE: Index 0 is this function
 	$Caller = (Get-PSCallStack)[1].Command
 
-	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet -Domain $Domain)
+	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet @ConnectParams)
 	{
 		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{
@@ -211,7 +242,7 @@ function Test-ExecutableFile
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
-				if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain)
+				if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams)
 				{
 					return $false
 				}
@@ -224,7 +255,7 @@ function Test-ExecutableFile
 				Write-Information -Tags $MyInvocation.InvocationName `
 					-MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 
-				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain | Out-Null
+				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams | Out-Null
 				return $false
 			}
 		}

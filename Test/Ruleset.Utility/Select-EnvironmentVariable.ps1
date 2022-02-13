@@ -79,11 +79,14 @@ Enter-Test "Select-EnvironmentVariable"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote UserProfile -Force"
+	Start-Test "Remote UserProfile -Force -Session"
 	# Only one -Force is needed
-	Select-EnvironmentVariable -From UserProfile -Force -Domain $Domain
+	Select-EnvironmentVariable -From UserProfile -Force -Session $SessionInstance
 
-	Start-Test "Remote FileSystem -Exact"
+	Start-Test "Remote FileSystem -Exact -Session"
+	Select-EnvironmentVariable -From FileSystem -Exact -Session $SessionInstance
+
+	Start-Test "Remote FileSystem -Exact -Domain"
 	Select-EnvironmentVariable -From FileSystem -Exact -Domain $Domain
 }
 else

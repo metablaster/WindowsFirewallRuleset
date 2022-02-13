@@ -57,6 +57,12 @@ One or more Windows store apps for which to retrieve capabilities
 .PARAMETER Domain
 Computer name which to check
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER User
 Specify user name for which to query app capabilities.
 This parameter is required only if input app or the app specified by -Name parameter is
@@ -92,6 +98,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 
 .NOTES
 TODO: According to unit test there are some capabilities not implemented here
+HACK: Parameter set names for ComputerName vs Session
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md
@@ -134,6 +141,12 @@ function Get-AppCapability
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
+		[PSCredential] $Credential,
+
+		[Parameter()]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter()]
 		[string] $User,
 
 		[Parameter()]
@@ -147,13 +160,27 @@ function Get-AppCapability
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# $DebugPreference = "Continue"
-		$VerbosePreference = "Continue"
+		$SessionParams = @{
+		}
 
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		if ($Session)
 		{
-			$Domain = [System.Environment]::MachineName
+			$Domain = $Session.ComputerName
+			$SessionParams.Session = $Session
+		}
+		else
+		{
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Domain -eq "localhost") -or ($Domain -eq "."))
+			{
+				$Domain = [System.Environment]::MachineName
+			}
+
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 
 		$InvocationName = $MyInvocation.InvocationName
@@ -178,6 +205,8 @@ function Get-AppCapability
 
 			if ($Domain -eq [System.Environment]::MachineName)
 			{
+				# HACK: module not imported, need to import manually
+				Import-WinModule -Name Appx -ErrorAction Stop
 				$InputObject = Get-AppxPackage @AppxParams
 			}
 			else
@@ -193,6 +222,7 @@ function Get-AppCapability
 	}
 	process
 	{
+		# HACK: Cannot use @SessionParams, no return value
 		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 

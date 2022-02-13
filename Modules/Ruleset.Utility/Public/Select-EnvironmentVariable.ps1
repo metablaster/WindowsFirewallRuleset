@@ -41,6 +41,12 @@ to existing file system location that is fully qualified and does not lead to us
 .PARAMETER Domain
 Computer name from which to retrieve environment variables
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER From
 A named group of system environment variables to get as follows:
 - UserProfile: Any variables that lead to or mentions user profile
@@ -165,6 +171,7 @@ a new group 'Firewall' is needed since whitelist excludes some valid variables
 TODO: Implement -AsCustomObject that will give consistent output for formatting purposes
 TODO: Implement -Unique switch since some variable Values may be duplicates (with different name)
 TODO: Output should include domain name from which variables were retrieved
+HACK: Parameter set names for ComputerName vs Session
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Select-EnvironmentVariable.md
@@ -181,6 +188,12 @@ function Select-EnvironmentVariable
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter()]
+		[PSCredential] $Credential,
+
+		[Parameter()]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter(ParameterSetName = "Scope")]
 		[Parameter(ParameterSetName = "Name")]
@@ -215,10 +228,26 @@ function Select-EnvironmentVariable
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$SessionParams = @{
+	}
+
+	if ($Session)
 	{
-		$Domain = [System.Environment]::MachineName
+		$SessionParams.Session = $Session
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$SessionParams.ComputerName = $Domain
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
 	}
 
 	# Make sure null or empty Name or Value arguments don't cause any overhead
@@ -318,13 +347,13 @@ function Select-EnvironmentVariable
 	{
 		if ($Exact)
 		{
-			$script:AllVariables = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$script:AllVariables = Invoke-Command @SessionParams -ScriptBlock {
 				Get-ChildItem Env:
 			}
 		}
 		else
 		{
-			$script:AllVariables = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$script:AllVariables = Invoke-Command @SessionParams -ScriptBlock {
 				Get-ChildItem Env: | ForEach-Object {
 					[System.Collections.DictionaryEntry]::new("%$($_.Name)%", $_.Value)
 				}
@@ -367,7 +396,7 @@ function Select-EnvironmentVariable
 				{
 					# TODO: This may include variables that are not meant to point to files
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Including file path $($Entry.Value)"
-					$FileExists = Invoke-Command -Session $SessionInstance -ScriptBlock {
+					$FileExists = Invoke-Command @SessionParams -ScriptBlock {
 						[System.IO.File]::Exists($using:Entry.Value)
 					}
 				}
@@ -395,11 +424,11 @@ function Select-EnvironmentVariable
 				$script:UserProfile += $Entry
 			}
 
-			$IsPathRooted = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$IsPathRooted = Invoke-Command @SessionParams -ScriptBlock {
 				[System.IO.Path]::IsPathRooted($using:Entry.Value)
 			}
 
-			$DirectoryExists = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$DirectoryExists = Invoke-Command @SessionParams -ScriptBlock {
 				[System.IO.Directory]::Exists($using:Entry.Value)
 			}
 

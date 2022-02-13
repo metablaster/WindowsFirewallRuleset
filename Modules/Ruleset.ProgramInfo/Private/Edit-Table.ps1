@@ -40,6 +40,15 @@ Program installation directory
 .PARAMETER Domain
 Remote computer for which installation path is added to the table
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER Quiet
 If specified suppresses warning, error or informationall messages if specified path does not exist
 or if it's of an invalid syntax needed for firewall
@@ -60,16 +69,25 @@ TODO: This function should make use of Out-DataTable function from Ruleset.Utili
 #>
 function Edit-Table
 {
-	[CmdletBinding()]
+	[CmdletBinding(DefaultParameterSetName = "Domain", PositionalBinding = $false)]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("InstallLocation")]
 		[string] $LiteralPath,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[CimSession] $CimSession,
 
 		[Parameter()]
 		[switch] $Quiet
@@ -77,24 +95,48 @@ function Edit-Table
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$SessionParams = @{
+		ErrorAction = "Stop"
+	}
+
+	$CimParams = @{
+		Namespace = "root\cimv2"
+	}
+
+	if ($Session)
 	{
-		$Domain = [System.Environment]::MachineName
+		$SessionParams.Session = $Session
+		$CimParams.CimSession = $CimSession
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$SessionParams.ComputerName = $Domain
+		$CimParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Attempt to insert new entry into installation table"
 
 	# Check if input path leads to user profile and is compatible with firewall
-	if (Test-FileSystemPath $LiteralPath -UserProfile -Firewall -Quiet -PathType Directory -Domain $Domain)
+	if (Test-FileSystemPath $LiteralPath -UserProfile -Firewall -Quiet -PathType Directory @SessionParams)
 	{
-		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem @CimParams |
 		Select-Object -ExpandProperty SystemDrive
 
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($LiteralPath.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
-		$UserInfo = Get-GroupPrincipal "Users" -Domain $Domain | Where-Object {
+		$UserInfo = Get-GroupPrincipal "Users" @CimParams | Where-Object {
 			$LiteralPath -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
@@ -121,12 +163,12 @@ function Edit-Table
 	# Check if input path is valid for firewall, since this path is manually specified by developer
 	# in Search-Installation we need to test it just like in Confirm-Installation where path is
 	# manually specified by the user
-	elseif (Test-FileSystemPath $LiteralPath -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain)
+	elseif (Test-FileSystemPath $LiteralPath -Firewall -PathType Directory -Quiet:$Quiet @SessionParams)
 	{
 		$LiteralPath = Format-Path $LiteralPath
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup -Domain $Domain | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup @CimParams | Where-Object -Property Group -EQ "Users"
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

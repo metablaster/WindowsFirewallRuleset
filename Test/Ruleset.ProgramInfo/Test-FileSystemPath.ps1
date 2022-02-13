@@ -76,8 +76,12 @@ Enter-Test #"Test-FileSystemPath"
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	$TestPath = "C:\TestFolder"
-	Start-Test "remote default"
-	Test-FileSystemPath $TestPath -PathType Directory -Domain $Domain
+
+	Start-Test "remote Session"
+	Test-FileSystemPath $TestPath -PathType Directory -Session $SessionInstance
+
+	# Start-Test "remote Domain"
+	# Test-FileSystemPath $TestPath -PathType Directory -Domain $Domain -Credential $RemotingCredential
 }
 else
 {

@@ -49,6 +49,12 @@ User name in form of:
 .PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .EXAMPLE
 PS> Get-UserApp "User" -Domain "Server01"
 
@@ -76,7 +82,7 @@ https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win
 #>
 function Get-UserApp
 {
-	[CmdletBinding(
+	[CmdletBinding(DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md")]
 	[OutputType([Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage], [object])]
 	param (
@@ -88,67 +94,81 @@ function Get-UserApp
 		[Alias("UserName")]
 		[string] $User,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	$Domain = foreach ($Computer in $Domain)
+	$SessionParams = @{
+	}
+
+	if ($Session)
 	{
-		if (($Computer -eq "localhost") -or ($Computer -eq "."))
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
 		{
-			[System.Environment]::MachineName
+			$Domain = [System.Environment]::MachineName
 		}
-		else
+
+		$SessionParams.ComputerName = $Domain
+		if ($Credential)
 		{
-			$Computer
+			$SessionParams.Credential = $Credential
 		}
 	}
 
-	foreach ($Computer in $Domain)
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
-		if (Test-Computer $Computer)
+		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
+		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
+		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
+		$DomainPath = $env:SystemDrive
+	}
+	else
+	{
+		$Apps = Invoke-Command @SessionParams -ScriptBlock {
+			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
+		}
+
+		# HACK: Hardcoded, a new functioned needed to get remote shares
+		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+		Select-Object -ExpandProperty SystemDrive
+
+		$SystemDrive = $SystemDrive.TrimEnd(":")
+		$DomainPath = "\\$Domain\$SystemDrive`$\"
+	}
+
+	foreach ($App in $Apps)
+	{
+		# NOTE: This path will be missing for default apps on Windows server
+		# It may also be missing in fresh installed OS before connecting to internet
+		$RemotePath = "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app path '$RemotePath'"
+
+		# TODO: See if "$_.Status" property can be used to determine if app is valid
+		if (Test-Path -PathType Container -Path $RemotePath)
 		{
-			if ($Computer -eq [System.Environment]::MachineName)
-			{
-				# TODO: PackageTypeFilter is not clear, why only "Bundle"?
-				# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
-				$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
-				$DomainPath = $env:SystemDrive
-			}
-			else
-			{
-				$Apps = Invoke-Command -Session $SessionInstance -ScriptBlock {
-					Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
-				}
-
-				[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
-				Select-Object -ExpandProperty SystemDrive
-
-				$SystemDrive = $SystemDrive.TrimEnd(":")
-				$DomainPath = "\\$Computer\$SystemDrive`$\"
-			}
-
-			foreach ($App in $Apps)
-			{
-				# NOTE: This path will be missing for default apps on Windows server
-				# It may also be missing in fresh installed OS before connecting to internet
-				# TODO: See if "$_.Status" property can be used to determine if app is valid
-				if (Test-Path -PathType Container -Path "$DomainPath\Users\$User\AppData\Local\Packages\$($App.PackageFamilyName)\AC")
-				{
-					# There is no Domain property, so add one, PSComputerName property is of no use here
-					Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
-				}
-				else
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
-					Write-Information -Tags $MyInvocation.InvocationName `
-						-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
-				}
-			}
-		} # if Test-Computer
-	} # foreach Computer
+			# There is no Domain property, so add one, PSComputerName property is of no use here
+			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
+		}
+		else
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Store app '$($App.Name)' is not installed by user '$User' or the app is missing"
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: To fix the problem let this user update all of it's apps in Windows store"
+		}
+	}
 }

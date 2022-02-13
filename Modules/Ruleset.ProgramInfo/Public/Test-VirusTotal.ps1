@@ -40,6 +40,12 @@ Fully qualified path to executable file which is to be tested
 .PARAMETER Domain
 Computer name on which executable file to be tested is located
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER SigcheckLocation
 Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
@@ -69,16 +75,22 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 #>
 function Test-VirusTotal
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md")]
 	[OutputType([bool])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $LiteralPath,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
 
 		[Parameter(Mandatory = $true)]
 		[string] $SigcheckLocation,
@@ -92,8 +104,33 @@ function Test-VirusTotal
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		$ConnectParams = @{
+			ErrorAction = "Stop"
+		}
+
+		if ($Session)
+		{
+			$Domain = $Session.ComputerName
+			$ConnectParams.Session = $Session
+		}
+		else
+		{
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Domain -eq "localhost") -or ($Domain -eq "."))
+			{
+				$Domain = [System.Environment]::MachineName
+			}
+
+			$ConnectParams.ComputerName = $Domain
+
+			if ($Credential)
+			{
+				$ConnectParams.Credential = $Credential
+			}
+		}
+
 		$InvocationName = $MyInvocation.InvocationName
-		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
+		Invoke-Command @ConnectParams -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 
 			$Executable = Split-Path -Path $using:LiteralPath -Leaf
@@ -129,7 +166,7 @@ function Test-VirusTotal
 				}
 				else
 				{
-					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in specified path '$SigcheckDir', virus total scan will not be performed"
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$SigcheckDir', virus total scan will not be performed"
 				}
 			}
 

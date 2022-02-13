@@ -76,8 +76,11 @@ Enter-Test "Test-Service"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "remote dnscache"
-	Test-Service dnscache -Domain $Domain
+	Start-Test "remote dnscache -Session"
+	Test-Service dnscache -Session $SessionInstance
+
+	Start-Test "remote dnscache -Domain"
+	Test-Service dnscache -Domain $Domain -Credential $RemotingCredential
 }
 else
 {

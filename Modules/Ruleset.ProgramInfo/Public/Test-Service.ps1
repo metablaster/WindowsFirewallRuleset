@@ -41,6 +41,12 @@ Service short name (not display name)
 .PARAMETER Domain
 Computer name on which service to be tested is located
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER SigcheckLocation
 Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
@@ -81,7 +87,7 @@ however it doesn't make much sense since the function is to test existence of a 
 #>
 function Test-Service
 {
-	[CmdletBinding(PositionalBinding = $false,
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md")]
 	[OutputType([bool])]
 	param (
@@ -91,9 +97,15 @@ function Test-Service
 		[ValidateScript( { $_ -ne "System.ServiceProcess.ServiceController" } )]
 		[string] $Name,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
 
 		[Parameter()]
 		[System.IO.DirectoryInfo] $SigcheckLocation = $SigcheckPath,
@@ -111,10 +123,29 @@ function Test-Service
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$ConnectParams = @{
+		ErrorAction = "Stop"
+	}
+
+	if ($Session)
 	{
-		$Domain = [System.Environment]::MachineName
+		$Domain = $Session.ComputerName
+		$ConnectParams.Session = $Session
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$ConnectParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$ConnectParams.Credential = $Credential
+		}
 	}
 
 	if ($Quiet)
@@ -127,7 +158,7 @@ function Test-Service
 	# Keep track of already checked service signatures
 	[hashtable] $BinaryPathCache = @{}
 
-	$Services = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	$Services = Invoke-Command @ConnectParams -ScriptBlock {
 		Get-Service -Name $using:Name -ErrorAction Ignore
 	}
 
@@ -147,6 +178,7 @@ function Test-Service
 		}
 		else
 		{
+			# HACK: Duplicate of PSSession parameter
 			$BinaryPath = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 				-Class Win32_Service -Property Name, PathName -Filter "Name = '$($Service.Name)'" |
 			Select-Object -ExpandProperty PathName
@@ -173,7 +205,7 @@ function Test-Service
 			}
 
 			# [System.Management.Automation.Signature]
-			$Signature = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$Signature = Invoke-Command @ConnectParams -ScriptBlock {
 				Get-AuthenticodeSignature -LiteralPath $using:BinaryPath
 			}
 
@@ -184,7 +216,7 @@ function Test-Service
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
 					$BinaryPathCache.Add($BinaryPath, $true)
 
-					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain)
+					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams)
 					{
 						Write-Output $false
 						continue
@@ -197,9 +229,7 @@ function Test-Service
 				{
 					Write-Error -Category SecurityError -TargetObject $BinaryPath `
 						-Message "Digital signature verification failed for service '$($Service.Name)'"
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
-
-					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut -Domain $Domain | Out-Null
+					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams | Out-Null
 				}
 			}
 			else

@@ -83,11 +83,14 @@ $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Valid executable"
-	Test-ExecutableFile $ValidFile -Domain $Domain
+	Start-Test "Remote valid executable -Domain"
+	Test-ExecutableFile $ValidFile -Domain $Domain -Credential $RemotingCredential
 
-	Start-Test "Remote directory"
-	Test-ExecutableFile $Directory -Domain $Domain
+	Start-Test "Remote valid executable -Session"
+	Test-ExecutableFile $ValidFile -Session $SessionInstance
+
+	Start-Test "Remote directory -Session"
+	Test-ExecutableFile $Directory -Session $SessionInstance
 }
 else
 {

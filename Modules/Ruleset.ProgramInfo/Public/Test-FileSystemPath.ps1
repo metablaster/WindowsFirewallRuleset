@@ -45,6 +45,12 @@ Allows null or empty since it may come from commandlets which may return empty s
 .PARAMETER Domain
 Computer name on which to test path
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER PathType
 The type of path to test, can be one of the following:
 1. File - The path is path to file
@@ -58,9 +64,6 @@ When specified, for path to be reported as valid it must be compatible for firew
 .PARAMETER UserProfile
 Checks if the path leads to user profile.
 When specified, for path to be reported as valid it must lead to user profile.
-
-.PARAMETER Strict
-If specified, this function produces errors instead of warnings
 
 .PARAMETER Quiet
 If specified, no information, warning or error message is shown, only true or false is returned
@@ -105,7 +108,7 @@ TODO: This should proably be part of Utility or ComputerInfo module, it's here s
 #>
 function Test-FileSystemPath
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Session",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-FileSystemPath.md")]
 	[OutputType([bool])]
 	param (
@@ -114,9 +117,15 @@ function Test-FileSystemPath
 		[AllowEmptyString()]
 		[string] $LiteralPath,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session = $SessionInstance,
 
 		[Parameter()]
 		[Alias("Type")]
@@ -129,19 +138,35 @@ function Test-FileSystemPath
 		[Parameter()]
 		[switch] $UserProfile,
 
-		[Parameter(ParameterSetName = "Strict")]
-		[switch] $Strict,
-
-		[Parameter(ParameterSetName = "Quiet")]
+		[Parameter()]
 		[switch] $Quiet
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	$ConnectParams = @{
+		ErrorAction = "Stop"
+	}
+
+	if ($Session)
 	{
-		$Domain = [System.Environment]::MachineName
+		$Domain = $Session.ComputerName
+		$ConnectParams.Session = $Session
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$ConnectParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$ConnectParams.Credential = $Credential
+		}
 	}
 
 	$InvocationInfo = $MyInvocation.InvocationName
@@ -152,7 +177,6 @@ function Test-FileSystemPath
 
 			# Following parameters are needed only in remote execution context
 			[switch] $Quiet = $Quiet,
-			[switch] $Strict = $Strict,
 			[string] $LiteralPath = $LiteralPath,
 			[string] $InvocationInfo = $InvocationInfo
 		)
@@ -164,15 +188,7 @@ function Test-FileSystemPath
 		}
 		else
 		{
-			if ($Strict)
-			{
-				Write-Error -Category InvalidArgument -TargetObject $LiteralPath -Message $Message
-			}
-			else
-			{
-				Write-Warning -Message "[$InvocationInfo & WriteConditional] $Message"
-			}
-
+			Write-Warning -Message "[$InvocationInfo & WriteConditional] $Message"
 			Write-Information -Tags "$InvocationInfo & WriteConditional" -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
@@ -183,7 +199,7 @@ function Test-FileSystemPath
 		return $false
 	}
 
-	$ExpandedPath = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	$ExpandedPath = Invoke-Command @ConnectParams -ScriptBlock {
 		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
 	}
 
@@ -222,7 +238,7 @@ function Test-FileSystemPath
 	}
 	else
 	{
-		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name -Domain $Domain
+		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name @ConnectParams
 		if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "*$($args[0])*" }))
 		{
 			$Status = "Specified environment variable was blacklisted"
@@ -233,7 +249,7 @@ function Test-FileSystemPath
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name -Domain $Domain
+			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name @ConnectParams
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall)
@@ -247,7 +263,7 @@ function Test-FileSystemPath
 				# Verify path environment variables are whitelisted
 				# NOTE: This check must be before qualifier check to get precise error description
 				$RegexVariable = [regex]::Match($LiteralPath, "(?<=%)[^%\\]+(?=%)")
-				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact -Domain $Domain
+				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact @ConnectParams
 
 				while ($RegexVariable.Success)
 				{
@@ -275,6 +291,7 @@ function Test-FileSystemPath
 				}
 			}
 
+			# HACK: Need a separate function
 			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
 			Select-Object -ExpandProperty SystemDrive
 
@@ -286,7 +303,7 @@ function Test-FileSystemPath
 			}
 		}
 
-		Invoke-Command -Session $SessionInstance -ArgumentList $WriteConditional -ScriptBlock {
+		Invoke-Command @ConnectParams -ArgumentList $WriteConditional -ScriptBlock {
 			# NOTE: Must not be declared as [scriptblock], otherwise [ScriptBlock]::Create() (later) fails
 			param ($WriteConditional)
 
@@ -318,7 +335,7 @@ function Test-FileSystemPath
 				$Status = "Specified file does not exist"
 			}
 
-			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:Strict, $using:LiteralPath, $using:InvocationInfo)
+			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:LiteralPath, $using:InvocationInfo)
 			return $false
 		} # Invoke-Command
 	} # if ([string]::IsNullOrEmpty($Status))
