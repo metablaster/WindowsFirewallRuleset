@@ -84,19 +84,22 @@ $OfficeRoot = "%ProgramFiles(x866666)%\Microsoft Office\root\Office16"
 $TestBadVariable = "%UserProfile%\crazyFolder"
 $TestBadVariable2 = "%UserProfile%\crazyFolder"
 
+$PSDefaultParameterValues["Confirm-Installation:Session"] = $SessionInstance
+$PSDefaultParameterValues["Confirm-Installation:CimSession"] = $CimServer
+
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	# Uses Update-Table
 	Start-Test "Remote VSCode"
-	Confirm-Installation "VSCode" ([ref] $VSCodeRoot) -Domain $Domain
+	Confirm-Installation "VSCode" ([ref] $VSCodeRoot)
 
 	# Uses Edit-Table
 	Start-Test "Remote 'PowerShell86'"
-	Confirm-Installation "PowerShell86" ([ref] $PowerShell86Root) -Domain $Domain
+	Confirm-Installation "PowerShell86" ([ref] $PowerShell86Root)
 
 	# Uses custom case
 	Start-Test "Remote 'NETFramework'"
-	Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot) -Domain $Domain
+	Confirm-Installation "NETFramework" ([ref] $NETFrameworkRoot)
 }
 else
 {

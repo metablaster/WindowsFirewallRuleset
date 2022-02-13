@@ -45,6 +45,15 @@ excluding executable file name.
 .PARAMETER Domain
 Computer name on which to verify for program installation
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER Interactive
 If requested program installation directory is not found, Confirm-Installation will ask
 user to specify program installation location.
@@ -68,7 +77,7 @@ TODO: ComputerName parameter is missing for remote test
 #>
 function Confirm-Installation
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Confirm-Installation.md")]
 	[OutputType([bool])]
 	param (
@@ -78,9 +87,18 @@ function Confirm-Installation
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ref] $Directory,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[CimSession] $CimSession,
 
 		[Parameter()]
 		[switch] $Interactive,
@@ -91,16 +109,35 @@ function Confirm-Installation
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$Domain = [System.Environment]::MachineName
+		$PSDefaultParameterValues["Test-FileSystemPath:Session"] = $Session
+		$PSDefaultParameterValues["Test-FileSystemPath:CimSession"] = $CimSession
+		$PSDefaultParameterValues["Search-Installation:Session"] = $Session
+		$PSDefaultParameterValues["Search-Installation:CimSession"] = $CimSession
+	}
+	else
+	{
+		# Replace localhost and dot with NETBIOS computer name
+		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		{
+			$Domain = [System.Environment]::MachineName
+		}
+
+		$PSDefaultParameterValues["Test-FileSystemPath:Domain"] = $Domain
+		$PSDefaultParameterValues["Search-Installation:CimSession"] = $Domain
+
+		if ($Credential)
+		{
+			$PSDefaultParameterValues["Test-FileSystemPath:Credential"] = $Credential
+			$PSDefaultParameterValues["Search-Installation:Credential"] = $Credential
+		}
 	}
 
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet -Domain $Domain))
+	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value
@@ -108,7 +145,7 @@ function Confirm-Installation
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Application well known"
 		return $true # input path is correct
 	}
-	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet -Domain $Domain)
+	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
 		$InstallLocation = "unknown install location"

@@ -86,6 +86,9 @@ function Update-Table
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
+		[Parameter()]
+		[CimSession] $CimSession,
+
 		[Parameter(ParameterSetName = "Search")]
 		[switch] $UserProfile,
 
@@ -98,10 +101,21 @@ function Update-Table
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
+		[hashtable] $ConnectParams = @{}
+		if ($CimSession)
 		{
-			$Domain = [System.Environment]::MachineName
+			$Domain = $CimSession.ComputerName
+			$ConnectParams.CimSession = $CimSession
+		}
+		else
+		{
+			# Replace localhost and dot with NETBIOS computer name
+			if (($Domain -eq "localhost") -or ($Domain -eq "."))
+			{
+				$Domain = [System.Environment]::MachineName
+			}
+
+			$ConnectParams.ComputerName = $Domain
 		}
 
 		if ($Domain -ne $script:LastPolicyStore)
@@ -114,7 +128,7 @@ function Update-Table
 		}
 
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup -Domain $PolicyStore
+		$UserGroups = Get-UserGroup @ConnectParams
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
@@ -235,7 +249,7 @@ function Update-Table
 		# NOTE: User profile should be searched even if there is an installation system wide
 		if ($UserProfile)
 		{
-			$Principals = Get-GroupPrincipal "Users" -Domain $Domain
+			$Principals = Get-GroupPrincipal "Users" @ConnectParams
 
 			foreach ($UserInfo in $Principals)
 			{

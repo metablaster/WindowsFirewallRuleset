@@ -46,6 +46,9 @@ Specifies the credential object to use for authentication
 .PARAMETER Session
 Specifies the PS session to use
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER Interactive
 If requested program installation directory is not found, Search-Installation will ask
 user to specify program installation location
@@ -102,18 +105,15 @@ function Search-Installation
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-		ErrorAction = "Stop"
-	}
-
-	$CimParams = @{
-		Namespace = "root\cimv2"
-	}
-
-	if ($Session)
+	[hashtable] $SessionParams = @{}
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
+		$Domain = $Session.ComputerName
 		$SessionParams.Session = $Session
-		$CimParams.CimSession = $CimSession
+
+		$PSDefaultParameterValues["Edit-Table:Session"] = $Session
+		$PSDefaultParameterValues["Edit-Table:CimSession"] = $CimSession
+		$PSDefaultParameterValues["Update-Table:CimSession"] = $CimSession
 	}
 	else
 	{
@@ -124,18 +124,18 @@ function Search-Installation
 		}
 
 		$SessionParams.ComputerName = $Domain
-		$CimParams.ComputerName = $Domain
+		$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
+		$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
 
 		if ($Credential)
 		{
 			$SessionParams.Credential = $Credential
+			$PSDefaultParameterValues["Edit-Table:Credential"] = $Credential
 		}
 	}
 
 	Initialize-Table
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
-	$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
-	$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
 	# TODO: need to check some of these search strings (cases), also remove hardcoded directories
@@ -353,7 +353,7 @@ function Search-Installation
 			if ($InstallTable.Rows.Count -eq 1)
 			{
 				$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
-				$VersionFolders = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				$VersionFolders = Invoke-Command @SessionParams -ScriptBlock {
 					Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($using:InstallLocation)) |
 					Where-Object {
 						$_.BaseName -match "^\d+\."
@@ -630,7 +630,7 @@ function Search-Installation
 
 			if (Test-Path $ExpandedPath)
 			{
-				$VersionFolders = Invoke-Command -Session $SessionInstance -ScriptBlock {
+				$VersionFolders = Invoke-Command @SessionParams -ScriptBlock {
 					Get-ChildItem -Directory -Path $using:ExpandedPath -Name
 				}
 

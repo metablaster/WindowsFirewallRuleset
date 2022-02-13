@@ -69,7 +69,7 @@ TODO: This function should make use of Out-DataTable function from Ruleset.Utili
 #>
 function Edit-Table
 {
-	[CmdletBinding(DefaultParameterSetName = "Domain", PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
@@ -95,15 +95,10 @@ function Edit-Table
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SessionParams = @{
-		ErrorAction = "Stop"
-	}
+	[hashtable] $SessionParams = @{}
+	[hashtable] $CimParams = @{}
 
-	$CimParams = @{
-		Namespace = "root\cimv2"
-	}
-
-	if ($Session)
+	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
 		$SessionParams.Session = $Session
 		$CimParams.CimSession = $CimSession
@@ -130,7 +125,7 @@ function Edit-Table
 	# Check if input path leads to user profile and is compatible with firewall
 	if (Test-FileSystemPath $LiteralPath -UserProfile -Firewall -Quiet -PathType Directory @SessionParams)
 	{
-		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem @CimParams |
+		[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -Namespace "root\cimv2" @CimParams |
 		Select-Object -ExpandProperty SystemDrive
 
 		# Get a list of users to choose from, 3rd element in the path is user name

@@ -89,24 +89,28 @@ Enter-Test
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	# Uses Update-Table
-	Start-Test "Remote 'EdgeChromium'"
-	Search-Installation "EdgeChromium" -Domain $Domain
+	# Start-Test "Remote 'EdgeChromium' -Domain"
+	# Search-Installation "EdgeChromium" -Domain $Domain -Credential $RemotingCredential
+	# $global:InstallTable | Format-Table -AutoSize
+
+	Start-Test "Remote 'EdgeChromium' -Session"
+	Search-Installation "EdgeChromium" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Format-Table -AutoSize
 
 	# Uses Edit-Table
-	Start-Test "Remote 'PowerShell86'"
-	Search-Installation "PowerShell86" -Domain $Domain
+	Start-Test "Remote 'PowerShell86' -Session"
+	Search-Installation "PowerShell86" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Format-Table -AutoSize
 
 	# Uses custom case
-	Start-Test "Remote 'NETFramework'"
-	Search-Installation "NETFramework" -Domain $Domain
+	Start-Test "Remote 'NETFramework' -Session"
+	Search-Installation "NETFramework" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Format-Table -AutoSize
 }
 else
 {
 	Start-Test "Search-Installation 'EdgeChromium'"
-	Search-Installation "EdgeChromium"
+	Search-Installation "EdgeChromium" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Install Root EdgeChromium"
@@ -117,18 +121,18 @@ else
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'VisualStudio'"
-	Search-Installation "VisualStudio"
+	Search-Installation "VisualStudio" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'Greenshot'"
-	Search-Installation "Greenshot"
+	Search-Installation "Greenshot" -Session $SessionInstance -CimSession $CimServer
 	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Install Root Greenshot"
 	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Search-Installation 'OneDrive'"
-	$Result = Search-Installation "OneDrive"
+	$Result = Search-Installation "OneDrive" -Session $SessionInstance -CimSession $CimServer
 	$Result
 	$global:InstallTable | Format-Table -AutoSize
 
