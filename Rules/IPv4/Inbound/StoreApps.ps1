@@ -90,7 +90,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 # Block Administrators by default
 #
 
-$Principals = Get-GroupPrincipal "Administrators"
+$Principals = Get-GroupPrincipal "Administrators" -CimSession $CimServer
 foreach ($Principal in $Principals)
 {
 	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
@@ -112,15 +112,15 @@ Administrators should have limited or no connectivity at all for maximum securit
 # Create rules for all network apps for each standard user
 #
 
-$Principals = Get-GroupPrincipal "Users"
+$Principals = Get-GroupPrincipal "Users" -CimSession $CimServer
 foreach ($Principal in $Principals)
 {
 	#
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApp -User $Principal.User | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
+	Get-UserApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -176,8 +176,8 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	Get-SystemApp -User $Principal.User | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -Networking
+	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -Session $SessionInstance -Networking
 
 		if (!$NetworkCapabilities)
 		{

@@ -123,8 +123,8 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #
 # Block Administrators by default
 #
-$Users = Get-GroupPrincipal "Users"
-$Administrators = Get-GroupPrincipal "Administrators"
+$Users = Get-GroupPrincipal "Users" -CimSession $CimServer
+$Administrators = Get-GroupPrincipal "Administrators" -CimSession $CimServer
 
 foreach ($Principal in $Administrators)
 {
@@ -162,8 +162,8 @@ foreach ($Principal in $Users)
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApp -User $Principal.User | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
+	Get-UserApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking -Session $SessionInstance
 
 		if (!$NetworkCapabilities)
 		{
@@ -225,8 +225,8 @@ foreach ($Principal in $Users)
 	# Create rules for system apps
 	#
 
-	Get-SystemApp -User $Principal.User | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -Networking
+	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -Session $SessionInstance -Networking
 
 		if (!$NetworkCapabilities)
 		{

@@ -161,9 +161,10 @@ Set-ScreenBuffer 3000 @SetScreenBufferParams
 
 # Check all rules which apply to windows services
 # TODO: Failed test does not exclude rules from loading?
-Build-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
-	Test-Service $_ | Out-Null
-}
+# TODO: Services are reported as unsigned
+# Build-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
+# 	Test-Service $_ -Session $SessionInstance | Out-Null
+# }
 Update-Log
 #endregion
 

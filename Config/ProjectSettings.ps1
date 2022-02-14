@@ -520,6 +520,11 @@ if (!$InModule)
 	{
 		$private:PSDefaultParameterValues["*:InformationVariable"] = "+InfoBuffer"
 	}
+
+	# Used in rule scripts
+	$PSDefaultParameterValues["Confirm-Installation:Session"] = $SessionInstance
+	$PSDefaultParameterValues["Confirm-Installation:CimSession"] = $CimServer
+	$PSDefaultParameterValues["Test-ExecutableFile:Session"] = $SessionInstance
 }
 #endregion
 
