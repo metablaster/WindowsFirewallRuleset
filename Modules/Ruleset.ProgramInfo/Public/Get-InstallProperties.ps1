@@ -63,12 +63,7 @@ function Get-InstallProperties
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -140,7 +135,7 @@ function Get-InstallProperties
 				# TODO: generate Principal entry in all registry functions
 				# Get more key entries as needed
 				[PSCustomObject]@{
-					Domain = $Domain
+					Domain = $MachineName
 					Name = $ProductKey.GetValue("DisplayName")
 					Version = $ProductKey.GetValue("DisplayVersion")
 					Publisher = $ProductKey.GetValue("Publisher")

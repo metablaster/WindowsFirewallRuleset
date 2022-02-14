@@ -231,14 +231,9 @@ function Get-SystemSKU
 
 			foreach ($Computer in $Domain)
 			{
+				$MachineName = Format-ComputerName $Computer
 				if ($PSCmdlet.ParameterSetName -eq "Domain")
 				{
-					# Replace localhost and dot with NETBIOS computer name
-					if (($Computer -eq "localhost") -or ($Computer -eq "."))
-					{
-						$Computer = [System.Environment]::MachineName
-					}
-
 					$CimParams.ComputerName = $Computer
 				}
 
@@ -252,7 +247,7 @@ function Get-SystemSKU
 						Select-Object -ExpandProperty OperatingSystemSku
 
 						[PSCustomObject] @{
-							Domain = $Computer
+							Domain = $MachineName
 							SystemSKU = & $GetStringSKU $CimSKU
 							SKU = $CimSKU
 						}
@@ -263,7 +258,7 @@ function Get-SystemSKU
 
 						# Include just computer
 						[PSCustomObject] @{
-							Domain = $Computer
+							Domain = $MachineName
 							SystemSKU = $null
 							SKU = $null
 						}

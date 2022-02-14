@@ -101,18 +101,14 @@ function Get-PathSDDL
 	}
 	else
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
-		{
-			$Domain = [System.Environment]::MachineName
-		}
-
 		$SessionParams.ComputerName = $Domain
 		if ($Credential)
 		{
 			$SessionParams.Credential = $Credential
 		}
 	}
+
+	$MachineName = Format-ComputerName $Domain
 
 	# Glossary:
 	# SDDL: Security Descriptor Definition Language
@@ -147,7 +143,7 @@ function Get-PathSDDL
 
 	[string] $DACL = $null
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
 		# TODO: Multiple paths should be supported either here or trough path parameter
 		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
@@ -173,7 +169,7 @@ function Get-PathSDDL
 		return
 	}
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
 		$ACL = Get-Acl -Path $TargetPath
 	}

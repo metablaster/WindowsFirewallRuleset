@@ -74,6 +74,7 @@ $PublicScripts = @(
 	"Compare-Path"
 	"Confirm-FileEncoding"
 	"ConvertFrom-Wildcard"
+	"Format-ComputerName"
 	"Get-FileEncoding"
 	"Get-TypeName"
 	"Invoke-Process"

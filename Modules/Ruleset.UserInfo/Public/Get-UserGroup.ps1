@@ -85,18 +85,13 @@ function Get-UserGroup
 
 	foreach ($Computer in $Domain)
 	{
+		$MachineName = Format-ComputerName $Computer
 		if ($PSCmdlet.ParameterSetName -eq "Domain")
 		{
-			# Replace localhost and dot with NETBIOS computer name
-			if (($Computer -eq "localhost") -or ($Computer -eq "."))
-			{
-				$Computer = [System.Environment]::MachineName
-			}
-
 			$CimParams.ComputerName = $Computer
 		}
 
-		if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Computer -eq [System.Environment]::MachineName))
+		if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -111,7 +106,7 @@ function Get-UserGroup
 			foreach ($Group in $LocalGroups)
 			{
 				[PSCustomObject]@{
-					Domain = $Computer
+					Domain = $MachineName
 					Group = $Group.Name
 					Principal = Join-Path -Path $Computer -ChildPath $Group.Name
 					SID = $Group.SID

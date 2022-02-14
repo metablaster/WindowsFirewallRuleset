@@ -65,12 +65,7 @@ function Get-ExecutablePath
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
-
+	$MachineName = Format-ComputerName $Domain
 	if (Test-Computer $Domain)
 	{
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -169,7 +164,7 @@ function Get-ExecutablePath
 				# Getting more key entries not possible in this leaf key
 				# NOTE: Some key names are named as alternative executable name
 				[PSCustomObject]@{
-					Domain = $Domain
+					Domain = $MachineName
 					Name = $Executable
 					InstallLocation = $InstallLocation
 					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"

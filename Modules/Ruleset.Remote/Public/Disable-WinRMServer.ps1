@@ -140,15 +140,20 @@ function Disable-WinRMServer
 		# NOTE: Do not use Set-PSSessionConfiguration -AccessMode Local because "Remote" access mode is required to create PSSession
 		if ($KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable custom session configurations"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling custom session configurations"
-
 			# Disable all custom session configurations, keep default ones
-			Get-PSSessionConfiguration | Where-Object {
-				($_.Name -notlike "Microsoft.PowerShell*") -and
-				# TODO: PS Core major is hardcoded
-				($_.Name -notlike "PowerShell.7*") -and
-				($_.Name -notmatch "(Local|Remote)Firewall\.(Core|Desktop)")
-			} | Disable-PSSessionConfiguration -NoServiceRestart -Force
+			# HACK: Using Where-Object for this task will not work with -notlike operator
+			foreach ($Session in Get-PSSessionConfiguration)
+			{
+				$a = $Session.Name -notlike "Microsoft.PowerShell*"
+				$b = $Session.Name -notlike "PowerShell.7*"
+				$c = $Session.Name -notmatch "(Local|Remote)Firewall\.(Core|Desktop)"
+
+				if ($a -and $b -and $c)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling '$($Session.Name)' custom session configuration"
+					Disable-PSSessionConfiguration -NoServiceRestart -Force -Name $Session.Name
+				}
+			}
 		}
 		elseif (!$KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable all unneeded session configurations"))
 		{

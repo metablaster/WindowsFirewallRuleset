@@ -343,14 +343,9 @@ function ConvertFrom-SID
 									continue
 								}
 
+								# $MachineName = Format-ComputerName $Computer
 								if ($PSCmdlet.ParameterSetName -eq "Domain")
 								{
-									# Replace localhost and dot with NETBIOS computer name
-									if (($Computer -eq "localhost") -or ($Computer -eq "."))
-									{
-										$Computer = [System.Environment]::MachineName
-									}
-
 									$ConnectParams.ComputerName = $Computer
 								}
 
@@ -416,14 +411,9 @@ function ConvertFrom-SID
 									continue
 								}
 
+								# $MachineName = Format-ComputerName $Computer
 								if ($PSCmdlet.ParameterSetName -eq "Domain")
 								{
-									# Replace localhost and dot with NETBIOS computer name
-									if (($Computer -eq "localhost") -or ($Computer -eq "."))
-									{
-										$Computer = [System.Environment]::MachineName
-									}
-
 									$ConnectParams.ComputerName = $Computer
 								}
 
@@ -494,7 +484,7 @@ function ConvertFrom-SID
 			# Write out result
 			# TODO: we should also save system edition, authority, domain etc.
 			[PSCustomObject]@{
-				Domain = Split-Principal $LogonName -DomainName
+				Domain = Format-ComputerName (Split-Principal $LogonName -DomainName)
 				User = Split-Principal $LogonName
 				Principal = $LogonName
 				SID = $InputSID

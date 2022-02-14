@@ -74,8 +74,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 # TODO: All except ExpandProperty will be blank in bulk test run in this unit
 Enter-Test "Select-EnvironmentVariable"
-
-# $private:PSDefaultParameterValues.Add("Select-EnvironmentVariable:IncludeFile", $true)
+$PSDefaultParameterValues.Add("Select-EnvironmentVariable:Session", $SessionInstance)
 
 if ($Domain -ne [System.Environment]::MachineName)
 {

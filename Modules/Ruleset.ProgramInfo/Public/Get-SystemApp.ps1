@@ -109,12 +109,6 @@ function Get-SystemApp
 	}
 	else
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
-		{
-			$Domain = [System.Environment]::MachineName
-		}
-
 		$SessionParams.ComputerName = $Domain
 		if ($Credential)
 		{
@@ -122,9 +116,11 @@ function Get-SystemApp
 		}
 	}
 
+	$MachineName = Format-ComputerName $Domain
+
 	# TODO: show warning instead of error when fail (ex. in non elevated run)
 	# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
 		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Main
 		$DomainPath = $env:SystemDrive
@@ -141,7 +137,7 @@ function Get-SystemApp
 		Select-Object -ExpandProperty SystemDrive
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
-		$DomainPath = "\\$Domain\$SystemDrive`$\"
+		$DomainPath = "\\$MachineName\$SystemDrive`$\"
 	}
 
 	foreach ($App in $Apps)
@@ -157,7 +153,7 @@ function Get-SystemApp
 			if (Test-Path -PathType Container -Path $RemotePath)
 			{
 				# There is no Domain property, so add one, PSComputerName property is of no use here
-				Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
+				Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $MachineName
 			}
 			else
 			{

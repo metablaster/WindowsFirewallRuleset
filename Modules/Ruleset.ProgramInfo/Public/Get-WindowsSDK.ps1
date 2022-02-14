@@ -63,12 +63,7 @@ function Get-WindowsSDK
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -132,7 +127,7 @@ function Get-WindowsSDK
 			$InstallLocation = Format-Path $InstallLocation
 
 			[PSCustomObject]@{
-				Domain = $Domain
+				Domain = $MachineName
 				Name = $SubKey.GetValue("ProductName")
 				Version = $SubKey.GetValue("ProductVersion")
 				Publisher = "Microsoft Corporation"

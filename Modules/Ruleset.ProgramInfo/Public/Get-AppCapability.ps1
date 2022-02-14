@@ -181,7 +181,9 @@ function Get-AppCapability
 			}
 		}
 
+		$MachineName = Format-ComputerName $Domain
 		$InvocationName = $MyInvocation.InvocationName
+
 		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
 			# Get it from main store to be able to query package manifest
@@ -201,7 +203,7 @@ function Get-AppCapability
 				$AppxParams["User"] = $User
 			}
 
-			if ($Domain -eq [System.Environment]::MachineName)
+			if ($MachineName -eq [System.Environment]::MachineName)
 			{
 				# HACK: module not imported, need to import manually
 				Import-WinModule -Name Appx -ErrorAction Stop

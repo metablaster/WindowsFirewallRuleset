@@ -259,10 +259,11 @@ TODO: missing resolutions for the following known problems:
 
 #### The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available
 
-> Connecting to remote server MSI-DESKTOP failed with the following error message :
+> Connecting to remote server COMPUTERNAME failed with the following error message :
 > The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available.
 > This is usually returned by a HTTP server that does not support the WS-Management protocol.
 
+When you specify computername, it is translated to private IP address for which listener must exist.
 Service is not listening on HTTP address, to add listener:
 
 ```powershell

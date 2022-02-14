@@ -93,15 +93,10 @@ function Get-PrincipalSID
 		}
 		else
 		{
-			# Replace localhost and dot with NETBIOS computer name
-			if (($Domain -eq "localhost") -or ($Domain -eq "."))
-			{
-				$Domain = [System.Environment]::MachineName
-			}
-
 			$CimParams.ComputerName = $Domain
 		}
 
+		$MachineName = Format-ComputerName $Domain
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq $args[0] }))
 	}
@@ -111,7 +106,7 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			if (($PSCmdlet.ParameterSetName -eq "Domain") -and (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and (($MachineName -eq [System.Environment]::MachineName) -or $IsKnownDomain))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 
@@ -126,7 +121,7 @@ function Get-PrincipalSID
 					}
 					else
 					{
-						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($Domain, $UserName)
+						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($MachineName, $UserName)
 						$PrincipalSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
 					}
 				}
@@ -155,9 +150,9 @@ function Get-PrincipalSID
 			else
 			{
 				[PSCustomObject]@{
-					Domain = $Domain
+					Domain = $MachineName
 					User = $UserName
-					Principal = "$Domain\$UserName"
+					Principal = "$MachineName\$UserName"
 					SID = $PrincipalSID
 					PSTypeName = "Ruleset.Userinfo.Principal"
 				}

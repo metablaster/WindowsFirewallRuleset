@@ -86,6 +86,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
   - `Test-RemoteRegistry` new function to test for functioning remote registry
   - `Test-VirusTotal` new module function used to perform virus total analysis on executable
+  - `Format-ComputerName` new module function to format computer name to NETBIOS name
 
 - Scripts
 

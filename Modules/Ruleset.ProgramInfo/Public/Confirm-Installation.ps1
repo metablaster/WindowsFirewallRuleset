@@ -118,12 +118,6 @@ function Confirm-Installation
 	}
 	else
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
-		{
-			$Domain = [System.Environment]::MachineName
-		}
-
 		$PSDefaultParameterValues["Test-FileSystemPath:Domain"] = $Domain
 		$PSDefaultParameterValues["Search-Installation:CimSession"] = $Domain
 

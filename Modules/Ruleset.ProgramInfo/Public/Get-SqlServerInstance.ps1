@@ -179,19 +179,6 @@ function Get-SqlServerInstance
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# Replace localhost and dot with NETBIOS computer name
-		$Domain = foreach ($Computer in $Domain)
-		{
-			if (($Computer -eq "localhost") -or ($Computer -eq "."))
-			{
-				[System.Environment]::MachineName
-			}
-			else
-			{
-				$Computer
-			}
-		}
-
 		# TODO: begin scope for all registry functions
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 
@@ -216,8 +203,10 @@ function Get-SqlServerInstance
 		{
 			[PSCustomObject[]] $AllInstances = @()
 
-			# TODO: what is this?
+			# TODO: handling FQDN in all other cases is needed
 			$Computer = $Computer -replace '(.*?)\..+', '$1'
+			$MachineName = Format-ComputerName $Computer
+
 			if (!(Test-Computer $Computer))
 			{
 				continue
@@ -416,7 +405,7 @@ function Get-SqlServerInstance
 								if ($Service)
 								{
 									$File = $Service -replace '^.*(\w:\\.*\\sqlservr.exe).*', '$1'
-									$Version = (Get-Item ("\\$Computer\$($File -replace ":", "$")")).VersionInfo.ProductVersion
+									$Version = (Get-Item ("\\$MachineName\$($File -replace ":", "$")")).VersionInfo.ProductVersion
 								}
 								else
 								{
@@ -484,7 +473,7 @@ function Get-SqlServerInstance
 						}
 
 						$AllInstances += [PSCustomObject]@{
-							Domain = $Computer
+							Domain = $MachineName
 							SqlInstance = $Instance
 							InstallLocation = $SQLBinRoot
 							SqlPath = $SQLPath
@@ -510,18 +499,18 @@ function Get-SqlServerInstance
 							}.InvokeReturnAsIs()
 
 							IsCluster = $IsCluster
-							IsClusterNode = ($Nodes -contains $Computer)
+							IsClusterNode = ($Nodes -contains $MachineName)
 							ClusterName = $ClusterName
-							ClusterNodes = ($Nodes -ne $Computer)
+							ClusterNodes = ($Nodes -ne $MachineName)
 
 							FullName = {
 								if ($Instance -eq "MSSQLSERVER")
 								{
-									$Computer
+									$MachineName
 								}
 								else
 								{
-									"$($Computer)\$($Instance)"
+									"$($MachineName)\$($Instance)"
 								}
 							}.InvokeReturnAsIs()
 

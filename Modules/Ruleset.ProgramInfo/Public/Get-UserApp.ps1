@@ -115,12 +115,6 @@ function Get-UserApp
 	}
 	else
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
-		{
-			$Domain = [System.Environment]::MachineName
-		}
-
 		$SessionParams.ComputerName = $Domain
 		if ($Credential)
 		{
@@ -128,7 +122,9 @@ function Get-UserApp
 		}
 	}
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+	$MachineName = Format-ComputerName $Domain
+
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
@@ -146,7 +142,7 @@ function Get-UserApp
 		Select-Object -ExpandProperty SystemDrive
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
-		$DomainPath = "\\$Domain\$SystemDrive`$\"
+		$DomainPath = "\\$MachineName\$SystemDrive`$\"
 	}
 
 	foreach ($App in $Apps)
@@ -160,7 +156,7 @@ function Get-UserApp
 		if (Test-Path -PathType Container -Path $RemotePath)
 		{
 			# There is no Domain property, so add one, PSComputerName property is of no use here
-			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
+			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $MachineName
 		}
 		else
 		{

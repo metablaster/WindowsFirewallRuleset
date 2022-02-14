@@ -133,18 +133,13 @@ function Get-GroupPrincipal
 	{
 		foreach ($Computer in $Domain)
 		{
+			$MachineName = Format-ComputerName $Computer
 			if ($PSCmdlet.ParameterSetName -eq "Domain")
 			{
-				# Replace localhost and dot with NETBIOS computer name
-				if (($Computer -eq "localhost") -or ($Computer -eq "."))
-				{
-					$Computer = [System.Environment]::MachineName
-				}
-
 				$CimParams.ComputerName = $Computer
 			}
 
-			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Computer -eq [System.Environment]::MachineName))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Querying localhost"
 
@@ -182,9 +177,9 @@ function Get-GroupPrincipal
 						}
 
 						$AccountName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-								Write-Debug "Comparing $($args[0]) with $Computer\$($Account.Name)"
+								Write-Debug "Comparing $($args[0]) with $MachineName\$($Account.Name)"
 								# NOTE: Account.Domain Because $Computer may be set to "localhost"
-								$args[0] -eq "$Computer\$($Account.Name)"
+								$args[0] -eq "$MachineName\$($Account.Name)"
 							})
 
 						if ($AccountName)
@@ -192,7 +187,7 @@ function Get-GroupPrincipal
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $($Account.Name)"
 
 							[PSCustomObject]@{
-								Domain = $Computer
+								Domain = $MachineName
 								User = $Account.Name
 								Group = $UserGroup
 								Principal = $AccountName

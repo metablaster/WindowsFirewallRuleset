@@ -64,12 +64,7 @@ function Get-NetFramework
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -126,7 +121,7 @@ function Get-NetFramework
 
 				# we add entry regardless of presence of install path
 				[PSCustomObject]@{
-					Domain = $Domain
+					Domain = $MachineName
 					Version = $Version
 					InstallLocation = $InstallLocation
 					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
@@ -177,7 +172,7 @@ function Get-NetFramework
 
 					# we add entry regardless of presence of install path
 					[PSCustomObject]@{
-						Domain = $Domain
+						Domain = $MachineName
 						Name = ".NET Framework"
 						Version = $Version
 						Publisher = "Microsoft Corporation"

@@ -117,12 +117,6 @@ function Search-Installation
 	}
 	else
 	{
-		# Replace localhost and dot with NETBIOS computer name
-		if (($Domain -eq "localhost") -or ($Domain -eq "."))
-		{
-			$Domain = [System.Environment]::MachineName
-		}
-
 		$SessionParams.ComputerName = $Domain
 		$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
 		$PSDefaultParameterValues["Update-Table:Domain"] = $Domain

@@ -93,14 +93,10 @@ function Get-GroupSID
 		}
 		else
 		{
-			# Replace localhost and dot with NETBIOS computer name
-			if (($Domain -eq "localhost") -or ($Domain -eq "."))
-			{
-				$Domain = [System.Environment]::MachineName
-			}
-
 			$CimParams.ComputerName = $Domain
 		}
+
+		$MachineName = Format-ComputerName $Domain
 	}
 	process
 	{
@@ -108,7 +104,7 @@ function Get-GroupSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
-			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 			{
 				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |
@@ -131,7 +127,7 @@ function Get-GroupSID
 			else
 			{
 				[PSCustomObject]@{
-					Domain = $Domain
+					Domain = $MachineName
 					Group = $UserGroup
 					SID = $GroupSID
 					PSTypeName = "Ruleset.UserInfo.Group"
