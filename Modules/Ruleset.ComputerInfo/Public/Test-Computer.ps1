@@ -133,11 +133,7 @@ function Test-Computer
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Status = $false
-
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if (($PSCmdlet.ParameterSetName -eq "WSMan") -and ($Protocol -ne "Ping"))
 	{
@@ -156,7 +152,7 @@ function Test-Computer
 				ErrorAction = "SilentlyContinue"
 			}
 
-			if ($Domain -ne [System.Environment]::MachineName)
+			if ($MachineName -ne [System.Environment]::MachineName)
 			{
 				if ($Credential)
 				{

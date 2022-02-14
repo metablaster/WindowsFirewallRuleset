@@ -107,12 +107,7 @@ param (
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
-
-# Replace localhost and dot with NETBIOS computer name
-if (($Domain -eq "localhost") -or ($Domain -eq "."))
-{
-	$Domain = [System.Environment]::MachineName
-}
+$MachineName = Format-ComputerName $Domain
 
 # User prompt
 $Accept = "Grant permission to read firewall log files until system reboot"
@@ -184,13 +179,13 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
-	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
+	if (Set-Permission $TargetFolder -User $User -Domain $MachineName -Rights $UserControl)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $MachineName -Rights $UserControl | Out-Null
 		}
 	}
 }

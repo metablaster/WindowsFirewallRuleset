@@ -117,12 +117,7 @@ function Remove-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
 	{
@@ -209,7 +204,7 @@ function Remove-FirewallRule
 
 				Write-Progress @ProgressParams
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to Name"
-				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -Name $Rule.Name -ErrorAction SilentlyContinue
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $MachineName -Name $Rule.Name -ErrorAction SilentlyContinue
 
 				if (!$CurrentRule)
 				{
@@ -224,7 +219,7 @@ function Remove-FirewallRule
 				Write-Progress @ProgressParams
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
-				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $MachineName -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
 
 				if (!$CurrentRule)
 				{
@@ -241,7 +236,7 @@ function Remove-FirewallRule
 			}
 
 			Write-Host "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
-			Remove-NetFirewallRule -PolicyStore $Domain -Name $CurrentRule.Name
+			Remove-NetFirewallRule -PolicyStore $MachineName -Name $CurrentRule.Name
 		}
 
 		$StopWatch.Stop()

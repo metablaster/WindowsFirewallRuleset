@@ -182,12 +182,7 @@ function Test-WinRM
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	# HTTP\S connectivity status
 	$StatusHTTP = $false
@@ -213,7 +208,7 @@ function Test-WinRM
 			-Message "WinRM service is not running, please run Set-WinRMClient for configuration"
 	}
 
-	if (($Protocol -eq "HTTPS") -and ($Domain -eq [System.Environment]::MachineName))
+	if (($Protocol -eq "HTTPS") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
 		Write-Error -Category NotImplemented -TargetObject $Protocol `
 			-Message "HTTPS for localhost not implemented"
@@ -231,11 +226,11 @@ function Test-WinRM
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
 	}
-	elseif (($Domain -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
+	elseif (($MachineName -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
-	elseif (($Domain -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
+	elseif (($MachineName -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
@@ -271,7 +266,7 @@ function Test-WinRM
 		ConfigurationName = $ConfigurationName
 	}
 
-	if ($Domain -ne [System.Environment]::MachineName)
+	if ($MachineName -ne [System.Environment]::MachineName)
 	{
 		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
 		# authentication otherwise the error is:
@@ -279,12 +274,12 @@ function Test-WinRM
 		# Encountered an internal error in the SSL library"
 		if (!$Credential)
 		{
-			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
+			$Credential = Get-Credential -Message "Credentials are required to access '$MachineName'"
 
 			if (!$Credential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
+				Write-Error -Category InvalidOperation -Message "Credentials are required to access '$MachineName'"
 			}
 			elseif ($Credential.Password.Length -eq 0)
 			{

@@ -136,11 +136,7 @@ function Set-WinRMClient
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
-
+	$MachineName = Format-ComputerName $Domain
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient -AllowUnencrypted:($Protocol -ne "HTTPS")
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client..."
 
@@ -288,7 +284,7 @@ function Set-WinRMClient
 			# SSL certificate
 			[hashtable] $SSLCertParams = @{
 				ProductType = "Client"
-				Domain = $Domain
+				Domain = $MachineName
 			}
 
 			if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }

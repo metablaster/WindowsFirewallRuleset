@@ -184,12 +184,7 @@ function Export-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	# Filter rules?
 	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
@@ -216,7 +211,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules"
 
-		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $Domain |
+		$FirewallRules += Get-NetFirewallRule -DisplayName $DisplayName -PolicyStore $MachineName |
 		Where-Object {
 			($_.DisplayGroup -Like $DisplayGroup) -and ($_.Direction -like $Direction) -and `
 			($_.Enabled -like $RuleState) -and ($_.Action -like $Action)
@@ -226,7 +221,7 @@ function Export-FirewallRule
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules - skip ungrouped rules"
 
-		$FirewallRules += Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $Domain |
+		$FirewallRules += Get-NetFirewallRule -DisplayGroup $DisplayGroup -PolicyStore $MachineName |
 		Where-Object {
 			($_.Direction -like $Direction) -and ($_.Enabled -like $RuleState) -and ($_.Action -like $Action)
 		}

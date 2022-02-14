@@ -229,16 +229,12 @@ begin
 	# Store hostnames in array for quick lookup
 	$DnsCache = @{}
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 }
 process
 {
 	# Handle remote systems
-	if ($Domain -eq [System.Environment]::MachineName)
+	if ($MachineName -eq [System.Environment]::MachineName)
 	{
 		# Collect processes
 		if ($IncludeProcessName)
@@ -273,7 +269,7 @@ process
 		[string] $cmd = "cmd /c c:\windows\system32\netstat.exe -ano >> $TempLocation"
 
 		# Define remote file path - computername, drive, folder path
-		$RemoteTempFile = "\\{0}\{1}`${2}" -f $Domain, (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
+		$RemoteTempFile = "\\{0}\{1}`${2}" -f $MachineName, (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
 
 		try
 		{
@@ -462,7 +458,7 @@ process
 
 				if (($RemoteAddress -eq "127.0.0.1") -or ($RemoteAddress -eq "0.0.0.0"))
 				{
-					$RemoteAddress = $Domain
+					$RemoteAddress = $MachineName
 				}
 				elseif ($RemoteAddress -match "\w")
 				{
@@ -492,7 +488,7 @@ process
 
 				if (($LocalAddress -eq "127.0.0.1") -or ($LocalAddress -eq "0.0.0.0"))
 				{
-					$LocalAddress = $Domain
+					$LocalAddress = $MachineName
 				}
 				elseif ($LocalAddress -match "\w")
 				{
@@ -520,7 +516,7 @@ process
 
 			# Write the object
 			[PSCustomObject]@{
-				Domain = $Domain
+				Domain = $MachineName
 				PID = $ProcessID
 				ProcessName = $ItemProcessName
 				Protocol = $ItemProtocol

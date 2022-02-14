@@ -135,12 +135,7 @@ function Get-RegistryRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -257,7 +252,7 @@ function Get-RegistryRule
 			}
 			else
 			{
-				$PolicyStoreSource = $Domain
+				$PolicyStoreSource = $MachineName
 				$PolicyStoreSourceType = "GroupPolicy"
 			}
 
@@ -356,7 +351,7 @@ function Get-RegistryRule
 					Platform = $null
 					Platform2 = $null
 					RuleVersion = (($RootKey.GetValue($RuleName).ToString() -split '\|')[0]).TrimStart("v") # <BLANK>
-					Domain = $Domain
+					Domain = $MachineName
 					PolicyStoreSource = $PolicyStoreSource
 					PolicyStoreSourceType = $PolicyStoreSourceType
 					Description = $null # Desc

@@ -85,12 +85,6 @@ param (
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
-
-# Replace localhost and dot with NETBIOS computer name
-if (($Domain -eq "localhost") -or ($Domain -eq "."))
-{
-	$Domain = [System.Environment]::MachineName
-}
 #endregion
 
 $InformationPreference = "Continue"

@@ -109,19 +109,14 @@ function Update-Table
 		}
 		else
 		{
-			# Replace localhost and dot with NETBIOS computer name
-			if (($Domain -eq "localhost") -or ($Domain -eq "."))
-			{
-				$Domain = [System.Environment]::MachineName
-			}
-
 			$ConnectParams.ComputerName = $Domain
 		}
 
-		if ($Domain -ne $script:LastPolicyStore)
+		$MachineName = Format-ComputerName $Domain
+		if ($MachineName -ne $script:LastPolicyStore)
 		{
 			# If domain changed, need to update script cache
-			$script:LastPolicyStore = $Domain
+			$script:LastPolicyStore = $MachineName
 			$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
 			$script:SystemPrograms = Get-SystemSoftware -Domain $Domain
 			$script:AllUserPrograms = Get-InstallProperties -Domain $Domain

@@ -119,12 +119,7 @@ function Import-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
+	$MachineName = Format-ComputerName $Domain
 
 	$Path = Resolve-FileSystemPath $Path
 	if (!$Path -or !$Path.Exists)
@@ -240,7 +235,7 @@ function Import-FirewallRule
 		if ($Overwrite)
 		{
 			$IsRemoved = @()
-			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $MachineName -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
 
 			if ($IsRemoved.Count -gt 0)
 			{
@@ -251,7 +246,7 @@ function Import-FirewallRule
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
 			}
 		}
-		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction Ignore))
+		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $MachineName -ErrorAction Ignore))
 		{
 			$ImportRule = $false
 		}
@@ -260,7 +255,7 @@ function Import-FirewallRule
 		{
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-			New-NetFirewallRule -PolicyStore $Domain @HashProps | Format-RuleOutput -Import
+			New-NetFirewallRule -PolicyStore $MachineName @HashProps | Format-RuleOutput -Import
 		}
 		else
 		{

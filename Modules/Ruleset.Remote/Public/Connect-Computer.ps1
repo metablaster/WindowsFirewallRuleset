@@ -146,15 +146,10 @@ function Connect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Replace localhost and dot with NETBIOS computer name
-	if (($Domain -eq "localhost") -or ($Domain -eq "."))
-	{
-		$Domain = [System.Environment]::MachineName
-	}
-
+	$MachineName = Format-ComputerName $Domain
 	if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 	{
-		if ($Domain -eq $PolicyStore)
+		if ($MachineName -eq $PolicyStore)
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] Connection already established to '$Domain', run Disconnect-Computer to disconnect"
 			return
@@ -194,14 +189,14 @@ function Connect-Computer
 
 	if ($Protocol -eq "Default")
 	{
-		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
+		$PSSessionParams["UseSSL"] = $MachineName -ne ([System.Environment]::MachineName)
 	}
 	else
 	{
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	if ($Domain -ne [System.Environment]::MachineName)
+	if ($MachineName -ne [System.Environment]::MachineName)
 	{
 		if (!$Credential)
 		{
@@ -275,7 +270,7 @@ function Connect-Computer
 	catch
 	{
 		# Fallback to HTTP
-		if ((($PSCmdlet.ParameterSetName -eq "Thumbprint") -or ($Protocol -eq "Default")) -and ($Domain -ne ([System.Environment]::MachineName)))
+		if ((($PSCmdlet.ParameterSetName -eq "Thumbprint") -or ($Protocol -eq "Default")) -and ($MachineName -ne ([System.Environment]::MachineName)))
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] HTTPS connection to '$Domain' failed, fallback to HTTP"
 
@@ -299,7 +294,7 @@ function Connect-Computer
 		return
 	}
 
-	if ($Domain -ne ([System.Environment]::MachineName))
+	if ($MachineName -ne ([System.Environment]::MachineName))
 	{
 		try
 		{

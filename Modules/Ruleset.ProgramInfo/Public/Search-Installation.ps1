@@ -129,6 +129,7 @@ function Search-Installation
 	}
 
 	Initialize-Table
+	$MachineName = Format-ComputerName $Domain
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
@@ -488,7 +489,7 @@ function Search-Installation
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
 			# Update-Table -Search "Microsoft Office"
 
-			if ($Domain -ne $script:LastPolicyStore)
+			if ($MachineName -ne $script:LastPolicyStore)
 			{
 				# If domain changed, need to update script cache
 				$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
