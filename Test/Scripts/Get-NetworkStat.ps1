@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-UserApp
+Unit test for Get-NetworkStat
 
 .DESCRIPTION
-Test correctness of Get-UserApp function
+Test correctness of Get-NetworkStat.ps1 script
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,20 +40,19 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-UserApp.ps1
+PS> .\Get-NetworkStat.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-UserApp.ps1
+None. You cannot pipe objects to Get-NetworkStat.ps1
 
 .OUTPUTS
-None. Get-UserApp.ps1 does not generate any output
+None. Get-NetworkStat.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -70,37 +69,27 @@ param (
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+#Endregion
 
-
-Enter-Test "Get-UserApp"
-
+Enter-Test
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote Get-UserApp -User $TestUser -Session"
-	Get-UserApp -User $TestUser -Session $SessionInstance
-
-	# Start-Test "Remote Get-UserApp -User $TestUser -Domain $Domain"
-	# Get-UserApp -User $TestUser -Domain $Domain -Credential $RemotingCredential
+	Start-Test "remote Get-NetworkStat -State LISTENING -Protocol TCP"
+	Get-NetworkStat -State LISTENING -Protocol TCP -Session $SessionInstance -CimSession $CimServer
 }
 else
 {
-	Start-Test $TestAdmin
-	Get-UserApp -User $TestAdmin
+	Start-Test "Get-NetworkStat"
+	Get-NetworkStat
 
-	Start-Test $TestUser
-	$Result = Get-UserApp -User $TestUser
+	Start-Test "Get-NetworkStat -IPAddress 192* -State LISTENING"
+	Get-NetworkStat -IPAddress 192* -State LISTENING
+
+	Start-Test "Get-NetworkStat -State LISTENING -Protocol TCP"
+	$Result = Get-NetworkStat -State LISTENING -Protocol TCP
 	$Result
-
-	Start-Test "Format-List"
-	$Result | Format-List
-
-	Start-Test "Format-Wide"
-	$Result | Format-Wide
-
-	Test-Output $Result -Command Get-UserApp
+	Test-Output $Result -Command Get-NetworkStat.ps1
 }
 
 Update-Log

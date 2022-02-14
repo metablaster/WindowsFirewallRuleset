@@ -125,6 +125,7 @@ function Initialize-Connection
 			}
 			else
 			{
+				# TODO: fallback to HTTP not implemented
 				$PSSessionOption.NoEncryption = $false
 				# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
 				# There is global variable that controls encoding, see if it can be used here
@@ -145,13 +146,13 @@ function Initialize-Connection
 				{
 					# Set client by the way for both, loopback HTTP and remote HTTPS
 					$WinRMClientSet = $true
-					if ($RemotingProtocol -eq "HTTPS")
+					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
 					}
 
 					# Enable loopback only HTTP
@@ -188,13 +189,13 @@ function Initialize-Connection
 				if (!$WinRMClientSet)
 				{
 					# Configure this machine for remote session over SSL
-					if ($RemotingProtocol -eq "HTTPS")
+					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
 					}
 				}
 

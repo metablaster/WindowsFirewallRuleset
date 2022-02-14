@@ -161,7 +161,7 @@ function Get-AppCapability
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 		[hashtable] $SessionParams = @{}
-		if ($PsCmdlet.ParameterSetName -eq "Session")
+		if ($Session)
 		{
 			$Domain = $Session.ComputerName
 			$SessionParams.Session = $Session
@@ -206,7 +206,7 @@ function Get-AppCapability
 			else
 			{
 				# HACK: No apps are returned from remote
-				$InputObject = Invoke-Command -Session $SessionInstance -ArgumentList $AppxParams -ScriptBlock {
+				$InputObject = Invoke-Command @SessionParams -ArgumentList $AppxParams -ScriptBlock {
 					param ([hashtable] $AppxParams)
 
 					Get-AppxPackage @AppxParams
@@ -217,7 +217,7 @@ function Get-AppCapability
 	process
 	{
 		# HACK: Cannot use @SessionParams, no return value
-		Invoke-Command -Session $SessionInstance -ArgumentList $InvocationName -ScriptBlock {
+		Invoke-Command @SessionParams -ArgumentList $InvocationName -ScriptBlock {
 			param ([string] $InvocationName)
 
 			foreach ($StoreApp in $using:InputObject)

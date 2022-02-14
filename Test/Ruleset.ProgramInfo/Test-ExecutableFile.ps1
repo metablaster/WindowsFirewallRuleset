@@ -94,6 +94,8 @@ if ($Domain -ne [System.Environment]::MachineName)
 }
 else
 {
+	$PSDefaultParameterValues["Test-ExecutableFile:Session"] = $SessionInstance
+
 	Start-Test "Valid executable"
 	$Result = Test-ExecutableFile $ValidFile
 	$Result

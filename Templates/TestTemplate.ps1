@@ -80,7 +80,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Test-Function"
 
 # TODO Specify temporary Test-Function parameters
-# $PSDefaultParameterValues.Add("Test-Function:Force", $Force)
+# $PSDefaultParameterValues["Test-Function:Force"] = $Force
 
 # TODO: Keep this check if this test is:
 # 1. Experimental or potentially dangerous

@@ -69,6 +69,15 @@ Run this script against specified computer.
 The default value is local computer.
 \\$Domain\C$\netstat.txt is created on that system and the results are returned here
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER Protocol
 The name of the protocol (TCP or UDP).
 The default value is "*" (Any)
@@ -190,9 +199,18 @@ param (
 	[ValidatePattern("[\*\d\?\[\]]")]
 	[string] $Port = "*",
 
-	[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+	[Parameter(ParameterSetName = "Domain", ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 	[Alias("ComputerName", "CN")]
 	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter(ParameterSetName = "Domain")]
+	[PSCredential] $Credential,
+
+	[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+	[System.Management.Automation.Runspaces.PSSession] $Session,
+
+	[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+	[CimSession] $CimSession,
 
 	[Parameter()]
 	[ValidateSet("*", "TCP", "UDP")]
@@ -219,8 +237,29 @@ param (
 
 begin
 {
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
+	[hashtable] $CimParams = @{}
+	[hashtable] $SessionParams = @{}
+
+	if ($PsCmdlet.ParameterSetName -eq "Session")
+	{
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+		$CimParams.CimSession = $CimSession
+	}
+	else
+	{
+		$CimParams.ComputerName = $Domain
+		$SessionParams.ComputerName = $Domain
+
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
+	}
+
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 	Initialize-Project -Strict
 
 	# Define properties
@@ -254,7 +293,7 @@ process
 			try
 			{
 				Write-Information -Tags $ThisScript -MessageData "INFO: Getting list of processes on '$Domain'..."
-				$Processes = Invoke-Command -ComputerName $Domain -Credential $RemotingCredential -ErrorAction Stop -ScriptBlock {
+				$Processes = Invoke-Command @SessionParams -ErrorAction Stop -ScriptBlock {
 					Get-Process
 				} |	Select-Object -Property Name, Id
 			}
@@ -274,7 +313,7 @@ process
 		try
 		{
 			# Delete previous results
-			Invoke-CimMethod -ClassName Win32_Process -MethodName Create -CimSession $CimServer -ErrorAction Stop `
+			Invoke-CimMethod -ClassName Win32_Process -MethodName Create @CimParams -ErrorAction Stop `
 				-Arguments @{ CommandLine = "cmd /c del $TempLocation" } | Out-Null
 		}
 		catch
@@ -285,9 +324,9 @@ process
 		try
 		{
 			Invoke-CimMethod -ClassName Win32_Process -MethodName Create `
-				-Arguments @{ CommandLine = $cmd } -CimSession $CimServer -ErrorAction Stop | Out-Null
+				-Arguments @{ CommandLine = $cmd } @CimParams -ErrorAction Stop | Out-Null
 
-			Invoke-Command -ComputerName $Domain -Credential $RemotingCredential -ScriptBlock {
+			Invoke-Command @SessionParams -ScriptBlock {
 				Get-Process -Name netstat -ErrorAction SilentlyContinue | Wait-Process
 			}
 		}
@@ -323,7 +362,7 @@ process
 
 	# Initialize counter for progress
 	$Count = 0
-	$TotalCount = $NetstatData.Count
+	$TotalCount = ($NetstatData | Measure-Object).Count
 
 	# Loop through each line of results
 	foreach ($NetstatEntry in $NetstatData)

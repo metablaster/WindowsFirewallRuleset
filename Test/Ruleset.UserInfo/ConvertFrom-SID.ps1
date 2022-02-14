@@ -73,10 +73,8 @@ Start-Test "'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE" -Command "Ge
 $UserAccounts = Get-GroupPrincipal "Users", "Administrators"
 $UserAccounts
 
-Test-Output $UserAccounts[0] -Command Get-GroupPrincipal
-
-Start-Test "Get-PrincipalSID NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
-$NTAccounts = (Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE").SID
+Start-Test "NT SYSTEM, NT LOCAL SERVICE" -Command "Get-PrincipalSID"
+$NTAccounts = Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
 $NTAccounts
 
 Start-Test "users and admins"
@@ -90,7 +88,7 @@ $AccountSIDs | ConvertFrom-SID | Format-Table
 Start-Test "NT AUTHORITY users"
 foreach ($Account in $NTAccounts)
 {
-	ConvertFrom-SID $Account | Format-Table
+	ConvertFrom-SID $Account.SID | Format-Table
 }
 
 Start-Test "Unknown domain"

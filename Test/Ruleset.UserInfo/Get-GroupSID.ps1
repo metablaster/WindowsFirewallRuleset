@@ -112,7 +112,7 @@ else
 
 	Test-Output $GroupsTest -Command Get-GroupSID
 
-	Start-Test $GroupArray
+	Start-Test "GroupArray"
 	$GroupsTest = Get-GroupSID $GroupArray
 	$GroupsTest
 

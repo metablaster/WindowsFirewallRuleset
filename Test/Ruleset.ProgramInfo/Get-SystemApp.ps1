@@ -81,8 +81,8 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote Get-UserApp -User $TestUser -Session"
 	Get-SystemApp -User $TestUser -Session $SessionInstance
 
-	Start-Test "Remote Get-UserApp -User $TestUser -Domain $Domain"
-	Get-SystemApp -User $TestUser -Domain $Domain -Credential $RemotingCredential
+	# Start-Test "Remote Get-UserApp -User $TestUser -Domain $Domain"
+	# Get-SystemApp -User $TestUser -Domain $Domain -Credential $RemotingCredential
 }
 else
 {

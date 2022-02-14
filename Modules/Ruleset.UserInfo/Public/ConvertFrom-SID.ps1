@@ -39,10 +39,16 @@ In all other cases result if full account name in form of COMPUTERNAME\USERNAME
 One or more SIDs to convert
 
 .PARAMETER Domain
-One or more computers to check if SID is not known, the default is localhost
+Computer to check if SID is not known, the default is localhost
+
+.PARAMETER Credential
+Specifies the credential object to use for authentication
 
 .PARAMETER CimSession
 Specifies the CIM session to use
+
+.PARAMETER Session
+Specifies the PS session to use
 
 .EXAMPLE
 PS> ConvertFrom-SID S-1-5-21-2139171146-395215898-1246945465-2359
@@ -111,24 +117,30 @@ function ConvertFrom-SID
 
 		[Parameter(ParameterSetName = "Domain")]
 		[Alias("Computer", "CN")]
-		[string[]] $Domain = [System.Environment]::MachineName,
+		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "CimSession")]
-		[CimSession] $CimSession
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[CimSession] $CimSession,
+
+		[Parameter(Mandatory = $true, ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		[hashtable] $ConnectParams = @{
-			Namespace = "root\cimv2"
-		}
+		[hashtable] $CimParams = @{}
+		[hashtable] $SessionParams = @{}
 
-		if ($PSCmdlet.ParameterSetName -eq "CimSession")
+		if ($PSCmdlet.ParameterSetName -eq "Session")
 		{
 			$Domain = $CimSession.ComputerName
-			$ConnectParams.CimSession = $CimSession
+			$CimParams.CimSession = $CimSession
+			$SessionParams.Session = $Session
 		}
 	}
 	process
@@ -335,26 +347,25 @@ function ConvertFrom-SID
 							$SidType = "Store App"
 
 							# Check SID on all target computers until match
-							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $Domain)
+							if (Test-Computer $Domain)
 							{
-								if (!(Test-Computer $Computer))
-								{
-									continue
-								}
-
-								# $MachineName = Format-ComputerName $Computer
 								if ($PSCmdlet.ParameterSetName -eq "Domain")
 								{
-									$ConnectParams.ComputerName = $Computer
+									$CimParams.ComputerName = $Domain
+									$SessionParams.Domain = $Domain
+
+									if ($Credential)
+									{
+										$SessionParams.Credential = $Credential
+									}
 								}
 
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer: '$Computer'"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer: '$Domain'"
 
 								# Find to which store app this SID belongs
-								$Groups = Get-UserGroup @ConnectParams | Select-Object -ExpandProperty Group
+								$Groups = Get-UserGroup @CimParams | Select-Object -ExpandProperty Group
 								# NOTE: ignore warnings to reduce spam
-								$Users = Get-GroupPrincipal @ConnectParams -Group $Groups -WA SilentlyContinue |
+								$Users = Get-GroupPrincipal @CimParams -Group $Groups -WA SilentlyContinue |
 								Select-Object -ExpandProperty User
 
 								foreach ($User in $Users)
@@ -362,27 +373,26 @@ function ConvertFrom-SID
 									Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing username: '$User'"
 
 									# TODO: instead of many for loops probably create hash table or array for match
-									$StoreApps = Get-UserApp -Domain $Computer -User $User
-									$StoreApps += Get-SystemApp -Domain $Computer -User $User
+									$StoreApps = Get-UserApp @SessionParams -User $User
+									$StoreApps += Get-SystemApp @SessionParams -User $User
 
 									foreach ($App in $StoreApps)
 									{
 										Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app: '$App'"
 
-										# TODO: Get-AppSID should retrieve remote computer information see implementation
 										# NOTE: ignore warnings and info to reduce spam
-										if ($(Get-AppSID -FamilyName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
+										if ((Get-AppSID -PackageFamilyName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
 										{
 											$ResultName = $App.Name
 											# TODO: we probably also need to save target computer where this SID is valid
-											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is known store app SID for computer: '$Computer'"
+											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is known store app SID for computer: '$Domain'"
 											break computer
 										}
 									}
 								}
 
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID for computer: '$Computer'"
-							} # foreach computer
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID for computer: '$Domain'"
+							}
 
 							if ([string]::IsNullOrEmpty($ResultName))
 							{
@@ -403,38 +413,36 @@ function ConvertFrom-SID
 						default
 						{
 							# Check SID on all target computers until match
-							# TODO: could this result is incomplete information if multiple computers match?
-							:computer foreach ($Computer in $Domain)
+							if (Test-Computer $Domain)
 							{
-								if (!(Test-Computer $Computer))
-								{
-									continue
-								}
-
-								# $MachineName = Format-ComputerName $Computer
 								if ($PSCmdlet.ParameterSetName -eq "Domain")
 								{
-									$ConnectParams.ComputerName = $Computer
+									$SessionParams.Domain = $Domain
+									if ($Credential)
+									{
+										$SessionParams.Credential = $Credential
+									}
 								}
 
 								try # to translate the SID to an account on target computer
 								{
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating SID on computer: '$Computer'"
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating SID on computer: '$Domain'"
 
-									# TODO: this needs remote execution
-									$ObjectSID = New-Object -TypeName System.Security.Principal.SecurityIdentifier($InputSID)
-									$ResultName = $ObjectSID.Translate([System.Security.Principal.NTAccount]).Value
+									$ResultName = Invoke-Command @SessionParams -ScriptBlock {
+										$ObjectSID = New-Object -TypeName System.Security.Principal.SecurityIdentifier($InputSID)
+										$ObjectSID.Translate([System.Security.Principal.NTAccount]).Value
+									}
 
 									# NTAccount represents a user or group account
 									$SidType = "NTAccount"
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Computer' recognizes specified SID as NTAccount SID"
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Domain' recognizes specified SID as NTAccount SID"
 									break computer
 								}
 								catch
 								{
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Computer' does not recognize SID: '$SID'"
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Domain' does not recognize SID: '$SID'"
 								}
-							} # foreach computer
+							}
 
 							if ([string]::IsNullOrEmpty($ResultName))
 							{
@@ -482,10 +490,13 @@ function ConvertFrom-SID
 			}
 
 			# Write out result
+			$TempDomain = if ($LogonName) { Split-Principal $LogonName -DomainName } else { $LogonName }
+			$TempDomain = if ($TempDomain) { Format-ComputerName $TempDomain } else { $TempDomain }
+
 			# TODO: we should also save system edition, authority, domain etc.
 			[PSCustomObject]@{
-				Domain = Format-ComputerName (Split-Principal $LogonName -DomainName)
-				User = Split-Principal $LogonName
+				Domain = $TempDomain
+				User = if ($LogonName) { Split-Principal $LogonName } else { $LogonName }
 				Principal = $LogonName
 				SID = $InputSID
 				Type = $SidType

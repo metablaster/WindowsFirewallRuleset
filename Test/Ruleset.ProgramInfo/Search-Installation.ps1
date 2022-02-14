@@ -109,8 +109,11 @@ if ($Domain -ne [System.Environment]::MachineName)
 }
 else
 {
+	$PSDefaultParameterValues["Search-Installation:Session"] = $SessionInstance
+	$PSDefaultParameterValues["Search-Installation:CimSession"] = $CimServer
+
 	Start-Test "Search-Installation 'EdgeChromium'"
-	Search-Installation "EdgeChromium" -Session $SessionInstance -CimSession $CimServer
+	Search-Installation "EdgeChromium"
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Install Root EdgeChromium"
@@ -121,18 +124,18 @@ else
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'VisualStudio'"
-	Search-Installation "VisualStudio" -Session $SessionInstance -CimSession $CimServer
+	Search-Installation "VisualStudio"
 	$global:InstallTable | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'Greenshot'"
-	Search-Installation "Greenshot" -Session $SessionInstance -CimSession $CimServer
+	Search-Installation "Greenshot"
 	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Install Root Greenshot"
 	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Search-Installation 'OneDrive'"
-	$Result = Search-Installation "OneDrive" -Session $SessionInstance -CimSession $CimServer
+	$Result = Search-Installation "OneDrive"
 	$Result
 	$global:InstallTable | Format-Table -AutoSize
 

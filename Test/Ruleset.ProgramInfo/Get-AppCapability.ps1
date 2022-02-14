@@ -82,14 +82,16 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote Session"
 	Get-AppCapability -Session $SessionInstance -PackageTypeFilter Main -Name "*AccountsControl*"
 
-	Start-Test "Remote Session"
-	Get-AppCapability -Domain $Domain -Credential $RemotingCredential -PackageTypeFilter Main -Name "*AccountsControl*"
+	# Start-Test "Remote Session"
+	# Get-AppCapability -Domain $Domain -Credential $RemotingCredential -PackageTypeFilter Main -Name "*AccountsControl*"
 
 	# Start-Test "Get-SystemApp $TestAdmin | Get-AppCapability -Networking -Domain $Domain"
 	# Get-SystemApp -User $TestAdmin -Domain $Domain | Get-AppCapability -Networking -Domain $Domain
 }
 else
 {
+	$PSDefaultParameterValues["Get-AppCapability:Session"] = $SessionInstance
+
 	# NOTE: Using "AccountsControl" because "Microsoft.AccountsControl" is available on all OS editions
 	Start-Test 'Get-AppCapability -Name "*AccountsControl*"'
 	Get-AppCapability "*AccountsControl*"

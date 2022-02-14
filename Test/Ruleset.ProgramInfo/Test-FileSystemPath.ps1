@@ -85,6 +85,8 @@ if ($Domain -ne [System.Environment]::MachineName)
 }
 else
 {
+	$PSDefaultParameterValues["Test-FileSystemPath:Session"] = $SessionInstance
+
 	#
 	# Root drives
 	#

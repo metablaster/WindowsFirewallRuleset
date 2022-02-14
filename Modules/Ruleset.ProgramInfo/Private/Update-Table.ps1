@@ -73,6 +73,7 @@ currently it looks like we assign entire user group for program that applies to 
 TODO: Consider optional parameter for search by regex, wildcard, case sensitive or positional search
 TODO: This function should make use of Out-DataTable function from Ruleset.Utility module
 TODO: Using Format.psm1xml for DataTable would apply to all data tables, maybe reveting to PSCustomObject?
+HACK: Parameter set name for Domain vs CIM session
 #>
 function Update-Table
 {
