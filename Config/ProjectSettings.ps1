@@ -520,7 +520,11 @@ if (!$InModule)
 	{
 		$private:PSDefaultParameterValues["*:InformationVariable"] = "+InfoBuffer"
 	}
+}
 
+# TODO: This needs to be initialized after connection is established, work around is to run target script twice
+if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
+{
 	# Used in rule scripts
 	$PSDefaultParameterValues["Confirm-Installation:Session"] = $SessionInstance
 	$PSDefaultParameterValues["Confirm-Installation:CimSession"] = $CimServer

@@ -119,12 +119,12 @@ if ((Confirm-Installation "OpenTTD" ([ref] $OpenTTDRoot)) -or $ForceLoad)
 		New-NetFirewallRule -DisplayName "OpenTTD" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 3978 `
+			-LocalPort Any -RemotePort 80, 3978 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "" | Format-RuleOutput
+			-Description "Content download system" | Format-RuleOutput
 	}
 }
 

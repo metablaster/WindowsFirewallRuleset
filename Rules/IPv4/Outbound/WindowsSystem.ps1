@@ -435,7 +435,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 		-LocalAddress Any -RemoteAddress Internet4 `
 		-LocalPort Any -RemotePort 443 `
-		-LocalUser Any `
+		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
 		-Description "Report Windows errors back to Microsoft." |
 	Format-RuleOutput

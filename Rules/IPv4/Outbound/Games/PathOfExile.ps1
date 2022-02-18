@@ -116,7 +116,21 @@ if ((Confirm-Installation "PathOfExile" ([ref] $PathOfExileRoot)) -or $ForceLoad
 	$Program = "$PathOfExileRoot\PathOfExile_x64Steam.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Path of exile" `
+		New-NetFirewallRule -DisplayName "Path of exile x64" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 6112, 20481 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Needed for online gaming" | Format-RuleOutput
+	}
+
+	$Program = "$PathOfExileRoot\PathOfExileSteam.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Path of exile x86" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
