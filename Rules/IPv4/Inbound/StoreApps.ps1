@@ -79,7 +79,6 @@ $Accept = "Inbound rules for store apps will be loaded, required for Windows sto
 $Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

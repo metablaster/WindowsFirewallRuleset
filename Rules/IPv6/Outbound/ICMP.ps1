@@ -141,7 +141,6 @@ $Accept = "Outbound rules for ICMPv6 will be loaded, recommended for proper netw
 $Deny = "Skip operation, outbound ICMPv6 rules will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

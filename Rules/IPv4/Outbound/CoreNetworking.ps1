@@ -84,7 +84,6 @@ $Accept = "Outbound rules for core networking will be loaded, required for prope
 $Deny = "Skip operation, outbound core networking rules will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

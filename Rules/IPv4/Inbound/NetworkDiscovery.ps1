@@ -84,7 +84,6 @@ $Accept = "Inbound rules for network discovery will be loaded, required for host
 $Deny = "Skip operation, inbound network discovery rules will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $DisplayGroup -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

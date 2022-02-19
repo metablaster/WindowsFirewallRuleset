@@ -82,7 +82,6 @@ $Accept = "Inbound broadcast rules will be loaded, recommended for proper local 
 $Deny = "Skip operation, inbound broadcast rules will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # NOTE: Don't run if execute not approved

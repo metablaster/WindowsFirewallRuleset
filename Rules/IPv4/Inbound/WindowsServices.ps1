@@ -79,7 +79,6 @@ $Accept = "Inbound rules for system services will be loaded, required for proper
 $Deny = "Skip operation, inbound rules for system services will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

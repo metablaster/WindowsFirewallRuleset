@@ -92,10 +92,15 @@ $Accept = "Outbound rules for Incredibuild software will be loaded, recommended 
 $Deny = "Skip operation, outbound rules for Incredibuild software will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
-$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
-$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
+$PSDefaultParameterValues = @{
+	"Confirm-Installation:Quiet" = $Quiet
+	"Confirm-Installation:Interactive" = $Interactive
+	"Confirm-Installation:Session" = $SessionInstance
+	"Confirm-Installation:CimSession" = $CimServer
+	"Test-ExecutableFile:Quiet" = $Quiet
+	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
+	"Test-ExecutableFile:Session" = $SessionInstance
+}
 #endregion
 
 #

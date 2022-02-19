@@ -136,7 +136,6 @@ $Accept = "Inbound rules for IPv6 multicast will be loaded, recommended for prop
 $Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group

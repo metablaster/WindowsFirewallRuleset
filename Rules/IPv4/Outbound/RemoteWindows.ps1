@@ -79,7 +79,11 @@ $Accept = "Outbound rules for remote Windows will be loaded, required for servic
 $Deny = "Skip operation, outbound rules for remote Windows will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
+$PSDefaultParameterValues = @{
+	"Test-ExecutableFile:Quiet" = $Quiet
+	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
+	"Test-ExecutableFile:Session" = $SessionInstance
+}
 #endregion
 
 # First remove all existing rules matching group
