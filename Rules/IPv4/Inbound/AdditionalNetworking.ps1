@@ -42,10 +42,6 @@ Following predefined groups are included:
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
-.PARAMETER Interactive
-If program installation directory is not found, script will ask user to
-specify program installation location.
-
 .PARAMETER Quiet
 If specified, it suppresses warning, error or informationall messages if user specified or default
 program path does not exist or if it's of an invalid syntax needed for firewall.
@@ -75,9 +71,6 @@ param (
 	[switch] $Trusted,
 
 	[Parameter()]
-	[switch] $Interactive,
-
-	[Parameter()]
 	[switch] $Quiet,
 
 	[Parameter()]
@@ -98,10 +91,6 @@ $Deny = "Skip operation, inbound additional networking rules will not be loaded 
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues = @{
-	"Confirm-Installation:Quiet" = $Quiet
-	"Confirm-Installation:Interactive" = $Interactive
-	"Confirm-Installation:Session" = $SessionInstance
-	"Confirm-Installation:CimSession" = $CimServer
 	"Test-ExecutableFile:Quiet" = $Quiet
 	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
 	"Test-ExecutableFile:Session" = $SessionInstance

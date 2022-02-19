@@ -33,10 +33,6 @@ Outbound firewall rules for ICMPv4 traffic
 .DESCRIPTION
 Outbound firewall rules for ICMPv4 traffic
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -89,9 +85,6 @@ ex. $APIPA = "169.254.1.0-169.254.254.255"
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )

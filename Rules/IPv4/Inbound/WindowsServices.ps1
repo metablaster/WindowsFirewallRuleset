@@ -34,10 +34,6 @@ Inbound firewall rules forfirewall rules for Windows services
 Windows services rules
 Rules which apply to Windows services which are not handled by predefined rules
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -59,9 +55,6 @@ None.
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )

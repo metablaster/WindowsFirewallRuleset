@@ -37,6 +37,10 @@ Outbound rules for store apps
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
+.PARAMETER Quiet
+If specified, it suppresses warning, error or informationall messages if user specified or default
+program path does not exist or if it's of an invalid syntax needed for firewall.
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -90,6 +94,9 @@ NOTE: If OneNote app fails to install, start "Print Spooler" service and try aga
 param (
 	[Parameter()]
 	[switch] $Trusted,
+
+	[Parameter()]
+	[switch] $Quiet,
 
 	[Parameter()]
 	[switch] $Force

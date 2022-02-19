@@ -36,10 +36,6 @@ Predefined rules from Core Networking are here excluding ICMP
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .EXAMPLE
 PS> .\CoreNetworking.ps1
 
@@ -58,9 +54,6 @@ None.
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )

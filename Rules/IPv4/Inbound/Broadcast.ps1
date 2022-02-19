@@ -33,10 +33,6 @@ Inbound broadcast traffic rules
 .DESCRIPTION
 Inbound firewall rules for broadcast traffic
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -61,9 +57,6 @@ TODO: currently handling only UDP, also broadcast falls into multicast space
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )

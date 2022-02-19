@@ -34,10 +34,6 @@ Outbound firewall rules for network discovery
 Network Discovery predefined rules + additional rules
 Rules which apply to network discovery on LAN
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -62,9 +58,6 @@ TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )

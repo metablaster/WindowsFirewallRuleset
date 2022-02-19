@@ -41,10 +41,6 @@ Following predefined groups are included:
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
 
-.PARAMETER Interactive
-If program installation directory is not found, script will ask user to
-specify program installation location.
-
 .PARAMETER Quiet
 If specified, it suppresses warning, error or informationall messages if user specified or default
 program path does not exist or if it's of an invalid syntax needed for firewall.
@@ -72,9 +68,6 @@ NOTE: There are no predefined outbound rules for connections to "DIAL protocol s
 param (
 	[Parameter()]
 	[switch] $Trusted,
-
-	[Parameter()]
-	[switch] $Interactive,
 
 	[Parameter()]
 	[switch] $Quiet,

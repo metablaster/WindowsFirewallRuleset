@@ -210,18 +210,18 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
 		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
 		& "$Destination\ICMP.ps1" -Force:$AllCurrent
 		& "$Destination\Multicast.ps1" -Force:$AllCurrent
 		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
 		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
-		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent
+		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
 		& "$Destination\Temporary.ps1" -Force:$AllCurrent
 		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
-		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 
@@ -345,19 +345,19 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
 		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
 		& "$Destination\ICMP.ps1" -Force:$AllCurrent
 		& "$Destination\Multicast.ps1" -Force:$AllCurrent
 		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
 		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
-		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent
-		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
+		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		& "$Destination\StoreApps.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		& "$Destination\Temporary.ps1" -Force:$AllCurrent
 		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
 		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent
+		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
 		$AllCurrent = $YesToAll
 	}
 

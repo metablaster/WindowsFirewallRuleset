@@ -36,10 +36,6 @@ Outbound firewall rules for IPv6 multicast traffic
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
-.PARAMETER Trusted
-If specified, rules will be loaded for executables with missing or invalid digital signature.
-By default an error is generated and rule isn't loaded.
-
 .EXAMPLE
 PS> .\Multicast.ps1
 
@@ -106,9 +102,6 @@ https://www.ronaldschlager.com/2014/ipv6-addresses-scopes-zones/
 
 [CmdletBinding()]
 param (
-	[Parameter()]
-	[switch] $Trusted,
-
 	[Parameter()]
 	[switch] $Force
 )
