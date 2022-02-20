@@ -481,6 +481,24 @@ function Initialize-Project
 				-MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 		}
 
+		# Otherwise this was performed before .NET checking
+		if (!$Develop)
+		{
+			Initialize-Connection
+
+			if ($TargetPSVersion -ge "7.1")
+			{
+				# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
+				# https://github.com/PowerShell/PowerShell/issues/13138
+				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
+				# check to use compatibility only as needed
+				# TODO: Implement Scope parameter
+				# NOTE: New-PSSession for compatibility module is first time executed here,
+				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
+				Import-WinModule -Name Appx
+			}
+		}
+
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Detecting OS on computer '$PolicyStore'"
 		$OSCaption = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" `
 			-Class Win32_OperatingSystem -Property Caption | Select-Object -ExpandProperty Caption
@@ -504,23 +522,5 @@ function Initialize-Project
 		Write-Host "System:`t`t $OSCaption $OSBuildVersion"
 		Write-Host "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
 		Write-Host ""
-
-		# Otherwise this was performed before .NET checking
-		if (!$Develop)
-		{
-			Initialize-Connection
-
-			if ($TargetPSVersion -ge "7.1")
-			{
-				# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
-				# https://github.com/PowerShell/PowerShell/issues/13138
-				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
-				# check to use compatibility only as needed
-				# TODO: Implement Scope parameter
-				# NOTE: New-PSSession for compatibility module is first time executed here,
-				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
-				Import-WinModule -Name Appx
-			}
-		}
 	} # if ShouldProcess
 }

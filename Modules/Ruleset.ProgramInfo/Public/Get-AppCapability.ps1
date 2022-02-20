@@ -250,35 +250,39 @@ function Get-AppCapability
 
 					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name) user $using:User"
 					# [System.XML.XMLDocument]
-					$PackageManifest = ($App | Get-AppxPackageManifest -User $using:User).Package
+					$PackageManifest = $App | Get-AppxPackageManifest -User $using:User
 				}
 				else
 				{
-					try
-					{
-						Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
-						$PackageManifest = ($App | Get-AppxPackageManifest).Package
-					}
-					catch
-					{
-						# NOTE: This will be the cause with Microsoft account (non local Windows account)
-						Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing manifest 'Package' property because $($_.Exception.Message)"
-						continue
-					}
+					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
+					$PackageManifest = $App | Get-AppxPackageManifest
 				}
 
-				if (!$PackageManifest.PSObject.Properties.Name.Contains("Capabilities"))
+				if (!$PackageManifest)
+				{
+					Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing package manifest"
+					continue
+				}
+				elseif ($null -eq ($PackageManifest | Select-Object -ExpandProperty Package))
+				{
+					# NOTE: This may be the cause with Microsoft account (non local Windows account)
+					Write-Warning -Message "[$InvocationName] Store app '$($App.Name)' is missing manifest 'Package' property"
+					continue
+				}
+
+				$Package = $PackageManifest.Package
+				if (!$Package.PSObject.Properties.Name.Contains("Capabilities"))
 				{
 					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities"
 					continue
 				}
-				elseif (!$PackageManifest.Capabilities.PSObject.Properties.Name.Contains("Capability"))
+				elseif (!$Package.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
 					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities"
 					continue
 				}
 
-				[string[]] $AppCapabilities = ($PackageManifest.Capabilities | Select-Object -ExpandProperty Capability).Name
+				[string[]] $AppCapabilities = ($Package.Capabilities | Select-Object -ExpandProperty Capability).Name
 
 				foreach ($Capability in $AppCapabilities)
 				{
