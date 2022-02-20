@@ -16,7 +16,7 @@ Disable WinRM server for CIM and PowerShell remoting
 ### Default (Default)
 
 ```powershell
-Disable-WinRMServer [-WhatIf] [-Confirm] [<CommonParameters>]
+Disable-WinRMServer [-KeepDefault] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### All
@@ -29,7 +29,7 @@ Disable-WinRMServer [-All] [-WhatIf] [-Confirm] [<CommonParameters>]
 
 Disable WinRM server for remoting previously enabled by Enable-WinRMServer.
 WinRM service will continue to run but will accept only loopback HTTP and only if
-using "RemoteFirewall.PSedition" session configuration.
+using "LocalFirewall.PSedition" session configuration.
 
 In addition unlike Disable-PSRemoting, it will also remove default firewall rules
 and restore registry setting which restricts remote access to members of the
@@ -43,16 +43,46 @@ Administrators group on the computer.
 Disable-WinRMServer
 ```
 
+### EXAMPLE 2
+
+```powershell
+Disable-WinRMServer -KeepDefault
+```
+
+### EXAMPLE 3
+
+```powershell
+Disable-WinRMServer -All
+```
+
 ## PARAMETERS
 
 ### -All
 
 If specified, will disable WinRM service completely including loopback functionality,
-remove all listeners and disable all session configurations.
+remove all listeners, disable all session configurations and disable registry setting to
+deny remote access to Administrators
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
 Parameter Sets: All
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -KeepDefault
+
+If specified, keeps default session configurations enabled.
+This is needed to be able to specify -ComputerName parameter in commands that support it
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -114,6 +144,7 @@ in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
+TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 
 ## RELATED LINKS
 

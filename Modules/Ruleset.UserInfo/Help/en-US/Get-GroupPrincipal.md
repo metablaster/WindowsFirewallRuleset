@@ -13,9 +13,18 @@ Get principals of specified groups on target computers
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
 Get-GroupPrincipal [-Group] <String[]> [-Domain <String[]>] [-Include <String>] [-Exclude <String>] [-Disabled]
- [-CIM] [<CommonParameters>]
+ [<CommonParameters>]
+```
+
+### CimSession
+
+```powershell
+Get-GroupPrincipal [-Group] <String[]> -CimSession <CimSession> [-Include <String>] [-Exclude <String>]
+ [-Disabled] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,7 +42,13 @@ Get-GroupPrincipal "Users", "Administrators"
 ### EXAMPLE 2
 
 ```powershell
-Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP) -CIM
+Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)
 ```
 
 ## PARAMETERS
@@ -60,12 +75,28 @@ One or more computers which to query for group users
 
 ```yaml
 Type: System.String[]
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimSession
+
+Specifies the CIM session to use
+
+```yaml
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: CimSession
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -105,22 +136,6 @@ Accept wildcard characters: True
 ### -Disabled
 
 If specified, result is disabled accounts instead
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CIM
-
-Whether to contact CIM server (required for remote computers)
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

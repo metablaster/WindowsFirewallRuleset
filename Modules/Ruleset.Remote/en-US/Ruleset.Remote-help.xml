@@ -10,8 +10,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Connect to remote computer onto which to deploy firewall. This script will perform necessary initialization to enter PS session to remote computer, in addition required authentication is made to use remote registry service and to run commands against remote CIM server.</maml:para>
-      <maml:para>Following global variables or objects are created: CimServer (variable), to be used by CIM commandlets to specify cim session to use RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) RemoteSession (PSSession), PS session object which represent remote session RemoteCim (CimSession), CIM session object</maml:para>
+      <maml:para>Connect local machine to local (loopback) or remote computer onto which to deploy firewall.</maml:para>
+      <maml:para>Following global variables are set and objects created: RemoteCim (CimSession), CIM session object RemoteSession (PSSession), PS session object which represent remote session RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) CimServer (variable), to be used by CIM commandlets to access "RemoteCim" object for -CimSession parameter SessionInstance (variable), to be used by Invoke-Command to access "RemoteSession" object for -Session parameter</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -31,7 +31,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:description>
-            <maml:para>Specify credentials which to use to connect to remote computer. If not specified, you'll be asked for credentials</maml:para>
+            <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
@@ -43,14 +43,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify protocol to use for test, HTTP, HTTPS or any. The default value is "Any" which means HTTPS is used for connection to remote computer and HTTP for local machine.</maml:para>
+            <maml:para>Specify protocol to use for connection, HTTP, HTTPS or Default. The default value is "Default" which means HTTPS is used for connection to remote computer and if not working fallback to HTTP, for localhost "Default" means use HTTP.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>Any</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Port</maml:name>
@@ -65,21 +65,21 @@
           <dev:defaultValue>0</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CertThumbprint</maml:name>
+          <maml:name>Authentication</maml:name>
           <maml:description>
-            <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+            <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SessionOption</maml:name>
           <maml:description>
-            <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption preference variable</maml:para>
+            <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
           <dev:type>
@@ -115,7 +115,118 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CimOptions</maml:name>
           <maml:description>
-            <maml:para>Specify custom CIM session object to fine tune CIM sessions. By default new blank CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+            <maml:para>Optionally specify custom CIM session options to fine tune CIM session. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.Options.CimSessionOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-Computer</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name with which to connect for remoting</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Port</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CertThumbprint</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify certificate thumbprint which is to be used for HTTPS. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Authentication</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Default</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SessionOption</maml:name>
+          <maml:description>
+            <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Remoting.PSSessionOption</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionOption</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:description>
+            <maml:para>Specify session configuration to use for remoting, this session configuration must be registered and enabled on remote computer. The default value is controlled with PSSessionConfigurationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionConfigurationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ApplicationName</maml:name>
+          <maml:description>
+            <maml:para>Specify application name use for remote connection, Currently only "wsman" is supported. The default value is controlled with PSSessionApplicationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionApplicationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimOptions</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify custom CIM session options to fine tune CIM session. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
           <dev:type>
@@ -142,7 +253,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
-          <maml:para>Specify credentials which to use to connect to remote computer. If not specified, you'll be asked for credentials</maml:para>
+          <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
@@ -154,14 +265,14 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specify protocol to use for test, HTTP, HTTPS or any. The default value is "Any" which means HTTPS is used for connection to remote computer and HTTP for local machine.</maml:para>
+          <maml:para>Specify protocol to use for connection, HTTP, HTTPS or Default. The default value is "Default" which means HTTPS is used for connection to remote computer and if not working fallback to HTTP, for localhost "Default" means use HTTP.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>Any</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Port</maml:name>
@@ -178,7 +289,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CertThumbprint</maml:name>
         <maml:description>
-          <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+          <maml:para>Optionally specify certificate thumbprint which is to be used for HTTPS. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -188,9 +299,21 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Authentication</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Default</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SessionOption</maml:name>
         <maml:description>
-          <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption preference variable</maml:para>
+          <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
         <dev:type>
@@ -226,7 +349,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CimOptions</maml:name>
         <maml:description>
-          <maml:para>Specify custom CIM session object to fine tune CIM sessions. By default new blank CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+          <maml:para>Optionally specify custom CIM session options to fine tune CIM session. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
         <dev:type>
@@ -258,7 +381,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: When localhost or dot (.) is specified it should be treated as localhost which means localhost requirements must be met.</maml:para>
+        <maml:para>None.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -393,7 +516,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Disable WinRM server for remoting previously enabled by Enable-WinRMServer. WinRM service will continue to run but will accept only loopback HTTP and only if using "RemoteFirewall.PSedition" session configuration.</maml:para>
+      <maml:para>Disable WinRM server for remoting previously enabled by Enable-WinRMServer. WinRM service will continue to run but will accept only loopback HTTP and only if using "LocalFirewall.PSedition" session configuration.</maml:para>
       <maml:para>In addition unlike Disable-PSRemoting, it will also remove default firewall rules and restore registry setting which restricts remote access to members of the Administrators group on the computer.</maml:para>
     </maml:description>
     <command:syntax>
@@ -402,7 +525,43 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>All</maml:name>
           <maml:description>
-            <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners and disable all session configurations.</maml:para>
+            <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners, disable all session configurations and disable registry setting to deny remote access to Administrators</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Disable-WinRMServer</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>KeepDefault</maml:name>
+          <maml:description>
+            <maml:para>If specified, keeps default session configurations enabled. This is needed to be able to specify -ComputerName parameter in commands that support it</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -438,7 +597,19 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>All</maml:name>
         <maml:description>
-          <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners and disable all session configurations.</maml:para>
+          <maml:para>If specified, will disable WinRM service completely including loopback functionality, remove all listeners, disable all session configurations and disable registry setting to deny remote access to Administrators</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>KeepDefault</maml:name>
+        <maml:description>
+          <maml:para>If specified, keeps default session configurations enabled. This is needed to be able to specify -ComputerName parameter in commands that support it</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -494,13 +665,27 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error</maml:para>
+        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Disable-WinRMServer</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Disable-WinRMServer -KeepDefault</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Disable-WinRMServer -All</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -594,7 +779,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: If there are multiple connections, remove only specific ones TODO: This function should be called at the end of each script since individual scripts may run, implementation needed to prevent disconnection when Deploy-Firewall runs.</maml:para>
+        <maml:para>TODO: If there are multiple connections, remove only specific ones TODO: This function should be called at the end of each script since individual scripts may be run, implementation needed to prevent disconnection when Deploy-Firewall runs.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -608,8 +793,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disconnect-Computer.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_disconnected_sessions</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_disconnected_sessions</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -623,7 +812,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Starts the RemoteRegistry service and adds required firewall rules which enables remote users to modify registry settings on this computer.</maml:para>
+      <maml:para>Starts the RemoteRegistry service and adds required firewall rules which enables remote users to modify registry settings on this computer and conversely.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -701,7 +890,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>For remote registry to work, both client and server must enable remote registry service, must enable File and Printer sharing and Network Discovery for both inbound and outbound, and must operate on private profile if either one is workstation machine.</maml:para>
-        <maml:para>In addition to make it work in PS, administrative authentication must be done by opening a share to server by client computer.</maml:para>
+        <maml:para>In addition to make it work in PS, administrative authentication must be done by opening a share to server by client computer by using New-PSDrive</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -730,9 +919,8 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Configures local machine to accept remote CIM and PowerShell requests using WS-Management. In addition it initializes specialized remoting session configuration as well as most common issues are handled and attempted to be resolved or bypassed automatically.</maml:para>
-      <maml:para>If specified -Protocol is set to HTTPS, it will export public key (DER encoded CER file) to default repository location (\Exports), which you should then copy to client machine to be picked up by Set-WinRMClient and used for communication over SSL.</maml:para>
-      <maml:para>If you wish to enable only loopback, run Enable-WinRMServer followed by Disable-WinRMServer</maml:para>
+      <maml:para>Configures local machine to accept local or remote CIM and PowerShell requests using WS-Management. In addition it initializes specialized remoting session configuration as well as most common issues are handled and attempted to be resolved automatically.</maml:para>
+      <maml:para>If -Protocol parameter is set to HTTPS, it will export public key (DER encoded CER file) to default repository location (\Exports), which you should then copy to client machine to be picked up by Set-WinRMClient and used for communication over SSL.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -740,14 +928,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specifies listener protocol to HTTP, HTTPS or both. By default only HTTPS is configured.</maml:para>
+            <maml:para>Specifies listener protocol to HTTP, HTTPS or Default. The default value is "Default", which configures both HTTP and HTTPS.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>HTTPS</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CertFile</maml:name>
@@ -760,6 +948,28 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>KeepDefault</maml:name>
+          <maml:description>
+            <maml:para>If specified, keeps default session configurations enabled. This is needed to be able to specify -ComputerName parameter in commands that support it</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Loopback</maml:name>
+          <maml:description>
+            <maml:para>If specified, only loopback server is enabled. Remote connections to this computer will not work.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
@@ -800,14 +1010,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specifies listener protocol to HTTP, HTTPS or both. By default only HTTPS is configured.</maml:para>
+            <maml:para>Specifies listener protocol to HTTP, HTTPS or Default. The default value is "Default", which configures both HTTP and HTTPS.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>HTTPS</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CertThumbprint</maml:name>
@@ -820,6 +1030,28 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>KeepDefault</maml:name>
+          <maml:description>
+            <maml:para>If specified, keeps default session configurations enabled. This is needed to be able to specify -ComputerName parameter in commands that support it</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Loopback</maml:name>
+          <maml:description>
+            <maml:para>If specified, only loopback server is enabled. Remote connections to this computer will not work.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
@@ -860,14 +1092,14 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specifies listener protocol to HTTP, HTTPS or both. By default only HTTPS is configured.</maml:para>
+          <maml:para>Specifies listener protocol to HTTP, HTTPS or Default. The default value is "Default", which configures both HTTP and HTTPS.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>HTTPS</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CertFile</maml:name>
@@ -892,6 +1124,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>KeepDefault</maml:name>
+        <maml:description>
+          <maml:para>If specified, keeps default session configurations enabled. This is needed to be able to specify -ComputerName parameter in commands that support it</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Loopback</maml:name>
+        <maml:description>
+          <maml:para>If specified, only loopback server is enabled. Remote connections to this computer will not work.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
@@ -968,20 +1224,20 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Authenticate users using certificates optionally or instead of credential object TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error</maml:para>
+        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Enable-WinRMServer</dev:code>
+        <dev:code>Enable-WinRMServer -Confirm:$false</dev:code>
         <dev:remarks>
           <maml:para>Configures server machine to accept remote commands using SSL. If there is no server certificate a new one self signed is made and put into trusted root.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Enable-WinRMServer -CertFile C:\Cert\Server2.pfx -Protocol Any</dev:code>
+        <dev:code>Enable-WinRMServer -CertFile C:\Cert\Server2.pfx -Protocol Default</dev:code>
         <dev:remarks>
           <maml:para>Configures server machine to accept remote commands using using either HTTPS or HTTP. Client will authenticate with specified certificate for HTTPS.</maml:para>
         </dev:remarks>
@@ -995,10 +1251,9 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Enable-WinRMServer
-PS&gt; Disable-WinRMServer</dev:code>
+        <dev:code>Enable-WinRMServer -Loopback -Confirm:$false -KeepDefault</dev:code>
         <dev:remarks>
-          <maml:para>Will make WinRM work only on loopback</maml:para>
+          <maml:para>Will make WinRM work only on loopback and default session configurations stay enabled</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1089,6 +1344,65 @@ PS&gt; Disable-WinRMServer</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Export-WinRM.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Export-WinRM.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Import-WinRM</command:name>
+      <command:verb>Import</command:verb>
+      <command:noun>WinRM</command:noun>
+      <maml:description>
+        <maml:para>Import WinRM configuration from file</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Import-WinRM imports WinRM configuration from file previously exported with Export-WinRM</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Import-WinRM</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Import-WinRM</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Import-WinRM does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Function not implemented</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Import-WinRM</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Import-WinRM.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Import-WinRM.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1677,7 +1991,7 @@ PS&gt; Disable-WinRMServer</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Reset-WinRM resets WinRM configuration to either system defaults or to previous settings that were exported by Export-WinRM. In addition PS remoting is disabled or restored and reset to PowerShell defaults, default firewall rules are removed and WinRM service is stopped and disabled.</maml:para>
+      <maml:para>Reset-WinRM resets WinRM configuration to system defaults. PS remoting is disabled and WinRM service is reset to defaults, default firewall rules are disabled and WinRM service is stopped and set to manual.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1754,7 +2068,7 @@ PS&gt; Disable-WinRMServer</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired TODO: Restoring old setup not implemented</maml:para>
+        <maml:para>HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Need to reset changes done by Enable-RemoteRegistry, separate function is desired TODO: Restoring old setup not implemented TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Parameter which will allow resetting to custom settings in addition to factory reset TODO: Somewhere it asks for confirmation to start WinRM service, to repro reset in Windows Powershell and then again in Core</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1803,19 +2117,31 @@ PS&gt; Disable-WinRMServer</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specifies protocol to HTTP, HTTPS or any. By default only HTTPS is configured.</maml:para>
+            <maml:para>Specifies protocol to HTTP, HTTPS or Default. The default value is "Default" which configures client for both HTTP and HTTPS.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>HTTPS</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CertFile</maml:name>
           <maml:description>
             <maml:para>Optionally specify custom certificate file. By default certificate store is searched for certificate with CN entry set to value specified by -Domain parameter. If not found, default repository location (\Exports) is searched for DER encoded CER file.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TrustedHosts</maml:name>
+          <maml:description>
+            <maml:para>Optionally append computers or IP addresses to trusted hosts. To specify multiple hosts, separate then with comma without spaces. This option is required for non loopback HTTP remoting</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1875,19 +2201,31 @@ PS&gt; Disable-WinRMServer</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specifies protocol to HTTP, HTTPS or any. By default only HTTPS is configured.</maml:para>
+            <maml:para>Specifies protocol to HTTP, HTTPS or Default. The default value is "Default" which configures client for both HTTP and HTTPS.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>HTTPS</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CertThumbprint</maml:name>
           <maml:description>
             <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TrustedHosts</maml:name>
+          <maml:description>
+            <maml:para>Optionally append computers or IP addresses to trusted hosts. To specify multiple hosts, separate then with comma without spaces. This option is required for non loopback HTTP remoting</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1947,14 +2285,14 @@ PS&gt; Disable-WinRMServer</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specifies protocol to HTTP, HTTPS or any. By default only HTTPS is configured.</maml:para>
+          <maml:para>Specifies protocol to HTTP, HTTPS or Default. The default value is "Default" which configures client for both HTTP and HTTPS.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>HTTPS</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CertFile</maml:name>
@@ -1972,6 +2310,18 @@ PS&gt; Disable-WinRMServer</dev:code>
         <maml:name>CertThumbprint</maml:name>
         <maml:description>
           <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TrustedHosts</maml:name>
+        <maml:description>
+          <maml:para>Optionally append computers or IP addresses to trusted hosts. To specify multiple hosts, separate then with comma without spaces. This option is required for non loopback HTTP remoting</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2055,7 +2405,7 @@ PS&gt; Disable-WinRMServer</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Authenticate users using certificates optionally or instead of credential object TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error</maml:para>
+        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2075,9 +2425,9 @@ PS&gt; Disable-WinRMServer</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Set-WinRMClient -Domain Server3 -Protocol HTTP</dev:code>
+        <dev:code>Set-WinRMClient -Domain Server3 -Protocol HTTP -TrustedHosts "172.64.9.4,RemoteComputer,192.168.2.155"</dev:code>
         <dev:remarks>
-          <maml:para>Configures client machine to run commands remotely on computer Server3 using HTTP</maml:para>
+          <maml:para>Configures client machine to run commands remotely on computer Server3 using HTTP, and allows connection to hosts specified by -TrustedHosts parameter.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2112,7 +2462,7 @@ PS&gt; Disable-WinRMServer</dev:code>
     <maml:description>
       <maml:para>Various commands such as "winrm get winrm/config" will show all the data but will also include containers, WSMan provider is also not universal, and you need to run different commands to get desired results or values from sub containers.</maml:para>
       <maml:para>Some of the WinRM options are advanced and not easily discoverable or often used, as such these can cause isssues hard to debug due to WinRM service misconfiguration.</maml:para>
-      <maml:para>This scripts does all this, by harvesting all important and relevant information and excludes\includes containers by specifying few switches, all of which is then sorted so that it can be compared with other working configurations to quickly discover problems.</maml:para>
+      <maml:para>Show-WinRMConfig does all this, by harvesting all important and relevant information and excludes\includes containers by specifying few switches, all of which is then sorted so that it can be compared with other working configurations to quickly discover problems.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2271,6 +2621,159 @@ PS&gt; Disable-WinRMServer</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Test-RemoteRegistry</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>RemoteRegistry</command:noun>
+      <maml:description>
+        <maml:para>Test remote registry service</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Test-RemoteRegistry tests for functioning remote registry</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-RemoteRegistry</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Remote computer name against which remote registry is to be tested</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, no warning is shown, only true or false is returned</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Remote computer name against which remote registry is to be tested</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, no warning is shown, only true or false is returned</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Test-RemoteRegistry</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Need to test if there is authentication with PSDrive</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Test-RemoteRegistry -Domain Server01</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-RemoteRegistry.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-RemoteRegistry.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Test-WinRM</command:name>
       <command:verb>Test</command:verb>
       <command:noun>WinRM</command:noun>
@@ -2279,7 +2782,7 @@ PS&gt; Disable-WinRMServer</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test WinRM service (server) configuration on either client or server computer. WinRM service is tested for functioning connectivity which includes PowerShell remoting, remoting with CIM commandlets and user authentication.</maml:para>
+      <maml:para>Test WinRM service (server) configuration on either client or server computer. WinRM service is tested for functioning connectivity which includes PowerShell remoting, remoting with CIM commandlets and creation of PS session.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2287,7 +2790,7 @@ PS&gt; Disable-WinRMServer</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Target host which is to be tested. If not specified, local machine is the default</maml:para>
+            <maml:para>Computer name which is to be tested for functioning WinRM. If not specified, local machine is the default</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2299,7 +2802,7 @@ PS&gt; Disable-WinRMServer</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:description>
-            <maml:para>Specify credentials which to use to test connection to remote computer. If not specified, you'll be asked for credentials</maml:para>
+            <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
@@ -2311,19 +2814,19 @@ PS&gt; Disable-WinRMServer</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify protocol to use for test, HTTP, HTTPS or both. By default only HTTPS is tested.</maml:para>
+            <maml:para>Specify protocol to use for test, HTTP, HTTPS or Default. The default value is "Default", which means HTTPS is tested first and if failed HTTP is tested.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>HTTPS</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Port</maml:name>
           <maml:description>
-            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port. The default value if 5985 for HTTP and 5986 for HTTPS.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -2333,9 +2836,167 @@ PS&gt; Disable-WinRMServer</dev:code>
           <dev:defaultValue>0</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Authentication</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Default</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UICulture</maml:name>
+          <maml:description>
+            <maml:para>Specifies the user interface culture to use for the CIM session, in Windows this setting is known as "Windows display language" The default value is en-US, current value can be obtained with Get-UICulture</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Globalization.CultureInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Globalization.CultureInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Culture</maml:name>
+          <maml:description>
+            <maml:para>Controls the formats used to represent numbers, currency values, and date/time values, in Windows this setting is known as "Region and regional format" The default value is en-US, current value can be obtained with Get-Culture</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Globalization.CultureInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Globalization.CultureInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultCulture</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ApplicationName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the application name in the connection. The default value is controlled with PSSessionApplicationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionApplicationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SessionOption</maml:name>
+          <maml:description>
+            <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Remoting.PSSessionOption</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionOption</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:description>
+            <maml:para>Specify session configuration to use for remoting, this session configuration must be registered and enabled on remote computer. The default value is controlled with PSSessionConfigurationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionConfigurationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimOptions</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify custom CIM session options to fine tune CIM session test. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.Options.CimSessionOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Status</maml:name>
+          <maml:description>
+            <maml:para>Boolean reference variable used for return value which indicates whether the test was success</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSReference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, does not produce errors, success messages or informational action messages</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Test-WinRM</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name which is to be tested for functioning WinRM. If not specified, local machine is the default</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Port</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port. The default value if 5985 for HTTP and 5986 for HTTPS.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Authentication</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Default</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CertThumbprint</maml:name>
           <maml:description>
-            <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+            <maml:para>Optionally specify certificate thumbprint which is to be used for HTTPS. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2354,7 +3015,7 @@ PS&gt; Disable-WinRMServer</dev:code>
             <maml:name>System.Globalization.CultureInfo</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>[System.Globalization.CultureInfo]::new("en-US", $false)</dev:defaultValue>
+          <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Culture</maml:name>
@@ -2366,7 +3027,55 @@ PS&gt; Disable-WinRMServer</dev:code>
             <maml:name>System.Globalization.CultureInfo</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>[System.Globalization.CultureInfo]::new("en-US", $false)</dev:defaultValue>
+          <dev:defaultValue>$DefaultCulture</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ApplicationName</maml:name>
+          <maml:description>
+            <maml:para>Specifies the application name in the connection. The default value is controlled with PSSessionApplicationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionApplicationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SessionOption</maml:name>
+          <maml:description>
+            <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Remoting.PSSessionOption</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionOption</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigurationName</maml:name>
+          <maml:description>
+            <maml:para>Specify session configuration to use for remoting, this session configuration must be registered and enabled on remote computer. The default value is controlled with PSSessionConfigurationName preference variable</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$PSSessionConfigurationName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimOptions</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify custom CIM session options to fine tune CIM session test. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.Options.CimSessionOptions</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Status</maml:name>
@@ -2397,7 +3106,7 @@ PS&gt; Disable-WinRMServer</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Target host which is to be tested. If not specified, local machine is the default</maml:para>
+          <maml:para>Computer name which is to be tested for functioning WinRM. If not specified, local machine is the default</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2409,7 +3118,7 @@ PS&gt; Disable-WinRMServer</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
-          <maml:para>Specify credentials which to use to test connection to remote computer. If not specified, you'll be asked for credentials</maml:para>
+          <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
@@ -2421,19 +3130,19 @@ PS&gt; Disable-WinRMServer</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specify protocol to use for test, HTTP, HTTPS or both. By default only HTTPS is tested.</maml:para>
+          <maml:para>Specify protocol to use for test, HTTP, HTTPS or Default. The default value is "Default", which means HTTPS is tested first and if failed HTTP is tested.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>HTTPS</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Port</maml:name>
         <maml:description>
-          <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+          <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port. The default value if 5985 for HTTP and 5986 for HTTPS.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -2443,9 +3152,21 @@ PS&gt; Disable-WinRMServer</dev:code>
         <dev:defaultValue>0</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Authentication</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify Authentication kind: None, no authentication is performed, request is anonymous. Basic, a scheme in which the user name and password are sent in clear text to the server or proxy. Default, use the authentication method implemented by the WS-Management protocol. Digest, a challenge-response scheme that uses a server-specified data string for the challenge. Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos. Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates. CredSSP, use Credential Security Support Provider (CredSSP) authentication. The default value is "Default"</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Default</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CertThumbprint</maml:name>
         <maml:description>
-          <maml:para>Optionally specify certificate thumbprint which is to be used for SSL. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
+          <maml:para>Optionally specify certificate thumbprint which is to be used for HTTPS. Use this parameter when there are multiple certificates with same DNS entries.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2464,7 +3185,7 @@ PS&gt; Disable-WinRMServer</dev:code>
           <maml:name>System.Globalization.CultureInfo</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>[System.Globalization.CultureInfo]::new("en-US", $false)</dev:defaultValue>
+        <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Culture</maml:name>
@@ -2476,7 +3197,55 @@ PS&gt; Disable-WinRMServer</dev:code>
           <maml:name>System.Globalization.CultureInfo</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>[System.Globalization.CultureInfo]::new("en-US", $false)</dev:defaultValue>
+        <dev:defaultValue>$DefaultCulture</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ApplicationName</maml:name>
+        <maml:description>
+          <maml:para>Specifies the application name in the connection. The default value is controlled with PSSessionApplicationName preference variable</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$PSSessionApplicationName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SessionOption</maml:name>
+        <maml:description>
+          <maml:para>Specify custom PSSessionOption object to use for remoting. The default value is controlled with PSSessionOption variable from caller scope</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Remoting.PSSessionOption</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Remoting.PSSessionOption</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$PSSessionOption</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigurationName</maml:name>
+        <maml:description>
+          <maml:para>Specify session configuration to use for remoting, this session configuration must be registered and enabled on remote computer. The default value is controlled with PSSessionConfigurationName preference variable</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$PSSessionConfigurationName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimOptions</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify custom CIM session options to fine tune CIM session test. By default new CIM options object is made and set to use SSL if protocol is HTTPS</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.Options.CimSessionOptions</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.Options.CimSessionOptions</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Status</maml:name>
@@ -2525,7 +3294,7 @@ PS&gt; Disable-WinRMServer</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?) TODO: Remote registry test TODO: Default test should be to localhost which must not ask for credentials TODO: Test for private profile to avoid cryptic error message</maml:para>
+        <maml:para>TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?) TODO: Test for private profile to avoid cryptic error message</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2554,8 +3323,12 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.authenticationmechanism</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.authenticationmechanism</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

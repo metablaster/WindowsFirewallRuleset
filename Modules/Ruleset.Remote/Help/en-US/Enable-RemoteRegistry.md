@@ -20,7 +20,7 @@ Enable-RemoteRegistry [-WhatIf] [-Confirm] [<CommonParameters>]
 ## DESCRIPTION
 
 Starts the RemoteRegistry service and adds required firewall rules
-which enables remote users to modify registry settings on this computer.
+which enables remote users to modify registry settings on this computer and conversely.
 
 ## EXAMPLES
 
@@ -84,6 +84,6 @@ must enable File and Printer sharing and Network Discovery for both inbound and 
 and must operate on private profile if either one is workstation machine.
 
 In addition to make it work in PS, administrative authentication must be done by opening a share
-to server by client computer.
+to server by client computer by using New-PSDrive
 
 ## RELATED LINKS

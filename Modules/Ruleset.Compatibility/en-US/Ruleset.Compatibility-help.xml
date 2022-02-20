@@ -1354,6 +1354,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
+        <maml:para>February 2022: Added check to confirm session configuration is present and enabled Added logic to convert local computer name to localhost</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1545,6 +1546,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>OutputType can't be declared because output may be anything</maml:para>
         <maml:para>Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
@@ -1558,7 +1560,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Invoke-WinCommand {param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion} Jeffrey</dev:code>
+        <dev:code>Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey</dev:code>
         <dev:remarks>
           <maml:para>Hello Jeffrey, how are you? Major  Minor  Build  Revision PSComputerName -----  -----  -----  -------- -------------- 5      1      17134  1        localhost</maml:para>
           <maml:para>In this example, we're invoking a ScriptBlock with 1 parameter in the compatibility session. This ScriptBlock will simply print a message and then return the version number of the compatibility session.</maml:para>

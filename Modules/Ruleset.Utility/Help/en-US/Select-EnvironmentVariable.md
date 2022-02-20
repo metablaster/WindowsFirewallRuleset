@@ -16,22 +16,22 @@ Select a group of system environment variables
 ### Scope (Default)
 
 ```powershell
-Select-EnvironmentVariable [-From <String>] [-Property <String>] [-Exact] [-IncludeFile] [-Force]
- [<CommonParameters>]
-```
-
-### Value
-
-```powershell
-Select-EnvironmentVariable [-From <String>] -Value <String> [-Property <String>] [-Exact] [-IncludeFile]
- [-Force] [<CommonParameters>]
+Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
+ [-From <String>] [-Property <String>] [-Exact] [-IncludeFile] [-Force] [<CommonParameters>]
 ```
 
 ### Name
 
 ```powershell
-Select-EnvironmentVariable [-From <String>] -Name <String> [-Property <String>] [-IncludeFile] [-Force]
- [<CommonParameters>]
+Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
+ [-From <String>] -Name <String> [-Property <String>] [-IncludeFile] [-Force] [<CommonParameters>]
+```
+
+### Value
+
+```powershell
+Select-EnvironmentVariable [-Domain <String>] [-Credential <PSCredential>] [-Session <PSSession>]
+ [-From <String>] -Value <String> [-Property <String>] [-Exact] [-IncludeFile] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -114,6 +114,54 @@ DriverData                 C:\Windows\System32\Drivers\DriverData
 
 ## PARAMETERS
 
+### -Domain
+
+Computer name from which to retrieve environment variables
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -From
 
 A named group of system environment variables to get as follows:
@@ -179,7 +227,7 @@ Accept wildcard characters: True
 
 Specify behavior of -Name or -Value parameters, for ex.
 -Name parameter gets values for
-environment variables that match -Name wildcard patter, to instead get variable names specify -Property Name.
+environment variables that match -Name wildcard pattern, to instead get variable names specify -Property Name.
 Same applies to -Value parameter which gets variables for matches values.
 
 ```yaml
@@ -288,6 +336,8 @@ TODO: Need to see if UNC, single backslash and relative paths without a qualifie
 a new group 'Firewall' is needed since whitelist excludes some valid variables
 TODO: Implement -AsCustomObject that will give consistent output for formatting purposes
 TODO: Implement -Unique switch since some variable Values may be duplicates (with different name)
+TODO: Output should include domain name from which variables were retrieved
+HACK: Parameter set names for ComputerName vs Session
 
 ## RELATED LINKS
 

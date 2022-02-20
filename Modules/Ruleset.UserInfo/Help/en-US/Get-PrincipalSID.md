@@ -13,8 +13,16 @@ Get SID for specified user account
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Get-PrincipalSID [-User] <String[]> [-Domain <String>] [-CIM] [<CommonParameters>]
+Get-PrincipalSID [-User] <String[]> [-Domain <String>] [<CommonParameters>]
+```
+
+### CimSession
+
+```powershell
+Get-PrincipalSID [-User] <String[]> [-CimSession <CimSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,13 +34,19 @@ Get SID's for single or multiple user names on a target computer
 ### EXAMPLE 1
 
 ```powershell
-Get-PrincipalSID "User" -Server "Server01"
+Get-PrincipalSID "User" -Domain "Server01"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM
+Get-PrincipalSID @("USERNAME1", "USERNAME2")
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-PrincipalSID "User" -CimSession (New-CimSession)
 ```
 
 ## PARAMETERS
@@ -59,7 +73,7 @@ Target computer on which to perform query
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
@@ -69,18 +83,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CIM
+### -CimSession
 
-Whether to contact CIM server (required for remote computers)
+Specifies the CIM session to use
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,7 +109,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string] SID's (security identifiers)
+### [PSCustomObject]
 
 ## NOTES
 

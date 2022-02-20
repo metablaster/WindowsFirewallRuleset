@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Remote
 Module Guid: 28ed593c-ae6e-4067-8a50-28f0d32d2edd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -42,6 +42,10 @@ Configure WinRM server for CIM and PowerShell remoting
 
 Export WinRM configuration to file
 
+### [Import-WinRM](Import-WinRM.md)
+
+Import WinRM configuration from file
+
 ### [Publish-SshKey](Publish-SshKey.md)
 
 Deploy public SSH key to remote host using SSH
@@ -61,6 +65,10 @@ Configure client computer for WinRM remoting
 ### [Show-WinRMConfig](Show-WinRMConfig.md)
 
 Show WinRM service configuration
+
+### [Test-RemoteRegistry](Test-RemoteRegistry.md)
+
+Test remote registry service
 
 ### [Test-WinRM](Test-WinRM.md)
 

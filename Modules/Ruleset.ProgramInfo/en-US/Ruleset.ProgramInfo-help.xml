@@ -22,6 +22,7 @@
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -116,6 +117,181 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which to verify for program installation</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Interactive</maml:name>
+          <maml:description>
+            <maml:para>If requested program installation directory is not found, Confirm-Installation will ask user to specify program installation location.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, it suppresses warning, error or informationall messages if user specified or default program installation directory path does not exist or if it's of an invalid syntax needed for firewall.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Confirm-Installation</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Application</maml:name>
+          <maml:description>
+            <maml:para>Predefined program name for which to search</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlServer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NETFramework</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">vcpkg</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ColorMania</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MetaTrader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AzureDataStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DemiseOfNations</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CounterStrikeGO</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PinballArcade</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaUpdate</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaRuntime</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeARM</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeReader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeAcrobat</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LoLGame</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FileZilla</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PathOfExile</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HWMonitor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CPUZ</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSIAfterburner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GPG</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OBSStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordSafe</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Greenshot</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DnsCrypt</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSSH</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShellCore64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OneDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HelpViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VSCode</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MicrosoftOffice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TeamViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeChromium</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chrome</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Firefox</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yandex</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Tor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">uTorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Thuderbird</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Steam</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GeForceExperience</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WarThunder</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PokerStars</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudioInstaller</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSYS2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Git</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GitHubDesktop</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EpicGames</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">UnrealEngine</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">BingWallpaper</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
+          <dev:type>
+            <maml:name>TargetProgram</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Directory</maml:name>
+          <maml:description>
+            <maml:para>Reference to variable which should be updated with the path to program installation directory excluding executable file name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSReference</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Interactive</maml:name>
           <maml:description>
@@ -161,6 +337,54 @@
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSReference</command:parameterValue>
         <dev:type>
           <maml:name>System.Management.Automation.PSReference</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which to verify for program installation</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -366,7 +590,105 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-AppCapability</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="App, StoreApp">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PackageTypeFilter</maml:name>
+          <maml:description>
+            <maml:para>Specifies one or more comma-separated types of packages to gets from the package repository. If not specified processes only packages of types Main and Framework.</maml:para>
+            <maml:para>Valid values are: Bundle Framework Main Resource None</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name which to check</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>IncludeAuthority</maml:name>
+          <maml:description>
+            <maml:para>If specified, outputs full reference name. By default only capability display name is returned.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Networking</maml:name>
+          <maml:description>
+            <maml:para>If specified, the result includes only networking capabilities</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-AppCapability</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="App, StoreApp">
           <maml:name>InputObject</maml:name>
           <maml:description>
             <maml:para>One or more Windows store apps for which to retrieve capabilities</maml:para>
@@ -378,10 +700,46 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name which to check</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from the main store</maml:para>
+            <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -391,7 +749,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Authority</maml:name>
+          <maml:name>IncludeAuthority</maml:name>
           <maml:description>
             <maml:para>If specified, outputs full reference name. By default only capability display name is returned.</maml:para>
           </maml:description>
@@ -415,7 +773,32 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="App, StoreApp">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PackageTypeFilter</maml:name>
+        <maml:description>
+          <maml:para>Specifies one or more comma-separated types of packages to gets from the package repository. If not specified processes only packages of types Main and Framework.</maml:para>
+          <maml:para>Valid values are: Bundle Framework Main Resource None</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="App, StoreApp">
         <maml:name>InputObject</maml:name>
         <maml:description>
           <maml:para>One or more Windows store apps for which to retrieve capabilities</maml:para>
@@ -427,10 +810,46 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name which to check</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>User</maml:name>
         <maml:description>
-          <maml:para>Specify user name for which to query app capabilities, this parameter is required only if input app is not obtained from the main store</maml:para>
+          <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -440,7 +859,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Authority</maml:name>
+        <maml:name>IncludeAuthority</maml:name>
         <maml:description>
           <maml:para>If specified, outputs full reference name. By default only capability display name is returned.</maml:para>
         </maml:description>
@@ -494,7 +913,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: According to unit test there are some capabilities not implemented here TODO: Need better descriptive parameter name for -Authority switch</maml:para>
+        <maml:para>TODO: According to unit test there are some capabilities not implemented here HACK: Parameter set names for ComputerName vs Session</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -507,7 +926,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-AppCapability -Authority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking</dev:code>
+        <dev:code>Get-AppCapability -IncludeAuthority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking</dev:code>
         <dev:remarks>
           <maml:para>APPLICATION PACKAGE AUTHORITY\Your Internet connection APPLICATION PACKAGE AUTHORITY\Your home or work networks</maml:para>
         </dev:remarks>
@@ -533,6 +952,10 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1245,9 +1668,9 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-SystemApps</command:name>
+      <command:name>Get-SystemApp</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>SystemApps</command:noun>
+      <command:noun>SystemApp</command:noun>
       <maml:description>
         <maml:para>Get store apps installed system wide</maml:para>
       </maml:description>
@@ -1257,7 +1680,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-SystemApps</maml:name>
+        <maml:name>Get-SystemApp</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
@@ -1270,7 +1693,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -1286,7 +1709,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1297,6 +1720,61 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-SystemApp</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User name in form of:</maml:para>
+            <maml:para>- domain\user_name</maml:para>
+            <maml:para>- user_name@fqn.domain.tld</maml:para>
+            <maml:para>- user_name</maml:para>
+            <maml:para>- SID-string</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1313,7 +1791,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -1329,7 +1807,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1341,11 +1819,35 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-SystemApps</maml:name>
+          <maml:name>None. You cannot pipe objects to Get-SystemApp</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1380,20 +1882,20 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Query remote computer not implemented TODO: Multiple computers TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: Format.ps1xml not applied in Windows PowerShell</maml:para>
+        <maml:para>TODO: Query multiple computers TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: Format.ps1xml not applied in Windows PowerShell</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SystemApps "User" -Domain "Server01"</dev:code>
+        <dev:code>Get-SystemApp "User" -Domain "Server01"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-SystemApps "Administrator"</dev:code>
+        <dev:code>Get-SystemApp "Administrator"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1402,7 +1904,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApps.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SystemApp.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1499,9 +2001,9 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-UserApps</command:name>
+      <command:name>Get-UserApp</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>UserApps</command:noun>
+      <command:noun>UserApp</command:noun>
       <maml:description>
         <maml:para>Get store apps for specific user</maml:para>
       </maml:description>
@@ -1511,7 +2013,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-UserApps</maml:name>
+        <maml:name>Get-UserApp</maml:name>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
@@ -1524,7 +2026,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>*</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>User name in form of:</maml:para>
@@ -1540,7 +2042,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1551,6 +2053,61 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-UserApp</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Specifies the name of a particular package. If specified, function returns results for this package only. Wildcards are permitted.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User name in form of:</maml:para>
+            <maml:para>- domain\user_name</maml:para>
+            <maml:para>- user_name@fqn.domain.tld</maml:para>
+            <maml:para>- user_name</maml:para>
+            <maml:para>- SID-string</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1567,7 +2124,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>*</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="UserName">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>User name in form of:</maml:para>
@@ -1583,7 +2140,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1595,11 +2152,35 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-UserApps</maml:name>
+          <maml:name>None. You cannot pipe objects to Get-UserApp</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1634,20 +2215,20 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Query remote computer not implemented TODO: Multiple domains TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: See also -AllUsers and other parameters in related links TODO: Format.ps1xml not applied in Windows PowerShell</maml:para>
+        <maml:para>TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID TODO: See also -AllUsers and other parameters in related links TODO: Format.ps1xml not applied in Windows PowerShell</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-UserApps "User" -Domain "Server01"</dev:code>
+        <dev:code>Get-UserApp "User" -Domain "Server01"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-UserApps "Administrator"</dev:code>
+        <dev:code>Get-UserApp "Administrator"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1655,8 +2236,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md</maml:uri>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:linkText>
@@ -2074,6 +2655,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -2159,7 +2741,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Computer name on which to look for program installation</maml:para>
+            <maml:para>Computer name on which to search for program installations</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -2167,6 +2749,157 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Interactive</maml:name>
+          <maml:description>
+            <maml:para>If requested program installation directory is not found, Search-Installation will ask user to specify program installation location</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, it suppresses warning, error or informationall messages if default program installation directory path does not exist or if it's of an invalid syntax needed for firewall. Same applies for program path (if found) specified by -Application parameter.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Search-Installation</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Program">
+          <maml:name>Application</maml:name>
+          <maml:description>
+            <maml:para>Predefined program name</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlServer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SqlManagementStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsDefender</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NuGet</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NETFramework</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">vcpkg</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GoogleDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RivaTuner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Incredibuild</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ColorMania</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MetaTrader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">RealWorld</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AzureDataStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">qBittorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenTTD</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EveOnline</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DemiseOfNations</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CounterStrikeGO</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PinballArcade</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaUpdate</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">JavaRuntime</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeARM</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeReader</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AdobeAcrobat</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LoLGame</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FileZilla</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PathOfExile</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HWMonitor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CPUZ</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSIAfterburner</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GPG</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OBSStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PasswordSafe</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Greenshot</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DnsCrypt</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSSH</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShellCore64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PowerShell86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OneDrive</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">HelpViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VSCode</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MicrosoftOffice</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">TeamViewer</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EdgeChromium</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Chrome</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Firefox</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yandex</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Tor</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">uTorrent</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Thuderbird</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Steam</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia64</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Nvidia86</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GeForceExperience</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WarThunder</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PokerStars</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudio</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">VisualStudioInstaller</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MSYS2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Git</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">GitHubDesktop</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">EpicGames</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">UnrealEngine</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">BingWallpaper</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">TargetProgram</command:parameterValue>
+          <dev:type>
+            <maml:name>TargetProgram</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Interactive</maml:name>
@@ -2208,7 +2941,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Computer name on which to look for program installation</maml:para>
+          <maml:para>Computer name on which to search for program installations</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -2216,6 +2949,42 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Interactive</maml:name>
@@ -2300,7 +3069,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists. File extension is then verified to confirm it is whitelisted, ex. such as an *.exe The executable is then verified to ensure it's digitaly signed and that signature is valid. If the file can't be found or verified, an error is genrated possibly with informational message, to explain if there is any problem with the path or file name syntax, otherwise information is present to the user to explain how to resolve the problem including a stack trace to script that is producing this issue.</maml:para>
+      <maml:para>Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists. File extension is then verified to confirm it is whitelisted, ex. such as an *.exe The executable is then verified to ensure it's digitaly signed and that signature is valid. If digital signature is missing or not valid, the file is optionally scanned on virus total to confirm it's not malware. If the file can't be found or verified, an error is genrated possibly with informational message, to explain if there is any problem with the path or file name syntax, otherwise information is present to the user to explain how to resolve the problem including a stack trace to script that is producing this issue.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -2317,6 +3086,54 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which executable file to be tested is located</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
@@ -2331,7 +3148,80 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test.</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Test-ExecutableFile</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:description>
+            <maml:para>Fully qualified path to executable file</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2354,6 +3244,66 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which executable file to be tested is located</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SigcheckLocation</maml:name>
+        <maml:description>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TimeOut</maml:name>
+        <maml:description>
+          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>300</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
         <maml:description>
@@ -2369,7 +3319,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:description>
-          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test.</maml:para>
+          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2476,6 +3426,30 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which to test path</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
           <maml:name>PathType</maml:name>
           <maml:description>
@@ -2511,9 +3485,9 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Strict</maml:name>
+          <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>If specified, this function produces errors instead of warnings</maml:para>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -2532,6 +3506,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -2596,6 +3582,42 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which to test path</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
         <maml:name>PathType</maml:name>
         <maml:description>
@@ -2624,18 +3646,6 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:name>UserProfile</maml:name>
         <maml:description>
           <maml:para>Checks if the path leads to user profile. When specified, for path to be reported as valid it must lead to user profile.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Strict</maml:name>
-        <maml:description>
-          <maml:para>If specified, this function produces errors instead of warnings</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -2741,17 +3751,149 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Test-Service</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="ServiceName">
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="ServiceName">
           <maml:name>Name</maml:name>
           <maml:description>
             <maml:para>Service short name (not display name)</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.String[]</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which service to be tested is located</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in passed test.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Test-Service</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="ServiceName">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Service short name (not display name)</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <dev:type>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
@@ -2767,17 +3909,89 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="ServiceName">
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="ServiceName">
         <maml:name>Name</maml:name>
         <maml:description>
           <maml:para>Service short name (not display name)</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.String[]</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which service to be tested is located</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SigcheckLocation</maml:name>
+        <maml:description>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <dev:type>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$SigcheckPath</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TimeOut</maml:name>
+        <maml:description>
+          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>300</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>If specified, no information, warning or error message is shown, only true or false is returned</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
@@ -2827,7 +4041,14 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>@("msiserver", "Spooler", "WSearch") | Test-Service</dev:code>
+        <dev:code>Test-Service WSearch -Domain Server01</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Test-Service SomeService -Quiet -Force</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2837,6 +4058,317 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Test-VirusTotal</command:name>
+      <command:verb>Test</command:verb>
+      <command:noun>VirusTotal</command:noun>
+      <maml:description>
+        <maml:para>Analyze file trough virus total API</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Test-VirusTotal performs malware analysis on file by using sysinternals sigcheck program which in turn uses virus total API to perform analysis.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Test-VirusTotal</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:description>
+            <maml:para>Fully qualified path to executable file which is to be tested</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which executable file to be tested is located</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Test-VirusTotal</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LiteralPath</maml:name>
+          <maml:description>
+            <maml:para>Fully qualified path to executable file which is to be tested</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SigcheckLocation</maml:name>
+          <maml:description>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TimeOut</maml:name>
+          <maml:description>
+            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LiteralPath</maml:name>
+        <maml:description>
+          <maml:para>Fully qualified path to executable file which is to be tested</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which executable file to be tested is located</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SigcheckLocation</maml:name>
+        <maml:description>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TimeOut</maml:name>
+        <maml:description>
+          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>300</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Test-VirusTotal</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Test-VirusTotal -LiteralPath "C:\Windows\notepad.exe" -SigcheckLocation "C:\tools"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

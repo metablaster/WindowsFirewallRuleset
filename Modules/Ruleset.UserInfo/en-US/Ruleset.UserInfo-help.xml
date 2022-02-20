@@ -151,14 +151,65 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>One or more computers to check if SID is not known, the default is localhost</maml:para>
+            <maml:para>Computer to check if SID is not known, the default is localhost</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>ConvertFrom-SID</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+          <maml:name>SID</maml:name>
+          <maml:description>
+            <maml:para>One or more SIDs to convert</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
             <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -178,14 +229,50 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Computer, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>One or more computers to check if SID is not known, the default is localhost</maml:para>
+          <maml:para>Computer to check if SID is not known, the default is localhost</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.String[]</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -326,10 +413,61 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-GroupPrincipal</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="UserGroup">
+          <maml:name>Group</maml:name>
           <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+            <maml:para>User group on local or remote computer</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Include</maml:name>
+          <maml:description>
+            <maml:para>Specifies a username as a wildcard pattern that this function includes in the operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Exclude</maml:name>
+          <maml:description>
+            <maml:para>Specifies a username as a wildcard pattern that this function excludes from operation.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Disabled</maml:name>
+          <maml:description>
+            <maml:para>If specified, result is disabled accounts instead</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -364,6 +502,18 @@
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Include</maml:name>
         <maml:description>
@@ -392,18 +542,6 @@
         <maml:name>Disabled</maml:name>
         <maml:description>
           <maml:para>If specified, result is disabled accounts instead</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
-        <maml:description>
-          <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -448,7 +586,14 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP) -CIM</dev:code>
+        <dev:code>Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -500,16 +645,32 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-GroupSID</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="UserGroup">
+          <maml:name>Group</maml:name>
           <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+            <maml:para>Array of user groups or single group name</maml:para>
           </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -539,16 +700,16 @@
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
+        <maml:name>CimSession</maml:name>
         <maml:description>
-          <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+          <maml:para>Specifies the CIM session to use</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -564,7 +725,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] SID's (security identifiers)</maml:name>
+          <maml:name>[PSCustomObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -586,7 +747,14 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-GroupSID @("USERNAME1", "USERNAME2") -CIM</dev:code>
+        <dev:code>Get-GroupSID @("USERNAME1", "USERNAME2")</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-GroupSID "USERNAME" -CimSession (New-CimSession)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -596,6 +764,225 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-PathSDDL</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>PathSDDL</command:noun>
+      <maml:description>
+        <maml:para>Get SDDL string for a path</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Get SDDL string for file system or registry locations on a single target computer</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-PathSDDL</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which specified path is located</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Merge</maml:name>
+          <maml:description>
+            <maml:para>If specified, combines resultant SDDL strings into one</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-PathSDDL</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Merge</maml:name>
+          <maml:description>
+            <maml:para>If specified, combines resultant SDDL strings into one</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which specified path is located</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Merge</maml:name>
+        <maml:description>
+          <maml:para>If specified, combines resultant SDDL strings into one</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-PathSDDL</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[string]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-PathSDDL -Path "C:\Users\Public\Desktop\" -Domain Server01 -Credential (Get-Credential)</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-PathSDDL -Path "C:\Users" -Session (New-PSSession)</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-PathSDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PathSDDL.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -638,16 +1025,32 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-PrincipalSID</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+            <maml:para>One or more user names</maml:para>
           </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -677,16 +1080,16 @@
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
+        <maml:name>CimSession</maml:name>
         <maml:description>
-          <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+          <maml:para>Specifies the CIM session to use</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -702,7 +1105,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] SID's (security identifiers)</maml:name>
+          <maml:name>[PSCustomObject]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -717,14 +1120,21 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-PrincipalSID "User" -Server "Server01"</dev:code>
+        <dev:code>Get-PrincipalSID "User" -Domain "Server01"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-PrincipalSID @("USERNAME1", "USERNAME2") -CIM</dev:code>
+        <dev:code>Get-PrincipalSID @("USERNAME1", "USERNAME2")</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-PrincipalSID "User" -CimSession (New-CimSession)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -752,10 +1162,22 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-SDDL</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
             <maml:para>One or more users for which to obtain SDDL string</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
+          <maml:name>Group</maml:name>
+          <maml:description>
+            <maml:para>One or more user groups for which to obtain SDDL string</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -775,17 +1197,6 @@
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
-          <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Merge</maml:name>
@@ -813,7 +1224,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
           <maml:name>Group</maml:name>
           <maml:description>
             <maml:para>One or more user groups for which to obtain SDDL string</maml:para>
@@ -825,77 +1236,17 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
-          <maml:name>Domain</maml:name>
-          <maml:description>
-            <maml:para>Single domain or computer such as remote computer name or builtin computer domain</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
+          <maml:name>CimSession</maml:name>
           <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+            <maml:para>Specifies the CIM session to use</maml:para>
           </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Merge</maml:name>
-          <maml:description>
-            <maml:para>If specified, combines resultant SDDL strings into one</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Get-SDDL</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Path</maml:name>
-          <maml:description>
-            <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
-          <maml:name>Domain</maml:name>
-          <maml:description>
-            <maml:para>Single domain or computer such as remote computer name or builtin computer domain</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
-          <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Merge</maml:name>
@@ -911,7 +1262,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
           <maml:para>One or more users for which to obtain SDDL string</maml:para>
@@ -923,7 +1274,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserGroup">
         <maml:name>Group</maml:name>
         <maml:description>
           <maml:para>One or more user groups for which to obtain SDDL string</maml:para>
@@ -931,18 +1282,6 @@
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
           <maml:name>System.String[]</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Path</maml:name>
-        <maml:description>
-          <maml:para>Single file system or registry location for which to obtain SDDL. Wildcard characters are supported.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -960,16 +1299,16 @@
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
+        <maml:name>CimSession</maml:name>
         <maml:description>
-          <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+          <maml:para>Specifies the CIM session to use</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Merge</maml:name>
@@ -1006,13 +1345,13 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>TODO: Mandatory parameter is impossible to make</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM</dev:code>
+        <dev:code>Get-SDDL -User USERNAME -Domain COMPUTERNAME</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1027,13 +1366,6 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Get-SDDL -Domain "NT AUTHORITY" -User "System"</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Get-SDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1061,7 +1393,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-UserGroup</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>One or more computers which to query for user groups</maml:para>
@@ -1073,21 +1405,25 @@
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-UserGroup</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CIM</maml:name>
+          <maml:name>CimSession</maml:name>
           <maml:description>
-            <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+            <maml:para>Specifies the CIM session to use</maml:para>
           </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>One or more computers which to query for user groups</maml:para>
@@ -1100,16 +1436,16 @@
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CIM</maml:name>
+        <maml:name>CimSession</maml:name>
         <maml:description>
-          <maml:para>Whether to contact CIM server (required for remote computers)</maml:para>
+          <maml:para>Specifies the CIM session to use</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1147,7 +1483,14 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-UserGroup @(DESKTOP, LAPTOP) -CIM</dev:code>
+        <dev:code>Get-UserGroup @(DESKTOP, LAPTOP)</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-UserGroup -CimSession (New-CimSession)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1413,19 +1756,29 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
       <command:verb>Test</command:verb>
       <command:noun>Credential</command:noun>
       <maml:description>
-        <maml:para>Takes a PSCredential object and validates it</maml:para>
+        <maml:para>Validates Windows user credentials.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Takes a PSCredential object and validates it against a domain or local machine</maml:para>
+      <maml:para>Validates a [PSCredential] instance representing user-account credentials against the current user's logon domain or local machine.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Test-Credential</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:description>
-            <maml:para>A PSCredential object with the username/password which is to be tested. Typically this is generated using the Get-Credential cmdlet.</maml:para>
+            <maml:para>The [PSCredential] instance to validate, typically obtained with Get-Credential.</maml:para>
+            <maml:para>The .UserName value may be: * a mere username: e.g, "user"</maml:para>
+            <maml:para>* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
+            <maml:para>* in UPN format: e.g., "user@domain.example.org"</maml:para>
+            <maml:para></maml:para>
+            <maml:para>IMPORTANT: If the logon domain is the current machine, validation happens against the local user database.</maml:para>
+            <maml:para>IRRESPECTIVE OF THE DOMAIN NAME SPECIFIED, VALIDATION IS ONLY EVER PERFORMED AGAINST THE CURRENT USER'S LOGON DOMAIN.</maml:para>
+            <maml:para>If an NTLM-format username is specified, the NETBIOS domain prefix, if specified, must match the NETBIOS logon domain as reflected in $env:USERDOMAIN</maml:para>
+            <maml:para>If a UPN-format username is specified, its domain suffix should match $env:USERDNSDOMAIN, although if it doesn't, only a warning is issued and an attempt to validate against the logon domain is still attempted, so as to support UPNs whose domain suffix differs from the logon DNS name. To avoid the warning, use the NTLM-format username with the NETBIOS domain prefix, or omit the domain part altogether.</maml:para>
+            <maml:para>If the credentials are valid in principle, but using them with the target account is in effect not possible - such as due to the account being disabled or having expired - a warning to that effect is issued and $false is returned.</maml:para>
+            <maml:para>The SecureString instance containing the decrypted password in the input credentials is decrypted in local memory , though it is again encrypted in transit when querying Active Directory.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
@@ -1434,37 +1787,35 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Context</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Local</maml:name>
           <maml:description>
-            <maml:para>Specifies the type of store to which the principal belongs: Domain: The domain store. This represents the AD DS store. Machine: The computer store. This represents the SAM store. ApplicationDirectory: The application directory store. This represents the AD LDS store.</maml:para>
+            <maml:para>Use this switch to validate perform validation against the local machine's user database rather than against the current logon domain.</maml:para>
+            <maml:para>If you're not currently logged on to a domain, use of this switch is optional. Conversely, however, the only way to validate against a domain is to be logged on to it.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
-          <maml:name>Domain</maml:name>
-          <maml:description>
-            <maml:para>Target computer against which to test local credential object</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
-          <maml:para>A PSCredential object with the username/password which is to be tested. Typically this is generated using the Get-Credential cmdlet.</maml:para>
+          <maml:para>The [PSCredential] instance to validate, typically obtained with Get-Credential.</maml:para>
+          <maml:para>The .UserName value may be: * a mere username: e.g, "user"</maml:para>
+          <maml:para>* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
+          <maml:para>* in UPN format: e.g., "user@domain.example.org"</maml:para>
+          <maml:para></maml:para>
+          <maml:para>IMPORTANT: If the logon domain is the current machine, validation happens against the local user database.</maml:para>
+          <maml:para>IRRESPECTIVE OF THE DOMAIN NAME SPECIFIED, VALIDATION IS ONLY EVER PERFORMED AGAINST THE CURRENT USER'S LOGON DOMAIN.</maml:para>
+          <maml:para>If an NTLM-format username is specified, the NETBIOS domain prefix, if specified, must match the NETBIOS logon domain as reflected in $env:USERDOMAIN</maml:para>
+          <maml:para>If a UPN-format username is specified, its domain suffix should match $env:USERDNSDOMAIN, although if it doesn't, only a warning is issued and an attempt to validate against the logon domain is still attempted, so as to support UPNs whose domain suffix differs from the logon DNS name. To avoid the warning, use the NTLM-format username with the NETBIOS domain prefix, or omit the domain part altogether.</maml:para>
+          <maml:para>If the credentials are valid in principle, but using them with the target account is in effect not possible - such as due to the account being disabled or having expired - a warning to that effect is issued and $false is returned.</maml:para>
+          <maml:para>The SecureString instance containing the decrypted password in the input credentials is decrypted in local memory , though it is again encrypted in transit when querying Active Directory.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
@@ -1473,45 +1824,25 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Context</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Local</maml:name>
         <maml:description>
-          <maml:para>Specifies the type of store to which the principal belongs: Domain: The domain store. This represents the AD DS store. Machine: The computer store. This represents the SAM store. ApplicationDirectory: The application directory store. This represents the AD LDS store.</maml:para>
+          <maml:para>Use this switch to validate perform validation against the local machine's user database rather than against the current logon domain.</maml:para>
+          <maml:para>If you're not currently logged on to a domain, use of this switch is optional. Conversely, however, the only way to validate against a domain is to be logged on to it.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
-        <maml:name>Domain</maml:name>
-        <maml:description>
-          <maml:para>Target computer against which to test local credential object</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>[PSCredential]</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
+    <command:inputTypes />
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] true if the credentials are valid, otherwise false</maml:name>
+          <maml:name>[bool] A Boolean indicating whether the credentials were successfully validated.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1520,31 +1851,38 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Modifications by metablaster January 2021: Function interface reworked by removing unnecesarry parameter and changin param block Simplified logic to validate credential based on context type Added links, inputs, outputs and notes to comment based help TODO: Does not seem to work on LAN, try with Domain\User + pwd and: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/create-inbound-rules-to-support-rpc</maml:para>
+        <maml:para>Gratefully adapted from: https://gallery.technet.microsoft.com/scriptcenter/Test-Credential-dda902c6, via https://stackoverflow.com/q/10802850/45375 WinAPI solution for local-account validation inspired by: https://stackoverflow.com/a/15644447/45375</maml:para>
+        <maml:para>Modifications by metablaster: February 2022: Added SuppressMessageAttribute to suppress PSUseCompatibleType warning Adapted code and comment formating and variable casing to be in line with the rest of code in repository Added OutputType attribute and additional links</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$Cred = Get-Credential
-PS&gt; Test-Credential $Cred -Context Machine</dev:code>
+        <dev:code>Test-Credential -Credential user
+True</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Prompts for the password for user "user" and validates it against the current logon domain (which may be the local machine). 'True' ($True) as the output indicates successful validation.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>$Cred = Get-Credential
-PS&gt; Test-Credential $Cred -Domain Server01 -Context Domain</dev:code>
+        <dev:code>Test-Credential domain\user</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Prompts for the password for user "domain\user" and validates it against the current logon domain, whose NETBIOS name (as reflected in $env:USERDOMAIN) must match.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>@($Cred1, $Cred2, $Cred3) | Test-Credential -CN Server01 -Context Domain</dev:code>
+        <dev:code>Test-Credential user@domain.example.org</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>Prompts for the password for user "user@domain.example.org" and validates it against the current logon domain, whose DNS name (as reflected in $env:USERDNSDOMAIN) is expected to match; if not, a warning is issued, but validation is still attempted.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>Test-Credential Administrator -Local</dev:code>
+        <dev:remarks>
+          <maml:para>Prompts for the password of the machine-local administrator account and validates it against the local user database.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1554,12 +1892,8 @@ PS&gt; Test-Credential $Cred -Domain Server01 -Context Domain</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/RamblingCookieMonster/PowerShell</maml:linkText>
-        <maml:uri>https://github.com/RamblingCookieMonster/PowerShell</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.directoryservices.accountmanagement.principalcontext</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.directoryservices.accountmanagement.principalcontext</maml:uri>
+        <maml:linkText>https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce</maml:linkText>
+        <maml:uri>https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Firewall
 Module Guid: 3ee23849-8adf-46ee-95f9-7a02417e1f4b
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -29,6 +29,10 @@ Exports firewall rules to a CSV or JSON file from registry
 ### [Find-RulePrincipal](Find-RulePrincipal.md)
 
 Get all firewall rules without or with specified LocalUser value
+
+### [Find-WeakRule](Find-WeakRule.md)
+
+Get potentially weak firewall rules
 
 ### [Format-RuleOutput](Format-RuleOutput.md)
 

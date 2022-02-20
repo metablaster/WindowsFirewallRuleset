@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.UserInfo
 Module Guid: 136254f4-4730-4ed1-b9e9-1ccecfe09ee9
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -30,6 +30,10 @@ Get principals of specified groups on target computers
 
 Get SID of user groups on local or remote computers
 
+### [Get-PathSDDL](Get-PathSDDL.md)
+
+Get SDDL string for a path
+
 ### [Get-PrincipalSID](Get-PrincipalSID.md)
 
 Get SID for specified user account
@@ -52,7 +56,7 @@ Split principal to either user name or domain
 
 ### [Test-Credential](Test-Credential.md)
 
-Takes a PSCredential object and validates it
+Validates Windows user credentials.
 
 ### [Test-UPN](Test-UPN.md)
 

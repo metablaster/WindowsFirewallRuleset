@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -33,6 +33,10 @@ Verify file is encoded as expected
 ### [ConvertFrom-Wildcard](ConvertFrom-Wildcard.md)
 
 Convert wildcard pattern to regex
+
+### [Format-ComputerName](Format-ComputerName.md)
+
+Format computer name to NETBIOS format
 
 ### [Get-FileEncoding](Get-FileEncoding.md)
 

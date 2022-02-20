@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ComputerInfo
 Module Guid: c68a812d-076d-47bd-a73d-8d4600bd3c51
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 

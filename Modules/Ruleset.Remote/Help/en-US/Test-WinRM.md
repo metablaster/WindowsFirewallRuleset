@@ -13,26 +13,29 @@ Test WinRM service configuration
 
 ## SYNTAX
 
-### Default (Default)
+### Protocol (Default)
 
 ```powershell
 Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
- [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-Status <PSReference>] [-Quiet] [<CommonParameters>]
+ [-Authentication <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-ApplicationName <String>]
+ [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-CimOptions <CimSessionOptions>]
+ [-Status <PSReference>] [-Quiet] [<CommonParameters>]
 ```
 
-### ThumbPrint
+### Thumbprint
 
 ```powershell
-Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
- [-CertThumbprint <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-Status <PSReference>]
- [-Quiet] [<CommonParameters>]
+Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Port <Int32>] [-Authentication <String>]
+ [-CertThumbprint <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-ApplicationName <String>]
+ [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-CimOptions <CimSessionOptions>]
+ [-Status <PSReference>] [-Quiet] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 Test WinRM service (server) configuration on either client or server computer.
 WinRM service is tested for functioning connectivity which includes
-PowerShell remoting, remoting with CIM commandlets and user authentication.
+PowerShell remoting, remoting with CIM commandlets and creation of PS session.
 
 ## EXAMPLES
 
@@ -59,7 +62,7 @@ PS> Test-WinRM HTTP -Quiet -Status $RemoteStatus
 
 ### -Domain
 
-Target host which is to be tested.
+Computer name which is to be tested for functioning WinRM.
 If not specified, local machine is the default
 
 ```yaml
@@ -77,6 +80,7 @@ Accept wildcard characters: False
 ### -Credential
 
 Specify credentials which to use to test connection to remote computer.
+Credentials are required for HTTPS and remote connections.
 If not specified, you'll be asked for credentials
 
 ```yaml
@@ -93,17 +97,17 @@ Accept wildcard characters: False
 
 ### -Protocol
 
-Specify protocol to use for test, HTTP, HTTPS or both.
-By default only HTTPS is tested.
+Specify protocol to use for test, HTTP, HTTPS or Default.
+The default value is "Default", which means HTTPS is tested first and if failed HTTP is tested.
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Protocol
 Aliases:
 
 Required: False
 Position: Named
-Default value: HTTPS
+Default value: Default
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -111,7 +115,8 @@ Accept wildcard characters: False
 ### -Port
 
 Optionally specify port number if the WinRM server specified by
--Domain parameter listens on non default port
+-Domain parameter listens on non default port.
+The default value if 5985 for HTTP and 5986 for HTTPS.
 
 ```yaml
 Type: System.Int32
@@ -125,14 +130,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Authentication
+
+Optionally specify Authentication kind:
+None, no authentication is performed, request is anonymous.
+Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
+Default, use the authentication method implemented by the WS-Management protocol.
+Digest, a challenge-response scheme that uses a server-specified data string for the challenge.
+Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
+Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
+CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+The default value is "Default"
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Default
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -CertThumbprint
 
-Optionally specify certificate thumbprint which is to be used for SSL.
+Optionally specify certificate thumbprint which is to be used for HTTPS.
 Use this parameter when there are multiple certificates with same DNS entries.
 
 ```yaml
 Type: System.String
-Parameter Sets: ThumbPrint
+Parameter Sets: Thumbprint
 Aliases:
 
 Required: False
@@ -155,7 +184,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: [System.Globalization.CultureInfo]::new("en-US", $false)
+Default value: $DefaultUICulture
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -173,7 +202,76 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: [System.Globalization.CultureInfo]::new("en-US", $false)
+Default value: $DefaultCulture
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ApplicationName
+
+Specifies the application name in the connection.
+The default value is controlled with PSSessionApplicationName preference variable
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $PSSessionApplicationName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SessionOption
+
+Specify custom PSSessionOption object to use for remoting.
+The default value is controlled with PSSessionOption variable from caller scope
+
+```yaml
+Type: System.Management.Automation.Remoting.PSSessionOption
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $PSSessionOption
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConfigurationName
+
+Specify session configuration to use for remoting, this session configuration must
+be registered and enabled on remote computer.
+The default value is controlled with PSSessionConfigurationName preference variable
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $PSSessionConfigurationName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimOptions
+
+Optionally specify custom CIM session options to fine tune CIM session test.
+By default new CIM options object is made and set to use SSL if protocol is HTTPS
+
+```yaml
+Type: Microsoft.Management.Infrastructure.Options.CimSessionOptions
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -225,8 +323,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
-TODO: Remote registry test
-TODO: Default test should be to localhost which must not ask for credentials
 TODO: Test for private profile to avoid cryptic error message
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md)
+
+[https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.authenticationmechanism](https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspaces.authenticationmechanism)

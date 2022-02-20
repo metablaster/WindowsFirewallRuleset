@@ -16,21 +16,22 @@ Configure client computer for WinRM remoting
 ### Default (Default)
 
 ```powershell
-Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-TrustedHosts <String>] [-Force] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### File
 
 ```powershell
-Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-CertFile <String>] [-Force] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-CertFile <String>] [-TrustedHosts <String>]
+ [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### CertThumbprint
 
 ```powershell
-Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-CertThumbprint <String>] [-Force] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Set-WinRMClient [[-Domain] <String>] [-Protocol <String>] [-CertThumbprint <String>] [-TrustedHosts <String>]
+ [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,10 +62,11 @@ by installing specified certificate file into trusted root store.
 ### EXAMPLE 3
 
 ```powershell
-Set-WinRMClient -Domain Server3 -Protocol HTTP
+Set-WinRMClient -Domain Server3 -Protocol HTTP -TrustedHosts "172.64.9.4,RemoteComputer,192.168.2.155"
 ```
 
-Configures client machine to run commands remotely on computer Server3 using HTTP
+Configures client machine to run commands remotely on computer Server3 using HTTP, and allows
+connection to hosts specified by -TrustedHosts parameter.
 
 ## PARAMETERS
 
@@ -87,8 +89,8 @@ Accept wildcard characters: False
 
 ### -Protocol
 
-Specifies protocol to HTTP, HTTPS or any.
-By default only HTTPS is configured.
+Specifies protocol to HTTP, HTTPS or Default.
+The default value is "Default" which configures client for both HTTP and HTTPS.
 
 ```yaml
 Type: System.String
@@ -97,7 +99,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: HTTPS
+Default value: Default
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -129,6 +131,24 @@ Use this parameter when there are multiple certificates with same DNS entries.
 ```yaml
 Type: System.String
 Parameter Sets: CertThumbprint
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TrustedHosts
+
+Optionally append computers or IP addresses to trusted hosts.
+To specify multiple hosts, separate then with comma without spaces.
+This option is required for non loopback HTTP remoting
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -209,9 +229,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: How to control language?
 in WSMan:\COMPUTER\Service\DefaultPorts and
 WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
-TODO: Authenticate users using certificates optionally or instead of credential object
+TODO: Optionally authenticate users using certificates in addition to credentials
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
+TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 
 ## RELATED LINKS
 

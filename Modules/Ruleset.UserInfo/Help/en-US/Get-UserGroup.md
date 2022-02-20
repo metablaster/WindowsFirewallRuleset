@@ -13,8 +13,16 @@ Get user groups on target computers
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Get-UserGroup [[-Domain] <String[]>] [-CIM] [<CommonParameters>]
+Get-UserGroup [-Domain <String[]>] [<CommonParameters>]
+```
+
+### CimSession
+
+```powershell
+Get-UserGroup [-CimSession <CimSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +40,13 @@ Get-UserGroup "ServerPC"
 ### EXAMPLE 2
 
 ```powershell
-Get-UserGroup @(DESKTOP, LAPTOP) -CIM
+Get-UserGroup @(DESKTOP, LAPTOP)
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-UserGroup -CimSession (New-CimSession)
 ```
 
 ## PARAMETERS
@@ -43,28 +57,28 @@ One or more computers which to query for user groups
 
 ```yaml
 Type: System.String[]
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
-Position: 1
+Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CIM
+### -CimSession
 
-Whether to contact CIM server (required for remote computers)
+Specifies the CIM session to use
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -123,7 +123,7 @@ New-Variable -Name WinRMCompatibilityRules -Scope Script -Value "@FirewallAPI.dl
 # Server (3)
 New-Variable -Name Workstation -Scope Script -Option Constant -Value (
 	(Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
-	Select-Object -ExpandProperty ProductType) -eq 1)
+		Select-Object -ExpandProperty ProductType) -eq 1)
 
 New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
 

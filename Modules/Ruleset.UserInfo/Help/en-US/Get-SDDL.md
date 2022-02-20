@@ -13,22 +13,16 @@ Get SDDL string of a user, group or from path
 
 ## SYNTAX
 
-### User (Default)
+### Domain (Default)
 
 ```powershell
-Get-SDDL -User <String[]> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
+Get-SDDL [-User <String[]>] [-Group <String[]>] [-Domain <String>] [-Merge] [<CommonParameters>]
 ```
 
-### Group
+### CimSession
 
 ```powershell
-Get-SDDL [-User <String[]>] -Group <String[]> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
-```
-
-### Path
-
-```powershell
-Get-SDDL -Path <String> [-Domain <String>] [-CIM] [-Merge] [<CommonParameters>]
+Get-SDDL [-User <String[]>] [-Group <String[]>] [-CimSession <CimSession>] [-Merge] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,7 +35,7 @@ locations on a single target computer
 ### EXAMPLE 1
 
 ```powershell
-Get-SDDL -User USERNAME -Domain COMPUTERNAME -CIM
+Get-SDDL -User USERNAME -Domain COMPUTERNAME
 ```
 
 ### EXAMPLE 2
@@ -56,12 +50,6 @@ Get-SDDL -Group @("Users", "Administrators") -Merge
 Get-SDDL -Domain "NT AUTHORITY" -User "System"
 ```
 
-### EXAMPLE 4
-
-```powershell
-Get-SDDL -Path "HKLM:\SOFTWARE\Microsoft\Clipboard"
-```
-
 ## PARAMETERS
 
 ### -User
@@ -70,19 +58,7 @@ One or more users for which to obtain SDDL string
 
 ```yaml
 Type: System.String[]
-Parameter Sets: User
-Aliases: UserName
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: System.String[]
-Parameter Sets: Group
+Parameter Sets: (All)
 Aliases: UserName
 
 Required: False
@@ -98,31 +74,14 @@ One or more user groups for which to obtain SDDL string
 
 ```yaml
 Type: System.String[]
-Parameter Sets: Group
+Parameter Sets: (All)
 Aliases: UserGroup
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
-```
-
-### -Path
-
-Single file system or registry location for which to obtain SDDL.
-Wildcard characters are supported.
-
-```yaml
-Type: System.String
-Parameter Sets: Path
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: True
 ```
 
 ### -Domain
@@ -131,7 +90,7 @@ Single domain or computer such as remote computer name or builtin computer domai
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
@@ -141,18 +100,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CIM
+### -CimSession
 
-Whether to contact CIM server (required for remote computers)
+Specifies the CIM session to use
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -187,6 +146,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+TODO: Mandatory parameter is impossible to make
 
 ## RELATED LINKS

@@ -13,8 +13,16 @@ Get SID of user groups on local or remote computers
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Get-GroupSID [-Group] <String[]> [-Domain <String>] [-CIM] [<CommonParameters>]
+Get-GroupSID [-Group] <String[]> [-Domain <String>] [<CommonParameters>]
+```
+
+### CimSession
+
+```powershell
+Get-GroupSID [-Group] <String[]> [-CimSession <CimSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +40,13 @@ Get-GroupSID "USERNAME" -Domain "COMPUTERNAME"
 ### EXAMPLE 2
 
 ```powershell
-Get-GroupSID @("USERNAME1", "USERNAME2") -CIM
+Get-GroupSID @("USERNAME1", "USERNAME2")
+```
+
+### EXAMPLE 3
+
+```powershell
+Get-GroupSID "USERNAME" -CimSession (New-CimSession)
 ```
 
 ## PARAMETERS
@@ -59,7 +73,7 @@ Computer name which to query for group users
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
@@ -69,18 +83,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CIM
+### -CimSession
 
-Whether to contact CIM server (required for remote computers)
+Specifies the CIM session to use
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -95,7 +109,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string] SID's (security identifiers)
+### [PSCustomObject]
 
 ## NOTES
 

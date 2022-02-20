@@ -141,6 +141,12 @@ Test-Service
 
 Check if system service exists and is trusted
 
+```powershell
+Test-VirusTotal
+```
+
+Analyze file trough virus total API
+
 ## KEYWORDS
 
 - Program

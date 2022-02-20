@@ -27,7 +27,7 @@ Register-SslCertificate [-Domain <String>] -ProductType <String> [-CertFile <Str
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### ThumbPrint
+### Thumbprint
 
 ```powershell
 Register-SslCertificate [-Domain <String>] -ProductType <String> [-CertThumbprint <String>] [-PassThru]
@@ -136,7 +136,7 @@ Use this parameter when there are multiple certificates with same DNS entries.
 
 ```yaml
 Type: System.String
-Parameter Sets: ThumbPrint
+Parameter Sets: Thumbprint
 Aliases:
 
 Required: False

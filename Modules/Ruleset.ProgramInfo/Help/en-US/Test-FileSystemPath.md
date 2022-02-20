@@ -13,25 +13,18 @@ Test existence of a file system path and validate path syntax
 
 ## SYNTAX
 
-### None (Default)
+### Domain (Default)
 
 ```powershell
-Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile]
- [<CommonParameters>]
+Test-FileSystemPath [-LiteralPath] <String> [-Domain <String>] [-Credential <PSCredential>]
+ [-PathType <String>] [-Firewall] [-UserProfile] [-Quiet] [<CommonParameters>]
 ```
 
-### Strict
+### Session
 
 ```powershell
-Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile] [-Strict]
- [<CommonParameters>]
-```
-
-### Quiet
-
-```powershell
-Test-FileSystemPath [-LiteralPath] <String> [-PathType <String>] [-Firewall] [-UserProfile] [-Quiet]
- [<CommonParameters>]
+Test-FileSystemPath [-LiteralPath] <String> [-Session <PSSession>] [-PathType <String>] [-Firewall]
+ [-UserProfile] [-Quiet] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,6 +97,54 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Domain
+
+Computer name on which to test path
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PathType
 
 The type of path to test, can be one of the following:
@@ -160,29 +201,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Strict
-
-If specified, this function produces errors instead of warnings
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Strict
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Quiet
 
 If specified, no information, warning or error message is shown, only true or false is returned
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Quiet
+Parameter Sets: (All)
 Aliases:
 
 Required: False

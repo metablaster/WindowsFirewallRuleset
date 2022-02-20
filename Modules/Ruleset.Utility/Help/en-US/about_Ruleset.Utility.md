@@ -58,6 +58,12 @@ ConvertFrom-Wildcard
 Convert wildcard pattern to regex
 
 ```powershell
+Format-ComputerName
+```
+
+Format computer name to NETBIOS format
+
+```powershell
 Get-FileEncoding
 ```
 

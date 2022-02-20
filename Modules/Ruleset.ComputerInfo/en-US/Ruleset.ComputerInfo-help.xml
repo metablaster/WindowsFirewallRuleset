@@ -527,7 +527,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SKU</maml:name>
           <maml:description>
-            <maml:para>Operating system SKU number</maml:para>
+            <maml:para>Operating system SKU number to convert to SKU string</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -542,7 +542,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>One or more computer names</maml:para>
+            <maml:para>One or more computer names for which to obtain SKU</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -552,12 +552,27 @@
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-SystemSKU</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SKU</maml:name>
         <maml:description>
-          <maml:para>Operating system SKU number</maml:para>
+          <maml:para>Operating system SKU number to convert to SKU string</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -569,7 +584,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>One or more computer names</maml:para>
+          <maml:para>One or more computer names for which to obtain SKU</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -577,6 +592,18 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -683,7 +710,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
           <maml:description>
-            <maml:para>Obtain IP address for specified IP version</maml:para>
+            <maml:para>Obtain IP address for the specified IP version</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -768,7 +795,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
           <maml:description>
-            <maml:para>Obtain IP address for specified IP version</maml:para>
+            <maml:para>Obtain IP address for the specified IP version</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -827,7 +854,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
           <maml:name>AddressFamily</maml:name>
           <maml:description>
-            <maml:para>Obtain IP address for specified IP version</maml:para>
+            <maml:para>Obtain IP address for the specified IP version</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -922,7 +949,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="IPVersion">
         <maml:name>AddressFamily</maml:name>
         <maml:description>
-          <maml:para>Obtain IP address for specified IP version</maml:para>
+          <maml:para>Obtain IP address for the specified IP version</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1375,14 +1402,26 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are WSMan and Ping The default is WSMan.</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>WSMan</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Port</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Credential</maml:name>
@@ -1408,6 +1447,18 @@
           </dev:type>
           <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CertThumbprint</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify certificate thumbprint which is to be used for WinRM over SSL.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Test-Computer</maml:name>
@@ -1426,14 +1477,14 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are WSMan and Ping The default is WSMan.</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>WSMan</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Retry</maml:name>
@@ -1457,7 +1508,7 @@
             <maml:name>System.Int16</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>0</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1477,14 +1528,26 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specify the kind of a test to perform. Acceptable values are WSMan and Ping The default is WSMan.</maml:para>
+          <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>WSMan</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Port</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>0</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Credential</maml:name>
@@ -1511,6 +1574,18 @@
         <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CertThumbprint</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify certificate thumbprint which is to be used for WinRM over SSL.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Retry</maml:name>
         <maml:description>
           <maml:para>Specifies the number of echo requests to send. The default value is 4. Valid only for PowerShell Core The default value is defined in $PSSessionOption preference variable</maml:para>
@@ -1532,7 +1607,7 @@
           <maml:name>System.Int16</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>0</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1557,7 +1632,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NOTE: This function currently does nothing useful except testing if CIM session is still alive. TODO: Partially avoiding error messages, check all references which handle errors (code bloat) TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection) TODO: Test CIM and DCOM</maml:para>
+        <maml:para>TODO: We should check for common issues for GPO management, not just ping status (ex. Test-NetConnection)</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

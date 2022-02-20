@@ -20,6 +20,12 @@ that end users may have.
 Initialize-Module
 ```
 
+Initialize connection for firewall deployment
+
+```powershell
+Initialize-Module
+```
+
 Update or install specified modules
 
 ```powershell

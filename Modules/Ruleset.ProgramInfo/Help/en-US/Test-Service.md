@@ -13,8 +13,18 @@ Check if system service exists and is trusted
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Test-Service [-Name] <String[]> [-Force] [<CommonParameters>]
+Test-Service [-Name] <String> [-Domain <String>] [-Credential <PSCredential>]
+ [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>] [-Quiet] [-Force] [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+Test-Service [-Name] <String> [-Session <PSSession>] [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>]
+ [-Quiet] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,8 +43,14 @@ Test-Service dnscache
 
 ### EXAMPLE 2
 
+```powershell
+Test-Service WSearch -Domain Server01
 ```
-@("msiserver", "Spooler", "WSearch") | Test-Service
+
+### EXAMPLE 3
+
+```powershell
+Test-Service SomeService -Quiet -Force
 ```
 
 ## PARAMETERS
@@ -44,15 +60,117 @@ Test-Service dnscache
 Service short name (not display name)
 
 ```yaml
-Type: System.String[]
+Type: System.String
 Parameter Sets: (All)
 Aliases: ServiceName
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: True
+```
+
+### -Domain
+
+Computer name on which service to be tested is located
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SigcheckLocation
+
+Specify path to sigcheck executable program.
+Do not specify sigcheck file, only path to where sigcheck is located.
+By default working directory and PATH is searched for sigcheck64.exe.
+On 32 bit operating system sigcheck.exe is searched instead.
+If location to sigcheck executable is not found then no virus total scan and report is done.
+
+```yaml
+Type: System.IO.DirectoryInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $SigcheckPath
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TimeOut
+
+Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
+The default wait time is 300 (5 minutes).
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 300
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Quiet
+
+If specified, no information, warning or error message is shown, only true or false is returned
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
 
 ### -Force

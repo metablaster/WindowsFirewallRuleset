@@ -13,8 +13,16 @@ Convert SID to principal, user and domain name
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-ConvertFrom-SID [-SID] <String[]> [-Domain <String[]>] [<CommonParameters>]
+ConvertFrom-SID [-SID] <String[]> [-Domain <String>] [-Credential <PSCredential>] [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+ConvertFrom-SID [-SID] <String[]> -CimSession <CimSession> -Session <PSSession> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,16 +65,64 @@ Accept wildcard characters: False
 
 ### -Domain
 
-One or more computers to check if SID is not known, the default is localhost
+Computer to check if SID is not known, the default is localhost
 
 ```yaml
-Type: System.String[]
-Parameter Sets: (All)
+Type: System.String
+Parameter Sets: Domain
 Aliases: Computer, CN
 
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimSession
+
+Specifies the CIM session to use
+
+```yaml
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: Session
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

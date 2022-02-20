@@ -13,8 +13,19 @@ Get Windows store app capabilities
 
 ## SYNTAX
 
+### Name
+
 ```powershell
-Get-AppCapability [-InputObject] <Object[]> [-User <String>] [-Authority] [-Networking] [<CommonParameters>]
+Get-AppCapability [[-Name] <String>] [-PackageTypeFilter <String>] [-Domain <String>]
+ [-Credential <PSCredential>] [-Session <PSSession>] [-User <String>] [-IncludeAuthority] [-Networking]
+ [<CommonParameters>]
+```
+
+### InputObject
+
+```powershell
+Get-AppCapability -InputObject <Object[]> [-Domain <String>] [-Credential <PSCredential>]
+ [-Session <PSSession>] [-User <String>] [-IncludeAuthority] [-Networking] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,7 +52,7 @@ Removable storage
 ### EXAMPLE 2
 
 ```powershell
-Get-AppCapability -Authority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
+Get-AppCapability -IncludeAuthority -InputObject (Get-AppxPackage -Name "*ZuneMusic*") -Networking
 ```
 
 APPLICATION PACKAGE AUTHORITY\Your Internet connection
@@ -49,26 +60,117 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 
 ## PARAMETERS
 
+### -Name
+
+Specifies the name of a particular package.
+If specified, function returns results for this package only.
+Wildcards are permitted.
+
+```yaml
+Type: System.String
+Parameter Sets: Name
+Aliases:
+
+Required: False
+Position: 1
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -PackageTypeFilter
+
+Specifies one or more comma-separated types of packages to gets from the package repository.
+If not specified processes only packages of types Main and Framework.
+
+Valid values are:
+Bundle
+Framework
+Main
+Resource
+None
+
+```yaml
+Type: System.String
+Parameter Sets: Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -InputObject
 
 One or more Windows store apps for which to retrieve capabilities
 
 ```yaml
 Type: System.Object[]
-Parameter Sets: (All)
+Parameter Sets: InputObject
 Aliases: App, StoreApp
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -Domain
+
+Computer name which to check
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -User
 
-Specify user name for which to query app capabilities, this parameter
-is required only if input app is not obtained from the main store
+Specify user name for which to query app capabilities.
+This parameter is required only if input app or the app specified by -Name parameter is
+not from the main store.
 
 ```yaml
 Type: System.String
@@ -82,7 +184,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Authority
+### -IncludeAuthority
 
 If specified, outputs full reference name.
 By default only capability display name is returned.
@@ -132,7 +234,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 TODO: According to unit test there are some capabilities not implemented here
-TODO: Need better descriptive parameter name for -Authority switch
+HACK: Parameter set names for ComputerName vs Session
 
 ## RELATED LINKS
 
@@ -145,3 +247,5 @@ TODO: Need better descriptive parameter name for -Authority switch
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/appxmanifestschema/element-capability)
 
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability)
+
+[https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes](https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes)

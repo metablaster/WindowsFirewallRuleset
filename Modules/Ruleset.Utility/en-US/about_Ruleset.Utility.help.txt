@@ -31,6 +31,9 @@ EXAMPLES
 	ConvertFrom-Wildcard
 	Convert wildcard pattern to regex
 
+	Format-ComputerName
+	Format computer name to NETBIOS format
+
 	Get-FileEncoding
 	Gets the encoding of a file
 

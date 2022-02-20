@@ -9,46 +9,98 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Takes a PSCredential object and validates it
+Validates Windows user credentials.
 
 ## SYNTAX
 
 ```powershell
-Test-Credential [-Credential] <PSCredential> -Context <String> [-Domain <String>] [<CommonParameters>]
+Test-Credential [-Credential] <PSCredential> [-Local] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Takes a PSCredential object and validates it against a domain or local machine
+Validates a \[PSCredential\] instance representing user-account credentials
+against the current user's logon domain or local machine.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-$Cred = Get-Credential
-PS> Test-Credential $Cred -Context Machine
+Test-Credential -Credential user
+True
 ```
+
+Prompts for the password for user "user" and validates it against the current
+logon domain (which may be the local machine).
+'True' ($True) as the output
+indicates successful validation.
 
 ### EXAMPLE 2
 
 ```powershell
-$Cred = Get-Credential
-PS> Test-Credential $Cred -Domain Server01 -Context Domain
+Test-Credential domain\user
 ```
+
+Prompts for the password for user "domain\user" and validates it against
+the current logon domain, whose NETBIOS name (as reflected in $env:USERDOMAIN)
+must match.
 
 ### EXAMPLE 3
 
 ```powershell
-@($Cred1, $Cred2, $Cred3) | Test-Credential -CN Server01 -Context Domain
+Test-Credential user@domain.example.org
 ```
+
+Prompts for the password for user "user@domain.example.org" and validates it against
+the current logon domain, whose DNS name (as reflected in $env:USERDNSDOMAIN)
+is expected to match; if not, a warning is issued, but validation is still
+attempted.
+
+### EXAMPLE 4
+
+```powershell
+Test-Credential Administrator -Local
+```
+
+Prompts for the password of the machine-local administrator account and
+validates it against the local user database.
 
 ## PARAMETERS
 
 ### -Credential
 
-A PSCredential object with the username/password which is to be tested.
-Typically this is generated using the Get-Credential cmdlet.
+The \[PSCredential\] instance to validate, typically obtained with
+Get-Credential.
+
+The .UserName value may be:
+* a mere username: e.g, "user"
+* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"
+* in UPN format: e.g., "user@domain.example.org"
+
+IMPORTANT:
+If the logon domain is the current machine, validation happens against the local user database.
+
+IRRESPECTIVE OF THE DOMAIN NAME SPECIFIED, VALIDATION IS ONLY EVER PERFORMED
+AGAINST THE CURRENT USER'S LOGON DOMAIN.
+
+If an NTLM-format username is specified, the NETBIOS domain prefix, if specified,
+must match the NETBIOS logon domain as reflected in $env:USERDOMAIN
+
+If a UPN-format username is specified, its domain suffix should match $env:USERDNSDOMAIN,
+although if it doesn't, only a warning is issued and an attempt to validate against the
+logon domain is still attempted, so as to support UPNs whose domain suffix differs from
+the logon DNS name.
+To avoid the warning, use the NTLM-format username with the NETBIOS domain prefix,
+or omit the domain part altogether.
+
+If the credentials are valid in principle, but using them with the target account is
+in effect not possible - such as due to the account being disabled or having expired -
+a warning to that effect is issued and $false is returned.
+
+The SecureString instance containing the decrypted password in the input credentials is
+decrypted *in local memory*, though it is again encrypted *in transit* when querying
+Active Directory.
 
 ```yaml
 Type: System.Management.Automation.PSCredential
@@ -58,47 +110,28 @@ Aliases:
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Context
-
-Specifies the type of store to which the principal belongs:
-Domain:
-The domain store.
-This represents the AD DS store.
-Machine:
-The computer store.
-This represents the SAM store.
-ApplicationDirectory:
-The application directory store.
-This represents the AD LDS store.
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Domain
+### -Local
 
-Target computer against which to test local credential object
+Use this switch to validate perform validation against the local machine's
+user database rather than against the current logon domain.
+
+If you're not currently logged on to a domain, use of this switch is
+optional.
+Conversely, however, the only way to validate against a domain
+is to be logged on to it.
 
 ```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
-Aliases: ComputerName, CN
+Aliases:
 
 Required: False
 Position: Named
-Default value: [System.Environment]::MachineName
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -109,25 +142,26 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [PSCredential]
-
 ## OUTPUTS
 
-### [bool] true if the credentials are valid, otherwise false
+### [bool] A Boolean indicating whether the credentials were successfully validated.
 
 ## NOTES
 
-Modifications by metablaster January 2021:
-Function interface reworked by removing unnecesarry parameter and changin param block
-Simplified logic to validate credential based on context type
-Added links, inputs, outputs and notes to comment based help
-TODO: Does not seem to work on LAN, try with Domain\User + pwd and:
-<https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/create-inbound-rules-to-support-rpc>
+Gratefully adapted from:
+https://gallery.technet.microsoft.com/scriptcenter/Test-Credential-dda902c6,
+via https://stackoverflow.com/q/10802850/45375
+WinAPI solution for local-account validation inspired by:
+https://stackoverflow.com/a/15644447/45375
+
+Modifications by metablaster:
+February 2022:
+Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
+Adapted code and comment formating and variable casing to be in line with the rest of code in repository
+Added OutputType attribute and additional links
 
 ## RELATED LINKS
 
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md)
 
-[https://github.com/RamblingCookieMonster/PowerShell](https://github.com/RamblingCookieMonster/PowerShell)
-
-[https://docs.microsoft.com/en-us/dotnet/api/system.directoryservices.accountmanagement.principalcontext](https://docs.microsoft.com/en-us/dotnet/api/system.directoryservices.accountmanagement.principalcontext)
+[https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce](https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce)

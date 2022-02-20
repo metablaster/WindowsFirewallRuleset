@@ -57,6 +57,12 @@ Export-WinRM
 Export WinRM configuration to file
 
 ```powershell
+Export-WinRM
+```
+
+Import WinRM configuration from file
+
+```powershell
 Publish-SshKey
 ```
 

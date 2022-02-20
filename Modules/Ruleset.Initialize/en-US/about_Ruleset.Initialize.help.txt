@@ -12,6 +12,9 @@ LONG DESCRIPTION
 	that end users may have.
 
 EXAMPLES
+	Initialize-Connection
+	Initialize connection for firewall deployment
+
 	Initialize-Module
 	Update or install specified modules
 

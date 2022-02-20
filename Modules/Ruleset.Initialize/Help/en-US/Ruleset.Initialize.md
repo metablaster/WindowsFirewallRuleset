@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Initialize
 Module Guid: 41585bd3-3f4d-4669-9919-2d19c0451b73
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -13,6 +13,10 @@ Locale: en-US
 Initialize repository development environment
 
 ## Ruleset.Initialize Cmdlets
+
+### [Initialize-Connection](Initialize-Connection.md)
+
+Initialize connection for firewall deployment
 
 ### [Initialize-Module](Initialize-Module.md)
 

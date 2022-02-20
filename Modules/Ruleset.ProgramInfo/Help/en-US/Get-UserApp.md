@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md
 schema: 2.0.0
 ---
 
-# Get-UserApps
+# Get-UserApp
 
 ## SYNOPSIS
 
@@ -13,8 +13,17 @@ Get store apps for specific user
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Get-UserApps [[-Name] <String>] [-User] <String> [[-Domain] <String>] [<CommonParameters>]
+Get-UserApp [[-Name] <String>] -User <String> [-Domain <String>] [-Credential <PSCredential>]
+ [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+Get-UserApp [[-Name] <String>] -User <String> [-Session <PSSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,13 +35,13 @@ Search installed store apps in userprofile for specific user account
 ### EXAMPLE 1
 
 ```powershell
-Get-UserApps "User" -Domain "Server01"
+Get-UserApp "User" -Domain "Server01"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-UserApps "Administrator"
+Get-UserApp "Administrator"
 ```
 
 ## PARAMETERS
@@ -70,7 +79,7 @@ Parameter Sets: (All)
 Aliases: UserName
 
 Required: True
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -82,12 +91,44 @@ NETBIOS Computer name in form of "COMPUTERNAME"
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
-Position: 3
+Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -98,7 +139,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-UserApps
+### None. You cannot pipe objects to Get-UserApp
 
 ## OUTPUTS
 
@@ -110,14 +151,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Query remote computer not implemented
-TODO: Multiple domains
 TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID
 TODO: See also -AllUsers and other parameters in related links
 TODO: Format.ps1xml not applied in Windows PowerShell
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApps.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md)
 
 [https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps](https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps)

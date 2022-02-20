@@ -40,6 +40,12 @@ Find-RulePrincipal
 Get all firewall rules with or without LocalUser value
 
 ```powershell
+Find-WeakRule
+```
+
+Get all rules which are not restrictive enough
+
+```powershell
 Format-RuleOutput
 ```
 

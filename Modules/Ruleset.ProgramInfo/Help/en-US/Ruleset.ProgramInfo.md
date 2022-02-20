@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.12.0
-Help Version: 0.12.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
+Help Version: 0.13.0
 Locale: en-US
 ---
 
@@ -54,7 +54,7 @@ Get installed Microsoft SQL Server Management Studios
 
 Get SQL server information from a local or remote servers
 
-### [Get-SystemApps](Get-SystemApps.md)
+### [Get-SystemApp](Get-SystemApp.md)
 
 Get store apps installed system wide
 
@@ -62,7 +62,7 @@ Get store apps installed system wide
 
 Search installed programs for all users, system wide
 
-### [Get-UserApps](Get-UserApps.md)
+### [Get-UserApp](Get-UserApp.md)
 
 Get store apps for specific user
 
@@ -97,3 +97,7 @@ Test existence of a file system path and validate path syntax
 ### [Test-Service](Test-Service.md)
 
 Check if system service exists and is trusted
+
+### [Test-VirusTotal](Test-VirusTotal.md)
+
+Analyze file trough virus total API

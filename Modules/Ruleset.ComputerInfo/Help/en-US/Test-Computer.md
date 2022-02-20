@@ -16,8 +16,8 @@ Test target computer (policy store) on which to deploy firewall
 ### WSMan (Default)
 
 ```powershell
-Test-Computer [-Domain] <String> [-Protocol <String>] [-Credential <PSCredential>] [-Authentication <String>]
- [<CommonParameters>]
+Test-Computer [-Domain] <String> [-Protocol <String>] [-Port <Int32>] [-Credential <PSCredential>]
+ [-Authentication <String>] [-CertThumbprint <String>] [<CommonParameters>]
 ```
 
 ### Ping
@@ -73,8 +73,8 @@ Accept wildcard characters: False
 ### -Protocol
 
 Specify the kind of a test to perform.
-Acceptable values are WSMan and Ping
-The default is WSMan.
+Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default
+The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping
 
 ```yaml
 Type: System.String
@@ -83,7 +83,24 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: WSMan
+Default value: Default
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Port
+
+Optionally specify port number if the WinRM server specified by
+-Domain parameter listens on non default port
+
+```yaml
+Type: System.Int32
+Parameter Sets: WSMan
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -127,6 +144,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -CertThumbprint
+
+Optionally specify certificate thumbprint which is to be used for WinRM over SSL.
+
+```yaml
+Type: System.String
+Parameter Sets: WSMan
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Retry
 
 Specifies the number of echo requests to send.
@@ -159,7 +192,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -178,10 +211,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-NOTE: This function currently does nothing useful except testing if CIM session is still alive.
-TODO: Partially avoiding error messages, check all references which handle errors (code bloat)
 TODO: We should check for common issues for GPO management, not just ping status (ex.
 Test-NetConnection)
-TODO: Test CIM and DCOM
 
 ## RELATED LINKS

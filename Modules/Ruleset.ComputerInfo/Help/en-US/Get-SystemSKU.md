@@ -13,16 +13,22 @@ Get operating system SKU information
 
 ## SYNTAX
 
+### Domain (Default)
+
+```powershell
+Get-SystemSKU [-Domain <String[]>] [<CommonParameters>]
+```
+
 ### Number
 
 ```powershell
 Get-SystemSKU -SKU <Int32> [<CommonParameters>]
 ```
 
-### Computer
+### Session
 
 ```powershell
-Get-SystemSKU [-Domain <String[]>] [<CommonParameters>]
+Get-SystemSKU [-CimSession <CimSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,7 +74,7 @@ Domain   SystemSKU   SKU
 
 ### -SKU
 
-Operating system SKU number
+Operating system SKU number to convert to SKU string
 
 ```yaml
 Type: System.Int32
@@ -84,17 +90,33 @@ Accept wildcard characters: False
 
 ### -Domain
 
-One or more computer names
+One or more computer names for which to obtain SKU
 
 ```yaml
 Type: System.String[]
-Parameter Sets: Computer
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -CimSession
+
+Specifies the CIM session to use
+
+```yaml
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

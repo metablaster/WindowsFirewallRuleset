@@ -91,10 +91,7 @@ function Find-RulePrincipal
 
 		[Parameter()]
 		[ValidateSet("Inbound", "Outbound", "*")]
-		[string] $Direction = "*",
-
-		[Parameter()]
-		[switch] $Append
+		[string] $Direction = "*"
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"

@@ -74,6 +74,9 @@ EXAMPLES
 	Test-Service
 	Check if system service exists and is trusted
 
+	Test-Service
+	Analyze file trough virus total API
+
 KEYWORDS
 	Program
 	ProgramInfo

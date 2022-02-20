@@ -13,8 +13,18 @@ Check if executable file exists and is trusted.
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Test-ExecutableFile [-LiteralPath] <String> [-Quiet] [-Force] [<CommonParameters>]
+Test-ExecutableFile [-LiteralPath] <String> [-Domain <String>] [-Credential <PSCredential>]
+ [-SigcheckLocation <DirectoryInfo>] [-TimeOut <Int32>] [-Quiet] [-Force] [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+Test-ExecutableFile [-LiteralPath] <String> [-Session <PSSession>] [-SigcheckLocation <DirectoryInfo>]
+ [-TimeOut <Int32>] [-Quiet] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,6 +33,8 @@ Test-ExecutableFile verifies the path to executable file is valid and that execu
 File extension is then verified to confirm it is whitelisted, ex.
 such as an *.exe
 The executable is then verified to ensure it's digitaly signed and that signature is valid.
+If digital signature is missing or not valid, the file is optionally scanned on virus total to
+confirm it's not malware.
 If the file can't be found or verified, an error is genrated possibly with informational message,
 to explain if there is any problem with the path or file name syntax, otherwise information is
 present to the user to explain how to resolve the problem including a stack trace to script that
@@ -90,6 +102,92 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Domain
+
+Computer name on which executable file to be tested is located
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SigcheckLocation
+
+Specify path to sigcheck executable program.
+Do not specify sigcheck file, only path to where sigcheck is located.
+By default working directory and PATH is searched for sigcheck64.exe.
+On 32 bit operating system sigcheck.exe is searched instead.
+If location to sigcheck executable is not found then no virus total scan and report is done.
+
+```yaml
+Type: System.IO.DirectoryInfo
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $SigcheckPath
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TimeOut
+
+Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
+The default wait time is 300 (5 minutes).
+
+```yaml
+Type: System.Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 300
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Quiet
 
 If specified, no information, warning or error message is shown, only true or false is returned
@@ -110,6 +208,7 @@ Accept wildcard characters: False
 
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
+This parameter has no effect virus total check, if the file is reported as malware the return value is False.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

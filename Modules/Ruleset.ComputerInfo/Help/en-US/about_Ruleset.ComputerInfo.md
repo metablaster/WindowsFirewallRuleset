@@ -51,6 +51,12 @@ Select-IPInterface
 Select IP configuration for specified network adapters
 
 ```powershell
+Test-Computer
+```
+
+Test target computer (policy store) to which to deploy firewall
+
+```powershell
 Test-DnsName
 ```
 
@@ -61,12 +67,6 @@ Test-NetBiosName
 ```
 
 Validate NETBIOS name syntax
-
-```powershell
-Test-Computer
-```
-
-Test target computer (policy store) to which to deploy firewall
 
 ```powershell
 Test-UNC

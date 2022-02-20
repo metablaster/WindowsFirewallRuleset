@@ -28,14 +28,14 @@ EXAMPLES
 	Select-IPInterface
 	Select IP configuration for specified network adapters
 
+	Test-Computer
+	Test target computer (policy store) to which to deploy firewall
+
 	Test-DnsName
 	Validate DNS domain name syntax
 
 	Test-NetBiosName
 	Validate NETBIOS name syntax
-
-	Test-Computer
-	Test target computer (policy store) to which to deploy firewall
 
 	Test-UNC
 	Validate UNC path syntax
