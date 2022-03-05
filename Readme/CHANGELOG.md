@@ -35,6 +35,8 @@ If you would like to see fresh changes done since last release you can do so on 
     - Microsoft Edge WebView2
     - Sysinternals sigcheck
     - Microsoft Network Realtime Inspection Service
+    - Psiphon censorship circumvention system
+    - Added rule for wsmprovhost.exe
 
   - Updated rules for:
 

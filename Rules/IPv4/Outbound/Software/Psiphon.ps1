@@ -5,8 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound firewall rules template
+Outbound firewall rules for Psiphon
 
 .DESCRIPTION
-Detailed descritpion of this outbound rule group and involved programs and services including
-their networking requirements.
+Outbound firewall rules for Psiphon Circumvention System
 
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
@@ -51,13 +49,13 @@ program path does not exist or if it's of an invalid syntax needed for firewall.
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> OutboundRule
+PS> .\Psiphon.ps1
 
 .INPUTS
-None. You cannot pipe objects to OutboundRule.ps1
+None. You cannot pipe objects to Psiphon.ps1
 
 .OUTPUTS
-None. OutboundRule.ps1 does not generate any output
+None. Psiphon.ps1 does not generate any output
 
 .NOTES
 None.
@@ -82,18 +80,16 @@ param (
 )
 
 #region Initialization
-# TODO: Adjust path to project settings
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\DirectionSetup.ps1
+. $PSScriptRoot\..\DirectionSetup.ps1
+
 Initialize-Project -Strict
+Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Template - TargetProgram"
-$PackageSID = "*"
-$PrincipalSID = (Get-PrincipalSID $DefaultUser).SID
-# TODO: Update command line help messages
-$Accept = "Template accept help message"
-$Deny = "Skip operation, template deny help message"
+$Group = "Software - Psiphon"
+$Accept = "Outbound rules for Psiphon portable will be loaded, recommended if Psiphon portable is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for Psiphon portable will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues = @{
@@ -110,79 +106,42 @@ $PSDefaultParameterValues = @{
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-# TargetProgram installation directories
-$TargetProgramRoot = "%ProgramFiles%\TargetProgram"
+# Psiphon installation directories
+$PsiphonRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp"
 
 #
-# Rules for TargetProgram
+# Rules for Psiphon
 #
 
 # Test if installation exists on system
-if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Psiphon" ([ref] $PsiphonRoot)) -or $ForceLoad)
 {
-	# Following lines/options are not used:
-	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)
-	# -RemoteUser $RemoteUser -RemoteMachine $RemoteMachine
-	# -Authentication NotRequired -Encryption NotRequired -OverrideBlockRules False
-	# -InterfaceAlias "loopback" (if used, goes on line with InterfaceType)
-
-	# Following lines/options are used only where appropriate:
-	# LocalOnlyMapping $false -LooseSourceMapping $false
-	# -Owner $PrincipalSID -Package $PackageSID
-
-	$Program = "$TargetProgramRoot\TargetProgram.exe"
+	$Program = "$PsiphonRoot\psiphon-tunnel-core.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		# Outbound TCP template
-		New-NetFirewallRule -DisplayName "Outbound TCP template" `
+		New-NetFirewallRule -DisplayName "Psiphon" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort Any -RemotePort Any `
-			-LocalUser Any `
+			-LocalPort Any -RemotePort 22, 80, 443, 554 `
+			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Outbound TCP template description" |
+			-Description "Psiphon censorship circumvention system" |
 		Format-RuleOutput
 
-		# Outbound UDP template
-		New-NetFirewallRule -DisplayName "Outbound UDP template" `
+		New-NetFirewallRule -DisplayName "Psiphon" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort Any -RemotePort Any `
-			-LocalUser Any `
+			-LocalPort Any -RemotePort 23, 53, 443, 554 `
+			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "Outbound UDP template description" |
-		Format-RuleOutput
-
-		# Outbound ICMP template
-		New-NetFirewallRule -DisplayName "Outbound ICMP template" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol ICMPv4 -IcmpType 0 `
-			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort Any -RemotePort Any `
-			-LocalUser Any `
-			-InterfaceType $DefaultInterface `
-			-Description "Outbound ICMP template description" |
+			-Description "Psiphon censorship circumvention system" |
 		Format-RuleOutput
 	}
-
-	# Outbound StoreApp TCP template
-	New-NetFirewallRule -DisplayName "Outbound StoreApp TCP template" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-		-Service Any -Program Any -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any `
-		-InterfaceType $DefaultInterface `
-		-Owner $PrincipalSID -Package $PackageSID `
-		-Description "Outbound StoreApp TCP template description" |
-	Format-RuleOutput
 }
 
 if ($UpdateGPO)

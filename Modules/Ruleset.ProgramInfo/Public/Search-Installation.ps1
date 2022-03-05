@@ -196,7 +196,7 @@ function Search-Installation
 		}
 		"NuGet"
 		{
-			# NOTE: ask user where he installed NuGet
+			# NOTE: ask user for standalone installation directory of NuGet
 			break
 		}
 		"NETFramework"
@@ -217,12 +217,17 @@ function Search-Installation
 		}
 		"vcpkg"
 		{
-			# NOTE: ask user where he installed vcpkg
+			# NOTE: ask user for standalone installation directory of vcpkg
 			break
 		}
 		"SysInternals"
 		{
-			# NOTE: ask user where he installed SysInternals
+			# NOTE: ask user for standalone installation directory of SysInternals
+			break
+		}
+		"Psiphon"
+		{
+			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp"
 			break
 		}
 		"WindowsKits"
@@ -531,7 +536,7 @@ function Search-Installation
 		}
 		"Tor"
 		{
-			# NOTE: ask user where he installed Tor because it doesn't include an installer
+			# NOTE: ask user for standalone installation directory of Tor
 			break
 		}
 		"uTorrent"
@@ -675,7 +680,8 @@ function Search-Installation
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
 
-			$Accept = "Provide full path to '$Application' installation directory"
+			# TODO: If path is specified with quotes it's not found, but Format-Path in Edit-Table should handle this
+			$Accept = "Provide full path to '$Application' installation directory without quotes"
 			$Deny = "Skip operation, rules for '$Application' won't be loaded into firewall"
 
 			if (Approve-Execute -Accept $Accept -Deny $Deny -Title "Rule group for $Application" -Question "Do you want to input path now?")

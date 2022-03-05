@@ -190,7 +190,7 @@ function Initialize-WinSession
 
 	if (!$Session)
 	{
-		$NewPSSessionParameters = @{
+		$PSSessionParams = @{
 			Verbose = $VerboseFlag
 			ComputerName = $Domain
 			Name = $script:SessionName
@@ -200,7 +200,7 @@ function Initialize-WinSession
 
 		if ($Credential)
 		{
-			$NewPSSessionParameters.Credential = $Credential
+			$PSSessionParams.Credential = $Credential
 		}
 
 		if ($Domain -eq "localhost")
@@ -208,11 +208,11 @@ function Initialize-WinSession
 			# MSDN: EnableNetworkAccess, indicates that this cmdlet adds an interactive security token to loopback sessions.
 			# The interactive token lets you run commands in the loopback session that get data from other computers
 			# The EnableNetworkAccess parameter is effective only in loopback sessions.
-			$NewPSSessionParameters.EnableNetworkAccess = $true
+			$PSSessionParams.EnableNetworkAccess = $true
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on computer '$Domain'"
-		$Session = New-PSSession @NewPSSessionParameters | Select-Object -First 1
+		$Session = New-PSSession @PSSessionParams | Select-Object -First 1
 
 		# keep the compatibility session PWD in sync with the parent PWD.
 		# This only applies on localhost.
