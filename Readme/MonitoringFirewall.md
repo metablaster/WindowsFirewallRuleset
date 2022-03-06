@@ -157,7 +157,7 @@ firewall information.
 6. Double click "Audit Filtering Platform Packet drop"
 7. Check "Configure the following audit events"
 8. Check "Audit Failure" and click OK to apply
-9. "Audit Filtering Platform Connection" (this is optional, I don't recommend enabling this to
+9. "Audit Filtering Platform Connection" (this is optional, it's not recommend to enable this to
 reduce amount of data,\
 and to focus on relevant, which is monitoring dropped packets)
 
@@ -189,7 +189,7 @@ click on image to enlarge:
 
 - WFP stand for "Windows Filtering Platform", native packet filter upon which Windows firewall
 is built.
-- **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in section
+- **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in the section
 "Event log" above.
 - You can access WFP logs, filter and state by executing following commands:\
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or

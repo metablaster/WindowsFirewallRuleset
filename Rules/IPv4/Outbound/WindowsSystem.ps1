@@ -211,7 +211,7 @@ Antivirus use." |
 			-Service WdNisSvc -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-Description "Helps guard against intrusion attempts targeting known and newly

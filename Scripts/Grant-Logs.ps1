@@ -52,7 +52,7 @@ The Microsoft Protection Service will automatically reset permissions on firewal
 on system reboot, network reconnect or firewall settings change, for security reasons.
 
 .PARAMETER User
-Non administrative user account for which to grant permission
+Standard (non administrative) user account for which to grant logs permission
 
 .PARAMETER Domain
 Principal domain for which to grant permission.
@@ -91,9 +91,9 @@ using namespace System.Security
 [CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true)]
 [OutputType([void])]
 param (
-	[Parameter(Position = 0)]
+	[Parameter(Mandatory = $true, Position = 0)]
 	[Alias("UserName")]
-	[string] $User = $DefaultUser,
+	[string] $User,
 
 	[Parameter()]
 	[Alias("ComputerName", "CN")]

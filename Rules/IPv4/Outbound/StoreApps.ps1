@@ -85,6 +85,7 @@ TODO: We can learn app display name from manifest
 TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
 
 NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
+HACK: Rule for Windows Store doesn't work
 #>
 
 #Requires -Version 5.1
@@ -200,6 +201,7 @@ foreach ($Principal in $Users)
 				"runFullTrust"
 				{
 					$RemoteAddress += "Internet4"
+					$RemoteAddress += "LocalSubnet4"
 					break
 				}
 			}
@@ -263,6 +265,7 @@ foreach ($Principal in $Users)
 				"runFullTrust"
 				{
 					$RemoteAddress += "Internet4"
+					$RemoteAddress += "LocalSubnet4"
 					break
 				}
 			}

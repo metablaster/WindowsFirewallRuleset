@@ -135,6 +135,12 @@ foreach ($Principal in $Principals)
 					$RemoteAddress += "LocalSubnet4"
 					break
 				}
+				"runFullTrust"
+				{
+					$RemoteAddress += "Internet4"
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
 			}
 		}
 
@@ -189,6 +195,12 @@ foreach ($Principal in $Principals)
 				}
 				"Your home or work networks"
 				{
+					$RemoteAddress += "LocalSubnet4"
+					break
+				}
+				"runFullTrust"
+				{
+					$RemoteAddress += "Internet4"
 					$RemoteAddress += "LocalSubnet4"
 					break
 				}
