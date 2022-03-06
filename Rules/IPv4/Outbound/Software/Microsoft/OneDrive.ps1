@@ -168,6 +168,32 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 			-InterfaceType $DefaultInterface `
 			-Description "One drive for syncing user data" | Format-RuleOutput
 	}
+
+	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($OneDriveRoot)
+	$VersionFolder = Get-ChildItem -Directory -Path $ExpandedPath -Name | Where-Object {
+		$_ -match "\d+"
+	}
+
+	if ([string]::IsNullOrEmpty($VersionFolder))
+	{
+		Write-Warning -Message "[$ThisScript] Unable to find OneDrive version folder"
+	}
+	else
+	{
+		$Program = "$OneDriveRoot\$VersionFolder\FileSyncHelper.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "OneDrive file sync helper" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $LocalSystem `
+				-InterfaceType $DefaultInterface `
+				-Description "" | Format-RuleOutput
+		}
+	}
 }
 
 if ($UpdateGPO)

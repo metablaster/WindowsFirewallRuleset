@@ -44,6 +44,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - Multicast
     - Path of Exile game
     - OpenTTD game
+    - One Drive
 
 - Modules
 
