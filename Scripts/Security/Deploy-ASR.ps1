@@ -70,7 +70,8 @@ None. You cannot pipe objects to Deploy-ASR.ps1
 None. Deploy-ASR.ps1 does not generate any output
 
 .NOTES
-None.
+To exclude folders or files from ASR use:
+Add-MpPreference -AttackSurfaceReductionOnlyExclusions $ExcludePath
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
