@@ -69,6 +69,7 @@ TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
 TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
 Develop from false to true in clean session
+TODO: Changes done to system services should be reverted to original values, new function needed.
 #>
 function Initialize-Project
 {
@@ -200,7 +201,8 @@ function Initialize-Project
 				"WinRM" # Windows Remote Management (WS-Management)
 			)
 
-			if ($PolicyStore -ne [System.Environment]::MachineName)
+			# TODO: Learn why is RemoteRegistry service also required for localhost? (OpenRemoteBaseKey fails with "network path was not found")
+			if ($true) # ($PolicyStore -ne [System.Environment]::MachineName)
 			{
 				# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
 				$RequiredServices += "RemoteRegistry"

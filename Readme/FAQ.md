@@ -55,6 +55,7 @@ Next ensure at a minimum following network services are `Running` and optionally
 2. LanmanServer: `Server`
 3. lmhosts: `TCP/IP NetBIOS Helper service`
 4. WinRM: `Windows Remote Management (WS-Management)`
+5. RemoteRegistry `Remote Registry`
 
 If this doesn't work verify the command that is causing this problem, for example following command
 tries to get firewall rules from GPO and will produce this problem:
