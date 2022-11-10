@@ -488,6 +488,11 @@ function Select-EnvironmentVariable
 				$script:BlackList += $Entry
 			}
 		}
+
+		# Windows firewall doesn't work with %HOMEDRIVE% variable
+		$script:WhiteList = $script:WhiteList | Where-Object {
+			$_.Name -notmatch "HOMEDRIVE"
+		}
 	}
 	elseif ($LastState.Value -ne $Exact)
 	{

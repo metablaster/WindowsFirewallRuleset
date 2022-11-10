@@ -225,6 +225,11 @@ function Search-Installation
 			# NOTE: ask user for standalone installation directory of SysInternals
 			break
 		}
+		"OpenSpace"
+		{
+			# NOTE: ask user for standalone installation directory of OpenSpace
+			break
+		}
 		"Psiphon"
 		{
 			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp"

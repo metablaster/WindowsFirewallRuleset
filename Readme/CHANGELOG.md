@@ -37,6 +37,7 @@ If you would like to see fresh changes done since last release you can do so on 
     - Microsoft Network Realtime Inspection Service
     - Psiphon censorship circumvention system
     - Added rule for wsmprovhost.exe
+    - Open space project
 
   - Updated rules for:
 
@@ -80,6 +81,12 @@ If you would like to see fresh changes done since last release you can do so on 
     - `Test-Credential`
     - `Test-ExecutableFile` will now perform virus total check if digital signature is missing
     - `Get-NetFramework`
+
+  - Updated module functions
+
+    - `Convert-FromOSBuild` to handle 22H2
+    - `Select-EnvironmentVariable` to blacklist `%HOMEDRIVE%` because it's it's incompatible with
+    Windows firewall
 
 - New features
 

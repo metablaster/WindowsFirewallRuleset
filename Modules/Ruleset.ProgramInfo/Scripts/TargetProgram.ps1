@@ -45,6 +45,7 @@ enum TargetProgram
 	SysInternals
 	WindowsKits
 	WebPlatform
+	OpenSpace
 	XTU
 	Chocolatey
 	ArenaChess

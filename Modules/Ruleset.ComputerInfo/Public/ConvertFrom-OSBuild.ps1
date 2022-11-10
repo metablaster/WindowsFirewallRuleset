@@ -89,6 +89,7 @@ function ConvertFrom-OSBuild
 <#
 https://docs.microsoft.com/en-us/windows/release-health/release-information
 Version	Servicing option				Availability OS build	Latest revision date	End of service
+22H2	General Availability Channel    2022-10-18	19045.2251	2022-11-08				2024-05-14
 21H2	General Availability Channel	2021-11-16	19044.1415	2021-12-14	2023-06-13	2024-06-11
 21H1	Semi-Annual Channel				2021-05-18	19043.1165	2021-08-10	2022-12-13	2022-12-13
 20H2	Semi-Annual Channel				2020-10-20	19042.572	2020-10-13	2022-05-10	2023-05-09
@@ -131,6 +132,10 @@ Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomO
 			Build = 22000
 		}
 		# Windows 10
+		[hashtable]@{
+			Version = "22H2"
+			Build = 19045
+		}
 		[hashtable]@{
 			Version = "21H2"
 			Build = 19044
