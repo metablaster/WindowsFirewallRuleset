@@ -58,6 +58,7 @@ Todo's in this file are categorized into following sections:
     - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
     - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one admin),
     and 1 disabled account for each of these 3 groups for best test results.
+    - Verify there aren't any hardcoded paths such as `C:\dev\GitHub` pointing to root directory
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Run master script on all target OS editions
     - Revisit and update `CHANGELOG.md`

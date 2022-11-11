@@ -39,8 +39,6 @@ If specified default options are used instead of modified ones
 .EXAMPLE
 PS> SessionSettings
 
-Repeat ".EXAMPLE" keyword for each example
-
 .INPUTS
 None. You cannot pipe objects to SessionSettings.ps1
 

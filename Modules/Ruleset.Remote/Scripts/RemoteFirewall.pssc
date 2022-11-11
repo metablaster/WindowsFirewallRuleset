@@ -134,19 +134,21 @@ SOFTWARE.
 	# ScriptsToProcess = 'C:\ConfigData\InitScript1.ps1', 'C:\ConfigData\InitScript2.ps1'
 
 	# Modules to import when applied to a session
-	ModulesToImport = @(
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Compatibility"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ComputerInfo"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Firewall"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Initialize"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.IP"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Logging"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.ProgramInfo"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Remote"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.UserInfo"
-		"C:\dev\GitHub\WindowsFirewallRuleset\Modules\Ruleset.Utility"
-		# "C:\dev\GitHub\WindowsFirewallRuleset\Modules\VSSetup"
-	)
+	# NOTE: Specifying full path won't work if repository root is elsewhere and specifying only
+	# module name won't work for first time setup in PS Core for compatiblity session
+	# ModulesToImport = @(
+	# 	"Ruleset.Compatibility"
+	# 	"Ruleset.ComputerInfo"
+	# 	# "Ruleset.Firewall"
+	# 	# "Ruleset.Initialize"
+	# 	# "Ruleset.IP"
+	# 	"Ruleset.Logging"
+	# 	"Ruleset.ProgramInfo"
+	# 	# "Ruleset.Remote"
+	# 	"Ruleset.UserInfo"
+	# 	"Ruleset.Utility"
+	# 	# "VSSetup"
+	# )
 
 	# Aliases to make visible when applied to a session
 	# VisibleAliases = "gt", "Add-WinPSModulePath"

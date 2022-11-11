@@ -217,55 +217,6 @@ function Enable-WinRMServer
 
 	Unblock-NetProfile
 
-	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
-	{
-		# Re-register repository specific session configuration
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
-
-		$LocalSessionConfigParams = @{
-			Name = $script:LocalFirewallSession
-			Path = "$PSScriptRoot\..\Scripts\LocalFirewall.pssc"
-			ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
-			MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
-			MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
-			# NOTE: Remote is required for New-PSSession
-			AccessMode = $SessionConfigParams["AccessMode"]
-			ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
-			ThreadOptions = $SessionConfigParams["ThreadOptions"]
-			TransportOption = New-PSTransportOption @TransportConfigParams
-			UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
-		}
-
-		Set-StrictMode -Off
-		Register-PSSessionConfiguration @LocalSessionConfigParams -NoServiceRestart -Force | Out-Null
-		Set-StrictMode -Version Latest
-
-		if (!$Loopback)
-		{
-			$RemoteSessionConfigParams = @{
-				Name = $script:RemoteFirewallSession
-				Path = "$PSScriptRoot\..\Scripts\RemoteFirewall.pssc"
-				ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
-				MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
-				MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
-				AccessMode = $SessionConfigParams["AccessMode"]
-				ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
-				ThreadOptions = $SessionConfigParams["ThreadOptions"]
-				# StartupScript = $SessionConfigParams["StartupScript"]
-				TransportOption = New-PSTransportOption @TransportConfigParams
-				# RunAsCredential = $SessionConfigParams["RunAsCredential"]
-				UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
-				# SecurityDescriptorSddl = $SessionConfigParams["SecurityDescriptorSddl"]
-			}
-
-			# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
-			Set-StrictMode -Off
-			# [Microsoft.WSMan.Management.WSManConfigContainerElement]
-			Register-PSSessionConfiguration @RemoteSessionConfigParams -NoServiceRestart -Force | Out-Null
-			Set-StrictMode -Version Latest
-		} # if loopback
-	}
-
 	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Recreate default session configurations"))
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Recreating default session configurations"
@@ -293,6 +244,56 @@ function Enable-WinRMServer
 		{
 			Write-Error -ErrorRecord $_
 		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Register custom session configuration"))
+	{
+		# Re-register repository specific session configuration
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
+
+		$LocalSessionConfigParams = @{
+			Name = $script:LocalFirewallSession
+			Path = "$PSScriptRoot\..\Scripts\LocalFirewall.pssc"
+			StartupScript = "$PSScriptRoot\..\Scripts\SessionStartupScript.ps1"
+			ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
+			MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
+			MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
+			# NOTE: Remote is required for New-PSSession
+			AccessMode = $SessionConfigParams["AccessMode"]
+			ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
+			ThreadOptions = $SessionConfigParams["ThreadOptions"]
+			TransportOption = New-PSTransportOption @TransportConfigParams
+			UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
+		}
+
+		Set-StrictMode -Off
+		Register-PSSessionConfiguration @LocalSessionConfigParams -NoServiceRestart -Force | Out-Null
+		Set-StrictMode -Version Latest
+
+		if (!$Loopback)
+		{
+			$RemoteSessionConfigParams = @{
+				Name = $script:RemoteFirewallSession
+				Path = "$PSScriptRoot\..\Scripts\RemoteFirewall.pssc"
+				StartupScript = "$PSScriptRoot\..\Scripts\SessionStartupScript.ps1"
+				ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
+				MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
+				MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
+				AccessMode = $SessionConfigParams["AccessMode"]
+				ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
+				ThreadOptions = $SessionConfigParams["ThreadOptions"]
+				TransportOption = New-PSTransportOption @TransportConfigParams
+				# RunAsCredential = $SessionConfigParams["RunAsCredential"]
+				UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
+				# SecurityDescriptorSddl = $SessionConfigParams["SecurityDescriptorSddl"]
+			}
+
+			# NOTE: Register-PSSessionConfiguration may fail in Windows PowerShell
+			Set-StrictMode -Off
+			# [Microsoft.WSMan.Management.WSManConfigContainerElement]
+			Register-PSSessionConfiguration @RemoteSessionConfigParams -NoServiceRestart -Force | Out-Null
+			Set-StrictMode -Version Latest
+		} # if loopback
 	}
 
 	if (!$KeepDefault -and $PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Disable unneeded default session configurations"))

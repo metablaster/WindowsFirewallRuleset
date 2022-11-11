@@ -283,8 +283,9 @@ These steps here assume you have downloaded a zip file from "assets" section und
 2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
 (project root directory) into `C:\` root drive directly.
 
-3. If you would like to use Windows PowerShell instead of PowerShell Core see:\
-[How to open Windows PowerShell](Readme/WindowsPowerShell.md)
+3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](Readme/WindowsPowerShell.md)\
+If you would like to use PowerShell Core instead of Windows PowerShell keep in mind that there might
+appear some issues hard to diagnose, in which case you can try Windows PowerShell which is well tested.
 
 4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
