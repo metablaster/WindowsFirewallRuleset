@@ -16,6 +16,7 @@ In addition, general questions and answers regarding this firewall.
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
+  - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
 
 ## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
 
@@ -357,6 +358,21 @@ network settings as follows:
 
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
 - Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
+
+## The maximum number of concurrent operations for this user has been exceeded
+
+This error may happen when using PS Core to deploy firewall because in PS Core up to 3 sessions may
+be created during initial configuration while using single PS Core console.
+This means if second console is opened it will exceed the default value of 5 sessions.
+
+There are few solutions:
+
+1. Close down all PS Core consoles, wait some time and try again with single PS Core console.
+
+2. You can increase the limit in `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`, here search for
+`MaxShellsPerUser` and increase the value to 10, 20 or more, default is 5.
+
+3. If nothing works the easiest workaround is to use Windows PowerShell for the time being.
 
 [Table of Contents](#table-of-contents)
 

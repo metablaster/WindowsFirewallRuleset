@@ -211,7 +211,7 @@ function Initialize-WinSession
 			$PSSessionParams.EnableNetworkAccess = $true
 		}
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Created new compatibility session on computer '$Domain'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new compatibility session on computer '$Domain'"
 		$Session = New-PSSession @PSSessionParams | Select-Object -First 1
 
 		# keep the compatibility session PWD in sync with the parent PWD.

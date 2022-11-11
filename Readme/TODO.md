@@ -175,6 +175,8 @@ Todo's in this file are categorized into following sections:
     - Need global setting to allow more detailed warnings, which will list at a minimum function name
     where the warning was generated, or this additional data could be logged but not displayed.
     - Any function that depend on "Users" group will fail if there are no users, just Administrator
+    - When using PS Core, WinRM configuration will cause ghost consoles to pop up, to dismiss them
+    one needs to close them manually on taskbar
 
 [Table of Contents](#table-of-contents)
 

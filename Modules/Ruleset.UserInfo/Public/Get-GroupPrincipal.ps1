@@ -191,7 +191,7 @@ function Get-GroupPrincipal
 								User = $Account.Name
 								Group = $UserGroup
 								Principal = $AccountName
-								# NOTE: $Account.SID return "AccountDomainSid" portion and the full SID of an account
+								# NOTE: $Account.SID returns "AccountDomainSid" portion and the full SID of an account
 								SID = $Account.SID.Value
 								LocalAccount = $Account.PrincipalSource -eq "Local"
 								PSTypeName = "Ruleset.UserInfo.Principal"

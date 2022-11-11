@@ -290,7 +290,8 @@ if (!$Default)
 
 		# Specifies the maximum number of concurrent shells that any user can remotely open on the same computer.
 		# The default is 5 remote shells per user.
-		MaxShellsPerUser = 5
+		# NOTE: Increased to 15 to handle unsuccessful first time use of PS Core
+		MaxShellsPerUser = 15
 	}
 }
 else
