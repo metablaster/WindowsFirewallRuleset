@@ -53,12 +53,16 @@ None.
 $ModulesDir = Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path
 
 $ModulesToImport = @(
-	"$ModulesDir\Ruleset.Compatibility"
 	"$ModulesDir\Ruleset.ComputerInfo"
 	"$ModulesDir\Ruleset.Logging"
 	"$ModulesDir\Ruleset.ProgramInfo"
 	"$ModulesDir\Ruleset.UserInfo"
 	"$ModulesDir\Ruleset.Utility"
 )
+
+if ($PSVersionTable.PSEdition -eq "Core")
+{
+	$ModulesToImport += "$ModulesDir\Ruleset.Compatibility"
+}
 
 Import-Module -Name $ModulesToImport

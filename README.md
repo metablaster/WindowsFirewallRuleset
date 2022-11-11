@@ -218,9 +218,9 @@ Following are brief warnings and notices first time user should be aware of befo
 ### Warning
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose
-internet connectivity completely, if that happens, you can either temporarily allow outbound network
-traffic or run `Scripts\Reset-Firewall.ps1`, to reset GPO firewall to system defaults and remove all
-rules.
+internet connectivity completely, if that happens, you can either temporarily allow outbound network\
+traffic or run `Scripts\Reset-Firewall.ps1 -Remoting`, to reset GPO firewall to system defaults,
+remove all rules and restore WinRM to system defaults.
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
@@ -228,11 +228,11 @@ as rules from this ruleset, however **this does not apply to** `Scripts\Reset-Fi
 will clear GPO rules completely and leave only those in control panel.
 - If you want to be 100% sure please export your GPO rules as explained in
 [Export\Import rules](#exportimport-rules)
-- You will be asked which rules to load, to minimize internet connectivity trouble you should
-deploy at least all generic networking and OS related rules called "CoreNetworking", "ICMP",
-"WindowsSystem", "WindowsServices", "Multicast" including all rules for which you have programs
-installed on system, also do not ignore IPv6, Windows indeed needs IPv6 even if you're on IPv4
-network.\
+- You will be asked which rules to load (if you select interactive deployment, see later),
+to minimize internet connectivity trouble you should deploy at least all generic networking and OS
+related rules called "CoreNetworking", "ICMP", "WindowsSystem", "WindowsServices", "Multicast"
+including all rules for which you have programs installed on system, also do not ignore IPv6,
+Windows indeed needs IPv6 even if you're on IPv4 network.\
 It will be easy to delete what you don't need in GPO, rather than later digging through code finding
 what you have missed.
 - Default configuration will set global firewall behavior which is not configurable in GPO,
@@ -249,18 +249,19 @@ IPv4 broadcast address. (Otherwise errors may be generated without completing th
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
-want to fix some problem, most warnings can be safely ignored but errors should be resolved.
+want to fix some problem, most warnings and even some errors can be safely ignored, in certain cases
+you might want to resolve errors if possible.
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
 script again, see [FAQ](Readme/FAQ.md) for more information on why this may happen.
-- If the project was manually downloaded, transferred from another computer or media then you should\
-unblock all files in project first to avoid YES/NO spam questions for every executing script,
+- If the repository was manually downloaded, transferred from another computer or media then you should\
+unblock all files in repository first to avoid YES/NO spam questions for every executing script,
 by running `Scripts\Unblock-Project.ps1`\
 Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO
 questions will still be present in that case.
 - If you download code to location that is under "Ransomware protection" (in Windows Defender),
 make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
 otherwise doing anything may be blocked.\
-PowerShell console may need to be restarted for "Controlled folder access" changes to take effect.
+PowerShell console might need to be restarted for "Controlled folder access" changes to take effect.
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 user that is Administrator, if you're Administrator on your computer you'll have to either create
 standard user account and use that for your everyday life or modify code to allow Administrator
@@ -270,6 +271,9 @@ information why using Administrator account is not recommended for security reas
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
 needed to update firewall for system changes that may happen at any time.
+- Before deploying firewall it is recommended to update system and user programs on target computer
+including Windows store apps, especially if system is fresh installed because updating later may
+require to re-load some rules.
 
 [Table of Contents](#table-of-contents)
 
@@ -284,8 +288,9 @@ These steps here assume you have downloaded a zip file from "assets" section und
 (project root directory) into `C:\` root drive directly.
 
 3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](Readme/WindowsPowerShell.md)\
-If you would like to use PowerShell Core instead of Windows PowerShell keep in mind that there might
-appear some issues hard to diagnose, in which case you can try Windows PowerShell which is well tested.
+If you would like to use PowerShell Core instead of Windows PowerShell keep in mind that in rare
+cases there might appear some issues hard to diagnose, in which case you can re-try with
+Windows PowerShell as suggested.
 
 4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
@@ -353,7 +358,15 @@ description on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
 It is recommended to close down all other programs before running master script in the next step.
 
-12. Back to PowerShell console and run `Deploy-Firewall` command below:
+12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
+
+    To deploy firewall automatically without any prompt run:
+
+    ```powershell
+    .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
+    ```
+
+    Otherwise to be interactively prompted which rules to load run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1
