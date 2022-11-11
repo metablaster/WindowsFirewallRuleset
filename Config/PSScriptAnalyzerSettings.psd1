@@ -1,8 +1,8 @@
 
-# https://github.com/PowerShell/PSScriptAnalyzer/tree/master/RuleDocumentation
+# https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/rules/readme
 # NOTE: PSGallery ruleset is a duplicate of these
 # TODO: Check for new or updated settings
-# NOTE: Last checked on 23.8.2020. v1.19.1
+# NOTE: Last checked on 11.11.2022. v1.21.0
 # NOTE: Good portion of warnings is surpressed because of following false positive:
 # https://github.com/PowerShell/PSScriptAnalyzer/issues/1354
 
@@ -18,6 +18,7 @@
 		"PSUseSingularNouns"
 		"PSMissingModuleManifestField"
 		"PSAvoidDefaultValueSwitchParameter"
+		"AvoidMultipleTypeAttributes"
 		#
 		# "PSDSC*",
 		# Desired State Configuration is a management platform in PowerShell that enables you to
@@ -50,6 +51,7 @@
 		# New settings v1.19.1
 		"AvoidUsingDoubleQuotesForConstantString"
 		"UseUsingScopeModifierInNewRunspaces"
+		"AvoidSemicolonsAsLineTerminators"
 		#
 		# ScriptSecurity
 		#
@@ -58,6 +60,7 @@
 		"PSUsePSCredentialType"
 		"PSAvoidUsingConvertToSecureStringWithPlainText"
 		"PSAvoidUsingUserNameAndPasswordParams"
+		"AvoidUsingBrokenHashAlgorithms"
 		#
 		# Rules not includes in samples
 		#

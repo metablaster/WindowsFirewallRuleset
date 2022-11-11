@@ -112,7 +112,7 @@ Recommended workspace extensions are as follows:
 
     Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
 
-5. [Highlight Dodgy Characters][extension gremlins]
+5. [Highlight Bad Chars][extension gremlins]
 
     Helps to detect gremlins (bad chars), which cause issues such as unable to save file
     in UTF-8 format
@@ -583,7 +583,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension powershell]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
 [extension markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint "Visit Marketplace"
 [extension spellcheck]: https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker "Visit Marketplace"
-[extension gremlins]: https://marketplace.visualstudio.com/items?itemName=nachocab.highlight-dodgy-characters "Visit Marketplace"
+[extension gremlins]: https://marketplace.visualstudio.com/items?itemName=wengerk.highlight-bad-chars "Visit Marketplace"
 [extension bookmarks]: https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks "Visit Marketplace"
 [extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
 [extension gitlens]: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens "Visit Marketplace"

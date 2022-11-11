@@ -96,7 +96,7 @@ function Get-FileEncoding
 		[ValidateScript( {
 				($_ -is [System.Text.Encoding]) -or
 				($_ -in @("ascii", "bigendianunicode", "bigendianutf32", "oem", "unicode", "utf7",
-						"utf8", "utf32", "utf8BOM", "utf8NoBOM", "byte", "default", "string", "unknown"))
+					"utf8", "utf32", "utf8BOM", "utf8NoBOM", "byte", "default", "string", "unknown"))
 			})]
 		$Encoding = $DefaultEncoding
 	)

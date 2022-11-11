@@ -689,7 +689,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 2, 1))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 3, 0))
 	}
 	else
 	{
@@ -722,16 +722,16 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		# Required minimum PSScriptAnalyzer version for code editing, do not decrement!
 		# PSScriptAnalyzer >= 1.19.1 is minimum required otherwise code will start missing while editing probably due to analyzer settings
 		# https://github.com/PowerShell/PSScriptAnalyzer#requirements
-		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 20, 0))
+		New-Variable -Name RequireAnalyzerVersion -Scope Global -Option Constant -Value ([version]::new(1, 21, 0))
 
 		# Recommended minimum posh-git version for git in PowerShell
 		# NOTE: pre-release minimum 1.0.0-beta4 will be installed
-		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(1, 0, 0))
+		New-Variable -Name RequirePoshGitVersion -Scope Global -Option Constant -Value ([version]::new(1, 1, 0))
 
 		# Recommended minimum Pester version for code testing
 		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
-		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 3, 1))
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 3, 3))
 
 		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
@@ -744,14 +744,14 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PSReadline version for command line editing experience of PowerShell
 		# Needs the 1.6.0 or a higher version of PowerShellGet to install the latest prerelease version of PSReadLine
-		New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 1, 0))
+		New-Variable -Name RequirePSReadlineVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 6))
 	}
 
 	if ($Develop -or ($ProjectCheck -and $ModulesCheck))
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 35, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 38, 1))
 	}
 
 	if ($Develop)
@@ -768,7 +768,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 65, 0))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 73, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
