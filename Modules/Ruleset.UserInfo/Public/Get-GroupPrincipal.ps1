@@ -191,7 +191,8 @@ function Get-GroupPrincipal
 								User = $Account.Name
 								Group = $UserGroup
 								Principal = $AccountName
-								SID = $Account.SID
+								# NOTE: $Account.SID return "AccountDomainSid" portion and the full SID of an account
+								SID = $Account.SID.Value
 								LocalAccount = $Account.PrincipalSource -eq "Local"
 								PSTypeName = "Ruleset.UserInfo.Principal"
 							}
@@ -246,12 +247,15 @@ function Get-GroupPrincipal
 						{
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
 
+							# NOTE: $Account.SID may be empty
+							$Principal = Get-PrincipalSID -User $Account.Name -CimSession $CimSession
+
 							[PSCustomObject]@{
 								Domain = $Account.Domain
 								User = $Account.Name
 								Group = $UserGroup
 								Principal = $Account.Caption
-								SID = $Account.SID
+								SID = $Principal.SID
 								# TODO: Figure out if it's MS account using CIM
 								LocalAccount = $Account.LocalAccount -eq "True"
 								PSTypeName = "Ruleset.UserInfo"

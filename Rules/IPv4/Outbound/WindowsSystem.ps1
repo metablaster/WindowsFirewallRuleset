@@ -976,6 +976,10 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
+# Accounts needed for Microsoft Edge WebView2 Runtime
+$WebViewAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "ALL APPLICATION PACKAGES"
+Merge-SDDL ([ref] $WebViewAccounts) -From $UsersGroupSDDL
+
 $EdgeWebView = "%ProgramFiles(x86)%\Microsoft\EdgeWebView\Application\97.0.1072.76"
 if ((Confirm-Installation "EdgeWebView" ([ref] $EdgeWebView)) -or $ForceLoad)
 {
@@ -988,7 +992,7 @@ if ((Confirm-Installation "EdgeWebView" ([ref] $EdgeWebView)) -or $ForceLoad)
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalUser $WebViewAccounts `
 			-InterfaceType $DefaultInterface `
 			-Description "Enables embedded web content (HTML, CSS, and JavaScript) in native applications" |
 		Format-RuleOutput

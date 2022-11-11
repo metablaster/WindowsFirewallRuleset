@@ -159,17 +159,24 @@ To resolve this issue ensure following:
     - Under `Name` verify location to log file is correct
     - Under `Log dropped packet` make sure it's set to `Yes`
 
-2. Verify that both the target folder and all the logs inside that directory grant write\
+2. Ensure that log files were generated in the specified location.
+
+    - If log file were not generated go to step 3 to grant permission to specified folder and then
+    get back here to step 2
+    - If you applied write permission to specified folder and log files aren't generated temporarily
+    toggle setting to log successful connections and apply it, this should force generating logs.
+
+3. Verify that both the target folder and all the logs inside that directory grant write\
 permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
-3. For changes to take effect save your modifications and reboot system
+4. For changes to take effect save your modifications and reboot system.
 
 Keep in mind that setting additional permissions afterwards will be reset by Windows firewall service
 on every system boot or firewall setting change for security reasons.\
 If this doesn't resolve the problem remove all log files inside target directory, to be able to do this,
 you'll have to instruct firewall to write to different location to set your logs free, then reboot system.
 
-Btw. firewall service can't be stopped or manipulated in any way except trough UI followed by reboot.
+Also firewall service can't be stopped or manipulated in any way except trough UI followed by reboot.
 
 [Table of Contents](#table-of-contents)
 

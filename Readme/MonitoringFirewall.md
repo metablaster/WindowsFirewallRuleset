@@ -110,10 +110,12 @@ here is how it feels in VSCode.
 - Prerequisites and setup for built-in log tailing are as follows:
 - Accept and install recommended workspace extentions for VSCode
 - Modify variable `FirewallLogsFolder` in `Config\ProjectSettings.ps1` to value `$LogsFolder\Firewall`
-- Modify variable `DefaultUser` to your account username in `Config\ProjectSettings.ps1`
+- Ensure variable `DefaultUser` points to your account username in `Config\ProjectSettings.ps1`
 - To apply this setting restart PowerShell then run `Scripts\Complete-Firewall.ps1` and reboot system
-- Next step is to grant appropriate file system permissions to firewall logs which are now written
-to `Logs\Firewall` directory inside repository.
+- Next step is to grant appropriate file system permissions to firewall logs which are now written\
+to `Logs\Firewall` directory inside repository, but before doing this ensure specified location as\
+well as log files have been generated, if there are no log file see [FAQ](/Readme/FAQ.md) to resolve
+the issue.
 - To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot, any firewall setting change or manual permission removal.
 - Inside VSCode open individual firewall log file under `Logs\Firewall` node
@@ -156,7 +158,7 @@ firewall information.
 5. Click on "Object Access"
 6. Double click "Audit Filtering Platform Packet drop"
 7. Check "Configure the following audit events"
-8. Check "Audit Failure" and click OK to apply
+8. Check "Failure" and click OK to apply
 9. "Audit Filtering Platform Connection" (this is optional, it's not recommend to enable this to
 reduce amount of data,\
 and to focus on relevant, which is monitoring dropped packets)
@@ -166,11 +168,12 @@ To open Event viewer to monitor configured packet filtering events follow steps 
 1. Click on start and type: `compmgmt.msc`, right click and "Run as Administrator"
 2. If prompted for password, enter administrator password and click "Yes" to continue
 3. Expand node: "Computer Management (Local)
-4. Expand node: "Event Viewer"
-5. Expand node: "Windows Logs"
-6. Click on "Security"
-7. In the column "Task Category" look for "Filtering Platform Packet Drop"
-8. Click on individual event to see details about the event
+4. Expand node: "System Tools"
+5. Expand node: "Event Viewer"
+6. Expand node: "Windows Logs"
+7. Click on "Security"
+8. In the column "Task Category" look for "Filtering Platform Packet Drop"
+9. Click on individual event to see details about the event
 
 [Event logging reference][ref event log]
 

@@ -150,7 +150,7 @@ Following table lists currently tested operating systems
 
 | OS                  | Edition       | Version     | Architecture |
 | ------------------- | ------------- | ----------- | ------------ |
-| Windows 10          | Pro           | 1809 - 21H2 | x64          |
+| Windows 10          | Pro           | 1809 - 22H2 | x64          |
 | Windows 10          | Pro Education | 20H2        | x64          |
 | Windows 10          | Enterprise    | 1809 - 20H2 | x64          |
 | Windows 10          | Education     | 20H2        | x64          |
@@ -162,7 +162,7 @@ Following table lists currently tested operating systems
 
 ***
 
-1. Windows PowerShell 5.1 or PowerShell Core 7.2 [Download PowerShell Core][download core]
+1. Windows PowerShell 5.1 or PowerShell Core 7.3 [Download PowerShell Core][download core]
 2. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
 3. Git (Optional) [Download Git][download git]
 4. Visual Studio Code (Recommended) [Download VSCode][vscode]
@@ -715,7 +715,7 @@ ex. for ICMP rules you would provide a link to [IANA][iana] with relevant refere
 new [issue][issues] and provide relevant details as outlined in "Get started".
 
 3. To contribute your own already made rules, it is desired that each rule contains good description
-of it's purpose, when the user clicks on rule in firewall GUI he/she wants to see what this rule is
+of it's purpose, when a user clicks on rule in firewall GUI he/she wants to see what this rule is
 about to easily conclude whether to enable/disable rule or allow/block network traffic.\
 If possible, the rule should be specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.

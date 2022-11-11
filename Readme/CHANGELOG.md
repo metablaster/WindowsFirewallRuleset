@@ -46,11 +46,13 @@ If you would like to see fresh changes done since last release you can do so on 
     - Path of Exile game
     - OpenTTD game
     - One Drive
+    - Store apps
 
 - Modules
 
   - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
   - Fixed a bug in `Ruleset.Remote\TestWinRM` causing invalid result
+  - Fixed a bug in `Ruleset.UserInfo\Get-GroupPrincipal` causing unexpected SID value
   - Implemented remoting functionality for the following public functions:
 
     - `Get-SystemSKU`

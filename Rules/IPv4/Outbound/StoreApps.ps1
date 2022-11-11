@@ -85,7 +85,6 @@ TODO: We can learn app display name from manifest
 TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
 
 NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
-HACK: Rule for Windows Store doesn't work
 #>
 
 #Requires -Version 5.1
@@ -158,7 +157,7 @@ foreach ($Principal in $Administrators)
 		-LocalPort Any -RemotePort Any `
 		-LocalUser Any `
 		-InterfaceType $DefaultInterface `
-		-Owner (Get-PrincipalSID $Principal.User).SID -Package * `
+		-Owner $Principal.SID -Package * `
 		-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |
@@ -319,13 +318,13 @@ its permissions and informing the user whether or not its being allowed" |
 	Format-RuleOutput
 }
 
+# Accounts needed for store app web authentication
+$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
+Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
+
 $Program = "%SystemRoot%\System32\AuthHost.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	# Accounts needed for store app web authentication
-	$AppAccounts = Get-SDDL -Domain "APPLICATION PACKAGE AUTHORITY" -User "Your Internet connection"
-	Merge-SDDL ([ref] $AppAccounts) -From $UsersGroupSDDL
-
 	New-NetFirewallRule -DisplayName "Authentication Host" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 		-Service Any -Program $Program -Group $ProgramsGroup `
