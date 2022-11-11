@@ -111,29 +111,29 @@ If specified, invalid links are logged.
 Log file can be found in Logs\MarkdownLinkTest_DATE.log
 
 .EXAMPLE
-PS> Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
+PS> Test-MarkdownLink -Path C:\GitHub\MyProject -Recurse
 
 .EXAMPLE
-PS> Test-MarkdownLinks -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy
+PS> Test-MarkdownLink -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy
 
 .EXAMPLE
-PS> Test-MarkdownLinks .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*
+PS> Test-MarkdownLink .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*
 
 .INPUTS
-None. You cannot pipe objects to Test-MarkdownLinks
+None. You cannot pipe objects to Test-MarkdownLink
 
 .OUTPUTS
-None. Test-MarkdownLinks does not generate any output
+None. Test-MarkdownLink does not generate any output
 
 .NOTES
 WebSslProtocol enum does not list Tls13
 TODO: Implement pipeline support
 TODO: Implement testing links to repository
 #>
-function Test-MarkdownLinks
+function Test-MarkdownLink
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Path",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLinks.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLink.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Path")]

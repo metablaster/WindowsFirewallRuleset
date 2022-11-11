@@ -144,7 +144,7 @@ else
 
 if (!$Pester)
 {
-	Test-MarkdownLinks -LiteralPath $ProjectRoot -Recurse -Unique #-Exclude "github.com"
+	Test-MarkdownLink -LiteralPath $ProjectRoot -Recurse -Unique #-Exclude "github.com"
 }
 
 Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck

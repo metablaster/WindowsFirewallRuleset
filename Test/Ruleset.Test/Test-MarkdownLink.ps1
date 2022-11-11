@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-MarkdownLinks
+Unit test for Test-MarkdownLink
 
 .DESCRIPTION
-Test correctness of Test-MarkdownLinks function
+Test correctness of Test-MarkdownLink function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Test-MarkdownLinks.ps1
+PS> .\Test-MarkdownLink.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-MarkdownLinks.ps1
+None. You cannot pipe objects to Test-MarkdownLink.ps1
 
 .OUTPUTS
-None. Test-MarkdownLinks.ps1 does not generate any output
+None. Test-MarkdownLink.ps1 does not generate any output
 
 .NOTES
 None.
@@ -68,16 +68,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test
 
 Start-Test "Single file"
-$Result = Test-MarkdownLinks $ProjectRoot\Readme\Reference.md -LinkType "Inline" -Exclude *microsoft.com*
-$Result | Test-Output -Command Test-MarkdownLinks
+$Result = Test-MarkdownLink $ProjectRoot\Readme\Reference.md -LinkType "Inline" -Exclude *microsoft.com*
+$Result | Test-Output -Command Test-MarkdownLink
 
 Start-Test "Reference links"
-Test-MarkdownLinks $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
+Test-MarkdownLink $ProjectRoot\Readme\FirewallParameters.md -LinkType "Reference" -Include *microsoft.com*
 
 if ($Force -or $PSCmdlet.ShouldContinue("Markdown files", "Run lengthy link test"))
 {
 	Start-Test "Recurse project"
-	Test-MarkdownLinks $ProjectRoot -Recurse -Log | Test-Output -Command Test-MarkdownLinks
+	Test-MarkdownLink $ProjectRoot -Recurse -Log | Test-Output -Command Test-MarkdownLink
 }
 
 Update-Log

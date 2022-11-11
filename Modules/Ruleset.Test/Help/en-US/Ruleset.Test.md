@@ -38,7 +38,7 @@ Start test case
 
 Stop test case
 
-### [Test-MarkdownLinks](Test-MarkdownLinks.md)
+### [Test-MarkdownLink](Test-MarkdownLink.md)
 
 Test links in markdown files
 

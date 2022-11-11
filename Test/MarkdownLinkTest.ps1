@@ -62,5 +62,5 @@ param (
 if (Approve-Execute -Title "Markdown links" -Question "Run markdown link test?" -Force:$Force `
 		-Accept "Run markdown link test on entire repository" -Deny "Skip link test operation")
 {
-	Test-MarkdownLinks $ProjectRoot -Recurse -Log
+	Test-MarkdownLink $ProjectRoot -Recurse -Log
 }

@@ -50,7 +50,7 @@ Stop-Test
 Stop test case
 
 ```powershell
-Test-MarkdownLinks
+Test-MarkdownLink
 ```
 
 Test links in markdown files

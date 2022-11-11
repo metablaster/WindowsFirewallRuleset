@@ -964,7 +964,7 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Test-MarkdownLinks</command:name>
+      <command:name>Test-MarkdownLink</command:name>
       <command:verb>Test</command:verb>
       <command:noun>MarkdownLinks</command:noun>
       <maml:description>
@@ -976,7 +976,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Test-MarkdownLinks</maml:name>
+        <maml:name>Test-MarkdownLink</maml:name>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
@@ -1145,7 +1145,7 @@
         </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
-        <maml:name>Test-MarkdownLinks</maml:name>
+        <maml:name>Test-MarkdownLink</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="LP">
           <maml:name>LiteralPath</maml:name>
           <maml:description>
@@ -1501,7 +1501,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Test-MarkdownLinks</maml:name>
+          <maml:name>None. You cannot pipe objects to Test-MarkdownLink</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1511,7 +1511,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Test-MarkdownLinks does not generate any output</maml:name>
+          <maml:name>None. Test-MarkdownLink does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1526,21 +1526,21 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse</dev:code>
+        <dev:code>Test-MarkdownLink -Path C:\GitHub\MyProject -Recurse</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Test-MarkdownLinks -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy</dev:code>
+        <dev:code>Test-MarkdownLink -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Test-MarkdownLinks .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*</dev:code>
+        <dev:code>Test-MarkdownLink .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1549,7 +1549,7 @@
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLinks.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLink.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

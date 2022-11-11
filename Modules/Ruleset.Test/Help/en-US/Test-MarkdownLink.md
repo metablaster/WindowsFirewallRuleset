@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Test-help.xml
 Module Name: Ruleset.Test
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLinks.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-MarkdownLink.md
 schema: 2.0.0
 ---
 
-# Test-MarkdownLinks
+# Test-MarkdownLink
 
 ## SYNOPSIS
 
@@ -16,7 +16,7 @@ Test links in markdown files
 ### Path (Default)
 
 ```powershell
-Test-MarkdownLinks [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
+Test-MarkdownLink [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
  [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
  [<CommonParameters>]
@@ -25,7 +25,7 @@ Test-MarkdownLinks [-Path] <String[]> [-Recurse] [-TimeoutSec <Int32>] [-Maximum
 ### Literal
 
 ```powershell
-Test-MarkdownLinks -LiteralPath <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
+Test-MarkdownLink -LiteralPath <String[]> [-Recurse] [-TimeoutSec <Int32>] [-MaximumRetryCount <Int32>]
  [-RetryIntervalSec <Int32>] [-MaximumRedirection <Int32>] [-SslProtocol <String>] [-NoProxy]
  [-Include <String>] [-Exclude <String>] [-LinkType <String>] [-Unique] [-Depth <UInt32>] [-Log]
  [<CommonParameters>]
@@ -44,19 +44,19 @@ The links to be tested can be reference links, inline links or both.
 ### EXAMPLE 1
 
 ```powershell
-Test-MarkdownLinks -Path C:\GitHub\MyProject -Recurse
+Test-MarkdownLink -Path C:\GitHub\MyProject -Recurse
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Test-MarkdownLinks -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy
+Test-MarkdownLink -Path C:\GitHub\MyProject -SslProtocol Tls -NoProxy
 ```
 
 ### EXAMPLE 3
 
 ```powershell
-Test-MarkdownLinks .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*
+Test-MarkdownLink .\MyProject\MarkdownFile.md -LinkType "Reference" -Include *microsoft.com*
 ```
 
 ## PARAMETERS
@@ -337,11 +337,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Test-MarkdownLinks
+### None. You cannot pipe objects to Test-MarkdownLink
 
 ## OUTPUTS
 
-### None. Test-MarkdownLinks does not generate any output
+### None. Test-MarkdownLink does not generate any output
 
 ## NOTES
 

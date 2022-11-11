@@ -64,7 +64,7 @@ Todo's in this file are categorized into following sections:
     - Revisit and cleanup `TODO.md`
     - Update markdown help and help content, run: `Update-HelpContent.ps1`
     - Verify links to repository are pointing to master except if develop branch is wanted,
-    links should be then tested on master branch with `Test-MarkdownLinks.ps1`.
+    links should be then tested on master branch with `Test-MarkdownLink.ps1`.
     There are 3 kinds of links to check:\
     WindowsFirewallRuleset/develop\
     WindowsFirewallRuleset/blob/develop\

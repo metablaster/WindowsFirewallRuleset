@@ -27,7 +27,7 @@ EXAMPLES
 	Stop-Test
 	Stop test case
 
-	Test-MarkdownLinks
+	Test-MarkdownLink
 	Test links in markdown files
 
 	Test-Output

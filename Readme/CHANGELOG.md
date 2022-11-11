@@ -277,7 +277,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - `Get-ParameterAlias` script to help harvest function parameter aliases for all installed modules
   - `Set-Shortcut` function to set desktop shortcut to personalized firewall management console
-  - `Test-MarkdownLinks` function to find dead links in markdown files
+  - `Test-MarkdownLink` function to find dead links in markdown files
   - `Resolve-FileSystem` function to resolve path wildcard pattern or relative paths to `System.IO.*Info`
   - `Reset-TestDrive` function to safely clear test drive directory for cleaner and smoother unit testing
   - `Resolve-Host` function used to resolve host to IP or an IP to host.

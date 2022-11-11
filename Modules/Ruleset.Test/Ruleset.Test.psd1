@@ -120,7 +120,7 @@ SOFTWARE.
 		"Reset-TestDrive"
 		"Start-Test"
 		"Stop-Test"
-		"Test-MarkdownLinks"
+		"Test-MarkdownLink"
 		"Test-Output"
 	)
 
@@ -156,7 +156,7 @@ SOFTWARE.
 		"Help\en-US\Ruleset.Test.md"
 		"Help\en-US\Start-Test.md"
 		"Help\en-US\Stop-Test.md"
-		"Help\en-US\Test-MarkdownLinks.md"
+		"Help\en-US\Test-MarkdownLink.md"
 		"Help\en-US\Test-Output.md"
 		"Help\README.md"
 		"Public\Enter-Test.ps1"
@@ -166,7 +166,7 @@ SOFTWARE.
 		"Public\Reset-TestDrive.ps1"
 		"Public\Start-Test.ps1"
 		"Public\Stop-Test.ps1"
-		"Public\Test-MarkdownLinks.ps1"
+		"Public\Test-MarkdownLink.ps1"
 		"Public\Test-Output.ps1"
 		"Ruleset.Test_e40d3133-e3f2-47f3-9f81-572732cc7c91_HelpInfo.xml"
 		"Ruleset.Test.psd1"
