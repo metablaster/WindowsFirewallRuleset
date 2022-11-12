@@ -126,7 +126,7 @@ By default no options are set.
 Type: System.Text.RegularExpressions.RegexOptions
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, IgnoreCase, Multiline, ExplicitCapture, Compiled, Singleline, IgnorePatternWhitespace, RightToLeft, ECMAScript, CultureInvariant
+Accepted values: None, IgnoreCase, Multiline, ExplicitCapture, Compiled, Singleline, IgnorePatternWhitespace, RightToLeft, ECMAScript, CultureInvariant, NonBacktracking
 
 Required: False
 Position: Named

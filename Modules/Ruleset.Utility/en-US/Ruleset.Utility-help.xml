@@ -961,6 +961,7 @@ False</dev:code>
             <command:parameterValue required="false" command:variableLength="false">RightToLeft</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ECMAScript</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CultureInvariant</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NonBacktracking</command:parameterValue>
           </command:parameterValueGroup>
           <command:parameterValue required="true" variableLength="false">System.Text.RegularExpressions.RegexOptions</command:parameterValue>
           <dev:type>
@@ -1034,6 +1035,7 @@ False</dev:code>
             <command:parameterValue required="false" command:variableLength="false">RightToLeft</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ECMAScript</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CultureInvariant</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NonBacktracking</command:parameterValue>
           </command:parameterValueGroup>
           <command:parameterValue required="true" variableLength="false">System.Text.RegularExpressions.RegexOptions</command:parameterValue>
           <dev:type>

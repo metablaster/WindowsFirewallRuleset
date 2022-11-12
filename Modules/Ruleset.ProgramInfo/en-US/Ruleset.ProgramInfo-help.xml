@@ -21,6 +21,7 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
@@ -35,6 +36,7 @@
             <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSpace</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
@@ -172,6 +174,7 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
@@ -186,6 +189,7 @@
             <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSpace</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
@@ -2654,6 +2658,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
@@ -2668,6 +2673,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSpace</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>
@@ -2793,6 +2799,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
@@ -2807,6 +2814,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <command:parameterValue required="false" command:variableLength="false">SysInternals</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WindowsKits</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">WebPlatform</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenSpace</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">XTU</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Chocolatey</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">ArenaChess</command:parameterValue>

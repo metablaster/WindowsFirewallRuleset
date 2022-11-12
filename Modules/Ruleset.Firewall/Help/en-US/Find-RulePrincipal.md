@@ -16,21 +16,20 @@ Get all firewall rules without or with specified LocalUser value
 ### None (Default)
 
 ```powershell
-Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-Direction <String>] [-Append]
- [<CommonParameters>]
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-Direction <String>] [<CommonParameters>]
 ```
 
 ### Group
 
 ```powershell
 Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] [-User <String>] -Group <String>
- [-Direction <String>] [-Append] [<CommonParameters>]
+ [-Direction <String>] [<CommonParameters>]
 ```
 
 ### User
 
 ```powershell
-Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] -User <String> [-Direction <String>] [-Append]
+Find-RulePrincipal -Path <DirectoryInfo> [-FileName <String>] -User <String> [-Direction <String>]
  [<CommonParameters>]
 ```
 

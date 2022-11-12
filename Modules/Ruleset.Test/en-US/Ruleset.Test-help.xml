@@ -966,7 +966,7 @@
     <command:details>
       <command:name>Test-MarkdownLink</command:name>
       <command:verb>Test</command:verb>
-      <command:noun>MarkdownLinks</command:noun>
+      <command:noun>MarkdownLink</command:noun>
       <maml:description>
         <maml:para>Test links in markdown files</maml:para>
       </maml:description>

@@ -451,7 +451,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session</maml:para>
+        <maml:para>TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session TODO: Changes done to system services should be reverted to original values, new function needed.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
