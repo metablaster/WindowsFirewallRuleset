@@ -26,15 +26,7 @@
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
   - [Remote firewall deployment](#remote-firewall-deployment)
-  - [Checking for updates](#checking-for-updates)
-    - [Using GitHub Desktop app](#using-github-desktop-app)
-    - [Manual release download](#manual-release-download)
-    - [Manual beta download](#manual-beta-download)
-    - [Using git command](#using-git-command)
-    - [Which update method is the best](#which-update-method-is-the-best)
-  - [Contributing or suggestions](#contributing-or-suggestions)
-  - [Support](#support)
-  - [Customization](#customization)
+  - [Support, customization, updates and documentation](#support-customization-updates-and-documentation)
   - [The future](#the-future)
 
 ## About Windows Firewall Ruleset
@@ -590,183 +582,12 @@ Remote deployment can be customized in a great detail in the following locations
 
 For additional information and troubleshooting tips see also [Remoting help](Readme/Remote.md)
 
-## Checking for updates
-
-Just like any other software on your computer, this firewall will go out of date as well,
-become obsolete, and may no longer function properly.
-
-This repository consists of 2 branches, `master` (stable) and `develop` (possibly unstable).\
-The "develop" branch is where all updates directly go, so it's work in progress,
-unlike "master" branch which is updated from develop once in a while and not before all scripts
-are thoroughly tested on fresh installed systems, which is what makes master brach stable.
-
-If you want to experiment with development version to check out new stuff, switch to "develop"
-branch and try it out, however if it produces errors, you can either attempt to fix problems or
-switch back to "master".
-
-There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
-
 [Table of Contents](#table-of-contents)
 
-### Using GitHub Desktop app
+## Support, customization, updates and documentation
 
-[![GitHub Desktop][badge github desktop]][github desktop]
-
-This method is similar to git command, but instead you'll use a graphical interface which
-you can get from here: [GitHub Desktop][github desktop]
-
-The benefit of using GitHub Desktop is that you easily see code changes on you desktop for each
-individual update.
-
-To use it you will need [github account][github join] and a [fork][github fork] of this repository
-in your GitHub account.
-
-To configure GitHub Desktop see [GitHub Desktop Documentation][github desktop docs] or search for
-some tutorial online.
-
-### Manual release download
-
-[![Releases][badge github]][releases]
-
-This method requires you to simply download released zip file which can be found in
-[Releases][releases], this is always from "master" branch
-
-### Manual beta download
-
-This method is good if you want to download from "develop" branch, to do so, use the `branch` button
-here on this site and switch to develop branch, next use `Code` button and choose option to either
-clone or download zip file .
-
-[Table of Contents](#table-of-contents)
-
-### Using git command
-
-[![Download Git][badge git]][download git]
-
-This method is similar to GitHub Desktop above but good if you need specific git features.\
-In addition to 2 mentioned requirements for GitHub Desktop you will also need [git][download git]
-and optionally (but recommended) [SSH keys][github ssh]
-
-Follow steps below to check for updates once you installed git and [cloned][clone] your own fork:
-
-- Right click on Start button in Windows
-- Click `Windows PowerShell` to open PowerShell
-- First navigate to folder where your instance of Windows Firewall Ruleset instance is, for example:
-- Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or
-```cd ..``` to go one directory back
-- Type: ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
-
-Following 2 sets of commands are typed only once for initial setup:
-
-1. If you cloned your fork with `SSH` then run following command:
-
-    ```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
-
-2. Otherwise if you cloned your fork with `HTTPS` run:
-
-    ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset.git```
-
-Next 2 sets of commands are typed each time you want to check for updates:
-
-1. To get updates from master branch run:
-
-    - Type: ```git checkout master```
-    - Type: ```git fetch upstream```
-    - Type: ```git merge upstream/master```
-
-2. Otherwise to get updates from develop branch run:
-
-    - Type: ```git checkout develop```
-    - Type: ```git fetch upstream```
-    - Type: ```git merge upstream/develop```
-
-For this to work, you need to make sure your working tree is "clean", which means
-you need to save and upload your modifications to your fork, for example:
-
- ```cpp
- cd Path\To\WindowsFirewallRuleset
- git add .
- git commit -m "my changes"
- git push
- ```
-
- You can switch from one branch to another with git in PowerShell as many times as you  want and
- all files will be auto updated without the need to re-download or re-setup anything.
-
- For more information on how to use git see [git documentation][git docs]\
- There are also many great tutorials online to learn how to use git.
-
-[Table of Contents](#table-of-contents)
-
-### Which update method is the best
-
-If your goal is to just get updates then `GitHub Desktop` is the best, otherwise if your goal is
-firewall customization, using `git` command would be more productive because it offers specific
-functionalities that you might need.
-
-You can have both setups in same time and use them as needed in specific situation.\
-There is no benefit with manual zip download in comparison with git or GitHub Desktop.
-
-[Table of Contents](#table-of-contents)
-
-## Contributing or suggestions
-
-Do you want to suggest new rules, features, report problems or contribute by writing code?
-
-Here are brief notes for requesting new rules or features.\
-If you would like to contribute by writing code you should also read [CONTRIBUTING.md](CONTRIBUTING.md)
-
-You are most welcome to suggest or contribute new rules or improvements for existing rules or
-scripts.
-
-Please try to abide to notices below:
-
-1. If possible provide some documentation or links (preferably official) for your rules or design
-changes so that it can be easy to verify these rules or changes don't contain mistakes.\
-ex. for ICMP rules you would provide a link to [IANA][iana] with relevant reference document.
-
-2. To report problems, suggest new rules or various rule and code design improvements, please open
-new [issue][issues] and provide relevant details as outlined in "Get started".
-
-3. To contribute your own already made rules, it is desired that each rule contains good description
-of it's purpose, when a user clicks on rule in firewall GUI he/she wants to see what this rule is
-about to easily conclude whether to enable/disable rule or allow/block network traffic.\
-If possible, the rule should be specific and not generic, that means specifying protocol,
-IP addresses, ports, system user, interface type and other relevant information.
-
-If you lack some of the details, no problem but please try to collect as much information as
-possible.
-
-[Table of Contents](#table-of-contents)
-
-## Support
-
-Inside [Readme](Readme) folder you will find useful information not only about this project but
-also general information on how to troubleshoot firewall and network problems, or to gather other
-relevant information.
-
-It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
-explains how to monitor firewall in real time.
-
-If you have random questions that don't fit anywhere else or you just want to say something then
-you're most welcome to open new discussion in [Discussions][discrussions]
-
-[Table of Contents](#table-of-contents)
-
-## Customization
-
-If you would like to customize how scripts run, such as force loading rules and various defaults
-then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for
-this.
-
-If you would like to customize code or add more firewall rules to suit your private or
-corporate interests then first step is to set up development environment and learn about best
-practices used by this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
-
-Depending on your situation and target platform you might also want to read
-[Legacy Support](Readme/LegacySupport.md)
-
-These 2 documents are bare minimum to get you started customizing this repository.
+For support, issue reports, suggestions or customization of this repository and methods to
+periodically update this firewall please refer to [SUPPORT.md](SUPPORT.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -804,17 +625,7 @@ and firewall settings
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
 [about execution policies]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7 "About Execution Policies"
 [configure security policy settings]: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings "Configure Security Policy Settings"
-[github join]: https://github.com/join "Join GitHub"
-[github fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo "Create a fork on GitHub"
-[github ssh]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
-[git docs]: https://git-scm.com/doc "Git Documentation"
-[iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
-[github desktop]: https://desktop.github.com "Visit GitHub Desktop download page"
-[github desktop docs]: https://docs.github.com/en/desktop "Visit GitHub Desktop docs"
 [releases]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Visit releases page now"
-[discrussions]: https://github.com/metablaster/WindowsFirewallRuleset/discussions "GitHub discussions"
-[issues]: https://github.com/metablaster/WindowsFirewallRuleset/issues "GitHub issues"
-[clone]: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository "Cloning a repository"
 [powershell]: https://docs.microsoft.com/en-us/powershell/scripting/overview "What is PowerShell anyway?"
 [windows]: https://docs.microsoft.com/en-us/windows/windows-10 "Windows 10 for IT Pros"
 [alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
@@ -823,7 +634,4 @@ and firewall settings
 [badge system]: https://img.shields.io/static/v1?label=OS&message=Windows&color=informational&style=plastic&logo=Windows
 [badge language]: https://img.shields.io/static/v1?label=Language&message=PowerShell&color=informational&style=plastic&logo=PowerShell
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
-[badge github]: https://img.shields.io/static/v1?label=Releases%20on&message=GitHub&color=white&style=plastic&logo=GitHub
-[badge github desktop]: https://img.shields.io/static/v1?label=Download&message=GitHub%20Desktop&color=purple&style=plastic&logo=GitHub
-[badge git]: https://img.shields.io/static/v1?label=Download&message=Git&color=red&style=plastic&logo=Git
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code

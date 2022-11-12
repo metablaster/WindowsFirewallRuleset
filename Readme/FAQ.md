@@ -84,65 +84,10 @@ If none of this works even after reboot of all involved computers, following lin
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall part of protection.
 
-For maximum security you'll need way more than just good firewall, here is a minimum list:
+Keep in mind that this project is still alpha software, not yet ready for production use, see
+[What's alpha software][alpha]
 
-1. Using standard (non Administrative) Windows account for almost all use.\
-Administrative account should be used for administration only, preferably offline.
-
-2. Installing and running only digitally signed software, and only those publishers you trust.\
-Installing cracks, warez and similar is the most common way to let hackers in.
-
-3. Visit only known trusted web sites, preferably HTTPS, and check links before clicking them.\
-To visit odd sites and freely click around please do it in virtual machine,\
-(isolated browser session is OK too, as long as you don't misconfigure it)
-
-4. Use password manager capable of auto typing passwords and with the support of virtual keyboard.\
-Don't use hardware keyboard to type passwords.
-Your passwords should meet length and complexity requirements.\
-Never use same password to log in to multiple places, use unique password for each login.
-
-5. Don't let your email program or web interface auto load email content.\
-Configure you mail client to be restrictive, also important not to open attachments you don't
-recognize or didn't ask for.
-
-6. Never disable antivirus or firewall except to troubleshoot issues.\
-Btw. Troubleshooting doesn't include installing software or visiting some web site.
-
-7. VPN is not recommended except for business or to bypass your IP or geolocation ban.\
-Even if VPN provider is considered "trusted".
-
-8. Protect your web browser maximum possible by restrictively adjusting settings, and
-avoid using addons except one to block ads, which is known to be trusted by online community.
-
-9. When it comes to privacy, briefly, there are 2 very different defense categories:
-
-   - Prevent identity theft, this is worse than loosing data, being hacked or just being spied on.\
-   Go ahead and study worse identity theft cases and you'll understand
-
-   - Hide your activity, is what people usually refer to when talking about "privacy"\
-   Understanding the difference is important, because how do you defend if the threat is unknown?
-
-10. Keep your operating system and anti virus patched maximum possible, that means checking for
-system and virus updates on daily basis.
-
-11. High value data and larger financial transactions should be performed on separate computer whose
-only purpose is to do this and nothing else, and to keep valueable data protected away from network.
-
-12. Encrypt your valueable hard drives or individual files, for computers such as those in point 10,
-this is requirement not suggestion.
-
-13. Always keep a backup of everything on at least 1 drive that is offline and away from online machine.
-If you have to bring it online, take down the rest of network.
-
-If you don't follow this list, no firewall, anti virus or security expert is going to help much.\
-Usually the purpose of a firewall, anti virus or a paid expert is to protect you from your own mistakes.
-
-Remember, the most common ways for hackers "getting in" and stealing data is when **YOU** make a mistake!
-(not because of their skills)
-
-If you recognize your mistakes from this list on regular basis, and would like to ensure clean state
-and fresh start then only hard drive reformat, network reset and clean reinstall of operating systems
-can regain trust to original value.
+For maximum security you'll need much more than just good firewall, for start you can read trough [SecurityAndPrivacy.md](SecurityAndPrivacy.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -386,3 +331,4 @@ There are few solutions:
 [makecab]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab "Visit Microsoft docs"
 [netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
 [sigcheck]: https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck "Visit Microsoft docs"
+[alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
