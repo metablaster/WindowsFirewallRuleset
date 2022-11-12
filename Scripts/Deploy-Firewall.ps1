@@ -470,7 +470,7 @@ if (Approve-Execute @ExecuteParams)
 		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\OpenSpace.ps1.ps1" -Force:$AllCurrent @ScriptParams
+		& "$Destination\Software\OpenSpace.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent @ScriptParams
 		& "$Destination\Software\Psiphon.ps1" -Force:$AllCurrent @ScriptParams
