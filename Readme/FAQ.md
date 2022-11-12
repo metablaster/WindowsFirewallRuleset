@@ -11,7 +11,7 @@ In addition, general questions and answers regarding this firewall.
   - [Table of Contents](#table-of-contents)
   - [Firewall rule doesn't work, program "some_program.exe" fails to connect to internet](#firewall-rule-doesnt-work-program-some_programexe-fails-to-connect-to-internet)
   - [I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"](#i-get-an-error-network-path-not-found-unable-to-contact-computer-or-the-client-cannot-connect)
-  - [Does this firewall project give me the right (or better) protection](#does-this-firewall-project-give-me-the-right-or-better-protection)
+  - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
   - [Can I trust scripts from this repository](#can-i-trust-scripts-from-this-repository)
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
@@ -79,7 +79,7 @@ If none of this works even after reboot of all involved computers, following lin
 
 [Table of Contents](#table-of-contents)
 
-## Does this firewall project give me the right (or better) protection
+## Does this firewall project give me the right protection
 
 Good firewall setup is essential for computer security, and, if not misused then the answer is yes
 but only for the firewall part of protection.

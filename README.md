@@ -26,7 +26,7 @@
     - [Deleting rules](#deleting-rules)
     - [Export\Import rules](#exportimport-rules)
   - [Remote firewall deployment](#remote-firewall-deployment)
-  - [Support, customization, updates and documentation](#support-customization-updates-and-documentation)
+  - [Support, updates and documentation](#support-updates-and-documentation)
   - [The future](#the-future)
 
 ## About Windows Firewall Ruleset
@@ -584,7 +584,7 @@ For additional information and troubleshooting tips see also [Remoting help](Rea
 
 [Table of Contents](#table-of-contents)
 
-## Support, customization, updates and documentation
+## Support, updates and documentation
 
 For support, issue reports, suggestions or customization of this repository and methods to
 periodically update this firewall please refer to [SUPPORT.md](SUPPORT.md)

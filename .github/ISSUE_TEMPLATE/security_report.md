@@ -8,12 +8,7 @@ assignees: ''
 ---
 
 **Prerequisites**
-To rule out invalid report, please read [Security.md](../../SECURITY.md) and check the checkboxes as
-applicable.
-
-- [ ] I have read `Security.md` file
-- [ ] This is privacy issue
-- [ ] This is security issue
+To rule out invalid report, please read [Security.md](../../SECURITY.md) first.
 
 **Describe the issue**
 A clear description of a security or privacy issue related to Windows Firewall Ruleset

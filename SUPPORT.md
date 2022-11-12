@@ -36,7 +36,7 @@ provides instructions on how to monitor firewall in real time.
 ## Reporting a problem or bug
 
 To report bugs or functionality issues please open new [issue][issues] and provide relevant
-details as outlined in "`Get started` under `Bug report`.
+details as outlined in `Get started` under `Bug report`.
 
 [Table of Contents](#table-of-contents)
 
@@ -45,7 +45,7 @@ details as outlined in "`Get started` under `Bug report`.
 If there is security or privacy issue please first refer to [SECURITY.md](SECURITY.md)
 
 To report security or privacy issue with Windows Firewall Ruleset please open new [issue][issues]
-and provide relevant details as outlined in "`Get started` under `Security report`.
+and provide relevant details as outlined in `Get started` under `Security report`.
 
 [Table of Contents](#table-of-contents)
 
@@ -73,7 +73,7 @@ If you lack some of the details, no problem but please try to collect as much in
 possible.
 
 To actually make a suggestion please open new [issue][issues] and provide relevant details as
-outlined in "`Get started` under `Feature request`.
+outlined in `Get started` under `Feature request`.
 
 [Table of Contents](#table-of-contents)
 
@@ -97,7 +97,7 @@ practices used by this repository all of which is explained in [CONTRIBUTING.md]
 Depending on your situation and target platform you might also want to read
 [Legacy Support](Readme/LegacySupport.md)
 
-These 2 documents are bare minimum to get you started customizing this repository.
+These two documents are bare minimum to get you started customizing this repository.
 
 [Table of Contents](#table-of-contents)
 
