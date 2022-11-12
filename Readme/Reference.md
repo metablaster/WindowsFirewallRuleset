@@ -78,7 +78,7 @@ Also few commandlets from these modules:
 
 [Git documentation](https://git-scm.com/doc)
 
-[GitHub Documentation](https://docs.github.com/en/github)
+[GitHub Documentation](https://docs.github.com/en)
 
 ## IPv6
 

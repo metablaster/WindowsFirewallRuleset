@@ -627,7 +627,7 @@ if (($PSCmdlet.ParameterSetName -eq "Script") -and ($Develop -or !(Get-Variable 
 	}
 
 	# Remote test computer which will perform unit testing
-	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
+	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "UnspecifiedDomain"
 }
 #endregion
 

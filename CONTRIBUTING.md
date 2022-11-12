@@ -45,7 +45,7 @@ Following 2 pages below explain general/starting guidelines regarding open sourc
 [Open Source Contribution Etiquette][open source etiquette]
 
 First step is to fork a project:\
-[Forking projects][forking projects]
+[Forking a repo][Forking a repo]
 
 Next if needed, you might want to set up your SSH keys:\
 [Connecting to GitHub with SSH][github ssh]
@@ -568,8 +568,8 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [contributing develop]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/CONTRIBUTING.md "latest CONTRIBUTING.md"
 [contribute to open source]: https://opensource.guide/how-to-contribute "How to contribute to open source"
 [open source etiquette]: https://tirania.org/blog/archive/2010/Dec-31.html "Open Source Contribution Etiquette"
-[forking projects]: https://guides.github.com/activities/forking "Forking projects"
-[github ssh]: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
+[Forking a repo]: https://docs.github.com/en/get-started/quickstart/fork-a-repo "Forking a repo"
+[github ssh]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh "Connecting to GitHub with SSH"
 [tutorial]: https://gist.github.com/metablaster/52b1baac5be44e2f1e6d16800813f42f "Tutorial git, powershell, gpg4win, posh-git, commit signing, ssh and key caching"
 [filescope copyright]: https://softwarefreedom.org/resources/2012/ManagingCopyrightInformation.html#maintaining-file-scope-copyright-notices "Maintaining file-scope copyright notices"
 [copyright law]: http://softwarefreedom.org/resources/2007/originality-requirements.html "Requirements under U.S. and E.U. Copyright Law"
@@ -611,7 +611,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0
 [exceptions everything]: https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know "Visit blog"
 [exceptions handling]: https://github.com/MicrosoftDocs/PowerShell-Docs/issues/1583 "Visit GitHub"
-[markdown mastering]: https://guides.github.com/features/mastering-markdown "Visit GitHub"
+[markdown mastering]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax "Visit GitHub"
 [markdown style]: https://cirosantilli.com/markdown-style-guide "Visit markdown guide"
 [markdown tables]: https://www.tablesgenerator.com/markdown_tables "Visit table generator site"
 [badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code

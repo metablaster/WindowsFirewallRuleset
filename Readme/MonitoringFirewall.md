@@ -90,9 +90,10 @@ just place it next to mTail executable, restart mTail and open firewall log,
 which is by default placed into `C:\Windows\System32\LogFiles\Firewall\pfirewall.log\`
 However `Complete-Firewall.ps1` script will instruct firewall to write separate logs for each
 firewall profile.
-- There is another config file called `mtail.ini` which needs to be (re)placed into:
-`C:\Users\ADMINUSERNAME\Roaming\mtail\`, this config file contains configuration to monitor
-firewall activity for individual firewall profiles as well as number of personalized settings.
+- There is another config file called `mtail.ini` which first need to be edited to update hardcoded
+paths and then (re)placed into: `C:\Users\ADMINUSERNAME\Roaming\mtail\`,
+this config file contains configuration to monitor firewall activity for individual firewall
+profiles as well as number of personalized settings.
 - Please keep in mind that settings configuration for mTail is (at this time) highly buggy,
 and requires hacking configuration files.
 

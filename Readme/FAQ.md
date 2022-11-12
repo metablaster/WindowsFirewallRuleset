@@ -203,7 +203,7 @@ So here is an overview to help you see what they do hopefully answering all of y
 
     - Running any script will add modules from this repository to module path for current PS session
     only.
-    - Once you close down (or open new) PowerShell session, module path modifications are lost.
+    - Once you close down (or open new) PowerShell session, module path modifications are undone.
 
 4. Required system services are started and set to automatic startup
 
@@ -216,7 +216,7 @@ So here is an overview to help you see what they do hopefully answering all of y
       - Starts the WinRM service.
       - Sets the startup type on the WinRM service to Automatic.
       - Creates a listener to accept requests on loopback IP address.
-      - Temporarily enables a firewall exception for WS-Management communications.
+      - Temporarily enables firewall exception for WS-Management communications.
       - Creates the simple and long name session endpoint configurations if needed.
       - Enables all session configurations.
       - Optionally changes the security descriptor of all session configurations to allow remote access.
@@ -233,13 +233,14 @@ them as follows:
 
     - Adjust console buffer size (valid until you close down PowerShell)
     - Update PowerShell module help files (only if you enable development mode)
-    - Install or update dependent PowerShell modules (only if you enable development mode)
+    - Install or update dependent PowerShell modules (only if you enable development mode or if you
+    set `ModulesCheck` variable to `$true` manually)
     - Install recommended VSCode extensions (if you accpet VSCode recommendation)
     - Modify file system permissions (ex. after setting firewall to log into this repository)
     - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer
     only)
 
-    All of these modifications in point 5 are done in following situations:
+    All of modifications above are done in following situations:
 
     - VScode might ask you to install recommended extensions
     - Some script might ask you to confirm whether you want to do this or that, and you're free to
@@ -279,12 +280,12 @@ them as follows:
     - [netstat.exe][netstat] (Used to get network statistics)
     - [sigcheck64.exe][sigcheck] (Used to scan digital signature of executable files)
 
-10. There is nothing harmful
+10. There is nothing harmful to privacy or system security
 
     - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
     to download or update modules, however this happens only if you manually enable setting
     - Some scripts are potentially dangerous due to their experimental state such as
-    `Uninstall-DuplicateModule.ps1` which may fail and leave you with broken modules that you would
+    `Uninstall-DuplicateModule.ps1` which may fail and leave you with broken modules which you would
     have to to fix with your own intervention.
     - "development mode" may be enabled by default on `develop` branch but never on `master` branch,
     which means defaults described so far may no longer be defaults

@@ -97,7 +97,7 @@ TODO: Test pipeline with multiple computers and SID's, probably it make no sense
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md
 
 .LINK
-http://support.microsoft.com/kb/243330
+https://learn.microsoft.com/en-US/windows-server/identity/ad-ds/manage/understand-security-identifiers
 
 .LINK
 https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/81d92bba-d22b-4a8c-908a-554ab29148ab

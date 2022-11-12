@@ -71,7 +71,7 @@ Todo's in this file are categorized into following sections:
     WindowsFirewallRuleset/blob/develop\
     WindowsFirewallRuleset/tree/develop
     - Run module manifest test
-    - Update software and modules versions in `ProjectSettings.ps1`
+    - Update software and module versions in `ProjectSettings.ps1`
     - Cleanup repository:
     - `git clean -d -x --dry-run` `git clean -d -x -f`
     - `git prune --dry-run` `git prune`
