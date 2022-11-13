@@ -288,20 +288,20 @@ Following web sites are good starting point for additional research regarding se
 [Table of Contents](#table-of-contents)
 
 [digital signature]: https://www.ghacks.net/2018/04/16/how-to-verify-digital-signatures-programs-in-windows "Visit ghacks.net"
-[local account]: https://support.microsoft.com/en-us/windows/create-a-local-user-or-administrator-account-in-windows-20de74e0-ac7f-3502-a866-32915af2a34d
-[app guard]: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-security-windows-defender-application-guard
-[hyper-v]: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v
-[pwsafe]: https://pwsafe.org/index.shtml
-[schneier]: https://www.schneier.com/academic/passsafe/
-[prxbx]: https://prxbx.com/email
-[proton mail]: https://proton.me/mail
-[defender]: https://www.microsoft.com/en-us/windows/comprehensive-security
-[firewall]: https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security
-[gpg4win]: https://www.gpg4win.org/
-[psiphon]: https://www.psiphon.onl/windows
-[dnscrpyt]: https://simplednscrypt.org
-[ublock]: https://github.com/gorhill/uBlock
-[cad]: https://github.com/Cookie-AutoDelete/Cookie-AutoDelete
-[https]: https://www.eff.org/https-everywhere
-[secure browser]: https://www.cisa.gov/uscert/publications/securing-your-web-browser
-[prism break]: https://prism-break.org/en/
+[local account]: https://support.microsoft.com/en-us/windows/create-a-local-user-or-administrator-account-in-windows-20de74e0-ac7f-3502-a866-32915af2a34d "Visit microsoft site"
+[app guard]: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-security-windows-defender-application-guard "Visit microsoft site"
+[hyper-v]: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v "Visit microsoft site"
+[pwsafe]: https://pwsafe.org/index.shtml "Visit password safe site"
+[schneier]: https://www.schneier.com/academic/passsafe "Visist Schneier's site"
+[prxbx]: https://prxbx.com/email "Visit prxbx.com site"
+[proton mail]: https://proton.me/mail "Visit protomail site"
+[defender]: https://www.microsoft.com/en-us/windows/comprehensive-securit "Visit microsoft site"
+[firewall]: https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit microsoft site"
+[gpg4win]: https://www.gpg4win.org "Visit gpg4win.org site"
+[psiphon]: https://www.psiphon.onl/windows "Visit psiphon.onl site"
+[dnscrpyt]: https://simplednscrypt.org "Visit simple DNS crypt homepage"
+[ublock]: https://github.com/gorhill/uBlock "Visit uBlock github page"
+[cad]: https://github.com/Cookie-AutoDelete/Cookie-AutoDelete "Visit CAD github page"
+[https]: https://www.eff.org/https-everywhere "Visit external eff.org site"
+[secure browser]: https://www.cisa.gov/uscert/publications/securing-your-web-browser "Visit cisa.gov site"
+[prism break]: https://prism-break.org/en "Visit prism break site"

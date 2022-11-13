@@ -77,6 +77,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - `Enable-WinRMServer` added `-Loopback` switch to be able to configure loopback only server
   - Most functions in `Ruleset.Remote` improved
   - Added separate PS session configuration for localhost deployment
+  - Make `Ruleset.Compatibility` function show verbose output is set globally
 
   - Improved module functions
 

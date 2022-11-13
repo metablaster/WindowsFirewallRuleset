@@ -53,7 +53,9 @@ Firewall Ruleset` and not a help request, bug or some other unrelated problem.
 
 To report a privacy or security issue with `Windows Firewall Ruleset` follow these steps:
 
-* Visit repository home page: [Windows Firewall Ruleset](https://github.com/metablaster/WindowsFirewallRuleset)
+* Visit repository home page: [Windows Firewall Ruleset][homepage]
 * Under the repository name, click on `Issues`
 * Click on `New Issue` button
 * Click on `Security report` and describe the issue according to directions.
+
+[homepage]: https://github.com/metablaster/WindowsFirewallRuleset "Visit home page"
