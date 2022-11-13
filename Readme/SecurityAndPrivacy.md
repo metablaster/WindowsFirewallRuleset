@@ -21,6 +21,7 @@ and how to maximize security of a personal computer.
     - [Separate account or computer](#separate-account-or-computer)
     - [Encryption](#encryption)
     - [Backup](#backup)
+    - [Advanced Threat Protection](#advanced-threat-protection)
   - [Privacy suggestions](#privacy-suggestions)
     - [VPN or proxy](#vpn-or-proxy)
     - [DNS encryption](#dns-encryption)
@@ -208,6 +209,33 @@ computer.
 
 [Table of Contents](#table-of-contents)
 
+### Advanced Threat Protection
+
+Advanced Threat Protection or ATP for short used to be a set of rules and settings which apply to
+business addition of Windows defender and pro edition of Windows, however these rules and settings
+can be applied on any system natively without any special paid software.
+
+You can read more about this on links below:
+
+- [Understand and use attack surface reduction capabilities][asr]
+- [Microsoft Defender for Office][defender office]
+
+As already said good news is that you need none of these expensive software, in this repository in\
+`Scripts\Security` directory you'll find following scripts which automate these things as follows:
+
+1. `Deploy-ATP.ps1` is used to deploy attack surface reduction rules on your system
+2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
+3. `Show-ASR` is used to show settings applied by `Deploy-ATP.ps1`
+4. `Find-UnsignedFile.ps1` is used to detect unsigned software on your system and perform automatic
+online malware analysis with [Virus total][virus total] so that you don't have to upload each file
+manually.
+
+It's recommended to take a look into these scripts to see what they do and how to use them before
+actually running them, you might want to adjust some of the settings according to your personal
+references.
+
+[Table of Contents](#table-of-contents)
+
 ## Privacy suggestions
 
 In the following sections are most common privacy concerns and suggestions on how to deal with them.\
@@ -310,6 +338,7 @@ Suggested browser extensions are:
 Following web sites are good starting point for additional research regarding security and privacy
 
 - [PRISM ⚡ BREAK][prism break]
+- [Technical analysis of client identification mechanisms][client identification]
 
 [Table of Contents](#table-of-contents)
 
@@ -331,3 +360,7 @@ Following web sites are good starting point for additional research regarding se
 [https]: https://www.eff.org/https-everywhere "Visit external eff.org site"
 [secure browser]: https://www.cisa.gov/uscert/publications/securing-your-web-browser "Visit cisa.gov site"
 [prism break]: https://prism-break.org/en "Visit prism break site"
+[client identification]: https://www.chromium.org/Home/chromium-security/client-identification-mechanisms "Visit chromium site"
+[asr]: https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/overview-attack-surface-reduction "Visit microsoft site"
+[defender office]: https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-defender-office-365 "Visit microsoft site"
+[virus total]: https://www.virustotal.com/gui/home/upload "Visit Virus total"
