@@ -27,9 +27,9 @@ If you would like to see fresh changes done since last release you can do so on 
 
 ## v0.14.0 (develop branch)
 
-## v0.13.0 (current release)
-
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+
+## v0.13.0 (current release)
 
 - Rules
 

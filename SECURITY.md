@@ -58,4 +58,6 @@ To report a privacy or security issue with `Windows Firewall Ruleset` follow the
 * Click on `New Issue` button
 * Click on `Security report` and describe the issue according to directions.
 
+Alternatively email your report to zebal@protonmail.ch
+
 [homepage]: https://github.com/metablaster/WindowsFirewallRuleset "Visit home page"
