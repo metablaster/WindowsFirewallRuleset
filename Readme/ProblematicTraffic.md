@@ -103,9 +103,9 @@ if outbound traffic is blocked by default.
 except adding all the accounts needed to separate rule as follows:
 
 1. User account
-2. NT AUTHORITY\SYSTEM
-3. NT AUTHORITY\LOCAL SERVICE
-4. NT AUTHORITY\NETWORK SERVICE
+2. `NT AUTHORITY\SYSTEM`
+3. `NT AUTHORITY\LOCAL SERVICE`
+4. `NT AUTHORITY\NETWORK SERVICE`
 
 TODO: doesn't work for CryptSvc, see why
 

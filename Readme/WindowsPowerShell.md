@@ -41,7 +41,8 @@ Here is how:
 ### Windows 11
 
 Unfortunately there is no default way like in Windows 10, one solution is to follow steps explained
-in section\ `Right click "Open Windows Terminal as Administrator" context menu for Windows 11` below
+in section\
+`Right click "Open Windows Terminal as Administrator" context menu for Windows 11` see [Windows Terminal](/Readme/WindowsTerminal.md)
 
 ## Right click "Open Windows PowerShell here" context menu in Windows 10
 

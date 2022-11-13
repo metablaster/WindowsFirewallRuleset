@@ -84,6 +84,7 @@ None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Rule deployment should probably be separated into new script
+TODO: Quiet switch should not suppress errors ex. about failed digital signature
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

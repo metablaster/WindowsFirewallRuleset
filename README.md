@@ -145,7 +145,7 @@ Following table lists currently tested operating systems
 | Windows 10          | Pro           | 1809 - 22H2 | x64          |
 | Windows 10          | Pro Education | 20H2        | x64          |
 | Windows 10          | Enterprise    | 1809 - 20H2 | x64          |
-| Windows 10          | Education     | 20H2        | x64          |
+| Windows 10          | Education     | 20H2 - 22H2 | x64          |
 | Windows 11          | Pro Education | 21H2        | x64          |
 | Windows 11          | Pro           | 22H2        | x64          |
 | Windows Server 2019 | Essentials    | 1809        | x64          |

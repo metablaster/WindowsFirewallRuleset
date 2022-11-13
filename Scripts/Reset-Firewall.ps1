@@ -51,7 +51,7 @@ Disables PS remoting and restores leftover changes.
 
 .PARAMETER Remoting
 If specified resets and disables Windows remote management service, disables PowerShell remoting and
-disabled remote registry in addition to firewall reset
+disables remote registry in addition to firewall reset
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions

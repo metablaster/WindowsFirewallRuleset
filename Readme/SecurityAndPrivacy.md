@@ -225,7 +225,7 @@ As already said good news is that you need none of these expensive software, in 
 
 1. `Deploy-ATP` is used to deploy attack surface reduction rules on your system
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
-3. `Show-ASR` is used to show settings applied by `Deploy-ATP.ps1`
+3. `Show-ASR` is used to show settings applied by `Deploy-ATP`
 4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic\
 online malware analysis with [Virus total][virus total] so that you don't have to upload each file
 manually.
