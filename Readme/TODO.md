@@ -305,6 +305,19 @@ Todo's in this file are categorized into following sections:
     - Add SHA signature to scripts and modules
     - For completness, specific functions could operate on persistent store firewall, currently
     some functions are GPO only or not tested for persistent store or other stores
+    - Verbose, debug, WhatIf and Confirm when enabled for module will work only for module `Write-*`
+    streams, to make it work also for built-in commandlets it's needed to specify `-Verbose` to each,
+    thus suggested design is to make a conditional global variable which will be used to initialize
+    function scope variable, ex how to handle verbose:
+
+    ```powershell
+    # Initialize function scope variable
+    [bool] $VerboseFlag = $PSBoundParameters["Verbose"] -or $VerbosePreference
+    $Params = @{ Verbose = $VerboseFlag }
+    # Use function scope verbose flag on each built-in commandlet
+    New-PSSession @Params
+    # TODO: See also Copy-WinModule.ps1 which already implements this although only partially
+    ```
 
 2. Scripts
 

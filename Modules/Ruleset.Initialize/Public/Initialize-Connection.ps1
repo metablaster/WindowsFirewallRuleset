@@ -170,15 +170,19 @@ function Initialize-Connection
 
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				# Loopback WinRM is required for Ruleset.Compatibility module
+				# TODO: Loopback WinRM is required for Ruleset.Compatibility module for testing and local session?
+				# Compatibility session will also run on remote computer due to startup script which
+				# loads Ruleset.ProgramInfo which in turn calls Import-WinModule which creates compatibility session
+				# need to see if compatibility session on remote session is needed
 				# TODO: This test should be against Microsoft.PowreShell configuration but it is not accessible from Core
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
+				# TODO: If this test succeeds there is no quarantee client is set for HTTPS
 				Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName "LocalFirewall.$($PSVersionTable.PSEdition)"
 
 				if (!$ConnectionStatus)
 				{
-					# Set client by the way for both, loopback HTTP and remote HTTPS
-					$WinRMClientSet = $true
+					# Set client by the way for both, loopback HTTP and remote HTTPS,
+					# this is also needed to be able to Test-WinRM on loopback
 					if ($RemotingProtocol -eq "HTTP")
 					{
 						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
@@ -192,6 +196,8 @@ function Initialize-Connection
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 					Test-WinRM -Protocol HTTP -ErrorAction Stop -ConfigurationName "LocalFirewall.$($PSVersionTable.PSEdition)"
 				}
+
+				$WinRMClientSet = $true
 			}
 
 			$TestParams = @{
@@ -202,11 +208,13 @@ function Initialize-Connection
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if remoting WinRM requires configuration..."
+			$ConnectionStatus = $false
 			Test-WinRM @TestParams -Status ([ref] $ConnectionStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
 			if (!$ConnectionStatus)
 			{
+				# If using PS Core it's already set above
 				if (!$WinRMClientSet)
 				{
 					# Configure this machine for remote session over SSL
@@ -220,6 +228,12 @@ function Initialize-Connection
 					}
 				}
 
+				# HACK: This will fail in PS Core if remote server is set as HTTPS only because
+				# compatibility module in remote session will attempt to cotact "localhost" or the
+				# server which doesn't listen to HTTP
+				# A workaround is to set remote host to listen on both HTTP and HTTPS
+				# TODO: Desired solution is to configure remote server so that is listens on HTTPS
+				# on all addresses and HTTP only loopback for compatibility session
 				Test-WinRM @TestParams -ErrorAction Stop
 			}
 		}

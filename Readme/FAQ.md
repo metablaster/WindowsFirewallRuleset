@@ -17,6 +17,7 @@ In addition, general questions and answers regarding this firewall.
   - [Why do I get "Access is denied" errors](#why-do-i-get-access-is-denied-errors)
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
   - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
+  - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
 
 ## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
 
@@ -322,6 +323,29 @@ There are few solutions:
 
 [Table of Contents](#table-of-contents)
 
+## Why do I need to specify my Microsoft account credentials
+
+If you're using Microsoft account to log in to your computer you will be asked for
+credentials, which needs to be your Microsoft email and password used to log into computer
+regardless if you're using Windows hello or not, specifying PIN ie. will not work and other Windows
+hello authentication methods are not supported.
+
+If invalid credentials are supplied you'll get an error saying `Access is denied`.\
+If this happens you'll need to restart PowerShell console and try again.
+
+The reason why this is necessary is because this firewall uses PowerShell remoting and WinRM service
+to deploy rules, by default PS Remoting will use your NTLM username\password, however this method
+does not work if Microsoft account is used because NTLM username is not the same as Microsoft account
+username, which results in an error saying that such user does not exist.
+
+Thus the only way for proper authentication is to ask user for valid Microsoft account credentials,
+which needs to be of an Administrative account on computer.\
+The credentials are securely stored in an object of type [PSCredential][pscredential]
+
+Windows hello is neither supported nor necessary by PowerShell remoting or WinRM.
+
+[Table of Contents](#table-of-contents)
+
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
@@ -332,3 +356,4 @@ There are few solutions:
 [netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
 [sigcheck]: https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck "Visit Microsoft docs"
 [alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
+[pscredential]: https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.pscredential "What is PSCredential?"

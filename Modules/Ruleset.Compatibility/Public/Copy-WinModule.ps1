@@ -118,7 +118,6 @@ function Copy-WinModule
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 	[bool] $WhatIfFlag = $PSBoundParameters["WhatIf"]
 	[bool] $ConfirmFlag = $PSBoundParameters["Confirm"]
 
@@ -147,7 +146,6 @@ function Copy-WinModule
 	$Destination = $ResolvedDestination.Path
 
 	$InitializeWinSessionParameters = @{
-		Verbose = $VerboseFlag
 		ComputerName = $Domain
 		ConfigurationName = $ConfigurationName
 		Credential = $Credential
@@ -158,7 +156,6 @@ function Copy-WinModule
 
 	$CopyItemParameters = @{
 		WhatIf = $WhatIfFlag
-		Verbose = $VerboseFlag
 		Confirm = $ConfirmFlag
 		Recurse = $true
 	}

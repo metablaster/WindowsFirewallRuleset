@@ -104,6 +104,7 @@ TODO: Configure server remotely either with WSMan or trough SSH, to test and con
 remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+TODO: Implement specifying listening addresses and address ranges
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md

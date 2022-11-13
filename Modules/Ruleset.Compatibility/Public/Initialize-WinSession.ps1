@@ -120,7 +120,6 @@ function Initialize-WinSession
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on host '$Domain'."
-	[bool] $VerboseFlag = $PSBoundParameters["Verbose"]
 
 	if ([string]::IsNullOrEmpty($Domain))
 	{
@@ -168,9 +167,9 @@ function Initialize-WinSession
 		($_.Name -eq $script:SessionName)
 	} | Select-Object -First 1
 
-	# Deal with the possibilities of multiple sessions. This might arise
-	# from the user hitting ctrl-C. We'll make the assumption that the
-	# first one returned is the correct one and we'll remove the rest.
+	# Deal with the possibilities of multiple sessions.
+	# This might arise from the user hitting ctrl-C.
+	# We'll make the assumption that the first one returned is the correct one and we'll remove the rest.
 	$Session, $Rest = $Session
 	if ($Rest)
 	{
@@ -191,7 +190,6 @@ function Initialize-WinSession
 	if (!$Session)
 	{
 		$PSSessionParams = @{
-			Verbose = $VerboseFlag
 			ComputerName = $Domain
 			Name = $script:SessionName
 			ConfigurationName = $ConfigurationName

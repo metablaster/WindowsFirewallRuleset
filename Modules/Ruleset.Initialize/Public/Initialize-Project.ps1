@@ -238,7 +238,7 @@ function Initialize-Project
 				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
 				# check to use compatibility only as needed
 				# TODO: Implement Scope parameter
-				# NOTE: New-PSSession for compatibility module is first time executed here,
+				# NOTE: New-PSSession for compatibility module is first time executed either here or while importing Ruleset.ProgramInfo,
 				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
 				Import-WinModule -Name Appx
 			}
@@ -495,7 +495,7 @@ function Initialize-Project
 				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
 				# check to use compatibility only as needed
 				# TODO: Implement Scope parameter
-				# NOTE: New-PSSession for compatibility module is first time executed here,
+				# NOTE: New-PSSession for compatibility module is first time executed either here or while importing Ruleset.ProgramInfo,
 				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
 				Import-WinModule -Name Appx
 			}

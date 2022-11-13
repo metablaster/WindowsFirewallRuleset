@@ -302,6 +302,10 @@ which means specifying host name, user name and password.
 
 #### Access is denied
 
+> `Access is denied`
+
+If credentials are required, this may happend due to invalid username\password.
+
 > [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
 
 Check following 3 things:

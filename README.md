@@ -374,6 +374,16 @@ It is recommended to close down all other programs before running master script 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take some 15 minutes of your attention.
 
+    **NOTE:** If you're using Microsoft account to log in to your computer you will be asked for
+    credentials, which needs to be your Microsoft email and password used to log into computer
+    regardless if you're using Windows hello or not, specifying PIN ie. will not work and other Windows
+    hello authentication methods are not supported.
+
+    If invalid credentials are supplied you'll get an error saying `Access is denied`.\
+    If this happens you'll need to restart PowerShell console and try again.
+
+    For more information why this is necessary see [FAQ](/Readme/FAQ.md)
+
 14. If you encounter errors, you can either ignore errors or update script that produced the error
 then re-run that specific script once again later.
 
@@ -546,7 +556,11 @@ localhost by design requires working WinRM and PS remoting configuration as well
 Before remote deployment can be performed, remote computer (server) needs to be configured to accept
 connection, example on how to establish SSL connection as follows:
 
-- To allow execution, set WinRM service and remote registry on server computer, run:
+- To allow execution, configure WinRM service and remote registry on server computer by running:
+
+**NOTE:** If using PowerShell core omit `-Protocol HTTPS` from `Enable-WinRMServer`, this will
+enable both HTTP and HTTPS which is a temporary workaround for compatibility module to work in
+remote session.
 
 ```powershell
 # On server computer
@@ -572,8 +586,10 @@ cd C:\Path\to\WindowsFirewallRuleset\Scripts
 Deploy-Firewall -Domain "ServerComputerName"
 ```
 
-This is how remote deployment is going to work once this functionality gets fully implemented.
+**NOTE:** Both set of commands above need to be run in same edition of PowerShell, ex. if server was
+configured in PowerShell Core then client computer also need PowerShell core for deployment.
 
+This is how remote deployment is going to work once this functionality gets fully implemented.\
 Remote deployment can be customized in a great detail in the following locations:
 
 - To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`
