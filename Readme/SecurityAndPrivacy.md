@@ -223,10 +223,10 @@ You can read more about this on links below:
 As already said good news is that you need none of these expensive software, in this repository in\
 `Scripts\Security` directory you'll find following scripts which automate these things as follows:
 
-1. `Deploy-ATP.ps1` is used to deploy attack surface reduction rules on your system
+1. `Deploy-ATP` is used to deploy attack surface reduction rules on your system
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
 3. `Show-ASR` is used to show settings applied by `Deploy-ATP.ps1`
-4. `Find-UnsignedFile.ps1` is used to detect unsigned software on your system and perform automatic
+4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic\
 online malware analysis with [Virus total][virus total] so that you don't have to upload each file
 manually.
 
@@ -238,7 +238,7 @@ references.
 
 ## Privacy suggestions
 
-In the following sections are most common privacy concerns and suggestions on how to deal with them.\
+In the following sections are most common privacy concerns and suggestions on how to deal with them.
 
 When it comes to privacy, briefly, there are 2 different defense categories:
 
@@ -350,7 +350,7 @@ Following web sites are good starting point for additional research regarding se
 [schneier]: https://www.schneier.com/academic/passsafe "Visist Schneier's site"
 [prxbx]: https://prxbx.com/email "Visit prxbx.com site"
 [proton mail]: https://proton.me/mail "Visit protomail site"
-[defender]: https://www.microsoft.com/en-us/windows/comprehensive-securit "Visit microsoft site"
+[defender]: https://www.microsoft.com/en-us/windows/comprehensive-security "Visit microsoft site"
 [firewall]: https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit microsoft site"
 [gpg4win]: https://www.gpg4win.org "Visit gpg4win.org site"
 [psiphon]: https://www.psiphon.onl/windows "Visit psiphon.onl site"
