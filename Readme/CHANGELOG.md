@@ -119,6 +119,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
     - ColorMania color picker
     - Azure Data studio
+    - MS-Edge IRC
 
   - Updated rules for:
 

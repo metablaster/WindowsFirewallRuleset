@@ -186,6 +186,17 @@ Experimental transport layer network protocol developed by Google and implemente
 			-InterfaceType $DefaultInterface `
 			-Description "Ports needed for pokerist casino game" | Format-RuleOutput
 
+		New-NetFirewallRule -DisplayName "Edge-Chromium IRC" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 8605 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Allow IRC communication with MS-Edge, some sites might provide IRC chat" |
+		Format-RuleOutput
+
 		if ($false)
 		{
 			# NOTE: Not applied because now handled by IPv4 multicast rules

@@ -1,8 +1,8 @@
 
 # Security and privacy
 
-This document provides incomplete suggestions on how to have control over your online privacy and
-how to maximize security of a computer system.
+This document provides suggestions and best practices on how to have control over your online privacy\
+and how to maximize security of a personal computer.
 
 ## Table of contents
 
@@ -34,20 +34,13 @@ Both security and privacy are important in the digital world.
 Privacy refers to the control that you have over your personal information and how that information
 is used.\
 Personal information is any information that can be used to determine your identity such as email,
-credit card or bank details, home address, birthdate etc.\
+credit card or bank details, home address, birthdate, geographical location etc.\
 Personal information may also refer to hardware ID's, IP address, browsing habits etc. which if
 gained access to may uniquely identify your system.
 
 Security, on the other hand, refers to how your personal information is protected.\
 Security generally refers to the prevention of unauthorized access of data,
 often involving protection against hackers or cyber criminals.
-
-In regard to `Windows Firewall Ruleset`, an example of privacy issue would be a firewall rule or
-portion of source code which leaks yours or someones else's personal information.\
-An example of security issue would be a firewall rule or portion of source code which let's an
-attacker compromise yours or someones else's system.\
-A security or privacy issue may also be related to documentation in this repository such as
-outdated information or suggestions concerning security or privacy.
 
 [Table of Contents](#table-of-contents)
 
@@ -58,8 +51,12 @@ Some security suggestions here also touch privacy but are more related to securi
 
 ### Standard user account
 
-Using standard (aka. non Administrative or local) Windows account for almost all use.\
-Administrative account should be used for administration only, if possible offline.
+Using standard (aka. non Administrative) Windows account for almost all use helps to guard your
+system because potential malware won't be able to compromise system without you allowing such action
+by supplying your administrative credentials.
+
+Administrative account is needed as well but it should be used for administration only,
+if possible offline.
 
 Following site explains how to create local (standard) account:\
 [Create a local user or administrator account in Windows][local account]
@@ -68,16 +65,40 @@ Following site explains how to create local (standard) account:\
 
 ### Digitally signed and trusted software
 
-Installing and running only digitally signed software, and only those publishers you trust.\
-Installing cracks, warez and similar is the most common way to let hackers in.
+Installing and running only digitally signed software, and only those publishers you trust helps to
+ensure integrity of a system, because by running unsigned software you run the risk of installing
+malware or spyware.
 
+Installing cracks, warez and similar is the most common way to let hackers in.\
 Following site explains [How to verify Digital Signatures of programs in Windows][digital signature]
+
+To enforce digital signature requirement for all software on your system follow steps below:
+
+1. Press start button
+2. Type: `secpol.msc`
+3. Right click on secpol.msc and click `Run as administrator`
+4. Expand node: `Security settings`
+5. Expand node: `Local policies`
+6. Expand node: `Security options`
+7. On the right find option `User Account Control: Only elevate executable files that are signed and validated`
+8. Double click it to open it
+9. Click on enabled checkbox and apply, hit OK
+
+Now if you attempt to install unsigned software an error will appear like in the image below:
+
+![Alternate text](Screenshots/SignatureError.png)
 
 [Table of Contents](#table-of-contents)
 
 ### Trusted and encrypted web sites
 
-Visit only known trusted web sites, preferably HTTPS, and check links before clicking them.\
+Visit only known trusted web sites, preferably HTTPS, and check links before clicking them.
+
+Unencrypted web sites are subject to attack and the infomation you supply on such sites can end up
+in wrong hands.\
+Also by visiting unknown or untrusted web sites you run the risk to connect to potentially malicious
+web server or game server and similar.
+
 To visit odd sites and freely click around do it in isolated browser session or virtual machine
 
 Isolated or virtual session isolates your real system from isolated system in such a way where
@@ -88,7 +109,9 @@ How to configure isolated browser session depends on your web browser.\
 For MS Edge Chromium following site explains how to get started:\
 [Microsoft Edge support for Microsoft Defender Application Guard][app guard]
 
-If your browser doesn't support isolated browser session an alternative is to use virtual machine.\
+If your browser does not support isolated browser session an alternative is to use virtual machine,
+however virtual machine consumes your system resources since you would be running 2 systems at once.
+
 Following site explains how to get started with Hyper-V virtual machine in Windows:\
 [Install Hyper-V on Windows 10][hyper-v]
 
@@ -149,7 +172,7 @@ the following web site:\
 
 ### Software updates
 
-Keep your operating system, anti virus and web browser patched maximum possible, that means checking
+Keep your operating system, anti virus and web browser patched maximum possible, this means checking
 for updates on daily basis for these essential programs.
 
 OS, AV and browsers are most essential to be up to date, but on regular basis you also want to
@@ -160,8 +183,8 @@ update the rest of software on your computer, especially networking programs.
 ### Separate account or computer
 
 High value data, online purchases and financial transactions should be performed on separate computer
-or user account whose only purpose is to do this and nothing else, and to keep valueable data protected
-away from network.
+or alternatively separate user account on same computer whose only purpose is to do this and nothing
+else, and to keep valueable data protected away from network.
 
 [Table of Contents](#table-of-contents)
 
@@ -177,16 +200,19 @@ Suggested software for disk encryption is subjective.
 
 ### Backup
 
-Always keep a backup of everything on at least 1 drive that is offline and away from online machine.
+Always keep a backup of everything on at least 1 drive that is offline and away from online machine.\
 If you have to bring it online, take down the rest of network.
 
-Suggestion of backup software is subjective, preferred method is external hard drive or separate computer.
+Suggestion of backup software is subjective, most secure method is external hard drive or separate
+computer.
 
 [Table of Contents](#table-of-contents)
 
 ## Privacy suggestions
 
-When it comes to privacy, briefly, there are 2 very different defense categories:
+In the following sections are most common privacy concerns and suggestions on how to deal with them.\
+
+When it comes to privacy, briefly, there are 2 different defense categories:
 
 - Hide your online activity, is what people usually refer to when talking about "privacy".\
 This relates to data such as hardware ID's, browser fingerprinting, IP address etc.
@@ -224,15 +250,15 @@ other country possibly not restricted and this would let you circumvent the rest
 the site.
 
 Another example where VPN or proxy proves useful is to avoid an IP ban.\
-However major benefit of using VPN and proxy is privacy because it hides your online identity,
+However major benefit of using VPN or proxy is privacy because it helps to hide your online identity,
 allowing you to browse the internet anonymously.
 
 It's difficult to suggest VPN since VPN's aren't free and proxy services which you can find online
 aren't to be trusted.\
 Therefore suggested software for VPN or proxy that is free is [Psiphon][psiphon]
 
-Psiphon is a standalone executable which doesn't require elevation, their company has servers world
-wide and you're able to choose from a set of countries in the UI.
+Psiphon is a standalone executable which doesn't require elevation, it's free, their company has
+servers world wide and you're able to choose from a set of countries in the UI.
 
 [Table of Contents](#table-of-contents)
 
@@ -250,7 +276,7 @@ By using DNS encryption this can be prevented.\
 DNS encryption works by configuring computer to query DNS server which supports DNS encryption.
 
 You only have to be careful to use DNS server which is trusted and one which provides maximum security
-and privacy, this means servers which don't collect logs and one which supports `DNSSEC`.
+and privacy, this means servers which don't collect logs and those which support `DNSSEC`.
 
 DNS encryption is supported by some web browsers and even OS's however not all have this functionality.\
 Suggested DNS encryption software is open source [Simple DNSCrypt][dnscrpyt] which is a UI frontend

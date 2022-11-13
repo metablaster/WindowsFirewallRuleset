@@ -22,7 +22,7 @@ Both security and privacy are important in the digital world.
 Privacy refers to the control that you have over your personal information and how that information
 is used.\
 Personal information is any information that can be used to determine your identity such as email,
-credit card or bank details, home address, birthdate etc.\
+credit card or bank details, home address, birthdate, geographical location etc.\
 Personal information may also refer to hardware ID's, IP address, browsing habits etc. which if
 gained access to may uniquely identify your system.
 

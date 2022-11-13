@@ -45,7 +45,8 @@ details as outlined in `Get started` under `Bug report`.
 If there is security or privacy issue please first refer to [SECURITY.md](SECURITY.md)
 
 To report security or privacy issue with Windows Firewall Ruleset please open new [issue][issues]
-and provide relevant details as outlined in `Get started` under `Security report`.
+and provide relevant details as outlined in\
+`Get started` under `Security report`.
 
 [Table of Contents](#table-of-contents)
 
