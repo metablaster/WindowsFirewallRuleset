@@ -53,6 +53,7 @@ If you would like to see fresh changes done since last release you can do so on 
   - Fixed a bug in `Ruleset.Firewall\Find-RulePrincipal` causing wrong output
   - Fixed a bug in `Ruleset.Remote\TestWinRM` causing invalid result
   - Fixed a bug in `Ruleset.UserInfo\Get-GroupPrincipal` causing unexpected SID value
+  - Fixed a bug in `Ruleset.Remote` module which prevented deployment with Microsoft account
   - Implemented remoting functionality for the following public functions:
 
     - `Get-SystemSKU`

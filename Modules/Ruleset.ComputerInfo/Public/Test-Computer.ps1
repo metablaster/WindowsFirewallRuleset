@@ -104,7 +104,7 @@ function Test-Computer
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Ping", "Default")]
-		[string] $Protocol = "Default",
+		[string] $Protocol = $RemotingProtocol,
 
 		[Parameter(ParameterSetName = "WSMan")]
 		[ValidateRange(1, 65535)]
@@ -115,7 +115,7 @@ function Test-Computer
 
 		[Parameter(ParameterSetName = "WSMan")]
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
-		[string] $Authentication = "Default",
+		[string] $Authentication = $RemotingAuthentication,
 
 		[Parameter(ParameterSetName = "WSMan")]
 		[string] $CertThumbprint,

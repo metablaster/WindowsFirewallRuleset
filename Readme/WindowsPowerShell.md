@@ -15,9 +15,9 @@ Note that Windows PowerShell is not the same thing as PowerShell Core, for more 
 
 ## How to open Windows PowerShell in Windows 11
 
-1. Right click on start button in Windows
-2. Click `Windows Powershell (Admin)` to open Powershell as Administrator
-3. If prompted for password, enter Administrator password and click `Yes` to continue
+1. Click on start button
+2. Type `Windows PowerShell` into search box
+3. Right click on `Windows PowerShell` and either run it normally or as Administrator
 
 ## How to open Windows PowerShell in target folder
 
@@ -53,17 +53,6 @@ in section\ `Right click "Open Windows Terminal as Administrator" context menu f
 
     [Open PowerShell window here as Administrator][powershell here as admin]
 
-## Right click "Open Windows Terminal as Administrator" context menu for Windows 11
-
-In Windows 11 the default is Windows Terminal which hosts both the Core and Desktop editions of PowerShell
-
-1. Context menu on right click for "Windows Terminal" for standard already exists in Windows 11
-
-2. To add context menu on right click for "Windows PowerShell as Administrator" see:
-
-    [Add "Open in Windows Terminal as administrator" context menu in Windows 11][Terminal as admin]
-
 [about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7
 [powershell here]: https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html
 [powershell here as admin]: https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html
-[Terminal as admin]: https://www.elevenforum.com/t/add-open-in-windows-terminal-as-administrator-context-menu-in-windows-11.581/

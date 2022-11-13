@@ -275,6 +275,7 @@ Todo's in this file are categorized into following sections:
 7. Other
 
     - There are many places where `Write-Progress` could be useful
+    - Need to test using all authentication options
 
 [Table of Contents](#table-of-contents)
 

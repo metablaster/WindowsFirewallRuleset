@@ -119,7 +119,7 @@ function Set-WinRMClient
 
 		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Default")]
-		[string] $Protocol = "Default",
+		[string] $Protocol = $RemotingProtocol,
 
 		[Parameter(ParameterSetName = "File")]
 		[string] $CertFile,

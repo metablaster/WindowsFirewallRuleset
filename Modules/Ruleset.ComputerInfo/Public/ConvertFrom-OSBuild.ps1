@@ -51,6 +51,12 @@ None. You cannot pipe objects to ConvertFrom-OSBuild
 .NOTES
 The ValidatePattern attribute matches decimal part as (,\d{2,5})? instead of (\.\d{3,5})? because
 ex. 19041.450 will convert to 19041,45, last zeroes will be dropped and dot is converted to coma.
+
+.LINK
+https://docs.microsoft.com/en-us/windows/release-health/release-information
+
+.LINK
+https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information
 #>
 function ConvertFrom-OSBuild
 {
@@ -87,7 +93,8 @@ function ConvertFrom-OSBuild
 }
 
 <#
-https://docs.microsoft.com/en-us/windows/release-health/release-information
+Windows 10
+
 Version	Servicing option				Availability OS build	Latest revision date	End of service
 22H2	General Availability Channel    2022-10-18	19045.2251	2022-11-08				2024-05-14
 21H2	General Availability Channel	2021-11-16	19044.1415	2021-12-14	2023-06-13	2024-06-11
@@ -118,6 +125,12 @@ Windows Server, version 2004		Semi-Annual Channel					Datacenter Core, Standard 
 Windows Server, version 1909		Semi-Annual Channel					Datacenter Core, Standard Core		2019-11-12		18363.418	End of servicing			Not applicable
 Windows Server 2019 (version 1809)	Long-Term Servicing Channel (LTSC)	Datacenter, Essentials, Standard	2018-11-13		17763.107	2024-01-09					2029-01-09
 Windows Server 2016 (version 1607)	Long-Term Servicing Channel (LTSC)	Datacenter, Essentials, Standard	2016-10-15		14393.0		2022-01-11					2027-01-11
+
+Windows 11
+
+Version	Servicing option	            Availability date Latest revision date Latest build End of servicing: Home, Pro, Pro Education and Pro for Workstations	End of servicing: Enterprise, Education and IoT Enterprise
+22H2	General Availability Channel	2022-09-20	      2022-11-08	       22621.819    2024-10-08 2025-10-14
+21H2	General Availability Channel	2021-10-04	      2022-11-08           22000.1219   2023-10-10 2024-10-08
 #>
 
 Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomObject[]]@(
@@ -127,6 +140,10 @@ Set-Variable -Name OSBuildInfo -Scope Script -Option Constant -Value ([PSCustomO
 			Build = 20348
 		}
 		# Windows 11
+		[hashtable]@{
+			Version = "22H2"
+			Build = 22621
+		}
 		[hashtable]@{
 			Version = "21H2"
 			Build = 22000

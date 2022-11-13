@@ -142,14 +142,14 @@ function Test-WinRM
 
 		[Parameter(ParameterSetName = "Protocol")]
 		[ValidateSet("HTTP", "HTTPS", "Default")]
-		[string] $Protocol = "Default",
+		[string] $Protocol = $RemotingProtocol,
 
 		[Parameter()]
 		[ValidateRange(1, 65535)]
 		[int32] $Port,
 
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
-		[string] $Authentication = "Default",
+		[string] $Authentication = $RemotingAuthentication,
 
 		[Parameter(ParameterSetName = "Thumbprint")]
 		[string] $CertThumbprint,
@@ -266,7 +266,7 @@ function Test-WinRM
 		ConfigurationName = $ConfigurationName
 	}
 
-	if ($MachineName -ne [System.Environment]::MachineName)
+	if (($MachineName -ne [System.Environment]::MachineName) -or ($RemotingAuthentication -in $AuthRequiresCredentials))
 	{
 		# NOTE: If using SSL on localhost, it would go trough network stack for which we need
 		# authentication otherwise the error is:
@@ -289,9 +289,13 @@ function Test-WinRM
 			}
 		}
 
-		$WSManParams["ComputerName"] = $Domain
-		$CimParams["ComputerName"] = $Domain
-		$PSSessionParams["ComputerName"] = $Domain
+		# Use -ComputerName parameter only for remote connections
+		if ($MachineName -ne [System.Environment]::MachineName)
+		{
+			$WSManParams["ComputerName"] = $Domain
+			$CimParams["ComputerName"] = $Domain
+			$PSSessionParams["ComputerName"] = $Domain
+		}
 
 		$WSManParams["Credential"] = $Credential
 		$CimParams["Credential"] = $Credential

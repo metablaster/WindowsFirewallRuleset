@@ -264,7 +264,7 @@ TODO: missing resolutions for the following known problems:
 > This is usually returned by a HTTP server that does not support the WS-Management protocol.
 
 When you specify computername, it is translated to private IP address for which listener must exist.
-Service is not listening on HTTP address, to add listener:
+Service is not listening translated IP address, to add listener for any IP address run:
 
 ```powershell
 New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null

@@ -117,7 +117,7 @@ function Connect-Computer
 
 		[Parameter(ParameterSetName = "Protocol")]
 		[ValidateSet("HTTP", "HTTPS", "Default")]
-		[string] $Protocol = "Default",
+		[string] $Protocol = $RemotingProtocol,
 
 		[Parameter()]
 		[ValidateRange(1, 65535)]
@@ -127,7 +127,7 @@ function Connect-Computer
 		[string] $CertThumbprint,
 
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
-		[string] $Authentication = "Default",
+		[string] $Authentication = $RemotingAuthentication,
 
 		[Parameter()]
 		[System.Management.Automation.Remoting.PSSessionOption]
@@ -196,7 +196,7 @@ function Connect-Computer
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	if ($MachineName -ne [System.Environment]::MachineName)
+	if (($MachineName -ne [System.Environment]::MachineName) -or ($Authentication -in $AuthRequiresCredentials))
 	{
 		if (!$Credential)
 		{
@@ -215,11 +215,15 @@ function Connect-Computer
 			}
 		}
 
-		$CimParams["Credential"] = $Credential
-		$CimParams["ComputerName"] = $Domain
+		# Use -ComputerName parameter only for remote connections
+		if ($MachineName -ne [System.Environment]::MachineName)
+		{
+			$CimParams["ComputerName"] = $Domain
+			$PSSessionParams["ComputerName"] = $Domain
+		}
 
+		$CimParams["Credential"] = $Credential
 		$PSSessionParams["Credential"] = $Credential
-		$PSSessionParams["ComputerName"] = $Domain
 	}
 
 	# Remote computer or localhost over HTTPS

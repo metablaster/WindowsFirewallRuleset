@@ -420,10 +420,31 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 	# A value "Default" for remoting means, use HTTPS for remote deployment and if not working fallback to HTTP
 	# for local deployment "Default" means use HTTP
 	# NOTE: For localhost sessions only HTTP is supported and this setting is ignored for localhost
+	# The default value is "Default"
 	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "Default"
 
-	# Credential object to be used for authentication to remote computer
-	New-Variable -Name RemotingAuthentication -Scope Global -Option Constant -Value "Default"
+	# Specifies the authentication mechanism to be used at the server.
+	# The acceptable values for this parameter are:
+	# None, no authentication is performed, request is anonymous.
+	# Basic, a scheme in which the user name and password are sent in clear text to the server or proxy.
+	# Default, use the authentication method implemented by the WS-Management protocol.
+	# Digest, a challenge-response scheme that uses a server-specified data string for the challenge.
+	# Negotiate, negotiates with the server or proxy to determine the scheme, NTLM or Kerberos.
+	# Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
+	# CredSSP, use Credential Security Support Provider (CredSSP) authentication.
+	# NOTE: If you specify an option other than "Default" you also need to ensure the corresponding
+	# WinRM authentication is enabled in Modules\Ruleset.Remote\Scripts\WinrRMSettings.ps1 -> $AuthenticationOptions
+	# NOTE: To use CredSSP it needs to be enabled in GPO or by Enable-WSManCredSSP for both the
+	# client and server computers
+	# The default value is "Default"
+	New-Variable -Name RemotingAuthentication -Scope Global -Option ReadOnly -Value "Default"
+
+	# Authentication options which require credentails, do not modify!
+	New-Variable -Name AuthRequiresCredentials -Scope Global -Option Constant -Value @(
+		"Basic"
+		"CredSSP"
+		"Negotiate"
+	)
 
 	# Credential object to be used for authentication to remote computer
 	New-Variable -Name RemotingCredential -Scope Global -Option ReadOnly -Value $null
@@ -484,7 +505,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Specify path to sigcheck64.exe
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
-	# sigcheck64.exe is used to perform malware analysis via virus total service.
+	# sigcheck64.exe is used to perform online malware analysis via virus total service.
 	# You can get sigcheck64.exe from Microsoft sysinternals site below:
 	# https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
 	Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"

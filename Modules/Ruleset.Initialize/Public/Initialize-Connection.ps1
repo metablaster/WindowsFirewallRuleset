@@ -70,6 +70,17 @@ function Initialize-Connection
 		# NOTE: Global variable CimServer is set by Connect-Computer function
 		# Destruction of these is done by Disconnect-Computer
 
+		# If using Microsoft account for local deployment, credentials are required which in turn require appropriate authentication method
+		if (($PolicyStore -in $LocalStore) -and ([System.Security.Principal.WindowsIdentity]::GetCurrent().AuthenticationType -eq "CloudAP"))
+		{
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if authentication method is valid for Microsoft account"
+			if ($RemotingAuthentication -notin $AuthRequiresCredentials)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified authentication method '$RemotingAuthentication' was replaced with 'Negotiate'"
+				Set-Variable -Name RemotingAuthentication -Scope Global -Force -Value "Negotiate"
+			}
+		}
+
 		$ConnectParams = @{
 			ErrorAction = "Stop"
 			Domain = $PolicyStore
@@ -104,7 +115,29 @@ function Initialize-Connection
 		# The default value is 4 for Test-NetConnection which specifies echo requests
 		$PSSessionOption.MaxConnectionRetryCount = 4
 
+		if (($PolicyStore -notin $LocalStore) -or ($RemotingAuthentication -in $AuthRequiresCredentials))
+		{
+			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
+				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
+			)
+
+			if (!$RemotingCredential)
+			{
+				# Will happen if credential request was dismissed using ESC key.
+				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
+			}
+			elseif ($RemotingCredential.Password.Length -eq 0)
+			{
+				# Will happen when no password is specified
+				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
+				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
+			}
+
+			$ConnectParams["Credential"] = $RemotingCredential
+		}
+
 		$ConnectionStatus = $false
+
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
@@ -161,27 +194,15 @@ function Initialize-Connection
 				}
 			}
 
-			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
-				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
-			)
-
-			if (!$RemotingCredential)
-			{
-				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
+			$TestParams = @{
+				Domain = $PolicyStore
+				Protocol = $RemotingProtocol
+				Credential = $RemotingCredential
+				ConfigurationName = $PSSessionConfigurationName
 			}
-			elseif ($RemotingCredential.Password.Length -eq 0)
-			{
-				# Will happen when no password is specified
-				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
-				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
-			}
-
-			$ConnectParams["Credential"] = $RemotingCredential
 
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if remoting WinRM requires configuration..."
-			Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -Credential $RemotingCredential `
-				-Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName $PSSessionConfigurationName
+			Test-WinRM @TestParams -Status ([ref] $ConnectionStatus) -Quiet
 
 			# TODO: A new function needed to conditionally configure remote host here
 			if (!$ConnectionStatus)
@@ -199,8 +220,7 @@ function Initialize-Connection
 					}
 				}
 
-				Test-WinRM -Protocol $RemotingProtocol -Domain $PolicyStore -ErrorAction Stop `
-					-ConfigurationName $PSSessionConfigurationName -Credential $RemotingCredential
+				Test-WinRM @TestParams -ErrorAction Stop
 			}
 		}
 		elseif ($PolicyStore -eq [System.Environment]::MachineName)
@@ -209,18 +229,27 @@ function Initialize-Connection
 			$PSSessionOption.NoCompression = $true
 			$PSSessionConfigurationName = "LocalFirewall.$($PSVersionTable.PSEdition)"
 
+			$TestParams = @{
+				ConfigurationName = $PSSessionConfigurationName
+			}
+
+			if ($RemotingAuthentication -in $AuthRequiresCredentials)
+			{
+				$TestParams["Credential"] = $RemotingCredential
+			}
+
 			# For loopback using only HTTP
 			# TODO: For completeness, implement use of HTTPS, credentials will be needed
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to local computer"
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking if loopback WinRM requires configuration..."
-			Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet -ConfigurationName $PSSessionConfigurationName
+			Test-WinRM -Protocol HTTP -Status ([ref] $ConnectionStatus) -Quiet @TestParams
 
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
 				Set-WinRMClient -Protocol HTTP -Confirm:$false
 				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
-				Test-WinRM -Protocol HTTP -ConfigurationName $PSSessionConfigurationName -ErrorAction Stop
+				Test-WinRM -Protocol HTTP @TestParams -ErrorAction Stop
 			}
 
 			$ConnectParams["Protocol"] = "HTTP"
