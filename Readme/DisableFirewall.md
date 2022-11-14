@@ -1,10 +1,10 @@
 
 # How to disable Windows firewall
 
-This document explains how to disable Windows firewall in Control Panel and/or in Local group policy.
+This document explains how to disable Windows firewall in Control Panel and/or in Local group policy.\
 It is not recommended to disable firewall for security reasons except to troubleshoot problems.
 
-Keep in mind that GPO firewall and Control Panel firewall are 2 distinct "firewalls" that let you
+Keep in mind that GPO firewall and Control Panel firewall are two distinct "firewalls" that let you
 manage the same filtering platform behind the scene.\
 Technically speaking these are called policy stores.
 
@@ -27,13 +27,13 @@ To do this follow steps below:
 4. Expand node: `Windows Defender Firewall with Advanced Security`
 5. Right click on: `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 6. Select `properties` in pop up menu
-7. There are 3 tabs: `Domain`, `Private` and `Public`
-8. Set "Firewall state" to `Not Configured` for all 3 profiles and click "Apply" for each
+7. There are three tabs: `Domain`, `Private` and `Public`
+8. Set "Firewall state" to `Not Configured` for all three profiles and click "Apply" for each
 9. You might need to reboot system if the effect is not immediate.
 
 ## Disable firewall in Control Panel
 
-Disabling Control Panel firewall can be done in 2 ways with different results:
+Disabling Control Panel firewall can be done in two ways with different results:
 
 ### Make Control Panel firewall not active by configuring GPO firewall
 

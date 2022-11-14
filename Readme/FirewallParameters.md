@@ -58,6 +58,7 @@ and usually need googling out what they do.
 
 - Port(s) can be specified only for TCP/UDP
 - The docs say we can specify ICMP Type/Code with port parameter which doesn't work.
+
 **NOTE:** According to docs IPHTTPS(Out\In) ports are only supported on Windows Server
 
 ### LocalPort/RemotePort

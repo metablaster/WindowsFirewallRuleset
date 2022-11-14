@@ -9,7 +9,7 @@ Contains scripts which are not part of modules as follows:
 | Complete-Firewall.ps1  | Apply global firewall settings (called by "Deploy-Firewall.ps1")   |
 | Deploy-Firewall.ps1    | Apply firewall rules and global settings to GPO                    |
 | Grant-Logs.ps1         | Grant access to firewall log files if logged into repository       |
-| Reset-Firewall.ps1     | Restore GPO policy store to factory defaults                       |
+| Reset-Firewall.ps1     | Reset GPO policy store to system defaults                          |
 | Restore-Firewall.ps1   | Import all exported firewall rules into GPO policy store           |
 | Unblock-Project.ps1    | Unblock all files in repository (called by "Deploy-Firewall.ps1")  |
 

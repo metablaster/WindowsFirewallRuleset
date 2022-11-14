@@ -34,5 +34,7 @@ Predefined group -> new group
 
 There are some predefined rules we can't avoid, at least not yet!
 
-For example, to make home group work "Network Discovery" and "File and printer sharing" is needed.\
+For example, to make home group work "Network Discovery" and "File and printer sharing" rules are
+needed.\
 There might be more such predefined rules which can't be easily reinvented.
+I have not yet figured the esoteric meaning behind these rules and why custom rules don't work.

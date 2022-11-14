@@ -1,8 +1,8 @@
 
 # Support
 
-This document provides information on how to get support with Windows Firewall Ruleset and anything
-related such as networking, security, privacy, troubleshooting and reporting issues.
+This document provides information on how to get support with `Windows Firewall Ruleset` and
+anything related such as networking, security, privacy, troubleshooting and reporting issues.
 
 ## Table of Contents
 
@@ -42,11 +42,7 @@ details as outlined in `Get started` under `Bug report`.
 
 ## Reporting security or privacy issue
 
-If there is security or privacy issue please first refer to [SECURITY.md](SECURITY.md)
-
-To report security or privacy issue with Windows Firewall Ruleset please open new [issue][issues]
-and provide relevant details as outlined in\
-`Get started` under `Security report`.
+If there is security or privacy issue please refer to [SECURITY.md](SECURITY.md)
 
 [Table of Contents](#table-of-contents)
 

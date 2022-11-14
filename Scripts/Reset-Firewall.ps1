@@ -41,12 +41,12 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Reset GPO firewall and WinRM to factory defaults
+Reset GPO firewall and WinRM to system defaults
 
 .DESCRIPTION
 Reset-Firewall script clears all GPO firewall rules and sets all GPO firewall parameters to their
 default values.
-Resets Windows Remote Management service configuration to factory defaults.
+Resets Windows Remote Management service configuration to system defaults.
 Disables PS remoting and restores leftover changes.
 
 .PARAMETER Remoting
@@ -95,7 +95,7 @@ Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName)
 Initialize-Project -Strict
 
 # User prompt
-$Accept = "All GPO firewall rules will be removed and settings restored to factory defaults"
+$Accept = "All GPO firewall rules will be removed and settings restored to system defaults"
 $Deny = "Abort operation, no change will be done to firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion

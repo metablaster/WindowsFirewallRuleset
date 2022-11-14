@@ -58,7 +58,7 @@ None. You cannot pipe objects to Psiphon.ps1
 None. Psiphon.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Psiphon must be running for these rules to be applied
 #>
 
 #Requires -Version 5.1

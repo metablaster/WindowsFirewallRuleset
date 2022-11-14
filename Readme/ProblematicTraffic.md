@@ -183,8 +183,8 @@ Unfortunately a link to this quote no longer exists.
 
 ## Case 4: Updating Microsoft Office fails
 
-1. Either manually or automatic,
-updating office fails because outbound connection is blocked despite correct allow rules
+- Either manually or automatic, updating office fails because outbound connection is blocked despite
+correct allow rules
 
 ### Case 4: Troubleshooting
 
@@ -203,7 +203,7 @@ bypassing our rules.
 
 **Update** This no longer seems to be problem since more recent version of Office suite
 
-1. Impossible to define a rule which would monitor behavior of such stupidly designed programs.
+1. Impossible to define a rule which would monitor such behavior
 
 - Resolution is to define a "temporary" rule which would be disabled by default, and enabled only
 during update of office.

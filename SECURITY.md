@@ -51,13 +51,18 @@ It might help you to resolve issues without having to report a problem or ask qu
 Please ensure that your report is strictly about either privacy or security concerning `Windows
 Firewall Ruleset` and not a help request, bug or some other unrelated problem.
 
+Security or privacy issues are taken seriously and have precedence over regular bug reports or
+help requests.\
 To report a privacy or security issue with `Windows Firewall Ruleset` follow these steps:
+
+If you believe your security or privacy report should be done strictly in private then please
+send your report via email to `zebal@protonmail.ch`
+
+Otherwise to report security or privacy issue in public:
 
 * Visit repository home page: [Windows Firewall Ruleset][homepage]
 * Under the repository name, click on `Issues`
 * Click on `New Issue` button
 * Click on `Security report` and describe the issue according to directions.
-
-Alternatively email your report to zebal@protonmail.ch
 
 [homepage]: https://github.com/metablaster/WindowsFirewallRuleset "Visit home page"

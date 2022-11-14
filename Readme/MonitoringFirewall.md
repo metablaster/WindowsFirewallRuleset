@@ -335,7 +335,7 @@ Once you install it and open ETL (Event Trace Log) file here is sample traffic a
 To generate an ETL file use "Windows Performance Recorder" which is part of same package in either
 Windows SDK or Windows ADK.
 
-Other two (less useful) methods are described in 2 sections that follow in this guide.
+Other two (less useful) methods are described in two sections that follow in this guide.
 
 - [Windows Performance Analyzer Intro][intro wpa]
 - [Windows Performance Analyzer reference][ref wpa]

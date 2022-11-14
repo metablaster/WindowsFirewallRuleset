@@ -1,7 +1,14 @@
 
 # Network Adapter Items
 
-Detailed description of network adapter items.
+This document provides detailed description of network adapter items.
+
+To view or manage these items follow steps below:
+
+1. Open control panel
+2. Click on `Network and Sharing Center`
+3. On the left click on `Change adapter settings` link
+4. Right click adapter you wish to manage and click `Properties`
 
 ## Client for Microsoft Networks
 

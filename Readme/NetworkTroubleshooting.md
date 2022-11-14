@@ -22,7 +22,7 @@ This are the most basic troubleshooting procedures one should always perform whe
   - [Reset network](#reset-network)
   - [Check for updates](#check-for-updates)
   - [Troubleshoot WI-FI](#troubleshoot-wi-fi)
-  - [Trace route to random hosts on internet](#trace-route-to-random-hosts-on-internet)
+  - [Trace route to random hosts on the internet](#trace-route-to-random-hosts-on-the-internet)
   - [Disable firewall](#disable-firewall)
   - [Disable and enable network adapter](#disable-and-enable-network-adapter)
   - [Change DNS server](#change-dns-server)
@@ -53,7 +53,7 @@ Press `Windows key + X` then click on "Windows PowerShell (Admin)"
 ## First clear DNS cache to isolate that problem
 
 ```powershell
-ipconfig /flushdns
+Clear-DnsClientCache
 ```
 
 ## Perform DNS query
@@ -125,7 +125,8 @@ troubleshooting, even if not needed.
 
 Alternative way to reset network is by using "Settings" app in Windows 10 as follows:
 
-`Settings > Network & Internet > Status > Network Reset`
+`Settings > Network & Internet > Status > Network Reset`\
+It's important to let network reset finish without interruption.
 
 ## Check for updates
 
@@ -157,7 +158,7 @@ Link below explains how to troubleshoot WI-FI problems, some of the steps are al
 
 [Fix WI-FI issues][fix wifi]
 
-## Trace route to random hosts on internet
+## Trace route to random hosts on the internet
 
 Traceroute will help you figure out which node on the network isn't responding.
 
@@ -304,7 +305,7 @@ Log in to your router and find "NAT" settings, possible options are:
 - Symmetric NAT (Dynamic NAT)
 
 For gaming your want "Full Cone NAT (Static NAT)"\
-remember, "Symmetric NAT (Dynamic NAT)" will cause you a lot of multiplayer troubles.
+remember, "Symmetric NAT (Dynamic NAT)" may cause you a lot of multiplayer troubles.
 
 ## Issues with LAN, Workgroup, Home group, Remote desktop or sharing
 

@@ -23,17 +23,21 @@ In addition, general questions and answers regarding this firewall.
 
 First step is to open PowerShell as Administrator and run `gpupdate.exe`, if not working then:
 
-1. Close down the program which is unable to connect to network completely
-2. In GPO select each rule that applies to this program, right click and disable,
-   wait 2 seconds then enable again.
+1. Close down the program which is unable to connect to network completely, including system tray.
+2. In GPO firewall `SHIFT` select each rule that applies to this program, right click and disable,
+   wait two seconds then enable again.
 3. Open program in question and try again, in most cases this should work.
 4. If not try rebooting system, Windows firewall sometimes just doesn't instantly respect rules.
-5. If still no luck, open rule properties in GPO and under advanced tab allow all interface types,
-all users or both, however allowing all interfaces or users should be only a temporary measure.
+5. If still no luck, open rule properties in GPO and under `Advanced` tab allow all interface types
+and allow all users under `Local Principals` tab, however allowing all interfaces or users should be
+only a temporary measure for troubleshooting.
 
 **NOTE**: In addition to interfaces shown in GPO there are some hidden network interfaces,
-until I figure out how to make rules based on those allow them all if this resolves the problem.\
+until I figure out how to make rules based on those allow them all to rule out problem with
+interfaces.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
+
+Other than this, if problem persists, you'll have to debug the problem, to get started see [MonitoringFirewall.md](/Readme/MonitoringFirewall.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -49,9 +53,10 @@ any changes to take effect:
 5. Link-Layer Topology Discovery Responder
 6. Link-Layer Topology Discovery I/O Driver
 
-For more information about these items see [Adapter Items](/Readme/LAN%20Setup/AdapterItems.md)
+For more information about these items and how to manage them see [AdapterItems.md](/Readme/LAN%20Setup/AdapterItems.md)
 
-Next ensure at a minimum following network services are `Running` and optionally set to `Automatic` startup
+Next ensure at the minimum following network services are `Running` and optionally set to
+`Automatic` startup
 
 1. LanmanWorkstation: `Workstation`
 2. LanmanServer: `Server`
@@ -63,13 +68,13 @@ If this doesn't work verify the command that is causing this problem, for exampl
 tries to get firewall rules from GPO and will produce this problem:
 
 ```powershell
-Get-NetFirewallRule -PolicyStore [system.environment]::MachineName
+Get-NetFirewallRule -PolicyStore [System.Environment]::MachineName
 ```
 
 In this example to fix the problem modify command above to the following and it should work:
 
 ```powershell
-Get-NetFirewallRule -PolicyStore ([system.environment]::MachineName)
+Get-NetFirewallRule -PolicyStore ([System.Environment]::MachineName)
 ```
 
 If you're trying to deploy or manage firewall remotely see this document [Remote.md](/Readme/Remote.md)
@@ -82,7 +87,7 @@ If none of this works even after reboot of all involved computers, following lin
 
 ## Does this firewall project give me the right protection
 
-Good firewall setup is essential for computer security, and, if not misused then the answer is yes
+Good firewall setup is essential for computer security, and if not misused then the answer is yes
 but only for the firewall part of protection.
 
 Keep in mind that this project is still alpha software, not yet ready for production use, see
@@ -108,8 +113,8 @@ To resolve this issue ensure following:
 
 2. Ensure that log files were generated in the specified location.
 
-    - If log file were not generated go to step 3 to grant permission to specified folder and then
-    get back here to step 2
+    - If log files were not generated go to step 3 below to grant permission to specified folder and
+    then get back here to step 2
     - If you applied write permission to specified folder and log files aren't generated temporarily
     toggle setting to log successful connections and apply it, this should force generating logs.
 
@@ -123,7 +128,8 @@ on every system boot or firewall setting change for security reasons.\
 If this doesn't resolve the problem remove all log files inside target directory, to be able to do this,
 you'll have to instruct firewall to write to different location to set your logs free, then reboot system.
 
-Also firewall service can't be stopped or manipulated in any way except trough UI followed by reboot.
+Also keep in mind that firewall service can't be stopped or manipulated in any way except trough UI
+followed by reboot.
 
 [Table of Contents](#table-of-contents)
 
@@ -169,6 +175,7 @@ So here is an overview to help you see what they do hopefully answering all of y
 
     - Default PowerShell session configurations are recreated and optionally disabled
     - Custom session configurations are created which is used for local and remote firewall deployment
+    - Your own PowerShell session configurations if you made them will be removed
 
 6. Following default firewall rules are recreated or removed in control panel firewall
 
@@ -241,6 +248,7 @@ them as follows:
     don't include any personal information such as user names, email or system details.
     - Bugs may exist which could break things, while I do my best to avoid bugs you might want to
     report your findings to be fixed.
+    - If you believe there is security or privacy issue please see [Security.md](../SECURITY.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -314,12 +322,14 @@ This means if second console is opened it will exceed the default value of 5 ses
 
 There are few solutions:
 
-1. Close down all PS Core consoles, wait some time and try again with single PS Core console.
+1. Close down all PS Core consoles (including ghost windows), wait some time and try again with
+single PS Core console.
 
 2. You can increase the limit in `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`, here search for
 `MaxShellsPerUser` and increase the value to 10, 20 or more, default is 5.
 
-3. If nothing works the easiest workaround is to use Windows PowerShell for the time being.
+3. If nothing works the easiest workaround is either reboot system or use Windows PowerShell for
+the time being.
 
 [Table of Contents](#table-of-contents)
 
@@ -340,7 +350,8 @@ username, which results in an error saying that such user does not exist.
 
 Thus the only way for proper authentication is to ask user for valid Microsoft account credentials,
 which needs to be of an Administrative account on computer.\
-The credentials are securely stored in an object of type [PSCredential][pscredential]
+The credentials are securely stored in an object of type [PSCredential][pscredential] and once you
+close down PowerShell the credential object is removed.
 
 Windows hello is neither supported nor necessary by PowerShell remoting or WinRM.
 

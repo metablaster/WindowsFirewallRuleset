@@ -404,7 +404,7 @@ For more information see [WMI plug-in configuration notes][WMI plugin]
 
 #### Access id denied
 
-Specify credentials
+Most likely you need to specify credentials
 
 ### Troubleshooting remote registry
 

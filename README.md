@@ -33,7 +33,12 @@
 
 [![Alpha release][badge status]][alpha]
 
-This project consists of 2 major parts, firewall rules and firewall framework as follows:
+A fully automated solution for Windows firewall with PowerShell
+
+`Windows Firewall Ruleset` configures Windows firewall automatically and applies restrictive
+firewall rules specific for target system and software installed on that system.
+
+This project consists of two major parts, firewall rules and firewall framework as follows:
 
 ### Firewall rules
 
@@ -70,14 +75,14 @@ such as:
   - Network configuration
   - Firewall management
   - Quick analysis of packet trace and audit logs
-  - Various firewall, system, troubleshooting and network utility functions
+  - Various troubleshooting, firewall, system and network utility functions
 
-- Meaning this repository is a good base to easily extend your firewall to include more rules and
-functionalities.
+- Thus this repository is a good starting point to easily extend your firewall to include more rules
+and functionalities as desired.
 - Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
-and a bunch of useful documentation.
-- You can choose which rules you want, and deploy only those or deploy them all with master script
-to your firewall.
+and a good portion of useful documentation.
+- You can interactively choose which rules you want, and deploy only those or you could automate the
+process and deploy all necessary rules and settings to your firewall.
 
 [Table of Contents](#table-of-contents)
 
@@ -96,8 +101,8 @@ or restriction requirements.
 part of their installation process will have no effect on firewall unless you explicitly make an
 exception.
 
-3. Rules based on programs and services will have their specified executable file checked for digital
-signature and will be scanned on virus total if digital signature is missing,
+3. Rules based on programs and services will have their specified executable file checked for
+digital signature and will be scanned on virus total if digital signature is missing,
 for security reasons rule is not created or loaded into firewall if this verification fails.
 (can be forced)
 
@@ -131,14 +136,14 @@ you much valuable administration time.
 
 This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
-Some scripts, files or modules are not MIT licensed or may have their own Copyright holders
+Some scripts, files or modules are not `MIT` licensed or may have their own Copyright holders
 for this reason license and Copyright notices are maintained **"per file"**.
 
 ## Requirements
 
 [![Windows][badge system]][windows]
 
-Following table lists currently tested operating systems
+Following table lists operating systems on which `Windows Firewall Ruleset` has been tested
 
 | OS                  | Edition       | Version     | Architecture |
 | ------------------- | ------------- | ----------- | ------------ |
@@ -167,22 +172,29 @@ Following table lists currently tested operating systems
 ### Requirements details
 
 - All Windows 10.0 systems (Major 10, Minor 0) and above are supported,
-but only those editions listed in the table above are actively tested.\
+but only those editions listed in the table above has been tested.\
 The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
-- PowerShell "Core" is not built into Windows, you will need to install it separately or use
+
+- `PowerShell Core` is not built into Windows, you will need to install it separately or use
 [Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
-- .NET Framework min. version 4.5 is required if using Windows PowerShell (Desktop edition)
+
+- `.NET Framework` min. version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
+
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
+
 - VS Code is preferred and recommended editor to navigate code and edit scripts for your
 own needs or contribution.
+
 - If you get VSCode, you'll also need PowerShell extension for code navigation and PowerShell
 language features.
-- To navigate and edit code with VSCode `PSScriptAnalyzer` is requirement, otherwise editing
-experience may behave really odd due to various repository settings.
+
+- To navigate and edit code with VSCode `PSScriptAnalyzer` is highly recommended, otherwise editing
+experience may behave odd due to various repository settings.
+
 - There are no hardware requirements, but if you plan to write code recommendation is min. 8GB of
 memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your personal
 firewall less than that will work just fine.
@@ -211,27 +223,34 @@ Following are brief warnings and notices first time user should be aware of befo
 ### Warning
 
 - You might loose internet connectivity for some of your programs or in rare cases even lose
-internet connectivity completely, if that happens, you can either temporarily allow outbound network\
-traffic or run `Scripts\Reset-Firewall.ps1 -Remoting`, to reset GPO firewall to system defaults,
-remove all rules and restore WinRM to system defaults.
+internet connectivity completely, if that happens, you can either temporarily allow outbound network
+in GPO or run\
+`Scripts\Reset-Firewall.ps1 -Remoting`, to reset GPO firewall to system defaults, remove all rules
+and restore WinRM to system defaults. (afterwards PowerShell restart is required)
+
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
+
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
 as rules from this ruleset, however **this does not apply to** `Scripts\Reset-Firewall.ps1` which
 will clear GPO rules completely and leave only those in control panel.
+
 - If you want to be 100% sure please export your GPO rules as explained in
 [Export\Import rules](#exportimport-rules)
+
 - You will be asked which rules to load (if you select interactive deployment, see later),
 to minimize internet connectivity trouble you should deploy at least all generic networking and OS
 related rules called "CoreNetworking", "ICMP", "WindowsSystem", "WindowsServices", "Multicast"
 including all rules for which you have programs installed on system, also do not ignore IPv6,
-Windows indeed needs IPv6 even if you're on IPv4 network.\
+Windows needs IPv6 even if you're on IPv4 network.\
 It will be easy to delete what you don't need in GPO, rather than later digging through code finding
 what you have missed.
+
 - Default configuration will set global firewall behavior which is not configurable in GPO,
 such as `Stateful FTP` and `PPTP` or global `IPSec` settings, if you need specific setup please
 visit `Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting`.\
 Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\Deploy-Firewall.ps1`
+
 - Some scripts require you (network adapter) to be connected to network, for example to determine
 IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
 
@@ -241,29 +260,37 @@ IPv4 broadcast address. (Otherwise errors may be generated without completing th
 
 - Loading rules into an empty GPO should be very fast, however loading into GPO which already
 contains rules will be significantly slower (depends on number of existing rules)
+
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
 want to fix some problem, most warnings and even some errors can be safely ignored, in certain cases
 you might want to resolve errors if possible.
+
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
 script again, see [FAQ](Readme/FAQ.md) for more information on why this may happen.
+
 - If the repository was manually downloaded, transferred from another computer or media then you should\
 unblock all files in repository first to avoid YES/NO spam questions for every executing script,
 by running `Scripts\Unblock-Project.ps1`\
 Master script `Scripts\Deploy-Firewall.ps1` does this in case if you forget, but initial YES/NO
 questions will still be present in that case.
+
 - If you download code to location that is under "Ransomware protection" (in Windows Defender),
 make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Desktop edition)
 otherwise doing anything may be blocked.\
 PowerShell console might need to be restarted for "Controlled folder access" changes to take effect.
+
 - It's important to understand these rules are designed to be used as "Standard" user, not as
 user that is Administrator, if you're Administrator on your computer you'll have to either create
 standard user account and use that for your everyday life or modify code to allow Administrator
 online access.\
-See [FAQ](Readme/FAQ.md#does-this-firewall-project-give-me-the-right-protection) for more
+See [SecurityAndPrivacy.md](Readme/SecurityAndPrivacy.md#standard-user-account) for more
 information why using Administrator account is not recommended for security reasons.
+
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
 needed to update firewall for system changes that may happen at any time.
+This behavior is called [Software regression][regression]
+
 - Before deploying firewall it is recommended to update system and user programs on target computer
 including Windows store apps, especially if system is fresh installed because updating later may
 require to re-load some rules.
@@ -281,18 +308,17 @@ These steps here assume you have downloaded a zip file from "assets" section und
 (project root directory) into `C:\` root drive directly.
 
 3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](Readme/WindowsPowerShell.md)\
-If you would like to use PowerShell Core instead of Windows PowerShell keep in mind that in rare
-cases there might appear some issues hard to diagnose, in which case you can re-try with
-Windows PowerShell as suggested.
+If you would like to use PowerShell Core instead keep in mind that in rare cases there might appear
+some issues hard to diagnose, in which case you can re-try with Windows PowerShell as suggested.
 
 4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
 PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
 Core) if not open it manually.
 
-5. If you don't have PowerShell context menu then move to `C:\` root drive by executing following 2
-lines (type or copy/paste following commands and hit enter for each),
-this is where you extracted your downloaded zip file
+5. If you don't have PowerShell context menu then move to `C:\` root drive by executing following
+two lines (type or copy/paste following commands and hit enter for each), this is where you
+extracted your downloaded zip file
 
     ```powershell
     c:
@@ -307,7 +333,7 @@ something else:
     ```
 
 7. To see current execution policy type the following command and hit enter:\
-(**hint:** *you can use `TAB` key to auto complete commands*)
+(**hint:** *you can use `TAB` key to auto complete as you type*)
 
     ```powershell
     Get-ExecutionPolicy
@@ -326,7 +352,7 @@ something else:
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all project files first by executing the script called\
+9. At this point you should "unblock" all project files first by executing a script called\
 `Scripts\Unblock-Project.ps1`, btw. project files were blocked by Windows to prevent users from
 running untrusted script code downloaded from internet:
 
@@ -353,7 +379,7 @@ It is recommended to close down all other programs before running master script 
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 
-    To deploy firewall automatically without any prompt run:
+    To deploy firewall automatically without any prompt run and clean output:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
@@ -376,8 +402,8 @@ it will take some 15 minutes of your attention.
 
     **NOTE:** If you're using Microsoft account to log in to your computer you will be asked for
     credentials, which needs to be your Microsoft email and password used to log into computer
-    regardless if you're using Windows hello or not, specifying PIN ie. will not work and other Windows
-    hello authentication methods are not supported.
+    regardless if you're using Windows hello or not, specifying PIN ie. will not work and other
+    Windows hello authentication methods are not supported.
 
     If invalid credentials are supplied you'll get an error saying `Access is denied`.\
     If this happens you'll need to restart PowerShell console and try again.
@@ -404,7 +430,7 @@ If you're unable to connect to internet after deploying these rules you have sev
 automatic start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these
 services to default if desired.\
 For example `Windows Remote Management` service should not run if not needed
-(The default is "Manual" startup)
+(the default is "Manual" startup)
 
 [Table of Contents](#table-of-contents)
 
@@ -445,7 +471,7 @@ Get-Help .\Scripts\Deploy-Firewall.ps1 -Detailed
 
 ### Manage GPO rules
 
-There are 2 mothods to manage GPO rules:
+There are two mothods to manage GPO rules:
 
 1. Using Local Group Policy, this method gives you limited freedom on what you can do with rules
 from this repository, such as disabling them, changing some attributes or adding new rules.\
@@ -468,7 +494,7 @@ For more information about GPO see:
 
 ### Deploying individual rulesets
 
-If you want to deploy only specific rules there are 2 ways to do this:
+If you want to deploy only specific rules there are two ways to do this:
 
 1. Execute `Scripts\Deploy-Firewall.ps1` and chose `Yes` only for rulesets you want, otherwise chose
 `No` and hit enter to skip current ruleset.
@@ -489,7 +515,7 @@ rules into GPO.
 
 ### Deleting rules
 
-At the moment there are 3 options to delete firewall rules:
+At the moment there are three options to delete firewall rules:
 
 1. The easiest way is to select all rules you want to delete in GPO, right click and delete.
 
@@ -514,7 +540,7 @@ If you want to export rules from GPO there are 2 methods available:
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
 2. To export using PowerShell run `Scripts\Backup-Firewall.ps1`\
-If you want to customize your export run `Export-RegistryRule` function located in `Ruleset.Firewall`
+If you want to customize your export see `Export-RegistryRule` function located in `Ruleset.Firewall`
 module, which let's you customize your export in almost any way you want.
 
 If you want to import rules, importing by using GPO is same as for export, and to import with
@@ -534,7 +560,7 @@ This section and functionality is currently under construction and incomplete
 
 ![Under construction](Readme/Screenshots/UnderConstruction.gif)
 
-In remote firewall deployment there are at least 2 computers involved,\
+In remote firewall deployment there are at least two computers involved,\
 one is called management computer (client) and all others are called managed computers (servers).
 
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
@@ -556,9 +582,9 @@ localhost by design requires working WinRM and PS remoting configuration as well
 Before remote deployment can be performed, remote computer (server) needs to be configured to accept
 connection, example on how to establish SSL connection as follows:
 
-- To allow execution, configure WinRM service and remote registry on server computer by running:
+To allow execution, configure WinRM service and remote registry on server computer by running:
 
-**NOTE:** If using PowerShell core omit `-Protocol HTTPS` from `Enable-WinRMServer`, this will
+**NOTE:** If using PowerShell core omit `-Protocol HTTPS` from `Enable-WinRMServer` below, this will
 enable both HTTP and HTTPS which is a temporary workaround for compatibility module to work in
 remote session.
 
@@ -578,12 +604,12 @@ By default self signed SSL certificate is created if the server computer does no
 **NOTE:** Configuring server computer manually is performed only once for initial setup,
 you don't need to repeat it for subsequent deployments.
 
-- Next step is to move on to management computer and run scripts as wanted, for example:
+Next step is to move on to management computer and run scripts as wanted, for example:
 
 ```powershell
 # On management computer
 cd C:\Path\to\WindowsFirewallRuleset\Scripts
-Deploy-Firewall -Domain "ServerComputerName"
+Deploy-Firewall -Domain "RemoteComputerName"
 ```
 
 **NOTE:** Both set of commands above need to be run in same edition of PowerShell, ex. if server was
@@ -644,11 +670,11 @@ and firewall settings
 [configure security policy settings]: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings "Configure Security Policy Settings"
 [releases]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Visit releases page now"
 [powershell]: https://docs.microsoft.com/en-us/powershell/scripting/overview "What is PowerShell anyway?"
-[windows]: https://docs.microsoft.com/en-us/windows/windows-10 "Windows 10 for IT Pros"
+[windows]: https://learn.microsoft.com/en-us/windows/resources "Visit Windows client documentation for IT Pros"
 [alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
-
 [badge status]: https://img.shields.io/static/v1?label=Status&message=Alpha&color=red&style=plastic
 [badge system]: https://img.shields.io/static/v1?label=OS&message=Windows&color=informational&style=plastic&logo=Windows
 [badge language]: https://img.shields.io/static/v1?label=Language&message=PowerShell&color=informational&style=plastic&logo=PowerShell
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
+[regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
