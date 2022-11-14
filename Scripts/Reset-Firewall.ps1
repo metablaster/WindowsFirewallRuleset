@@ -53,6 +53,9 @@ Disables PS remoting and restores leftover changes.
 If specified resets and disables Windows remote management service, disables PowerShell remoting and
 disables remote registry in addition to firewall reset
 
+.PARAMETER Service
+If specified restores modified Windows services to system defaults
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -193,10 +196,49 @@ if ($Remoting)
 	Reset-WinRM -Confirm:$false
 }
 
+# Reset affected services to system defaults
+# | Service                                  | Startup                   | Status  |
+# |------------------------------------------|---------------------------|---------|
+# | TCP/IP NetBIOS Helper (lmhosts)          | Manual (Trigger Start)    | Running |
+# | Workstation (LanmanWorkstation)          | Automatic                 | Running |
+# | Server (LanmanServer)                    | Automatic (Trigger Start) | Running |
+# | Windows Remote Management (WinRM)        | Manual                    | Stopped |
+# | OpenSSH Authentication Agent (ssh-agent) | Disabled                  | Stopped |
+# | Remote Registry (RemoteRegistry)         | Manual                    | Stopped |
+
+if ($Service)
+{
+	Set-Service -Name lmhosts -StartupType Manual
+	Set-Service -Name LanmanWorkstation -StartupType Automatic
+	Set-Service -Name LanmanServer -StartupType Automatic
+	Set-Service -Name WinRM -StartupType Manual
+	Set-Service -Name RemoteRegistry -StartupType Manual
+
+	Start-Service -Name lmhosts
+	Start-Service -Name LanmanWorkstation
+	Start-Service -Name LanmanServer
+
+	Stop-Service -Name WinRM
+	Stop-Service -Name RemoteRegistry
+
+	# Disabling following services might not be desired so ask for confirmation
+	if ($Develop)
+	{
+		Set-Service -Name ssh-agent -StartupType Disabled -Confirm
+		Stop-Service -Name ssh-agent -Confirm
+
+		if (Get-Service -Name sshd -ErrorAction Ignore)
+		{
+			Set-Service -Name sshd -StartupType Manual -Confirm
+			Stop-Service -Name ssh-agent -Confirm
+		}
+	}
+}
+
 Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
 Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"
 
-if ($Remoting)
+if ($Remoting -or $Service)
 {
 	# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
 	Write-Warning -Message "[$ThisScript] To continue running firewall scripts please restart PowerShell console"

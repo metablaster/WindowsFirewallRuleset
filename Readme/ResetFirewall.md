@@ -11,7 +11,7 @@ automatically, example how to run it:
 C:
 cd \
 cd WindowsFirewallRuleset-master
-.\Scripts\Reset-Firewall.ps1 -Remoting
+.\Scripts\Reset-Firewall.ps1 -Remoting -Service
 # Restart PowerShell
 ```
 
@@ -55,7 +55,7 @@ about default values.
 `Windows Firewal Ruleset` might have started some system services required for deployment, to see
 which services were modified take a look into `Logs` folder and find `Services-<DATE>.log`
 
-This file lists all the services whose startup mode and\or startup status was changed.
+The log file lists all the services whose startup mode and\or status status was changed.
 
 If you're unable to find the file or you don't know defaults, following table lists all the services
 which `Windows Firewal Ruleset` might have modified and their system defaults:

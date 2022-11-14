@@ -225,8 +225,9 @@ Following are brief warnings and notices first time user should be aware of befo
 - You might loose internet connectivity for some of your programs or in rare cases even lose
 internet connectivity completely, if that happens, you can either temporarily allow outbound network
 in GPO or run\
-`Scripts\Reset-Firewall.ps1 -Remoting`, to reset GPO firewall to system defaults, remove all rules
-and restore WinRM to system defaults. (afterwards PowerShell restart is required)
+`.\Scripts\Reset-Firewall.ps1 -Remoting -Service`, to reset GPO firewall to system defaults,
+remove all rules and restore WinRM and modified services to system defaults.
+(afterwards PowerShell restart is required)
 
 - Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
