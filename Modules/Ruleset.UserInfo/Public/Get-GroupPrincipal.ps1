@@ -133,6 +133,7 @@ function Get-GroupPrincipal
 	{
 		foreach ($Computer in $Domain)
 		{
+			# NOTE: Because $Computer may be set to "localhost"
 			$MachineName = Format-ComputerName $Computer
 			if ($PSCmdlet.ParameterSetName -eq "Domain")
 			{
@@ -177,8 +178,7 @@ function Get-GroupPrincipal
 						}
 
 						$AccountName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-								Write-Debug "Comparing $($args[0]) with $MachineName\$($Account.Name)"
-								# NOTE: Account.Domain Because $Computer may be set to "localhost"
+								Write-Debug -Message "[Get-GroupPrincipal] Comparing $($args[0]) with $MachineName\$($Account.Name)"
 								$args[0] -eq "$MachineName\$($Account.Name)"
 							})
 
@@ -220,7 +220,7 @@ function Get-GroupPrincipal
 
 					# Get either enabled or disabled users, these include SID but also non group users
 					$EnabledAccounts = Get-CimInstance @CimParams -Class Win32_UserAccount `
-						-Property LocalAccount, Disabled, Caption -Filter "LocalAccount = True" |
+						-Property LocalAccount, Disabled, Caption, Domain, Name -Filter "LocalAccount = True" |
 					Where-Object -Property Disabled -EQ $Disabled  #| Select-Object -Property Name, Caption, SID, Domain
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
@@ -238,7 +238,7 @@ function Get-GroupPrincipal
 						}
 
 						$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
-								Write-Debug "Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
+								Write-Debug -Message "[Get-GroupPrincipal] Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
 								# NOTE: Account.Domain or $Computer is same thing
 								$Account.Caption -eq "$($Account.Domain)\$($args[0])"
 							})

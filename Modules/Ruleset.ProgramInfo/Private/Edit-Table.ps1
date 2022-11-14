@@ -126,7 +126,8 @@ function Edit-Table
 		# NOTE: | Where-Object -Property User -EQ ($LiteralPath.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
 		$UserInfo = Get-GroupPrincipal "Users" @CimParams | Where-Object {
-			$LiteralPath -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
+			# LiteralPath might contain environment variables, which would make match fail
+			[System.Environment]::ExpandEnvironmentVariables($LiteralPath) -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
 		}
 
 		# Make sure user profile variables are not present
