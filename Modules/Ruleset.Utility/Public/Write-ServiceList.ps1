@@ -42,13 +42,13 @@ Root folder name which to scan recursively
 If specified, the list of services is also logged.
 
 .EXAMPLE
-PS> Build-ServiceList "C:\PathToRepo"
+PS> Write-ServiceList "C:\PathToRepo"
 
 .EXAMPLE
-PS> Build-ServiceList "C:\PathToRepo" -Log
+PS> Write-ServiceList "C:\PathToRepo" -Log
 
 .INPUTS
-None. You cannot pipe objects to Build-ServiceList
+None. You cannot pipe objects to Write-ServiceList
 
 .OUTPUTS
 [string]
@@ -56,10 +56,10 @@ None. You cannot pipe objects to Build-ServiceList
 .NOTES
 TODO: -Log parameter should be accompanied with -LogName parameter
 #>
-function Build-ServiceList
+function Write-ServiceList
 {
 	[CmdletBinding(PositionalBinding = $false,
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Build-ServiceList.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Write-ServiceList.md")]
 	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

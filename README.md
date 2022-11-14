@@ -162,10 +162,11 @@ Following table lists operating systems on which `Windows Firewall Ruleset` has 
 
 1. Windows PowerShell 5.1 or PowerShell Core 7.3 [Download PowerShell Core][download core]
 2. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
-3. Git (Optional) [Download Git][download git]
-4. Visual Studio Code (Recommended) [Download VSCode][vscode]
-5. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
-6. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
+3. `sigcheck64.exe` (Highly recommended) [Download sigcheck][sigcheck]
+4. Git (Optional) [Download Git][download git]
+5. Visual Studio Code (Recommended) [Download VSCode][vscode]
+6. PowerShell Support for VSCode (Recommended) [Download extension][download powershell extension]
+7. PSScriptAnalyzer (Recommended) [Download PSScriptAnalyzer][module psscriptanalyzer]
 
 [Table of Contents](#table-of-contents)
 
@@ -182,6 +183,14 @@ A list of other untested but supported systems and features is in [The future](#
 - `.NET Framework` min. version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
+
+- `sigcheck64.exe` is a digital signature verification tool which you can download from Microsoft site
+and should be placed either into `C:\tools` folder or into `%PATH%` environment variable.\
+`Windows Firewall Ruleset` will use it to perform online malware analysis on virus total for every
+executable that is not digitally signed before a firewall rule is made for that executable.\
+This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
+Of course this is only a recommendation, if there is no `sigcheck64.exe` in PATH no malware analysis
+is made.
 
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
@@ -679,3 +688,4 @@ and firewall settings
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
+[sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"

@@ -33,6 +33,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated `Test-ExecutableFile` so that digital signature mismatch is always reported
   - Fixed a bug in `Edit-Table` which didn't account for paths with environment variables
+  - Renamed function `Build-ServiceList` to `Write-ServiceList` to avoid warning about unapproved
+  verb in Windows PowerShell
 
 - Scripts
 

@@ -98,7 +98,7 @@ else
 	Test-Service "FailureTest"
 
 	Start-Test "project rules"
-	Build-ServiceList $ProjectRoot\Rules | ForEach-Object {
+	Write-ServiceList $ProjectRoot\Rules | ForEach-Object {
 		Test-Service $_
 	}
 

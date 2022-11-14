@@ -70,7 +70,7 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Approve-Execute"
-	"Build-ServiceList"
+	"Write-ServiceList"
 	"Compare-Path"
 	"Confirm-FileEncoding"
 	"ConvertFrom-Wildcard"

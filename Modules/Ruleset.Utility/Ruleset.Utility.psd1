@@ -115,7 +115,7 @@ SOFTWARE.
 	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"Approve-Execute"
-		"Build-ServiceList"
+		"Write-ServiceList"
 		"Compare-Path"
 		"Confirm-FileEncoding"
 		"ConvertFrom-Wildcard"
@@ -161,7 +161,7 @@ SOFTWARE.
 		"en-US\Ruleset.Utility-help.xml"
 		"Help\en-US\about_Ruleset.Utility.md"
 		"Help\en-US\Approve-Execute.md"
-		"Help\en-US\Build-ServiceList.md"
+		"Help\en-US\Write-ServiceList.md"
 		"Help\en-US\Compare-Path.md"
 		"Help\en-US\Confirm-FileEncoding.md"
 		"Help\en-US\ConvertFrom-Wildcard.md"
@@ -181,7 +181,7 @@ SOFTWARE.
 		"Private\Convert-EncodingString.ps1"
 		"Private\Set-Privilege.ps1"
 		"Public\Approve-Execute.ps1"
-		"Public\Build-ServiceList.ps1"
+		"Public\Write-ServiceList.ps1"
 		"Public\Compare-Path.ps1"
 		"Public\Confirm-FileEncoding.ps1"
 		"Public\ConvertFrom-Wildcard.ps1"

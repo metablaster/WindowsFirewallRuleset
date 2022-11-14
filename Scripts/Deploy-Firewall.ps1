@@ -160,12 +160,18 @@ if ($PSBoundParameters.ContainsKey("Confirm"))
 # Prompt to set screen buffer to recommended value
 Set-ScreenBuffer 3000 @SetScreenBufferParams
 
-# Check all rules which apply to windows services
-# TODO: Failed test does not exclude rules from loading?
-# TODO: Services are reported as unsigned
-# Build-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
-# 	Test-Service $_ -Session $SessionInstance | Out-Null
-# }
+# Check all rules which apply to windows services, currently this is used only for debuggin purposes
+# NOTE: Most Windows services are not signed and would be reported as untrusted without -Force switch
+# TODO: A solution is to maintain a list of official Windows services
+# TODO: Rule scripts should Test-Service per rule to avoid loading rules for nonexistent services,
+# a problem though is that multiple scripts may load rules for same service such as svchost,
+# resulting in redundant tests
+if ($Develop)
+{
+	Write-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
+		Test-Service $_ -Session $SessionInstance -Force | Out-Null
+	}
+}
 Update-Log
 #endregion
 

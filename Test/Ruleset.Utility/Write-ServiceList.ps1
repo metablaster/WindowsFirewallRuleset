@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Build-ServiceList
+Unit test for Write-ServiceList
 
 .DESCRIPTION
-Test correctness of Build-ServiceList function
+Test correctness of Write-ServiceList function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Build-ServiceList.ps1
+PS> .\Write-ServiceList.ps1
 
 .INPUTS
-None. You cannot pipe objects to Build-ServiceList.ps1
+None. You cannot pipe objects to Write-ServiceList.ps1
 
 .OUTPUTS
-None. Build-ServiceList.ps1 does not generate any output
+None. Write-ServiceList.ps1 does not generate any output
 
 .NOTES
 None.
@@ -65,16 +65,16 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Build-ServiceList"
+Enter-Test "Write-ServiceList"
 
 Start-Test "default"
-$Result = Build-ServiceList "$ProjectRoot\Rules"
+$Result = Write-ServiceList "$ProjectRoot\Rules"
 $Result
 
 Start-Test "-Log"
-Build-ServiceList "$ProjectRoot\Rules" -Log
+Write-ServiceList "$ProjectRoot\Rules" -Log
 
-Test-Output $Result -Command Build-ServiceList
+Test-Output $Result -Command Write-ServiceList
 
 Update-Log
 Exit-Test
