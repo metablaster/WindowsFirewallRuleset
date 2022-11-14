@@ -13,6 +13,7 @@ Following version of `Windows Firewall Ruleset` are eligible for security report
 | Version | Supported |
 | ------- | ----------|
 | 0.13.0  | &check;   |
+| 0.13.1  | &check;   |
 | 0.14.0  | &check;   |
 
 ## The difference between privacy and security

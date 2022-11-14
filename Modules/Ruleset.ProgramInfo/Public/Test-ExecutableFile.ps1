@@ -225,9 +225,12 @@ function Test-ExecutableFile
 
 		if ($Signature.Status -ne "Valid")
 		{
+			# HACK: We ignore -Quiet switch for signature mismatch because of Deploy-Firewall -Quiet
+			# making signature mismatch silent is not desired for bulk deployment however a better
+			# design is needed for global -Quiet because this function should be quiet if run on it's own
 			if ($Force)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for: $ExpandedPath"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for: $ExpandedPath" -WarningAction "Continue"
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
@@ -239,9 +242,9 @@ function Test-ExecutableFile
 			else
 			{
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
-					-Message "Digital signature verification failed for: $ExpandedPath"
+					-Message "Digital signature verification failed for: $ExpandedPath" -ErrorAction "Continue"
 
-				Write-Information -Tags $MyInvocation.InvocationName `
+				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
 					-MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 
 				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams | Out-Null

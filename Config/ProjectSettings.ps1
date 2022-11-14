@@ -265,7 +265,7 @@ $PSSessionApplicationName = "wsman"
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -688,7 +688,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		[Microsoft.Win32.RegistryView]::Registry64)
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 13, 0))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 13, 1))
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019

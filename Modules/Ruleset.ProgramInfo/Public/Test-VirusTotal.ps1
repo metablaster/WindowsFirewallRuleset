@@ -155,7 +155,8 @@ function Test-VirusTotal
 				}
 				else
 				{
-					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$SigcheckDir', virus total scan will not be performed"
+					# Using because ExpandEnvironmentVariables will return NULL if location doesn't exist
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$using:SigcheckLocation', virus total scan will not be performed"
 				}
 			}
 

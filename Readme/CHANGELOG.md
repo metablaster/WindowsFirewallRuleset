@@ -10,7 +10,7 @@ If you would like to see fresh changes done since last release you can do so on 
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.14.0 (develop branch)](#v0140-develop-branch)
+  - [v0.13.1 (develop branch)](#v0131-develop-branch)
   - [v0.13.0 (current release)](#v0130-current-release)
   - [v0.12.0](#v0120)
   - [v0.11.0](#v0110)
@@ -25,9 +25,17 @@ If you would like to see fresh changes done since last release you can do so on 
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.14.0 (develop branch)
+## v0.13.1 (develop branch)
 
 **NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+
+- Modules
+
+  - Updated `Test-ExecutableFile` so that digital signature mismatch is always reported
+
+- Scripts
+
+  - `Reset-Firewall` added `-Service` switch which restores modified system services to system defaults
 
 ## v0.13.0 (current release)
 

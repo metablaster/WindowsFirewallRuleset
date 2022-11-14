@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#PSScriptInfo
 
-.VERSION 0.13.0
+.VERSION 0.13.1
 
 .GUID 1cfe2d15-b310-48ad-97ba-fbb46abea6c0
 
@@ -87,6 +87,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 param (
 	[Parameter()]
 	[switch] $Remoting,
+
+	[Parameter()]
+	[switch] $Service,
 
 	[Parameter()]
 	[switch] $Force
