@@ -77,9 +77,9 @@ Todo's in this file are categorized into following sections:
     - `git prune --dry-run` `git prune`
     - `git repack -d -F`
     - Create and publish a new tag:
-    - `git tag -a v0.14.0 -m "Windows Firewall Ruleset -s"`
-    - `git tag -v v0.14.0`
-    - `git push origin v0.14.0`
+    - `git tag -a v0.13.1 -m "Windows Firewall Ruleset 0.13.1 -s`
+    - `git tag -v v0.13.1`
+    - `git push origin v0.13.1`
     - Generate SHA `Get-FileHash -Algorithm SHA256 -Path FILENAME`
 
 5. Documentation

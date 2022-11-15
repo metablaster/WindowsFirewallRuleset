@@ -7,8 +7,9 @@ Here is a list of changes for each of the releases.
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.13.1 (develop branch)](#v0131-develop-branch)
-  - [v0.13.0 (current release)](#v0130-current-release)
+  - [v0.14.0 (develop branch)](#v0140-develop-branch)
+  - [v0.13.1 (current release)](#v0131-current-release)
+  - [v0.13.0](#v0130)
   - [v0.12.0](#v0120)
   - [v0.11.0](#v0110)
   - [v0.10.0](#v0100)
@@ -22,10 +23,12 @@ Here is a list of changes for each of the releases.
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.13.1 (develop branch)
+## v0.14.0 (develop branch)
 
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront
+
+## v0.13.1 (current release)
 
 - Modules
 
@@ -41,7 +44,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Resolved some annoying warnings
   - Converted some errors about unfound programs (registry keys) to warnings
 
-## v0.13.0 (current release)
+## v0.13.0
 
 - Rules
 
