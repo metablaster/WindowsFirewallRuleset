@@ -304,7 +304,9 @@ which means specifying host name, user name and password.
 
 > `Access is denied`
 
-If credentials are required, this may happend due to invalid username\password.
+If credentials are required, this may happend due to invalid username\password.\
+It may also happen if the administrative account used to deploy firewall has no password set,
+in which case password must be set because WinRM doesn't support passwordless authentication.
 
 > [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
 

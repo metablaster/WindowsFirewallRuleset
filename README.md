@@ -294,7 +294,8 @@ user that is Administrator, if you're Administrator on your computer you'll have
 standard user account and use that for your everyday life or modify code to allow Administrator
 online access.\
 See [SecurityAndPrivacy.md](Readme/SecurityAndPrivacy.md#standard-user-account) for more
-information why using Administrator account is not recommended for security reasons.
+information why using Administrator account is not recommended for security reasons.\
+Your administrative account used to deploy firewall must have password set.
 
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
