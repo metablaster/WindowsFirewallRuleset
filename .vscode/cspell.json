@@ -1,5 +1,5 @@
 {
-    "version": "0.1",
+    "version": "0.2",
     "language": "en-US",
     "maxNumberOfProblems": 20,
     "numSuggestions": 8,
@@ -12,7 +12,6 @@
         // "csv"
     ],
     "enabled": true,
-    "showStatus": true,
     "allowCompoundWords": true,
     "ignoreWords": [],
     "ignorePaths": [
@@ -23,7 +22,6 @@
         "*.dll",
         "*.msc"
     ],
-    "spellCheckDelayMs": 1000,
     "flagWords": [],
     "maxDuplicateProblems": 3,
     "words": [

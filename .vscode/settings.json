@@ -45,8 +45,6 @@
 	"diffEditor.ignoreTrimWhitespace": false,
 	// PowerShell updates
 	"powershell.pester.useLegacyCodeLens": false,
-	// NOTE: disabled for testing Initialize-Project function
-	"powershell.promptToUpdatePackageManagement": false,
 	"powershell.promptToUpdatePowerShell": true,
 	// PowerShell: script analysis
 	"powershell.scriptAnalysis.enable": true,
@@ -121,13 +119,13 @@
 			// used to set the foreground colour of the highlight in the editor and the marker in the ruler
 			// Foreground and background can be: "red", "green", "blue", "yellow", "magenta", "cyan", "grey", "white" or "black"
 			// See also: https://en.wikipedia.org/wiki/Web_colors
-			"foreground": "white",
+			"foreground": "#ffffff",
 			// used to set the background colour of the highlight in the editor.
-			"background": "red",
+			"background": "#ff0000",
 			// 100% will produce an opaque background
 			"opacity": 70,
 			// used to set the colour of the icon in the tree
-			"iconColour": "red",
+			"iconColour": "#ff0000",
 			// used to hide tags from the tree, but still highlight in files
 			// "hideFromTree ": false,
 			// set to true to show the icon in the editor gutter
@@ -138,53 +136,53 @@
 		// Needs additional work
 		"TODO": {
 			"icon": "check-circle",
-			"foreground": "black",
-			"background": "white",
-			"iconColour": "ForestGreen",
+			"foreground": "#000000",
+			"background": "#ffffff",
+			"iconColour": "#228B22", // ForestGreen
 			"opacity": 90
 		},
 		// Important comment(s)
 		"NOTE": {
 			"icon": "checklist",
-			"foreground": "white",
-			"background": "green",
+			"foreground": "#ffffff",
+			"background": "#2ec920", // custom green
 			"opacity": 40,
 			// TODO: setting not working
 			"hideFromTree ": true
 		},
 		"MSDN": {
 			"icon": "info",
-			"foreground": "Cornsilk",
-			"background": "DarkCyan",
-			"iconColour": "DeepSkyBlue",
+			"foreground": "#fff8dc", // Cornsilk
+			"background": "#008b8b", // DarkCyan
+			"iconColour": "#00bfff", // DeepSkyBlue
 			"opacity": 70
 		},
 		"ALERT": {
 			"icon": "alert",
-			"foreground": "black",
-			"background": "Gold",
-			"iconColour": "Gold",
+			"foreground": "#000000",
+			"background": "#FFD700", // Gold
+			"iconColour": "#FFD700", // Gold
 			"opacity": 70
 		},
 		"BUG": {
 			"icon": "bug",
-			"foreground": "Cornsilk",
-			"background": "DeepSkyBlue",
-			"iconColour": "DeepSkyBlue",
+			"foreground": "#fff8dc", // Cornsilk
+			"background": "#008b8b", // DarkCyan
+			"iconColour": "#00bfff", // DeepSkyBlue
 			"opacity": 70
 		},
 		"[ ]": {
 			"icon": "markdown",
-			"foreground": "black",
-			"background": "white",
-			"iconColour": "white",
+			"foreground": "#000000",
+			"background": "#ffffff",
+			"iconColour": "#ffffff",
 			"opacity": 90
 		},
 		"[x]": {
 			"icon": "markdown",
-			"foreground": "white",
-			"background": "green",
-			"iconColour": "green",
+			"foreground": "#ffffff",
+			"background": "#2ec920", // custom green
+			"iconColour": "#2ec920", // custom green
 			"opacity": 40,
 		}
 	},
