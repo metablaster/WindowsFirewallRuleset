@@ -37,13 +37,13 @@ Search separate location in the registry for programs installed for all users.
 Computer name which to check
 
 .EXAMPLE
-PS> Get-InstallProperties
+PS> Get-InstallProperty
 
 .EXAMPLE
-PS> Get-InstallProperties "COMPUTERNAME"
+PS> Get-InstallProperty "COMPUTERNAME"
 
 .INPUTS
-None. You cannot pipe objects to Get-InstallProperties
+None. You cannot pipe objects to Get-InstallProperty
 
 .OUTPUTS
 [PSCustomObject] list of programs installed for all users
@@ -51,10 +51,10 @@ None. You cannot pipe objects to Get-InstallProperties
 .NOTES
 TODO: Should be renamed to something that best describes target registry key
 #>
-function Get-InstallProperties
+function Get-InstallProperty
 {
 	[CmdletBinding(
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperty.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
 		[Parameter()]

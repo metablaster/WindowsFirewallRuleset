@@ -82,6 +82,8 @@
 		"json",
 		"properties", // gitattributes
 		"log",
+		// If "csv (semicolon)" is flagged it's false falg see:
+		// https://github.com/streetsidesoftware/vscode-spell-checker/discussions/2346
 		"csv (semicolon)", // exported rules
 		"ini" // mTail configuration
 	],

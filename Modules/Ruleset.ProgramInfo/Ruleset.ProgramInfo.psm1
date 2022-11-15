@@ -94,7 +94,7 @@ foreach ($Script in $PrivateScripts)
 $PublicScripts = @(
 	"Confirm-Installation"
 	"Format-Path"
-	"Get-InstallProperties"
+	"Get-InstallProperty"
 	"Get-AppCapability"
 	"Get-AppSID"
 	"Get-ExecutablePath"

@@ -61,7 +61,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 #Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
+	"PSReviewUnusedParameter", "", Justification = "Settings used by other scripts")]
 [CmdletBinding()]
 param (
 	[Parameter()]

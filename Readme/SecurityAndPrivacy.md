@@ -12,6 +12,7 @@ and how to maximize security of a personal computer.
   - [Security suggestions](#security-suggestions)
     - [Standard user account](#standard-user-account)
     - [Digitally signed and trusted software](#digitally-signed-and-trusted-software)
+    - [User Account Control](#user-account-control)
     - [Trusted and encrypted web sites](#trusted-and-encrypted-web-sites)
     - [Password manager](#password-manager)
     - [Email client and service](#email-client-and-service)
@@ -90,6 +91,15 @@ Now if you attempt to install unsigned software an error will appear like in the
 ![Alternate text](Screenshots/SignatureError.png)
 
 [Table of Contents](#table-of-contents)
+
+### User Account Control
+
+UAC helps mitigate the impact of malware by asking for consent prior to running an executable as
+Administrator.\
+UAC has several protections levels, it's recommended to set it to max, to configure UAC see:\
+[Change User Access Control setting][uac settings]
+
+See also [How User Account Control works][uac]
 
 ### Trusted and encrypted web sites
 
@@ -364,3 +374,5 @@ Following web sites are good starting point for additional research regarding se
 [asr]: https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/overview-attack-surface-reduction "Visit microsoft site"
 [defender office]: https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-defender-office-365 "Visit microsoft site"
 [virus total]: https://www.virustotal.com/gui/home/upload "Visit Virus total"
+[uac]: https://learn.microsoft.com/en-us/windows/security/identity-protection/user-account-control/how-user-account-control-works "Visit microsoft site"
+[uac settings]: https://learn.microsoft.com/en-us/mem/intune/user-help/you-need-to-enable-uac-windows "Visit microsoft site"

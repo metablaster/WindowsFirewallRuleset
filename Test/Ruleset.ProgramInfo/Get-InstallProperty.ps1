@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-InstallProperties
+Unit test for Get-InstallProperty
 
 .DESCRIPTION
-Test correctness of Get-InstallProperties function
+Test correctness of Get-InstallProperty function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-InstallProperties.ps1
+PS> .\Get-InstallProperty.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-InstallProperties.ps1
+None. You cannot pipe objects to Get-InstallProperty.ps1
 
 .OUTPUTS
-None. Get-InstallProperties.ps1 does not generate any output
+None. Get-InstallProperty.ps1 does not generate any output
 
 .NOTES
 None.
@@ -72,20 +72,20 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Get-InstallProperties"
+Enter-Test "Get-InstallProperty"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Remote default"
-	Get-InstallProperties -Domain $Domain
+	Get-InstallProperty -Domain $Domain
 }
 else
 {
 	Start-Test "default"
-	$Result = Get-InstallProperties
+	$Result = Get-InstallProperty
 	$Result
 
-	Test-Output $Result -Command Get-InstallProperties
+	Test-Output $Result -Command Get-InstallProperty
 }
 
 Update-Log
