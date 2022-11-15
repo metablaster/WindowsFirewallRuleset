@@ -332,7 +332,7 @@ function Connect-Computer
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
-		# TODO: Will create new blank console windows, see also:
+		# TODO: Will create new blank console windows in PS Core, see also:
 		# https://github.com/PowerShell/PowerShell/issues/16763
 		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)
 

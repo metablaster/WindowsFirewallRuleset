@@ -157,6 +157,7 @@ Following table lists operating systems on which `Windows Firewall Ruleset` has 
 | Windows Server 2019 | Standard      | 1809        | x64          |
 | Windows Server 2019 | Datacenter    | 1809        | x64          |
 | Windows Server 2022 | Standard      | 21H2        | x64          |
+| Windows Server 2022 | Datacenter    | 21H2        | x64          |
 
 ***
 

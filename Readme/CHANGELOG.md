@@ -3,9 +3,6 @@
 
 Here is a list of changes for each of the releases.
 
-If you would like to see fresh changes done since last release you can do so on "develop" branch
-[HERE][changelog]
-
 ## Table of Contents
 
 - [Changelog](#changelog)
@@ -27,7 +24,8 @@ If you would like to see fresh changes done since last release you can do so on 
 
 ## v0.13.1 (develop branch)
 
-**NOTE:** Changes for unreleased version (develop branch) may change or be announced upfront
+To see unreleased changes please do so on `develop` branch [HERE][changelog]\
+**NOTE:** Changes for unreleased version may change or be announced upfront
 
 - Modules
 

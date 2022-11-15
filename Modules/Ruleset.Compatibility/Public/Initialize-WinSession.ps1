@@ -167,7 +167,7 @@ function Initialize-WinSession
 		($_.ComputerName -eq $Domain) -and
 		($_.ConfigurationName -eq $ConfigurationName) -and
 		($_.Name -eq $script:SessionName)
-	} | Select-Object -First 1
+	} # | Select-Object -First 1
 
 	# Deal with the possibilities of multiple sessions.
 	# This might arise from the user hitting ctrl-C.
@@ -177,7 +177,7 @@ function Initialize-WinSession
 	{
 		foreach ($Entry in $Rest)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing stale compatibility session '$Entry'"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing stale compatibility session '$Entry'" -Debug
 			Remove-PSSession $Entry
 		}
 	}

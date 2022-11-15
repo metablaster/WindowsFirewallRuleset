@@ -96,7 +96,7 @@ function Initialize-Service
 		$Deny.HelpMessage = "Skip operation"
 		[string] $Title = "Required system service not running"
 
-		# Timeout to start and stop WinRM service
+		# Timeout to start a service
 		$ServiceTimeout = "00:00:30"
 
 		# Log file header to use for this script
@@ -241,23 +241,27 @@ function Initialize-Service
 					}
 
 					# Required services and startup type is checked, start service
-					$Service.Start()
-					$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+					# NOTE: RemoteRegistry starts on demand and stops on it's own when not used
+					if ($Service.Name -ne "RemoteRegistry")
+					{
+						$Service.Start()
+						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 
-					if ($Service.Status -ne [ServiceControllerStatus]::Running)
-					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
-					}
-					else
-					{
-						# Write log for service status change
-						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
-						Write-Information -Tags $MyInvocation.InvocationName `
-							-MessageData "INFO: Starting '$($Service.Name)' service succeeded"
+						if ($Service.Status -ne [ServiceControllerStatus]::Running)
+						{
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
+						}
+						else
+						{
+							# Write log for service status change
+							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
+							Write-Information -Tags $MyInvocation.InvocationName `
+								-MessageData "INFO: Starting '$($Service.Name)' service succeeded"
+						}
 					}
 				}
 
-				if ($Service.Status -ne [ServiceControllerStatus]::Running)
+				if (($Service.Name -ne "RemoteRegistry") -and ($Service.Status -ne [ServiceControllerStatus]::Running))
 				{
 					Write-Error -Category OperationStopped -TargetObject $Service `
 						-Message "Unable to proceed, required services are not started"
