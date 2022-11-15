@@ -64,6 +64,8 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
 TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 [System.ServiceProcess.ServiceController[]]
+TODO: RemoteRegistry starts on demand and stops on it's own when not used, no need to start it,
+only manual trigger start is needed
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md
@@ -241,27 +243,23 @@ function Initialize-Service
 					}
 
 					# Required services and startup type is checked, start service
-					# NOTE: RemoteRegistry starts on demand and stops on it's own when not used
-					if ($Service.Name -ne "RemoteRegistry")
-					{
-						$Service.Start()
-						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+					$Service.Start()
+					$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 
-						if ($Service.Status -ne [ServiceControllerStatus]::Running)
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
-						}
-						else
-						{
-							# Write log for service status change
-							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
-							Write-Information -Tags $MyInvocation.InvocationName `
-								-MessageData "INFO: Starting '$($Service.Name)' service succeeded"
-						}
+					if ($Service.Status -ne [ServiceControllerStatus]::Running)
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
+					}
+					else
+					{
+						# Write log for service status change
+						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $ServiceOldStatus -> Running"
+						Write-Information -Tags $MyInvocation.InvocationName `
+							-MessageData "INFO: Starting '$($Service.Name)' service succeeded"
 					}
 				}
 
-				if (($Service.Name -ne "RemoteRegistry") -and ($Service.Status -ne [ServiceControllerStatus]::Running))
+				if ($Service.Status -ne [ServiceControllerStatus]::Running)
 				{
 					Write-Error -Category OperationStopped -TargetObject $Service `
 						-Message "Unable to proceed, required services are not started"

@@ -111,6 +111,8 @@ Todo's in this file are categorized into following sections:
     - Compatibility module takes long time to load, need to add streams to module
     - Functions which make use of remoting should implement parameter sets for Credential and Session
     to be able to specify either PS session or computername + credential
+    - It should be possible to optionally deploy firewall for Administrator, ex. on server computer
+    there could be no standard users.
 
 2. Scripts
 

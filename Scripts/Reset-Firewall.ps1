@@ -199,6 +199,7 @@ if ($Remoting)
 	Reset-WinRM -Confirm:$false
 }
 
+# TODO: Initialize-Service also configures dependent services which are not handled here
 # Reset affected services to system defaults
 # | Service                                  | Startup                   | Status  |
 # |------------------------------------------|---------------------------|---------|

@@ -167,17 +167,18 @@ function Initialize-WinSession
 		($_.ComputerName -eq $Domain) -and
 		($_.ConfigurationName -eq $ConfigurationName) -and
 		($_.Name -eq $script:SessionName)
-	} # | Select-Object -First 1
+	} | Select-Object -First 1
 
 	# Deal with the possibilities of multiple sessions.
 	# This might arise from the user hitting ctrl-C.
 	# We'll make the assumption that the first one returned is the correct one and we'll remove the rest.
+	# TODO: This needs to be tested, ex. Select-Object -First 1 should be removed
 	$Session, $Rest = $Session
 	if ($Rest)
 	{
 		foreach ($Entry in $Rest)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing stale compatibility session '$Entry'" -Debug
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Removing stale compatibility session '$Entry'"
 			Remove-PSSession $Entry
 		}
 	}
@@ -215,6 +216,7 @@ function Initialize-WinSession
 
 		# NOTE: This will fail with "access denied" if session configuration was disabled in Windows PowerShell,
 		# ex. by using Reset-Firewall -Remote, see Remote.md for fix
+		# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
 		$Session = New-PSSession @PSSessionParams -EV test | Select-Object -First 1
 
 		# keep the compatibility session PWD in sync with the parent PWD.
