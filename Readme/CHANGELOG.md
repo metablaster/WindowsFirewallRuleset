@@ -33,12 +33,15 @@ If you would like to see fresh changes done since last release you can do so on 
 
   - Updated `Test-ExecutableFile` so that digital signature mismatch is always reported
   - Fixed a bug in `Edit-Table` which didn't account for paths with environment variables
+  - Fixed a bug in `Unblock-NetProfile` which threw exceptions without catching them
   - Renamed function `Build-ServiceList` to `Write-ServiceList` to avoid warning about unapproved
   verb in Windows PowerShell
 
 - Scripts
 
   - `Reset-Firewall` added `-Service` switch which restores modified system services to system defaults
+  - Resolved some annoying warnings
+  - Converted some errors about unfound programs (registry keys) to warnings
 
 ## v0.13.0 (current release)
 

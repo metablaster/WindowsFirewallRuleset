@@ -91,7 +91,9 @@ function Get-UserSoftware
 
 			if (!$RootKey)
 			{
-				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKU")
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: $HKU"
+				$RemoteKey.Dispose()
+				return
 			}
 		}
 		catch

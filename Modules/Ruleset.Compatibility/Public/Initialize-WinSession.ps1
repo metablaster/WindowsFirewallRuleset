@@ -212,13 +212,10 @@ function Initialize-WinSession
 		}
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new compatibility session on computer '$Domain'"
-		$Session = New-PSSession @PSSessionParams | Select-Object -First 1
 
-		if (!$Session)
-		{
-			# NOTE: This will happen if session configuration was disabled in Windows PowerShell, ex. by using Reset-Firewall -Remote
-			Write-Warning -Message "Session configuration '$ConfigurationName' likely lacks 'Remote' access, to fix run 'Set-PSSessionConfiguration -Name $ConfigurationName -AccessMode Remote' in Windows PowerShell"
-		}
+		# NOTE: This will fail with "access denied" if session configuration was disabled in Windows PowerShell,
+		# ex. by using Reset-Firewall -Remote, see Remote.md for fix
+		$Session = New-PSSession @PSSessionParams -EV test | Select-Object -First 1
 
 		# keep the compatibility session PWD in sync with the parent PWD.
 		# This only applies on localhost.
