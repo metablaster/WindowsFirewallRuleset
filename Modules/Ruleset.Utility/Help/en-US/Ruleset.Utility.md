@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Utility
 Module Guid: 5f38e46f-1bc4-489d-90df-72755129cfdd
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.0
-Help Version: 0.13.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.1
+Help Version: 0.13.1
 Locale: en-US
 ---
 
@@ -17,10 +17,6 @@ PowerShell utility module for Windows Firewall Ruleset project
 ### [Approve-Execute](Approve-Execute.md)
 
 Customized user prompt to continue
-
-### [Build-ServiceList](Build-ServiceList.md)
-
-Build a list of windows services involved in script rules
 
 ### [Compare-Path](Compare-Path.md)
 
@@ -77,3 +73,7 @@ Set vertical screen buffer to recommended value
 ### [Set-Shortcut](Set-Shortcut.md)
 
 Set desktop or online shortcut
+
+### [Write-ServiceList](Write-ServiceList.md)
+
+Build a list of windows services involved in script rules

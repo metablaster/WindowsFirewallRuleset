@@ -1144,9 +1144,9 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-InstallProperties</command:name>
+      <command:name>Get-InstallProperty</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>InstallProperties</command:noun>
+      <command:noun>InstallProperty</command:noun>
       <maml:description>
         <maml:para>Search system wide program install properties</maml:para>
       </maml:description>
@@ -1156,7 +1156,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-InstallProperties</maml:name>
+        <maml:name>Get-InstallProperty</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
@@ -1188,7 +1188,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-InstallProperties</maml:name>
+          <maml:name>None. You cannot pipe objects to Get-InstallProperty</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1213,14 +1213,14 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-InstallProperties</dev:code>
+        <dev:code>Get-InstallProperty</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-InstallProperties "COMPUTERNAME"</dev:code>
+        <dev:code>Get-InstallProperty "COMPUTERNAME"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1229,7 +1229,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:relatedLinks>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md</maml:uri>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperty.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Utility-help.xml
 Module Name: Ruleset.Utility
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Build-ServiceList.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Write-ServiceList.md
 schema: 2.0.0
 ---
 
-# Build-ServiceList
+# Write-ServiceList
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Build a list of windows services involved in script rules
 ## SYNTAX
 
 ```powershell
-Build-ServiceList [-Path] <DirectoryInfo> [-Log] [<CommonParameters>]
+Write-ServiceList [-Path] <DirectoryInfo> [-Log] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,13 +28,13 @@ on target system.
 ### EXAMPLE 1
 
 ```powershell
-Build-ServiceList "C:\PathToRepo"
+Write-ServiceList "C:\PathToRepo"
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Build-ServiceList "C:\PathToRepo" -Log
+Write-ServiceList "C:\PathToRepo" -Log
 ```
 
 ## PARAMETERS
@@ -77,7 +77,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Build-ServiceList
+### None. You cannot pipe objects to Write-ServiceList
 
 ## OUTPUTS
 

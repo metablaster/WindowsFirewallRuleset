@@ -94,7 +94,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Default
+Default value: $RemotingProtocol
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -246,6 +246,7 @@ TODO: Configure server remotely either with WSMan or trough SSH, to test and con
 remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+TODO: Implement specifying listening addresses and address ranges
 
 ## RELATED LINKS
 

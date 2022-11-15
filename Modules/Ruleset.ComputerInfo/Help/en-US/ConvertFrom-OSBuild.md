@@ -71,3 +71,7 @@ ex.
 19041.450 will convert to 19041,45, last zeroes will be dropped and dot is converted to coma.
 
 ## RELATED LINKS
+
+[https://docs.microsoft.com/en-us/windows/release-health/release-information](https://docs.microsoft.com/en-us/windows/release-health/release-information)
+
+[https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information](https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information)

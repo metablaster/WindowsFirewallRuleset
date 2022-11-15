@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.ProgramInfo-help.xml
 Module Name: Ruleset.ProgramInfo
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperties.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperty.md
 schema: 2.0.0
 ---
 
-# Get-InstallProperties
+# Get-InstallProperty
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Search system wide program install properties
 ## SYNTAX
 
 ```powershell
-Get-InstallProperties [[-Domain] <String>] [<CommonParameters>]
+Get-InstallProperty [[-Domain] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,13 +26,13 @@ Search separate location in the registry for programs installed for all users.
 ### EXAMPLE 1
 
 ```powershell
-Get-InstallProperties
+Get-InstallProperty
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-InstallProperties "COMPUTERNAME"
+Get-InstallProperty "COMPUTERNAME"
 ```
 
 ## PARAMETERS
@@ -59,7 +59,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-InstallProperties
+### None. You cannot pipe objects to Get-InstallProperty
 
 ## OUTPUTS
 

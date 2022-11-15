@@ -97,7 +97,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Default
+Default value: $RemotingProtocol
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -155,7 +155,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: Default
+Default value: $RemotingAuthentication
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
