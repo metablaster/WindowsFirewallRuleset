@@ -119,8 +119,6 @@ function Initialize-WinSession
 		$Domain = "localhost"
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on host '$Domain'."
-
 	if ([string]::IsNullOrEmpty($Domain))
 	{
 		$Domain = $script:SessionComputerName
@@ -130,6 +128,8 @@ function Initialize-WinSession
 		$script:SessionComputerName = $Domain
 	}
 
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Initializing the compatibility session on computer '$Domain'"
+
 	if ([string]::IsNullOrEmpty($ConfigurationName))
 	{
 		$ConfigurationName = $script:SessionConfigurationName
@@ -138,6 +138,8 @@ function Initialize-WinSession
 	{
 		$script:SessionConfigurationName = $ConfigurationName
 	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Using '$ConfigurationName' configuration for compatibility session"
 
 	# Confirm specified session configuration is present and enabled in Windows PowerShell
 	$Command = "Get-PSSessionConfiguration -Name $ConfigurationName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Enabled"
@@ -212,13 +214,19 @@ function Initialize-WinSession
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new compatibility session on computer '$Domain'"
 		$Session = New-PSSession @PSSessionParams | Select-Object -First 1
 
+		if (!$Session)
+		{
+			# NOTE: This will happen if session configuration was disabled in Windows PowerShell, ex. by using Reset-Firewall -Remote
+			Write-Warning -Message "Session configuration '$ConfigurationName' likely lacks 'Remote' access, to fix run 'Set-PSSessionConfiguration -Name $ConfigurationName -AccessMode Remote' in Windows PowerShell"
+		}
+
 		# keep the compatibility session PWD in sync with the parent PWD.
 		# This only applies on localhost.
 		if ($Session.ComputerName -eq "localhost")
 		{
 			# TODO: Why is this needed?
 			$UsingPath = (Get-Location).Path
-			Invoke-Command $Session -ScriptBlock { Set-Location $using:usingPath }
+			Invoke-Command -Session $Session -ScriptBlock { Set-Location $using:usingPath }
 		}
 	}
 	else

@@ -160,8 +160,8 @@ if ($PSBoundParameters.ContainsKey("Confirm"))
 # Prompt to set screen buffer to recommended value
 Set-ScreenBuffer 3000 @SetScreenBufferParams
 
-# Check all rules which apply to windows services, currently this is used only for debuggin purposes
-# NOTE: Most Windows services are not signed and would be reported as untrusted without -Force switch
+# Check all rules which apply to windows services, currently this is used only for debugging purposes
+# NOTE: Most Windows services are not digitally signed and would be reported as untrusted without a -Force switch
 # TODO: A solution is to maintain a list of official Windows services
 # TODO: Rule scripts should Test-Service per rule to avoid loading rules for nonexistent services,
 # a problem though is that multiple scripts may load rules for same service such as svchost,

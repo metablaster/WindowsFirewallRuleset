@@ -231,7 +231,11 @@ function Disable-WinRMServer
 
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
-				Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser -Value $ServerOptions["MaxConcurrentOperationsPerUser"]
+				# NOTE: Disable warning which say:
+				# The updated configuration might affect the operation of the plugins having a per plugin quota value greater than
+				Set-Item -Path WSMan:\localhost\service\MaxConcurrentOperationsPerUser `
+					-Value $ServerOptions["MaxConcurrentOperationsPerUser"] -WarningAction SilentlyContinue
+
 				Set-Item -Path WSMan:\localhost\service\EnumerationTimeoutms -Value $ServerOptions["EnumerationTimeoutms"]
 				Set-Item -Path WSMan:\localhost\service\MaxConnections -Value $ServerOptions["MaxConnections"]
 				Set-Item -Path WSMan:\localhost\service\MaxPacketRetrievalTimeSeconds -Value $ServerOptions["MaxPacketRetrievalTimeSeconds"]

@@ -270,8 +270,8 @@ resolve issues with remoting.
 
 ## I'm missing network profile settings in Settings App
 
-In `Settings -> Network & Internet -> Status -> Properties` there should be options to set private or
-public profile for your adapter, but what if these options are gone and how to get them back?
+In `Settings -> Network & Internet -> Status -> Properties` there should be options to set private
+or public profile for your adapter, but what if these options are gone and how to get them back?
 
 These profile settings go missing when some privileged process has modified network profile such
 as 3rd party firewalls.
@@ -279,8 +279,8 @@ as 3rd party firewalls.
 Here in this case this will happen when you run `Set-NetworkProfile.ps1` which runs only on demand,
 however you won't notice this problem until system is rebooted.
 
-**NOTE:** Since Windows Firewall Ruleset v0.11.0, `Set-NetworkProfile` runs by default and there is
-no way to avoid this issue because the function is run as Administrator.
+**NOTE:** In previous versions of Firewall Ruleset since v0.11.0, `Set-NetworkProfile` runs by
+default, however this is no longer the case in most recent versions.
 
 There are many options to troubleshoot this problem, most of which are just a workaround but don't
 actually bring these options back, so here are my favorites that should fix it instead:

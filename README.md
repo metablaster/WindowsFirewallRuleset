@@ -623,7 +623,10 @@ Deploy-Firewall -Domain "RemoteComputerName"
 ```
 
 **NOTE:** Both set of commands above need to be run in same edition of PowerShell, ex. if server was
-configured in PowerShell Core then client computer also need PowerShell core for deployment.
+configured in PowerShell Core then client computer also need PowerShell core for deployment.\
+
+If either the server or management computer is a workstation (ex. not Windows server or part of domain)
+then it's network profile must be set to private profile.
 
 This is how remote deployment is going to work once this functionality gets fully implemented.\
 Remote deployment can be customized in a great detail in the following locations:

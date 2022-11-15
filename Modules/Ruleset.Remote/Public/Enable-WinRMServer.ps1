@@ -213,7 +213,11 @@ function Enable-WinRMServer
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)
 		# for both Enable-WinRMServer and Set-WinRMClient
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment will not work over public network profile"
+		# TODO: This check doesn't account for remote computer which might be on public network
+		if ((Get-NetConnectionProfile | Select-Object -ExpandProperty NetworkCategory) -ne "Private")
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote deployment will not work over public network profile"
+		}
 	}
 
 	Unblock-NetProfile

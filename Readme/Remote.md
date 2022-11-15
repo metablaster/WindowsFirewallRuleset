@@ -316,10 +316,13 @@ Check following 3 things:
     Get-PSSessionConfiguration -Name "NameOfTheSession" | Enable-PSSessionConfiguration
     ```
 
+    **NOTE:** To get Windows PowerShell session configurations use `Get-PSSessionConfiguration` in
+    Windows PowerShell
+
 2. Verify access mode of the session PS configuration is set to `Remote`
 
     ```powershell
-    Set-PSSessionConfiguration  -Name "NameOfTheSession" -AccessMode Remote
+    Set-PSSessionConfiguration -Name "NameOfTheSession" -AccessMode Remote
     ```
 
 3. Verify `LocalAccountTokenFilterPolicy` is enabled (set to 1)
