@@ -32,7 +32,7 @@ Set network profile to private and disable virtual adapters
 
 .DESCRIPTION
 To be able to configure WinRM service any network adapter which does not operate on private
-network profile should be set to private profile.
+network profile should be set to private profile on workstation machines.
 Virtual adapters which are configured but not connected cannot be assigned to private profile,
 also default Hyper-V switch can't be set to private even if connected, in these cases they need
 to be temporarily disabled.
@@ -84,8 +84,8 @@ function Unblock-NetProfile
 				}
 				elseif (!$WhatIfPreference.IsPresent)
 				{
-					throw [System.OperationCanceledException]::new(
-						"not all connected network adapters are operating on private profile")
+					Write-Error -Category OperationStopped -TargetObject $Adapter -ErrorAction Stop `
+						-Message "not all connected network adapters are operating on private profile"
 				}
 			}
 		}
@@ -108,8 +108,8 @@ function Unblock-NetProfile
 				}
 				elseif (!$WhatIfPreference.IsPresent)
 				{
-					throw [System.OperationCanceledException]::new(
-						"not all configured network adapters are operating on private profile")
+					Write-Error -Category OperationStopped -TargetObject $Adapter -ErrorAction Stop `
+						-Message "not all configured network adapters are operating on private profile"
 				}
 			}
 		}

@@ -4,7 +4,10 @@
 This document briefly describes remoting commandlets, requirements, help notices and
 design used in this repository.
 
+## Table of Contents
+
 - [Remoting help](#remoting-help)
+  - [Table of Contents](#table-of-contents)
   - [Commandlets breakdown](#commandlets-breakdown)
     - [Set-WSManQuickConfig](#set-wsmanquickconfig)
     - [Enable-PSRemoting](#enable-psremoting)
@@ -43,6 +46,8 @@ A brief breakdown that is of interest, according to Microsoft docs.
 
 `Set-WSManQuickConfig -UseSSL` will not work if your certificate is self signed
 
+[Table of Contents](#table-of-contents)
+
 ### Enable-PSRemoting
 
 - Runs the `Set-WSManQuickConfig`
@@ -58,7 +63,8 @@ A brief breakdown that is of interest, according to Microsoft docs.
 This provides remote access to session configurations that were reserved for local use.\
 `LocalAccountTokenFilterPolicy = 1` allows remote access to members of the Administrators group.
 
-[Reference][Enable-PSRemoting]
+[Reference][Enable-PSRemoting]\
+[Table of Contents](#table-of-contents)
 
 ### Enable-PSSessionConfiguration
 
@@ -70,7 +76,8 @@ This provides remote access to session configurations that were reserved for loc
 
 Does not remove or change the `Network_Deny_All`
 
-[Reference][Enable-PSSessionConfiguration]
+[Reference][Enable-PSSessionConfiguration]\
+[Table of Contents](#table-of-contents)
 
 ### Disable-PSRemoting
 
@@ -92,13 +99,16 @@ Will **not** undo the following:
 Because `Deny_All` was not added, loopback connections are still allowed, for requirements see
 [WinRM on loopback](#winrm-on-loopback)
 
-[Reference][Disable-PSRemoting]
+[Reference][Disable-PSRemoting]\
+[Table of Contents](#table-of-contents)
 
 ### Disable-PSSessionConfiguration
 
 - Adds the `Deny_All` setting to the security descriptor
 - Sets the value of the Enabled property of the session configuration in\
 `WSMan:\<computer>\PlugIn\<SessionConfigurationName>\Enabled` to False.
+
+[Table of Contents](#table-of-contents)
 
 ### WinRM on loopback
 
@@ -111,6 +121,8 @@ A loopback connection is created when the following conditions are met:
 
 For loopback remoting reference see [Disable-PSRemoting][Disable-PSRemoting]
 
+[Table of Contents](#table-of-contents)
+
 ### Security descriptor flags
 
 - `Deny_All` block all users from using session configuration, both remote and local
@@ -120,6 +132,8 @@ either loopback or trough network stack
 For details see `-AccessMode` parameter description here [AccessMode][descriptor flags]
 
 To add or remove these flags to configurations manually use [Set-PSSessionConfiguration][set descriptor]
+
+[Table of Contents](#table-of-contents)
 
 ### SkipNetworkProfileCheck commandlets
 
@@ -148,6 +162,8 @@ In this repository for PowerShell `[Microsoft.Win32.RegistryKey]` class is used 
 
 For reference see [RegistryKey][RegistryKey]
 
+[Table of Contents](#table-of-contents)
+
 ### Remote registry requirements in PowerShell
 
 Following requirements apply to both endpoints involved (client and server computers):
@@ -174,6 +190,8 @@ New-PSDrive -Credential $RemotingCredential -PSProvider FileSystem -Name RemoteR
 
 Note that Registry provider `-PSProvider Registry` does not support specifying credentials but
 specifying `FileSystem` does the trick
+
+[Table of Contents](#table-of-contents)
 
 ### Exception handling
 
@@ -257,6 +275,8 @@ TODO: missing resolutions for the following known problems:
 
 - System cannot find file because it does not exist
 
+[Table of Contents](#table-of-contents)
+
 #### The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available
 
 > Connecting to remote server COMPUTERNAME failed with the following error message :
@@ -277,6 +297,8 @@ New-WSManInstance -ResourceURI winrm/config/Listener -ValueSet @{ Enabled = $tru
      -SelectorSet @{ Address = "*"; Transport = "HTTP" } | Out-Null
 ```
 
+[Table of Contents](#table-of-contents)
+
 #### "Negotiate" authentication is not enabled
 
 ```powershell
@@ -292,6 +314,8 @@ Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN\Cli
 Restart-Service -Name WinRM
 ```
 
+[Table of Contents](#table-of-contents)
+
 #### Encountered an internal error in the SSL library
 
 > The server certificate on the destination computer (localhost) has the following errors:
@@ -299,6 +323,8 @@ Restart-Service -Name WinRM
 
 If using SSL on localhost, it would go trough network stack and for this you need authentication,
 which means specifying host name, user name and password.
+
+[Table of Contents](#table-of-contents)
 
 #### Access is denied
 
@@ -310,7 +336,14 @@ in which case password must be set because WinRM doesn't support passwordless au
 
 > [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
 
-Check following 3 things:
+If this happens in `Initialize-WinSession` it's because session configuration was disabled in
+Windows PowerShell, ex. by using Reset-Firewall -Remote, to fix this problem run in Windows PowerShell:
+
+```powershell
+Set-PSSessionConfiguration -Name Microsoft.PowerShell -AccessMode Remote
+```
+
+Otherwise check following 3 things:
 
 1. Verify PS session configuration which is being used is enabled
 
@@ -334,7 +367,11 @@ Check following 3 things:
         -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
     ```
 
+[Table of Contents](#table-of-contents)
+
 ### Troubleshooting CIM
+
+Following sections list CIM related errors and how to resolve them
 
 #### WS-Management service does not support the specified polymorphism mode
 
@@ -405,11 +442,15 @@ Set-Item -Path WSMan:\localhost\Plugin\"WMI Provider"\Enabled -Value $true
 Restart-Service -Name WinRM
 ```
 
+[Table of Contents](#table-of-contents)
+
 For more information see [WMI plug-in configuration notes][WMI plugin]
 
 #### Access id denied
 
 Most likely you need to specify credentials
+
+[Table of Contents](#table-of-contents)
 
 ### Troubleshooting remote registry
 

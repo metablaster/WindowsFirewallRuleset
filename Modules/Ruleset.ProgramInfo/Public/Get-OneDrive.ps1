@@ -154,8 +154,8 @@ function Get-OneDrive
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: $HKLM"
 			$RemoteKey.Dispose()
-			Write-Error -ErrorRecord $_
 			return
 		}
 
