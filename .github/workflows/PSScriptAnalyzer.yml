@@ -1,0 +1,38 @@
+# The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
+name: PSScriptAnalyzer
+# Specifies the trigger for this workflow.
+on: [push, workflow_dispatch]
+# Groups together all the jobs that run
+jobs:
+  # Job name
+  analyze:
+    # ?
+    name: Run PSScriptAnalyzer
+    runs-on: windows-2022
+    steps:
+    # Specifies that this step will run v3 of the actions/checkout action
+    - uses: actions/checkout@v3
+    # ?
+    - name: lint
+      # Repository and branch which is to be analyzed
+      uses: metablaster/WindowsFirewallRuleset@develop
+      with:
+        # The root directory to run PSScriptAnalyzer on.
+        # By default, this is the root of the repository.
+        rootPath: .\
+        # Runs Script Analyzer on the files in the Path directory and all subdirectories recursively.
+        recurse: true
+        suppressedOnly: false
+        # The path to a PSScriptAnalyser settings file to control rules to execute.
+        settingsPath: Config/PSScriptAnalyzerSettings.psd1
+        # Enable/disable sending comments with PSScriptAnalyzer results back to PR.
+        sendComment: true
+        # GitHub token the action will use to send comments back to PR with.
+        # Use ${{ secrets.GITHUB_TOKEN }}.
+        repoToken: ${{ secrets.GITHUB_TOKEN }}
+        # Enable/disable failing the action on PSScriptAnalyzer error items.
+        failOnErrors: true
+        # Enable/disable failing the action on PSScriptAnalyzer warning items.
+        failOnWarnings: true
+        # Enable/disable failing the action on PSScriptAnalyzer informational items.
+        failOnInfos: true

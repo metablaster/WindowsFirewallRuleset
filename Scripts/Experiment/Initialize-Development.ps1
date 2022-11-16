@@ -51,7 +51,7 @@ The purpose of this script is automated development environment setup for the pu
 testing code and firewall deployment inside virtual machine with fresh installed operating system.
 
 A clean OS environment is requirement for best test results, however setting up everything over and
-over again it tedious, that's where this script is going to help.
+over again is tedious, that's where this script is going to help.
 
 .PARAMETER User
 User name which to set into git config

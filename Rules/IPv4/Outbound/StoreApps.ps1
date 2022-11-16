@@ -248,7 +248,9 @@ foreach ($Principal in $Users)
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $DefaultUICulture.TextInfo.ToTitleCase($_.Name) `
+			$DisplayName = $DefaultUICulture.TextInfo.ToTitleCase($_.Name)
+
+			New-NetFirewallRule -DisplayName $DisplayName `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -257,7 +259,7 @@ foreach ($Principal in $Users)
 				-LocalUser Any `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) used by $($Principal.User)" |
+				-Description "Auto generated rule for $DisplayName used by $($Principal.User)" |
 			Format-RuleOutput
 
 			Update-Log
@@ -312,7 +314,9 @@ foreach ($Principal in $Users)
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $DefaultUICulture.TextInfo.ToTitleCase($_.Name) `
+			$DisplayName = $DefaultUICulture.TextInfo.ToTitleCase($_.Name)
+
+			New-NetFirewallRule -DisplayName $DisplayName `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -321,7 +325,7 @@ foreach ($Principal in $Users)
 				-LocalUser Any `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
-				-Description "Auto generated rule for $($_.Name) installed system wide and used by $($Principal.User)" |
+				-Description "Auto generated rule for $DisplayName installed system wide and used by $($Principal.User)" |
 			Format-RuleOutput
 
 			Update-Log
