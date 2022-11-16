@@ -54,9 +54,6 @@ None. You cannot pipe objects to StoreApps.ps1
 None. StoreApps.ps1 does not generate any output
 
 .NOTES
-TODO: exclude store apps rules for servers, store app folders seem to exist but empty.
-TODO: currently making rules for each user separately, is it possible to make rules for all users?
-
 NOTE: Following "rules" apply for store apps for blocking/allowing users
 1. -Owner - Only one explicit user account can be specified (not group, not capability etc...)
 2. -LocalUser - Anything can be specified
@@ -69,7 +66,6 @@ NOTE: Following "rules" apply for store apps for blocking/allowing users
    specified and -LocalUser is not valid for specific packages
 
 TODO: Prompt or refuse running this script on server platforms (platforms with no apps)
-TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
 
 HACK: in Firewall GUI the rule may state wrong user in "Application packages" window,
 but the SID is the same for all users anyway, so OK,
@@ -81,7 +77,9 @@ example solitaire app; need to either update them or detect this case.
 NOTE: updating apps will not work unless also "Extension users" are updated in
 WindowsServices.ps1, meaning re-run the script.
 
-TODO: We can learn app display name from manifest
+TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
+We can learn app display name from manifest
+
 TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
 
 NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
@@ -214,15 +212,48 @@ foreach ($Principal in $Users)
 		$RemoteAddress = $RemoteAddress | Select-Object -Unique
 		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
 
+		# Specify correct ports for certain apps
+		[string[]] $RemotePort = switch ($_.Name)
+		{
+			# Mail apps
+			# NOTE: For security reasons full names should be used instead of wildcard
+			{ @(
+					"microsoft.windowscommunicationsapps" # Microsoft's mail app
+					"40811eyack.com.MAIL" # Mail (for gmail)
+					"CN609E45DF-0A4E-4EB8-A151.WunderMail" # WunderMail - Native Mail App
+					"Sunato.ShortyHubMail" # Shorty (HubMail)
+					"25695CarstenKnsken-CKSoft.PersonalMailerFree" # PersonalMailer Free
+					"23785SMTPSoftware.SMTPLookup" # SMTP Lookup
+					"22164ayamadori.EMLReader" # EML Reader
+					"60990LiliyaMuray.Mailing" # Mailing eMail
+					"32852ErikScheib.E-MailBot" # E-Mail Bot
+					"44500SecurityDevelopment.TemporaryEmailAddress-pro" # Temporary Email Address - protect your private
+					"14094LarsWuckel.502642E8227E3" # Desktop Mail
+					"61545TimGrabinat.wAPPerforGmail" # EasyMail - Email client
+					"49298JustinWIllis.MailGO" # Mail GO
+					"5913DefineStudio.CloudMail" # Flow Mail - Manage Email Accounts
+					"Birdie.ReadMyMail" # Read My Mail
+				) -contains $_ }
+			{
+				# This handles: IMAP SSL, IMAP, POP3 SSL, POP3 and SMTP
+				"80", "443", "993", "143", "110", "587", "995"
+				break
+			}
+			default
+			{
+				"80", "443"
+			}
+		}
+
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $_.Name `
+			New-NetFirewallRule -DisplayName $DefaultUICulture.TextInfo.ToTitleCase($_.Name) `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress $RemoteAddress `
-				-LocalPort Any -RemotePort 80, 443 `
+				-LocalPort Any -RemotePort $RemotePort `
 				-LocalUser Any `
 				-InterfaceType $DefaultInterface `
 				-Owner $Principal.SID -Package $PackageSID `
@@ -281,7 +312,7 @@ foreach ($Principal in $Users)
 		# Possible package not found
 		if ($PackageSID)
 		{
-			New-NetFirewallRule -DisplayName $_.Name `
+			New-NetFirewallRule -DisplayName $DefaultUICulture.TextInfo.ToTitleCase($_.Name) `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program Any -Group $SystemGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `

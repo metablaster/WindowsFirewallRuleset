@@ -228,6 +228,7 @@ function Test-ExecutableFile
 			# HACK: We ignore -Quiet switch for signature mismatch because of Deploy-Firewall -Quiet
 			# making signature mismatch silent is not desired for bulk deployment however a better
 			# design is needed for global -Quiet because this function should be quiet if run on it's own
+			# TODO: Errors and warnings are not logged, probably due to script level preferences
 			if ($Force)
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for: $ExpandedPath" -WarningAction "Continue"

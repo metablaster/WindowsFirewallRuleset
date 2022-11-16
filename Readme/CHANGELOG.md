@@ -28,6 +28,14 @@ Here is a list of changes for each of the releases.
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront
 
+- Rules
+
+  - Updated rules for mail apps from Windows store so that ports for POP3, IMAP and SMTP are specified
+
+- Rules
+
+  - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
+
 - Modules
 
   - `FDResPub` and `fdPHost` services are now required for remote deployment to rule out host
@@ -35,7 +43,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 - Scripts
 
-  - Make possible to specify `localhost` for deployment
+  - Made possible to specify `localhost` for deployment
 
 ## v0.13.1 (current release)
 
