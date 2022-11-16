@@ -199,7 +199,6 @@ if ($Remoting)
 	Reset-WinRM -Confirm:$false
 }
 
-# TODO: Initialize-Service also configures dependent services which are not handled here
 # Reset affected services to system defaults
 # | Service                                            | Startup                   | Status  |
 # |----------------------------------------------------|---------------------------|---------|
@@ -212,8 +211,17 @@ if ($Remoting)
 # | Function Discovery Provider host (fdPHost)         | Manual                    | Running |
 # | Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
+# Services listed above depend on following services which are also affected
+# | Service                                            | Startup                   | Status  |
+# |----------------------------------------------------|---------------------------|---------|
+# | Network Store Interface Service (nsi)              | Automatic                 | Running |
+# | Security Accounts Manager (SamSs)                  | Automatic                 | Running |
+
 if ($Service)
 {
+	Set-Service -Name nsi -StartupType Automatic
+	Set-Service -Name SamSs -StartupType Automatic
+
 	Set-Service -Name lmhosts -StartupType Manual
 	Set-Service -Name LanmanWorkstation -StartupType Automatic
 	Set-Service -Name LanmanServer -StartupType Automatic
@@ -221,6 +229,9 @@ if ($Service)
 	Set-Service -Name RemoteRegistry -StartupType Manual
 	Set-Service -Name fdPHost -StartupType Manual
 	Set-Service -Name FDResPub -StartupType Manual
+
+	Start-Service -Name nsi
+	Start-Service -Name SamSs
 
 	Start-Service -Name lmhosts
 	Start-Service -Name LanmanWorkstation

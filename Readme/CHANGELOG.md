@@ -28,6 +28,15 @@ Here is a list of changes for each of the releases.
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront
 
+- Modules
+
+  - `FDResPub` and `fdPHost` services are now required for remote deployment to rule out host
+  discovery issues
+
+- Scripts
+
+  - Make possible to specify `localhost` for deployment
+
 ## v0.13.1 (current release)
 
 - Modules

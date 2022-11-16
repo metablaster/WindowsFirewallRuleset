@@ -108,6 +108,7 @@ function Initialize-Service
 	{
 		foreach ($InputService in $Name)
 		{
+			# [System.ServiceProcess.ServiceController]
 			$Service = Get-Service -Name $InputService -ErrorAction Ignore
 
 			if (!$Service)
@@ -254,9 +255,24 @@ function Initialize-Service
 						}
 					}
 
-					# Required services and startup type is checked, start service
-					$Service.Start()
-					$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+					# If fdPHost or FDResPub are already running there is a chance host discovery won't work,
+					# this is a know issue in Windows to which solution is to restart those services
+					if ((($Service.Name -eq "fdPHost") -or ($Service.Name -eq "FDResPub")) -and ($ServiceOldStatus -eq [ServiceControllerStatus]::Running))
+					{
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$($Service.Name)' to rule out known issue resolving remote host"
+
+						$Service.Stop()
+						$Service.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
+
+						$Service.Start()
+						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+					}
+					else
+					{
+						# Required services and startup type is checked, start service
+						$Service.Start()
+						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+					}
 
 					if ($Service.Status -ne [ServiceControllerStatus]::Running)
 					{

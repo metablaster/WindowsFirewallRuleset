@@ -407,6 +407,7 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 
 	# Valid policy stores
 	New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
+		"localhost"
 		([System.Environment]::MachineName)
 		"PersistentStore"
 		"ActiveStore"
