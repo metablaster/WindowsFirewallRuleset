@@ -194,6 +194,8 @@ function Initialize-Project
 				"lmhosts" # TCP/IP NetBIOS Helper
 				"LanmanWorkstation" # Workstation
 				"LanmanServer" # Server
+				"fdPHost" # Function Discovery Provider host
+				"FDResPub" # Function Discovery Resource Publication
 				# WinRM required for:
 				# 1. Remote firewall administration, see Enable-PSRemoting cmdlet, or when localhost is specified instad of NETBIOS name
 				# 2. For PowerShell Core 7.1+ this service is required for compatibility module

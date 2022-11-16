@@ -25,11 +25,11 @@ design used in this repository.
       - [The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available](#the-winrm-client-sent-a-request-to-an-http-server-and-got-a-response-saying-the-requested-http-url-was-not-available)
       - ["Negotiate" authentication is not enabled](#negotiate-authentication-is-not-enabled)
       - [Encountered an internal error in the SSL library](#encountered-an-internal-error-in-the-ssl-library)
-      - [Access is denied](#access-is-denied)
+      - [Access is denied (WinRM)](#access-is-denied-winrm)
     - [Troubleshooting CIM](#troubleshooting-cim)
       - [WS-Management service does not support the specified polymorphism mode](#ws-management-service-does-not-support-the-specified-polymorphism-mode)
       - [The service is configured to reject remote connection requests for this plugin](#the-service-is-configured-to-reject-remote-connection-requests-for-this-plugin)
-      - [Access id denied](#access-id-denied)
+      - [Access is denied (CIM)](#access-is-denied-cim)
     - [Troubleshooting remote registry](#troubleshooting-remote-registry)
 
 ## Commandlets breakdown
@@ -168,11 +168,11 @@ For reference see [RegistryKey][RegistryKey]
 
 Following requirements apply to both endpoints involved (client and server computers):
 
-- `RemoteRegistry` service is `Running` and set to `Automatic` startup
+- `RemoteRegistry` service is `Running` and set to `Automatic` startup on both endpoints
 - Enable at a minimum following **predefined** (not custom) firewall rules:
   - `File and Printer sharing`
   - `Network Discovery`
-- Network adapter is on `Private` or `Domain` network profile.
+- Network adapter is on `Private` or `Domain` network profile on both endpoints.
 
 To initiate remote registry connection you must authenticate to remote computer with username and
 password of the user account on remote computer that belongs to `Administrators` group.
@@ -189,7 +189,11 @@ New-PSDrive -Credential $RemotingCredential -PSProvider FileSystem -Name RemoteR
 ```
 
 Note that Registry provider `-PSProvider Registry` does not support specifying credentials but
-specifying `FileSystem` does the trick
+specifying `FileSystem` does the trick.
+
+If `New-PSDrive` fails with "The network path was not found" try restarting `fdphost` service on
+both computers or reboot both computers.\
+Alternatively, creating a new remote share and connecting to it instead of default `C$` can help.
 
 [Table of Contents](#table-of-contents)
 
@@ -326,7 +330,7 @@ which means specifying host name, user name and password.
 
 [Table of Contents](#table-of-contents)
 
-#### Access is denied
+#### Access is denied (WinRM)
 
 > `Access is denied`
 
@@ -337,7 +341,7 @@ in which case password must be set because WinRM doesn't support passwordless au
 > [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
 
 If this happens in `Initialize-WinSession` it's because session configuration was disabled in
-Windows PowerShell, ex. by using Reset-Firewall -Remote, to fix this problem run in Windows PowerShell:
+Windows PowerShell, ex. by using `Reset-Firewall -Remoting`, to fix this problem run in Windows PowerShell:
 
 ```powershell
 Set-PSSessionConfiguration -Name Microsoft.PowerShell -AccessMode Remote
@@ -390,9 +394,7 @@ Error resolution:
 
 [PolymorphismMode][winrm polymorphism]
 
-Hint:
-
-Do not use `-Shallow` parameter with `Get-CimInstance` commandlet
+Hint: do not use `-Shallow` parameter with `Get-CimInstance` commandlet
 
 #### The service is configured to reject remote connection requests for this plugin
 
@@ -446,7 +448,7 @@ Restart-Service -Name WinRM
 
 For more information see [WMI plug-in configuration notes][WMI plugin]
 
-#### Access id denied
+#### Access is denied (CIM)
 
 Most likely you need to specify credentials
 

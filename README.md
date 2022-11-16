@@ -174,7 +174,7 @@ Following table lists operating systems on which `Windows Firewall Ruleset` has 
 ### Requirements details
 
 - All Windows 10.0 systems (Major 10, Minor 0) and above are supported,
-but only those editions listed in the table above has been tested.\
+but only those editions listed in the table above have been tested.\
 The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
 
@@ -196,7 +196,7 @@ is made.
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
 
-- VS Code is preferred and recommended editor to navigate code and edit scripts for your
+- VS Code is preferred and recommended editor to navigate code and or to edit scripts for your
 own needs or contribution.
 
 - If you get VSCode, you'll also need PowerShell extension for code navigation and PowerShell
@@ -205,9 +205,9 @@ language features.
 - To navigate and edit code with VSCode `PSScriptAnalyzer` is highly recommended, otherwise editing
 experience may behave odd due to various repository settings.
 
-- There are no hardware requirements, but if you plan to write code recommendation is min. 8GB of
-memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your personal
-firewall less than that will work just fine.
+- There are no hardware requirements, but if you plan to write and debug code recommendation is min.
+8GB of memory and SSD drive to comfortably work on project, otherwise to just deploy rules to your
+personal firewall less than that will work just fine.
 
 [Table of Contents](#table-of-contents)
 
@@ -341,7 +341,7 @@ extracted your downloaded zip file
 something else:
 
     ```powershell
-    cd WindowsFirewallRuleset-master
+    cd WindowsFirewallRuleset*
     ```
 
 7. To see current execution policy type the following command and hit enter:\
@@ -407,7 +407,7 @@ It is recommended to close down all other programs before running master script 
     If you need help to decide whether to run some ruleset or not, type `?` when prompted to run
     ruleset and press enter to get more info.\
     If for what ever reason you want to interrupt and abort deployment (ex. to start a new) press
-    `CTRL + C` on your keyboard and restart PowerShell console.
+    `CTRL + C` on your keyboard while PowerShell is in focus and restart PowerShell console.
 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take some 15 minutes of your attention.
@@ -546,7 +546,7 @@ Note that you'll also need to re-import your exported GPO rules if you had them.
 
 ### Export\Import rules
 
-If you want to export rules from GPO there are 2 methods available:
+If you want to export rules from GPO there are two methods available:
 
 1. Export in local group policy by clicking on `Export Policy...` menu, after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`

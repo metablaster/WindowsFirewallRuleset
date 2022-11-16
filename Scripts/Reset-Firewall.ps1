@@ -201,14 +201,16 @@ if ($Remoting)
 
 # TODO: Initialize-Service also configures dependent services which are not handled here
 # Reset affected services to system defaults
-# | Service                                  | Startup                   | Status  |
-# |------------------------------------------|---------------------------|---------|
-# | TCP/IP NetBIOS Helper (lmhosts)          | Manual (Trigger Start)    | Running |
-# | Workstation (LanmanWorkstation)          | Automatic                 | Running |
-# | Server (LanmanServer)                    | Automatic (Trigger Start) | Running |
-# | Windows Remote Management (WinRM)        | Manual                    | Stopped |
-# | OpenSSH Authentication Agent (ssh-agent) | Disabled                  | Stopped |
-# | Remote Registry (RemoteRegistry)         | Manual                    | Stopped |
+# | Service                                            | Startup                   | Status  |
+# |----------------------------------------------------|---------------------------|---------|
+# | TCP/IP NetBIOS Helper (lmhosts)                    | Manual (Trigger Start)    | Running |
+# | Workstation (LanmanWorkstation)                    | Automatic                 | Running |
+# | Server (LanmanServer)                              | Automatic (Trigger Start) | Running |
+# | Windows Remote Management (WinRM)                  | Manual                    | Stopped |
+# | OpenSSH Authentication Agent (ssh-agent)           | Disabled                  | Stopped |
+# | Remote Registry (RemoteRegistry)                   | Manual                    | Stopped |
+# | Function Discovery Provider host (fdPHost)         | Manual                    | Running |
+# | Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
 if ($Service)
 {
@@ -217,10 +219,14 @@ if ($Service)
 	Set-Service -Name LanmanServer -StartupType Automatic
 	Set-Service -Name WinRM -StartupType Manual
 	Set-Service -Name RemoteRegistry -StartupType Manual
+	Set-Service -Name fdPHost -StartupType Manual
+	Set-Service -Name FDResPub -StartupType Manual
 
 	Start-Service -Name lmhosts
 	Start-Service -Name LanmanWorkstation
 	Start-Service -Name LanmanServer
+	Start-Service -Name fdPHost
+	Start-Service -Name FDResPub
 
 	Stop-Service -Name WinRM
 	Stop-Service -Name RemoteRegistry

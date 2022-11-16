@@ -63,6 +63,8 @@ Next ensure at the minimum following network services are `Running` and optional
 3. lmhosts: `TCP/IP NetBIOS Helper service`
 4. WinRM: `Windows Remote Management (WS-Management)`
 5. RemoteRegistry `Remote Registry`
+6. FDResPub `Function Discovery Resource Publication`
+7. fdPHost `Function Discovery Provider host`
 
 If this doesn't work verify the command that is causing this problem, for example following command
 tries to get firewall rules from GPO and will produce this problem:

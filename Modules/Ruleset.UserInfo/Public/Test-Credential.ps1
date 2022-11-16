@@ -8,8 +8,7 @@ Validates a [PSCredential] instance representing user-account credentials
 against the current user's logon domain or local machine.
 
 .PARAMETER Credential
-The [PSCredential] instance to validate, typically obtained with
-Get-Credential.
+The [PSCredential] instance to validate, typically obtained with Get-Credential.
 
 The .UserName value may be:
 * a mere username: e.g, "user"
@@ -44,10 +43,8 @@ Active Directory.
 Use this switch to validate perform validation against the local machine's
 user database rather than against the current logon domain.
 
-If you're not currently logged on to a domain, use of this switch is
-optional.
-Conversely, however, the only way to validate against a domain
-is to be logged on to it.
+If you're not currently logged on to a domain, use of this switch is optional.
+Conversely, however, the only way to validate against a domain is to be logged on to it.
 
 .EXAMPLE
 PS> Test-Credential -Credential user
@@ -77,6 +74,9 @@ PS> Test-Credential Administrator -Local
 
 Prompts for the password of the machine-local administrator account and
 validates it against the local user database.
+
+.INPUTS
+None. You cannot pipe objects to Test-Credential
 
 .OUTPUTS
 [bool] A Boolean indicating whether the credentials were successfully validated.

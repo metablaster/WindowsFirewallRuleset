@@ -130,6 +130,12 @@ function Initialize-Connection
 			{
 				# Will happen when no password is specified
 				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
+
+				if (($PolicyStore -in $LocalStore) -and (Test-Credential -User $RemotingCredential -Local))
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] User $($RemotingCredential.UserName) has no password set on local computer"
+				}
+
 				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
 			}
 

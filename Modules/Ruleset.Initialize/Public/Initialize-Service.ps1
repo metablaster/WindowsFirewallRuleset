@@ -137,6 +137,18 @@ function Initialize-Service
 						"Required to manage GPO firewall"
 						break
 					}
+					# Function Discovery Provider host
+					"fdPHost"
+					{
+						"Required for remote firewall administration"
+						break
+					}
+					# Function Discovery Resource Publication
+					"FDResPub"
+					{
+						"Required for remote firewall administration"
+						break
+					}
 					"WinRM"
 					{
 						"Required for non 'Core' module compatibility, local and remote firewall administration"
