@@ -14,13 +14,13 @@ anything related such as networking, security, privacy, troubleshooting and repo
   - [Suggesting a feature or information](#suggesting-a-feature-or-information)
   - [Starting a new discussion](#starting-a-new-discussion)
   - [Customization](#customization)
+  - [Legacy support](#legacy-support)
   - [Checking for updates](#checking-for-updates)
     - [Using GitHub Desktop app](#using-github-desktop-app)
     - [Manual release download](#manual-release-download)
     - [Manual beta download](#manual-beta-download)
     - [Using git command](#using-git-command)
     - [Which update method is the best](#which-update-method-is-the-best)
-  - [Legacy support](#legacy-support)
 
 ## Documentation
 
@@ -76,7 +76,7 @@ outlined in `Get started` under `Feature request`.
 
 ## Starting a new discussion
 
-If you have random questions that don't fit anywhere else or you just want to say something then
+If you have random questions that don't fit anywhere else or you just want to say something then\
 you're most welcome to open new discussion in [Discussions][discussions]
 
 [Table of Contents](#table-of-contents)
@@ -87,14 +87,16 @@ If you would like to customize how scripts run, such as force loading rules and 
 then visit `Config\ProjectSettings.ps1` and there you'll find global variables which are used for
 this.
 
-If you would like to customize code or add more firewall rules to suit your private or
-corporate interests then first step is to set up development environment and learn about best
-practices used by this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
+If you would like to customize code or add more firewall rules to suit your interests then first
+step is to set up development environment and learn about best practices used by this repository
+all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Depending on your situation and target platform you might also want to read
-[Legacy Support](/Docs/LegacySupport.md)
+[Table of Contents](#table-of-contents)
 
-These two documents are bare minimum to get you started customizing this repository.
+## Legacy support
+
+For information on how to make use of this firewall on older Windows systems such as Windows 7 or
+Windows Server 2008 see [Legacy Support](/Docs/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -214,13 +216,6 @@ functionalities that you might need.
 
 You can have both setups in same time and use them as needed in specific situation.\
 There is no benefit with manual zip download in comparison with git or GitHub Desktop.
-
-[Table of Contents](#table-of-contents)
-
-## Legacy support
-
-For information on how to make use of this firewall on older Windows systems such as Windows 7 or
-Windows Server 2008 see [Legacy Support](/Docs/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 

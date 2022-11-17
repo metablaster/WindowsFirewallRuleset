@@ -50,11 +50,15 @@ This are the most basic troubleshooting procedures one should always perform whe
 
 Press `Windows key + X` then click on "Windows PowerShell (Admin)"
 
+[Table of Contents](#table-of-contents)
+
 ## First clear DNS cache to isolate that problem
 
 ```powershell
 Clear-DnsClientCache
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Perform DNS query
 
@@ -66,6 +70,8 @@ Resolve-DnsName 8.8.8.8
 Resolve-DnsName microsoft.com
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Take a look at your network information
 
 These commands will save output to file, you can review those files so that you don't need
@@ -76,6 +82,8 @@ somebody can help you out.
 ipconfig /all > $env:SystemDrive\ipconfig.txt
 Get-NetAdapter | ? HardwareInterface | select * > $env:SystemDrive\adapter.txt
 ```
+
+[Table of Contents](#table-of-contents)
 
 ## Ping hosts
 
@@ -103,6 +111,8 @@ address at field that say:
 
 `IPv4 Address. . . . . . . . . . . :`
 
+[Table of Contents](#table-of-contents)
+
 ## Reset network
 
 Type following commands into console to reset network
@@ -128,6 +138,8 @@ Alternative way to reset network is by using "Settings" app in Windows 10 as fol
 `Settings > Network & Internet > Status > Network Reset`\
 It's important to let network reset finish without interruption.
 
+[Table of Contents](#table-of-contents)
+
 ## Check for updates
 
 Make sure your system and drivers are fully up to date:
@@ -152,11 +164,15 @@ Do it manually in this order:
 3. the rest of drivers
 4. reboot system
 
+[Table of Contents](#table-of-contents)
+
 ## Troubleshoot WI-FI
 
 Link below explains how to troubleshoot WI-FI problems, some of the steps are already covered here:
 
 [Fix WI-FI issues][fix wifi]
+
+[Table of Contents](#table-of-contents)
 
 ## Trace route to random hosts on the internet
 
@@ -179,6 +195,8 @@ tracert microsoft.com
 
 **NOTE:** Some sites (such as microsoft) drop ICMP packets, so make sure to test multiple sites.
 
+[Table of Contents](#table-of-contents)
+
 ## Disable firewall
 
 If nothing so far worked disable firewall and try all over again.\
@@ -189,6 +207,8 @@ See link below on how to disable both GPO and Control Panel firewall:\
 
 **NOTE:** If you experience this problem only while having firewall enabled from this project,
 feel free to open new issue and provide as much details (results) as possible from this document.
+
+[Table of Contents](#table-of-contents)
 
 ## Disable and enable network adapter
 
@@ -212,11 +232,15 @@ Alternative way to disable/enable adapter is in control panel at:
 Click on `Change Adapter Settings`, right click your adapter that is having problem,
 then disable and enable back.
 
+[Table of Contents](#table-of-contents)
+
 ## Change DNS server
 
 google DNS servers are fast and reliable, see link below to change your DNS settings to use google DNS:
 
 [google DNS servers][google dns]
+
+[Table of Contents](#table-of-contents)
 
 ## Restart or reset router
 
@@ -230,14 +254,20 @@ hole in the router.
 This will reset router and WI-FI password and the default one can be found on the sticker somewhere
 on the router.
 
+[Table of Contents](#table-of-contents)
+
 ## Check your LAN connection
 
 Check your LAN cable, verify it is properly connected and functioning.
+
+[Table of Contents](#table-of-contents)
 
 ## Contact your ISP
 
 If other computers are not working on your LAN, or if you have no other computers to test with,
 call your ISP and ask them what's the problem.
+
+[Table of Contents](#table-of-contents)
 
 ## Perform internet speed test
 
@@ -250,12 +280,16 @@ ask them how much it will cost to get faster internet. (more pay = faster)
 
 See if your ISP can install you optic cable into your house, and for what price.
 
+[Table of Contents](#table-of-contents)
+
 ## Perform LAN speed test
 
 If your network speed is slow and related only to local network (ex. between computers behind router),
 you can test LAN speed with tool called NetIO:
 
 [NetIO-GUI][netio]
+
+[Table of Contents](#table-of-contents)
 
 ## Try another adapter
 
@@ -265,6 +299,8 @@ make sure to verify other devices on your network work properly (ex. no internet
 Which means something is wrong with your operating system or adapter.
 
 You might want to boot linux live ISO to make sure your adapter or operating system is not faulty.
+
+[Table of Contents](#table-of-contents)
 
 ## Change adapter properties
 
@@ -285,12 +321,16 @@ Depending on your adapter, here are links that help explain the meaning of adapt
 - [Resolving Issues with Energy Efficient Ethernet (EEE) or Green Ethernet][adapter eee issues]
 - [Optimal setting for advanced parameters for Realtek PCI-e GBE family network card][adapter realtek settings]
 
+[Table of Contents](#table-of-contents)
+
 ## Configure your router
 
 Read documentation about yor router, learn what different options do and adjust your router
 setting for optimal performance.
 
 Restarting router is recommended to check if new configuration makes any difference.
+
+[Table of Contents](#table-of-contents)
 
 ## I have game multiplayer issues
 
@@ -307,17 +347,23 @@ Log in to your router and find "NAT" settings, possible options are:
 For gaming your want "Full Cone NAT (Static NAT)"\
 remember, "Symmetric NAT (Dynamic NAT)" may cause you a lot of multiplayer troubles.
 
+[Table of Contents](#table-of-contents)
+
 ## Issues with LAN, Workgroup, Home group, Remote desktop or sharing
 
 Link below contains detailed guidelines:
 
 [LAN Setup](/Docs/LAN%20Setup)
 
+[Table of Contents](#table-of-contents)
+
 ## Reset firewall
 
 Link Below explains how to reset both GPO firewall and firewall in control panel:
 
 [Reset Firewall](ResetFirewall.md)
+
+[Table of Contents](#table-of-contents)
 
 ## Run network troubleshooter
 
@@ -338,6 +384,8 @@ On another systems, alternative way is:
 4. what you are looking for is "Network reset" and "Diagnose problems"
 5. If problem is not fixed right away you might need to reboot system
 
+[Table of Contents](#table-of-contents)
+
 ## Look at IP route information
 
 ```powershell
@@ -348,6 +396,8 @@ For more information about see [Get-NetRoute][ref netroute]
 
 For more information about routing table [routing table][wikipedia routing table]
 
+[Table of Contents](#table-of-contents)
+
 ## Look at your hosts file
 
 You want to make sure your younger brother or sister doesn't have fun with you!
@@ -357,6 +407,8 @@ Visit this folder: `C:\Windows\System32\drivers\etc`
 Open `hosts` file with notepad or some other text editor and make sure all lines begin with hash "#"\
 If any lines doesn't begin with hash, then either add hash to those lines or delete entry.
 
+[Table of Contents](#table-of-contents)
+
 ## Firewall issue
 
 To troubleshoot firewall take a look at:
@@ -364,6 +416,8 @@ To troubleshoot firewall take a look at:
 - [Monitoring Firewall](MonitoringFirewall.md)
 - [Problematic Traffic](ProblematicTraffic.md)
 - [Rest of documentation](/Docs)
+
+[Table of Contents](#table-of-contents)
 
 ## Check for Windows Auto-Tuning
 
@@ -391,11 +445,15 @@ To enable setting run:
 netsh int tcp set global autotuninglevel=normal
 ```
 
+[Table of Contents](#table-of-contents)
+
 ## Specific problems
 
 Few external references for specific issues:
 
 [Computer Name Won't Resolve on Network][name resolution issue]
+
+[Table of Contents](#table-of-contents)
 
 ## Troubleshoot or reinstall Windows
 
@@ -406,6 +464,8 @@ First see recovery options in Windows 10, you might be able to recover your syst
 reinstalling is is last resort, if operating system is bad reinstall it:
 
 [Download Windows 10][download windows]
+
+[Table of Contents](#table-of-contents)
 
 ## If nothing works
 

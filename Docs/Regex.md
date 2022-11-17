@@ -106,6 +106,8 @@ New-NetFirewallRule -DisplayName $_.Name -Service Any `
 
 [//]: # (Platform)
 
+[Table of Contents](#table-of-contents)
+
 ### Get platform
 
 ```powershell
@@ -127,6 +129,8 @@ New-NetFirewallRule -Group "Some rule group"
 -Group (([\$|\w]\w+)|(".*")) ?
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### Get Interface
 
 ```powershell
@@ -142,6 +146,8 @@ New-NetFirewallRule -InterfaceType Wired, Wireless
 
 [//]: # (PolicyStore)
 
+[Table of Contents](#table-of-contents)
+
 ### Get policy store
 
 ```powershell
@@ -151,6 +157,8 @@ New-NetFirewallRule -InterfaceType Wired, Wireless
 ```regex
 -PolicyStore [\$|\w]\w+ ?
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Get Profile property if value also contains variable names
 
@@ -163,6 +171,8 @@ New-NetFirewallRule -Profile Private, Domain
 ```regex
 -Profile [\$|\w]\w+,? ?\w+ ?
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Direction protocol pairs
 
@@ -178,6 +188,8 @@ New-NetFirewallRule -Direction Inbound -Protocol 41
 -Direction [\$|\w]\w+ -Protocol [\$|\w]\w+ -IcmpType \d+(:\d+)? ?
  ```
 
+[Table of Contents](#table-of-contents)
+
 ### Get local and remote port parameters and values
 
 ```powershell
@@ -189,6 +201,8 @@ New-NetFirewallRule -LocalPort 22, 546-55, 54 -RemotePort Any
 ```regex
 -LocalPort [\w&&,&&\-&& ]+ -RemotePort [\w&&,&&\-&& ]+ ?
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Get mapping pairs and their values
 
@@ -203,6 +217,8 @@ New-NetFirewallRule -LocalOnlyMapping $true -LooseSourceMapping $false
 
 [//]: # (If needed)
 
+[Table of Contents](#table-of-contents)
+
 ### Get LocalUser and EdgeTraversalPolicy
 
 ```powershell
@@ -216,6 +232,8 @@ New-NetFirewallRule -LocalUser Any -EdgeTraversalPolicy DeferToApp
 -LocalUser [\$|\w]\w+ -EdgeTraversalPolicy \w+ ?
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### Get local and remote IPv6 address only in any notation
 
 ```powershell
@@ -226,6 +244,8 @@ New-NetFirewallRule -LocalAddress Any -RemoteAddress ff01::2
 ```regex
 -LocalAddress (?!.*\.)[\w&&:&&/]+ -RemoteAddress (?!.*\.)[\w&&:&&/]+ ?
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Get local and remote IPv4 address only in any notation
 
@@ -239,6 +259,8 @@ New-NetFirewallRule -LocalAddress LocalSubnet4 -RemoteAddress 224.3.0/24, 224.0/
 -LocalAddress (?!.*:)[,\.\w \-/]+ -RemoteAddress (?!.*:)[,\.\w \-/]+ ?
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### Get owner and package for store app
 
 ```powershell
@@ -250,6 +272,8 @@ New-NetFirewallRule -Owner $Principal.SID -Package $PackageSID
 -Owner [\$|\w](\w|\.)+(?= -Package) -Package [\$|\w](\w|\.)+ ?
 -Owner (([\$|\w](\w|\.)+)|(\(.*\))) -Package ([\$|\w](\w|\.)+|".*") ?
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### Get enabled or action flag
 
@@ -270,6 +294,8 @@ Here file extention must be either `*.lnk` or `*.url`
 '^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*(\.(lnk|url))*$'
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### File path selection
 
 Select path up to last directory, up to 3rd directory and last item respectively
@@ -279,6 +305,8 @@ Select path up to last directory, up to 3rd directory and last item respectively
 ".+?(?=(\\.*\\*){3})"
 "\\+(?:.(?!\\))+$"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### URL validation
 
@@ -314,6 +342,8 @@ Sample match:
 https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/bb726984(v=technet.10)
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### DACL validation
 
 DACL is part of SDDL string
@@ -322,6 +352,8 @@ DACL is part of SDDL string
 "(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}"
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### UNC validation
 
 Universal Name Convention
@@ -329,6 +361,8 @@ Universal Name Convention
 ```powershell
 "^\\\\[a-zA-Z0-9\.\-_]{1,}(\\[a-zA-Z0-9\-_\s\.]{1,}){1,}[\$]{0,1}"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### UPN validation
 
@@ -341,11 +375,15 @@ Domain name portion:
 "(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-0-9a-zA-Z]*[0-9a-zA-Z]*\.)+[0-9a-zA-Z][-0-9a-zA-Z]{0,22}[0-9a-zA-Z]))$"
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### User profile validation
 
 ```powershell
 "^($env:SystemDrive\\?|\\)Users(?!\\+Public\\*)"
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### File extension
 
@@ -355,6 +393,8 @@ Invalid characters to name a directory: / \ : < > ? * | "
 '\.[^./\\:<>?*|"]+$'
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### File name
 
 Invalid characters to name a file: / \ : < > ? * | "
@@ -362,6 +402,8 @@ Invalid characters to name a file: / \ : < > ? * | "
 ```powershell
 '[^/\\:<>?*|"]+$'
 ```
+
+[Table of Contents](#table-of-contents)
 
 ### NETBIOS name
 
@@ -380,6 +422,8 @@ Relaxed version for Windows:
 "^([A-Z0-9a-z\-_\.\s]\*?)+$"
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### System environment variable
 
 The first character of the name must not be numeric.
@@ -389,12 +433,16 @@ A variable name may include any of the following characters:
 A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### Email validation
 
 2 useful links:
 
 - [Microsoft][msemail]
 - [stackoverflow][stackemail]
+
+[Table of Contents](#table-of-contents)
 
 ### IPv6 validation
 
@@ -405,6 +453,8 @@ Simple version:
 ```
 
 For more complex examples see [Regular expression that matches valid IPv6 addresses][ipv6 regex]
+
+[Table of Contents](#table-of-contents)
 
 ### IPv4 validation
 

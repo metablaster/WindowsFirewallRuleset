@@ -319,7 +319,7 @@ network settings as follows:
 ## The maximum number of concurrent operations for this user has been exceeded
 
 This error may happen when using PS Core to deploy firewall because in PS Core up to 3 sessions may
-be created during initial configuration while using single PS Core console.
+be created during initial configuration while using single PS Core console.\
 This means if second console is opened it will exceed the default value of 5 sessions.
 
 There are few solutions:
@@ -353,7 +353,7 @@ username, which results in an error saying that such user does not exist.
 Thus the only way for proper authentication is to ask user for valid Microsoft account credentials,
 which needs to be of an Administrative account on computer.\
 The credentials are securely stored in an object of type [PSCredential][pscredential] and once you
-close down PowerShell the credential object is removed.
+close down PowerShell the credential object is destroyed.
 
 Windows hello is neither supported nor necessary by PowerShell remoting or WinRM.
 

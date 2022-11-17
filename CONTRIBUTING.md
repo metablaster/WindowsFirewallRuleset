@@ -1,8 +1,8 @@
 
 # How to contribute
 
-Use this document to see how to contribute code or to prepare yourself to extend this firewall
-for your personal or corporate needs.
+This document provides details on how to contribute code or to prepare yourself to extend this
+firewall for your own needs.
 
 ## Table of Contents
 
@@ -24,13 +24,14 @@ for your personal or corporate needs.
     - [In command line prompts (current execution help)](#in-command-line-prompts-current-execution-help)
     - [In comment based help (module and script main documentation source)](#in-comment-based-help-module-and-script-main-documentation-source)
     - [In module Help folder (module online documentation)](#in-module-help-folder-module-online-documentation)
-    - [In readme folder (general project documentation)](#in-readme-folder-general-project-documentation)
+    - [In docs directory (general project documentation)](#in-docs-directory-general-project-documentation)
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
+  - [Debugging](#debugging)
   - [Commits and pull requests](#commits-and-pull-requests)
   - [Portability and other systems](#portability-and-other-systems)
   - [Making new scripts or modules](#making-new-scripts-or-modules)
-  - [Repository folder structure](#repository-folder-structure)
+  - [Repository directory structure](#repository-directory-structure)
   - [Where to start](#where-to-start)
 
 ## General guidelines
@@ -137,12 +138,12 @@ Recommended workspace extensions are as follows:
 10. [Log File Highlighter][extension logs]
 
     Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
-    This extension complements "Auto Scroll" extension below.
+    This extension complements `Auto Scroll` extension below.
 
 11. [Auto Scroll][extension scroll]
 
     Automatic scrolling of log files, useful to tail firewall logs.\
-    This extension complements "Log File Highlighter" extension above.
+    This extension complements `Log File Highlighter` extension above.
 
 12. [Filter Line][extension filterline]
 
@@ -154,7 +155,7 @@ Recommended workspace extensions are as follows:
 
 14. [Remote SSH editing][extension remote SSH editing]
 
-    This extension complements the Remote - SSH extension with syntax colorization,
+    This extension complements the `Remote - SSH` extension with syntax colorization,
     keyword intellisense, and simple snippets when editing SSH configuration files.
 
 15. [Json][extension json]
@@ -227,14 +228,14 @@ It is recommended to also enable specific development features in Windows which 
 ### Automatic formatting
 
 This workspace includes code formatting settings, which means you don't have to spend time
-formatting source files manually, otherwise it's enough to right click into VSCode and select
-"Format document".
+formatting source files manually, otherwise it's enough to right click into any source file and
+select `Format document`.
 
 Lines should be kept within 100-120 columns, however it is not always practical, so it's not a hard
 rule, workspace settings are configured to show rulers inside code editor.
 
-If you use some other code editor you should configure it according to these rules which are found
-in `.vscode`, `Config` and repository root directory.
+If you use some other code editor it's recommended you configure it according to these rules which
+are found in `.vscode`, `Config` and repository root directory.
 
 [Table of Contents](#table-of-contents)
 
@@ -252,7 +253,7 @@ Following links may help with exception and error handling:
 - [Everything you wanted to know about exceptions][exceptions everything]
 - [Our Error Handling - GitHub][exceptions handling]
 
-Use risk mitigation features is applicable for functions that you write, see "Remarks" sections on
+Use risk mitigation features if applicable for functions that you write, see "Remarks" sections on
 the links below to understand how to implement `ShouldProcess` and `ShouldContinue`:
 
 - [Cmdlet.ShouldContinue][should continue]
@@ -347,7 +348,7 @@ Exception to this rule are complete modules (larger portion of code) which shoul
 directory domain within repository.
 
 Most important is to keep each function in it's own script, separated into Public/Private folders,
-this is required for 2 valid reasons:
+this is required for reasons:
 
 1. To perform tests on private functions without exporting them from module
 2. For organizational purposes, to make it easy to maintain and navigate module functions.
@@ -405,7 +406,7 @@ block comments only if comment spans 5 or more lines.
 ### In rules (rule description)
 
 It is important that each firewall rule contains good description of it's purpose,
-when a user clicks on rule in firewall GUI he/she wants to see what this rule is about and
+when a user clicks on rule in firewall GUI she\he wants to see what this rule is about and
 easily conclude whether to enable/disable rule or allow/block network traffic.
 
 In general regarding firewall rules, provide documentation and official reference for your rules
@@ -453,11 +454,11 @@ users and repository visitors can read module documentation on github site eithe
 with `Get-Help -Online`
 
 `Update-HelpContent.ps1` script is not perfect and requires additional editing of help files once
-documentation was regenerated.
+documentation was regenerated, diff tool in VSCode is essential for this.
 
-### In readme folder (general project documentation)
+### In docs directory (general project documentation)
 
-The `Readme` folder in repository root contains random documentation that covers wide range of
+The `Docs` directory in repository root contains random documentation that covers wide range of
 aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
 
 Remember, documenting code and features is as important as writing it!
@@ -509,6 +510,39 @@ This will add all repository `Modules` to current session module path
 
 [Table of Contents](#table-of-contents)
 
+## Debugging
+
+At the moment debugging is one area in this repository which can be hard and is not well maintained.
+
+Regarding code major problem is that scripts and modules require elevation, this means you can't
+simply use integrated terminal in VSCode nor any VSCode debugging features unless you're
+Administrator or run PS and VSCode as Admin which means your machine becomes an elevated test machine.
+
+Secondary aspect of debugging is testing firewall rules and networking issues which may or may not
+be as cool or as easy as debugging code.
+
+Knowing this here are some recommendations:
+
+1. Screw debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see what the
+code is doing, this is so much faster and more useful and informative than stepping trough code.
+
+2. Run PS as Admin and type command by commad which you wish to test by copying code out of editor
+into the console, this is much more practical than stepping trough code because you can handle
+various scenarios by simply modifying variables and using console history to repeat steps.
+
+3. In `Config\ProjectSettings.ps1` debug and verbose preferences are set in single place and entire
+repository is affected, you don't even have to restart PS or reimport modules when `$Develop` is set
+because each run of some scripts gives you fresh environment for testing.\
+Some variables are however exception to this and will require restart of PS.
+
+4. For deployment testing or testing which affects firewall on your host simply set up multiple
+Hyper-V guest systems with external switch (NIC) and optionally map your repo from host to guest
+system.
+
+5. Regarding testing rules, the easiest method is get confortable with all the tools and methods
+described in [MonitoringFirewall.md](/Docs/MonitoringFirewall.md)\
+For remoting tests of course Hyper-V on same subnet and mapped drive proves most useful.
+
 ## Commits and pull requests
 
 Push commits that solve or improve single or specific problem, to reduce merge conflicts and
@@ -544,12 +578,12 @@ systems, but this likely won't happen any time soon.
 Inside `Templates` folder there are few template scripts as a starting point.\
 Copy them to target location, update starting code and you're ready to start working.
 
-These templates are always up to date for current rule design, code and formatting style of this
+These templates are always up to date for current rule design, code and formatting style in this
 repository.
 
 [Table of Contents](#table-of-contents)
 
-## Repository folder structure
+## Repository directory structure
 
 See [Directory Structure](/Docs/DirectoryStructure.md)
 

@@ -46,6 +46,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   possible to deploy rules for Administrators which is useful for Windows Server without any
   standard account
 
+[Table of Contents](#table-of-contents)
+
 ## v0.13.1 (current release)
 
 - Modules
@@ -61,6 +63,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - `Reset-Firewall` added `-Service` switch which restores modified system services to system defaults
   - Resolved some annoying warnings
   - Converted some errors about unfound programs (registry keys) to warnings
+
+[Table of Contents](#table-of-contents)
 
 ## v0.13.0
 
@@ -151,6 +155,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Added new documentation concerning security and privacy
 
+[Table of Contents](#table-of-contents)
+
 ## v0.12.0
 
 - Rules
@@ -228,6 +234,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Revisited and updated for missing changes introduced since v0.10.0
 
+[Table of Contents](#table-of-contents)
+
 ## v0.11.0
 
 - Rules
@@ -299,6 +307,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added SSH configuration files and syntax highlighting setting for `*config` files
   - Updated `todo-tree` extension settings for markdown support
   - Improved process monitor configuration files for network activity optionally for TCP or UDP
+
+[Table of Contents](#table-of-contents)
 
 ## v0.10.0
 

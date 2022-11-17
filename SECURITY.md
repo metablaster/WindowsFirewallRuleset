@@ -40,10 +40,8 @@ outdated information or suggestions concerning security or privacy.
 
 ## Methods to maximize your security and privacy
 
-Following document privdes some suggestions on how to take control over your privacy and how to
-secure your system:
-
-[SecurityAndPrivacy.md](/Docs/SecurityAndPrivacy.md)
+[SecurityAndPrivacy.md](/Docs/SecurityAndPrivacy.md) privdes some suggestions on how to take control
+over your privacy and how to secure personal computer.
 
 It might help you to resolve issues without having to report a problem or ask questions.
 

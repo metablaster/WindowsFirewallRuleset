@@ -35,6 +35,8 @@ customized scenarios.
 
 [What is a workspace in Visual Studio Code](https://stackoverflow.com/questions/44629890/what-is-a-workspace-in-visual-studio-code)
 
+[Table of Contents](#table-of-contents)
+
 ## PowerShell
 
 [PowerShell Core Reference](https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1)
@@ -58,6 +60,8 @@ Also few commandlets from these modules:
 
 [PowerShell Explained](https://powershellexplained.com)
 
+[Table of Contents](#table-of-contents)
+
 ## Module help and help files
 
 [Supporting Online Help](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/supporting-online-help?view=powershell-7)
@@ -74,11 +78,15 @@ Also few commandlets from these modules:
 
 [How to Prepare Updatable Help CAB Files](https://docs.microsoft.com/en-us/powershell/scripting/developer/help/how-to-prepare-updatable-help-cab-files?view=powershell-7)
 
+[Table of Contents](#table-of-contents)
+
 ## Git and GitHub
 
 [Git documentation](https://git-scm.com/doc)
 
 [GitHub Documentation](https://docs.github.com/en)
+
+[Table of Contents](#table-of-contents)
 
 ## IPv6
 
@@ -92,6 +100,8 @@ Also few commandlets from these modules:
 
 [IPv6 multicast](https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml)
 
+[Table of Contents](#table-of-contents)
+
 ## IPv4
 
 [IPv4 multicast](https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml)
@@ -104,6 +114,8 @@ Also few commandlets from these modules:
 
 [Directed broadcast](https://www.kareemccie.com/2018/08/what-is-use-of-ip-directed-broadcast.html)
 
+[Table of Contents](#table-of-contents)
+
 ## IP general
 
 [IP protocol numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)
@@ -115,6 +127,8 @@ Also few commandlets from these modules:
 [Network segmentation](https://www.omnisecu.com/cisco-certified-network-associate-ccna/benefits-of-segmenting-a-network-using-a-router.php)
 
 [Collision Domain and Broadcast Domain](https://www.omnisecu.com/cisco-certified-network-associate-ccna/what-are-collision-domain-and-broadcast-domain.php)
+
+[Table of Contents](#table-of-contents)
 
 ## Windows Firewall
 
@@ -142,6 +156,8 @@ Also few commandlets from these modules:
 
 [Firewall Rule and the Firewall Rule Grammar Rule](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-gpfas/2efe0b76-7b4a-41ff-9050-1023f8196d16?redirectedfrom=MSDN)
 
+[Table of Contents](#table-of-contents)
+
 ## Virtualization
 
 [What is the Hyper-V Virtual Switch and How Does it Work?](https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1/)
@@ -149,6 +165,10 @@ Also few commandlets from these modules:
 [Windows Firewall On Hyper-V Host Has Nothing To Do With Virtual Machines](https://aidanfinn.com/?p=15222)
 
 [FW_RULE structure](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-fasp/8c008258-166d-46d4-9090-f2ffaa01be4b)
+
+[Table of Contents](#table-of-contents)
+
+[Table of Contents](#table-of-contents)
 
 ## OS and software
 
@@ -164,6 +184,8 @@ Also few commandlets from these modules:
 
 [How Visual Studio generates an app package manifest](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/generate-package-manifest)
 
+[Table of Contents](#table-of-contents)
+
 ## Protocols
 
 [Active FTP vs. Passive FTP](http://slacksite.com/other/ftp.html)
@@ -172,6 +194,8 @@ Also few commandlets from these modules:
 
 [NetBIOS over TCP/IP](https://docs.microsoft.com/en-us/previous-versions//bb727013(v=technet.10))
 
+[Table of Contents](#table-of-contents)
+
 ## Troubleshooting
 
 [Advanced troubleshooting for TCP/IP issues](https://docs.microsoft.com/en-us/windows/client-management/troubleshoot-tcpip)
@@ -179,6 +203,8 @@ Also few commandlets from these modules:
 [WFP Monitoring](https://docs.microsoft.com/en-us/windows/win32/fwp/wfp-monitoring)
 
 [Capture Network Traffic with netsh trace command](https://www.computertechblog.com/capture-network-traffic-with-netsh-trace-windows-command)
+
+[Table of Contents](#table-of-contents)
 
 ## WinRM and PowerShell remoting
 
@@ -198,6 +224,8 @@ Also few commandlets from these modules:
 
 [Enable-PSRemoting](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/enable-psremoting?view=powershell-7.1)
 
+[Table of Contents](#table-of-contents)
+
 ## tools
 
 [makecab](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/makecab)
@@ -215,6 +243,8 @@ Also few commandlets from these modules:
 [takeown](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/takeown)
 
 [Windows Performance Analyzer](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer)
+
+[Table of Contents](#table-of-contents)
 
 ## Unclassified links
 

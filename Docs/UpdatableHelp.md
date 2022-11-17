@@ -38,6 +38,8 @@ Organize help files by UICulture into separate folders, ex. for en-US:
             \ModuleName.psm1-Help.xml
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### XML file content syntax
 
 [HelpInfo XML Sample File][sample helpifo]
@@ -56,6 +58,8 @@ HelpInfoURI = "https://URL_TO/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a
 2. Push module online, and take URL
 3. Set `HelpInfoUri` key of the module manifest to URL
 
+[Table of Contents](#table-of-contents)
+
 ## Help content cab file
 
 ### makecab.exe syntax
@@ -71,6 +75,8 @@ destination    File name to give compressed file
 makecab source destination /L TargetDir /V3
 ```
 
+[Table of Contents](#table-of-contents)
+
 ### CAB file name syntax
 
 ```none
@@ -81,6 +87,8 @@ Organize CAB files by module version into separate folders, ex:
 
 - `0.6.0/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
 - `0.7.0/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_en-US_HelpContent.cab`
+
+[Table of Contents](#table-of-contents)
 
 ### CAB file content syntax
 

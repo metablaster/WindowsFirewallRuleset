@@ -107,7 +107,7 @@ except adding all the accounts needed to separate rule as follows:
 3. `NT AUTHORITY\LOCAL SERVICE`
 4. `NT AUTHORITY\NETWORK SERVICE`
 
-TODO: doesn't work for CryptSvc, see why
+**TODO:** doesn't work for CryptSvc, see why
 
 [Table of Contents](#table-of-contents)
 
@@ -216,15 +216,15 @@ so you end up in Cat and Mouse game.
 
 ## Case 5: Outbound protocol 0 port 0
 
-- TODO: Investigation needed.
+- **TODO:** Investigation needed.
 
 ### Case 5: Troubleshooting
 
-- TODO: Investigation needed.
+- **TODO:** Investigation needed.
 
 ### Case 5 Audit result
 
-- TODO: Investigation needed.
+- **TODO:** Investigation needed.
 
 [Table of Contents](#table-of-contents)
 
@@ -243,7 +243,7 @@ so you end up in Cat and Mouse game.
 
 1. Packets are received just fine but small portion is dropped.
 
-- TODO: additional investigation needed to figure out why.
+- **TODO:** additional investigation needed to figure out why.
 
 [Table of Contents](#table-of-contents)
 

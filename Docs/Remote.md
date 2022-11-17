@@ -275,7 +275,7 @@ Following section lists other not so common problems and how to resolve them.
 
 ### Troubleshooting WinRM
 
-TODO: missing resolutions for the following known problems:
+**TODO:** missing resolutions for the following known problems:
 
 - System cannot find file because it does not exist
 

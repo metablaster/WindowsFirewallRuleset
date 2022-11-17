@@ -360,12 +360,12 @@ Their meaning in order how they appear in firewall log file:
 `action`
 
 - Displays which operation was observed by Windows Firewall
-- The options available are OPEN, OPEN-INBOUND, CLOSE, DROP, and INFO-EVENTS-LOST
+- The options available are `OPEN`, `OPEN-INBOUND`, `CLOSE`, `DROP`, and `INFO-EVENTS-LOST`
 
 `protocol`
 
 - Displays the protocol that was used for the communication
-- The options available are TCP, UDP, ICMP, and a protocol number for packets
+- The options available are `TCP`, `UDP`, `ICMP`, and a protocol number for packets
 
 `src-ip`
 
@@ -430,7 +430,7 @@ but were not recorded in the log from the time of the last occurrence of this ev
 `path`
 
 - Displays the direction of the communication
-- The options available are SEND, RECEIVE, FORWARD, and UNKNOWN
+- The options available are `SEND`, `RECEIVE`, `FORWARD`, and `UNKNOWN`
 
 For more information see [Interpreting the Windows Firewall Log][firewall logs]
 
@@ -563,7 +563,7 @@ UDP traffic is inferred by checking the following fields:
 4. local port
 5. remote port
 
-TODO: Rules which do not specify some of these fields, how does the above apply then?\
+**TODO:** Rules which do not specify some of these fields, how does the above apply then?\
 ex. only to new connections or existing connections? (statefull/stateless filtering)
 
 ### LocalOnlyMapping
@@ -581,7 +581,7 @@ and remote port.
 
 If set, the rule accepts packets incoming from a host other than the one the packets were sent to.
 
-TODO: Explain why this parameter can't be specified for inbound rule
+**TODO:** Explain why this parameter can't be specified for inbound rule
 
 For more information see [New-NetFirewallRule][netfirewallrule]
 
