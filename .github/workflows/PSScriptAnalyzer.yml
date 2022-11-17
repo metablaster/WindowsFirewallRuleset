@@ -5,7 +5,7 @@
 # The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
 name: PSScriptAnalyzer
 # Specifies the trigger for this workflow.
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 # Groups together all the jobs that run.
 jobs:
   # Job ID, a unique string identifier for the job.

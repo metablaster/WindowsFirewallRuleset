@@ -265,7 +265,7 @@ $PSSessionApplicationName = "wsman"
 # 4. Enables some disabled unit tests and disables logging
 # 5. Enables setting preference variables for modules
 # NOTE: If changed to $true, change requires PowerShell restart
-Set-Variable -Name Develop -Scope Global -Value $false
+Set-Variable -Name Develop -Scope Global -Value $true
 
 if ($Develop)
 {
@@ -578,13 +578,16 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 {
 	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
 
-	# Specify user group for which rules are being created
+	# Specify one or more user groups for which rules are being created by default
 	# NOTE: By design, for security reasons rules are created for all users in "Users" group while
 	# for Administrators group only those rules which necessary require Administrators online access.
 	# If there are no standard users you should set this to "Administrators" or some other group
 	# which represents non administrative users on target computer.
 	# The default value is "Users"
-	Set-Variable -Name DefaultGroup -Scope Global -Option ReadOnly -Force -Value "Administrators"
+	Set-Variable -Name DefaultGroup -Scope Global -Option ReadOnly -Force -Value @(
+		# Add or remove groups as needed
+		"Users"
+	)
 
 	if ($PSCmdlet.ParameterSetName -eq "Script")
 	{

@@ -40,10 +40,6 @@ One or more users for which to obtain SDDL string
 .PARAMETER Group
 One or more user groups for which to obtain SDDL string
 
-.PARAMETER Path
-Single file system or registry location for which to obtain SDDL.
-Wildcard characters are supported.
-
 .PARAMETER Domain
 Single domain or computer such as remote computer name or builtin computer domain
 

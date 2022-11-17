@@ -103,7 +103,7 @@ if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
 
 	# Generate SDDL string for the most common user groups
 	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (
-		Get-SDDL -Group (Get-Variable -Name DefaultGroup -Scope Global).Value
+		Get-SDDL -Merge -Group (Get-Variable -Name DefaultGroup -Scope Global).Value
 	)
 
 	New-Variable -Name AdminGroupSDDL -Scope Global -Option Constant -Value (
