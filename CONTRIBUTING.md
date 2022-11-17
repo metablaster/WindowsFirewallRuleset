@@ -92,7 +92,7 @@ repository folder with VSCode
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any directory see:
-[Windows PowerShell](Readme/WindowsPowerShell.md)
+[Windows PowerShell](/Docs/WindowsPowerShell.md)
 
 Recommended workspace extensions are as follows:
 
@@ -291,7 +291,7 @@ something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would 
 such exceptions should be rare.
 
 Noun word must be singular not plural, regardless if input or output is an array of objects.\
-For more information about naming see [Naming Convention](/Readme/NamingConvention.md)
+For more information about naming see [Naming Convention](/Docs/NamingConvention.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -551,7 +551,7 @@ repository.
 
 ## Repository folder structure
 
-See [Directory Structure](Readme/DirectoryStructure.md)
+See [Directory Structure](/Docs/DirectoryStructure.md)
 
 ## Where to start
 
@@ -560,7 +560,7 @@ here, significant portion of code was written before this `CONTRIBUTING.md` file
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-It's recommended to take a look into [TODO](Readme/TODO.md) list and also use `todo-tree`
+It's recommended to take a look into [TODO](/Docs/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
 
 [Table of Contents](#table-of-contents)

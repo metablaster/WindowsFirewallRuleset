@@ -179,7 +179,7 @@ The "Version" column lists tested releases, however only latest OS builds contin
 A list of other untested but supported systems and features is in [The future](#the-future)
 
 - `PowerShell Core` is not built into Windows, you will need to install it separately or use
-[Windows PowerShell](Readme/WindowsPowerShell.md) which is part of operating system.
+[Windows PowerShell](/Docs/WindowsPowerShell.md) which is part of operating system.
 
 - `.NET Framework` min. version 4.5 is required if using Windows PowerShell (Desktop edition)
 instead of PowerShell Core.\
@@ -222,7 +222,7 @@ For now you can load rules on 32 bit system just fine with the exception of few 
 relevant at all for your configuration.
 
 For information on how to make use of this firewall on older Windows systems such as Windows 7 or
-Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
+Windows Server 2008 see [Legacy Support](/Docs/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -277,7 +277,7 @@ want to fix some problem, most warnings and even some errors can be safely ignor
 you might want to resolve errors if possible.
 
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
-script again, see [FAQ](Readme/FAQ.md) for more information on why this may happen.
+script again, see [FAQ](/Docs/FAQ.md) for more information on why this may happen.
 
 - If the repository was manually downloaded, transferred from another computer or media then you should\
 unblock all files in repository first to avoid YES/NO spam questions for every executing script,
@@ -296,7 +296,7 @@ reasons.\
 If you're Administrator and are not willing to create standard account on your computer you'll have
 to modify `DefaultGroup` variable in `Config\ProjectSettings.ps1` and specify `Administrators`
 
-See [SecurityAndPrivacy.md](Readme/SecurityAndPrivacy.md#standard-user-account) for more
+See [SecurityAndPrivacy.md](/Docs/SecurityAndPrivacy.md#standard-user-account) for more
 information why using Administrator account is not recommended for security reasons.\
 Your administrative account used to deploy firewall must have a password set.
 
@@ -321,7 +321,7 @@ These steps here assume you have downloaded a zip file from "assets" section und
 2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
 (project root directory) into `C:\` root drive directly.
 
-3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](Readme/WindowsPowerShell.md)\
+3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](/Docs/WindowsPowerShell.md)\
 If you would like to use PowerShell Core instead keep in mind that in rare cases there might appear
 some issues hard to diagnose, in which case you can re-try with Windows PowerShell as suggested.
 
@@ -393,7 +393,7 @@ It is recommended to close down all other programs before running master script 
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 
-    To deploy firewall automatically without any prompt run and clean output:
+    To deploy firewall automatically without any prompt and concise output run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
@@ -422,7 +422,7 @@ it will take some 15 minutes of your attention.
     If invalid credentials are supplied you'll get an error saying `Access is denied`.\
     If this happens you'll need to restart PowerShell console and try again.
 
-    For more information why this is necessary see [FAQ](/Readme/FAQ.md)
+    For more information why this is necessary see [FAQ](/Docs/FAQ.md)
 
 14. If you encounter errors, you can either ignore errors or update script that produced the error
 then re-run that specific script once again later.
@@ -435,9 +435,9 @@ made.
 16. Now go ahead and test your internet connection (ex. with a browser or some other program),
 If you're unable to connect to internet after deploying these rules you have several options:
 
-    - Temporarily open outbound firewall in GPO or [Disable Firewall](Readme/DisableFirewall.md)
-    - Troubleshoot problems: [Network troubleshooting detailed guide](Readme/NetworkTroubleshooting.md)
-    - You can [Reset Firewall to previous state](Readme/ResetFirewall.md)
+    - Temporarily open outbound firewall in GPO or [Disable Firewall](/Docs/DisableFirewall.md)
+    - Troubleshoot problems: [Network troubleshooting detailed guide](/Docs/NetworkTroubleshooting.md)
+    - You can [Reset Firewall to previous state](/Docs/ResetFirewall.md)
     - Take a look into `Readme` folder for more troubleshooting options and documentation
 
 17. As a prerequisite to deploy firewall, some system services have been started and set to
@@ -457,7 +457,8 @@ Following section gives some hints to manage firewall with ease
 `Deploy-Firewall.ps1` script supports several parameters to let you customize deployment automation
 as follows:
 
-- To automatically run all rules without prompt but only for programs which exist on system run:
+- To automatically run all rules without prompt and concise output but only for programs which exist
+on system run:
 
 ```powershell
 .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
@@ -489,7 +490,7 @@ There are two mothods to manage GPO rules:
 
 1. Using Local Group Policy, this method gives you limited freedom on what you can do with rules
 from this repository, such as disabling them, changing some attributes or adding new rules.\
-For more information see: [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
+For more information see: [Manage GPO Firewall](/Docs/ManageGPOFirewall.md)
 
 2. Editing PowerShell scripts, this method gives you full control, you can change or remove existing
 rules with no restriction or add new ones.
@@ -499,7 +500,7 @@ rules, or adding new rules for programs not yet covered by this firewall.
 
 Rules are loaded into local group policy, if during firewall setup you accepted creating shortcut to
 personalized firewall management console you can run the schortcut, otherwise follow steps mentioned
-in [Manage GPO Firewall](Readme/ManageGPOFirewall.md)
+in [Manage GPO Firewall](/Docs/ManageGPOFirewall.md)
 
 For more information about GPO see:
 [Configure security policy settings][configure security policy settings]
@@ -572,7 +573,7 @@ function instead which is as fast as it can be.
 
 This section and functionality is currently under construction and incomplete
 
-![Under construction](Readme/Screenshots/UnderConstruction.gif)
+![Under construction](/Docs/Screenshots/UnderConstruction.gif)
 
 In remote firewall deployment there are at least two computers involved,\
 one is called management computer (client) and all others are called managed computers (servers).
@@ -639,7 +640,7 @@ Remote deployment can be customized in a great detail in the following locations
 - To customize self signed SSL certificate see: `Modules\Ruleset.Remote\Public\Register-SslCertificate.ps1`
 - To customize PS and CIM session configuration see: `Modules\Ruleset.Remote\Scripts\SessionSettings.ps1`
 
-For additional information and troubleshooting tips see also [Remoting help](Readme/Remote.md)
+For additional information and troubleshooting tips see also [Remoting help](/Docs/Remote.md)
 
 [Table of Contents](#table-of-contents)
 

@@ -24,11 +24,11 @@ anything related such as networking, security, privacy, troubleshooting and repo
 
 ## Documentation
 
-Inside [Readme](Readme) directory you will find useful information not only about this project but
+Inside [Docs](Docs) directory you will find useful information not only about this project but
 also general information on how to troubleshoot firewall and network problems, or to gather other
 relevant information.
 
-It might answer some of your questions, for example [Monitoring Firewall](Readme/MonitoringFirewall.md)
+It might answer some of your questions, for example [Monitoring Firewall](/Docs/MonitoringFirewall.md)
 provides instructions on how to monitor firewall in real time.
 
 [Table of Contents](#table-of-contents)
@@ -92,7 +92,7 @@ corporate interests then first step is to set up development environment and lea
 practices used by this repository all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Depending on your situation and target platform you might also want to read
-[Legacy Support](Readme/LegacySupport.md)
+[Legacy Support](/Docs/LegacySupport.md)
 
 These two documents are bare minimum to get you started customizing this repository.
 
@@ -220,7 +220,7 @@ There is no benefit with manual zip download in comparison with git or GitHub De
 ## Legacy support
 
 For information on how to make use of this firewall on older Windows systems such as Windows 7 or
-Windows Server 2008 see [Legacy Support](Readme/LegacySupport.md)
+Windows Server 2008 see [Legacy Support](/Docs/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 

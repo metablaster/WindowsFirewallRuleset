@@ -32,7 +32,7 @@ the meaning is same or similar.
     - [Private](#private)
     - [Public](#public)
     - [Scripts](#scripts)
-  - [Readme](#readme)
+  - [Docs](#docs)
     - [LAN Setup](#lan-setup)
     - [Screenshots](#screenshots)
   - [Rules](#rules)
@@ -136,7 +136,7 @@ Functions exposed by module
 
 Contains module scripts that are not functions
 
-## Readme
+## Docs
 
 Contains detailed project documentation
 

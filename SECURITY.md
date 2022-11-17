@@ -43,7 +43,7 @@ outdated information or suggestions concerning security or privacy.
 Following document privdes some suggestions on how to take control over your privacy and how to
 secure your system:
 
-[SecurityAndPrivacy.md](/Readme/SecurityAndPrivacy.md)
+[SecurityAndPrivacy.md](/Docs/SecurityAndPrivacy.md)
 
 It might help you to resolve issues without having to report a problem or ask questions.
 

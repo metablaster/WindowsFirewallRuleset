@@ -311,7 +311,7 @@ remember, "Symmetric NAT (Dynamic NAT)" may cause you a lot of multiplayer troub
 
 Link below contains detailed guidelines:
 
-[LAN Setup](/Readme/LAN%20Setup)
+[LAN Setup](/Docs/LAN%20Setup)
 
 ## Reset firewall
 
@@ -363,7 +363,7 @@ To troubleshoot firewall take a look at:
 
 - [Monitoring Firewall](MonitoringFirewall.md)
 - [Problematic Traffic](ProblematicTraffic.md)
-- [Rest of documentation](/Readme)
+- [Rest of documentation](/Docs)
 
 ## Check for Windows Auto-Tuning
 
