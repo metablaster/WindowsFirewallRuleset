@@ -1,0 +1,88 @@
+
+# Copyright (C) Microsoft Corporation
+# MIT License
+
+# action.yml syntax:
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+
+# Required, the name of your action.
+# GitHub displays the name in the Actions tab to help visually identify actions in each job.
+name: "Run PSScriptAnalyzer"
+# Optional, the name of the action's author.
+author: "ankatopo"
+# Required, a short description of the action.
+description: "Run PSScriptAnalyzer"
+# Optional,
+# Input parameters allow you to specify data that the action expects to use during runtime.
+inputs:
+  # Required, a string identifier to associate with the input.
+  path:
+    # Required, a string description of the input parameter.
+    description: "Specifies the path to the scripts or module to be analyzed. Wildcard characters are supported."
+    # Optional, a boolean to indicate whether the action requires the input parameter.
+    required: true
+    # Optional, a string representing the default value.
+    default: '.\'
+  CustomRulePath:
+    description: "Uses only the custom rules defined in the specified paths to the analysis. To still use the built-in rules, add the -IncludeDefaultRules switch."
+    required: false
+  RecurseCustomRulePath:
+    description: "Adds rules defined in subdirectories of the CustomRulePath location."
+    required: false
+  IncludeDefaultRules:
+    description: "Invoke default rules along with Custom rules."
+    required: false
+  ExcludeRule:
+    description: "Omits the specified rules from the Script Analyzer test. Wildcard characters are supported."
+    required: false
+  IncludeRule:
+    description: "Runs only the specified rules in the Script Analyzer test."
+    required: false
+  Severity:
+    description: "After running Script Analyzer with all rules, this parameter selects rule violations with the specified severity."
+    required: false
+  Recurse:
+    description: "Runs Script Analyzer on the files in the Path directory and all subdirectories recursively."
+    required: false
+  SuppressedOnly:
+    description: "Returns rules that are suppressed, instead of analyzing the files in the path."
+    required: false
+  Fix:
+    description: "Fixes certain warnings which contain a fix in their DiagnosticRecord."
+    required: false
+  EnableExit:
+    description: "Exits PowerShell and returns an exit code equal to the number of error records."
+    required: false
+  Settings:
+    description: "File path that contains user profile or hash table for ScriptAnalyzer."
+    required: false
+runs:
+ using: "composite"
+ steps:
+    - name: "Run PSScriptAnalyzer"
+      # NOTE: Running in Windows PowerShell to handle software regression
+      shell: "powershell"
+      run: |
+        $ModuleFQN = @{ ModuleName="PSScriptAnalyzer"; ModuleVersion="1.21.0"; GUID="d6245802-193d-4068-a631-8863a4342a18" }
+        $AnalyzerModule = Get-Module -FullyQualifiedName $ModuleFQN -ListAvailable
+
+        if ($null -eq $AnalyzerModule)
+        {
+          Install-Module -Name PSScriptAnalyzer -Force
+        }
+
+        $Params = [ordered]@{ Path = '${{ inputs.path }}'; }
+
+        if(![string]::IsNullOrEmpty('${{ inputs.CustomRulePath }}')) { $Params.Add("CustomRulePath", @(${{ inputs.CustomRulePath }})) }
+        if(![string]::IsNullOrEmpty('${{ inputs.RecurseCustomRulePath }}')) { $Params.Add("RecurseCustomRulePath", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.IncludeDefaultRules }}') -and '${{ inputs.IncludeDefaultRules }}' -ne 'false') { $Params.Add("IncludeDefaultRules", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.ExcludeRule }}')) { $Params.Add("ExcludeRule", @(${{ inputs.ExcludeRule }})) }
+        if(![string]::IsNullOrEmpty('${{ inputs.IncludeRule }}')) { $Params.Add("IncludeRule", @(${{ inputs.IncludeRule }})) }
+        if(![string]::IsNullOrEmpty('${{ inputs.Severity }}')) { $Params.Add("Severity", @(${{ inputs.Severity }})) }
+        if(![string]::IsNullOrEmpty('${{ inputs.Recurse }}') -and '${{ inputs.IncludeDefaultRules }}' -ne 'false') { $Params.Add("Recurse", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.SuppressedOnly }}')) { $Params.Add("SuppressedOnly", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.Fix }}')) { $Params.Add("Fix", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.EnableExit }}')) { $Params.Add("EnableExit", $true) }
+        if(![string]::IsNullOrEmpty('${{ inputs.Settings }}')) { $Params.Add("Settings", '${{ inputs.Settings }}') }
+
+        Invoke-ScriptAnalyzer @Params | Format-List -Property Severity, RuleName, RuleSuppressionID, Message, Line, ScriptPath

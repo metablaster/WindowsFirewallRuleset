@@ -1,38 +1,32 @@
+
+# Workflow syntax:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+
 # The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
 name: PSScriptAnalyzer
 # Specifies the trigger for this workflow.
 on: [push, workflow_dispatch]
-# Groups together all the jobs that run
+# Groups together all the jobs that run.
 jobs:
-  # Job name
+  # Job ID, a unique string identifier for the job.
   analyze:
-    # ?
+    # A name for the job, which is displayed in the GitHub UI.
     name: Run PSScriptAnalyzer
+    # Define the type of machine to run the job on.
     runs-on: windows-2022
+    # Groups together all the steps that run in this job ID
     steps:
     # Specifies that this step will run v3 of the actions/checkout action
-    - uses: actions/checkout@v3
-    # ?
-    - name: lint
-      # Repository and branch which is to be analyzed
-      uses: metablaster/WindowsFirewallRuleset@develop
+    # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+    - name: Checkout code
+      uses: actions/checkout@v3
+    # PSScriptAnalyzer custom action
+    - name: Run PSScriptAnalyzer
+      # Used to tell GitHub which action you want to use
+      # The specified path and branch needs to have action.yml file
+      uses: metablaster/WindowsFirewallRuleset/Actions/PSScriptAnalyzer@develop
+      # Initialize settings declared in action.yml
       with:
-        # The root directory to run PSScriptAnalyzer on.
-        # By default, this is the root of the repository.
-        rootPath: .\
-        # Runs Script Analyzer on the files in the Path directory and all subdirectories recursively.
+        path: .\
         recurse: true
-        suppressedOnly: false
-        # The path to a PSScriptAnalyser settings file to control rules to execute.
-        settingsPath: Config/PSScriptAnalyzerSettings.psd1
-        # Enable/disable sending comments with PSScriptAnalyzer results back to PR.
-        sendComment: true
-        # GitHub token the action will use to send comments back to PR with.
-        # Use ${{ secrets.GITHUB_TOKEN }}.
-        repoToken: ${{ secrets.GITHUB_TOKEN }}
-        # Enable/disable failing the action on PSScriptAnalyzer error items.
-        failOnErrors: true
-        # Enable/disable failing the action on PSScriptAnalyzer warning items.
-        failOnWarnings: true
-        # Enable/disable failing the action on PSScriptAnalyzer informational items.
-        failOnInfos: true
+        settings: Config/PSScriptAnalyzerSettings.psd1
