@@ -243,7 +243,8 @@ function Initialize-Connection
 				Test-WinRM @TestParams -ErrorAction Stop
 			}
 		}
-		elseif (($PolicyStore -eq [System.Environment]::MachineName) -or ($PolicyStore -eq "localhost"))
+		# localhost and . are converted in ProjectSettings
+		elseif ($PolicyStore -eq [System.Environment]::MachineName)
 		{
 			$PSSessionOption.NoEncryption = $true
 			$PSSessionOption.NoCompression = $true

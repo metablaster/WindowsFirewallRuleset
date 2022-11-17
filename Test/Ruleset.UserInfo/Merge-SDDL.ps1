@@ -81,9 +81,16 @@ $NewSDDL = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM", "USER MODE DRIVERS" -
 $NewSDDL
 
 Start-Test "default"
-$Result = Merge-SDDL ([ref] $TestUsersSDDL) -From $NewSDDL
+$TestSDDL = $TestUsersSDDL
+$Result = Merge-SDDL ([ref] $TestSDDL) -From $NewSDDL
 $Result
-$TestUsersSDDL
+$TestSDDL
+
+Start-Test "Unique"
+$TestSDDL = $TestUsersSDDL
+$Result = Merge-SDDL ([ref] $TestSDDL) -From $TestSDDL -Unique
+$Result
+$TestSDDL
 
 Test-Output $Result -Command Merge-SDDL
 

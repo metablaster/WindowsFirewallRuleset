@@ -328,7 +328,7 @@ $Program = "%SystemRoot%\System32\UserAccountBroker.exe"
 if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
 	$MSAccountUsers = $UsersGroupSDDL
-	Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL
+	Merge-SDDL ([ref] $MSAccountUsers) -From $AdminGroupSDDL -Unique
 
 	New-NetFirewallRule -DisplayName "Microsoft Account" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `

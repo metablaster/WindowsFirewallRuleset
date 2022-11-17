@@ -407,6 +407,7 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 
 	# Valid policy stores
 	New-Variable -Name LocalStore -Scope Global -Option Constant -Value @(
+		"."
 		"localhost"
 		([System.Environment]::MachineName)
 		"PersistentStore"
@@ -523,7 +524,7 @@ if (!$InModule)
 	# by top level advanced function in call stack which will pick up all Write-* streams in module functions
 	# NOTE: For functions outside module for same reason we need to declare PSDefaultParameterValues
 	# as private which will prevent propagating default parameters to functions in child scopes,
-	# In short advanced functions in child scopes and modules will receive these parameters by parent
+	# In short, advanced functions in child scopes and modules will receive these parameters by parent
 	# function, this is needed to avoid duplicate log entries.
 	# TODO: Could this override anything?
 	$private:PSDefaultParameterValues = @{}
@@ -573,83 +574,93 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 # 2. Only once by user before running any scripts from repository
 # 3. Any amount of time by user if "develop" mode is ON
 # In all other cases changing variable values requires PowerShell restart
-if (($PSCmdlet.ParameterSetName -eq "Script") -and ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore)))
+if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -ErrorAction Ignore))
 {
 	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
 
-	# Check if removable variables already initialized, do not modify!
-	Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
+	# Specify user group for which rules are being created
+	# NOTE: By design, for security reasons rules are created for all users in "Users" group while
+	# for Administrators group only those rules which necessary require Administrators online access.
+	# If there are no standard users you should set this to "Administrators" or some other group
+	# which represents non administrative users on target computer.
+	# The default value is "Users"
+	Set-Variable -Name DefaultGroup -Scope Global -Option ReadOnly -Force -Value "Administrators"
 
-	# Windows 10, Windows Server 2019 and above
-	Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
-
-	# Default network interface card to use if not locally specified
-	# TODO: We can learn this value programatically, but problem is the same as with specifying local IP
-	Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value "Wired, Wireless"
-
-	# Default network profile to use if not locally specified.
-	# NOTE: Do not modify except to to debug rules or unless absolutely needed!
-	Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
-
-	# To force loading rules regardless of presence of a program set to true
-	# The purpose of this is to test loading rules that would otherwise be skipped
-	Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
-
-	if ($PSVersionTable.PSEdition -eq "Core")
+	if ($PSCmdlet.ParameterSetName -eq "Script")
 	{
-		# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
-		# NOTE: Requests for Comments (RFCs) 1001 and 1002 define NetBIOS operation over IPv4.
-		# NetBT is not defined for IPv6.
-		Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
-	}
+		# Check if removable variables already initialized, do not modify!
+		Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
 
-	# User account name for which to search executables in user profile and non standard paths by default
-	# Also used for other defaults where standard user account is expected, ex. development as standard user
-	# NOTE: If there are multiple users and to affect them all set this value to non existent user
-	# TODO: Needs testing info messages for this value
-	# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
-	# TODO: This should be used for LocalUser rule parameter too
-	try
-	{
-		# A workaround which will fail if there are no standard users
-		Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
-			Split-Path -Path (Get-LocalGroupMember -Group Users | Where-Object {
-					$_.ObjectClass -EQ "User" -and
+		# Windows 10, Windows Server 2019 and above
+		Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
+
+		# Default network interface card to use if not locally specified
+		# TODO: We can learn this value programatically, but problem is the same as with specifying local IP
+		Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value "Wired, Wireless"
+
+		# Default network profile to use if not locally specified.
+		# NOTE: Do not modify except to to debug rules or unless absolutely needed!
+		Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
+
+		# To force loading rules regardless of presence of a program set to true
+		# The purpose of this is to test loading rules that would otherwise be skipped
+		Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
+
+		if ($PSVersionTable.PSEdition -eq "Core")
+		{
+			# Set to false to use IPv6 instead of IPv4 to test connection to target policy store
+			# NOTE: Requests for Comments (RFCs) 1001 and 1002 define NetBIOS operation over IPv4.
+			# NetBT is not defined for IPv6.
+			Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
+		}
+
+		# User account name for which to search executables in user profile and non standard paths by default
+		# Also used for other defaults where standard user account is expected, ex. development as standard user
+		# NOTE: If there are multiple users and to affect them all set this value to non existent user
+		# TODO: Needs testing info messages for this value
+		# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
+		# TODO: This should be used for -LocalUser rule parameter too
+		try
+		{
+			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
+				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup | Where-Object {
+						$_.ObjectClass -EQ "User" -and
 					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
-				} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
-	}
-	catch
-	{
-		Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
-		Write-Warning -Message "No users exists in 'Users' group"
-	}
+					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+		}
+		catch
+		{
+			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
+			Write-Warning -Message "No users exists in $DefaultGroup group"
+		}
 
-	# Administrative user account name which will perform unit testing
-	if ($PolicyStore -ne [System.Environment]::MachineName)
-	{
-		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
-	}
-	else
-	{
-		Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
-			Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
-					$_.ObjectClass -EQ "User" -and
+		# Administrative user account name which will perform unit testing
+		if ($PolicyStore -ne [System.Environment]::MachineName)
+		{
+			Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value "Admin"
+		}
+		else
+		{
+			Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
+				Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
+						$_.ObjectClass -EQ "User" -and
 					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
-				} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
-	}
+					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
+		}
 
-	# Standard user account name which will perform unit testing
-	if ($PolicyStore -ne [System.Environment]::MachineName)
-	{
-		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
-	}
-	else
-	{
-		Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
-	}
+		# Standard user account name which will perform unit testing
+		if ($PolicyStore -ne [System.Environment]::MachineName)
+		{
+			Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value "User"
+		}
+		else
+		{
+			Set-Variable -Name TestUser -Scope Global -Option ReadOnly -Force -Value $DefaultUser
+		}
 
-	# Remote test computer which will perform unit testing
-	Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "UnspecifiedDomain"
+		# Remote test computer which will perform unit testing
+		Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "UnspecifiedDomain"
+	}
 }
 #endregion
 

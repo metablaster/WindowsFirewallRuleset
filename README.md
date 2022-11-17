@@ -290,13 +290,15 @@ make sure to whitelist either `pwsh.exe` (Core edition) or `powershell.exe` (Des
 otherwise doing anything may be blocked.\
 PowerShell console might need to be restarted for "Controlled folder access" changes to take effect.
 
-- It's important to understand these rules are designed to be used as "Standard" user, not as
-user that is Administrator, if you're Administrator on your computer you'll have to either create
-standard user account and use that for your everyday life or modify code to allow Administrator
-online access.\
+- By default rules are made for `Users` group while for `Administrators` group only if necessary,
+recommendation is to have standard user account which you use for every day computing for security
+reasons.\
+If you're Administrator and are not willing to create standard account on your computer you'll have
+to modify `DefaultGroup` variable in `Config\ProjectSettings.ps1` and specify `Administrators`
+
 See [SecurityAndPrivacy.md](Readme/SecurityAndPrivacy.md#standard-user-account) for more
 information why using Administrator account is not recommended for security reasons.\
-Your administrative account used to deploy firewall must have password set.
+Your administrative account used to deploy firewall must have a password set.
 
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as

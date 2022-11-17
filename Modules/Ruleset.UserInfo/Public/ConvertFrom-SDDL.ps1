@@ -110,7 +110,7 @@ function ConvertFrom-SDDL
 			else
 			{
 				Write-Error -Category ParserError -TargetObject $RegMatch `
-					-Message "Unable to parse out DACL flags"
+					-Message "Unable to parse DACL flags"
 				continue
 			}
 

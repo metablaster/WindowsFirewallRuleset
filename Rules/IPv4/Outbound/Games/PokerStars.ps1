@@ -92,7 +92,7 @@ $Accept = "Outbound rules for Poker Stars game will be loaded, recommended if Po
 $Deny = "Skip operation, outbound rules for Poker Stars game will not be loaded into firewall"
 
 $UpdateAccounts = $UsersGroupSDDL
-Merge-SDDL ([ref] $UpdateAccounts) -From $AdminGroupSDDL
+Merge-SDDL ([ref] $UpdateAccounts) -From $AdminGroupSDDL -Unique
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 $PSDefaultParameterValues = @{

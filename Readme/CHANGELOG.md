@@ -31,19 +31,20 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 - Rules
 
   - Updated rules for mail apps from Windows store so that ports for POP3, IMAP and SMTP are specified
-
-- Rules
-
   - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
 
 - Modules
 
   - `FDResPub` and `fdPHost` services are now required for remote deployment to rule out host
   discovery issues
+  - `Merge-SDDL` Added `-Unique` switch to be able to merge SDDL's excluding duplicate ones
 
 - Scripts
 
-  - Made possible to specify `localhost` for deployment
+  - Made possible to specify `localhost` and `.` for deployment
+  - Made possible to deploy rules for groups other than `Users`, this otherwise means it's now
+  possible to deploy rules for Administrators which is useful for Windows Server without any
+  standard account
 
 ## v0.13.1 (current release)
 

@@ -40,8 +40,11 @@ SDDL into which to merge new SDDL
 .PARAMETER From
 Reference SDDL string which to merge into original SDDL
 
+.PARAMETER Unique
+If specified, only SDDL's with unique SID are merged
+
 .EXAMPLE
-$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)"
 $RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
 Merge-SDDL ([ref] $SDDL) -From $RefSDDL
 
@@ -66,10 +69,54 @@ function Merge-SDDL
 		[ref] $SDDL,
 
 		[Parameter(Mandatory = $true)]
-		[string] $From
+		[string] $From,
+
+		[Parameter()]
+		[switch] $Unique
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$SDDL.Value += $From.Substring(2)
+	$MergedSDDL = $SDDL.Value + $From.Substring(2)
+
+	if ($Unique)
+	{
+		$UniqueMerge = "D:"
+
+		# Cache unique SID's
+		$Cache = @()
+
+		$SddlSplit = $MergedSDDL.Substring(2).Split("(", [System.StringSplitOptions]::RemoveEmptyEntries).TrimEnd(")")
+
+		foreach ($SddlEntry in $SddlSplit)
+		{
+			$RegMatch = [regex]::Match($SddlEntry, "(?<SID>S-1-(\d+-)*\d+$)")
+
+			if ($RegMatch.Success)
+			{
+				$SIDMatch = $RegMatch.Groups["SID"]
+				$SID = $SIDMatch.Value
+
+				if ($SID -notin $Cache)
+				{
+					# Cache SID so that SDDL entry isn't re-added
+					$Cache += $SID
+
+					# Merge SDDL if not cached
+					$UniqueMerge += "($SddlEntry)"
+				}
+			}
+			else
+			{
+				Write-Error -Category ParserError -TargetObject $RegMatch `
+					-Message "Unable to parse SID from SDDL entry: $SddlEntry"
+				continue
+			}
+		}
+
+		$SDDL.Value = $UniqueMerge
+		return
+	}
+
+	$SDDL.Value = $MergedSDDL
 }

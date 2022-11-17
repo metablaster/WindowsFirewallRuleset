@@ -112,19 +112,12 @@ $SDDL4 = Get-SDDL -Domain $AppDomain -User $AppUser
 $SDDL4
 
 #
-# Test paths
+# Test merged SDDL
 #
 
-$FileSystem = "C:\Users\Public\Desktop\" # Inherited
-$Registry = "HKLM:\SOFTWARE\Microsoft\Clipboard"
-
-Start-Test -Command "Get-SDDL" -Message "-Path FileSystem"
-$SDDL5 = Get-SDDL -Path $FileSystem
-$SDDL5
-
-Start-Test "Get-SDDL -Path Registry"
-$SDDL6 = Get-SDDL -Path $Registry
-$SDDL6
+Start-Test -Command "Get-SDDL" -Message "$User"
+$MergedSDDL = Get-SDDL -User $TestUser, $TestAdmin
+$MergedSDDL
 
 #
 # Test convert
@@ -147,13 +140,8 @@ Start-Test "Store apps"
 $Result = ConvertFrom-SDDL $SDDL4
 $Result
 
-Test-Output $Result -Command ConvertFrom-SDDL
-
-Start-Test "file path"
-ConvertFrom-SDDL $SDDL5
-
-Start-Test "file path"
-$Result = ConvertFrom-SDDL $SDDL6
+Start-Test "Merged SDDL"
+$Result = ConvertFrom-SDDL $MergedSDDL
 $Result
 
 Test-Output $Result -Command ConvertFrom-SDDL

@@ -256,7 +256,7 @@ function Initialize-Service
 					}
 
 					# If fdPHost or FDResPub are already running there is a chance host discovery won't work,
-					# this is a know issue in Windows to which solution is to restart those services
+					# this is a known issue in Windows to which solution is to restart those services
 					if ((($Service.Name -eq "fdPHost") -or ($Service.Name -eq "FDResPub")) -and ($ServiceOldStatus -eq [ServiceControllerStatus]::Running))
 					{
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$($Service.Name)' to rule out known issue resolving remote host"

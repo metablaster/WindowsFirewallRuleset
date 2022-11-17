@@ -104,7 +104,7 @@ New-NetFirewallRule -DisplayName "Port 80" `
 Format-RuleOutput
 
 $InstallerAccounts = $UsersGroupSDDL
-Merge-SDDL ([ref] $InstallerAccounts) -From $AdminGroupSDDL
+Merge-SDDL ([ref] $InstallerAccounts) -From $AdminGroupSDDL -Unique
 
 # NOTE: to make use of this rule, it should be updated here and the script re-run
 New-NetFirewallRule -DisplayName "Installer" `
