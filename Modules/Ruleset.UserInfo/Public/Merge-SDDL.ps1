@@ -94,8 +94,7 @@ function Merge-SDDL
 
 			if ($RegMatch.Success)
 			{
-				$SIDMatch = $RegMatch.Groups["SID"]
-				$SID = $SIDMatch.Value
+				$SID = $RegMatch.Groups["SID"].Value
 
 				if ($SID -notin $Cache)
 				{
@@ -109,7 +108,7 @@ function Merge-SDDL
 			else
 			{
 				Write-Error -Category ParserError -TargetObject $RegMatch `
-					-Message "Unable to parse SID from SDDL entry: $SddlEntry"
+					-Message "Unable to parse SID from SDDL entry '$SddlEntry'"
 				continue
 			}
 		}

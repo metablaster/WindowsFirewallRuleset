@@ -1,0 +1,24 @@
+
+# Workflow syntax:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+# labeler repo:
+# https://github.com/github/issue-labeler
+
+name: "Issue Labeler"
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: github/issue-labeler@v2.5 # May not be the latest version
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        configuration-path: Actions/issue-labeler/action.yml
+        not-before: 2022-11-16T00:00:00Z
+        enable-versioned-regex: 0
+        versioned-regex: 'issue_labeler_regex_version=(\d+)'
+        body-missing-regex-label: 'broken-template'
+        include-title: 0

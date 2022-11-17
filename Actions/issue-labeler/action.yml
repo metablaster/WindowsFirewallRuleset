@@ -1,0 +1,16 @@
+
+# action.yml syntax:
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+# labeler repo:
+# https://github.com/github/issue-labeler
+
+# Add/remove 'bug' label if issue contains the words "bug"
+bug:
+    # regex pattern
+    - "bug"
+
+feature-request:
+    - "feature"
+
+help-wanted:
+    - "help"
