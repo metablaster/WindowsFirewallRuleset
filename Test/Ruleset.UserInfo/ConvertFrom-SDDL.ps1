@@ -33,6 +33,9 @@ Unit test for ConvertFrom-SDDL
 .DESCRIPTION
 Test correctness of ConvertFrom-SDDL function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,6 +57,10 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
@@ -68,83 +75,119 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "ConvertFrom-SDDL"
 
-#
-# Test groups
-#
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	#
+	# Test data
+	#
 
-[string[]] $Group = @("Users", "Administrators")
+	[string[]] $Group = @("Users", "Administrators")
 
-Start-Test -Command "Get-SDDL" -Message "$Group"
-$SDDL1 = Get-SDDL -Group $Group
-$SDDL1
+	Start-Test -Command "Get-GroupPrincipal -Group $Group -CimSession" -Message "$Group"
+	$Principals = Get-GroupPrincipal -Group $Group -CimSession $CimServer
+	$Principals
 
-#
-# Test users
-#
+	Start-Test -Command "Get-SDDL -CimSession" -Message "Principals"
+	$SDDL1 = Get-SDDL -User $Principals.User -CimSession $CimServer
+	$SDDL1
 
-[string[]] $User = "Administrator", $TestAdmin, $TestUser
+	Start-Test -Command "Merge-SDDL" -Message "Merged SDDL"
+	$MergedSDDL = $SDDL1[0]
+	Merge-SDDL ([ref] $MergedSDDL) -From $SDDL1[1]
+	$MergedSDDL
 
-Start-Test -Command "Get-SDDL" -Message "$User"
-$SDDL2 = Get-SDDL -User $User
-$SDDL2
+	#
+	# Test convert
+	#
 
-#
-# Test NT AUTHORITY
-#
+	Start-Test "Convert SDDL remote"
+	$Result = ConvertFrom-SDDL $SDDL1[0] -Session $SessionInstance
+	$Result
 
-[string] $NTDomain = "NT AUTHORITY"
-[string[]] $NTUser = "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
+	Start-Test "Convert merged SDDL remote"
+	$Result = ConvertFrom-SDDL $MergedSDDL -Session $SessionInstance
+	$Result
+}
+else
+{
+	#
+	# Test groups
+	#
+
+	[string[]] $Group = @("Users", "Administrators")
+
+	Start-Test -Command "Get-SDDL" -Message "$Group"
+	$SDDL1 = Get-SDDL -Group $Group
+	$SDDL1
+
+	#
+	# Test users
+	#
+
+	[string[]] $User = "Administrator", $TestAdmin, $TestUser
+
+	Start-Test -Command "Get-SDDL" -Message "$User"
+	$SDDL2 = Get-SDDL -User $User
+	$SDDL2
+
+	#
+	# Test NT AUTHORITY
+	#
+
+	[string] $NTDomain = "NT AUTHORITY"
+	[string[]] $NTUser = "SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE"
 
 
-Start-Test -Command "Get-SDDL" -Message "$NTDomain"
-$SDDL3 = Get-SDDL -Domain $NTDomain -User $NTUser
-$SDDL3
+	Start-Test -Command "Get-SDDL" -Message "$NTDomain"
+	$SDDL3 = Get-SDDL -Domain $NTDomain -User $NTUser
+	$SDDL3
 
-#
-# Test APPLICATION PACKAGE AUTHORITY
-#
+	#
+	# Test APPLICATION PACKAGE AUTHORITY
+	#
 
-[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
-[string[]] $AppUser = "Your Internet connection", "Your pictures library"
+	[string] $AppDomain = "APPLICATION PACKAGE AUTHORITY"
+	[string[]] $AppUser = "Your Internet connection", "Your pictures library"
 
-Start-Test -Command "Get-SDDL" -Message "-Domain $AppDomain -User $AppUser"
-$SDDL4 = Get-SDDL -Domain $AppDomain -User $AppUser
-$SDDL4
+	Start-Test -Command "Get-SDDL" -Message "-Domain $AppDomain -User $AppUser"
+	$SDDL4 = Get-SDDL -Domain $AppDomain -User $AppUser
+	$SDDL4
 
-#
-# Test merged SDDL
-#
+	#
+	# Test merged SDDL
+	#
 
-Start-Test -Command "Get-SDDL" -Message "$User"
-$MergedSDDL = Get-SDDL -User $TestUser, $TestAdmin
-$MergedSDDL
+	Start-Test -Command "Get-SDDL" -Message "$User"
+	$MergedSDDL = Get-SDDL -User $TestUser, $TestAdmin
+	$MergedSDDL
 
-#
-# Test convert
-#
+	#
+	# Test convert
+	#
 
-Start-Test "ArraySDDL"
-$ArraySDDL = $SDDL1 + $SDDL2 + $SDDL3
-$Result = ConvertFrom-SDDL $ArraySDDL
-$Result
+	Start-Test "ArraySDDL"
+	$ArraySDDL = $SDDL1 + $SDDL2 + $SDDL3
+	$Result = ConvertFrom-SDDL $ArraySDDL
+	$Result
 
-Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL
 
-Start-Test "pipeline"
-$Result = $ArraySDDL | ConvertFrom-SDDL
-$Result
+	Start-Test "pipeline"
+	$Result = $ArraySDDL | ConvertFrom-SDDL
+	$Result
 
-Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL
 
-Start-Test "Store apps"
-$Result = ConvertFrom-SDDL $SDDL4
-$Result
+	Start-Test "Store apps"
+	$Result = ConvertFrom-SDDL $SDDL4
+	$Result
 
-Start-Test "Merged SDDL"
-$Result = ConvertFrom-SDDL $MergedSDDL
-$Result
+	Start-Test "Merged SDDL"
+	$Result = ConvertFrom-SDDL $MergedSDDL
+	$Result
 
-Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL
+}
 
 Update-Log
 Exit-Test

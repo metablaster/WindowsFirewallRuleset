@@ -38,6 +38,9 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - `FDResPub` and `fdPHost` services are now required for remote deployment to rule out host
   discovery issues
   - `Merge-SDDL` Added `-Unique` switch to be able to merge SDDL's excluding duplicate ones
+  - Implemented remoting functionality for the following public functions:
+
+    - `ConvertFrom-SDDL`
 
 - Scripts
 

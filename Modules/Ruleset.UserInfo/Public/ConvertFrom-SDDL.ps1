@@ -37,6 +37,15 @@ relevant information about the principal.
 .PARAMETER SDDL
 One or more strings of SDDL syntax
 
+.PARAMETER Domain
+Computer name from which SDDL's were taken
+
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER Force
 If specified, does not perform name checking of converted string.
 This is useful for example to force spliting name like:
@@ -62,12 +71,22 @@ None.
 #>
 function ConvertFrom-SDDL
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SDDL.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[string[]] $SDDL,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
 		[switch] $Force
@@ -77,6 +96,23 @@ function ConvertFrom-SDDL
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
+
+		[hashtable] $SessionParams = @{}
+		$MachineName = Format-ComputerName $Domain
+
+		if ($PSCmdlet.ParameterSetName -eq "Session")
+		{
+			$Domain = $Session.ComputerName
+			$SessionParams.Session = $Session
+		}
+		else
+		{
+			$SessionParams.ComputerName = $MachineName
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
+		}
 	}
 	process
 	{
@@ -130,6 +166,7 @@ function ConvertFrom-SDDL
 					# If the match is successful, the collection is populated with one [System.Text.RegularExpressions.Match]
 					# object for each match found in the input string.
 					[System.Text.RegularExpressions.MatchCollection] $RegMatch = [regex]::Matches($AceSplit[5], "(S(-\d+){2,12})")
+
 					if ($RegMatch.Count -eq 1)
 					{
 						$DACL = "$DaclFlags($ACE)"
@@ -137,18 +174,38 @@ function ConvertFrom-SDDL
 
 						try
 						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Converting ACE to principal on computer '$Domain'"
+
 							# Set the security descriptor from the specified SDDL
-							$ACLObject.SetSecurityDescriptorSddlForm($DACL)
+							if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+							{
+								# HACK: If the SID is non existent on computer then ACLObject.Access will be completely useless,
+								# SetSecurityDescriptorSddlForm only tests SDDL syntax, it does not verify if SID exists.
+								# A solution around this might be Test-SDDL function which would call ConvertFrom-SID
+								# but this would require both the -Session and -CimSession parameters
+								$ACLObject.SetSecurityDescriptorSddlForm($DACL)
+
+								# [System.Security.Principal.NTAccount]
+								$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+								Select-Object -ExpandProperty Value
+							}
+							else
+							{
+								$Principal = Invoke-Command @SessionParams -ScriptBlock {
+									# HACK: Passing existing ACLObject to remote session doesn't work
+									$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
+
+									$ACLObject.SetSecurityDescriptorSddlForm($using:DACL)
+									$ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+									Select-Object -ExpandProperty Value
+								}
+							}
 						}
 						catch
 						{
 							Write-Error -Category InvalidArgument -TargetObject $DACL -Message "Invalid SDDL: '$($DACL)' $($_.Exception.Message)"
 							continue
 						}
-
-						# [System.Security.Principal.NTAccount]
-						$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
-						Select-Object -ExpandProperty Value
 
 						[PSCustomObject]@{
 							Domain = Split-Principal $Principal -DomainName -Force:$Force

@@ -94,6 +94,12 @@ function Get-SDDL
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	if (($null -eq $User) -and ($null -eq $Group))
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Please specify either User or Group"
+		return
+	}
+
 	[hashtable] $ConnectParams = @{}
 	if ($PSCmdlet.ParameterSetName -eq "CimSession")
 	{
