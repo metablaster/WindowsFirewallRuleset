@@ -133,9 +133,6 @@ function ConvertFrom-SID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# $VerbosePreference = "Continue"
-		# $DebugPreference = "Continue"
-
 		[hashtable] $CimParams = @{}
 		[hashtable] $SessionParams = @{}
 

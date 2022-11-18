@@ -123,6 +123,7 @@ function Get-UserApp
 	}
 
 	$MachineName = Format-ComputerName $Domain
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting apps for '$User' user on computer '$MachineName'"
 
 	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
@@ -134,6 +135,9 @@ function Get-UserApp
 	else
 	{
 		$Apps = Invoke-Command @SessionParams -ScriptBlock {
+			# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
+			# see also: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
+			# https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
 			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Bundle
 		}
 
@@ -143,6 +147,11 @@ function Get-UserApp
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
 		$DomainPath = "\\$MachineName\$SystemDrive`$\"
+	}
+
+	if (!$Apps)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] No apps were found for '$User' user on '$MachineName'"
 	}
 
 	foreach ($App in $Apps)

@@ -214,8 +214,9 @@ function Initialize-WinSession
 
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new compatibility session on computer '$Domain'"
 
-		# NOTE: This will fail with "access denied" if session configuration was disabled in Windows PowerShell,
+		# NOTE: This will fail with "access is denied" if session configuration was disabled in Windows PowerShell,
 		# ex. by using Reset-Firewall -Remote, see Remote.md for fix
+		# It will also fail if remote server was configured in PS Core as HTTPS only.
 		# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
 		$Session = New-PSSession @PSSessionParams -EV test | Select-Object -First 1
 

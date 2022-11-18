@@ -117,6 +117,7 @@ function Get-SystemApp
 	}
 
 	$MachineName = Format-ComputerName $Domain
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting system apps for '$User' user on computer '$MachineName'"
 
 	# TODO: show warning instead of error when fail (ex. in non elevated run)
 	# TODO: it is possible to add -User parameter, what's the purpose? see also StoreApps.ps1
@@ -129,6 +130,9 @@ function Get-SystemApp
 	{
 		# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
 		$Apps = Invoke-Command @SessionParams -ScriptBlock {
+			# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
+			# see also: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
+			# https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
 			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
 		}
 
@@ -138,6 +142,11 @@ function Get-SystemApp
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
 		$DomainPath = "\\$MachineName\$SystemDrive`$\"
+	}
+
+	if (!$Apps)
+	{
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] No apps were found for '$User' user on '$MachineName'"
 	}
 
 	foreach ($App in $Apps)

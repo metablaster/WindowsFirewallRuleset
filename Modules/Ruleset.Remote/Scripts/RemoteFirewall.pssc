@@ -135,7 +135,7 @@ SOFTWARE.
 
 	# Modules to import when applied to a session
 	# NOTE: Specifying full path won't work if repository root is elsewhere and specifying only
-	# module name won't work for first time setup in PS Core for compatiblity session
+	# module name won't work for first time setup in PS Core for compatibility session
 	# ModulesToImport = @(
 	# 	"Ruleset.Compatibility"
 	# 	"Ruleset.ComputerInfo"
