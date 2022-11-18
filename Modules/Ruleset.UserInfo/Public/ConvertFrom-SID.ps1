@@ -133,15 +133,39 @@ function ConvertFrom-SID
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		# $VerbosePreference = "Continue"
+		# $DebugPreference = "Continue"
+
 		[hashtable] $CimParams = @{}
 		[hashtable] $SessionParams = @{}
 
-		$Domain = Format-ComputerName $Domain
 		if ($PSCmdlet.ParameterSetName -eq "Session")
 		{
+			if ($Session.ComputerName -ne $CimSession.ComputerName)
+			{
+				Write-Error -Category InvalidArgument -TargetObject $CimSession `
+					-Message "Session and CimSession must be targeting same computer"
+			}
+
 			$Domain = $CimSession.ComputerName
 			$CimParams.CimSession = $CimSession
 			$SessionParams.Session = $Session
+		}
+		else
+		{
+			$Domain = Format-ComputerName $Domain
+
+			# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+			if ($Domain -ne [System.Environment]::MachineName)
+			{
+				$CimParams.ComputerName = $Domain
+				$SessionParams.ComputerName = $Domain
+
+				if ($Credential)
+				{
+					$SessionParams.Credential = $Credential
+				}
+			}
 		}
 	}
 	process
@@ -347,21 +371,10 @@ function ConvertFrom-SID
 						{
 							$SidType = "Store App"
 
-							# Check SID on all target computers until match
+							# Check SID on target computer
 							if (Test-Computer $Domain)
 							{
-								if ($PSCmdlet.ParameterSetName -eq "Domain")
-								{
-									$CimParams.ComputerName = $Domain
-									$SessionParams.Domain = $Domain
-
-									if ($Credential)
-									{
-										$SessionParams.Credential = $Credential
-									}
-								}
-
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer: '$Domain'"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking store app SID on computer '$Domain'"
 
 								# Find to which store app this SID belongs
 								$Groups = Get-UserGroup @CimParams | Select-Object -ExpandProperty Group
@@ -371,7 +384,7 @@ function ConvertFrom-SID
 
 								foreach ($User in $Users)
 								{
-									Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing username: '$User'"
+									Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing username '$User'"
 
 									# TODO: instead of many for loops probably create hash table or array for match
 									$StoreApps = Get-UserApp @SessionParams -User $User
@@ -379,25 +392,25 @@ function ConvertFrom-SID
 
 									foreach ($App in $StoreApps)
 									{
-										Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app: '$App'"
+										Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing app '$App'"
 
 										# NOTE: ignore warnings and info to reduce spam
 										if ((Get-AppSID -PackageFamilyName $App.PackageFamilyName -WA SilentlyContinue -INFA SilentlyContinue) -eq $InputSID)
 										{
 											$ResultName = $App.Name
 											# TODO: we probably also need to save target computer where this SID is valid
-											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is known store app SID for computer: '$Domain'"
-											break computer
+											Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is known store app SID for computer '$Domain'"
+											break
 										}
 									}
 								}
 
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID for computer: '$Domain'"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Specified SID is an unknown store app SID for computer '$Domain'"
 							}
 
 							if ([string]::IsNullOrEmpty($ResultName))
 							{
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID is unknown store app SID"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID is an unknown store app SID"
 							}
 							break
 						}
@@ -408,41 +421,32 @@ function ConvertFrom-SID
 
 							# TODO: Display what capability SID has, for more info look into registry and see:
 							# https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/security-identifiers#capability-sids
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID: '$InputSID' is capability SID"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified SID '$InputSID' is capability SID"
 							break
 						}
 						default
 						{
-							# Check SID on all target computers until match
-							if (Test-Computer $Domain)
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating SID on computer '$Domain'"
+							try # to translate the SID to an account on target computer
 							{
-								if ($PSCmdlet.ParameterSetName -eq "Domain")
+								if ($Domain -eq [System.Environment]::MachineName)
 								{
-									$SessionParams.Domain = $Domain
-									if ($Credential)
-									{
-										$SessionParams.Credential = $Credential
-									}
+									$ObjectSID = New-Object -TypeName System.Security.Principal.SecurityIdentifier($InputSID)
+									$ResultName = $ObjectSID.Translate([System.Security.Principal.NTAccount]).Value
 								}
-
-								try # to translate the SID to an account on target computer
+								# Check SID on target computer
+								elseif (Test-Computer $Domain)
 								{
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating SID on computer: '$Domain'"
-
 									$ResultName = Invoke-Command @SessionParams -ScriptBlock {
-										$ObjectSID = New-Object -TypeName System.Security.Principal.SecurityIdentifier($InputSID)
+										$ObjectSID = New-Object -TypeName System.Security.Principal.SecurityIdentifier($using:InputSID)
 										$ObjectSID.Translate([System.Security.Principal.NTAccount]).Value
 									}
-
-									# NTAccount represents a user or group account
-									$SidType = "NTAccount"
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Domain' recognizes specified SID as NTAccount SID"
-									break computer
 								}
-								catch
-								{
-									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer: '$Domain' does not recognize SID: '$SID'"
-								}
+							}
+							catch
+							{
+								Write-Debug $_
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer '$Domain' does not recognize SID '$SID'"
 							}
 
 							if ([string]::IsNullOrEmpty($ResultName))
@@ -457,8 +461,15 @@ function ConvertFrom-SID
 									$SidType = "Unknown"
 									# TODO: check if invalid format or just not found
 									# NOTE: regex matches don't check length of a SID which could help identify problem
-									Write-Warning -Message "[$($MyInvocation.InvocationName)] $InputSID is not a valid SID or could not be identified"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] $InputSID Could not be identified"
 								}
+							}
+							else
+							{
+								# NTAccount represents a user or group account
+								$SidType = "NTAccount"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Computer '$Domain' recognizes specified SID as NTAccount SID"
+								break
 							}
 						} # default
 					} # switch unknown

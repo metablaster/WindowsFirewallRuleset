@@ -33,6 +33,9 @@ Unit test for ConvertFrom-SID
 .DESCRIPTION
 Test correctness of ConvertFrom-SID function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -69,9 +76,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "ConvertFrom-SID"
 
-Start-Test "'Users', 'Administrators', NT SYSTEM, NT LOCAL SERVICE" -Command "Get-GroupPrincipal"
-$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
-$UserAccounts
+$SessionParams = @{}
+
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "'Users', 'Administrators'" -Command "Get-GroupPrincipal"
+	$UserAccounts = Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer
+	$UserAccounts | Select-Object *
+
+	$SessionParams["Session"] = $SessionInstance
+	$SessionParams["CimSession"] = $CimServer
+}
+else
+{
+	Start-Test "'Users', 'Administrators'" -Command "Get-GroupPrincipal"
+	$UserAccounts = Get-GroupPrincipal "Users", "Administrators"
+	$UserAccounts
+}
 
 Start-Test "NT SYSTEM, NT LOCAL SERVICE" -Command "Get-PrincipalSID"
 $NTAccounts = Get-PrincipalSID -Domain "NT AUTHORITY" -User "SYSTEM", "LOCAL SERVICE"
@@ -83,35 +104,38 @@ foreach ($Account in $UserAccounts)
 {
 	$AccountSIDs += $Account.SID
 }
-$AccountSIDs | ConvertFrom-SID | Format-Table
+$AccountSIDs | ConvertFrom-SID @SessionParams | Format-Table
 
 Start-Test "NT AUTHORITY users"
 foreach ($Account in $NTAccounts)
 {
-	ConvertFrom-SID $Account.SID | Format-Table
+	ConvertFrom-SID $Account.SID @SessionParams | Format-Table
 }
 
 Start-Test "Unknown domain"
-ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" -ErrorAction SilentlyContinue | Format-Table
+ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" @SessionParams -ErrorAction SilentlyContinue | Format-Table
+
+Start-Test "unknown SID"
+ConvertFrom-SID "S-1-5-9999" @SessionParams -ErrorAction SilentlyContinue | Format-Table
 
 Start-Test "App SID for Microsoft.AccountsControl"
 $AppSID = "S-1-15-2-969871995-3242822759-583047763-1618006129-3578262429-3647035748-2471858633"
-$AppResult = ConvertFrom-SID $AppSID
+$AppResult = ConvertFrom-SID $AppSID @SessionParams
 $AppResult | Format-Table
 
 Start-Test "nonexistent App SID"
 $AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
-$AppResult = ConvertFrom-SID $AppSID -ErrorAction SilentlyContinue
+$AppResult = ConvertFrom-SID $AppSID @SessionParams -ErrorAction SilentlyContinue
 $AppResult | Format-Table
 
 Start-Test "APPLICATION PACKAGE AUTHORITY"
 $AppSID = "S-1-15-2-2"
-$PackageResult = ConvertFrom-SID $AppSID
+$PackageResult = ConvertFrom-SID @SessionParams $AppSID
 $PackageResult | Format-Table
 
 Start-Test "Capability"
 $AppSID = "S-1-15-3-12345"
-$PackageResult = ConvertFrom-SID $AppSID
+$PackageResult = ConvertFrom-SID @SessionParams $AppSID
 $PackageResult | Format-Table
 
 Test-Output $AppResult -Command ConvertFrom-SID

@@ -79,8 +79,11 @@ Enter-Test "Get-UserApp"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote Get-UserApp -User $TestUser -Session"
-	Get-UserApp -User $TestUser -Session $SessionInstance
+	Start-Test "'Users', 'Administrators'" -Command "Get-GroupPrincipal"
+	$UserAccounts = Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer
+
+	Start-Test "Remote Get-UserApp -User $($UserAccounts[0]) -Session"
+	Get-UserApp -User $($UserAccounts[0]) -Session $SessionInstance
 
 	# Start-Test "Remote Get-UserApp -User $TestUser -Domain $Domain"
 	# Get-UserApp -User $TestUser -Domain $Domain -Credential $RemotingCredential
