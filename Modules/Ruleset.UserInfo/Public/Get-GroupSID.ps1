@@ -86,6 +86,7 @@ function Get-GroupSID
 			Namespace = "root\cimv2"
 		}
 
+		$Domain = Format-ComputerName $Domain
 		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
 			$Domain = $CimSession.ComputerName
@@ -95,8 +96,6 @@ function Get-GroupSID
 		{
 			$CimParams.ComputerName = $Domain
 		}
-
-		$MachineName = Format-ComputerName $Domain
 	}
 	process
 	{
@@ -104,7 +103,7 @@ function Get-GroupSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserGroup"
 
-			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 			{
 				$GroupSID = Get-LocalGroup -Name $UserGroup |
 				Select-Object -ExpandProperty SID |
@@ -127,7 +126,7 @@ function Get-GroupSID
 			else
 			{
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					Group = $UserGroup
 					SID = $GroupSID
 					PSTypeName = "Ruleset.UserInfo.Group"

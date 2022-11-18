@@ -134,8 +134,13 @@ Enter-Test "Get-SDDL"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote User -CimSession"
-	Get-SDDL -User "User" -CimSession $CimServer
+	Start-Test -Command "Get-GroupPrincipal" -Message "-Group Users"
+	$Principals = Get-GroupPrincipal -Group Users -CimSession $CimServer
+	$Principals
+
+	Start-Test "Remote User"
+	$SDDL1 = Get-SDDL -User $Principals[0].User -CimSession $CimServer
+	$SDDL1
 
 	Start-Test "Remote Group -CimSession"
 	Get-SDDL -Group "Users" -CimSession $CimServer

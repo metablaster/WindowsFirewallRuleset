@@ -88,7 +88,7 @@ function Get-UserGroup
 		$MachineName = Format-ComputerName $Computer
 		if ($PSCmdlet.ParameterSetName -eq "Domain")
 		{
-			$CimParams.ComputerName = $Computer
+			$CimParams.ComputerName = $MachineName
 		}
 
 		if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
@@ -100,7 +100,7 @@ function Get-UserGroup
 
 			if ([string]::IsNullOrEmpty($LocalGroups))
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $MachineName"
 			}
 
 			foreach ($Group in $LocalGroups)
@@ -108,7 +108,7 @@ function Get-UserGroup
 				[PSCustomObject]@{
 					Domain = $MachineName
 					Group = $Group.Name
-					Principal = Join-Path -Path $Computer -ChildPath $Group.Name
+					Principal = Join-Path -Path $MachineName -ChildPath $Group.Name
 					SID = $Group.SID
 					LocalAccount = $Group.PrincipalSource -eq "Local"
 					PSTypeName = "Ruleset.UserInfo"
@@ -116,16 +116,16 @@ function Get-UserGroup
 			}
 		}
 		# Core: -TimeoutSeconds -IPv4
-		elseif (Test-Computer $Computer)
+		elseif (Test-Computer $MachineName)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $Computer"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $MachineName"
 
 			$RemoteGroups = Get-CimInstance @CimParams -Class Win32_Group -Property LocalAccount |
 			Where-Object -Property LocalAccount -EQ "True"
 
 			if ([string]::IsNullOrEmpty($RemoteGroups))
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $Computer"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $MachineName"
 			}
 
 			foreach ($Group in $RemoteGroups)
@@ -140,5 +140,5 @@ function Get-UserGroup
 				}
 			}
 		}
-	} # foreach ($Computer in $Domain)
+	} # foreach ($MachineName in $Domain)
 }

@@ -33,6 +33,9 @@ Unit test for Get-InterfaceBroadcast
 .DESCRIPTION
 Test correctness of Get-InterfaceBroadcast function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,18 +74,36 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-InterfaceBroadcast"
 
-Start-Test "default"
-$Result = Get-InterfaceBroadcast
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "Remote Physical"
+	$Result = Get-InterfaceBroadcast -Session $SessionInstance
+	$Result
 
-Start-Test "-Virtual"
-Get-InterfaceBroadcast -Virtual
+	Start-Test "Remote Virtual"
+	Get-InterfaceBroadcast -Virtual -Session $SessionInstance
 
-Start-Test "-Physical"
-Get-InterfaceBroadcast -Physical
+	Start-Test "Remote Physical -Domain"
+	Get-InterfaceBroadcast -Domain $Domain
+}
+else
+{
+	Start-Test "default"
+	$Result = Get-InterfaceBroadcast
+	$Result
 
-Start-Test "-Hidden"
-Get-InterfaceBroadcast -Hidden
+	Start-Test "-Virtual"
+	Get-InterfaceBroadcast -Virtual
+
+	Start-Test "Physical"
+	Get-InterfaceBroadcast
+
+	Start-Test "-Hidden"
+	Get-InterfaceBroadcast -Hidden
+
+	Start-Test "-Hidden -Virtual"
+	Get-InterfaceBroadcast -Hidden -Virtual
+}
 
 Test-Output $Result -Command Get-InterfaceBroadcast
 

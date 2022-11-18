@@ -101,6 +101,8 @@ function Get-SDDL
 	}
 
 	[hashtable] $ConnectParams = @{}
+	$Domain = Format-ComputerName $Domain
+
 	if ($PSCmdlet.ParameterSetName -eq "CimSession")
 	{
 		$Domain = $CimSession.ComputerName

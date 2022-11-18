@@ -31,14 +31,21 @@ SOFTWARE.
 Get interface broadcast address
 
 .DESCRIPTION
-Get broadcast addresses, for specified network interfaces.
+Get broadcast addresses for either physical or virtual network interfaces.
 Returned broadcast addresses are IPv4 and only for adapters connected to network.
 
-.PARAMETER Physical
-If specified, include only physical adapters
+.PARAMETER Domain
+Computer name which to query
+
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
 
 .PARAMETER Virtual
-If specified, include only virtual adapters
+If specified, include only virtual adapters.
+By default only physical adapters are reported
 
 .PARAMETER Hidden
 If specified, only hidden interfaces are included
@@ -64,10 +71,17 @@ function Get-InterfaceBroadcast
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceBroadcast.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(ParameterSetName = "Physical")]
-		[switch] $Physical,
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "Virtual")]
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter()]
 		[switch] $Virtual,
 
 		[Parameter()]
@@ -75,36 +89,76 @@ function Get-InterfaceBroadcast
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
 
-	# Broadcast address makes sense only for IPv4
-	if ($Physical)
+	[hashtable] $SessionParams = @{}
+	$Domain = Format-ComputerName $Domain
+
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
-		$ConfiguredAdapters = Select-IPInterface -AddressFamily IPv4 -Connected -Physical:$Physical -Hidden:$Hidden
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$ConfiguredAdapters = Select-IPInterface -AddressFamily IPv4 -Connected -Virtual:$Virtual -Hidden:$Hidden
+		$SessionParams.ComputerName = $Domain
+		if ($Credential)
+		{
+			$SessionParams.Credential = $Credential
+		}
 	}
 
-	$ConfiguredAdapters = $ConfiguredAdapters | Select-Object -ExpandProperty IPv4Address
-	$Count = ($ConfiguredAdapters | Measure-Object).Count
+	$SessionParams.ErrorAction = "Stop"
 
-	if ($Count -gt 0)
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
+
+	try
 	{
-		[string[]] $BroadcastAddress = @()
-		foreach ($Adapter in $ConfiguredAdapters)
-		{
-			[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
-			$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
-
-			$BroadcastAddress += Get-NetworkSummary $IPAddress $SubnetMask |
-			Select-Object -ExpandProperty BroadcastAddress |
-			Select-Object -ExpandProperty IPAddressToString
+		# Broadcast address makes sense only for IPv4
+		# NOTE: Using Invoke-Command on localhost to avoid code bloat
+		$ConfiguredAdapters = Invoke-Command @SessionParams -ScriptBlock {
+			if ($using:Virtual)
+			{
+				Select-IPInterface -AddressFamily IPv4 -Connected -Virtual -Hidden:$using:Hidden -ErrorAction SilentlyContinue
+			}
+			else
+			{
+				Select-IPInterface -AddressFamily IPv4 -Connected -Physical -Hidden:$using:Hidden -ErrorAction SilentlyContinue
+			}
 		}
+	}
+	catch
+	{
+		# try\catch handles error with Invoke-Command only
+		Write-Error -ErrorRecord $_
+		return
+	}
 
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
-		Write-Output $BroadcastAddress
+	if ($ConfiguredAdapters)
+	{
+		$ConfiguredAdapters = $ConfiguredAdapters | Select-Object -ExpandProperty IPv4Address
+		$Count = ($ConfiguredAdapters | Measure-Object).Count
+
+		if ($Count -gt 0)
+		{
+			[string[]] $BroadcastAddress = @()
+			foreach ($Adapter in $ConfiguredAdapters)
+			{
+				[IPAddress] $IPAddress = $Adapter | Select-Object -ExpandProperty IPAddress
+				$SubnetMask = ConvertTo-Mask ($Adapter | Select-Object -ExpandProperty PrefixLength)
+
+				$BroadcastAddress += Get-NetworkSummary $IPAddress $SubnetMask |
+				Select-Object -ExpandProperty BroadcastAddress |
+				Select-Object -ExpandProperty IPAddressToString
+			}
+
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
+			Write-Output $BroadcastAddress
+			return
+		}
+	}
+	else
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] None of the adapters matches parameter set"
 	}
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] returns null"

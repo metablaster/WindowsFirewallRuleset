@@ -133,11 +133,11 @@ function Get-GroupPrincipal
 	{
 		foreach ($Computer in $Domain)
 		{
-			# NOTE: Because $Computer may be set to "localhost"
+			# NOTE: Because $MachineName may be set to "localhost"
 			$MachineName = Format-ComputerName $Computer
 			if ($PSCmdlet.ParameterSetName -eq "Domain")
 			{
-				$CimParams.ComputerName = $Computer
+				$CimParams.ComputerName = $MachineName
 			}
 
 			if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
@@ -157,7 +157,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$MachineName'"
 						continue
 					}
 
@@ -166,7 +166,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$MachineName'"
 						continue
 					}
 
@@ -201,7 +201,7 @@ function Get-GroupPrincipal
 				} # foreach ($UserGroup in $Group)
 			}
 			# Core: -TimeoutSeconds -IPv4
-			elseif (Test-Computer $Computer)
+			elseif (Test-Computer $MachineName)
 			{
 				foreach ($UserGroup in $Group)
 				{
@@ -214,7 +214,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($GroupUsers))
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' is empty or does not exist on computer '$MachineName'"
 						continue
 					}
 
@@ -225,7 +225,7 @@ function Get-GroupPrincipal
 
 					if ([string]::IsNullOrEmpty($EnabledAccounts))
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$Computer'"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] User group '$UserGroup' does not have any enabled accounts on computer '$MachineName'"
 						continue
 					}
 
@@ -239,7 +239,7 @@ function Get-GroupPrincipal
 
 						$UserName = [array]::Find([string[]] $GroupUsers.Name, [System.Predicate[string]] {
 								Write-Debug -Message "[Get-GroupPrincipal] Comparing $($Account.Caption) with $($Account.Domain)\$($args[0])"
-								# NOTE: Account.Domain or $Computer is same thing
+								# NOTE: Account.Domain or $MachineName is same thing
 								$Account.Caption -eq "$($Account.Domain)\$($args[0])"
 							})
 
@@ -268,6 +268,6 @@ function Get-GroupPrincipal
 					}
 				}
 			}
-		} # foreach ($Computer in $Domain)
+		} # foreach ($MachineName in $Domain)
 	} # process
 }

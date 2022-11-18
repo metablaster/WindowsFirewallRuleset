@@ -86,6 +86,7 @@ function Get-PrincipalSID
 			Namespace = "root\cimv2"
 		}
 
+		$Domain = Format-ComputerName $Domain
 		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
 			$Domain = $CimSession.ComputerName
@@ -96,7 +97,6 @@ function Get-PrincipalSID
 			$CimParams.ComputerName = $Domain
 		}
 
-		$MachineName = Format-ComputerName $Domain
 		[bool] $IsKnownDomain = ![string]::IsNullOrEmpty(
 			[array]::Find($KnownDomains, [System.Predicate[string]] { $Domain -eq $args[0] }))
 	}
@@ -106,7 +106,7 @@ function Get-PrincipalSID
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing: $Domain\$UserName"
 
-			if (($PSCmdlet.ParameterSetName -eq "Domain") -and (($MachineName -eq [System.Environment]::MachineName) -or $IsKnownDomain))
+			if (($PSCmdlet.ParameterSetName -eq "Domain") -and (($Domain -eq [System.Environment]::MachineName) -or $IsKnownDomain))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SID for principal: $Domain\$UserName"
 
@@ -121,7 +121,7 @@ function Get-PrincipalSID
 					}
 					else
 					{
-						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($MachineName, $UserName)
+						$NTAccount = New-Object -TypeName System.Security.Principal.NTAccount($Domain, $UserName)
 						$PrincipalSID = $NTAccount.Translate([System.Security.Principal.SecurityIdentifier]).ToString()
 					}
 				}
@@ -150,9 +150,9 @@ function Get-PrincipalSID
 			else
 			{
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					User = $UserName
-					Principal = "$MachineName\$UserName"
+					Principal = "$Domain\$UserName"
 					SID = $PrincipalSID
 					PSTypeName = "Ruleset.Userinfo.Principal"
 				}

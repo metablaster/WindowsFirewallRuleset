@@ -161,7 +161,7 @@ function Resolve-Host
 		elseif ($Domain)
 		{
 			# TODO: For localhost with multiple interfaces fine tune selection
-			foreach ($HostName in $Domain)
+			foreach ($Computer in $Domain)
 			{
 				[IPAddress] $IP = $null
 				[regex] $IPv4Regex = "([0-9]{1,3}\.){3}[0-9]{1,3}"
@@ -170,6 +170,8 @@ function Resolve-Host
 				try
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving host '$HostName' to '$AddressFamily' address"
+
+					$HostName = Format-ComputerName $Computer
 
 					# [Microsoft.DnsClient.Commands.DnsRecord]
 					$DNSRecord = Resolve-DnsName -Name $HostName -NetbiosFallback -Server 8.8.8.8 -EA Stop

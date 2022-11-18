@@ -234,12 +234,12 @@ function Get-SystemSKU
 				$MachineName = Format-ComputerName $Computer
 				if ($PSCmdlet.ParameterSetName -eq "Domain")
 				{
-					$CimParams.ComputerName = $Computer
+					$CimParams.ComputerName = $MachineName
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $Computer"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $MachineName"
 
-				if (Test-Computer $Computer)
+				if (Test-Computer $MachineName)
 				{
 					try
 					{

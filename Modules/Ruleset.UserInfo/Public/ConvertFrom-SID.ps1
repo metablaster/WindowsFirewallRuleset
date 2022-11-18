@@ -136,6 +136,7 @@ function ConvertFrom-SID
 		[hashtable] $CimParams = @{}
 		[hashtable] $SessionParams = @{}
 
+		$Domain = Format-ComputerName $Domain
 		if ($PSCmdlet.ParameterSetName -eq "Session")
 		{
 			$Domain = $CimSession.ComputerName

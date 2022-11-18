@@ -41,6 +41,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Implemented remoting functionality for the following public functions:
 
     - `ConvertFrom-SDDL`
+    - `Get-InterfaceBroadcast`
 
 - Scripts
 

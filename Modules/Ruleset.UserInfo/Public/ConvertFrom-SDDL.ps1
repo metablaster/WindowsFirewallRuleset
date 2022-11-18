@@ -98,7 +98,7 @@ function ConvertFrom-SDDL
 		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 
 		[hashtable] $SessionParams = @{}
-		$MachineName = Format-ComputerName $Domain
+		$Domain = Format-ComputerName $Domain
 
 		if ($PSCmdlet.ParameterSetName -eq "Session")
 		{
@@ -107,7 +107,7 @@ function ConvertFrom-SDDL
 		}
 		else
 		{
-			$SessionParams.ComputerName = $MachineName
+			$SessionParams.ComputerName = $Domain
 			if ($Credential)
 			{
 				$SessionParams.Credential = $Credential
@@ -177,7 +177,7 @@ function ConvertFrom-SDDL
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Converting ACE to principal on computer '$Domain'"
 
 							# Set the security descriptor from the specified SDDL
-							if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+							if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 							{
 								# HACK: If the SID is non existent on computer then ACLObject.Access will be completely useless,
 								# SetSecurityDescriptorSddlForm only tests SDDL syntax, it does not verify if SID exists.
@@ -189,7 +189,7 @@ function ConvertFrom-SDDL
 								$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
 								Select-Object -ExpandProperty Value
 							}
-							else
+							elseif (Test-Computer $Domain)
 							{
 								$Principal = Invoke-Command @SessionParams -ScriptBlock {
 									# HACK: Passing existing ACLObject to remote session doesn't work
@@ -199,6 +199,11 @@ function ConvertFrom-SDDL
 									$ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
 									Select-Object -ExpandProperty Value
 								}
+							}
+							else
+							{
+								# Test-Computer failed
+								return
 							}
 						}
 						catch

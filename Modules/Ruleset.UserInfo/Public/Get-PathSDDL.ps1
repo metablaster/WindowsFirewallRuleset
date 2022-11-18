@@ -94,6 +94,8 @@ function Get-PathSDDL
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $SessionParams = @{}
+	$Domain = Format-ComputerName $Domain
+
 	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
 		$Domain = $Session.ComputerName
@@ -107,8 +109,6 @@ function Get-PathSDDL
 			$SessionParams.Credential = $Credential
 		}
 	}
-
-	$MachineName = Format-ComputerName $Domain
 
 	# Glossary:
 	# SDDL: Security Descriptor Definition Language
@@ -142,9 +142,9 @@ function Get-PathSDDL
 	#>
 
 	[string] $DACL = $null
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path '$Path' on $MachineName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path '$Path' on $Domain"
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		# TODO: Multiple paths should be supported either here or trough path parameter
 		$TargetPath = Resolve-Path -Path $Path -ErrorAction Ignore
@@ -170,9 +170,9 @@ function Get-PathSDDL
 		return
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting path ACL on $MachineName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting path ACL on $Domain"
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		$ACL = Get-Acl -Path $TargetPath
 	}
