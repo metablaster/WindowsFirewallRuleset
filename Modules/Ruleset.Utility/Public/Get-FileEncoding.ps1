@@ -101,7 +101,7 @@ function Get-FileEncoding
 		$Encoding = $DefaultEncoding
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[System.IO.FileInfo] $File = Resolve-FileSystemPath $Path -File
 

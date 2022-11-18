@@ -98,7 +98,7 @@ function Disable-WinRMServer
 		[switch] $KeepDefault
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer -AllowUnencrypted:(!$All)
 
 	<# MSDN: Disabling the session configurations does not undo all the changes made by the

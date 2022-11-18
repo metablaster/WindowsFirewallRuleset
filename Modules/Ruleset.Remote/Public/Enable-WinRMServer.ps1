@@ -153,7 +153,7 @@ function Enable-WinRMServer
 		[switch] $Force
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeServer -AllowUnencrypted:($Protocol -ne "HTTPS")
 	. $PSScriptRoot\..\Scripts\SessionSettings.ps1

@@ -617,24 +617,24 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 			Set-Variable -Name ConnectionIPv4 -Scope Global -Option ReadOnly -Force -Value $true
 		}
 
-		# User account name for which to search executables in user profile and non standard paths by default
-		# Also used for other defaults where standard user account is expected, ex. development as standard user
-		# NOTE: If there are multiple users and to affect them all set this value to non existent user
-		# TODO: Needs testing info messages for this value
-		# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
-		# TODO: This should be used for -LocalUser rule parameter too
 		try
 		{
+			# User account name for which to search executables in user profile and non standard paths by default
+			# Also used for other defaults where standard user account is expected, ex. development as standard user
+			# NOTE: If there are multiple users and to affect them all set this value to non existent user
+			# TODO: Needs testing info messages for this value
+			# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
+			# TODO: This should be used for -LocalUser rule parameter too
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
-				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup | Where-Object {
-						$_.ObjectClass -EQ "User" -and
-					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup[0] | Where-Object {
+						($_.ObjectClass -EQ "User") -and
+					(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
 					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 		}
 		catch
 		{
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
-			Write-Warning -Message "No users exists in $DefaultGroup group"
+			Write-Warning -Message "No users exists in $($DefaultGroup[0]) group"
 		}
 
 		# Administrative user account name which will perform unit testing

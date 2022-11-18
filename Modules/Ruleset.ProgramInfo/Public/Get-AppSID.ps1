@@ -66,7 +66,7 @@ function Get-AppSID
 		[string] $PackageFamilyName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Sha256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
 	$Hash = $Sha256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($PackageFamilyName.ToLowerInvariant()))

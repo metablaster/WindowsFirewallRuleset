@@ -59,7 +59,7 @@ function Initialize-Connection
 	[OutputType([void])]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Establish WinRM connection to local or remote computer
 	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to remote computer and enable remote registry") -and

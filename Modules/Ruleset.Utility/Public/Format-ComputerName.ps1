@@ -59,7 +59,7 @@ function Format-ComputerName
 		[string] $Domain
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if (($Domain -eq [System.Environment]::MachineName) -or ($Domain -eq "localhost") -or ($Domain -eq "."))
 	{

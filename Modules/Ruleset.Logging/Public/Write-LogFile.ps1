@@ -136,7 +136,7 @@ function Write-LogFile
 		[switch] $Overwrite
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# If Peek() fails you have called Pop() more times than Push()
 	$LogFile = Initialize-Log $Path -LogName $LogName -Header $HeaderStack.Peek() -Overwrite:$Overwrite

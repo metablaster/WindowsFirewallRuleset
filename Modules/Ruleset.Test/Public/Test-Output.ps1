@@ -74,7 +74,7 @@ function Test-Output
 
 	begin
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		if (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)
 		{
 			$TestCommand = $script:TestCommand

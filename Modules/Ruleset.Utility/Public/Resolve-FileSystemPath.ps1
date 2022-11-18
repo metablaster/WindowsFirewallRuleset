@@ -86,7 +86,7 @@ function Resolve-FileSystemPath
 		[switch] $Create
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path: $Path"
 
 	# Qualifier ex. "C:\" "D:", "\" or "\\"

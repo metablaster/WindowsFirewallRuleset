@@ -101,6 +101,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-GroupSID`
     - `Get-PrincipalSID`
     - `Get-SDDL`
+    - `Get-PathSDDL`
     - `Get-AppCapability`
     - `Get-UserApp`
     - `Get-SystemApp`
@@ -117,7 +118,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - `Enable-WinRMServer` added `-Loopback` switch to be able to configure loopback only server
   - Most functions in `Ruleset.Remote` improved
   - Added separate PS session configuration for localhost deployment
-  - Make `Ruleset.Compatibility` function show verbose output is set globally
+  - Make `Ruleset.Compatibility` functions show verbose output is set globally
 
   - Improved module functions
 

@@ -94,7 +94,7 @@ function Find-RulePrincipal
 		[string] $Direction = "*"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	[array] $RegistryRules = Get-RegistryRule -GroupPolicy | Where-Object {
 		$_.Direction -like $Direction
 	}

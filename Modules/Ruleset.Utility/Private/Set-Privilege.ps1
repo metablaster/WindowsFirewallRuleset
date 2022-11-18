@@ -144,7 +144,7 @@ function Set-Privilege
 	# TODO: Why is this set to SilentlyContinue by default?
 	$InformationPreference = "Continue"
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# https://www.pinvoke.net/default.aspx/ntdll/RtlAdjustPrivilege.html
 	$Signature = '[DllImport("ntdll.dll", EntryPoint = "RtlAdjustPrivilege")]

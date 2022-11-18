@@ -70,7 +70,7 @@ function Write-ServiceList
 		[switch] $Log
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Scanning rules for network services"
 
 	[System.IO.DirectoryInfo] $Directory = Resolve-FileSystemPath $Path

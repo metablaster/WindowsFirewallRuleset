@@ -116,7 +116,7 @@ function Copy-WinModule
 		[string] $Destination
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[bool] $WhatIfFlag = $PSBoundParameters["WhatIf"]
 	[bool] $ConfirmFlag = $PSBoundParameters["Confirm"]

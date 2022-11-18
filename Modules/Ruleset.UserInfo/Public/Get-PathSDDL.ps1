@@ -91,7 +91,7 @@ function Get-PathSDDL
 		[switch] $Merge
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $SessionParams = @{}
 	if ($PSCmdlet.ParameterSetName -eq "Session")
@@ -142,6 +142,7 @@ function Get-PathSDDL
 	#>
 
 	[string] $DACL = $null
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path '$Path' on $MachineName"
 
 	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{
@@ -168,6 +169,8 @@ function Get-PathSDDL
 		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path resolves to multiple $($ItemCount) paths: $Path"
 		return
 	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting path ACL on $MachineName"
 
 	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
 	{

@@ -77,7 +77,7 @@ function Import-FirewallSetting
 		[string] $FileName = "FirewallSettings"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$Path = Resolve-FileSystemPath $Path
 	if (!$Path -or !$Path.Exists)

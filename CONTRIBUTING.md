@@ -524,7 +524,7 @@ be as cool or as easy as debugging code.
 Knowing this here are some recommendations:
 
 1. Forget about debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see
-what the code is doing, this is so much faster and more useful and informative than stepping trough
+what the code is doing, this is much faster and more useful and informative than stepping trough
 code.
 
 2. Run PS as Admin and type command by commad which you wish to test by copying code out of editor

@@ -106,7 +106,7 @@ function ConvertTo-Network
 		[string] $SubnetMask
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	$ValidSubnetMaskValues =
 	"0.0.0.0", "128.0.0.0", "192.0.0.0",

@@ -118,7 +118,7 @@ function Get-TypeName
 
 	begin
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 		$InvocationName = $MyInvocation.InvocationName
 
 		# TODO: This scriptblock should probably be a separate function called "Trace-TypeName" which would serve for troubleshooting

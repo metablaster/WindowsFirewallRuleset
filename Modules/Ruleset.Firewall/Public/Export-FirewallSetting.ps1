@@ -76,7 +76,7 @@ function Export-FirewallSetting
 		[string] $FileName = "FirewallSettings.json"
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall profile..."
 

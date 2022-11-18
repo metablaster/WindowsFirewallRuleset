@@ -83,7 +83,7 @@ function Convert-EncodingString
 		[switch] $BOM
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if (($PSVersionTable.PSEdition -eq "Core") -and ($Encoding -in @("byte", "default", "string", "unknown")))
 	{

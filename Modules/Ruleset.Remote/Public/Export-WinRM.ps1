@@ -56,7 +56,7 @@ function Export-WinRM
 	[OutputType([void])]
 	param ()
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	Write-Error -Category NotImplemented -Message "Export-WinRM function not implemented"
 }

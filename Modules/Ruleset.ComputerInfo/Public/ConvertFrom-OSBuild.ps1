@@ -69,7 +69,7 @@ function ConvertFrom-OSBuild
 		[decimal] $Build
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Drop decimal part, not used
 	$WholePart = [decimal]::ToUInt32($Build)

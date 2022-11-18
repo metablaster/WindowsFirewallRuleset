@@ -127,7 +127,7 @@ function ConvertFrom-Wildcard
 		[switch] $SkipAnchor
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$InvocationName = $MyInvocation.InvocationName
 
 	# Optimize dots and stars excluding escaped dots

@@ -137,6 +137,7 @@ if ($Domain -ne [System.Environment]::MachineName)
 	$RemotePath = "C:\Users\Public\Desktop\" # Inherited
 	$RemoteUNCPath = "\\$Domain\C$\Windows"
 
+	# NOTE: This will fail on HTTPS enabled remote because it will use HTTP
 	Start-Test "-Path remote FileSystem -Domain"
 	Get-PathSDDL -Path $RemotePath -Domain $Domain -Credential $RemotingCredential | Test-SDDL
 

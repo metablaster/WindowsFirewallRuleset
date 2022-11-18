@@ -69,7 +69,7 @@ function Disconnect-Computer
 		[string] $Domain
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if (!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
 	{

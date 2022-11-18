@@ -294,7 +294,7 @@ PowerShell console might need to be restarted for "Controlled folder access" cha
 recommendation is to have standard user account which you use for every day computing for security
 reasons.\
 If you're Administrator and are not willing to create standard account on your computer you'll have
-to modify `DefaultGroup` variable in `Config\ProjectSettings.ps1` and specify `Administrators`
+to modify `DefaultGroup` variable in `Config\ProjectSettings.ps1` and specify `Administrators`.
 
 See [SecurityAndPrivacy.md](/Docs/SecurityAndPrivacy.md#standard-user-account) for more
 information why using Administrator account is not recommended for security reasons.\

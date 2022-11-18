@@ -90,7 +90,7 @@ function Compare-Path
 		[switch] $CaseSensitive
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Expand environment variables
 	[string] $ComparePath = [System.Environment]::ExpandEnvironmentVariables($Path)

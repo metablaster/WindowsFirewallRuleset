@@ -99,7 +99,7 @@ function Get-SystemApp
 		[System.Management.Automation.Runspaces.PSSession] $Session
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $SessionParams = @{}
 	if ($PsCmdlet.ParameterSetName -eq "Session")
