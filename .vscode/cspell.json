@@ -79,6 +79,7 @@
         "dmcertinst",
         "dnscache",
         "dnscrypt",
+		"DNSSEC",
         "endregion",
         "executables",
         "FDPHOST",

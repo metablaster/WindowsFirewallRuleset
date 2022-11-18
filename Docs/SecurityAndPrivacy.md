@@ -121,7 +121,7 @@ For MS Edge Chromium following site explains how to get started:\
 [Microsoft Edge support for Microsoft Defender Application Guard][app guard]
 
 If your browser does not support isolated browser session an alternative is to use virtual machine,
-however virtual machine consumes your system resources since you would be running 2 systems at once.
+however virtual machine consumes system resources since you would be running two systems at once.
 
 Following site explains how to get started with Hyper-V virtual machine in Windows:\
 [Install Hyper-V on Windows 10][hyper-v]
@@ -145,8 +145,8 @@ More about the author of this program:\
 ### Email client and service
 
 Don't let your email client or web interface auto load email content.\
-Configure your mail client to be restrictive, also important not to open attachments you don't
-recognize or didn't ask for.
+Configure your mail client to be restrictive, also important not to open attachments and link in
+mail you don't recognize or didn't ask for.
 
 For recommended email service list see [Privacy-Conscious Email Services][prxbx]
 
@@ -211,7 +211,7 @@ Suggested software for disk encryption is subjective.
 
 ### Backup
 
-Always keep a backup of everything on at least 1 drive that is offline and away from online machine.\
+Always keep a backup of everything on at least one drive that is offline and away from online machine.\
 If you have to bring it online, take down the rest of network.
 
 Suggestion of backup software is subjective, most secure method is external hard drive or separate
@@ -225,7 +225,7 @@ Advanced Threat Protection or ATP for short used to be a set of rules and settin
 business addition of Windows defender and pro edition of Windows, however these rules and settings
 can be applied on any system natively without any special paid software.
 
-You can read more about this on links below:
+You can read more about this on the links below:
 
 - [Understand and use attack surface reduction capabilities][asr]
 - [Microsoft Defender for Office][defender office]
@@ -250,7 +250,7 @@ references.
 
 In the following sections are most common privacy concerns and suggestions on how to deal with them.
 
-When it comes to privacy, briefly, there are 2 different defense categories:
+When it comes to privacy, briefly, there are two different defense categories:
 
 - Hide your online activity, is what people usually refer to when talking about "privacy".\
 This relates to data such as hardware ID's, browser fingerprinting, IP address etc.
@@ -349,6 +349,7 @@ Following web sites are good starting point for additional research regarding se
 
 - [PRISM ⚡ BREAK][prism break]
 - [Technical analysis of client identification mechanisms][client identification]
+- [Safe computing][safe computing]
 
 [Table of Contents](#table-of-contents)
 
@@ -357,7 +358,7 @@ Following web sites are good starting point for additional research regarding se
 [app guard]: https://learn.microsoft.com/en-us/deployedge/microsoft-edge-security-windows-defender-application-guard "Visit microsoft site"
 [hyper-v]: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v "Visit microsoft site"
 [pwsafe]: https://pwsafe.org/index.shtml "Visit password safe site"
-[schneier]: https://www.schneier.com/academic/passsafe "Visist Schneier's site"
+[schneier]: https://www.schneier.com/academic/passsafe "Visit Schneier's site"
 [prxbx]: https://prxbx.com/email "Visit prxbx.com site"
 [proton mail]: https://proton.me/mail "Visit protomail site"
 [defender]: https://www.microsoft.com/en-us/windows/comprehensive-security "Visit microsoft site"
@@ -376,3 +377,4 @@ Following web sites are good starting point for additional research regarding se
 [virus total]: https://www.virustotal.com/gui/home/upload "Visit Virus total"
 [uac]: https://learn.microsoft.com/en-us/windows/security/identity-protection/user-account-control/how-user-account-control-works "Visit microsoft site"
 [uac settings]: https://learn.microsoft.com/en-us/mem/intune/user-help/you-need-to-enable-uac-windows "Visit microsoft site"
+[safe computing]: https://www.cisa.gov/uscert/ncas/tips "Visit government site"

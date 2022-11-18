@@ -208,7 +208,7 @@ bypassing our rules.
 - Resolution is to define a "temporary" rule which would be disabled by default, and enabled only
 during update of office.
 - Note that you can't specify program in this rule before starting download because the download
-process creates a new random folder each time where it puts the executable,
+process creates a new random directory each time where it puts the executable,
 so you end up in Cat and Mouse game.
 - What we can do however is specify protocol, ports and users allowed, which is NT AUTHORITY\SYSTEM
 

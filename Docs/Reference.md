@@ -168,8 +168,6 @@ Also few commandlets from these modules:
 
 [Table of Contents](#table-of-contents)
 
-[Table of Contents](#table-of-contents)
-
 ## OS and software
 
 [.NET Framework versions and dependencies](https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies)

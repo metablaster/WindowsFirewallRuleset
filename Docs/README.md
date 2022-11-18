@@ -1,5 +1,5 @@
 
-# Readme directory
+# Docs directory
 
 This directory contains project documentation such as:
 

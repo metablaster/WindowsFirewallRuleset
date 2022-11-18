@@ -115,12 +115,12 @@ To resolve this issue ensure following:
 
 2. Ensure that log files were generated in the specified location.
 
-    - If log files were not generated go to step 3 below to grant permission to specified folder and
-    then get back here to step 2
-    - If you applied write permission to specified folder and log files aren't generated temporarily
+    - If log files were not generated go to step 3 below to grant permission to specified directory
+    and then get back here to step 2
+    - If you applied write permission to specified directory and log files aren't generated temporarily
     toggle setting to log successful connections and apply it, this should force generating logs.
 
-3. Verify that both the target folder and all the logs inside that directory grant write\
+3. Verify that both the target directory and all the logs inside that directory grant write\
 permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
 4. For changes to take effect save your modifications and reboot system.
@@ -202,10 +202,11 @@ them as follows:
     deny by default.
     - You have enabled "development mode" project setting
     - You run some script on demand that is not run by default (ex. `Set-Permission.ps1`)
-    - You manually load software configuration from `Config` folder
-    - You run experimental or dangerous tests from `Test` folder (default action for these tests is `No`)
+    - You manually load software configuration from `Config` directory
+    - You run experimental or dangerous tests from `Test` directory (default action for these tests
+    is `No`)
 
-8. Here is a list of scripts that may behave unexpectedly because these are either experimental,
+1. Here is a list of scripts that may behave unexpectedly because these are either experimental,
    not intended for end user or hard to get right, therefore you might want to review them first
    to learn their purpose:
 
@@ -225,7 +226,7 @@ them as follows:
     except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in `Modules` and `Test` subdirectories.
 
-9. Following is a list of external executables that are run by some scripts
+2. Following is a list of external executables that are run by some scripts
 
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
@@ -235,7 +236,7 @@ them as follows:
     - [netstat.exe][netstat] (Used to get network statistics)
     - [sigcheck64.exe][sigcheck] (Used to scan digital signature of executable files)
 
-10. There is nothing harmful to privacy or system security
+3.  There is nothing harmful to privacy or system security
 
     - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
     to download or update modules, however this happens only if you manually enable setting

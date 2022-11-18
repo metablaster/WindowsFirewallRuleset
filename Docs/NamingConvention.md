@@ -14,6 +14,7 @@ variables used accross code in this repository.
     - [Registry functions](#registry-functions)
     - [Return types](#return-types)
     - [Exceptions](#exceptions)
+  - [Variables](#variables)
   - [Custom objects](#custom-objects)
     - [Ruleset.ProgramInfo](#rulesetprograminfo)
     - [Ruleset.UserInfo](#rulesetuserinfo)
@@ -195,6 +196,21 @@ IOException
 - `2, 3, 4, 5` The user does not have the necessary registry rights.
 
 [Table of Contents](#table-of-contents)
+
+## Variables
+
+To name variables we use descriptive approach and camel case similar to recommendations on how to
+name functions and parameters, ex:
+
+`$SearchString` instead of `$str`
+
+In for loops a variable which is about items in a collection should decriptively be declared so ex:
+
+```powershell
+foreach ($PathEntry in $SomeCollection)
+# Instead of
+foreach ($i in $SomeCollection)
+```
 
 ## Custom objects
 

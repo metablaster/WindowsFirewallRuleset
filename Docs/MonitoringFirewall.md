@@ -67,7 +67,7 @@ click on image to enlarge!
 
 ![Alternate text](Screenshots/ProcessMonitor.png)
 
-- Inside the `Config\procmon` folder you will find process monitor configuration specialized
+- Inside the `Config\procmon` directory you will find process monitor configuration specialized
 for firewall monitoring which you can import into your copy of process monitor.
 - Note that this configuration filters some network traffic which you might not want to see,
 click on filter button (or menu) to disable specific filters or to add new ones.
@@ -84,7 +84,7 @@ click on filter button (or menu) to disable specific filters or to add new ones.
 ![Alternate text](Screenshots/mTail.png)
 
 - Default mTail does not have special firewall coloring, those colors you see in the screenshot are
-custom made, you can get this configuration from `Config\mTail` folder inside repository,
+custom made, you can get this configuration from `Config\mTail` directory in repository,
 the config file is named `mtail_CC.ini`,
 just place it next to mTail executable, restart mTail and open firewall log,
 which is by default placed into `C:\Windows\System32\LogFiles\Firewall\pfirewall.log\`
@@ -114,17 +114,17 @@ here is how it feels in VSCode.
 - Ensure variable `DefaultUser` points to your account username in `Config\ProjectSettings.ps1`
 - To apply this setting restart PowerShell then run `Scripts\Complete-Firewall.ps1` and reboot system
 - Next step is to grant appropriate file system permissions to firewall logs which are now written\
-to `Logs\Firewall` directory inside repository, but before doing this ensure specified location as\
+to `Logs\Firewall` directory in repository, but before doing this ensure specified location as\
 well as log files have been generated, if there are no log file see [FAQ](/Docs/FAQ.md) to resolve
 the issue.
 - To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot, any firewall setting change or manual permission removal.
-- Inside VSCode open individual firewall log file under `Logs\Firewall` node
+- In VSCode open individual firewall log file under `Logs\Firewall` node
 - To filter log contents open command palette `CTRL + SHIT + P`, type "Filter line by Config File"
 and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
-- For sample filterline regexes take a look into `Readme\Regex.md`
+- For sample filterline regexes take a look into `Docs\Regex.md`
 
 [Table of Contents](#table-of-contents)
 
@@ -219,7 +219,7 @@ traffic, as well as what ports and addresses were used, then verify you have fir
 value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means IPv4 authorizing connect requests for outgoing connection,
 based on the first packet sent. Which btw. tells us there was no adequate allow rule so the
 default outbound action was hit.
-- For detailed information on how to interpret WFP log see "Firewall" section in `Readme\Reference.md`
+- For detailed information on how to interpret WFP log see "Firewall" section in `Docs\Reference.md`
 
 - [WFP Reference][ref WFP]
 - [WFP Auditing reference][ref WFP audit]
@@ -446,7 +446,7 @@ NetEventPacketCapture is a PowerShell module that is a replacement for `netsh tr
 
 Almost everything `netsh trace` can do can be also done with NetEventPacketCapture module.
 
-Inside `Scripts\Experiment` folder there are experimental `Start-PacketTrace.ps1` and `Stop-PacketTrace.ps1`
+Inside `Scripts\Experiment` directory there are experimental `Start-PacketTrace.ps1` and `Stop-PacketTrace.ps1`
 scripts which make use of `NetEventPacketCapture` module, you can use them to quickly start and stop
 packet capture.
 

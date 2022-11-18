@@ -186,7 +186,7 @@ instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
 
 - `sigcheck64.exe` is a digital signature verification tool which you can download from Microsoft site
-and should be placed either into `C:\tools` folder or into `%PATH%` environment variable.\
+and should be placed either into `C:\tools` directory or into `%PATH%` environment variable.\
 `Windows Firewall Ruleset` will use it to perform online malware analysis on virus total for every
 executable that is not digitally signed before a firewall rule is made for that executable.\
 This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
@@ -239,7 +239,7 @@ in GPO or run\
 remove all rules and restore WinRM and modified services to system defaults.
 (afterwards PowerShell restart is required)
 
-- Inside `Readme` folder there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
+- Inside `Docs` directory there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
@@ -388,7 +388,7 @@ running untrusted script code downloaded from internet:
 11. Rules for programs such as your web browser, games etc. depend on installation variables.\
 Most paths are auto-searched and variables are updated transparently, otherwise you get warning and
 description on how to fix the problem.\
-If needed, you can find these installation variables in individual scripts inside `Rules` folder.\
+If needed, you can find these installation variables in individual scripts inside `Rules` directory.\
 It is recommended to close down all other programs before running master script in the next step.
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
@@ -438,7 +438,7 @@ If you're unable to connect to internet after deploying these rules you have sev
     - Temporarily open outbound firewall in GPO or [Disable Firewall](/Docs/DisableFirewall.md)
     - Troubleshoot problems: [Network troubleshooting detailed guide](/Docs/NetworkTroubleshooting.md)
     - You can [Reset Firewall to previous state](/Docs/ResetFirewall.md)
-    - Take a look into `Readme` folder for more troubleshooting options and documentation
+    - Take a look into `Docs` directory for more troubleshooting options and documentation
 
 17. As a prerequisite to deploy firewall, some system services have been started and set to
 automatic start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these

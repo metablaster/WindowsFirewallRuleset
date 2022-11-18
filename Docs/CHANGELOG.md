@@ -504,7 +504,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 - Other
 
   - Calls to icacls, takeown and file system permission code replaced with call to Set-Permission
-  - Add `Scripts` folder to path for current session
+  - Add `Scripts` directory to path for current session
 
 [Table of Contents](#table-of-contents)
 
@@ -602,7 +602,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   to be able to share logs and other project files between Windows PowerShell and Core edition.
   - Renamed modules to better fit with project naming convention
   - Moved few functions to different modules
-  - Reorganized module file and folder structure according to community best practices
+  - Reorganized module file and directory structure according to community best practices
   - Added function to convert to or query system SKU
   - Several minor module code changes
 
@@ -711,7 +711,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - todo list categorized according to area and priority, duplicates removed
   - Markdown formatted according to markdownlint rules
   - Entire project spellchecked
-  - Added regex samples to query rules inside scripts for bulk operations
+  - Added regex samples to query rules in scripts for bulk operations
 
 - Documentation
 

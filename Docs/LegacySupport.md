@@ -45,7 +45,7 @@ The acceptable format for this parameter is a number in the `Major.Minor` format
 For more information about other Windows systems and their version numbers see link below:\
 [Operating System Version][os version]
 
-There are other variables inside `Config\ProjectSettings.ps1` that are worth changing, at a minimum
+There are other variables in `Config\ProjectSettings.ps1` that are worth changing, at a minimum
 set `Develop` to `$true` and restart PowerShell to enable debugging features and
 additional requirement checks.
 
@@ -85,7 +85,7 @@ To save yourself some time debugging you should also run code analysis with
 1. PSUseCompatibleCmdlets
 2. PSUseCompatibleSyntax
 
-Visit `Test` folder and run all tests individually to confirm modules and their functions work as
+Visit `Test` directory and run all tests individually to confirm modules and their functions work as
 expected, any failure should be fixed before loading rules to save yourself from frustration.
 
 [Table of Contents](#table-of-contents)

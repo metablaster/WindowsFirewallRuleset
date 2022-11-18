@@ -253,7 +253,7 @@ Todo's in this file are categorized into following sections:
 
 4. Test and debugging
 
-    - Move `Ruleset.IP` tests into test folder, clean up directory add `Write-*` streams
+    - Move `Ruleset.IP` tests into test directory, clean up directory add `Write-*` streams
     - Many test cases are local to our environment, other people might get different results
     - There is no test for `Get-Permutation` in `Ruleset.IP`
     - Module `Ruleset.Compatibility` is missing multiple tests
@@ -417,7 +417,7 @@ Todo's in this file are categorized into following sections:
     - Information output is not enabled for modules and probably other code
     - Use `Get-NetConnectionProfile` to aks user / set default network profile
     - Take out of deprecated scripts what can be used, remove the rest
-    - We should add `Scripts` folder to PS scripts path in ProjectSettings
+    - We should add `Scripts` directory to PS scripts path in ProjectSettings
     - Specify on which adapters Windows firewall is filtering data, see option in
     Windows firewall in control panel
     - Apply only rules for installed executables, `Confirm-Executable` function

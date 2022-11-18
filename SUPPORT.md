@@ -161,10 +161,10 @@ Follow steps below to check for updates once you installed git and [cloned][clon
 
 - Right click on Start button in Windows
 - Click `Windows PowerShell` to open PowerShell
-- First navigate to folder where your instance of Windows Firewall Ruleset instance is, for example:
+- First navigate to directory where your instance of Windows Firewall Ruleset instance is, for example:
 - Type: `dir` to list directories, ```cd SomeDirectoryName``` to move to some directory or
 ```cd ..``` to go one directory back
-- Type: ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset folder
+- Type: ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset directory
 
 Following 2 sets of commands are typed only once for initial setup:
 

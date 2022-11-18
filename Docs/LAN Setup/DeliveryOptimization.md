@@ -49,7 +49,7 @@ Delivery Optimization settings in Group Policy under:
 Check Clients Can Reach Delivery Optimization Cloud Services
 
 ```powershell
-Get-DeliveryOptimizationStatus | Format-List FileID,Status,Priority,SourceURL
+Get-DeliveryOptimizationStatus | Format-List FileID, Status, Priority, SourceURL
 ```
 
 Can Clients Reach Peers on the Network
@@ -61,7 +61,7 @@ Get-DeliveryOptimizationPerfSnap -Verbose
 Other Delivery Optimization PowerShell Cmdlets
 
 ```powershell
-Get-DeliveryOptimizationLog | Set-Content c:\temp\dosvc.log
+Get-DeliveryOptimizationLog | Set-Content C:\dosvc.log
 ```
 
 [delivery optimization]: https://docs.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization

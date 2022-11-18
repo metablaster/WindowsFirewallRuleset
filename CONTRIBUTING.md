@@ -23,7 +23,7 @@ firewall for your own needs.
     - [In rules (rule description)](#in-rules-rule-description)
     - [In command line prompts (current execution help)](#in-command-line-prompts-current-execution-help)
     - [In comment based help (module and script main documentation source)](#in-comment-based-help-module-and-script-main-documentation-source)
-    - [In module Help folder (module online documentation)](#in-module-help-folder-module-online-documentation)
+    - [In module Help directory (module online documentation)](#in-module-help-directory-module-online-documentation)
     - [In docs directory (general project documentation)](#in-docs-directory-general-project-documentation)
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
@@ -183,7 +183,7 @@ Following 2 extensions are optional and will not be automatically offerred for i
 
 - [GitLens][extension gitlens]
 
-    It provides so many great git features inside VSCode it can't be explained in one line
+    It provides so many great git features in VSCode it can't be explained in one line
 
 - [GitHub Pull Requests and Issues][pull requests]
 
@@ -232,7 +232,7 @@ formatting source files manually, otherwise it's enough to right click into any 
 select `Format document`.
 
 Lines should be kept within 100-120 columns, however it is not always practical, so it's not a hard
-rule, workspace settings are configured to show rulers inside code editor.
+rule, workspace settings are configured to show rulers in code editor.
 
 If you use some other code editor it's recommended you configure it according to these rules which
 are found in `.vscode`, `Config` and repository root directory.
@@ -443,9 +443,9 @@ You must avoid following comment based content to avoid errors while generating 
 - For anything else keep in mind that any markdown syntax in comments will be formatted in the
 resulting markdown file as markdown not as plain text, which may give unexpected results.
 
-### In module Help folder (module online documentation)
+### In module Help directory (module online documentation)
 
-The `Scripts` folder contains `Update-HelpContent.ps1` which when run will scan comment based
+The `Scripts` directory contains `Update-HelpContent.ps1` which when run will scan comment based
 help and generate online documentation for `Get-Help -Online` and help content for `Update-Help`
 on target module.
 
@@ -523,8 +523,9 @@ be as cool or as easy as debugging code.
 
 Knowing this here are some recommendations:
 
-1. Screw debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see what the
-code is doing, this is so much faster and more useful and informative than stepping trough code.
+1. Forget about debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see
+what the code is doing, this is so much faster and more useful and informative than stepping trough
+code.
 
 2. Run PS as Admin and type command by commad which you wish to test by copying code out of editor
 into the console, this is much more practical than stepping trough code because you can handle
@@ -575,7 +576,7 @@ systems, but this likely won't happen any time soon.
 
 ## Making new scripts or modules
 
-Inside `Templates` folder there are few template scripts as a starting point.\
+Inside `Templates` directory there are few template scripts as a starting point.\
 Copy them to target location, update starting code and you're ready to start working.
 
 These templates are always up to date for current rule design, code and formatting style in this

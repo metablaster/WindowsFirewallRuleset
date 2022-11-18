@@ -1,5 +1,5 @@
 
-# LAN directory
+# LAN Setup directory
 
 Contains information on how to setup up LAN network
 

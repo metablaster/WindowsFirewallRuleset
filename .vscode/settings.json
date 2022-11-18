@@ -307,6 +307,7 @@
 			"foreground": "#B8D7A3"
 		}
 	],
+	"autoscroll.enable": true,
 	"autoscroll.autoScrollAllOpenedFiles": false,
 	"autoscroll.keepLastLineInCenter": true,
 	// Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
