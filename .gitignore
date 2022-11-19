@@ -67,6 +67,7 @@
 # Visual Studio upgrade files
 *.htm
 *.html
+!docs/*.html
 
 # Visual Studio manifest files
 *.manifest
