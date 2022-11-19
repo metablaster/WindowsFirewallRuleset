@@ -4,8 +4,10 @@
 
 # The name of the workflow as it will appear in the "Actions" tab of the GitHub repository.
 name: PSScriptAnalyzer
+
 # Specifies the trigger for this workflow.
 on: [workflow_dispatch]
+
 # Groups together all the jobs that run.
 jobs:
   # Job ID, a unique string identifier for the job.
@@ -20,6 +22,7 @@ jobs:
     # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
     - name: Checkout code
       uses: actions/checkout@v3
+
     # PSScriptAnalyzer custom action
     - name: Run PSScriptAnalyzer
       # Used to tell GitHub which action you want to use
