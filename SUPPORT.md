@@ -24,11 +24,11 @@ anything related such as networking, security, privacy, troubleshooting and repo
 
 ## Documentation
 
-Inside [Docs](Docs) directory you will find useful information not only about this project but
+Inside [docs](docs) directory you will find useful information not only about this project but
 also general information on how to troubleshoot firewall and network problems, or to gather other
 relevant information.
 
-It might answer some of your questions, for example [Monitoring Firewall](/Docs/MonitoringFirewall.md)
+It might answer some of your questions, for example [Monitoring Firewall](/docs/MonitoringFirewall.md)
 provides instructions on how to monitor firewall in real time.
 
 [Table of Contents](#table-of-contents)
@@ -96,7 +96,7 @@ all of which is explained in [CONTRIBUTING.md](CONTRIBUTING.md)
 ## Legacy support
 
 For information on how to make use of this firewall on older Windows systems such as Windows 7 or
-Windows Server 2008 see [Legacy Support](/Docs/LegacySupport.md)
+Windows Server 2008 see [Legacy Support](/docs/LegacySupport.md)
 
 [Table of Contents](#table-of-contents)
 

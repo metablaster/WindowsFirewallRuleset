@@ -790,5 +790,5 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 [Table of Contents](#table-of-contents)
 
-[changelog]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/Docs/CHANGELOG.md "Visit latest changelog"
+[changelog]: https://github.com/metablaster/WindowsFirewallRuleset/blob/develop/docs/CHANGELOG.md "Visit latest changelog"
 [appsid-issue]: https://github.com/metablaster/WindowsFirewallRuleset/issues/6 "See issue"

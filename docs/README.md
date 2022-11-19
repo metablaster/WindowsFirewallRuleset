@@ -132,7 +132,7 @@ you much valuable administration time.
 
 ## License
 
-[![MIT license][badge license]](/LICENSE "View license")
+[![MIT license][badge license]][license]
 
 This project `Windows Firewall Ruleset` is licensed under the `MIT` license.
 
@@ -239,7 +239,7 @@ in GPO or run\
 remove all rules and restore WinRM and modified services to system defaults.
 (afterwards PowerShell restart is required)
 
-- Inside `Docs` directory there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
+- Inside `docs` directory there is a `ResetFirewall.md`, a guide on how to do it manually, by hand,
 if for some reason you're unable to run the script, or the script doesn't solve your problems.
 
 - Your existing rules will not be deleted unless you have rules in GPO with exact same group names
@@ -438,7 +438,7 @@ If you're unable to connect to internet after deploying these rules you have sev
     - Temporarily open outbound firewall in GPO or [Disable Firewall](DisableFirewall.md)
     - Troubleshoot problems: [Network troubleshooting detailed guide](NetworkTroubleshooting.md)
     - You can [Reset Firewall to previous state](ResetFirewall.md)
-    - Take a look into `Docs` directory for more troubleshooting options and documentation
+    - Take a look into `docs` directory for more troubleshooting options and documentation
 
 17. As a prerequisite to deploy firewall, some system services have been started and set to
 automatic start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these
@@ -647,7 +647,7 @@ For additional information and troubleshooting tips see also [Remoting help](Rem
 ## Support, updates and documentation
 
 For support, issue reports, suggestions or customization of this repository and methods to
-periodically update this firewall please refer to [SUPPORT.md](SUPPORT.md)
+periodically update this firewall please refer to [SUPPORT.md][to support]
 
 [Table of Contents](#table-of-contents)
 
@@ -696,3 +696,5 @@ and firewall settings
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
 [sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"
+[to support]: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/SUPPORT.md "Visit SUPPORT.md"
+[license]: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/LICENSE "View license"

@@ -25,7 +25,7 @@ the meaning is same or similar.
     - [SSH](#ssh)
     - [System](#system)
     - [WPA](#wpa)
-  - [Docs](#docs)
+  - [docs](#docs)
     - [LAN Setup](#lan-setup)
     - [Screenshots](#screenshots)
   - [Exports](#exports)
@@ -114,7 +114,7 @@ Settings for OS related software
 
 Contains settings for `Windows Performance Analyzer`
 
-## Docs
+## docs
 
 Contains detailed project documentation
 

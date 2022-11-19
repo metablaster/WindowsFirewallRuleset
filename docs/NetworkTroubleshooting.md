@@ -415,7 +415,7 @@ To troubleshoot firewall take a look at:
 
 - [Monitoring Firewall](MonitoringFirewall.md)
 - [Problematic Traffic](ProblematicTraffic.md)
-- [Rest of documentation](/Docs)
+- [Rest of documentation](/docs)
 
 [Table of Contents](#table-of-contents)
 

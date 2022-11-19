@@ -93,7 +93,7 @@ repository folder with VSCode
 6. Many other minor workspace settings to improve coding experience
 
 To work with Windows PowerShell quickly in any directory see:
-[Windows PowerShell](/Docs/WindowsPowerShell.md)
+[Windows PowerShell](/docs/WindowsPowerShell.md)
 
 Recommended workspace extensions are as follows:
 
@@ -292,7 +292,7 @@ something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would 
 such exceptions should be rare.
 
 Noun word must be singular not plural, regardless if input or output is an array of objects.\
-For more information about naming see [Naming Convention](/Docs/NamingConvention.md)
+For more information about naming see [Naming Convention](/docs/NamingConvention.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -458,7 +458,7 @@ documentation was regenerated, diff tool in VSCode is essential for this.
 
 ### In docs directory (general project documentation)
 
-The `Docs` directory in repository root contains random documentation that covers wide range of
+The `docs` directory in repository root contains random documentation that covers wide range of
 aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
 
 Remember, documenting code and features is as important as writing it!
@@ -541,7 +541,7 @@ Hyper-V guest systems with external switch (NIC) and optionally map your repo fr
 system.
 
 5. Regarding testing rules, the easiest method is get confortable with all the tools and methods
-described in [MonitoringFirewall.md](/Docs/MonitoringFirewall.md)\
+described in [MonitoringFirewall.md](/docs/MonitoringFirewall.md)\
 For remoting tests of course Hyper-V on same subnet and mapped drive proves most useful.
 
 ## Commits and pull requests
@@ -586,7 +586,7 @@ repository.
 
 ## Repository directory structure
 
-See [Directory Structure](/Docs/DirectoryStructure.md)
+See [Directory Structure](/docs/DirectoryStructure.md)
 
 ## Where to start
 
@@ -595,7 +595,7 @@ here, significant portion of code was written before this `CONTRIBUTING.md` file
 
 So it's an ongoing effort that by no means gets fulfilled.
 
-It's recommended to take a look into [TODO](/Docs/TODO.md) list and also use `todo-tree`
+It's recommended to take a look into [TODO](/docs/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
 
 [Table of Contents](#table-of-contents)

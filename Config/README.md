@@ -17,4 +17,4 @@ the need to set these things over and over again.
 9. `WPA` contains settings for Windows Performance Analyzer
 
 For more information about using these settings to configure external tools see:
-[Monitoring Firewall](../Docs/MonitoringFirewall.md)
+[Monitoring Firewall](../docs/MonitoringFirewall.md)

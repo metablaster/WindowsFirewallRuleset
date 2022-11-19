@@ -124,7 +124,7 @@ Permission is valid until system reboot, any firewall setting change or manual p
 and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
-- For sample filterline regexes take a look into `Docs\Regex.md`
+- For sample filterline regexes take a look into `docs\Regex.md`
 
 [Table of Contents](#table-of-contents)
 
@@ -219,7 +219,7 @@ traffic, as well as what ports and addresses were used, then verify you have fir
 value `FWPM_LAYER_ALE_AUTH_CONNECT_V4` means IPv4 authorizing connect requests for outgoing connection,
 based on the first packet sent. Which btw. tells us there was no adequate allow rule so the
 default outbound action was hit.
-- For detailed information on how to interpret WFP log see "Firewall" section in `Docs\Reference.md`
+- For detailed information on how to interpret WFP log see "Firewall" section in `docs\Reference.md`
 
 - [WFP Reference][ref WFP]
 - [WFP Auditing reference][ref WFP audit]
