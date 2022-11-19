@@ -115,7 +115,7 @@ here is how it feels in VSCode.
 - To apply this setting restart PowerShell then run `Scripts\Complete-Firewall.ps1` and reboot system
 - Next step is to grant appropriate file system permissions to firewall logs which are now written\
 to `Logs\Firewall` directory in repository, but before doing this ensure specified location as\
-well as log files have been generated, if there are no log file see [FAQ](/Docs/FAQ.md) to resolve
+well as log files have been generated, if there are no log file see [FAQ](FAQ.md) to resolve
 the issue.
 - To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot, any firewall setting change or manual permission removal.

@@ -6,7 +6,11 @@ name: Generate xml sitemap
 
 # TODO: Define triggers
 on:
-  workflow_call:
+  push:
+    branches:
+      - develop
+
+  # workflow_call:
   workflow_dispatch:
 
 jobs:

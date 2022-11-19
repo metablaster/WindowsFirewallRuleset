@@ -37,7 +37,7 @@ until I figure out how to make rules based on those allow them all to rule out p
 interfaces.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
 
-Other than this, if problem persists, you'll have to debug the problem, to get started see [MonitoringFirewall.md](/Docs/MonitoringFirewall.md)
+Other than this, if problem persists, you'll have to debug the problem, to get started see [MonitoringFirewall.md](MonitoringFirewall.md)
 
 [Table of Contents](#table-of-contents)
 
@@ -53,7 +53,7 @@ any changes to take effect:
 5. Link-Layer Topology Discovery Responder
 6. Link-Layer Topology Discovery I/O Driver
 
-For more information about these items and how to manage them see [AdapterItems.md](/Docs/LAN%20Setup/AdapterItems.md)
+For more information about these items and how to manage them see [AdapterItems.md](LAN%20Setup/AdapterItems.md)
 
 Next ensure at the minimum following network services are `Running` and optionally set to
 `Automatic` startup
@@ -79,7 +79,7 @@ In this example to fix the problem modify command above to the following and it 
 Get-NetFirewallRule -PolicyStore ([System.Environment]::MachineName)
 ```
 
-If you're trying to deploy or manage firewall remotely see this document [Remote.md](/Docs/Remote.md)
+If you're trying to deploy or manage firewall remotely see this document [Remote.md](Remote.md)
 
 If none of this works even after reboot of all involved computers, following link might help:
 
@@ -266,7 +266,7 @@ modifying settings/rules)
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to deploy firewall and try again.
 
-The "access is denied" error may also happen with remoting, see [Remote.md](/Docs/Remote.md) to
+The "access is denied" error may also happen with remoting, see [Remote.md](Remote.md) to
 resolve issues with remoting.
 
 [Table of Contents](#table-of-contents)

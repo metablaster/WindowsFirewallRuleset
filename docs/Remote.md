@@ -263,7 +263,7 @@ finally
 }
 ```
 
-For additional breakdown of registry key naming convention and exceptions see [NamingConvention.md](/Docs/NamingConvention.md)
+For additional breakdown of registry key naming convention and exceptions see [NamingConvention.md](NamingConvention.md)
 
 [Table of Contents](#table-of-contents)
 

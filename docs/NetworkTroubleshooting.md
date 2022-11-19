@@ -353,7 +353,7 @@ remember, "Symmetric NAT (Dynamic NAT)" may cause you a lot of multiplayer troub
 
 Link below contains detailed guidelines:
 
-[LAN Setup](/Docs/LAN%20Setup)
+[LAN Setup](LAN%20Setup)
 
 [Table of Contents](#table-of-contents)
 
