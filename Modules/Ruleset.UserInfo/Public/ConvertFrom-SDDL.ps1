@@ -98,8 +98,6 @@ function ConvertFrom-SDDL
 		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 
 		[hashtable] $SessionParams = @{}
-		$Domain = Format-ComputerName $Domain
-
 		if ($PSCmdlet.ParameterSetName -eq "Session")
 		{
 			$Domain = $Session.ComputerName
@@ -107,10 +105,16 @@ function ConvertFrom-SDDL
 		}
 		else
 		{
-			$SessionParams.ComputerName = $Domain
-			if ($Credential)
+			$Domain = Format-ComputerName $Domain
+
+			# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+			if ($Domain -ne [System.Environment]::MachineName)
 			{
-				$SessionParams.Credential = $Credential
+				$SessionParams.ComputerName = $Domain
+				if ($Credential)
+				{
+					$SessionParams.Credential = $Credential
+				}
 			}
 		}
 	}

@@ -63,7 +63,7 @@ function Get-WindowsKit
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -152,7 +152,7 @@ function Get-WindowsKit
 			$Version = $AllVersions | Select-Object -Last 1
 
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = "Windows Kits"
 				Version = $Version
 				Publisher = "Microsoft Corporation"

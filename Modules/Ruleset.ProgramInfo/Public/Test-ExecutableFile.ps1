@@ -146,17 +146,24 @@ function Test-ExecutableFile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[hashtable] $ConnectParams = @{}
+	[hashtable] $SessionParams = @{}
 	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$ConnectParams.Session = $Session
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$ConnectParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$ConnectParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
@@ -167,7 +174,7 @@ function Test-ExecutableFile
 		$InformationPreference = "SilentlyContinue"
 	}
 
-	$ExpandedPath = Invoke-Command @ConnectParams -ScriptBlock {
+	$ExpandedPath = Invoke-Command @SessionParams -ScriptBlock {
 		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
 	}
 
@@ -177,7 +184,7 @@ function Test-ExecutableFile
 	# NOTE: Index 0 is this function
 	$Caller = (Get-PSCallStack)[1].Command
 
-	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet @ConnectParams)
+	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet @SessionParams)
 	{
 		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{
@@ -235,7 +242,7 @@ function Test-ExecutableFile
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
-				if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams)
+				if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
 				{
 					return $false
 				}
@@ -248,7 +255,7 @@ function Test-ExecutableFile
 				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
 					-MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
 
-				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams | Out-Null
+				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
 				return $false
 			}
 		}

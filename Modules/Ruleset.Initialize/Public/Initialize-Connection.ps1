@@ -61,8 +61,8 @@ function Initialize-Connection
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# Establish WinRM connection to local or remote computer
-	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to remote computer and enable remote registry"))
+	$ErrorActionPreference = "Stop"
+	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to WinRM service and enable remote registry"))
 	{
 		if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 		{
@@ -70,9 +70,11 @@ function Initialize-Connection
 			Write-Information -MessageData "INFO: Verifying connection status to '$PolicyStore'"
 			if (($SessionInstance.State -ne "Opened") -or (!$CimServer.TestConnection()))
 			{
-				Write-Error -Category ConnectionError -TargetObject $PolicyStore -ErrorAction Stop `
+				Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 					-Message "Connection to $PolicyStore is broken, please restart PowerShell and try again"
 			}
+
+			return
 		}
 
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
@@ -133,20 +135,20 @@ function Initialize-Connection
 
 			if (!$RemotingCredential)
 			{
-				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$Domain'"
+				# Will happen if credential request was dismissed using ESC key or by pressing Cancel.
+				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$PolicyStore'"
 			}
+			# Will happen when no password is specified
 			elseif ($RemotingCredential.Password.Length -eq 0)
 			{
-				# Will happen when no password is specified
-				Write-Error -Category InvalidData -Message "User '$($RemotingCredential.UserName)' must have a password"
-
 				if (($PolicyStore -in $LocalStore) -and (Test-Credential -User $RemotingCredential -Local))
 				{
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] User $($RemotingCredential.UserName) has no password set on local computer"
 				}
 
+				$UserName = $RemotingCredential.UserName
 				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
+				Write-Error -Category InvalidData -Message "User '$UserName' must have a password"
 			}
 
 			$ConnectParams["Credential"] = $RemotingCredential
@@ -289,7 +291,7 @@ function Initialize-Connection
 		}
 		else
 		{
-			Write-Error -Category NotImplemented -TargetObject $PolicyStore -EA Stop `
+			Write-Error -Category NotImplemented -TargetObject $PolicyStore `
 				-Message "Deployment to specified policy store not implemented '$PolicyStore'"
 		}
 
@@ -310,7 +312,7 @@ function Initialize-Connection
 		}
 		catch
 		{
-			Write-Error -ErrorRecord $_ -ErrorAction Stop
+			Write-Error -ErrorRecord $_
 		}
 	}
 }

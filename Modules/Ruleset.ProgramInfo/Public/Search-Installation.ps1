@@ -117,19 +117,24 @@ function Search-Installation
 	}
 	else
 	{
-		$SessionParams.ComputerName = $Domain
-		$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
-		$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
+		$Domain = Format-ComputerName $Domain
 
-		if ($Credential)
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
-			$PSDefaultParameterValues["Edit-Table:Credential"] = $Credential
+			$SessionParams.ComputerName = $Domain
+			$PSDefaultParameterValues["Edit-Table:Domain"] = $Domain
+			$PSDefaultParameterValues["Update-Table:Domain"] = $Domain
+
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+				$PSDefaultParameterValues["Edit-Table:Credential"] = $Credential
+			}
 		}
 	}
 
 	Initialize-Table
-	$MachineName = Format-ComputerName $Domain
 	$PSDefaultParameterValues["Edit-Table:Quiet"] = $Quiet
 
 	# TODO: if it's program in user profile then how do we know it that applies to admins or users in rule?
@@ -499,7 +504,7 @@ function Search-Installation
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
 			# Update-Table -Search "Microsoft Office"
 
-			if ($MachineName -ne $script:LastPolicyStore)
+			if ($Domain -ne $script:LastPolicyStore)
 			{
 				# If domain changed, need to update script cache
 				$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain

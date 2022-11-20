@@ -86,7 +86,6 @@ function Get-GroupSID
 			Namespace = "root\cimv2"
 		}
 
-		$Domain = Format-ComputerName $Domain
 		if ($PSCmdlet.ParameterSetName -eq "CimSession")
 		{
 			$Domain = $CimSession.ComputerName
@@ -94,6 +93,7 @@ function Get-GroupSID
 		}
 		else
 		{
+			$Domain = Format-ComputerName $Domain
 			$CimParams.ComputerName = $Domain
 		}
 	}

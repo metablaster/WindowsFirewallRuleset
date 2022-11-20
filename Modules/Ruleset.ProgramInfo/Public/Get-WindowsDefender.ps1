@@ -63,7 +63,7 @@ function Get-WindowsDefender
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -111,7 +111,7 @@ function Get-WindowsDefender
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
 
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = "Windows Defender"
 				Version = (Split-Path $InstallLocation -Leaf)
 				Publisher = "Microsoft Corporation"

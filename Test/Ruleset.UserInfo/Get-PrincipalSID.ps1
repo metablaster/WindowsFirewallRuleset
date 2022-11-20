@@ -75,18 +75,22 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-PrincipalSID"
 
-[string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
-
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote CimSession"
-	Get-PrincipalSID -User $Users -CimSession $CimServer
+	Start-Test "Get remote user" -Command Get-GroupPrincipal
+	$Users = Get-GroupPrincipal -Group Users -CimSession $CimServer
+	$Users
+
+	Start-Test "Remote CimSession $($Users[0].User)"
+	Get-PrincipalSID -User $Users[0].User -CimSession $CimServer
 
 	# Start-Test "Remote Domain"
 	# Get-PrincipalSID -User $Users -Domain $Domain
 }
 else
 {
+	[string[]] $Users = @("Administrator", $TestUser, $TestAdmin)
+
 	#
 	# Test users
 	#

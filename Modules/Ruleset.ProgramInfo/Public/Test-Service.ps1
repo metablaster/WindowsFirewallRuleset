@@ -123,17 +123,24 @@ function Test-Service
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[hashtable] $ConnectParams = @{}
+	[hashtable] $SessionParams = @{}
 	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$ConnectParams.Session = $Session
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$ConnectParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$ConnectParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
@@ -147,7 +154,7 @@ function Test-Service
 	# Keep track of already checked service signatures
 	[hashtable] $BinaryPathCache = @{}
 
-	$Services = Invoke-Command @ConnectParams -ScriptBlock {
+	$Services = Invoke-Command @SessionParams -ScriptBlock {
 		Get-Service -Name $using:Name -ErrorAction Ignore
 	}
 
@@ -194,7 +201,7 @@ function Test-Service
 			}
 
 			# [System.Management.Automation.Signature]
-			$Signature = Invoke-Command @ConnectParams -ScriptBlock {
+			$Signature = Invoke-Command @SessionParams -ScriptBlock {
 				Get-AuthenticodeSignature -LiteralPath $using:BinaryPath
 			}
 
@@ -205,7 +212,7 @@ function Test-Service
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
 					$BinaryPathCache.Add($BinaryPath, $true)
 
-					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams)
+					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
 					{
 						Write-Output $false
 						continue
@@ -218,7 +225,7 @@ function Test-Service
 				{
 					Write-Error -Category SecurityError -TargetObject $BinaryPath `
 						-Message "Digital signature verification failed for service '$($Service.Name)'"
-					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @ConnectParams | Out-Null
+					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
 				}
 			}
 			else

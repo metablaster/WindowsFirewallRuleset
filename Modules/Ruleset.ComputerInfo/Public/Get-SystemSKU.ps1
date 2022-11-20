@@ -98,7 +98,7 @@ function Get-SystemSKU
 		[Alias("ComputerName", "CN")]
 		[string[]] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "Session")]
+		[Parameter(ParameterSetName = "CimSession")]
 		[CimSession] $CimSession
 	)
 

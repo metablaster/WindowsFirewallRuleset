@@ -94,8 +94,6 @@ function Get-PathSDDL
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $SessionParams = @{}
-	$Domain = Format-ComputerName $Domain
-
 	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
 		$Domain = $Session.ComputerName
@@ -103,10 +101,16 @@ function Get-PathSDDL
 	}
 	else
 	{
-		$SessionParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 

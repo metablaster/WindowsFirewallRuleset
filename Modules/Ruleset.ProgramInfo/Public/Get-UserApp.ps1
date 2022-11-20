@@ -115,17 +115,23 @@ function Get-UserApp
 	}
 	else
 	{
-		$SessionParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
-	$MachineName = Format-ComputerName $Domain
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting apps for '$User' user on computer '$MachineName'"
+	$Domain = Format-ComputerName $Domain
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting apps for '$User' user on computer '$Domain'"
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($MachineName -eq [System.Environment]::MachineName))
+	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
@@ -146,12 +152,12 @@ function Get-UserApp
 		Select-Object -ExpandProperty SystemDrive
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
-		$DomainPath = "\\$MachineName\$SystemDrive`$\"
+		$DomainPath = "\\$Domain\$SystemDrive`$\"
 	}
 
 	if (!$Apps)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] No apps were found for '$User' user on '$MachineName'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] No apps were found for '$User' user on '$Domain'"
 	}
 
 	foreach ($App in $Apps)
@@ -165,7 +171,7 @@ function Get-UserApp
 		if (Test-Path -PathType Container -Path $RemotePath)
 		{
 			# There is no Domain property, so add one, PSComputerName property is of no use here
-			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $MachineName
+			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
 		}
 		else
 		{

@@ -65,7 +65,7 @@ function Get-ExecutablePath
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 	if (Test-Computer $Domain)
 	{
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
@@ -164,7 +164,7 @@ function Get-ExecutablePath
 				# Getting more key entries not possible in this leaf key
 				# NOTE: Some key names are named as alternative executable name
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					Name = $Executable
 					InstallLocation = $InstallLocation
 					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"

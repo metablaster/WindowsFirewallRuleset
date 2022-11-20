@@ -79,8 +79,12 @@ Enter-Test "Get-OneDrive"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote default"
-	Get-OneDrive -Domain $Domain -User $TestUser
+	Start-Test "Get remote user" -Command Get-GroupPrincipal
+	$Users = Get-GroupPrincipal -Group Users -CimSession $CimServer
+	$Users
+
+	Start-Test "Remote default $($Users[0].User)"
+	Get-OneDrive -Domain $Domain -User $Users[0].User
 }
 else
 {

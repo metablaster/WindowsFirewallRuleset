@@ -168,14 +168,19 @@ function Get-AppCapability
 		}
 		else
 		{
-			$SessionParams.ComputerName = $Domain
-			if ($Credential)
+			$Domain = Format-ComputerName $Domain
+
+			# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+			if ($Domain -ne [System.Environment]::MachineName)
 			{
-				$SessionParams.Credential = $Credential
+				$SessionParams.ComputerName = $Domain
+				if ($Credential)
+				{
+					$SessionParams.Credential = $Credential
+				}
 			}
 		}
 
-		$MachineName = Format-ComputerName $Domain
 		$InvocationName = $MyInvocation.InvocationName
 
 		if ($PSCmdlet.ParameterSetName -eq "Name")
@@ -197,7 +202,7 @@ function Get-AppCapability
 				$AppxParams["User"] = $User
 			}
 
-			if ($MachineName -eq [System.Environment]::MachineName)
+			if ($Domain -eq [System.Environment]::MachineName)
 			{
 				# HACK: module not imported, need to import manually
 				Import-WinModule -Name Appx -ErrorAction Stop

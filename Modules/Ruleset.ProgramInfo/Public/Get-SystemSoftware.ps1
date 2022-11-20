@@ -64,7 +64,7 @@ function Get-SystemSoftware
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -163,7 +163,7 @@ function Get-SystemSoftware
 
 				# Get more key entries as needed
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					Name = $SubKey.GetValue("DisplayName")
 					Version = $SubKey.GetValue("DisplayVersion")
 					Publisher = $SubKey.GetValue("Publisher")

@@ -76,8 +76,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Get-UserSoftware"
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote default"
-	Get-UserSoftware -Domain $Domain -User $TestUser
+	Start-Test "Get remote user" -Command Get-GroupPrincipal
+	$Users = Get-GroupPrincipal -Group Users -CimSession $CimServer
+	$Users
+
+	Start-Test "Remote default $($Users[0].User)"
+	Get-UserSoftware -CimSession $CimServer -User $Users[0].User
 }
 else
 {

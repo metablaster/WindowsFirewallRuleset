@@ -144,17 +144,24 @@ function Test-FileSystemPath
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[hashtable] $ConnectParams = @{}
+	[hashtable] $SessionParams = @{}
 	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
-		$ConnectParams.Session = $Session
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$ConnectParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$ConnectParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
@@ -188,7 +195,7 @@ function Test-FileSystemPath
 		return $false
 	}
 
-	$ExpandedPath = Invoke-Command @ConnectParams -ScriptBlock {
+	$ExpandedPath = Invoke-Command @SessionParams -ScriptBlock {
 		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
 	}
 
@@ -227,7 +234,7 @@ function Test-FileSystemPath
 	}
 	else
 	{
-		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name @ConnectParams
+		$BlackList = Select-EnvironmentVariable -From BlackList -Property Name @SessionParams
 		if ([array]::Find($BlackList, [System.Predicate[string]] { $LiteralPath -like "*$($args[0])*" }))
 		{
 			$Status = "Specified environment variable was blacklisted"
@@ -238,7 +245,7 @@ function Test-FileSystemPath
 	{
 		if ($UserProfile -or $Firewall)
 		{
-			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name @ConnectParams
+			$UserVariables = Select-EnvironmentVariable -From UserProfile -Property Name @SessionParams
 			$IsUserProfile = [array]::Find($UserVariables, [System.Predicate[string]] { $LiteralPath -like "$($args[0])*" })
 
 			if ($Firewall)
@@ -252,7 +259,7 @@ function Test-FileSystemPath
 				# Verify path environment variables are whitelisted
 				# NOTE: This check must be before qualifier check to get precise error description
 				$RegexVariable = [regex]::Match($LiteralPath, "(?<=%)[^%\\]+(?=%)")
-				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact @ConnectParams
+				$WhiteList = Select-EnvironmentVariable -From WhiteList -Property Name -Exact @SessionParams
 
 				while ($RegexVariable.Success)
 				{
@@ -292,7 +299,7 @@ function Test-FileSystemPath
 			}
 		}
 
-		Invoke-Command @ConnectParams -ArgumentList $WriteConditional -ScriptBlock {
+		Invoke-Command @SessionParams -ArgumentList $WriteConditional -ScriptBlock {
 			# NOTE: Must not be declared as [scriptblock], otherwise [ScriptBlock]::Create() (later) fails
 			param ($WriteConditional)
 

@@ -39,6 +39,9 @@ User name in form of "USERNAME"
 .PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
 PS> Get-OneDrive "USERNAME"
 
@@ -59,25 +62,39 @@ if OneDrive can be installed for all users too.
 #>
 function Get-OneDrive
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-OneDrive.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("UserName")]
 		[string] $User,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+
+	[hashtable] $CimParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "CimSession")
+	{
+		$Domain = $CimSession.ComputerName
+		$CimParams.CimSession = $CimSession
+	}
+	else
+	{
+		$Domain = Format-ComputerName $Domain
+		$CimParams.ComputerName = $Domain
+	}
 
 	if (Test-Computer $Domain)
 	{
-		$Principal = Get-PrincipalSID $User -Domain $Domain
+		$Principal = Get-PrincipalSID $User @CimParams
 		if (!$Principal) { return }
 
 		$UserSID = $Principal.SID
@@ -105,7 +122,7 @@ function Get-OneDrive
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] User '$User' is not logged into system"
 
-			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem -CimSession $CimServer |
+			[string] $SystemDrive = Get-CimInstance -Class Win32_OperatingSystem @CimParams |
 			Select-Object -ExpandProperty SystemDrive
 			$UserRegConfig = "$SystemDrive\Users\$User\NTUSER.DAT"
 
@@ -177,7 +194,7 @@ function Get-OneDrive
 
 			# Get more key entries as needed
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = "OneDrive"
 				Version = $RootKey.GetValue("Version")
 				Publisher = "Microsoft Corporation"

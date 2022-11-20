@@ -63,7 +63,7 @@ function Get-InstallProperty
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -137,7 +137,7 @@ function Get-InstallProperty
 				# TODO: generate Principal entry in all registry functions
 				# Get more key entries as needed
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					Name = $ProductKey.GetValue("DisplayName")
 					Version = $ProductKey.GetValue("DisplayVersion")
 					Publisher = $ProductKey.GetValue("Publisher")

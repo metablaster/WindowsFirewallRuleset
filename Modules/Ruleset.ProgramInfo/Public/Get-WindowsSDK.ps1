@@ -63,7 +63,7 @@ function Get-WindowsSDK
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -129,7 +129,7 @@ function Get-WindowsSDK
 			$InstallLocation = Format-Path $InstallLocation
 
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = $SubKey.GetValue("ProductName")
 				Version = $SubKey.GetValue("ProductVersion")
 				Publisher = "Microsoft Corporation"

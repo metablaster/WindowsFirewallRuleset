@@ -65,7 +65,7 @@ function Get-SqlManagementStudio
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -130,7 +130,7 @@ function Get-SqlManagementStudio
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing registry key: $HKLMSubKey"
 
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = "Microsoft SQL Server Management Studio"
 				Version = $SubKey.GetValue("Version")
 				Publisher = "Microsoft Corporation"

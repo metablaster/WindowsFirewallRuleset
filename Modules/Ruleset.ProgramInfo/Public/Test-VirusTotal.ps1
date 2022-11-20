@@ -107,14 +107,21 @@ function Test-VirusTotal
 		[hashtable] $SessionParams = @{}
 		if ($PsCmdlet.ParameterSetName -eq "Session")
 		{
+			$Domain = $Session.ComputerName
 			$SessionParams.Session = $Session
 		}
 		else
 		{
-			$SessionParams.ComputerName = $Domain
-			if ($Credential)
+			$Domain = Format-ComputerName $Domain
+
+			# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+			if ($Domain -ne [System.Environment]::MachineName)
 			{
-				$SessionParams.Credential = $Credential
+				$SessionParams.ComputerName = $Domain
+				if ($Credential)
+				{
+					$SessionParams.Credential = $Credential
+				}
 			}
 		}
 

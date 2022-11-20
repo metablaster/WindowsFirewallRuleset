@@ -64,7 +64,7 @@ function Get-NetFramework
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -123,7 +123,7 @@ function Get-NetFramework
 
 				# we add entry regardless of presence of install path
 				[PSCustomObject]@{
-					Domain = $MachineName
+					Domain = $Domain
 					Version = $Version
 					InstallLocation = $InstallLocation
 					RegistryKey = $SubKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
@@ -174,7 +174,7 @@ function Get-NetFramework
 
 					# we add entry regardless of presence of install path
 					[PSCustomObject]@{
-						Domain = $MachineName
+						Domain = $Domain
 						Name = ".NET Framework"
 						Version = $Version
 						Publisher = "Microsoft Corporation"

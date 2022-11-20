@@ -39,6 +39,9 @@ User name in form of "USERNAME"
 .PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .EXAMPLE
 PS> Get-UserSoftware "User"
 
@@ -56,7 +59,7 @@ TODO: We should make a query for an array of users, will help to save into varia
 #>
 function Get-UserSoftware
 {
-	[CmdletBinding(
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
@@ -64,17 +67,31 @@ function Get-UserSoftware
 		[Alias("UserName")]
 		[string] $User,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "CimSession")]
+		[CimSession] $CimSession
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+
+	[hashtable] $CimParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "CimSession")
+	{
+		$Domain = $CimSession.ComputerName
+		$CimParams.CimSession = $CimSession
+	}
+	else
+	{
+		$Domain = Format-ComputerName $Domain
+		$CimParams.ComputerName = $Domain
+	}
 
 	if (Test-Computer $Domain)
 	{
-		$Principal = Get-PrincipalSID $User -Domain $Domain
+		$Principal = Get-PrincipalSID $User @CimParams
 		if (!$Principal) { return }
 
 		$HKU = $Principal.SID
@@ -134,7 +151,7 @@ function Get-UserSoftware
 
 			# Get more key entries as needed
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				Name = $SubKey.GetValue("DisplayName")
 				Version = $SubKey.GetValue("DisplayVersion")
 				Publisher = $SubKey.GetValue("Publisher")
