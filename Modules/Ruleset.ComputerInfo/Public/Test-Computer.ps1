@@ -135,9 +135,9 @@ function Test-Computer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$VerbosePreference = "Continue"
 
 	$Status = $false
+	$PreviousPort = $Port
 	$Domain = Format-ComputerName $Domain
 
 	# True with or without port specified
@@ -153,15 +153,14 @@ function Test-Computer
 		# Test WSMan
 		if ($Protocol -ne "TCP")
 		{
-			if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
+			if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 			{
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing CIM session"
-				$Status = $CimServer.TestConnection()
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing PS and CIM session"
+				$Status = (($SessionInstance.State -eq "Opened") -and $CimServer.TestConnection())
 			}
 			else
 			{
 				$WSManParams = @{
-					Quiet = $true
 					Port = $Port
 					Authentication = $Authentication
 					ApplicationName = "wsman"
@@ -224,8 +223,9 @@ function Test-Computer
 		}
 
 		# Test TCP port
-		if (!$Status -and (($Protocol -eq "TCP") -or (($null -ne $Port) -and ($Protocol -eq "Default"))))
+		if (!$Status -and (($Protocol -eq "TCP") -or ($PreviousPort -and ($Protocol -eq "Default"))))
 		{
+			# If protocol is TCP without port specified
 			if (!$Port)
 			{
 				Write-Error -Category InvalidArgument -TargetObject $Domain `

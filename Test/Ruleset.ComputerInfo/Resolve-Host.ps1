@@ -77,17 +77,23 @@ if ($Regex.Count)
 	Write-Information -Tags "Test" -MessageData "INFO: Google IP is $($GoogleIP.IPAddressToString)"
 }
 
-Start-Test "IPv4 WORKGROUP host"
+Start-Test "default"
+Resolve-Host
+
+Start-Test "IPv4 $TestDomain host"
 Resolve-Host -Domain $TestDomain -AddressFamily IPv4
 
-Start-Test "IPv4 LocalHost"
+Start-Test "IPv4 localhost -Physical"
 Resolve-Host -AddressFamily IPv4 -Physical
 
-Start-Test "Virtual"
+Start-Test "localhost Virtual"
 Resolve-Host -Virtual
 
-Start-Test "LocalHost"
+Start-Test "localhost NETBIOS name"
 Resolve-Host -Domain ([System.Environment]::MachineName)
+
+Start-Test "localhost"
+Resolve-Host -Domain localhost
 
 Start-Test "pipeline FlushDNS"
 Select-IPInterface | Resolve-Host -FlushDNS

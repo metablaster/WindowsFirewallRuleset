@@ -48,10 +48,10 @@ Flush DNS resolver cache before resolving IP or host name
 Obtain IP address for the specified IP version
 
 .PARAMETER Physical
-Resolve local host name to IP of a physical adapter
+Resolve local host name to IP of any physical adapter
 
 .PARAMETER Virtual
-Resolve local host name to IP of a virtual adapter
+Resolve local host name to IP of any virtual adapter
 
 .PARAMETER Connected
 If specified, only interfaces connected to network are considered
@@ -136,7 +136,7 @@ function Resolve-Host
 
 				try
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving IP: $IP"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving IP '$IP'"
 					# https://docs.microsoft.com/en-us/dotnet/api/system.net.dns?view=net-5.0
 					[System.Net.IPHostEntry] $HostEntry = [System.Net.Dns]::GetHostEntry($IP)
 
@@ -144,7 +144,7 @@ function Resolve-Host
 				}
 				catch [System.Net.Sockets.SocketException]
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Socket exception resolving address: $IP"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Socket exception resolving address '$IP'"
 				}
 				catch
 				{
@@ -160,43 +160,56 @@ function Resolve-Host
 		}
 		elseif ($Domain)
 		{
-			# TODO: For localhost with multiple interfaces fine tune selection
 			foreach ($Computer in $Domain)
 			{
 				[IPAddress] $IP = $null
 				[regex] $IPv4Regex = "([0-9]{1,3}\.){3}[0-9]{1,3}"
 				[regex] $IPv6Regex = "([a-f0-9:]+:)+[a-f0-9]+"
 
+				# TODO: Assuming IPv4 connectivity and single interface connected to network
+				$DnsServer = Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses
+
 				try
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving host '$HostName' to '$AddressFamily' address"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving host '$Computer' to '$AddressFamily' address"
 
-					$HostName = Format-ComputerName $Computer
-
-					# [Microsoft.DnsClient.Commands.DnsRecord]
-					$DNSRecord = Resolve-DnsName -Name $HostName -NetbiosFallback -Server 8.8.8.8 -EA Stop
-
-					if ($DNSRecord)
+					foreach ($ServerAddress in $DnsServer)
 					{
-						if ($AddressFamily -eq "IPv4")
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Using DNS server address $ServerAddress"
+
+						# [Microsoft.DnsClient.Commands.DnsRecord]
+						$DnsRecord = Resolve-DnsName -Name $Computer -NetbiosFallback -Server $ServerAddress -EA Stop
+						$DnsRecord_TXT = $DnsRecord | Select-Object -Property IPAddress
+
+						if ($DnsRecord_TXT)
 						{
-							$Match = $IPv4Regex.Matches($DNSRecord.IPAddress)
-							if ($Match.Success)
+							if ($AddressFamily -eq "IPv4")
 							{
-								$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+								$Match = $IPv4Regex.Matches($DnsRecord_TXT.IPAddress)
+								if ($Match.Success)
+								{
+									$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+								}
 							}
-						}
-						elseif ($AddressFamily -eq "IPv6")
-						{
-							$Match = $IPv6Regex.Matches($DNSRecord.IPAddress)
-							if ($Match.Success)
+							elseif ($AddressFamily -eq "IPv6")
 							{
-								$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+								# TODO: This needs testing with IPv6
+								$Match = $IPv6Regex.Matches($DnsRecord_TXT.IPAddress)
+								if ($Match.Success)
+								{
+									$IP = $Match.Captures[0] | Select-Object -ExpandProperty Value
+								}
 							}
-						}
-						else
-						{
-							$IP = $DNSRecord | Select-Object -ExpandProperty IPAddress -Last 1
+							else
+							{
+								for ($Index = 0; $Index -lt $DnsRecord_TXT.Length; ++$Index)
+								{
+									$IP = $DnsRecord_TXT[$Index].IPAddress
+									if ($null -ne $IP) { break }
+								}
+							}
+
+							break
 						}
 					}
 				}
@@ -207,41 +220,33 @@ function Resolve-Host
 
 				if (!$IP)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Pinging host '$HostName' to '$AddressFamily' address"
-					$Ping = New-Object System.Net.NetworkInformation.Ping
-
-					try
-					{
-						$IP = ($Ping.Send($HostName).Address).IPAddressToString
-					}
-					catch
-					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to resolve host $HostName"
-					}
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to resolve host '$Computer'"
 				}
 
 				[PSCustomObject] @{
-					Domain = $HostName
+					Domain = $Computer
 					IPAddress = $IP
 					PSTypeName = "Ruleset.HostInfo"
 				}
-			}
+			} # foreach $Computer
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting local host $AddressFamily address for domain: $([System.Environment]::MachineName)"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting localhost '$AddressFamily' address for domain '$([System.Environment]::MachineName)'"
 
 			[IPAddress] $IP = $null
 
-			if ($Virtual)
+			if ($Virtual -and !$Physical)
 			{
-				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-					-Connected:$Connected -Virtual
+				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily -Connected:$Connected -Virtual
 			}
-			else # Physical
+			elseif ($Physical -and !$Virtual)
 			{
-				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-					-Connected:$Connected -Physical
+				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily -Connected:$Connected -Physical
+			}
+			else
+			{
+				$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily -Connected:$Connected
 			}
 
 			if ($ConfiguredInterfaces)

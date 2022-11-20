@@ -48,6 +48,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Improved or updated module functions
 
     - `ConvertFrom-SID`
+    - `Test-Computer`
+    - `Resolve-Host`
 
 - Scripts
 

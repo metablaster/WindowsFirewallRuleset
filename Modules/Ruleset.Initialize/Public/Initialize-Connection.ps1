@@ -62,9 +62,19 @@ function Initialize-Connection
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Establish WinRM connection to local or remote computer
-	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to remote computer and enable remote registry") -and
-		!(Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore))
+	if ($PSCmdlet.ShouldProcess($PolicyStore, "Connect to remote computer and enable remote registry"))
 	{
+		if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
+		{
+			# This may happen when remote host comes offline
+			Write-Information -MessageData "INFO: Verifying connection status to '$PolicyStore'"
+			if (($SessionInstance.State -ne "Opened") -or (!$CimServer.TestConnection()))
+			{
+				Write-Error -Category ConnectionError -TargetObject $PolicyStore -ErrorAction Stop `
+					-Message "Connection to $PolicyStore is broken, please restart PowerShell and try again"
+			}
+		}
+
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
 		# NOTE: Global object RemoteRegistry (PSDrive), RemoteCim (CimSession) and RemoteSession (PSSession) are created by Connect-Computer function
 		# NOTE: Global variable CimServer is set by Connect-Computer function
