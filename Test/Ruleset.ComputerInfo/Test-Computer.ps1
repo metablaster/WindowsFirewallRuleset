@@ -74,26 +74,35 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Test-Computer"
 
-if ($PSVersionTable.PSEdition -eq "Core")
-{
-	Start-Test "-Retry 2 -Timeout 1"
-	Test-Computer $Domain -Retry 2 -Timeout 1
-}
-else
-{
-	Start-Test "-Retry 2"
-	Test-Computer $Domain -Retry 2
-}
-
-Start-Test "-Retry" -Expected "FAIL"
-Test-Computer "FAILURE-COMPUTER" -Retry 2
-
 Start-Test "default"
 $Result = Test-Computer $Domain
 $Result
 
-Start-Test "WinRM $RemotingProtocol"
+if ($PSVersionTable.PSEdition -eq "Core")
+{
+	Start-Test "Ping -Retry 2 -Timeout 1"
+	Test-Computer $Domain -Retry 2 -Timeout 1
+}
+else
+{
+	Start-Test "Ping -Retry 2"
+	Test-Computer $Domain -Retry 2
+}
+
+Start-Test "Ping with HTTP" -Expected "Fail"
+Test-Computer $Domain -Retry 2 -Protocol HTTP
+
+Start-Test "Ping with TCP" -Expected "Fail"
+Test-Computer $Domain -Port 5985 -Protocol Ping
+
+Start-Test "-Retry" -Expected "FAIL"
+Test-Computer "FAILURE-COMPUTER" -Retry 2
+
+Start-Test "WinRM -Protocol $RemotingProtocol"
 Test-Computer $Domain -Protocol $RemotingProtocol
+
+Start-Test "TCP test" -Expected "FAIL"
+Test-Computer $Domain -Port 5986 -Protocol TCP
 
 Test-Output $Result -Command Test-Computer
 

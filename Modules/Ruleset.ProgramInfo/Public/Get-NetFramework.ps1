@@ -66,7 +66,7 @@ function Get-NetFramework
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$MachineName = Format-ComputerName $Domain
 
-	if (Test-Computer $Domain)
+	if (Test-Computer $Domain -Protocol $RemotingProtocol)
 	{
 		$HKLM = "SOFTWARE\Microsoft\NET Framework Setup\NDP"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine

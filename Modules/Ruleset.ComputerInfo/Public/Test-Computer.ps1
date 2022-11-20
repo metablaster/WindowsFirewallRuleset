@@ -41,11 +41,15 @@ Target computer which to test for connectivity
 .PARAMETER Protocol
 Specify the kind of a test to perform.
 Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default
-The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping
+The default is "Default" which tries connectivity in this order:
+- HTTPS
+- HTTP
+- Ping or TCP port test
 
 .PARAMETER Port
 Optionally specify port number if the WinRM server specified by
 -Domain parameter listens on non default port
+Port can also be specified to test specific port unrelated to WinRM test
 
 .PARAMETER Credential
 Specify credentials required for authentication
@@ -94,7 +98,7 @@ TODO: We should check for common issues for GPO management, not just ping status
 #>
 function Test-Computer
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "WSMan",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "TCP",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Test-Computer.md")]
 	[OutputType([bool])]
 	param (
@@ -103,21 +107,21 @@ function Test-Computer
 		[string] $Domain,
 
 		[Parameter()]
-		[ValidateSet("HTTP", "HTTPS", "Ping", "Default")]
-		[string] $Protocol = $RemotingProtocol,
+		[ValidateSet("HTTP", "HTTPS", "Ping", "TCP", "Default")]
+		[string] $Protocol = "Default",
 
-		[Parameter(ParameterSetName = "WSMan")]
+		[Parameter(ParameterSetName = "TCP")]
 		[ValidateRange(1, 65535)]
 		[int32] $Port,
 
-		[Parameter(ParameterSetName = "WSMan")]
+		[Parameter(ParameterSetName = "TCP")]
 		[PSCredential] $Credential,
 
-		[Parameter(ParameterSetName = "WSMan")]
+		[Parameter(ParameterSetName = "TCP")]
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
 		[string] $Authentication = $RemotingAuthentication,
 
-		[Parameter(ParameterSetName = "WSMan")]
+		[Parameter(ParameterSetName = "TCP")]
 		[string] $CertThumbprint,
 
 		[Parameter(ParameterSetName = "Ping")]
@@ -131,129 +135,182 @@ function Test-Computer
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	$VerbosePreference = "Continue"
 
 	$Status = $false
 	$Domain = Format-ComputerName $Domain
 
-	if (($PSCmdlet.ParameterSetName -eq "WSMan") -and ($Protocol -ne "Ping"))
+	# True with or without port specified
+	if ($PSCmdlet.ParameterSetName -eq "TCP")
 	{
-		if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
+		if ($Protocol -eq "Ping")
 		{
-			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing CIM session"
-			$Status = $CimServer.TestConnection()
+			Write-Error -Category InvalidArgument -TargetObject $Domain `
+				-Message "Protocol '$Protocol' is not compatible with the specified parameters"
+			return $false
 		}
-		else
+
+		# Test WSMan
+		if ($Protocol -ne "TCP")
 		{
-			$WSManParams = @{
-				Quiet = $true
-				Port = $Port
-				Authentication = $Authentication
-				ApplicationName = "wsman"
-				ErrorAction = "SilentlyContinue"
-			}
-
-			if ($Domain -ne [System.Environment]::MachineName)
+			if (Get-CimSession -Name RemoteCim -ErrorAction Ignore)
 			{
-				if ($Credential)
-				{
-					$WSManParams["Credential"] = $Credential
-				}
-
-				$WSManParams["ComputerName"] = $Domain
-			}
-
-			if ($Protocol -ne "HTTP")
-			{
-				if (![string]::IsNullOrEmpty($CertThumbprint))
-				{
-					$WSManParams["CertificateThumbprint"] = $CertThumbprint
-				}
-
-				$WSManParams["UseSsl"] = $true
-				$WSManParams["Protocol"] = "HTTPS"
-
-				if (!$Port)
-				{
-					$WSManParams["Port"] = 5986
-				}
-
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WSMan"
-				$WSManResult = Test-WSMan @WSManParams
-				if ($null -ne $WSManResult) { $Status = $true }
-			}
-
-			if (!$Status -and ($Protocol -ne "HTTPS"))
-			{
-				if (![string]::IsNullOrEmpty($CertThumbprint))
-				{
-					$WSManParams.Remove("CertificateThumbprint")
-				}
-
-				$WSManParams["UseSsl"] = $false
-				$WSManParams["Protocol"] = "HTTP"
-
-				if (!$Port)
-				{
-					$WSManParams["Port"] = 5985
-				}
-
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WSMan"
-				$WSManResult = Test-WSMan @WSManParams
-				if ($null -ne $WSManResult) { $Status = $true }
-			}
-		}
-	}
-
-	if (!$Status -and ($PSCmdlet.ParameterSetName -eq "Ping") -and (($Protocol -eq "Default") -or ($Protocol -eq "Ping")))
-	{
-		# Test parameters depend on PowerShell edition
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			if (!$PSBoundParameters.ContainsKey("Timeout"))
-			{
-				# NOTE: The default value for Test-Connection is 5 seconds
-				$Timeout = 2
-			}
-
-			$PingParams = @{
-				TargetName = $Domain
-				Count = $Retry
-				TimeoutSeconds = $Timeout
-				Quiet = $true
-			}
-
-			if ($ConnectionIPv4)
-			{
-				$PingParams["IPv4"] = $true
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv4"
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing CIM session"
+				$Status = $CimServer.TestConnection()
 			}
 			else
 			{
-				$PingParams["IPv6"] = $true
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv6"
+				$WSManParams = @{
+					Quiet = $true
+					Port = $Port
+					Authentication = $Authentication
+					ApplicationName = "wsman"
+					ErrorAction = "SilentlyContinue"
+				}
+
+				if ($Domain -ne [System.Environment]::MachineName)
+				{
+					if ($Credential)
+					{
+						$WSManParams["Credential"] = $Credential
+					}
+
+					$WSManParams["ComputerName"] = $Domain
+				}
+
+				if ($Protocol -ne "HTTP")
+				{
+					if (![string]::IsNullOrEmpty($CertThumbprint))
+					{
+						$WSManParams["CertificateThumbprint"] = $CertThumbprint
+					}
+
+					$WSManParams["UseSsl"] = $true
+					$WSManParams["Protocol"] = "HTTPS"
+
+					if (!$Port)
+					{
+						$WSManParams["Port"] = 5986
+					}
+
+					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WSMan"
+					$WSManResult = Test-WSMan @WSManParams
+					if ($null -ne $WSManResult) { $Status = $true }
+				}
+
+				if (!$Status -and ($Protocol -ne "HTTPS"))
+				{
+					if (![string]::IsNullOrEmpty($CertThumbprint))
+					{
+						$WSManParams.Remove("CertificateThumbprint")
+					}
+
+					$WSManParams["UseSsl"] = $false
+					$WSManParams["Protocol"] = "HTTP"
+
+					if (!$Port)
+					{
+						$WSManParams["Port"] = 5985
+					}
+
+					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WSMan"
+					$WSManResult = Test-WSMan @WSManParams
+					if ($null -ne $WSManResult) { $Status = $true }
+				}
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Ping params $($PingParams | Out-String)"
-
-			# [ManagementObject]
-			$Status = Test-Connection @PingParams
+			# Default continues with ping or TCP test...
+			if ($Protocol -ne "Default") { return $Status }
 		}
-		else
-		{
-			# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
-			# if you test NetBios name it will fail because NetBios works only over IPv4
-			# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
-			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping"
 
-			# [NetConnectionResults]
-			$Status = Test-NetConnection -ComputerName $Domain |
-			Select-Object -ExpandProperty PingSucceeded
+		# Test TCP port
+		if (!$Status -and (($Protocol -eq "TCP") -or (($null -ne $Port) -and ($Protocol -eq "Default"))))
+		{
+			if (!$Port)
+			{
+				Write-Error -Category InvalidArgument -TargetObject $Domain `
+					-Message "TCP test requires -Port to be specified"
+				return $false
+			}
+
+			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' on TCP port $Port"
+
+			# TODO: This will also perform IPv6 ping test
+			$Status = Test-NetConnection -ComputerName $Domain -Port $Port |
+			Select-Object -ExpandProperty TcpTestSucceeded
+
+			# Default continues with ping test...
+			if ($Protocol -ne "Default") { return $Status }
 		}
 	}
 
 	if (!$Status)
 	{
-		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer: $Domain"
+		# Ping test
+		if (($PSCmdlet.ParameterSetName -eq "Ping") -or ($Protocol -eq "Default"))
+		{
+			# Handle ping parameter set with port or invalid protocol specified
+			if (($Protocol -ne "Default") -and ($Protocol -ne "Ping"))
+			{
+				Write-Error -Category InvalidArgument -TargetObject $Domain `
+					-Message "Specified protocol '$Protocol' is not valid for ping test"
+				return $false
+			}
+
+			# Test parameters depend on PowerShell edition
+			if ($PSVersionTable.PSEdition -eq "Core")
+			{
+				if (!$PSBoundParameters.ContainsKey("Timeout"))
+				{
+					# NOTE: The default value for Test-Connection is 5 seconds
+					$Timeout = 2
+				}
+
+				$PingParams = @{
+					TargetName = $Domain
+					Count = $Retry
+					TimeoutSeconds = $Timeout
+					Quiet = $true
+				}
+
+				if ($ConnectionIPv4)
+				{
+					$PingParams["IPv4"] = $true
+					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv4"
+				}
+				else
+				{
+					$PingParams["IPv6"] = $true
+					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv6"
+				}
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Ping params $($PingParams | Out-String)"
+
+				# [ManagementObject]
+				$Status = Test-Connection @PingParams
+			}
+			else
+			{
+				# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
+				# if you test NetBios name it will fail because NetBios works only over IPv4
+				# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
+				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping"
+
+				# [NetConnectionResults]
+				$Status = Test-NetConnection -ComputerName $Domain |
+				Select-Object -ExpandProperty PingSucceeded
+			}
+		}
+		else
+		{
+			Write-Error -Category InvalidArgument -TargetObject $Domain -Message "Specified parameters are not compatible"
+			return $Status
+		}
+	}
+
+	if (!$Status)
+	{
+		Write-Error -Category ResourceUnavailable -TargetObject $Domain -Message "Unable to contact computer '$Domain'"
 	}
 
 	return $Status
