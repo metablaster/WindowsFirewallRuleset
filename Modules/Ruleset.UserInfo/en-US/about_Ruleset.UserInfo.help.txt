@@ -61,6 +61,9 @@ EXAMPLES
 	Test-Credential
 	Takes a PSCredential object and validates it
 
+	Test-SDDL
+	Validate syntax of a SDDL string
+
 	Test-UPN
 	Validate Universal Principal Name syntax
 

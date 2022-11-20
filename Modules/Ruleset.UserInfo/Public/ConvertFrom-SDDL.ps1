@@ -214,6 +214,13 @@ function ConvertFrom-SDDL
 							continue
 						}
 
+						# If SID is unknown Principal property will be populated with SID instead of DOMAIN\User
+						$Match = [regex]::Match($Principal, "^S-1-(\d+-)*\d+$")
+						if ($Match.Success)
+						{
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] The principal of the SDDL is unknown '$SddlEntry'"
+						}
+
 						[PSCustomObject]@{
 							Domain = Split-Principal $Principal -DomainName -Force:$Force
 							User = Split-Principal $Principal -Force:$Force

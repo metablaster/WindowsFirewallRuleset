@@ -60,6 +60,7 @@ $PublicScripts = @(
 	"Merge-SDDL"
 	"Split-Principal"
 	"Test-Credential"
+	"Test-SDDL"
 	"Test-UPN"
 )
 

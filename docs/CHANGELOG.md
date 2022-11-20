@@ -51,6 +51,10 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Test-Computer`
     - `Resolve-Host`
 
+  - New functionalities
+
+    `Test-SDDL` function to validate SDDL syntax
+
 - Scripts
 
   - Made possible to specify `localhost` and `.` for deployment

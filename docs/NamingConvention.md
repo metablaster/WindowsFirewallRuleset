@@ -112,12 +112,12 @@ No clear conventions for the following parameters
 - [switch] `DomainName` (see: Test-UPN)
 - [string] `AddressFamily` (ValidateSet())
   - `IPVersion`
-- [switch] Physical
-- [switch] Virtual
-- [switch] Connected
-- [switch] Hidden
-- [switch] Detailed
-- [string] Message
+- [switch] `Physical`
+- [switch] `Virtual`
+- [switch] `Connected`
+- [switch] `Hidden`
+- [switch] `Detailed`
+- [string] `Message`
 - `Reference*`
 - `Difference*`
 - [uint32] Seconds, Minutes, Hours...

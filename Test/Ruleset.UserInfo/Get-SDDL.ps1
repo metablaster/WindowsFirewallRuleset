@@ -73,63 +73,6 @@ Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-<#
-.SYNOPSIS
-Validate SDDL string
-
-.DESCRIPTION
-Check if SDDL string has valid syntax
-
-.PARAMETER SDDL
-Security Descriptor Definition Language string
-
-.PARAMETER Force
-If specified, no prompt to run script is shown
-
-.EXAMPLE
-PS> Get-SDDL -Group @("Users", "Administrators") | Test-SDDL
-
-.INPUTS
-[string]
-
-.OUTPUTS
-[string]
-
-.NOTES
-TODO: This needs better place, and, more such validation functions are needed
-#>
-function Test-SDDL
-{
-	[CmdletBinding()]
-	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string[]] $SDDL
-	)
-
-	begin
-	{
-		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
-	}
-	process
-	{
-		foreach ($SddlString in $SDDL)
-		{
-			try
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Testing SDDL: $SddlString"
-
-				# Set the security descriptor from the specified SDDL
-				$ACLObject.SetSecurityDescriptorSddlForm($SddlString)
-				Write-Output $SddlString
-			}
-			catch
-			{
-				Write-Error -Category InvalidArgument -TargetObject $SddlString -Message $_.Exception.Message -EV ErrorData
-			}
-		}
-	}
-}
-
 Enter-Test "Get-SDDL"
 
 if ($Domain -ne [System.Environment]::MachineName)
