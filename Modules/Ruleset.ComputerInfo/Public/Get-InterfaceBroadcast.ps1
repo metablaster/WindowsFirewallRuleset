@@ -43,9 +43,15 @@ Specifies the credential object to use for authentication
 .PARAMETER Session
 Specifies the PS session to use
 
+.PARAMETER Physical
+If specified, include only physical adapters
+
 .PARAMETER Virtual
 If specified, include only virtual adapters.
 By default only physical adapters are reported
+
+.PARAMETER Visible
+If specified, only visible interfaces are included
 
 .PARAMETER Hidden
 If specified, only hidden interfaces are included
@@ -82,7 +88,13 @@ function Get-InterfaceBroadcast
 		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter()]
+		[switch] $Physical,
+
+		[Parameter()]
 		[switch] $Virtual,
+
+		[Parameter()]
+		[switch] $Visible,
 
 		[Parameter()]
 		[switch] $Hidden
@@ -91,7 +103,6 @@ function Get-InterfaceBroadcast
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $SessionParams = @{}
-	$Domain = Format-ComputerName $Domain
 
 	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
@@ -100,38 +111,51 @@ function Get-InterfaceBroadcast
 	}
 	else
 	{
-		$SessionParams.ComputerName = $Domain
-		if ($Credential)
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
-	$SessionParams.ErrorAction = "Stop"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast addresses of connected adapters"
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting broadcast address of connected adapters"
-
-	try
-	{
+	$Params = @{
 		# Broadcast address makes sense only for IPv4
-		# NOTE: Using Invoke-Command on localhost to avoid code bloat
-		$ConfiguredAdapters = Invoke-Command @SessionParams -ScriptBlock {
-			if ($using:Virtual)
-			{
-				Select-IPInterface -AddressFamily IPv4 -Connected -Virtual -Hidden:$using:Hidden -ErrorAction SilentlyContinue
-			}
-			else
-			{
-				Select-IPInterface -AddressFamily IPv4 -Connected -Physical -Hidden:$using:Hidden -ErrorAction SilentlyContinue
-			}
-		}
+		AddressFamily = "IPv4"
+		Connected = $true
+		Physical = $true
+		Virtual = $true
+		Visible = $true
+		Hidden = $true
+		ErrorAction = "Stop"
 	}
-	catch
+
+	if ($Physical -and !$Virtual)
 	{
-		# try\catch handles error with Invoke-Command only
-		Write-Error -ErrorRecord $_
-		return
+		$Params.Virtual = $false
 	}
+	elseif ($Virtual -and !$Physical)
+	{
+		$Params.Physical = $false
+	}
+
+	if ($Visible -and !$Hidden)
+	{
+		$Params.Hidden = $false
+	}
+	elseif ($Hidden -and !$Visible)
+	{
+		$Params.Visible = $false
+	}
+
+	$ConfiguredAdapters = Select-IPInterface @SessionParams @Params
 
 	if ($ConfiguredAdapters)
 	{
@@ -158,8 +182,6 @@ function Get-InterfaceBroadcast
 	}
 	else
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] None of the adapters matches parameter set"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] None of the adapters match the parameter set"
 	}
-
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] returns null"
 }

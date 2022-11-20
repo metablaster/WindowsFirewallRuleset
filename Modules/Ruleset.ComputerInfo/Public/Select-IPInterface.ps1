@@ -38,11 +38,23 @@ This may include adapters on all or specific compartments.
 .PARAMETER AddressFamily
 Obtain interfaces configured for specific IP version
 
+.PARAMETER Domain
+Computer name on which to gather IP configuration
+
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER Physical
 If specified, include only physical adapters
 
 .PARAMETER Virtual
 If specified, include only virtual adapters
+
+.PARAMETER Visible
+If specified, only visible interfaces are included
 
 .PARAMETER Hidden
 If specified, only hidden interfaces are included
@@ -71,11 +83,11 @@ None. You cannot pipe objects to Select-IPInterface
 "NetIPConfiguration" [PSCustomObject] or error message if no adapter configured
 
 .NOTES
-TODO: If no candidates are selected it's not an error
+None.
 #>
 function Select-IPInterface
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Select-IPInterface.md")]
 	[OutputType("NetIPConfiguration")]
 	param (
@@ -84,11 +96,24 @@ function Select-IPInterface
 		[ValidateSet("IPv4", "IPv6", "Any")]
 		[string] $AddressFamily = "Any",
 
-		[Parameter(ParameterSetName = "Physical")]
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
+		[Parameter()]
 		[switch] $Physical,
 
-		[Parameter(ParameterSetName = "Virtual")]
+		[Parameter()]
 		[switch] $Virtual,
+
+		[Parameter()]
+		[switch] $Visible,
 
 		[Parameter()]
 		[switch] $Hidden,
@@ -104,16 +129,44 @@ function Select-IPInterface
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
+
+	[hashtable] $SessionParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "Session")
+	{
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+	}
+	else
+	{
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
+		{
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
+		}
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting adapter IP configuration for '$AddressFamily' address family on computer '$Domain'"
 
 	if ($CompartmentId)
 	{
 		# NetIPConfiguration
-		$ConfiguredInterface = Get-NetIPConfiguration -Detailed:$Detailed -CompartmentId:$CompartmentId
+		$ConfiguredInterface = Invoke-Command @SessionParams -ArgumentList $Detailed, $CompartmentId -ScriptBlock {
+			param ($Detailed, $CompartmentId)
+			Get-NetIPConfiguration -Detailed:$Detailed -CompartmentId:$CompartmentId
+		}
 	}
 	else
 	{
-		$ConfiguredInterface = Get-NetIPConfiguration -Detailed:$Detailed -AllCompartments
+		$ConfiguredInterface = Invoke-Command @SessionParams -ArgumentList $Detailed -ScriptBlock {
+			param ($Detailed)
+			Get-NetIPConfiguration -Detailed:$Detailed -AllCompartments
+		}
 	}
 
 	if ($AddressFamily -eq "IPv4")
@@ -148,45 +201,56 @@ function Select-IPInterface
 		}
 	}
 
+	$Message, $Con = if ($Connected) { "connected", "to" } else { "configured", "for" }
+
 	if (!$ConfiguredInterface)
 	{
 		if ($AddressFamily -eq "Any")
 		{
-			Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
-				-Message "None of the adapters are configured connect to network"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] None of the adapters are $Message"
 		}
 		else
 		{
-			Write-Error -Category ObjectNotFound -TargetObject "AllConfiguredAdapters" `
-				-Message "None of the adapters is configured for $AddressFamily"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] None of the adapters are $Message $Con '$AddressFamily' address family"
 		}
-		return $null
+
+		return
 	}
 
 	# Get-NetIPConfiguration does not tell us adapter type (hardware, hidden or virtual)
 	# Microsoft.Management.Infrastructure.CimInstance#ROOT/StandardCimv2/MSFT_NetAdapter
 	$RequestedAdapters = @()
 
-	if ($Hidden)
+	if ($Visible -and !$Hidden)
 	{
-		$RequestedAdapters = Get-NetAdapter -IncludeHidden | Where-Object {
-			$_.Hidden -eq $true
+		$RequestedAdapters = Invoke-Command @SessionParams -ScriptBlock {
+			Get-NetAdapter -IncludeHidden | Where-Object {
+				$_.Hidden -eq $false
+			}
+		}
+	}
+	elseif ($Hidden -and !$Visible)
+	{
+		$RequestedAdapters = Invoke-Command @SessionParams -ScriptBlock {
+			Get-NetAdapter -IncludeHidden | Where-Object {
+				$_.Hidden -eq $true
+			}
 		}
 	}
 	else
 	{
-		$RequestedAdapters = Get-NetAdapter -IncludeHidden | Where-Object {
-			$_.Hidden -eq $false
+		$RequestedAdapters = Invoke-Command @SessionParams -ScriptBlock {
+			Get-NetAdapter -IncludeHidden
 		}
 	}
 
-	if ($Physical)
+	if ($Physical -and !$Virtual)
 	{
 		$RequestedAdapters = $RequestedAdapters | Where-Object {
 			$_.HardwareInterface -eq $true
 		}
 	}
-	elseif ($Virtual)
+	elseif ($Virtual -and !$Physical)
 	{
 		$RequestedAdapters = $RequestedAdapters | Where-Object {
 			$_.Virtual -eq $true
@@ -195,8 +259,8 @@ function Select-IPInterface
 
 	if (!$RequestedAdapters)
 	{
-		Write-Error -Category ObjectNotFound -Message "None of the adapters matches parameter set"
-		return $null
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] None of the adapters match the specified parameter set"
+		return
 	}
 
 	# Compare results for equality
@@ -211,19 +275,18 @@ function Select-IPInterface
 	{
 		if ($AddressFamily -eq "Any")
 		{
-			Write-Error -Category ObjectNotFound `
-				-Message "None of the adapters are configured to connect to network with the specified parameter set"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] None of the adapters are $Message with the specified parameter set"
 		}
 		else
 		{
-			Write-Error -Category ObjectNotFound `
-				-Message "None of the adapters is configured for '$AddressFamily' address family and the specified parameter set"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] None of the adapters are $Message $Con '$AddressFamily' address family with the specified parameter set"
 		}
-		return $null
+
+		return
 	}
 	elseif ($Count -gt 1)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Multiple adapters are configured for '$AddressFamily' address family"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Multiple adapters match the specified parameter set for '$AddressFamily' address family"
 	}
 
 	Write-Output $SelectedInterface

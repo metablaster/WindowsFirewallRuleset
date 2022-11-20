@@ -38,6 +38,15 @@ escape codes which is required to create valid fiewall rule based on interface a
 .PARAMETER AddressFamily
 Obtain interface aliases configured for specific IP version
 
+.PARAMETER Domain
+Computer name from which to obtain interface aliases
+
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER WildCardOption
 Specify wildcard options that modify the wildcard patterns found in interface alias strings.
 Compiled:
@@ -55,6 +64,9 @@ If specified, include only physical adapters
 
 .PARAMETER Virtual
 If specified, include only virtual adapters
+
+.PARAMETER Visible
+If specified, only visible interfaces are included
 
 .PARAMETER Hidden
 If specified, only hidden interfaces are included
@@ -82,7 +94,7 @@ TODO: There is another function with the same name in Scripts folder
 #>
 function Get-InterfaceAlias
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "None",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-InterfaceAlias.md")]
 	[OutputType([WildcardPattern])]
 	param (
@@ -91,14 +103,27 @@ function Get-InterfaceAlias
 		[ValidateSet("IPv4", "IPv6", "Any")]
 		[string] $AddressFamily = "Any",
 
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
 		[Parameter()]
 		[System.Management.Automation.WildcardOptions] $WildCardOption = "None",
 
-		[Parameter(ParameterSetName = "Physical")]
+		[Parameter()]
 		[switch] $Physical,
 
-		[Parameter(ParameterSetName = "Virtual")]
+		[Parameter()]
 		[switch] $Virtual,
+
+		[Parameter()]
+		[switch] $Visible,
 
 		[Parameter()]
 		[switch] $Hidden,
@@ -108,23 +133,50 @@ function Get-InterfaceAlias
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network"
 
-	if ($Physical)
+	[hashtable] $SessionParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
-		$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-			-Connected:$Connected -Hidden:$Hidden -Physical:$Physical
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$ConfiguredInterfaces = Select-IPInterface -AddressFamily:$AddressFamily `
-			-Connected:$Connected -Hidden:$Hidden -Virtual:$Virtual
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
+		{
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
+		}
+	}
+
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting connected adapters for $AddressFamily network on computer $Domain"
+
+	if ($Physical -and !$Virtual)
+	{
+		$ConfiguredInterfaces = Select-IPInterface @SessionParams `
+			-AddressFamily:$AddressFamily -Connected:$Connected -Hidden:$Hidden -Physical
+	}
+	elseif ($Virtual -and !$Physical)
+	{
+		$ConfiguredInterfaces = Select-IPInterface @SessionParams `
+			-AddressFamily:$AddressFamily -Connected:$Connected -Hidden:$Hidden -Virtual
+	}
+	else
+	{
+		$ConfiguredInterfaces = Select-IPInterface @SessionParams `
+			-AddressFamily:$AddressFamily -Connected:$Connected -Hidden:$Hidden
 	}
 
 	if (!$ConfiguredInterfaces)
 	{
-		# NOTE: Error should be generated and shown by Select-IPInterface
-		return $null
+		# Output is generated and shown by Select-IPInterface
+		return
 	}
 
 	[WildcardPattern[]] $EscapedAliasPattern = @()

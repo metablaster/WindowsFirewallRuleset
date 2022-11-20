@@ -73,37 +73,33 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Get-InterfaceBroadcast"
+$SessionParams = @{
+	Verbose = $true
+}
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote Physical"
-	$Result = Get-InterfaceBroadcast -Session $SessionInstance
-	$Result
-
-	Start-Test "Remote Virtual"
-	Get-InterfaceBroadcast -Virtual -Session $SessionInstance
-
-	Start-Test "Remote Physical -Domain"
-	Get-InterfaceBroadcast -Domain $Domain
+	$SessionParams.Session = $SessionInstance
 }
-else
-{
-	Start-Test "default"
-	$Result = Get-InterfaceBroadcast
-	$Result
 
-	Start-Test "-Virtual"
-	Get-InterfaceBroadcast -Virtual
+Start-Test "default"
+$Result = Get-InterfaceBroadcast @SessionParams
+$Result
 
-	Start-Test "Physical"
-	Get-InterfaceBroadcast
+Start-Test "-Virtual"
+Get-InterfaceBroadcast -Virtual @SessionParams
 
-	Start-Test "-Hidden"
-	Get-InterfaceBroadcast -Hidden
+Start-Test "Physical"
+Get-InterfaceBroadcast -Physical @SessionParams
 
-	Start-Test "-Hidden -Virtual"
-	Get-InterfaceBroadcast -Hidden -Virtual
-}
+Start-Test "-Hidden"
+Get-InterfaceBroadcast -Hidden @SessionParams
+
+Start-Test "-Visible"
+Get-InterfaceBroadcast -Visible @SessionParams
+
+Start-Test "-Hidden -Virtual"
+Get-InterfaceBroadcast -Hidden -Virtual @SessionParams
 
 Test-Output $Result -Command Get-InterfaceBroadcast
 

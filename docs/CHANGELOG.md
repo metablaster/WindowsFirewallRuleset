@@ -42,6 +42,12 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - `ConvertFrom-SDDL`
     - `Get-InterfaceBroadcast`
+    - `Get-InterfaceAlias`
+    - `Select-IPInterface`
+
+  - Improved or updated module functions
+
+    - `ConvertFrom-SID`
 
 - Scripts
 
@@ -49,6 +55,15 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Made possible to deploy rules for groups other than `Users`, this otherwise means it's now
   possible to deploy rules for Administrators which is useful for Windows Server without any
   standard account
+
+- Development
+
+  - Added github workflows to:
+
+    - Run PSScriptAnalyzer
+    - Generate sitemap xml
+    - Auto assign labels to issues
+    - Publish generated sitemap to google for crawling
 
 [Table of Contents](#table-of-contents)
 

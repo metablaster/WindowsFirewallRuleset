@@ -5,12 +5,12 @@ const { google } = require('googleapis');
 const { JWT } = require('google-auth-library');
 const searchconsole = google.searchconsole('v1');
 
-// GOOGLE_SEARCH_CONSOLE_JSON_KEY is a repository secret set in: Repo -> Settings -> Secrets -> Actions
+// GOOGLE_SEARCH_CONSOLE_KEY is a repository secret set in: Repo -> Settings -> Secrets -> Actions
 // PowerShell:
 // $Data = Get-Content -Path keys.json -Encoding utf8
-// $GOOGLE_SEARCH_CONSOLE_JSON_KEY = [System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($Data))
-// Set-Clipboard -Value $GOOGLE_SEARCH_CONSOLE_JSON_KEY
-const buffer = Buffer.from(process.env.GOOGLE_SEARCH_CONSOLE_JSON_KEY, 'base64').toString('utf-8');
+// $GOOGLE_SEARCH_CONSOLE_KEY = [System.Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($Data))
+// Set-Clipboard -Value $GOOGLE_SEARCH_CONSOLE_KEY
+const buffer = Buffer.from(process.env.GOOGLE_SEARCH_CONSOLE_KEY, 'base64').toString('utf-8');
 const keys = JSON.parse(JSON.stringify(buffer));
 
 // TODO: Resolve "Error: No key or keyFile set."

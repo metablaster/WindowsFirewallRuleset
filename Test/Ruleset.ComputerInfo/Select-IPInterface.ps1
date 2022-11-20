@@ -33,6 +33,9 @@ Unit test for Select-IPInterface
 .DESCRIPTION
 Test correctness of Select-IPInterface function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -66,34 +73,45 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Select-IPInterface"
+$SessionParams = @{
+	Verbose = $true
+}
+
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	$SessionParams.Session = $SessionInstance
+}
 
 Start-Test "default"
-Select-IPInterface -Detailed
+Select-IPInterface -Detailed @SessionParams
 
 Start-Test "IPv6 FAILURE TEST"
-Select-IPInterface -AddressFamily IPv6 -ErrorAction SilentlyContinue
+Select-IPInterface -AddressFamily IPv6 -ErrorAction SilentlyContinue @SessionParams
 
 Start-Test "IPv4 -Physical"
-$Result = Select-IPInterface -AddressFamily IPv4 -Physical
+$Result = Select-IPInterface -AddressFamily IPv4 -Physical @SessionParams
 $Result
 
 Start-Test "-Physical -Hidden"
-Select-IPInterface -Physical -Hidden
+Select-IPInterface -Physical -Hidden @SessionParams
 
 Start-Test "IPv4 -Virtual"
-Select-IPInterface -AddressFamily IPv4 -Virtual
+Select-IPInterface -AddressFamily IPv4 -Virtual @SessionParams
 
 Start-Test "-Virtual -Hidden"
-Select-IPInterface -Virtual -Hidden
+Select-IPInterface -Virtual -Hidden @SessionParams
 
 Start-Test "-Hidden"
-Select-IPInterface -Hidden
+Select-IPInterface -Hidden @SessionParams
 
 Start-Test "-Connected"
-Select-IPInterface -Connected -Detailed
+Select-IPInterface -Connected -Detailed @SessionParams
+
+Start-Test "-Connected -Hidden"
+Select-IPInterface -Connected -Hidden -AddressFamily IPv6 -Detailed @SessionParams
 
 Start-Test "binding"
-Select-IPInterface -AddressFamily IPv4 -Physical | Select-Object -ExpandProperty IPv4Address
+Select-IPInterface -AddressFamily IPv4 -Virtual @SessionParams | Select-Object -ExpandProperty IPv4Address
 
 Test-Output $Result -Command Select-IPInterface
 

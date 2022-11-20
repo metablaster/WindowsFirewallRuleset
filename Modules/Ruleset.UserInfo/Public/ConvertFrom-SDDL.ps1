@@ -183,6 +183,8 @@ function ConvertFrom-SDDL
 								# SetSecurityDescriptorSddlForm only tests SDDL syntax, it does not verify if SID exists.
 								# A solution around this might be Test-SDDL function which would call ConvertFrom-SID
 								# but this would require both the -Session and -CimSession parameters
+								# TODO: See remarks about security:
+								# https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setsecuritydescriptorsddlform
 								$ACLObject.SetSecurityDescriptorSddlForm($DACL)
 
 								# [System.Security.Principal.NTAccount]
