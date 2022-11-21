@@ -42,6 +42,15 @@ Wildcard characters and relative paths are supported.
 .PARAMETER ArgumentList
 A collection of command-line arguments to use when starting the application
 
+.PARAMETER Domain
+Computer name on which to invoke process
+
+.PARAMETER Credential
+Specify Credential used for authentication to Domain.
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .PARAMETER NoNewWindow
 Whether to use the operating system shell to start the process
 
@@ -58,13 +67,14 @@ This functionality is experimental because current thread will block until timeo
 If specified, process output is returned as string.
 By default process output is formatted and redirected to information and error stream.
 
-.PARAMETER Credential
-Optionally specify Windows user name and password to use when starting the process
+.PARAMETER RunAsCredential
+Optionally specify Windows user name and password to use when starting the process.
 
 .PARAMETER LoadUserProfile
 Specify whether the Windows user profile is to be loaded from the registry
 Because loading the profile can be time-consuming, it is best to use this value only if you must
 access the information in the HKEY_CURRENT_USER registry key.
+Requires RunAsCredential of the user to be specified.
 
 .PARAMETER WorkingDirectory
 Set the working directory for the process to be started.
@@ -115,6 +125,16 @@ function Invoke-Process
 		[Parameter(Position = 1)]
 		[string] $ArgumentList,
 
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
+
 		[Parameter()]
 		[switch] $NoNewWindow,
 
@@ -128,441 +148,501 @@ function Invoke-Process
 		[Parameter()]
 		[switch] $Raw,
 
-		[Parameter(Mandatory = $true, ParameterSetName = "Credential")]
-		[PSCredential] $Credential,
+		[Parameter()]
+		[PSCredential] $RunAsCredential,
 
-		[Parameter(ParameterSetName = "Credential")]
+		[Parameter()]
 		[switch] $LoadUserProfile,
 
 		[Parameter()]
-		[Parameter(Mandatory = $true, ParameterSetName = "Credential")]
 		[string] $WorkingDirectory
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$CommandName = Split-Path -Path $Path -Leaf
-	# [System.Management.Automation.ApplicationInfo]
-	$Command = Get-Command -Name $Path -CommandType Application -ErrorAction Ignore
-
-	# Can be, not found or there are multiple matches
-	if (($Command | Measure-Object).Count -ne 1)
+	if ($LoadUserProfile -and !$RunAsCredential)
 	{
-		[System.IO.FileInfo] $FilePath = Resolve-FileSystemPath $Path -File
+		Write-Error -Category InvalidArgument -TargetObject $LoadUserProfile `
+			-Message "LoadUserProfile requires RunAsCredential to be specified"
+		return
+	}
 
-		if ($FilePath -and $FilePath.Exists)
+	[hashtable] $SessionParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "Session")
+	{
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+	}
+	else
+	{
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$Command = Get-Command -Name $FilePath.FullName -CommandType Application -ErrorAction Ignore
-
-			if (!$Command)
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $FilePath.FullName -Message "Application was not found: $($FilePath.FullName)"
+				$SessionParams.Credential = $Credential
+			}
+		}
+	}
+
+	[scriptblock] $Code = {
+		param (
+			$Path,
+			$NoNewWindow,
+			$WorkingDirectory,
+			$LoadUserProfile,
+			$Timeout,
+			$Raw,
+			[PSCredential] $RunAsCredential,
+			$ArgumentList,
+			$Async
+		)
+
+		$CommandName = Split-Path -Path $Path -Leaf
+		# [System.Management.Automation.ApplicationInfo]
+		$Command = Get-Command -Name $Path -CommandType Application -ErrorAction Ignore
+
+		# Can be, not found or there are multiple matches
+		if (($Command | Measure-Object).Count -ne 1)
+		{
+			[System.IO.FileInfo] $FilePath = Resolve-FileSystemPath $Path -File
+
+			if ($FilePath -and $FilePath.Exists)
+			{
+				$Command = Get-Command -Name $FilePath.FullName -CommandType Application -ErrorAction Ignore
+
+				if (!$Command)
+				{
+					Write-Error -Category ObjectNotFound -TargetObject $FilePath.FullName -Message "Application was not found: $($FilePath.FullName)"
+					return
+				}
+			}
+			else
+			{
+				Write-Error -Category ObjectNotFound -TargetObject $CommandName -Message "Application '$CommandName' was not found"
 				return
 			}
 		}
-		else
+
+		$CommandName = $Command.Name
+		$Process = New-Object System.Diagnostics.Process
+
+		# The application or document to start
+		$Process.StartInfo.FileName = $Command.Path
+
+		# Whether the textual output of an application is written to the StandardOutput stream
+		$Process.StartInfo.RedirectStandardOutput = $true
+
+		# Whether the error output of an application is written to the StandardError stream
+		$Process.StartInfo.RedirectStandardError = $true
+
+		# Whether to start the process in a new window
+		$Process.StartInfo.CreateNoWindow = $NoNewWindow
+
+		# Whether to use the operating system shell to start the process
+		# If the UserName property is not null or an empty string, the UseShellExecute property must be false
+		$Process.StartInfo.UseShellExecute = $false
+
+		if (![string]::IsNullOrEmpty($WorkingDirectory))
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $CommandName -Message "Application '$CommandName' was not found"
-			return
+			# When UseShellExecute property is false, sets the working directory for the process to be started.
+			# When UseShellExecute is true, sets the directory that contains the process to be started.
+			$Process.StartInfo.WorkingDirectory = $WorkingDirectory
 		}
-	}
 
-	$CommandName = $Command.Name
-	$Process = New-Object System.Diagnostics.Process
-
-	# The application or document to start
-	$Process.StartInfo.FileName = $Command.Path
-
-	# Whether the textual output of an application is written to the StandardOutput stream
-	$Process.StartInfo.RedirectStandardOutput = $true
-
-	# Whether the error output of an application is written to the StandardError stream
-	$Process.StartInfo.RedirectStandardError = $true
-
-	# Whether to start the process in a new window
-	$Process.StartInfo.CreateNoWindow = $NoNewWindow
-
-	# Whether to use the operating system shell to start the process
-	# If the UserName property is not null or an empty string, the UseShellExecute property must be false
-	$Process.StartInfo.UseShellExecute = $false
-
-	if (![string]::IsNullOrEmpty($WorkingDirectory))
-	{
-		# When UseShellExecute property is false, sets the working directory for the process to be started.
-		# When UseShellExecute is true, sets the directory that contains the process to be started.
-		$Process.StartInfo.WorkingDirectory = $WorkingDirectory
-	}
-
-	if ($PSCmdlet.ParameterSetName -eq "Credential")
-	{
-		# The user name to use when starting the process
-		$Process.StartInfo.UserName = $Credential.UserName
-
-		# The user password to use when starting the process
-		$Process.StartInfo.Password = $Credential.Password
-
-		if ($LoadUserProfile)
+		if ($RunAsCredential)
 		{
-			$Process.StartInfo.LoadUserProfile = $LoadUserProfile
-		}
-	}
+			# The user name to use when starting the process
+			$Process.StartInfo.UserName = $RunAsCredential.UserName
 
-	if ($ArgumentList)
-	{
-		# A collection of command-line arguments to use when starting the application
-		$Process.StartInfo.Arguments = $ArgumentList
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] $CommandName argument list is '$ArgumentList'"
-	}
+			# The user password to use when starting the process
+			$Process.StartInfo.Password = $RunAsCredential.Password
 
-	$InvocationName = $MyInvocation.InvocationName
-
-	if ($Async)
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Hooking up event handlers for asynchronous operations"
-
-		if ($Raw)
-		{
-			[scriptblock] $OutputDataReceived = {
-				if (![string]::IsNullOrEmpty($EventArgs.Data))
-				{
-					Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
-					$Event.MessageData.AppendLine($EventArgs.Data)
-				}
-			}
-
-			[scriptblock] $ErrorDataReceived = {
-				if (![string]::IsNullOrEmpty($EventArgs.Data))
-				{
-					Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
-					$Event.MessageData.AppendLine($EventArgs.Data)
-				}
-			}
-		}
-		else
-		{
-			# Adding event handler for StandardOutput
-			[scriptblock] $OutputDataReceived = {
-				# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
-				[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
-				param (
-					[Parameter(Mandatory = $true)]
-					[object] $SendingProcess,
-
-					[Parameter(Mandatory = $true)]
-					[System.Diagnostics.DataReceivedEventArgs] $OutLine
-				)
-
-				if (![string]::IsNullOrEmpty($OutLine.Data))
-				{
-					# NOTE: Explicit -Debug or INFA is needed inside event
-					Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
-					Write-Information -Tags $InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
-				}
-			}
-
-			# Adding event handler for StandardError
-			[scriptblock] $ErrorDataReceived = {
-				# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
-				[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
-				param (
-					[Parameter(Mandatory = $true)]
-					[object] $SendingProcess,
-
-					[Parameter(Mandatory = $true)]
-					[System.Diagnostics.DataReceivedEventArgs] $OutLine
-				)
-
-				if (![string]::IsNullOrEmpty($OutLine.Data))
-				{
-					# NOTE: Explicit -Debug is needed inside event
-					Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)"
-					Write-Error -Category FromStdErr -TargetObject $Process -MessageData $OutLine.Data
-				}
-			}
-		}
-
-		$OutputEventParams = @{
-			InputObject = $Process
-			Action = $OutputDataReceived
-			EventName = "OutputDataReceived"
-		}
-
-		$ErrorEventParams = @{
-			InputObject = $Process
-			Action = $ErrorDataReceived
-			EventName = "ErrorDataReceived"
-		}
-
-		if ($Raw)
-		{
-			# Create string builders to store output
-			$OutputBuilder = New-Object -TypeName System.Text.StringBuilder
-			$ErrorBuilder = New-Object -TypeName System.Text.StringBuilder
-
-			$OutputEventParams.Add("MessageData", $OutputBuilder)
-			$ErrorEventParams.Add("MessageData", $ErrorBuilder)
-		}
-
-		# OutputDataReceived: Occurs each time an application writes a line to its redirected StandardOutput stream
-		$OutputEvent = Register-ObjectEvent @OutputEventParams
-
-		# ErrorDataReceived: Occurs when an application writes to its redirected StandardError stream
-		$ErrorEvent = Register-ObjectEvent @ErrorEventParams
-
-		[scriptblock] $UnregisterEvents = {
-			Write-Debug -Message "[$InvocationName & UnregisterEvents] Unregistering asynchronous operations"
-
-			try
+			if ($LoadUserProfile)
 			{
-				# End the asynchronous read operation.
-				# Cancels the asynchronous read operation on the redirected StandardOutput stream of an application
-				# https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.canceloutputread?view=net-5.0
-				$Process.CancelOutputRead()
-				$Process.CancelErrorRead()
+				$Process.StartInfo.LoadUserProfile = $LoadUserProfile
 			}
-			catch [System.InvalidOperationException]
+		}
+
+		if ($ArgumentList)
+		{
+			# A collection of command-line arguments to use when starting the application
+			$Process.StartInfo.Arguments = $ArgumentList
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] $CommandName argument list is '$ArgumentList'"
+		}
+
+		$InvocationName = $MyInvocation.InvocationName
+
+		$Raw = $Raw
+		$Async = $Async
+		$Timeout = $Timeout
+
+		if ($Async)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Hooking up event handlers for asynchronous operations"
+
+			if ($Raw)
 			{
-				# The StandardOutput stream is not enabled for asynchronous read operations
-				Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
+				[scriptblock] $OutputDataReceived = {
+					if (![string]::IsNullOrEmpty($EventArgs.Data))
+					{
+						Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
+						$Event.MessageData.AppendLine($EventArgs.Data)
+					}
+				}
+
+				[scriptblock] $ErrorDataReceived = {
+					if (![string]::IsNullOrEmpty($EventArgs.Data))
+					{
+						Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
+						$Event.MessageData.AppendLine($EventArgs.Data)
+					}
+				}
+			}
+			else
+			{
+				# Adding event handler for StandardOutput
+				[scriptblock] $OutputDataReceived = {
+					# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
+					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
+					param (
+						[Parameter(Mandatory = $true)]
+						[object] $SendingProcess,
+
+						[Parameter(Mandatory = $true)]
+						[System.Diagnostics.DataReceivedEventArgs] $OutLine
+					)
+
+					if (![string]::IsNullOrEmpty($OutLine.Data))
+					{
+						# NOTE: Explicit -Debug or INFA is needed inside event
+						Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($OutLine.Data)"
+						Write-Information -Tags $InvocationName -MessageData "INFO: $($OutLine.Data)" -INFA "Continue"
+					}
+				}
+
+				# Adding event handler for StandardError
+				[scriptblock] $ErrorDataReceived = {
+					# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
+					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
+					param (
+						[Parameter(Mandatory = $true)]
+						[object] $SendingProcess,
+
+						[Parameter(Mandatory = $true)]
+						[System.Diagnostics.DataReceivedEventArgs] $OutLine
+					)
+
+					if (![string]::IsNullOrEmpty($OutLine.Data))
+					{
+						# NOTE: Explicit -Debug is needed inside event
+						Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($OutLine.Data)"
+						Write-Error -Category FromStdErr -TargetObject $Process -MessageData $OutLine.Data
+					}
+				}
 			}
 
-			# Un-registering events to retrieve process output.
-			Unregister-Event -SourceIdentifier $OutputEvent.Name
-			Unregister-Event -SourceIdentifier $ErrorEvent.Name
-		}
-	}
+			$OutputEventParams = @{
+				InputObject = $Process
+				Action = $OutputDataReceived
+				EventName = "OutputDataReceived"
+			}
 
-	try
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting process '$CommandName'"
+			$ErrorEventParams = @{
+				InputObject = $Process
+				Action = $ErrorDataReceived
+				EventName = "ErrorDataReceived"
+			}
 
-		# true if a process resource is started; false if no new process resource is started
-		if (!$Process.Start())
-		{
-			Write-Error -Category InvalidResult -TargetObject $Process -Message "Starting process '$CommandName' failed"
-			if ($Async) { & $UnregisterEvents }
-			return
-		}
-	}
-	catch [System.ComponentModel.Win32Exception]
-	{
-		Write-Error -Category InvalidOperation -TargetObject $Process `
-			-Message "There was an error in starting process '$CommandName'"
-		if ($Async) { & $UnregisterEvents }
-		return
-	}
-	catch [System.InvalidOperationException]
-	{
-		Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
-		if ($Async) { & $UnregisterEvents }
-		return
-	}
-	catch
-	{
-		Write-Error -Category NotSpecified -TargetObject $Process -Message $_.Exception.Message
-		if ($Async) { & $UnregisterEvents }
-		return
-	}
+			if ($Raw)
+			{
+				# Create string builders to store output
+				$OutputBuilder = New-Object -TypeName System.Text.StringBuilder
+				$ErrorBuilder = New-Object -TypeName System.Text.StringBuilder
 
-	if ($Async)
-	{
-		if (!$Raw)
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting asynchronous read"
+				$OutputEventParams.Add("MessageData", $OutputBuilder)
+				$ErrorEventParams.Add("MessageData", $ErrorBuilder)
+			}
+
+			# OutputDataReceived: Occurs each time an application writes a line to its redirected StandardOutput stream
+			$OutputEvent = Register-ObjectEvent @OutputEventParams
+
+			# ErrorDataReceived: Occurs when an application writes to its redirected StandardError stream
+			$ErrorEvent = Register-ObjectEvent @ErrorEventParams
+
+			[scriptblock] $UnregisterEvents = {
+				Write-Debug -Message "[$InvocationName & UnregisterEvents] Unregistering asynchronous operations"
+
+				try
+				{
+					# End the asynchronous read operation.
+					# Cancels the asynchronous read operation on the redirected StandardOutput stream of an application
+					# https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.canceloutputread?view=net-5.0
+					$Process.CancelOutputRead()
+					$Process.CancelErrorRead()
+				}
+				catch [System.InvalidOperationException]
+				{
+					# The StandardOutput stream is not enabled for asynchronous read operations
+					Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
+				}
+
+				# Un-registering events to retrieve process output.
+				Unregister-Event -SourceIdentifier $OutputEvent.Name
+				Unregister-Event -SourceIdentifier $ErrorEvent.Name
+			}
 		}
 
 		try
 		{
-			# BeginOutputReadLine starts asynchronous read operations on the StandardOutput stream.
-			# This method enables a designated event handler for the stream output and immediately returns to the caller
-			# https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standardoutput?view=net-5.0
-			$Process.BeginOutputReadLine()
-			$Process.BeginErrorReadLine()
-		}
-		catch # [System.InvalidOperationException]
-		{
-			Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting process '$CommandName'"
 
-			$Async = $false
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Fallback to synchronous mode"
-		}
-
-		# Define the cancellation token
-		# https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-5.0
-		$CancelSource = [System.Threading.CancellationTokenSource]::new($Timeout)
-		$CancelToken = $CancelSource.Token #[System.Threading.CancellationToken]::new($true)
-
-		# WaitForExitAsync (System.Threading.CancellationToken cancellationToken = default)
-		# https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=net-5.0
-		[System.Threading.Tasks.Task] $Task = $Process.WaitForExitAsync($CancelToken)
-
-		Write-Output $CancelSource
-	}
-
-	try
-	{
-		if ($Timeout -ge 0)
-		{
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish..."
-
-			if ($Async)
+			# true if a process resource is started; false if no new process resource is started
+			if (!$Process.Start())
 			{
-				# true if the Task completed execution within the allotted time, otherwise false
-				$StatusWait = $Task.Wait($Timeout, $CancelToken)
+				Write-Error -Category InvalidResult -TargetObject $Process -Message "Starting process '$CommandName' failed"
+				if ($Async) { & $UnregisterEvents }
+				return
 			}
-			else
-			{
-				# true if the associated process has exited, otherwise false
-				$StatusWait = $Process.WaitForExit($Timeout)
-			}
-
-			if (!$StatusWait)
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$CommandName' is taking too long, aborting..."
-			}
-		}
-		else
-		{
-			$StatusWait = $true
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish..."
-
-			if ($Async)
-			{
-				$Task.Wait($CancelToken)
-			}
-			else
-			{
-				$Process.WaitForExit()
-			}
-		}
-	}
-	catch
-	{
-		$StatusWait = $false
-
-		if ($Async -and $CancelSource.IsCancellationRequested)
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] The task has been canceled"
-		}
-		else
-		{
-			Write-Error -ErrorRecord $_
-		}
-	}
-
-	if (!$StatusWait)
-	{
-		if ($Async) { & $UnregisterEvents }
-
-		try
-		{
-			# Immediately stops the associated process, and optionally its child/descendent processes (true)
-			$Process.Kill($true)
-		}
-		catch [System.NotSupportedException]
-		{
-			Write-Error -Category NotEnabled -TargetObject $Process `
-				-Message "Killing a process is available only for processes running on the local computer"
 		}
 		catch [System.ComponentModel.Win32Exception]
 		{
 			Write-Error -Category InvalidOperation -TargetObject $Process `
-				-Message "The process '$CommandName' could not be terminated"
+				-Message "There was an error in starting process '$CommandName'"
+			if ($Async) { & $UnregisterEvents }
+			return
 		}
-		catch # [System.InvalidOperationException]
+		catch [System.InvalidOperationException]
 		{
-			# TODO: Will be triggered in Windows PowerShell but not in Core (run unit test to repro)
-			Write-Error -Category NotSpecified -TargetObject $Process `
-				-Message "There is no process associated with this Process object"
+			Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
+			if ($Async) { & $UnregisterEvents }
+			return
+		}
+		catch
+		{
+			Write-Error -Category NotSpecified -TargetObject $Process -Message $_.Exception.Message
+			if ($Async) { & $UnregisterEvents }
+			return
 		}
 
-		return
-	}
-
-	if ($Async)
-	{
-		& $UnregisterEvents
-
-		if ($Raw)
+		if ($Async)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw asynchronous read"
-
-			$StandardOutput = $OutputBuilder.ToString()
-			if (![string]::IsNullOrEmpty($StandardOutput))
+			if (!$Raw)
 			{
-				Write-Output $StandardOutput
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting asynchronous read"
 			}
 
-			$StandardError = $ErrorBuilder.ToString()
-			if (![string]::IsNullOrEmpty($StandardError))
+			try
 			{
-				Write-Output $StandardError
+				# BeginOutputReadLine starts asynchronous read operations on the StandardOutput stream.
+				# This method enables a designated event handler for the stream output and immediately returns to the caller
+				# https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.standardoutput?view=net-5.0
+				$Process.BeginOutputReadLine()
+				$Process.BeginErrorReadLine()
+			}
+			catch # [System.InvalidOperationException]
+			{
+				Write-Error -Category InvalidOperation -TargetObject $Process -Message $_.Exception.Message
+
+				$Async = $false
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Fallback to synchronous mode"
+			}
+
+			# Define the cancellation token
+			# https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-5.0
+			$CancelSource = [System.Threading.CancellationTokenSource]::new($Timeout)
+			$CancelToken = $CancelSource.Token #[System.Threading.CancellationToken]::new($true)
+
+			# WaitForExitAsync (System.Threading.CancellationToken cancellationToken = default)
+			# https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.task?view=net-5.0
+			[System.Threading.Tasks.Task] $Task = $Process.WaitForExitAsync($CancelToken)
+
+			Write-Output $CancelSource
+		}
+
+		try
+		{
+			if ($Timeout -ge 0)
+			{
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish..."
+
+				if ($Async)
+				{
+					# true if the Task completed execution within the allotted time, otherwise false
+					$StatusWait = $Task.Wait($Timeout, $CancelToken)
+				}
+				else
+				{
+					# true if the associated process has exited, otherwise false
+					$StatusWait = $Process.WaitForExit($Timeout)
+				}
+
+				if (!$StatusWait)
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Process '$CommandName' is taking too long, aborting..."
+				}
+			}
+			else
+			{
+				$StatusWait = $true
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish..."
+
+				if ($Async)
+				{
+					$Task.Wait($CancelToken)
+				}
+				else
+				{
+					$Process.WaitForExit()
+				}
 			}
 		}
-	}
-	else
-	{
-		if ($Raw)
+		catch
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw synchronous read"
+			$StatusWait = $false
 
-			# Reads all characters from the current position to the end of the stream (returns [string])
-			$StandardOutput = $Process.StandardOutput.ReadToEnd()
-			if (![string]::IsNullOrEmpty($StandardOutput))
+			if ($Async -and $CancelSource.IsCancellationRequested)
 			{
-				Write-Output $StandardOutput
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The task has been canceled"
+			}
+			else
+			{
+				Write-Error -ErrorRecord $_
+			}
+		}
+
+		if (!$StatusWait)
+		{
+			if ($Async) { & $UnregisterEvents }
+
+			try
+			{
+				# Immediately stops the associated process, and optionally its child/descendent processes (true)
+				$Process.Kill($true)
+			}
+			catch [System.NotSupportedException]
+			{
+				Write-Error -Category NotEnabled -TargetObject $Process `
+					-Message "Killing a process is available only for processes running on the local computer"
+			}
+			catch [System.ComponentModel.Win32Exception]
+			{
+				Write-Error -Category InvalidOperation -TargetObject $Process `
+					-Message "The process '$CommandName' could not be terminated"
+			}
+			catch # [System.InvalidOperationException]
+			{
+				# TODO: Will be triggered in Windows PowerShell but not in Core (run unit test to repro)
+				Write-Error -Category NotSpecified -TargetObject $Process `
+					-Message "There is no process associated with this Process object"
 			}
 
-			$StandardError = $Process.StandardError.ReadToEnd()
-			if (![string]::IsNullOrEmpty($StandardError))
+			return
+		}
+
+		if ($Async)
+		{
+			& $UnregisterEvents
+
+			if ($Raw)
 			{
-				Write-Output $StandardError
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw asynchronous read"
+
+				$StandardOutput = $OutputBuilder.ToString()
+				if (![string]::IsNullOrEmpty($StandardOutput))
+				{
+					Write-Output $StandardOutput
+				}
+
+				$StandardError = $ErrorBuilder.ToString()
+				if (![string]::IsNullOrEmpty($StandardError))
+				{
+					Write-Output $StandardError
+				}
 			}
 		}
 		else
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting synchronous read"
-
-			# true if the current stream position is at the end of the stream
-			while (!$Process.StandardOutput.EndOfStream)
+			if ($Raw)
 			{
-				# Reads a line of characters from the current stream and returns the data as [string]
-				# Methods such as Read, ReadLine, and ReadToEnd perform synchronous read operations
-				# on the output stream of the process
-				$StreamLine = $Process.StandardOutput.ReadLine()
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw synchronous read"
 
-				if (![string]::IsNullOrEmpty($StreamLine))
+				# Reads all characters from the current position to the end of the stream (returns [string])
+				$StandardOutput = $Process.StandardOutput.ReadToEnd()
+				if (![string]::IsNullOrEmpty($StandardOutput))
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
+					Write-Output $StandardOutput
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
-				Start-Sleep -Milliseconds 300
+				$StandardError = $Process.StandardError.ReadToEnd()
+				if (![string]::IsNullOrEmpty($StandardError))
+				{
+					Write-Output $StandardError
+				}
 			}
-
-			while (!$Process.StandardError.EndOfStream)
+			else
 			{
-				$StreamLine = $Process.StandardError.ReadLine()
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting synchronous read"
 
-				if (![string]::IsNullOrEmpty($StreamLine))
+				# true if the current stream position is at the end of the stream
+				while (!$Process.StandardOutput.EndOfStream)
 				{
-					Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
+					# Reads a line of characters from the current stream and returns the data as [string]
+					# Methods such as Read, ReadLine, and ReadToEnd perform synchronous read operations
+					# on the output stream of the process
+					$StreamLine = $Process.StandardOutput.ReadLine()
+
+					if (![string]::IsNullOrEmpty($StreamLine))
+					{
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
+					}
+
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+					Start-Sleep -Milliseconds 300
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
-				Start-Sleep -Milliseconds 300
+				while (!$Process.StandardError.EndOfStream)
+				{
+					$StreamLine = $Process.StandardError.ReadLine()
+
+					if (![string]::IsNullOrEmpty($StreamLine))
+					{
+						Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
+					}
+
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+					Start-Sleep -Milliseconds 300
+				}
 			}
 		}
+
+		# The Close method causes the process to stop waiting for exit if it was waiting,
+		# closes the process handle, and clears process-specific properties.
+		# NOTE: Close does not close the standard output, input, and error readers and writers in
+		# case they are being referenced externally
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Closing process '$CommandName'"
+		$Process.Close()
 	}
 
-	# The Close method causes the process to stop waiting for exit if it was waiting,
-	# closes the process handle, and clears process-specific properties.
-	# NOTE: Close does not close the standard output, input, and error readers and writers in
-	# case they are being referenced externally
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Closing process '$CommandName'"
-	$Process.Close()
+	Invoke-Command @SessionParams -ArgumentList $PSCmdlet.ParameterSetName, $Path, $NoNewWindow,
+	$WorkingDirectory, $LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
+	return
+
+	if ($Domain -ne [System.Environment]::MachineName)
+	{
+		Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
+		$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
+	}
+	else
+	{
+		# TODO: Invoking scriptblock, if there is an error entire scriptblock will be print to console in red
+		& $Code $Path $NoNewWindow $WorkingDirectory $LoadUserProfile $Timeout $Raw $RunAsCredential $ArgumentList $Async
+	}
 }

@@ -44,6 +44,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-InterfaceBroadcast`
     - `Get-InterfaceAlias`
     - `Select-IPInterface`
+    - `Invoke-Process`
 
   - Improved or updated module functions
 

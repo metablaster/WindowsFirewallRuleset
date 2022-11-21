@@ -63,7 +63,7 @@ function Get-UserSoftware
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserSoftware.md")]
 	[OutputType([System.Management.Automation.PSCustomObject])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("UserName")]
 		[string] $User,
 
@@ -94,6 +94,7 @@ function Get-UserSoftware
 		$Principal = Get-PrincipalSID $User @CimParams
 		if (!$Principal) { return }
 
+		# TODO: Need to load key for user which is no logged on
 		$HKU = $Principal.SID
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users

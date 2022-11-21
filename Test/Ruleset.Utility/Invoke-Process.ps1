@@ -33,6 +33,9 @@ Unit test for Invoke-Process
 .DESCRIPTION
 Test correctness of Invoke-Process function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,27 +74,41 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Invoke-Process"
 
-Start-Test "gpupdate.exe /target:computer"
-$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "gpupdate.exe /target:computer"
+	$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+	$Result
 
-Test-Output $Result -Command Invoke-Process
+	Start-Test "run git"
+	Invoke-Process git.exe -NoNewWindow -ArgumentList "--version" -Session $SessionInstance
 
-Start-Test "path to gpupdate.exe /target:computer -Timeout 100"
-Invoke-Process "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Timeout 100
+	Test-Output $Result -Command Invoke-Process
+}
+else
+{
+	Start-Test "gpupdate.exe /target:computer"
+	$Result = Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	$Result
 
-Start-Test "git.exe status"
-# TODO: Does not work with Desktop edition
-$Result = Invoke-Process "git.exe" -ArgumentList "status" -NoNewWindow -Raw
-$Result
+	Test-Output $Result -Command Invoke-Process
 
-Test-Output $Result -Command Invoke-Process
+	Start-Test "path to gpupdate.exe /target:computer -Timeout 100"
+	Invoke-Process "C:\WINDOWS\system32\gpupdate.exe" -NoNewWindow -ArgumentList "/target:computer" -Timeout 100
 
-Start-Test "Bad path"
-Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Timeout 5000
+	Start-Test "git.exe status"
+	# TODO: Does not work with Desktop edition
+	$Result = Invoke-Process "git.exe" -ArgumentList "status" -NoNewWindow -Raw
+	$Result
 
-Start-Test "Bad file"
-Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Timeout 5000
+	Test-Output $Result -Command Invoke-Process
+
+	Start-Test "Bad path"
+	Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Timeout 5000
+
+	Start-Test "Bad file"
+	Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Timeout 5000
+}
 
 Update-Log
 Exit-Test
