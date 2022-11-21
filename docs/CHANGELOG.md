@@ -45,6 +45,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-InterfaceAlias`
     - `Select-IPInterface`
     - `Invoke-Process`
+    - `Get-OneDrive`
 
   - Improved or updated module functions
 

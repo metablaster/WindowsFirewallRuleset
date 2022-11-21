@@ -94,7 +94,7 @@ function Get-UserSoftware
 		$Principal = Get-PrincipalSID $User @CimParams
 		if (!$Principal) { return }
 
-		# TODO: Need to load key for user which is no logged on
+		# TODO: Need to load key for user which is not logged on
 		$HKU = $Principal.SID
 		$HKU += "\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::Users

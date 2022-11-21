@@ -39,8 +39,14 @@ User name in form of "USERNAME"
 .PARAMETER Domain
 NETBIOS Computer name in form of "COMPUTERNAME"
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
 .PARAMETER CimSession
 Specifies the CIM session to use
+
+.PARAMETER Session
+Specifies the PS session to use
 
 .EXAMPLE
 PS> Get-OneDrive "USERNAME"
@@ -74,22 +80,49 @@ function Get-OneDrive
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter(ParameterSetName = "CimSession")]
-		[CimSession] $CimSession
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[CimSession] $CimSession,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	[hashtable] $CimParams = @{}
-	if ($PSCmdlet.ParameterSetName -eq "CimSession")
+	[hashtable] $SessionParams = @{}
+
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
+		if ($Session.ComputerName -ne $CimSession.ComputerName)
+		{
+			Write-Error -Category InvalidArgument -TargetObject $CimSession `
+				-Message "Session and CimSession must be targeting same computer"
+			return
+		}
+
 		$Domain = $CimSession.ComputerName
 		$CimParams.CimSession = $CimSession
+		$SessionParams.Session = $Session
 	}
 	else
 	{
 		$Domain = Format-ComputerName $Domain
-		$CimParams.ComputerName = $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
+		{
+			$CimParams.ComputerName = $Domain
+			$SessionParams.ComputerName = $Domain
+
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
+		}
 	}
 
 	if (Test-Computer $Domain)
@@ -126,15 +159,24 @@ function Get-OneDrive
 			Select-Object -ExpandProperty SystemDrive
 			$UserRegConfig = "$SystemDrive\Users\$User\NTUSER.DAT"
 
+			if ($Domain -eq [System.Environment]::MachineName)
+			{
+				$PathToTest = $UserRegConfig
+			}
+			else
+			{
+				$PathToTest = "\\$Domain\$($SystemDrive.TrimEnd(":"))`$\Users\$User\NTUSER.DAT"
+			}
+
 			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
 			$TempKey = "User-$User" # $UserSID
 
-			if (Test-Path -Path $UserRegConfig)
+			if (Test-Path -Path $PathToTest)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$User' to HKU:$TempKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Loading offline hive for user '$User' to HKU\$TempKey"
 
 				# NOTE: Invoke-Process is needed to make the command finish it's job and print status
-				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig" -Raw
+				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig" -Raw @SessionParams
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
 				$HKU = "$TempKey\Software\Microsoft\OneDrive"
@@ -142,7 +184,7 @@ function Get-OneDrive
 			else
 			{
 				$RemoteKey.Dispose()
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to locate user registry config: $UserRegConfig"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to locate user registry config '$UserRegConfig'"
 				return
 			}
 		}
@@ -166,8 +208,10 @@ function Get-OneDrive
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 
+				# NOTE: reg load creates a handle which needs to be cleared before calling reg unload to avoid "access is denied"
+				# see also: https://stackoverflow.com/questions/25438409/reg-unload-and-new-key
 				[gc]::collect()
-				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
+				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw @SessionParams
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 			}
 
@@ -214,7 +258,7 @@ function Get-OneDrive
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 
 			[gc]::collect()
-			$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw
+			$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw @SessionParams
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
 		}
 

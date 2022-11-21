@@ -631,10 +631,11 @@ function Invoke-Process
 		$Process.Close()
 	}
 
-	Invoke-Command @SessionParams -ArgumentList $PSCmdlet.ParameterSetName, $Path, $NoNewWindow,
-	$WorkingDirectory, $LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
+	Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
+	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
 	return
 
+	# Inactive code
 	if ($Domain -ne [System.Environment]::MachineName)
 	{
 		Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
