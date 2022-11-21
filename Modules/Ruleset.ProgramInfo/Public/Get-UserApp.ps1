@@ -152,7 +152,7 @@ function Get-UserApp
 		Select-Object -ExpandProperty SystemDrive
 
 		$SystemDrive = $SystemDrive.TrimEnd(":")
-		$DomainPath = "\\$Domain\$SystemDrive`$\"
+		$DomainPath = "\\$Domain\$SystemDrive$"
 	}
 
 	if (!$Apps)

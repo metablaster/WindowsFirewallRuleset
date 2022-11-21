@@ -81,7 +81,7 @@ if ($Domain -ne [System.Environment]::MachineName)
 	$Users
 
 	Start-Test "Remote default $($Users[0].User)"
-	Get-UserSoftware -CimSession $CimServer -User $Users[0].User
+	Get-UserSoftware -User $Users[0].User -CimSession $CimServer -Session $SessionInstance
 }
 else
 {

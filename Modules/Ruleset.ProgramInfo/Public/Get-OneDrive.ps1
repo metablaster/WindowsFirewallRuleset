@@ -165,7 +165,7 @@ function Get-OneDrive
 			}
 			else
 			{
-				$PathToTest = "\\$Domain\$($SystemDrive.TrimEnd(":"))`$\Users\$User\NTUSER.DAT"
+				$PathToTest = "\\$Domain\$($SystemDrive.TrimEnd(":"))$\Users\$User\NTUSER.DAT"
 			}
 
 			# NOTE: Using User-UserName instead of SID to minimize the chance of existing key with same name
@@ -178,7 +178,7 @@ function Get-OneDrive
 				# NOTE: Invoke-Process is needed to make the command finish it's job and print status
 				$Status = Invoke-Process -NoNewWindow reg.exe -ArgumentList "load HKU\$TempKey $UserRegConfig" -Raw @SessionParams
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] $Status"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] reg load status is '$Status'"
 				$HKU = "$TempKey\Software\Microsoft\OneDrive"
 			}
 			else
@@ -208,14 +208,12 @@ function Get-OneDrive
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 
-				# NOTE: reg load creates a handle which needs to be cleared before calling reg unload to avoid "access is denied"
-				# see also: https://stackoverflow.com/questions/25438409/reg-unload-and-new-key
 				[gc]::collect()
 				$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw @SessionParams
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] reg unload status is '$Status'"
 			}
 
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: $HKLM"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 			$RemoteKey.Dispose()
 			return
 		}
@@ -249,17 +247,18 @@ function Get-OneDrive
 			}
 		}
 
-		# key loaded with 'reg load' has to be closed, if not 'reg unload' fails with "Access is denied"
-		# TODO: We close the key regardless, other functions using registry should also implement closing keys
+		# NOTE: each key accessed after 'reg load' has to be closed to release handle, if not 'reg unload' fails with "Access is denied"
+		# TODO: Other functions in ProgramInfo module should implement closing keys to release handles.
 		$RootKey.Close()
 
 		if ($TempKey)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Unload and release hive HKU:$TempKey"
 
+			# NOTE: This is not strictly needed but is recommended before calling reg unload
 			[gc]::collect()
 			$Status = Invoke-Process reg.exe -NoNewWindow -ArgumentList "unload HKU\$TempKey" -Raw @SessionParams
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] $Status"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] reg unload status is '$Status'"
 		}
 
 		$RemoteKey.Dispose()

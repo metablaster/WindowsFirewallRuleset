@@ -47,6 +47,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Invoke-Process`
     - `Get-OneDrive`
 
+  - Fixed a bug with `Get-UserSoftware` which didn't target a specified user
+
   - Improved or updated module functions
 
     - `ConvertFrom-SID`
