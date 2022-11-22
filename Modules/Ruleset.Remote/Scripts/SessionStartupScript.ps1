@@ -45,12 +45,25 @@ None. You cannot pipe objects to SessionStartupScript.ps1
 None. SessionStartupScript.ps1 does not generate any output
 
 .NOTES
-None.
+This script is referened in Enable-WinRMServer
 #>
 
 
 # Load required modules in session
 $ModulesDir = Resolve-Path -Path "$PSScriptRoot\..\.." | Select-Object -ExpandProperty Path
+
+if ($PSVersionTable.PSEdition -eq "Core")
+{
+	Import-Module -Name "$ModulesDir\Ruleset.Compatibility"
+
+	if ($PSVersionTable.PSVersion -ge "7.1")
+	{
+		Write-Verbose -Message "[SessionStartupScript.ps1] Importing Appx module" -Verbose
+		# NOTE: New-PSSession for compatibility module is first time executed here and for client
+		# in AppxModule.ps in ComputerInfo module
+		Import-WinModule -Name Appx -ErrorAction Stop
+	}
+}
 
 $ModulesToImport = @(
 	"$ModulesDir\Ruleset.ComputerInfo"
@@ -59,10 +72,5 @@ $ModulesToImport = @(
 	"$ModulesDir\Ruleset.UserInfo"
 	"$ModulesDir\Ruleset.Utility"
 )
-
-if ($PSVersionTable.PSEdition -eq "Core")
-{
-	$ModulesToImport += "$ModulesDir\Ruleset.Compatibility"
-}
 
 Import-Module -Name $ModulesToImport

@@ -340,16 +340,6 @@ function Connect-Computer
 		# TODO: Temporarily not using because not in need to enter session
 		# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Entering remote session to computer '$Domain'"
 		# Enter-PSSession -Name RemoteSession
-
-		if ($PSVersionTable.PSVersion -ge "7.1")
-		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Initializing '$($SessionInstance.Name)' session with compatibility modules"
-			# HACK: Unable to setup this in session configuration in "ScriptsToProcess" key,
-			# error is like: Object reference not set to an instance
-			Invoke-Command -Session $SessionInstance -ScriptBlock {
-				Import-WinModule -Name Appx -ErrorAction Stop
-			}
-		}
 	}
 	catch
 	{

@@ -259,6 +259,7 @@ function Enable-WinRMServer
 		$LocalSessionConfigParams = @{
 			Name = $script:LocalFirewallSession
 			Path = "$PSScriptRoot\..\Scripts\LocalFirewall.pssc"
+			# If the script generates any errors, including non-terminating errors, the New-PSSession command fails.
 			StartupScript = "$PSScriptRoot\..\Scripts\SessionStartupScript.ps1"
 			ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
 			MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]

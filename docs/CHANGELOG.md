@@ -48,6 +48,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-OneDrive`
 
   - Fixed a bug with `Get-UserSoftware` which didn't target a specified user
+  - Fixed a but in `Get-AppCapability` producing no result for remote session due to virtual admin
 
   - Improved or updated module functions
 

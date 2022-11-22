@@ -55,6 +55,7 @@ if ($ListPreference)
 #
 
 $ScriptsToProcess = @(
+	"AppxModule"
 	"TargetProgram"
 )
 

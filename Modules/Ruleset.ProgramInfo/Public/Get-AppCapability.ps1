@@ -41,21 +41,20 @@ If specified, function returns results for this package only.
 Wildcards are permitted.
 
 .PARAMETER PackageTypeFilter
-Specifies one or more comma-separated types of packages to gets from the package repository.
-If not specified processes only packages of types Main and Framework.
+Specifies the type of a packages to get from the package repository.
 
 Valid values are:
 Bundle
 Framework
 Main
 Resource
-None
+None (default)
 
 .PARAMETER InputObject
 One or more Windows store apps for which to retrieve capabilities
 
 .PARAMETER Domain
-Computer name which to check
+Computer name on which to run function
 
 .PARAMETER Credential
 Specifies the credential object to use for authentication
@@ -64,9 +63,7 @@ Specifies the credential object to use for authentication
 Specifies the PS session to use
 
 .PARAMETER User
-Specify user name for which to query app capabilities.
-This parameter is required only if input app or the app specified by -Name parameter is
-not from the main store.
+Specify user name for which to obtain store apps to query capabilities.
 
 .PARAMETER IncludeAuthority
 If specified, outputs full reference name.
@@ -97,8 +94,7 @@ APPLICATION PACKAGE AUTHORITY\Your home or work networks
 [string] Capability names or full reference names for capabilities of an app
 
 .NOTES
-TODO: According to unit test there are some capabilities not implemented here
-HACK: Parameter set names for ComputerName vs Session
+TODO: There are some capabilities not implemented here
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppCapability.md
@@ -129,7 +125,7 @@ function Get-AppCapability
 		[string] $Name = "*",
 
 		[Parameter(ParameterSetName = "Name")]
-		[ValidateSet("Bundle", "Framework", "Main", "Resource", "None", "Xap")]
+		[ValidateSet("Bundle", "Framework", "Main", "Resource", "None", "Xap", "Optional")]
 		[string] $PackageTypeFilter,
 
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "InputObject")]
@@ -146,7 +142,7 @@ function Get-AppCapability
 		[Parameter()]
 		[System.Management.Automation.Runspaces.PSSession] $Session,
 
-		[Parameter()]
+		[Parameter(Mandatory = $true)]
 		[string] $User,
 
 		[Parameter()]
@@ -185,83 +181,78 @@ function Get-AppCapability
 
 		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
-			# Get it from main store to be able to query package manifest
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Getting app from main store"
-
 			$AppxParams = @{
 				Name = $Name
+
+				# NOTE: Get-AppxPackage gets a list of the app packages that are installed in a user profile.
+				# Also Get-AppxPackageManifest does for current user.
+				# If no user is specified Get-AppxPackage and Get-AppxPackageManifest won't return anything from remote session
+				# because for remote session we use virtual Admin for which there aren't any packages
+				User = $User
 			}
 
 			if (![string]::IsNullOrEmpty($PackageTypeFilter))
 			{
-				$AppxParams["PackageTypeFilter"] = $PackageTypeFilter
-			}
-
-			if (![string]::IsNullOrEmpty($User))
-			{
-				$AppxParams["User"] = $User
+				$AppxParams.PackageTypeFilter = $PackageTypeFilter
 			}
 
 			if ($Domain -eq [System.Environment]::MachineName)
 			{
-				# HACK: module not imported, need to import manually
-				Import-WinModule -Name Appx -ErrorAction Stop
 				$InputObject = Get-AppxPackage @AppxParams
 			}
 			else
 			{
-				# HACK: No apps are returned from remote
 				$InputObject = Invoke-Command @SessionParams -ArgumentList $AppxParams -ScriptBlock {
 					param ([hashtable] $AppxParams)
 
+					# TODO: This is temporary for debugging, appx should be imported in startup script
+					if (($PSVersionTable.PSEdition -eq "Core") -and !(Get-Module -Name Appx -ErrorAction Ignore))
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Appx module not imported into remote session"
+					}
+
+					# HACK: In remote Windows PowerShell this fails with "The system cannot find the file specified"
 					Get-AppxPackage @AppxParams
 				}
 			}
 		}
+
+		if ($null -eq $InputObject)
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] No apps were retrieved to process"
+		}
 	}
 	process
 	{
-		# HACK: Cannot use @SessionParams, no return value
-		Invoke-Command @SessionParams -ArgumentList $InvocationName -ScriptBlock {
-			param ([string] $InvocationName)
+		Invoke-Command @SessionParams -ArgumentList $InvocationName, $InputObject, $User, $Networking, $IncludeAuthority -ScriptBlock {
+			param ([string] $InvocationName, $InputObject, $User, $Networking, $IncludeAuthority)
 
-			foreach ($StoreApp in $using:InputObject)
+			# [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+			foreach ($StoreApp in $InputObject)
 			{
 				# Need a copy because of possible modification
-				# [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 				$App = $StoreApp
 				[string[]] $OutputObject = @()
 				Write-Verbose -Message "[$InvocationName] Processing store app: '$($App.Name)'"
 
-				if ($App.IsBundle -or $App.IsResourcePackage -or $App.IsFramework)
+				# TODO: Other store options are: None, Main, Framework, Resource, Bundle, Xap, Optional
+				# NOTE: $App.IsFramework in not in the main store
+				if ($App.IsBundle -or $App.IsResourcePackage) # -or $App.IsFramework
 				{
-					if ([string]::IsNullOrEmpty($using:User))
-					{
-						Write-Error -Category InvalidArgument -TargetObject "User" `
-							-Message "The app '$($App.Name)' is not from the main store, please specify 'User' parameter"
-						continue
-					}
-
-					# If input app was not obtained from main store, get it from main store to be able to query package manifest
-					Write-Debug -Message "[$InvocationName] Input app is not from the main store, querying main store"
-					$App = Get-AppxPackage -Name $App.Name -User $using:User -PackageTypeFilter Main
+					# If app was not obtained from the main store, get it from main store to be able to query package manifest
+					Write-Verbose -Message "[$InvocationName] Input app is not from the main store, querying main store"
+					$App = Get-AppxPackage -Name $App.Name -User $User -PackageTypeFilter Main
 
 					if (!$App)
 					{
 						Write-Error -Category ObjectNotFound -TargetObject $StoreApp `
-							-Message "The app $($StoreApp.Name) not found in main store, unable to query package manifest"
+							-Message "The app $($StoreApp.Name) not found in the main store, unable to query package manifest"
 						continue
 					}
+				}
 
-					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name) user $using:User"
-					# [System.XML.XMLDocument]
-					$PackageManifest = $App | Get-AppxPackageManifest -User $using:User
-				}
-				else
-				{
-					Write-Debug -Message "[$InvocationName] Getting package manifest for $($App.Name)"
-					$PackageManifest = $App | Get-AppxPackageManifest
-				}
+				Write-Debug -Message "[$InvocationName] Getting package manifest for '$($App.Name)'"
+				$PackageManifest = $App | Get-AppxPackageManifest -User $User
 
 				if (!$PackageManifest)
 				{
@@ -278,20 +269,22 @@ function Get-AppCapability
 				$Package = $PackageManifest.Package
 				if (!$Package.PSObject.Properties.Name.Contains("Capabilities"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) has no capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name)' has no capabilities"
 					continue
 				}
 				elseif (!$Package.Capabilities.PSObject.Properties.Name.Contains("Capability"))
 				{
-					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name) is missing capabilities"
+					Write-Verbose -Message "[$InvocationName] Store app '$($App.Name)' is missing capabilities"
 					continue
 				}
 
+				Write-Debug -Message "[$InvocationName] Resolving capabilities for '$($App.Name)'"
 				[string[]] $AppCapabilities = ($Package.Capabilities | Select-Object -ExpandProperty Capability).Name
 
 				foreach ($Capability in $AppCapabilities)
 				{
-					Write-Debug -Message "[$InvocationName] Processing capability: '$Capability'"
+					# NOTE: -Debug:$false to avoid spaming the console
+					Write-Debug -Message "[$InvocationName] Processing capability: '$Capability'" -Debug:$false
 
 					[string] $DisplayName = switch ($Capability)
 					{
@@ -303,7 +296,7 @@ function Get-AppCapability
 						"privateNetworkClientServer" { "Your home or work networks"; break }
 						default
 						{
-							if ($using:Networking)
+							if ($Networking)
 							{
 								break
 							}
@@ -322,8 +315,7 @@ function Get-AppCapability
 								"contacts" { "Your Contacts"; break }
 								default
 								{
-									Write-Error -Category NotImplemented -TargetObject $Capability `
-										-Message "Getting capability for '$Capability' not implemented"
+									Write-Debug -Message "[$InvocationName] Getting displayname for '$Capability' capability not implemented"
 								}
 							}
 						}
@@ -331,21 +323,17 @@ function Get-AppCapability
 
 					if ([string]::IsNullOrEmpty($DisplayName))
 					{
-						Write-Debug -Message "[$InvocationName] Capability: '$Capability' not resolved"
+						# NOTE: -Debug:$false to avoid spaming the console
+						Write-Debug -Message "[$InvocationName] Capability: '$Capability' not resolved" -Debug:$false
 						continue
+					}
+					elseif ($IncludeAuthority)
+					{
+						$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $DisplayName)
 					}
 					else
 					{
-						Write-Debug -Message "[$InvocationName] Capability: '$Capability' resolved to: $DisplayName"
-
-						if ($using:IncludeAuthority)
-						{
-							$OutputObject += ("APPLICATION PACKAGE AUTHORITY\" + $DisplayName)
-						}
-						else
-						{
-							$OutputObject += $DisplayName
-						}
+						$OutputObject += $DisplayName
 					}
 				} # foreach capability
 

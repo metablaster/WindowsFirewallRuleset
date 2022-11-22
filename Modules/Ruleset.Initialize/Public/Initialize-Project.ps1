@@ -233,18 +233,6 @@ function Initialize-Project
 		{
 			Initialize-Connection
 
-			if ($TargetPSVersion -ge "7.1")
-			{
-				# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
-				# https://github.com/PowerShell/PowerShell/issues/13138
-				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
-				# check to use compatibility only as needed
-				# TODO: Implement Scope parameter
-				# NOTE: New-PSSession for compatibility module is first time executed either here or while importing Ruleset.ProgramInfo,
-				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
-				Import-WinModule -Name Appx
-			}
-
 			# Check NET Framework version
 			# NOTE: Project modules won't load if version isn't met, scripts a lone may have requirements too
 			# NOTE: This prerequisite is valid for the PowerShell Desktop edition only
@@ -489,18 +477,6 @@ function Initialize-Project
 		if (!$Develop)
 		{
 			Initialize-Connection
-
-			if ($TargetPSVersion -ge "7.1")
-			{
-				# Since PowerShell Core 7.1 Using Appx no longer works, so we use a compatibility module
-				# https://github.com/PowerShell/PowerShell/issues/13138
-				# TODO: Future versions of PS Core will support more "Desktop" edition modules,
-				# check to use compatibility only as needed
-				# TODO: Implement Scope parameter
-				# NOTE: New-PSSession for compatibility module is first time executed either here or while importing Ruleset.ProgramInfo,
-				# if it fails it's either Windows.PowerShell PS session configuration or WinRM loopback misconfiguration
-				Import-WinModule -Name Appx
-			}
 		}
 
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Detecting OS on computer '$PolicyStore'"

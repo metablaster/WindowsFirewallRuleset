@@ -74,13 +74,23 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
-# TODO: Once we handle all app capabilities remove SilentlyContinue
-$PSDefaultParameterValues["Get-AppCapability:ErrorAction"] = "SilentlyContinue"
-
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote Session"
-	Get-AppCapability -Session $SessionInstance -PackageTypeFilter Main -Name "*AccountsControl*"
+	Start-Test "Get remote user" -Command Get-GroupPrincipal
+	$Users = Get-GroupPrincipal -Group Users -CimSession $CimServer
+	$Users
+
+	Start-Test "Remote main store $($Users[0].User)"
+	Get-AppCapability -PackageTypeFilter Main -Name "*AccountsControl*" -User $Users[0].User -Session $SessionInstance
+
+	Start-Test "Remote Bundle store $($Users[0].User)"
+	Get-AppCapability -PackageTypeFilter Bundle -Name "*ZuneMusic*" -User $Users[0].User -Session $SessionInstance
+
+	Start-Test "Remote Framework store $($Users[0].User)"
+	Get-AppCapability -PackageTypeFilter Framework -Name "*Framework*" -User $Users[0].User -Session $SessionInstance
+
+	Start-Test "Remote Resource store $($Users[0].User)"
+	Get-AppCapability -PackageTypeFilter Resource -Name "*BingWeather*" -User $Users[0].User -Session $SessionInstance
 
 	# Start-Test "Remote Session"
 	# Get-AppCapability -Domain $Domain -Credential $RemotingCredential -PackageTypeFilter Main -Name "*AccountsControl*"
@@ -90,24 +100,25 @@ if ($Domain -ne [System.Environment]::MachineName)
 }
 else
 {
-	$PSDefaultParameterValues["Get-AppCapability:Session"] = $SessionInstance
-
 	# NOTE: Using "AccountsControl" because "Microsoft.AccountsControl" is available on all OS editions
 	Start-Test 'Get-AppCapability -Name "*AccountsControl*"'
-	Get-AppCapability "*AccountsControl*"
+	Get-AppCapability "*AccountsControl*" -User $TestUser
 
 	Start-Test 'Get-AppCapability -Name "*AccountsControl*" -PackageTypeFilter Main'
-	Get-AppCapability "*AccountsControl*" -PackageTypeFilter Main
+	Get-AppCapability "*AccountsControl*" -PackageTypeFilter Main -User $TestUser
 
-	Start-Test "Get-SystemApp $TestAdmin + Get-AppCapability -Networking -InputObject"
-	$Apps = Get-SystemApp -User $TestAdmin
-	Get-AppCapability -Networking -InputObject $Apps
+	Start-Test "Get-SystemApp $TestUser + Get-AppCapability -Networking -InputObject"
+	$Apps = Get-SystemApp -User $TestUser
+	if ($Apps)
+	{
+		Get-AppCapability -Networking -InputObject $Apps -User $TestUser
+	}
 
 	Start-Test "Get-UserApp -User $TestUser | Get-AppCapability -Networking"
 	Get-UserApp -User $TestUser | Get-AppCapability -User $TestUser -Networking
 
 	Start-Test "Get-AppxPackage -InputObject '*AccountsControl*' | Get-AppCapability -IncludeAuthority"
-	$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -IncludeAuthority
+	$Result = Get-AppCapability -InputObject (Get-AppxPackage -Name "*AccountsControl*") -IncludeAuthority -User $TestUser
 	$Result
 
 	Test-Output $Result -Command Get-AppCapability
