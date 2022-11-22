@@ -95,22 +95,36 @@ function Edit-Table
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	[hashtable] $SessionParams = @{}
 	[hashtable] $CimParams = @{}
+	[hashtable] $SessionParams = @{}
 
-	if ($PsCmdlet.ParameterSetName -eq "Session")
+	if ($CimSession)
 	{
-		$SessionParams.Session = $Session
+		if ($Session.ComputerName -ne $CimSession.ComputerName)
+		{
+			Write-Error -Category InvalidArgument -TargetObject $CimSession `
+				-Message "Session and CimSession must be targeting same computer"
+			return
+		}
+
+		$Domain = $CimSession.ComputerName
 		$CimParams.CimSession = $CimSession
+		$SessionParams.Session = $Session
 	}
 	else
 	{
-		$SessionParams.ComputerName = $Domain
-		$CimParams.ComputerName = $Domain
+		$Domain = Format-ComputerName $Domain
 
-		if ($Credential)
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
+			$CimParams.ComputerName = $Domain
+			$SessionParams.ComputerName = $Domain
+
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
 
@@ -125,9 +139,20 @@ function Edit-Table
 		# Get a list of users to choose from, 3rd element in the path is user name
 		# NOTE: | Where-Object -Property User -EQ ($LiteralPath.Split("\"))[2]
 		# will not work if a path is inconsistent with back or forward slashes
-		$UserInfo = Get-GroupPrincipal "Users" @CimParams | Where-Object {
-			# LiteralPath might contain environment variables, which would make match fail
-			[System.Environment]::ExpandEnvironmentVariables($LiteralPath) -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
+		if ($Domain -eq [System.Environment]::MachineName)
+		{
+			$UserInfo = Get-GroupPrincipal $DefaultGroup[0] | Where-Object {
+				# LiteralPath might contain environment variables, which would make match fail
+				[System.Environment]::ExpandEnvironmentVariables($LiteralPath) -match "^$SystemDrive\\+Users\\+$($_.User)\\+"
+			}
+		}
+		else
+		{
+			$UserInfo = Invoke-Command @SessionParams -ScriptBlock {
+				Get-GroupPrincipal $using:DefaultGroup[0] | Where-Object {
+					[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath) -match "^$using:SystemDrive\\+Users\\+$($_.User)\\+"
+				}
+			}
 		}
 
 		# Make sure user profile variables are not present
@@ -158,7 +183,7 @@ function Edit-Table
 		$LiteralPath = Format-Path $LiteralPath
 
 		# Not user profile path, so it applies to all users
-		$UserInfo = Get-UserGroup @CimParams | Where-Object -Property Group -EQ "Users"
+		$UserInfo = Get-UserGroup @CimParams | Where-Object -Property Group -EQ $DefaultGroup[0]
 
 		# Create a row
 		$Row = $InstallTable.NewRow()

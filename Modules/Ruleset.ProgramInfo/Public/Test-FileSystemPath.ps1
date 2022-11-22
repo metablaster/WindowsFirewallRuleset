@@ -195,8 +195,9 @@ function Test-FileSystemPath
 		return $false
 	}
 
-	$ExpandedPath = Invoke-Command @SessionParams -ScriptBlock {
-		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
+	$ExpandedPath = Invoke-Command @SessionParams -ArgumentList $LiteralPath -ScriptBlock {
+		param ($LiteralPath)
+		[System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
@@ -299,31 +300,31 @@ function Test-FileSystemPath
 			}
 		}
 
-		Invoke-Command @SessionParams -ArgumentList $WriteConditional -ScriptBlock {
+		Invoke-Command @SessionParams -ArgumentList $WriteConditional, $PathType, $ExpandedPath, $Quiet, $InvocationName -ScriptBlock {
 			# NOTE: Must not be declared as [scriptblock], otherwise [ScriptBlock]::Create() (later) fails
-			param ($WriteConditional)
+			param ($WriteConditional, $PathType, $ExpandedPath, $Quiet, $InvocationName)
 
-			if ($using:PathType -eq "Any")
+			if ($PathType -eq "Any")
 			{
-				if ([System.IO.Directory]::Exists($using:ExpandedPath) -or [System.IO.File]::Exists($using:ExpandedPath))
+				if ([System.IO.Directory]::Exists($ExpandedPath) -or [System.IO.File]::Exists($ExpandedPath))
 				{
 					return $true
 				}
 
 				$Status = "Specified file or directory does not exist"
 			}
-			elseif ($using:PathType -eq "Directory")
+			elseif ($PathType -eq "Directory")
 			{
-				if ([System.IO.Directory]::Exists($using:ExpandedPath))
+				if ([System.IO.Directory]::Exists($ExpandedPath))
 				{
 					return $true
 				}
 
 				$Status = "Specified directory does not exist"
 			}
-			elseif ($using:PathType -eq "File")
+			elseif ($PathType -eq "File")
 			{
-				if ([System.IO.File]::Exists($using:ExpandedPath))
+				if ([System.IO.File]::Exists($ExpandedPath))
 				{
 					return $true
 				}
@@ -331,7 +332,7 @@ function Test-FileSystemPath
 				$Status = "Specified file does not exist"
 			}
 
-			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $using:Quiet, $using:LiteralPath, $using:InvocationName)
+			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $Quiet, $LiteralPath, $InvocationName)
 			return $false
 		} # Invoke-Command
 	} # if ([string]::IsNullOrEmpty($Status))

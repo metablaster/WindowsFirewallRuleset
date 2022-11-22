@@ -77,12 +77,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test -Private "Update-Table"
+$RemoteParams = @{}
+
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$RemoteParams = @{
-		CimSession = $CimServer
-		Session = $SessionInstance
-	}
+	$RemoteParams.CimSession = $CimServer
+	$RemoteParams.Session = $SessionInstance
 }
 
 Start-Test "Greenshot -UserProfile"

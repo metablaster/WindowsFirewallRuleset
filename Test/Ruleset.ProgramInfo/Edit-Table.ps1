@@ -33,6 +33,9 @@ Unit test for Edit-Table
 .DESCRIPTION
 Test correctness of Edit-Table function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -56,11 +59,15 @@ TODO: can we use Requires -PSSnapin here for Initialize-Table?
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -68,25 +75,32 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test -Private "Edit-Table"
+$RemoteParams = @{}
+
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	$RemoteParams.CimSession = $CimServer
+	$RemoteParams.Session = $SessionInstance
+}
 
 Start-Test "Good system path"
 Initialize-Table
-Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0"
+Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Bad system path"
 Initialize-Table
-Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345"
+Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Bad user profile path"
 Initialize-Table
-Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\"
+Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Good user profile path"
 Initialize-Table
-$Result = Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\"
+$Result = Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\" @RemoteParams
 $Result
 $global:InstallTable | Format-Table -AutoSize
 
