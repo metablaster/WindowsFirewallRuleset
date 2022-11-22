@@ -120,6 +120,7 @@ function Search-Installation
 
 		$PSDefaultParameterValues["Edit-Table:Session"] = $Session
 		$PSDefaultParameterValues["Edit-Table:CimSession"] = $CimSession
+		$PSDefaultParameterValues["Update-Table:Session"] = $Session
 		$PSDefaultParameterValues["Update-Table:CimSession"] = $CimSession
 	}
 	else
@@ -137,6 +138,7 @@ function Search-Installation
 			{
 				$SessionParams.Credential = $Credential
 				$PSDefaultParameterValues["Edit-Table:Credential"] = $Credential
+				$PSDefaultParameterValues["Update-Table:Credential"] = $Credential
 			}
 		}
 	}
@@ -244,6 +246,7 @@ function Search-Installation
 		}
 		"Psiphon"
 		{
+			# TODO: We're not handling multiple directories
 			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp"
 			break
 		}
@@ -367,22 +370,32 @@ function Search-Installation
 		{
 			Update-Table -Search "Microsoft Edge WebView"
 
-			if ($InstallTable.Rows.Count -eq 1)
+			if ($InstallTable.Rows.Count -gt 0)
 			{
-				$InstallLocation = $InstallTable | Select-Object -ExpandProperty InstallLocation
-				$VersionFolders = Invoke-Command @SessionParams -ScriptBlock {
-					Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($using:InstallLocation)) |
-					Where-Object {
-						$_.BaseName -match "^\d+\."
-					}
-				}
-
-				$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
-				if ($VersionFoldersCount -gt 0)
+				foreach ($Row in $InstallTable.Rows)
 				{
-					$VersionFolder = $VersionFolders | Sort-Object | Select-Object -Last 1
-					Initialize-Table
-					Edit-Table "$InstallLocation\$($VersionFolder.BaseName)"
+					$InstallLocation = $Row | Select-Object -ExpandProperty InstallLocation
+					$VersionFolders = Invoke-Command @SessionParams -ArgumentList $InstallLocation -ScriptBlock {
+						param ($InstallLocation)
+
+						Get-ChildItem -Directory -Path ([System.Environment]::ExpandEnvironmentVariables($InstallLocation)) |
+						Where-Object {
+							$_.BaseName -match "^\d+\."
+						}
+					}
+
+					$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
+					if ($VersionFoldersCount -gt 0)
+					{
+						$VersionFolder = $VersionFolders | Sort-Object | Select-Object -Last 1
+						Initialize-Table
+						Edit-Table "$InstallLocation\$($VersionFolder.BaseName)"
+					}
+					else
+					{
+						Write-Error -Category InvalidResult -TargetObject $VersionFoldersCount `
+							-Message "No version folders found for EdgeWebView"
+					}
 				}
 			}
 
@@ -511,7 +524,8 @@ function Search-Installation
 			# versions: https://en.wikipedia.org/wiki/History_of_Microsoft_Office
 			# Update-Table -Search "Microsoft Office"
 
-			if ($Domain -ne $script:LastPolicyStore)
+			# LastPolicyStore first in comparison since it's null initially
+			if ($script:LastPolicyStore -ne $Domain)
 			{
 				# If domain changed, need to update script cache
 				$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
@@ -604,9 +618,10 @@ function Search-Installation
 		{
 			# TODO: should we handle multiple instances and their names, also for other programs.
 			# NOTE: VSSetup will return full path, no environment variables
-			$VSRoot = Get-VSSetupInstance |
-			Select-VSSetupInstance -Latest |
-			Select-Object -ExpandProperty InstallationPath
+			$VSRoot = Invoke-Command @SessionParams -ScriptBlock {
+				Get-VSSetupInstance | Select-VSSetupInstance -Latest |
+				Select-Object -ExpandProperty InstallationPath
+			}
 
 			if ($VSRoot)
 			{
@@ -643,12 +658,16 @@ function Search-Installation
 		{
 			# NOTE: game engine does not have installer, it is managed by launcher, and if it's
 			# built from source user must enter path to engine manually
-			$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables("%ProgramFiles%\Epic Games")
+			$ExpandedPath = Invoke-Command @SessionParams -ArgumentList "%ProgramFiles%\Epic Games" -ScriptBlock {
+				param ($Path)
+				[System.Environment]::ExpandEnvironmentVariables($Path)
+			}
 
 			if (Test-Path $ExpandedPath)
 			{
-				$VersionFolders = Invoke-Command @SessionParams -ScriptBlock {
-					Get-ChildItem -Directory -Path $using:ExpandedPath -Name
+				$VersionFolders = Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock {
+					param ($ExpandedPath)
+					Get-ChildItem -Directory -Path $ExpandedPath -Name
 				}
 
 				foreach ($VersionFolder in $VersionFolders)
@@ -661,6 +680,7 @@ function Search-Installation
 		}
 		"BingWallpaper"
 		{
+			# TODO: We're not handling multiple directories
 			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\BingWallpaperApp"
 			break
 		}
@@ -687,7 +707,7 @@ function Search-Installation
 
 		if ($Interactive)
 		{
-			# NOTE: number for Get-PSCallStack is 2, which means 3 function calls back and then get script name (call at 0 and 1 is this script)
+			# NOTE: number for Get-PSCallStack is 2, which means 2 calls back and then get script name (call at 0 is this script or function)
 			$Script = (Get-PSCallStack)[2].Command
 
 			# TODO: these loops seem to be skipped, probably missing Test-ExecutableFile, need to check

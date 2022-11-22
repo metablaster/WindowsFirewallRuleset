@@ -109,8 +109,22 @@ function Confirm-Installation
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	[hashtable] $CimParams = @{}
+	[hashtable] $SessionParams = @{}
+
 	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
+		if ($Session.ComputerName -ne $CimSession.ComputerName)
+		{
+			Write-Error -Category InvalidArgument -TargetObject $CimSession `
+				-Message "Session and CimSession must be targeting same computer"
+			return
+		}
+
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+		$CimParams.CimSession = $CimSession
+
 		$PSDefaultParameterValues["Test-FileSystemPath:Session"] = $Session
 		$PSDefaultParameterValues["Test-FileSystemPath:CimSession"] = $CimSession
 		$PSDefaultParameterValues["Search-Installation:Session"] = $Session
@@ -118,20 +132,30 @@ function Confirm-Installation
 	}
 	else
 	{
-		$PSDefaultParameterValues["Test-FileSystemPath:Domain"] = $Domain
-		$PSDefaultParameterValues["Search-Installation:CimSession"] = $Domain
+		$Domain = Format-ComputerName $Domain
 
-		if ($Credential)
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$PSDefaultParameterValues["Test-FileSystemPath:Credential"] = $Credential
-			$PSDefaultParameterValues["Search-Installation:Credential"] = $Credential
+			$SessionParams.ComputerName = $Domain
+			$CimParams.ComputerName = $Domain
+
+			$PSDefaultParameterValues["Test-FileSystemPath:Domain"] = $Domain
+			$PSDefaultParameterValues["Search-Installation:CimSession"] = $Domain
+
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+				$PSDefaultParameterValues["Test-FileSystemPath:Credential"] = $Credential
+				$PSDefaultParameterValues["Search-Installation:Credential"] = $Credential
+			}
 		}
 	}
 
 	# If input path is valid just make sure it's formatted
 	# NOTE: for debugging purposes we want to ignore default installation variables and force searching programs
 	# NOTE: this will cause "converted" path message in all cases
-	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet))
+	if (!$Develop -and (Test-FileSystemPath $Directory.Value -Firewall -PathType Directory -Quiet:$Quiet @SessionParams))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Formatting $Directory"
 		$Directory.Value = Format-Path $Directory.Value
@@ -139,9 +163,10 @@ function Confirm-Installation
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Installation path for $Application well known"
 		return $true # input path is correct
 	}
-	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet)
+	elseif (Search-Installation $Application -Interactive:$Interactive -Quiet:$Quiet @SessionParams @CimParams)
 	{
 		# NOTE: the paths in installation table are supposed to be formatted
+		# TODO: "unknown install location" should be null, need to see how rule scripts would handle null
 		$InstallLocation = "unknown install location"
 		$Count = $InstallTable.Rows.Count
 
