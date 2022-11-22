@@ -131,7 +131,7 @@ function Get-UserApp
 	$Domain = Format-ComputerName $Domain
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting apps for '$User' user on computer '$Domain'"
 
-	if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
+	if ($Domain -eq [System.Environment]::MachineName)
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
 		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)

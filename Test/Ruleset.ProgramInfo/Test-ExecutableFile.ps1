@@ -80,6 +80,7 @@ $UnknownExtension = New-Item -ItemType File -Path $DefaultTestDrive\badfile.asd 
 $NoExtension = New-Item -ItemType File -Path $DefaultTestDrive\fileonly -Force
 $UnsignedFile = New-Item -ItemType File -Path $DefaultTestDrive\unsigned.exe -Force
 $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
+$RemoteEicar = "C:\dev\WindowsFirewallRuleset\Test\TestDrive\eicar.exe"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
@@ -91,6 +92,9 @@ if ($Domain -ne [System.Environment]::MachineName)
 
 	Start-Test "Remote directory -Session"
 	Test-ExecutableFile $Directory -Session $SessionInstance
+
+	Start-Test "Remote eicar test"
+	Test-ExecutableFile $RemoteEicar -Session $SessionInstance
 }
 else
 {

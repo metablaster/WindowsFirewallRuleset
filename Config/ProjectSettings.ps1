@@ -662,7 +662,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 		}
 
 		# Remote test computer which will perform unit testing
-		Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "UnspecifiedDomain"
+		Set-Variable -Name TestDomain -Scope Global -Option ReadOnly -Force -Value "VM-PRO"
 	}
 }
 #endregion

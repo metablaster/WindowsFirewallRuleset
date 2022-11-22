@@ -73,7 +73,6 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-
 Enter-Test "Get-SystemApp"
 
 if ($Domain -ne [System.Environment]::MachineName)
@@ -82,7 +81,7 @@ if ($Domain -ne [System.Environment]::MachineName)
 	$UserAccounts = Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer
 	$UserAccounts
 
-	Start-Test "-User $($UserAccounts[0].User) -Session"
+	Start-Test "-User $($UserAccounts[0].User)"
 	Get-SystemApp -User $($UserAccounts[0].User) -Session $SessionInstance
 
 	# Start-Test "Remote Get-SystemApp -User $TestUser -Domain $Domain"

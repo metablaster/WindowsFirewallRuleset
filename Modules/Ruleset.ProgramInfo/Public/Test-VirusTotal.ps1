@@ -158,7 +158,7 @@ function Test-VirusTotal
 				if (($Command | Measure-Object).Count -eq 1)
 				{
 					$SigCheckFile = $Command.Name
-					Write-Debug -Message "[$InvocationName] $SigcheckExecutable found in path"
+					Write-Debug -Message "[$InvocationName] $SigcheckExecutable found in PATH"
 				}
 				else
 				{

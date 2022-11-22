@@ -174,14 +174,15 @@ function Test-ExecutableFile
 		$InformationPreference = "SilentlyContinue"
 	}
 
-	$ExpandedPath = Invoke-Command @SessionParams -ScriptBlock {
-		[System.Environment]::ExpandEnvironmentVariables($using:LiteralPath)
+	$ExpandedPath = Invoke-Command @SessionParams -ArgumentList $LiteralPath -ScriptBlock {
+		param ($LiteralPath)
+		[System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	}
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path: $ExpandedPath"
 	$Executable = Split-Path -Path $ExpandedPath -Leaf
 
-	# NOTE: Index 0 is this function
+	# Index 0 is this function
 	$Caller = (Get-PSCallStack)[1].Command
 
 	if (Test-FileSystemPath $ExpandedPath -PathType File -Firewall -Quiet:$Quiet @SessionParams)
@@ -227,8 +228,11 @@ function Test-ExecutableFile
 			return $false
 		}
 
-		# [System.Management.Automation.Signature]
-		$Signature = Get-AuthenticodeSignature -LiteralPath $ExpandedPath
+		$Signature = Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock {
+			param ($ExpandedPath)
+			# [System.Management.Automation.Signature]
+			Get-AuthenticodeSignature -LiteralPath $ExpandedPath
+		}
 
 		if ($Signature.Status -ne "Valid")
 		{

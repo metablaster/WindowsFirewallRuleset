@@ -58,7 +58,7 @@ if ($PSVersionTable.PSEdition -eq "Core")
 
 	if ($PSVersionTable.PSVersion -ge "7.1")
 	{
-		Write-Verbose -Message "[SessionStartupScript.ps1] Importing Appx module" -Verbose
+		Write-Verbose -Message "[SessionStartupScript.ps1] Importing Appx module"
 		# NOTE: New-PSSession for compatibility module is first time executed here and for client
 		# in AppxModule.ps in ComputerInfo module
 		Import-WinModule -Name Appx -ErrorAction Stop
