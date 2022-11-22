@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Get-InstallProperty
+Unit test for Get-AllUserProgram
 
 .DESCRIPTION
-Test correctness of Get-InstallProperty function
+Test correctness of Get-AllUserProgram function
 
 .PARAMETER Domain
 If specified, only remoting tests against specified computer name are performed
@@ -40,13 +40,13 @@ If specified, only remoting tests against specified computer name are performed
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Get-InstallProperty.ps1
+PS> .\Get-AllUserProgram.ps1
 
 .INPUTS
-None. You cannot pipe objects to Get-InstallProperty.ps1
+None. You cannot pipe objects to Get-AllUserProgram.ps1
 
 .OUTPUTS
-None. Get-InstallProperty.ps1 does not generate any output
+None. Get-AllUserProgram.ps1 does not generate any output
 
 .NOTES
 None.
@@ -72,20 +72,20 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Get-InstallProperty"
+Enter-Test "Get-AllUserProgram"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Remote default"
-	Get-InstallProperty -Domain $Domain
+	Get-AllUserProgram -Domain $Domain
 }
 else
 {
 	Start-Test "default"
-	$Result = Get-InstallProperty
+	$Result = Get-AllUserProgram
 	$Result
 
-	Test-Output $Result -Command Get-InstallProperty
+	Test-Output $Result -Command Get-AllUserProgram
 }
 
 Update-Log

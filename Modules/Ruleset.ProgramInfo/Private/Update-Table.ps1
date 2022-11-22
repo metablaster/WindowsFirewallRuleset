@@ -157,7 +157,7 @@ function Update-Table
 			$script:LastPolicyStore = $Domain
 			$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
 			$script:SystemPrograms = Get-SystemSoftware -Domain $Domain
-			$script:AllUserPrograms = Get-InstallProperty -Domain $Domain
+			$script:AllUserPrograms = Get-AllUserProgram -Domain $Domain
 		}
 
 		# To reduce typing and make code clear

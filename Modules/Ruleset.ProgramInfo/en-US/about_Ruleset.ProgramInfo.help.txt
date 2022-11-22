@@ -26,8 +26,8 @@ EXAMPLES
 	Get-ExecutablePath
 	Get a list of install locations for executable files
 
-	Get-InstallProperty
-	Search system wide program install properties
+	Get-Get-AllUserProgram
+	Search install properties for programs installed for all users
 
 	Get-NetFramework
 	Get installed .NET Frameworks

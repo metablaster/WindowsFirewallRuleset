@@ -34,7 +34,7 @@ Get store app SID
 
 Get a list of install locations for executable files
 
-### [Get-InstallProperty](Get-InstallProperty.md)
+### [Get-AllUserProgram](Get-AllUserProgram.md)
 
 Search system wide program install properties
 
