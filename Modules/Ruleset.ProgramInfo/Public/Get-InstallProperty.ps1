@@ -143,6 +143,7 @@ function Get-InstallProperty
 					Publisher = $ProductKey.GetValue("Publisher")
 					InstallLocation = $InstallLocation
 					RegistryKey = $ProductKey.ToString() -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+					# SIDKey is used by Update-Table
 					# SIDKey = $HKLSubMKey
 					PSTypeName = "Ruleset.ProgramInfo"
 				}

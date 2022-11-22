@@ -108,6 +108,13 @@ function Search-Installation
 	[hashtable] $SessionParams = @{}
 	if ($PsCmdlet.ParameterSetName -eq "Session")
 	{
+		if ($Session.ComputerName -ne $CimSession.ComputerName)
+		{
+			Write-Error -Category InvalidArgument -TargetObject $CimSession `
+				-Message "Session and CimSession must be targeting same computer"
+			return
+		}
+
 		$Domain = $Session.ComputerName
 		$SessionParams.Session = $Session
 

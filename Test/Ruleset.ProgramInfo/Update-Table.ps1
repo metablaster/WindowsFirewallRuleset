@@ -33,6 +33,9 @@ Unit test for Update-Table
 .DESCRIPTION
 Test correctness of Update-Table function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -58,11 +61,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -70,35 +77,42 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test -Private "Update-Table"
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	$RemoteParams = @{
+		CimSession = $CimServer
+		Session = $SessionInstance
+	}
+}
 
 Start-Test "Greenshot -UserProfile"
 Initialize-Table
-Update-Table -Search "Greenshot" -UserProfile
+Update-Table -Search "Greenshot" -UserProfile @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Failure Test"
 Initialize-Table
-Update-Table -Search "Failure" -UserProfile
+Update-Table -Search "Failure" -UserProfile @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
-Update-Table -Search "Visual Studio" -UserProfile
+Update-Table -Search "Visual Studio" -UserProfile @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "-Executable PowerShell.exe"
 Initialize-Table
-Update-Table -Executable "PowerShell.exe"
+Update-Table -Executable "PowerShell.exe" @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "-Search EdgeChromium -Executable msedge.exe"
 Initialize-Table
-Update-Table -Search "EdgeChromium" -Executable "msedge.exe"
+Update-Table -Search "EdgeChromium" -Executable "msedge.exe" @RemoteParams
 $global:InstallTable | Format-Table -AutoSize
 
 Start-Test "OneDrive -UserProfile"
 Initialize-Table
-$Result = Update-Table -Search "OneDrive" -UserProfile
+$Result = Update-Table -Search "OneDrive" -UserProfile @RemoteParams
 $Result
 $global:InstallTable | Format-Table -AutoSize
 

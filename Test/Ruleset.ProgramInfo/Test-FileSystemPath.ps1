@@ -75,9 +75,12 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test #"Test-FileSystemPath"
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$TestPath = "C:\TestFolder"
+	Start-Test "remote Session"
+	$TestPath = "C:\Windows\regedit.exe"
+	Test-FileSystemPath $TestPath -PathType Directory -Session $SessionInstance
 
 	Start-Test "remote Session"
+	$TestPath = "%SystemDrive%\Windows\System32"
 	Test-FileSystemPath $TestPath -PathType Directory -Session $SessionInstance
 
 	# Start-Test "remote Domain"

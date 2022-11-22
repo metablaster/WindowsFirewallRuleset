@@ -42,6 +42,15 @@ program search functions.
 .PARAMETER Domain
 Computer name which to check for installed programs
 
+.PARAMETER Credential
+Specifies the credential object to use for authentication
+
+.PARAMETER Session
+Specifies the PS session to use
+
+.PARAMETER CimSession
+Specifies the CIM session to use
+
 .PARAMETER UserProfile
 True if user profile is to be searched in addition to system wide installations
 
@@ -88,7 +97,13 @@ function Update-Table
 		[string] $Domain = [System.Environment]::MachineName,
 
 		[Parameter()]
+		[PSCredential] $Credential,
+
+		[Parameter()]
 		[CimSession] $CimSession,
+
+		[Parameter()]
+		[System.Management.Automation.Runspaces.PSSession] $Session,
 
 		[Parameter(ParameterSetName = "Search")]
 		[switch] $UserProfile,
@@ -102,29 +117,58 @@ function Update-Table
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
-		[hashtable] $ConnectParams = @{}
+		[hashtable] $CimParams = @{}
+		[hashtable] $SessionParams = @{}
+
 		if ($CimSession)
 		{
+			if ($Session.ComputerName -ne $CimSession.ComputerName)
+			{
+				Write-Error -Category InvalidArgument -TargetObject $CimSession `
+					-Message "Session and CimSession must be targeting same computer"
+				return
+			}
+
 			$Domain = $CimSession.ComputerName
-			$ConnectParams.CimSession = $CimSession
+			$CimParams.CimSession = $CimSession
+			$SessionParams.Session = $Session
 		}
 		else
 		{
-			$ConnectParams.ComputerName = $Domain
+			$Domain = Format-ComputerName $Domain
+
+			# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+			if ($Domain -ne [System.Environment]::MachineName)
+			{
+				$CimParams.ComputerName = $Domain
+				$SessionParams.ComputerName = $Domain
+
+				if ($Credential)
+				{
+					$SessionParams.Credential = $Credential
+				}
+			}
 		}
 
-		$MachineName = Format-ComputerName $Domain
-		if ($MachineName -ne $script:LastPolicyStore)
+		# LastPolicyStore first in comparison since it's null initially
+		if ($script:LastPolicyStore -ne $Domain)
 		{
 			# If domain changed, need to update script cache
-			$script:LastPolicyStore = $MachineName
+			$script:LastPolicyStore = $Domain
 			$script:ExecutablePaths = Get-ExecutablePath -Domain $Domain
 			$script:SystemPrograms = Get-SystemSoftware -Domain $Domain
 			$script:AllUserPrograms = Get-InstallProperty -Domain $Domain
 		}
 
 		# To reduce typing and make code clear
-		$UserGroups = Get-UserGroup @ConnectParams
+		$UserGroups = Get-UserGroup @CimParams
+
+		# TODO: Learn username from installation path, probably a new function for this
+		# TODO: UserInfo data from the table is not used, we currently use only InstallLocation,
+		# For programs not in userprofile we assign default group, installation table can then
+		# be then used to create a firewall rule for group.
+		# TODO: DefaultGroup may contain multiple groups, need to handle them all.
+		$UserInfo = $UserGroups | Where-Object -Property Group -EQ $DefaultGroup[0]
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
@@ -139,9 +183,6 @@ function Update-Table
 			{
 				# Create a row
 				$Row = $InstallTable.NewRow()
-
-				# TODO: Learn username from installation path, probably a function for this
-				$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 				# Enter data into row
 				$Row.ID = ++$RowIndex
@@ -172,13 +213,12 @@ function Update-Table
 		$SearchString = "*$Search*"
 
 		# Search system wide installed programs
-		if ($SystemPrograms -and $SystemPrograms.Name -like $SearchString)
+		if ($SystemPrograms -and ($SystemPrograms.Name -like $SearchString))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching system programs for $Search"
 
 			# TODO: need better mechanism for multiple matches
 			$TargetPrograms = $SystemPrograms | Where-Object -Property Name -Like $SearchString
-			$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
 
 			foreach ($Program in $TargetPrograms)
 			{
@@ -202,28 +242,19 @@ function Update-Table
 			}
 		}
 		# Program not found on system, attempt alternative search
-		elseif ($AllUserPrograms -and $AllUserPrograms.Name -like $SearchString)
+		elseif ($AllUserPrograms -and ($AllUserPrograms.Name -like $SearchString))
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching program install properties for $Search"
 			$TargetPrograms = $AllUserPrograms | Where-Object -Property Name -Like $SearchString
 
 			foreach ($Program in $TargetPrograms)
 			{
+				# TODO: $Program.SIDKey is probably SID of the user to which user specific information
+				# applies in regard to program, need to investigate if this user specific information
+				# can be used here to create multiple installtable entries for $UserInfo, currently using default group
+
 				# Create a row
 				$Row = $InstallTable.NewRow()
-
-				# Let see who owns the sub key which is the SID
-				$KeyOwner = ConvertFrom-SID $Program.SIDKey -Domain $Domain
-				if ($KeyOwner -eq "Users")
-				{
-					$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Users"
-				}
-				else
-				{
-					# TODO: we need more registry samples to determine what is right, Administrators seems logical
-					$UserInfo = $UserGroups | Where-Object -Property Group -EQ "Administrators"
-				}
-
 				$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 
 				# Enter data into row
@@ -245,7 +276,7 @@ function Update-Table
 		# NOTE: User profile should be searched even if there is an installation system wide
 		if ($UserProfile)
 		{
-			$Principals = Get-GroupPrincipal "Users" @ConnectParams
+			$Principals = Get-GroupPrincipal $DefaultGroup[0] @CimParams
 
 			foreach ($UserInfo in $Principals)
 			{
@@ -256,13 +287,13 @@ function Update-Table
 				if ($Search -eq "OneDrive")
 				{
 					# NOTE: For one drive registry drilling procedure is different
-					$UserPrograms = Get-OneDrive $UserInfo.User -Domain $Domain
+					$UserPrograms = Get-OneDrive $UserInfo.User @CimParams @SessionParams
 				}
 				else
 				{
 					# NOTE: the story is different here, each user might have multiple matches for search string
 					# letting one match to have same principal would be mistake.
-					$UserPrograms = Get-UserSoftware $UserInfo.User -Domain $Domain |
+					$UserPrograms = Get-UserSoftware $UserInfo.User @CimParams @SessionParams |
 					Where-Object -Property Name -Like $SearchString
 				}
 

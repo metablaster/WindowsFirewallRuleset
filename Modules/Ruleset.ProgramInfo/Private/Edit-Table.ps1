@@ -31,7 +31,7 @@ SOFTWARE.
 Manually add new program installation directory to the table
 
 .DESCRIPTION
-Based on path and if it's valid path fill the table with it and add principals and other information
+Based on path and if it's valid path fill the table with it and add principals and other information.
 Module scope installation table is updated
 
 .PARAMETER LiteralPath

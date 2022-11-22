@@ -120,7 +120,7 @@ function Get-UserGroup
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting CIM server on $MachineName"
 
-			$RemoteGroups = Get-CimInstance @CimParams -Class Win32_Group -Property LocalAccount |
+			$RemoteGroups = Get-CimInstance @CimParams -Class Win32_Group |
 			Where-Object -Property LocalAccount -EQ "True"
 
 			if ([string]::IsNullOrEmpty($RemoteGroups))
