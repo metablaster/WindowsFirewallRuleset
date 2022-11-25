@@ -32,6 +32,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated rules for mail apps from Windows store so that ports for POP3, IMAP and SMTP are specified
   - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
+  - Updated rules for Simple DNS crypt, there was issue on systems with virtual adapters
 
 - Modules
 
@@ -60,7 +61,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - New functionalities
 
-    `Test-SDDL` function to validate SDDL syntax
+    - `Test-SDDL` function to validate SDDL syntax
+    - Added PolicyFileEditor new external module to help with GPO management
 
 - Scripts
 

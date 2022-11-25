@@ -123,6 +123,10 @@ $DnsCryptRoot = "%ProgramFiles%\bitbeans\Simple DNSCrypt x64"
 # Test if installation exists on system
 if ((Confirm-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 {
+	# NOTE: Administrators group was necessary for initial setup on fresh system
+	$DnsCryptUsers = $LocalSystem
+	Merge-SDDL $DnsCryptUsers -From $AdminGroupSDDL
+
 	# NOTE: Port 53 (unencrypted) is required for fallback resolver
 	# NOTE: Previously it was -Service dnscrypt-proxy, but now it's NT AUTHORITY SYSTEM
 	$Program = "$DnsCryptRoot\dnscrypt-proxy\dnscrypt-proxy.exe"
@@ -134,7 +138,7 @@ if ((Confirm-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 53, 443, 853 `
-			-LocalUser $LocalSystem `
+			-LocalUser $DnsCryptUsers `
 			-InterfaceType $DefaultInterface `
 			-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
 and a DNS resolver. It prevents DNS spoofing.
@@ -150,7 +154,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 53, 443, 853 `
-			-LocalUser $LocalSystem `
+			-LocalUser $DnsCryptUsers `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
 			-InterfaceType $DefaultInterface `
 			-Description "DNSCrypt is a protocol that authenticates communications between a DNS client
