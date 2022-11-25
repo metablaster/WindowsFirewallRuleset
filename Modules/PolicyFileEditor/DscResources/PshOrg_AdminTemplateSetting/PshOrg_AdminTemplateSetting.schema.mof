@@ -1,0 +1,10 @@
+[ClassVersion("2"), FriendlyName("cAdministrativeTemplateSetting")]
+class PshOrg_AdminTemplateSetting : OMI_BaseResource
+{
+[Key,ValueMap{"Machine", "User", "Administrators", "NonAdministrators"},Values{"Machine", "User", "Administrators", "NonAdministrators"}] string PolicyType;
+[Key] string KeyValueName;
+[write,ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] string Ensure;
+[write] string Data[];
+[write,ValueMap{"Unknown", "String", "ExpandString", "Binary", "DWord", "MultiString", "QWord", "None"},Values{"Unknown","String","ExpandString","Binary","DWord","MultiString","QWord","None"}] string Type;
+};
+
