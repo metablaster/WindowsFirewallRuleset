@@ -1,3 +1,4 @@
+
 Remove-Module [P]olicyFileEditor
 $scriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 $psd1Path = Join-Path $scriptRoot PolicyFileEditor.psd1
