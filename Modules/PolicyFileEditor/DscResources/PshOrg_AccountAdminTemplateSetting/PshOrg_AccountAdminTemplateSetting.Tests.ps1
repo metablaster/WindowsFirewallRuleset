@@ -19,8 +19,8 @@ Describe 'GetPolFilePath with -Account parameter' {
 	It 'Returns the proper path for a local account' {
 		$computer = [adsi]"WinNT://$env:COMPUTERNAME"
 		$user = $computer.Children |
-		where SchemaClassName -EQ User |
-		select -First 1
+		Where-Object SchemaClassName -EQ User |
+		Select-Object -First 1
 
 		$sid = New-Object System.Security.Principal.SecurityIdentifier($user.objectSid[0], 0)
 

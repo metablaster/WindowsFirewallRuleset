@@ -40,8 +40,8 @@ Task Build -depends Test {
 	$null = New-Item -Path $buildTarget -ItemType Directory -ErrorAction Stop
 
 	Get-ChildItem -Path $source\* -File -Recurse -ErrorAction Stop |
-	where { $file = $_; -not ($filesToExclude | where { $file.Name -like $_ }) } |
-	foreach {
+	Where-Object { $file = $_; -not ($filesToExclude | Where-Object { $file.Name -like $_ }) } |
+	ForEach-Object {
 		$sourceFile = $_
 		$relativePath = Get-RelativePath -Path $sourceFile.FullName -RelativeTo $source
 		$targetPath = Join-Path $buildTarget $relativePath

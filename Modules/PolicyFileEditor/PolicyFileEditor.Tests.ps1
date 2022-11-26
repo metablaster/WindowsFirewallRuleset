@@ -443,7 +443,6 @@ try
 				{
 					$Data[$i] | Should BeExactly $newData[$i]
 				}
-
 			}
 
 			It 'Gets values by Key and PropertyName successfully' {

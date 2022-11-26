@@ -1,3 +1,4 @@
+
 #requires -Version 2.0
 
 $script:MachineExtensionGuids = '[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]'
@@ -104,7 +105,6 @@ function GetEntryData
 			return $Entry.StringValue
 		}
 	}
-
 }
 
 function SavePolicyFile
@@ -676,7 +676,6 @@ function TestTargetResourceCommon
 
 		return $null -eq $entry
 	}
-
 }
 
 function Assert-ValidDataAndType
