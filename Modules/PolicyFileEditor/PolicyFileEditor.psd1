@@ -16,7 +16,8 @@
 	RootModule = "PolicyFileEditor.psm1"
 
 	# Version number of this module.
-	ModuleVersion = "3.1.0"
+	# NOTE: Last checked out official version was 3.1.0
+	ModuleVersion = "0.14.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(

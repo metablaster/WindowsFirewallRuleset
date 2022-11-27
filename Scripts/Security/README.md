@@ -10,3 +10,4 @@ In particular these scripts are used to manage the following:
 
 - Microsoft Defender Antivirus
 - Digital signature verification across system and virus total scan of entire system
+- Windows privacy options

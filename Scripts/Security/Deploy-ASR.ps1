@@ -102,8 +102,8 @@ Initialize-Project -Strict
 $Domain = Format-ComputerName $Domain
 
 # User prompt
-$Accept = "Accpet deploying ASR rules to target computer"
-$Deny = "Abort operation, no ASR rules will be deployed"
+$Accept = "Accpet deploying ASR rules to '$Domain' computer"
+$Deny = "Abort operation, no ASR rules to '$Domain' computer will be deployed"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
@@ -111,7 +111,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 {
 	#
 	# Attack Surface Reduction
-	# HACK: Set-PolicyFileEntry does not work for ASR and neither registry nor GPO isn't updated
+	# HACK: Set-PolicyFileEntry does not work for ASR, neither registry nor GPO isn't updated
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
 	# Registry: "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR -> ExploitGuard_ASR_Rules"
 	# Registry: "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules -> Rule Name"

@@ -105,15 +105,17 @@ param (
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
+$Domain = Format-ComputerName $Domain
+
 # User prompt
-$Accept = "Configure Windows Defender and Advanced Threat Protection"
-$Deny = "Abort operation, ATP and Windows defender will not be modified"
+$Accept = "Configure Windows Defender and Advanced Threat Protection on '$Domain' computer"
+$Deny = "Abort operation, ATP and Windows defender will not be modified on '$Domain' computer"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced Thread Protection"))
+if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced Thread Protection and settings"))
 {
-	# ADVANCED THREAT PROTECTION
+	# GPO\Computer configuration
 	$PolicyPath = "$env:WinDir\System32\GroupPolicy\Machine\Registry.pol"
 
 	#

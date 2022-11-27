@@ -35,13 +35,14 @@ Contains scripts which are not part of modules as follows:
 | Deploy-ASR.ps1              | Deploy attack surface reduction (ASR) rules                          |
 | Find-UnsignedFile.ps1       | Scan executables for digital signature and check virus total status  |
 | Set-ATP.ps1                 | Sets the Advanced Threat Protection (ATP) settings                   |
+| Set-Privacy.ps1             | Configures Windows privacy in a restrictive way                      |
 | Show-ASR.ps1                | Show current attack surface reduction (ASR) rules configuration      |
 
 ---
 
 | Experimental scripts        | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
-| Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state         |
+| Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state       |
 | Initialize-Development.ps1  | Initialize development environment                                   |
 | Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis      |
 | Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |

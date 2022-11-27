@@ -63,6 +63,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - `Test-SDDL` function to validate SDDL syntax
     - Added `PolicyFileEditor` new external module to help with GPO management
+    - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
 
 - Scripts
 

@@ -36,7 +36,7 @@ SOFTWARE.
 
 .REQUIREDSCRIPTS ProjectSettings.ps1
 
-.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize
+.EXTERNALMODULEDEPENDENCIES Ruleset.Logging, Ruleset.Initialize, Ruleset.Utility
 #>
 
 <#
