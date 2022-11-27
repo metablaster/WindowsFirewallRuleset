@@ -9,7 +9,7 @@ In addition, general questions and answers regarding this firewall.
 
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [Table of Contents](#table-of-contents)
-  - [Firewall rule doesn't work, program "some_program.exe" fails to connect to internet](#firewall-rule-doesnt-work-program-some_programexe-fails-to-connect-to-internet)
+  - [Firewall rule doesn't work, program "some-program.exe" fails to connect to internet](#firewall-rule-doesnt-work-program-some-programexe-fails-to-connect-to-internet)
   - [I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"](#i-get-an-error-network-path-not-found-unable-to-contact-computer-or-the-client-cannot-connect)
   - [Does this firewall project give me the right protection](#does-this-firewall-project-give-me-the-right-protection)
   - [Windows Firewall does not write logs](#windows-firewall-does-not-write-logs)
@@ -19,7 +19,7 @@ In addition, general questions and answers regarding this firewall.
   - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
   - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
 
-## Firewall rule doesn't work, program "some_program.exe" fails to connect to internet
+## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
 First step is to open PowerShell as Administrator and run `gpupdate.exe`, if not working then:
 
@@ -65,6 +65,15 @@ Next ensure at the minimum following network services are `Running` and optional
 5. RemoteRegistry `Remote Registry`
 6. FDResPub `Function Discovery Resource Publication`
 7. fdPHost `Function Discovery Provider host`
+
+Next ensure that on computer which you're trying to access the following is enabled for private
+network profile:
+
+1. Turn on network discovery
+2. Turn on file and printer sharing
+
+This can be enabled in the following location:\
+`Start->System->Network & Internet->Network and Sharing Center->Change advanced sharing settings`
 
 If this doesn't work verify the command that is causing this problem, for example following command
 tries to get firewall rules from GPO and will produce this problem:

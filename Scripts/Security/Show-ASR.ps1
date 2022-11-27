@@ -49,6 +49,24 @@ Use Show-ASR.ps1 to show current configuration of attack surface reduction (ASR)
 .PARAMETER Domain
 Computer name which is to be queried for ASR rules
 
+.PARAMETER Enabled
+If specified, shows only Enabled rules
+
+.PARAMETER Disabled
+If specified, shows only Disabled rules
+
+.PARAMETER Audit
+If specified, shows only Audit rules
+
+.PARAMETER NotConfigured
+If specified, shows only NotConfigured rules
+
+.PARAMETER Warn
+If specified, shows only Warn rules
+
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions
+
 .EXAMPLE
 PS> Show-ASR
 
@@ -73,21 +91,46 @@ https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack
 
 #Requires -Version 5.1
 #Requires -PSEdition Desktop
+#Requires -RunAsAdministrator
 
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = "None")]
 [OutputType([void])]
 param (
 	[Alias("ComputerName", "CN")]
-	[string] $Domain = [System.Environment]::MachineName
+	[Parameter()]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter(ParameterSetName = "Enabled")]
+	[switch] $Enabled,
+
+	[Parameter(ParameterSetName = "Disabled")]
+	[switch] $Disabled,
+
+	[Parameter(ParameterSetName = "Audit")]
+	[switch] $Audit,
+
+	[Parameter(ParameterSetName = "NotConfigured")]
+	[switch] $NotConfigured,
+
+	[Parameter(ParameterSetName = "Warn")]
+	[switch] $Warn,
+
+	[Parameter()]
+	[switch] $Force
 )
 
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
-#endregion
 
-$InformationPreference = "Continue"
+$Domain = Format-ComputerName $Domain
+
+# User prompt
+$Accept = "Accpet listing ASR rule status on '$Domain' computer"
+$Deny = "Abort operation, no ASR rules on '$Domain' computer will be listed"
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
 
 [scriptblock] $Convert = {
 	param([string] $Value)
@@ -113,6 +156,17 @@ $InformationPreference = "Continue"
 	}
 }
 
+if ($PSCmdlet.ParameterSetName -eq "None")
+{
+	Write-Information -MessageData "[$ThisScript] Listing all rules and rule status on '$Domain' computer"
+}
+else
+{
+	Write-Information -MessageData "[$ThisScript] Listing '$($PSCmdlet.ParameterSetName)' rules on '$Domain' computer"
+}
+
+Write-Information -MessageData ""
+
 $MpPreference = Get-MpPreference -CimSession $CimServer |
 Select-Object AttackSurfaceReductionRules_Ids, AttackSurfaceReductionRules_Actions
 
@@ -120,18 +174,66 @@ foreach ($Entry in $MpPreference)
 {
 	for ($Index = 0; $Index -lt $Entry.AttackSurfaceReductionRules_Ids.Length; ++$Index)
 	{
-		Write-Information -MessageData "$(& $Convert $Entry.AttackSurfaceReductionRules_Ids[$Index])"
+		$RuleInfo = & $Convert $Entry.AttackSurfaceReductionRules_Ids[$Index]
 
-		if ($Entry.AttackSurfaceReductionRules_Actions[$Index] -eq 1)
+		switch ($Entry.AttackSurfaceReductionRules_Actions[$Index])
 		{
-			$Enabled = "Enabled"
-		}
-		else
-		{
-			$Enabled = "Disabled"
+			0
+			{
+				if ($Disabled)
+				{
+					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					continue
+				}
+
+				$Status = "Disabled"
+			}
+			1
+			{
+				if ($Enabled)
+				{
+					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					continue
+				}
+
+				$Status = "Enabled"
+			}
+			2
+			{
+				if ($Audit)
+				{
+					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					continue
+				}
+
+				$Status = "Audit"
+			}
+			5
+			{
+				if ($NotConfigured)
+				{
+					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					continue
+				}
+
+				$Status = "Not Configured"
+			}
+			6
+			{
+				if ($Warn)
+				{
+					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					continue
+				}
+
+				$Status = "Warn"
+			}
 		}
 
-		Write-Information -MessageData $Enabled
+		if (!($Enabled -or $Disabled -or $Audit -or $NotConfigured -or $Warn))
+		{
+			Write-Information -MessageData "[$ThisScript] $Status -> $RuleInfo"
+		}
 	}
 }
 

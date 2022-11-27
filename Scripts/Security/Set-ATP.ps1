@@ -45,9 +45,11 @@ Set advanced threat protection settings
 
 .DESCRIPTION
 Use Set-ATP.ps1 to configure Microsoft Defender Antivirus.
+In addition to Windows Defender ATP settings a several other settings are enabled for
+maximum antivirus security.
 
 .PARAMETER Domain
-Computer name onto which do deploy ATP configuration
+Computer name onto which do deploy Windows Defender configuration
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
@@ -65,7 +67,8 @@ None. You cannot pipe objects to Set-ATP.ps1
 None. Set-ATP.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: There are some exotic options for Set-MpPreference which we don't use
+TODO: Switches are required to optionally set non ATP settings
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -74,7 +77,13 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference
 
 .LINK
-https://docs.microsoft.com/en-us/graph/api/resources/intune-deviceconfig-defendercloudblockleveltype
+https://learn.microsoft.com/en-us/windows/security/zero-trust-windows-device-health
+
+.LINK
+https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint
+
+.LINK
+https://gpsearch.azurewebsites.net
 #>
 
 #Requires -Version 5.1
@@ -97,24 +106,23 @@ Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName)
 Initialize-Project -Strict
 
 # User prompt
-$Accept = "Accpet deploying ASR rules to target computer"
-$Deny = "Abort operation, no ASR rules will be deployed"
+$Accept = "Configure Windows Defender and Advanced Threat Protection"
+$Deny = "Abort operation, ATP and Windows defender will not be modified"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced Thread Protection"))
 {
 	# ADVANCED THREAT PROTECTION
-
 	$PolicyPath = "$env:WinDir\System32\GroupPolicy\Machine\Registry.pol"
-	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\MAPS
 
 	#
-	# Block at first sight (MAPS)
+	# MAPS
+	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\MAPS
 	#
 
 	Write-Information -MessageData "[$ThisScript] Join Microsoft MAPS"
-	# Join Microsoft MAPS
+	# Join Microsoft MAPS (Advanced MAPS)
 	# item: decimal: 0 => Disabled
 	# item: decimal: 1 => Basic MAPS
 	# item: decimal: 2 => Advanced MAPS
@@ -122,7 +130,6 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueName = "SpynetReporting"
 	$Value = 2
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
 	Write-Information -MessageData "[$ThisScript] Send file samples when further analysis is required"
@@ -139,11 +146,11 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 	Write-Information -MessageData "[$ThisScript] Configure the 'Block at First Sight' feature"
 	# Configure the "Block at First Sight" feature (Enabled)
-	# NOTE: Depends on:
-	# "Join Microsoft MAPS"
-	# "Send file samples when further analysis is required (option 1 or 3)"
-	# Scan all downloaded files and attachments
-	# "Real time protection - do not enable 'turn off real time protection"
+	# NOTE: This feature requires four other settings to be enabled:
+	# 1. "Join Microsoft MAPS"
+	# 2. "Send file samples when further analysis is required (option 1 or 3)"
+	# 3. "Scan all downloaded files and attachments"
+	# 4. "Real time protection - do not enable 'turn off real time protection'"
 	# Enabled Value: decimal: 0
 	# Disabled Value: decimal: 1
 	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Spynet"
@@ -152,8 +159,12 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
-	Write-Information -MessageData "[$ThisScript] Scan all downloaded files and attachments"
+	#
+	# Real-time protection
 	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Real-time Protection
+	#
+
+	Write-Information -MessageData "[$ThisScript] Scan all downloaded files and attachments"
 	# Scan all downloaded files and attachments (Enabled)
 	# Enabled Value: decimal: 0
 	# Disabled Value: decimal: 1
@@ -163,7 +174,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
-	Write-Information -MessageData "[$ThisScript] Turn of realtime protection"
+	Write-Information -MessageData "[$ThisScript] Turn off realtime protection"
 	# Turn off real-time protection (Disabled)
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
@@ -173,12 +184,42 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
+	Write-Information -MessageData "[$ThisScript] Turn on behavioral monitoring"
+	# Turn on behavioral monitoring (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
+	$ValueName = "DisableBehaviorMonitoring"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Monitor file and program activity on your computer"
+	# Monitor file and program activity on your computer (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
+	$ValueName = "DisableOnAccessProtection"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Turn on process scanning whenever real-time protection is enabled"
+	# Turn on process scanning whenever real-time protection is enabled (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
+	$ValueName = "DisableScanOnRealtimeEnable"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
 	#
-	# Cloud protection
+	# mpengine
+	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\mpengine
 	#
 
 	Write-Information -MessageData "[$ThisScript] Enable file hash computation feature"
-	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\mpengine
 	# Enable file hash computation feature (Optional)
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
@@ -192,9 +233,9 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	# Configure extended cloud check (50 max)
 	# This feature allows Microsoft Defender Antivirus to block a suspicious file for up to X seconds, and scan it in the cloud to make sure it´s safe.
 	# NOTE: This feature depends on three other MAPS settings:
-	# 1. "Configure the ´Block at First Sight´ feature
-	# 2. "Join Microsoft MAPS";
-	# 3. "Send file samples when further analysis is required" all need to be enabled.
+	# 1. "Configure the 'Block at First Sight' feature
+	# 2. "Join Microsoft MAPS"
+	# 3. "Send file samples when further analysis is required"
 	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\MpEngine"
 	$ValueName = "MpBafsExtendedTimeout"
 	$Value = 50
@@ -215,21 +256,16 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
-
-	#
-	# Attack Surface Reduction
-	#
-
-	# Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard
+	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
 	# Configure Attack Surface Reduction rules
 	# Set-ASR
 
 	#
-	# Network protection
+	# Microsoft Defender Exploit Guard
+	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Network Protection
 	#
 
 	Write-Information -MessageData "[$ThisScript] Prevent users and apps from accessing dangerous websites"
-	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Network Protection
 	# Prevent users and apps from accessing dangerous websites (Block)
 	# item: decimal: 0 => Disable (Default)
 	# item: decimal: 1 => Block
@@ -242,16 +278,8 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 	#
 	# Scan
-	#
-
-	Write-Information -MessageData "[$ThisScript] Specify the maximum percentage of CPU utilization during a scan"
 	# GPO: Computer configuration\Administrative templates\Windows Components\Microsoft Defender Antivirus\Scan
-	# Specify the maximum percentage of CPU utilization during a scan (50%, Optional)
-	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
-	$ValueName = "AvgCPULoadFactor"
-	$Value = 50
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	#
 
 	Write-Information -MessageData "[$ThisScript] Check for the latest virus and spyware security intelligence before running a scheduled scan"
 	# Check for the latest virus and spyware security intelligence before running a scheduled scan (Optional)
@@ -263,28 +291,110 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
 
+	Write-Information -MessageData "[$ThisScript] Specify the maximum percentage of CPU utilization during a scan"
+	# Specify the maximum percentage of CPU utilization during a scan (50%, Optional)
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "AvgCPULoadFactor"
+	$Value = 50
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Turn on heuristics"
+	# Turn on heuristics (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableHeuristics"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Turn on e-mail scanning"
+	# Turn on e-mail scanning (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableEmailScanning"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Scan packed executables"
+	# Scan packed executables (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisablePackedExeScanning"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Scan removable drives"
+	# Scan removable drives (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableRemovableDriveScanning"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Run full scan on mapped network drives"
+	# Run full scan on mapped network drives (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableScanningMappedNetworkDrivesForFullScan"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Scan network files"
+	# Scan network files (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableScanningNetworkFiles"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Scan archive files"
+	# Scan archive files (Optional)
+	# Enabled Value: decimal: 0
+	# Disabled Value: decimal: 1
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "DisableArchiveScanning"
+	$Value = 0
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	Write-Information -MessageData "[$ThisScript] Specify the maximum depth to scan archive files"
+	# Specify the maximum depth to scan archive files (Optional)
+	# The default directory depth level is 0
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+	$ValueName = "ArchiveMaxDepth"
+	$Value = 5
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
+	#
+	# Security Intelligence Updates
+	# GPO: Computer Configuration\Administrative Templates\Windows Components\Microsoft Defender Antivirus\Security Intelligence Updates
+	#
+
+	Write-Information -MessageData "[$ThisScript] Check for the latest virus and spyware security intelligence on startup"
+	# Check for the latest virus and spyware security intelligence on startup (Optional)
+	# Enabled Value: decimal: 1
+	# Disabled Value: decimal: 0
+	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Signature Updates"
+	$ValueName = "UpdateOnStartUp"
+	$Value = 1
+	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+
 	# Update changes done to registry
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-
-	if ($false)
-	{
-		# TODO: Not implemented
-		Set-MpPreference -ScanScheduleDay Sunday -ScanScheduleTime 720 `
-			-ScanParameters FullScan `
-			-DisableCatchupFullScan $false `
-			-DisableCatchupQuickScan $false `
-			-DisableRestorePoint $false `
-			-DisableScriptScanning $false `
-			-DisableArchiveScanning $false `
-			-DisableEmailScanning $true `
-			-DisableRemovableDriveScanning $true `
-			-DisableScanningMappedNetworkDrivesForFullScan $true `
-			-DisableScanningNetworkFiles $true `
-			-CimSession $CimServer
-
-		# Other
-		Set-MpPreference -DisableBehaviorMonitoring $false -CimSession $CimServer
-	}
 }
 
 Update-Log

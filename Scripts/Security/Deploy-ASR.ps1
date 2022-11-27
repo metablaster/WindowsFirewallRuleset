@@ -99,14 +99,24 @@ param (
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
+$Domain = Format-ComputerName $Domain
+
 # User prompt
 $Accept = "Accpet deploying ASR rules to target computer"
 $Deny = "Abort operation, no ASR rules will be deployed"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surface reduction rules"))
+if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surface reduction rules to '$Domain' computer"))
 {
+	#
+	# Attack Surface Reduction
+	# HACK: Set-PolicyFileEntry does not work for ASR and neither registry nor GPO isn't updated
+	# GPO: Computer Configuration\Administrative Templates\Windows Components\Microsoft Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+	# Registry: "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR -> ExploitGuard_ASR_Rules"
+	# Registry: "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules -> Rule Name"
+	#
+
 	$Rules = @(
 		# Block abuse of exploited vulnerable signed drivers
 		"56a863a9-875e-4185-98a7-b882c64b5ce5"
@@ -177,8 +187,17 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		"Disabled "
 	)
 
-	Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -CimSession $CimServer `
-		-AttackSurfaceReductionRules_Actions $Actions
+	try
+	{
+		Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -CimSession $CimServer `
+			-AttackSurfaceReductionRules_Actions $Actions -ErrorAction Stop
+
+		Write-Information -MessageData "[$ThisScript] Successfully deployed ASR rules to '$Domain' computer"
+	}
+	catch
+	{
+		Write-Error -ErrorRecord $_
+	}
 }
 
 Update-Log
