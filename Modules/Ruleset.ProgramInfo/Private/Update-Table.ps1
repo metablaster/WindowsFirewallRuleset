@@ -45,11 +45,11 @@ Computer name which to check for installed programs
 .PARAMETER Credential
 Specifies the credential object to use for authentication
 
-.PARAMETER Session
-Specifies the PS session to use
-
 .PARAMETER CimSession
 Specifies the CIM session to use
+
+.PARAMETER Session
+Specifies the PS session to use
 
 .PARAMETER UserProfile
 True if user profile is to be searched in addition to system wide installations

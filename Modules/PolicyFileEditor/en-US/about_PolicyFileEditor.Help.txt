@@ -56,14 +56,14 @@ LONG DESCRIPTION
 		-Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
 
 EXAMPLES
-	Set-PolicyFileEntry
-	Retrieves the current setting(s) from a .pol file
+	Get-PolicyFileEntry
+	Creates or modifies a value in a .pol file
 
 	Remove-PolicyFileEntry
 	Removes a value from a .pol file
 
-	Get-PolicyFileEntry
-	Creates or modifies a value in a .pol file
+	Set-PolicyFileEntry
+	Retrieves the current setting(s) from a .pol file
 
 	Update-GptIniVersion
 	Increments the version counter in a gpt.ini file

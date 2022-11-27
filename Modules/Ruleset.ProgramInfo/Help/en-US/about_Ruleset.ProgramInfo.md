@@ -28,6 +28,12 @@ Format-Path
 Format file system path and fix syntax errors
 
 ```powershell
+Get-AllUserProgram
+```
+
+Search system wide program install properties
+
+```powershell
 Get-AppCapability
 ```
 
@@ -44,12 +50,6 @@ Get-ExecutablePath
 ```
 
 Get a list of install locations for executable files
-
-```powershell
-Get-InstallProperties
-```
-
-Search system wide program install properties
 
 ```powershell
 Get-NetFramework
@@ -76,7 +76,7 @@ Get-SqlServerInstance
 Get SQL server information from a local or remote servers
 
 ```powershell
-Get-SystemApps
+Get-SystemApp
 ```
 
 Get store apps installed system wide
@@ -88,7 +88,7 @@ Get-SystemSoftware
 Search installed programs for all users, system wide
 
 ```powershell
-Get-UserApps
+Get-UserApp
 ```
 
 Get store apps for specific user

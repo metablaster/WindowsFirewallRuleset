@@ -64,10 +64,10 @@ $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machin
 # EXAMPLES
 
 ```powershell
-Set-PolicyFileEntry
+Get-PolicyFileEntry
 ```
 
-Retrieves the current setting(s) from a .pol file
+Creates or modifies a value in a .pol file
 
 ```powershell
 Remove-PolicyFileEntry
@@ -76,10 +76,10 @@ Remove-PolicyFileEntry
 Removes a value from a .pol file
 
 ```powershell
-Get-PolicyFileEntry
+Set-PolicyFileEntry
 ```
 
-Creates or modifies a value in a .pol file
+Retrieves the current setting(s) from a .pol file
 
 ```powershell
 Update-GptIniVersion

@@ -19,9 +19,6 @@ EXAMPLES
 	Approve-Execute
 	Prompt user to continue running script
 
-	Write-ServiceList
-	Build a list of windows services involved in script rules
-
 	Compare-Path
 	Compare 2 paths for equality or similarity
 
@@ -63,6 +60,9 @@ EXAMPLES
 
 	Set-Shortcut
 	Create or set shortcut to file or online location
+
+	Write-ServiceList
+	Build a list of windows services involved in script rules
 
 ALIASES
 	gt -> Get-TypeName

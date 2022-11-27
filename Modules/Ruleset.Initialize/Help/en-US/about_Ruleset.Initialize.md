@@ -17,7 +17,7 @@ that end users may have.
 ## EXAMPLES
 
 ```powershell
-Initialize-Module
+Initialize-Connection
 ```
 
 Initialize connection for firewall deployment

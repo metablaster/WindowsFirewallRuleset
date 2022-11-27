@@ -17,6 +17,9 @@ EXAMPLES
 	Format-Path
 	Format file system path and fix syntax errors
 
+	Get-Get-AllUserProgram
+	Search install properties for programs installed for all users
+
 	Get-AppCapability
 	Get Windows store app capabilities
 
@@ -25,9 +28,6 @@ EXAMPLES
 
 	Get-ExecutablePath
 	Get a list of install locations for executable files
-
-	Get-Get-AllUserProgram
-	Search install properties for programs installed for all users
 
 	Get-NetFramework
 	Get installed .NET Frameworks
@@ -74,7 +74,7 @@ EXAMPLES
 	Test-Service
 	Check if system service exists and is trusted
 
-	Test-Service
+	Test-VirusTotal
 	Analyze file trough virus total API
 
 KEYWORDS

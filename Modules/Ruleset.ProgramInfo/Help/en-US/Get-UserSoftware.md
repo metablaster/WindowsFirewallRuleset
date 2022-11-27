@@ -16,7 +16,7 @@ Get a list of programs installed by specific user
 ### Domain (Default)
 
 ```powershell
-Get-UserSoftware [-User] <String> [-Domain <String>] [<CommonParameters>]
+Get-UserSoftware [-User] <String> [-Domain <String>] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
@@ -73,6 +73,22 @@ Aliases: ComputerName, CN
 Required: False
 Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

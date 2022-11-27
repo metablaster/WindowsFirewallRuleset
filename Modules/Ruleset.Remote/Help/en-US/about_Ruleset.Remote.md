@@ -57,7 +57,7 @@ Export-WinRM
 Export WinRM configuration to file
 
 ```powershell
-Export-WinRM
+Import-WinRM
 ```
 
 Import WinRM configuration from file
@@ -91,6 +91,12 @@ Show-WinRMConfig
 ```
 
 Show WinRM service configuration
+
+```powershell
+Test-RemoteRegistry
+```
+
+Test remote registry service
 
 ```powershell
 Test-WinRM

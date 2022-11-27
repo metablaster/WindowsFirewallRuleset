@@ -43,6 +43,9 @@ Data:       The current value assigned to the specified Key / ValueName in the .
 Type:       The RegistryValueKind type of the specified Key / ValueName in the .pol file.
 If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced.
 
+.NOTES
+None.
+
 .LINK
 Set-PolicyFileEntry
 

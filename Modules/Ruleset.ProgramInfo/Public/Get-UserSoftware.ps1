@@ -77,6 +77,9 @@ function Get-UserSoftware
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
 		[Parameter(ParameterSetName = "Session")]
 		[CimSession] $CimSession,
 

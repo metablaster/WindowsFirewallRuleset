@@ -15,6 +15,12 @@ computers.
 ## VARIABLES
 
 ```powershell
+CheckInitUserInfo
+```
+
+Serves to prevent double initialization of constants
+
+```powershell
 UsersGroupSDDL
 ```
 
@@ -44,12 +50,6 @@ NetworkService
 
 SDDL string for "NT AUTHORITY\NETWORK SERVICE"
 
-```powershell
-CheckInitUserInfo
-```
-
-Serves to prevent double initialization of constants
-
 ## EXAMPLES
 
 ```powershell
@@ -75,6 +75,12 @@ Get-GroupSID
 ```
 
 Get SID of user groups on local or remote computers
+
+```powershell
+Get-PathSDDL
+```
+
+Get SDDL string for a path
 
 ```powershell
 Get-PrincipalSID
@@ -111,6 +117,12 @@ Test-Credential
 ```
 
 Takes a PSCredential object and validates it
+
+```powershell
+Test-SDDL
+```
+
+Validate SDDL string
 
 ```powershell
 Test-UPN

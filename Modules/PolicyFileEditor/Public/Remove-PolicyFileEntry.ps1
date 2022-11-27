@@ -21,20 +21,20 @@ May be set to an empty string to remove the default value of a key.
 When this switch is used, the command will not attempt to update the version number in the gpt.ini file
 
 .EXAMPLE
-Remove-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue
+Remove-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol -Key `
+Software\Policies\Something -ValueName SomeValue
 
 Removes the value Software\Policies\Something\SomeValue from the local computer Machine GPO, if present.
 Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini
 
 .EXAMPLE
 $entries = @(
-    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
 
-$entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
+$entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol -Key `
+'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
 
 Example of using pipeline input to remove multiple values at once.
 The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated

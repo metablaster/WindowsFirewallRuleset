@@ -39,12 +39,6 @@ One or more objects to convert into a DataTable
 .PARAMETER NonNullable
 A list of columns to set disable AllowDBNull on
 
-.INPUTS
-[PSObject[]] Any object can be piped to Out-DataTable
-
-.OUTPUTS
-[System.Data.DataTable]
-
 .EXAMPLE
 PS> Get-PSDrive | Out-DataTable
 
@@ -54,6 +48,12 @@ Creates a DataTable from the properties of Get-PSDrive
 PS> Get-Process | Select-Object Name, CPU | Out-DataTable
 
 Get a list of processes and their CPU and create a datatable
+
+.INPUTS
+[PSObject[]] Any object can be piped to Out-DataTable
+
+.OUTPUTS
+[System.Data.DataTable]
 
 .NOTES
 Adapted from script by Marc van Orsouw and function from Chad Miller

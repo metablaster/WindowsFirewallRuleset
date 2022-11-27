@@ -34,12 +34,6 @@ Approve-Execute
 Prompt user to continue running script
 
 ```powershell
-Build-ServiceList
-```
-
-Build a list of windows services involved in script rules
-
-```powershell
 Compare-Path
 ```
 
@@ -122,6 +116,12 @@ Set-Shortcut
 ```
 
 Create or set shortcut to file or online location
+
+```powershell
+Build-ServiceList
+```
+
+Build a list of windows services involved in script rules
 
 ## ALIASES
 

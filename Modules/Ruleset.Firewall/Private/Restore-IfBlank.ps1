@@ -28,8 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
+Set firewall parameter to default value if input is blank
 
 .DESCRIPTION
+Set firewall parameter to specified default value if input is blank
 
 .PARAMETER Value
 Input value which is returned without modification

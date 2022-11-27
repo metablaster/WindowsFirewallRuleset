@@ -50,6 +50,9 @@ EXAMPLES
 	Show-WinRMConfig
 	Show WinRM service configuration
 
+	Test-RemoteRegistry
+	Test remote registry service
+
 	Test-WinRM
 	Test WinRM service configuration
 
