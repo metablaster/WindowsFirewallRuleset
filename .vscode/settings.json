@@ -10,6 +10,7 @@
 		"*config": "ruby",
 		"*.config": "ruby"
 	},
+
 	// editor
 	"editor.quickSuggestions": {
 		"other": true,
@@ -17,8 +18,14 @@
 		"strings": false
 	},
 	"editor.rulers": [
-		100,
-		120
+		{
+			"column": 100,
+			"color": "#4063ff"
+		},
+		{
+			"column": 120,
+			"color": "#ff0000"
+		},
 	],
 	"workbench.colorCustomizations": {
 		"editorRuler.foreground": "#4063ff",
@@ -31,18 +38,153 @@
 	"editor.wordWrap": "off",
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
+	"[markdown]": {
+		"editor.wordWrap": "off",
+		"editor.detectIndentation": true,
+		"editor.insertSpaces": true
+	},
+	// override the colors of the default log items:
+	// log.constant
+	// log.date
+	// log.verbose
+	// log.debug
+	// log.error
+	// log.exception
+	// log.info
+	// log.string
+	// log.exceptiontype
+	// log.warning
+	"editor.tokenColorCustomizations": {
+		"textMateRules": [
+			{
+				"scope": "log.date",
+				"settings": {
+					"foreground": "#b3aeae",
+					//"fontStyle": "bold"
+				}
+			}
+		]
+	},
 	// NOTE: Work around ugly syntax highlighting:
 	// https://github.com/PowerShell/vscode-powershell/issues/3221
 	"editor.semanticHighlighting.enabled": false,
-	// "editor.codeActionsOnSave": {
-	// TODO: need to verify if useful
-	// 	"source.fixAll.markdownlint": true
-	// },
+	"editor.codeActionsOnSave": {
+		// TODO: need to verify if useful
+		"source.fixAll.markdownlint": false
+	},
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
+
 	// diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
+
+	// Extension: AutoScroll
+	"autoscroll.keepLastLineInCenter": true,
+
+	// Extension: Bookmarks
+	"bookmarks.saveBookmarksInProject": true,
+	"bookmarks.sideBar.expanded": true,
+
+	// Extension: Code Spell Checker
+	// NOTE: This config isn't recognized in cspell.json
+	// File types for language ID's are defined in cspell.json
+	"cSpell.enableFiletypes": [
+		"ignore",
+		"jsonc",
+		"json",
+		"properties", // gitattributes
+		"log",
+		// NOTE: If "csv (semicolon)" is flagged it's false falg see:
+		// https://github.com/streetsidesoftware/vscode-spell-checker/discussions/2346
+		"csv (semicolon)", // exported rules
+		"ini" // mTail configuration
+	],
+
+	// Extension: Log File Hightlighter
+	// Custom highlighting patterns
+	// VS colors
+	// string D69D85
+	// comment 57A64A
+	// member func DCDCAA
+	// variables C8C8C8
+	// user types 1BC9B0
+	// enums B8D7A3
+	// functions FF8000
+	"logFileHighlighter.customPatterns": [
+		{
+			// Action drop fc3737
+			"pattern": "DROP",
+			"background": "#990404",
+			"foreground": "#ccc3c3"
+		},
+		{
+			// Action allow 066933
+			"pattern": "ALLOW",
+			"background": "#076338",
+			"foreground": "#ccc3c3"
+		},
+		{
+			// TCP protocol
+			"pattern": "TCP",
+			"foreground": "#57A64A"
+		},
+		{
+			// UDP protocol c4d112 f1a043
+			"pattern": "UDP",
+			"foreground": "#f1a043"
+		},
+		{
+			// ICMP protocol
+			"pattern": "ICMP",
+			"foreground": "#d5e40e"
+		},
+		{
+			// Other protocols d37811
+			"pattern": "(?<=(DROP|ACCEPT)\\s)\\d{1,3}",
+			"foreground": "#b3aeae"
+		},
+		{
+			// IPv4 address 5ca7ee
+			"pattern": "([0-9]{1,3}\\.){3}[0-9]{1,3}",
+			"foreground": "#5ca7ee"
+		},
+		{
+			// IPv6 address 7dbffd
+			"pattern": "(?<!-\\d+)\\s([a-f0-9:]+:)+[a-f0-9]+",
+			"foreground": "#1cdfce"
+		},
+		{
+			// Port numbers 1cdfce f17e7e
+			"pattern": "\\s[0-9]{1,5}\\s[0-9]{1,5}\\s(?=((\\d+|-)\\s){8})",
+			"foreground": "#f17e7e"
+		},
+		{
+			// Details, the rest of line
+			"pattern": "\\s((\\d+|-)\\s){8}(?=SEND|RECEIVE)",
+			"foreground": "#b3aeae"
+		},
+		{
+			// Direction inbound
+			"pattern": "(?<=(\\d|-)\\s)RECEIVE",
+			"foreground": "#fc3737"
+		},
+		{
+			// Direction outbound
+			"pattern": "(?<=(\\d|-)\\s)SEND",
+			"foreground": "#57A64A"
+		},
+		{
+			// Time
+			"pattern": "(?<=(-\\d+)\\s)\\d+:\\d+:\\d+",
+			"foreground": "#B8D7A3"
+		}
+	],
+
+	// Extension: Markdown All in One
+	"markdown.extension.orderedList.autoRenumber": true,
+
+	// Extension: PowerShell
 	// PowerShell updates
 	"powershell.pester.useLegacyCodeLens": false,
 	"powershell.promptToUpdatePowerShell": true,
@@ -74,21 +216,13 @@
 	"powershell.codeFormatting.useCorrectCasing": true,
 	// PSProvideCommentHelp
 	"powershell.helpCompletion": "BlockComment",
-	// NOTE: This config isn't recognized in cspell.json
-	// File types for language ID's are defined in cspell.json
-	"cSpell.enableFiletypes": [
-		"ignore",
-		"jsonc",
-		"json",
-		"properties", // gitattributes
-		"log",
-		// If "csv (semicolon)" is flagged it's false falg see:
-		// https://github.com/streetsidesoftware/vscode-spell-checker/discussions/2346
-		"csv (semicolon)", // exported rules
-		"ini" // mTail configuration
-	],
-	// extension Todo Tree
-	"todo-tree.tree.showScanModeButton": true,
+	// Other PowerShell extension settings
+	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
+	// Extension: Rainbow CSV
+	"rainbow_csv.enable_auto_csv_lint": true,
+	"rainbow_csv.csv_lint_detect_trailing_spaces": true,
+
+	// Extension: Todo Tree
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
 	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
 	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
@@ -202,126 +336,10 @@
 			"FIX"
 		]
 	},
-	"[markdown]": {
-		"editor.wordWrap": "off",
-		"editor.detectIndentation": true,
-		"editor.insertSpaces": true
-	},
-	// override the colors of the default log items:
-	// log.constant
-	// log.date
-	// log.verbose
-	// log.debug
-	// log.error
-	// log.exception
-	// log.info
-	// log.string
-	// log.exceptiontype
-	// log.warning
-	"editor.tokenColorCustomizations": {
-		"textMateRules": [
-			{
-				"scope": "log.date",
-				"settings": {
-					"foreground": "#b3aeae",
-					//"fontStyle": "bold"
-				}
-			}
-		]
-	},
-	// Custom highlighting patterns
-	// VS colors
-	// string D69D85
-	// comment 57A64A
-	// member func DCDCAA
-	// variables C8C8C8
-	// user types 1BC9B0
-	// enums B8D7A3
-	// functions FF8000
-	"logFileHighlighter.customPatterns": [
-		{
-			// Action drop fc3737
-			"pattern": "DROP",
-			"background": "#990404",
-			"foreground": "#ccc3c3"
-		},
-		{
-			// Action allow 066933
-			"pattern": "ALLOW",
-			"background": "#076338",
-			"foreground": "#ccc3c3"
-		},
-		{
-			// TCP protocol
-			"pattern": "TCP",
-			"foreground": "#57A64A"
-		},
-		{
-			// UDP protocol c4d112 f1a043
-			"pattern": "UDP",
-			"foreground": "#f1a043"
-		},
-		{
-			// ICMP protocol
-			"pattern": "ICMP",
-			"foreground": "#d5e40e"
-		},
-		{
-			// Other protocols d37811
-			"pattern": "(?<=(DROP|ACCEPT)\\s)\\d{1,3}",
-			"foreground": "#b3aeae"
-		},
-		{
-			// IPv4 address 5ca7ee
-			"pattern": "([0-9]{1,3}\\.){3}[0-9]{1,3}",
-			"foreground": "#5ca7ee"
-		},
-		{
-			// IPv6 address 7dbffd
-			"pattern": "(?<!-\\d+)\\s([a-f0-9:]+:)+[a-f0-9]+",
-			"foreground": "#1cdfce"
-		},
-		{
-			// Port numbers 1cdfce f17e7e
-			"pattern": "\\s[0-9]{1,5}\\s[0-9]{1,5}\\s(?=((\\d+|-)\\s){8})",
-			"foreground": "#f17e7e"
-		},
-		{
-			// Details, the rest of line
-			"pattern": "\\s((\\d+|-)\\s){8}(?=SEND|RECEIVE)",
-			"foreground": "#b3aeae"
-		},
-		{
-			// Direction inbound
-			"pattern": "(?<=(\\d|-)\\s)RECEIVE",
-			"foreground": "#fc3737"
-		},
-		{
-			// Direction outbound
-			"pattern": "(?<=(\\d|-)\\s)SEND",
-			"foreground": "#57A64A"
-		},
-		{
-			// Time
-			"pattern": "(?<=(-\\d+)\\s)\\d+:\\d+:\\d+",
-			"foreground": "#B8D7A3"
-		}
-	],
-	"autoscroll.enable": true,
-	"autoscroll.autoScrollAllOpenedFiles": false,
-	"autoscroll.keepLastLineInCenter": true,
-	// Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
-	// TODO: Doesn't seem to work (if this setting is not on remote?)
-	"remote.SSH.defaultExtensions": [
-		"ms-vscode.powershell",
-		"pejmannikram.vscode-auto-scroll",
-		"streetsidesoftware.code-spell-checker",
-		"everettjf.filter-line",
-		"nachocab.highlight-dodgy-characters",
-		"yzhang.markdown-all-in-one",
-		"davidanson.vscode-markdownlint",
-		"mechatroner.rainbow-csv",
-		"gruntfuggly.todo-tree",
-		"dotjoshjohnson.xml"
-	]
+
+	// Extension: Trailing Spaces
+	"trailing-spaces.trimOnSave": true,
+
+	//Extension: XML Tools
+	"xmlTools.enforcePrettySelfClosingTagOnFormat": true
 }
