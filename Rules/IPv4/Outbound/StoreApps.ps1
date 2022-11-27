@@ -112,6 +112,7 @@ $Group = "Store Apps"
 $ProgramsGroup = "Store Apps - Programs"
 $ServicesGroup = "Store Apps - Services"
 $SystemGroup = "Store Apps - System"
+$AppSubGroup = "$Group - SubPrograms"
 $Accept = "Outbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, outbound rules for store apps will not be loaded into firewall"
 
@@ -126,6 +127,7 @@ $PSDefaultParameterValues = @{
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $AppSubGroup -Direction $Direction -ErrorAction Ignore
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ProgramsGroup -Direction $Direction -ErrorAction Ignore
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Direction $Direction -ErrorAction Ignore
 
@@ -271,7 +273,7 @@ foreach ($Principal in $Users)
 	#
 
 	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -Session $SessionInstance -Networking
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -417,6 +419,39 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-InterfaceType $DefaultInterface `
 		-Description "App host registration verifier tool tests the configuration of store app and website" |
 	Format-RuleOutput
+}
+
+#
+# A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
+# TODO: This is a hackery, a better design or function is needed to detect programs withing apps
+#
+$TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
+if ($TerminalApp)
+{
+	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
+	Get-ChildItem -Path "$ParentPath\Microsoft.WindowsTerminal*" |
+	Select-Object PSPath | Convert-Path | ForEach-Object {
+		$Program = "$_\TerminalAzBridge.exe"
+
+		# NOTE: Temporarily forcing because it's a genuine program, and quiet because
+		# there are 2 paths one of which is invalid
+		if (Test-ExecutableFile $Program -Force -Quiet)
+		{
+			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
+			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL
+
+			New-NetFirewallRule -DisplayName "Azure Cloud Shell" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $AzureShellUsers `
+				-InterfaceType $DefaultInterface `
+				-Description "Rule for Azure Cloud Shell in Windows Terminal" |
+			Format-RuleOutput
+		}
+	}
 }
 
 if ($UpdateGPO)

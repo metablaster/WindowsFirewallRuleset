@@ -33,6 +33,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Updated rules for mail apps from Windows store so that ports for POP3, IMAP and SMTP are specified
   - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
   - Updated rules for Simple DNS crypt, there was issue on systems with virtual adapters
+  - Added rules for Azure Cloud Shell present in Windows Terminal
 
 - Modules
 
@@ -52,6 +53,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Fixed a bug with `Get-UserSoftware` which didn't target a specified user
   - Fixed a bug in `Get-AppCapability` producing no result for remote session due to virtual admin
+  - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
 
   - Improved or updated module functions
 

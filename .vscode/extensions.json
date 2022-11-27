@@ -3,28 +3,46 @@
 	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
 	// List of extensions which should be recommended for users of this workspace.
 	"recommendations": [
+		// AutoScroll
 		"pejmannikram.vscode-auto-scroll",
+		// Bookmarks
 		"alefragnani.bookmarks",
+		// Code Spell Checker
 		"streetsidesoftware.code-spell-checker",
+		// Filter Line
 		"everettjf.filter-line",
-		"wengerk.highlight-bad-chars",
-		//"nachocab.highlight-dodgy-characters",
-		"emilast.logfilehighlighter",
-		"yzhang.markdown-all-in-one",
-		"davidanson.vscode-markdownlint",
-		"ms-vscode.powershell",
-		"mechatroner.rainbow-csv",
-		// "eamodio.gitlens",
-		// "github.vscode-pull-request-github"
-		"ms-vscode-remote.remote-ssh",
-		"ms-vscode-remote.remote-ssh-edit",
-		"gruntfuggly.todo-tree",
-		"dotjoshjohnson.xml",
-		"zainchen.json",
+		// Fix JSON
 		"oliversturm.fix-json",
+		// Hightlight Bad Chars
+		"wengerk.highlight-bad-chars",
+		// json
+		"zainchen.json",
+		// Log File Highlighter
+		"emilast.logfilehighlighter",
+		// Markdown All in One
+		"yzhang.markdown-all-in-one",
+		// markdownlint
+		"davidanson.vscode-markdownlint",
+		// PowerShell
+		"ms-vscode.powershell",
+		// Rainbow CSV
+		"mechatroner.rainbow-csv",
+		// Remote - SSH
+		"ms-vscode-remote.remote-ssh",
+		// Remote - SSH: Editing Configuration Files
+		"ms-vscode-remote.remote-ssh-edit",
+		// Remote Explorer
+		"ms-vscode.remote-explorer",
+		// Sort JSON objects
 		"richie5um2.vscode-sort-json",
+		// Todo Tree
+		"gruntfuggly.todo-tree",
+		// Trailing Spaces
+		"shardulm94.trailing-spaces",
+		// vscode-json
 		"andyyaldoo.vscode-json",
-		"shardulm94.trailing-spaces"
+		// XML Tools
+		"dotjoshjohnson.xml",
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [

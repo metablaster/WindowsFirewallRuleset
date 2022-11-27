@@ -134,7 +134,7 @@ function Get-UserApp
 	if ($Domain -eq [System.Environment]::MachineName)
 	{
 		# TODO: PackageTypeFilter is not clear, why only "Bundle"?
-		# TODO: show warning instead of error when failed (ex. in non elevated run check is Admin)
+		# TODO: Show warning instead of error when failed (ex. in non elevated run check is Admin)
 		$Apps = Get-AppxPackage -Name $Name -User $User -PackageTypeFilter Bundle
 		$DomainPath = $env:SystemDrive
 	}

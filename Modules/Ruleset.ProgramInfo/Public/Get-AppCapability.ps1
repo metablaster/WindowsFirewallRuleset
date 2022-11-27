@@ -215,11 +215,11 @@ function Get-AppCapability
 					Get-AppxPackage @AppxParams
 				}
 			}
-		}
 
-		if ($null -eq $InputObject)
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] No apps were retrieved to process"
+			if ($null -eq $InputObject)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] No apps were retrieved to process for '$($AppxParams.Name)' app"
+			}
 		}
 	}
 	process
