@@ -119,6 +119,30 @@
           </dev:type>
           <dev:defaultValue>Any</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name from which to obtain interface aliases</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
           <maml:description>
@@ -141,6 +165,28 @@
           <maml:name>Physical</maml:name>
           <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Virtual</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only virtual adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -186,6 +232,18 @@
           <dev:defaultValue>Any</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WildCardOption</maml:name>
           <maml:description>
             <maml:para>Specify wildcard options that modify the wildcard patterns found in interface alias strings. Compiled: The wildcard pattern is compiled to an assembly. This yields faster execution but increases startup time. CultureInvariant: Specifies culture-invariant matching. IgnoreCase: Specifies case-insensitive matching. None: Indicates that no special processing is required.</maml:para>
@@ -204,9 +262,31 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Physical</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
           <maml:description>
             <maml:para>If specified, include only virtual adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -251,6 +331,42 @@
         </dev:type>
         <dev:defaultValue>Any</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name from which to obtain interface aliases</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>WildCardOption</maml:name>
         <maml:description>
@@ -279,6 +395,18 @@
         <maml:name>Virtual</maml:name>
         <maml:description>
           <maml:para>If specified, include only virtual adapters</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Visible</maml:name>
+        <maml:description>
+          <maml:para>If specified, only visible interfaces are included</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -377,15 +505,61 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Get broadcast addresses, for specified network interfaces. Returned broadcast addresses are IPv4 and only for adapters connected to network.</maml:para>
+      <maml:para>Get broadcast addresses for either physical or virtual network interfaces. Returned broadcast addresses are IPv4 and only for adapters connected to network.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-InterfaceBroadcast</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name which to query</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
           <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Virtual</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only virtual adapters. By default only physical adapters are reported</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -408,9 +582,43 @@
       <command:syntaxItem>
         <maml:name>Get-InterfaceBroadcast</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Physical</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
           <maml:description>
-            <maml:para>If specified, include only virtual adapters</maml:para>
+            <maml:para>If specified, include only virtual adapters. By default only physical adapters are reported</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -432,6 +640,42 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name which to query</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
         <maml:description>
@@ -447,7 +691,19 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
         <maml:description>
-          <maml:para>If specified, include only virtual adapters</maml:para>
+          <maml:para>If specified, include only virtual adapters. By default only physical adapters are reported</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Visible</maml:name>
+        <maml:description>
+          <maml:para>If specified, only visible interfaces are included</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -815,7 +1071,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
           <maml:description>
-            <maml:para>Resolve local host name to IP of a physical adapter</maml:para>
+            <maml:para>Resolve local host name to IP of any physical adapter</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -874,7 +1130,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
           <maml:description>
-            <maml:para>Resolve local host name to IP of a virtual adapter</maml:para>
+            <maml:para>Resolve local host name to IP of any virtual adapter</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -969,7 +1225,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
         <maml:description>
-          <maml:para>Resolve local host name to IP of a physical adapter</maml:para>
+          <maml:para>Resolve local host name to IP of any physical adapter</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -981,7 +1237,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Virtual</maml:name>
         <maml:description>
-          <maml:para>Resolve local host name to IP of a virtual adapter</maml:para>
+          <maml:para>Resolve local host name to IP of any virtual adapter</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1117,10 +1373,56 @@
           </dev:type>
           <dev:defaultValue>Any</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which to gather IP configuration</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Physical</maml:name>
           <maml:description>
             <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Virtual</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only virtual adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1189,9 +1491,43 @@
           <dev:defaultValue>Any</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Physical</maml:name>
+          <maml:description>
+            <maml:para>If specified, include only physical adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Virtual</maml:name>
           <maml:description>
             <maml:para>If specified, include only virtual adapters</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Visible</maml:name>
+          <maml:description>
+            <maml:para>If specified, only visible interfaces are included</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1259,6 +1595,42 @@
         </dev:type>
         <dev:defaultValue>Any</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which to gather IP configuration</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Physical</maml:name>
         <maml:description>
@@ -1275,6 +1647,18 @@
         <maml:name>Virtual</maml:name>
         <maml:description>
           <maml:para>If specified, include only virtual adapters</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Visible</maml:name>
+        <maml:description>
+          <maml:para>If specified, only visible interfaces are included</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1354,7 +1738,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: If no candidates are selected it's not an error</maml:para>
+        <maml:para>None.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1410,19 +1794,21 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+            <maml:para>- HTTP</maml:para>
+            <maml:para>- Ping or TCP port test</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>$RemotingProtocol</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Port</maml:name>
           <maml:description>
-            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+            <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port Port can also be specified to test specific port unrelated to WinRM test</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -1485,14 +1871,16 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+            <maml:para>- HTTP</maml:para>
+            <maml:para>- Ping or TCP port test</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>$RemotingProtocol</dev:defaultValue>
+          <dev:defaultValue>Default</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Retry</maml:name>
@@ -1536,19 +1924,21 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping</maml:para>
+          <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+          <maml:para>- HTTP</maml:para>
+          <maml:para>- Ping or TCP port test</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>$RemotingProtocol</dev:defaultValue>
+        <dev:defaultValue>Default</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Port</maml:name>
         <maml:description>
-          <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port</maml:para>
+          <maml:para>Optionally specify port number if the WinRM server specified by -Domain parameter listens on non default port Port can also be specified to test specific port unrelated to WinRM test</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>

@@ -12,7 +12,7 @@ the meaning is same or similar.
 - [Directory Structure](#directory-structure)
   - [Table of Contents](#table-of-contents)
   - [.github](#github)
-    - [ISSUE_TEMPLATE](#issue_template)
+    - [ISSUE\_TEMPLATE](#issue_template)
     - [workflows](#workflows)
   - [.vscode](#vscode)
   - [Actions](#actions)
@@ -104,7 +104,7 @@ Configurations files for process monitor from sysinternals site
 
 ### SSH
 
-SSH configuration files
+SSH configuration files for Remote-SSH extension
 
 ### System
 

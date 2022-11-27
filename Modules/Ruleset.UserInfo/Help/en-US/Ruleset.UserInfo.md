@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.UserInfo
 Module Guid: 136254f4-4730-4ed1-b9e9-1ccecfe09ee9
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.1
-Help Version: 0.13.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.14.0
+Help Version: 0.14.0
 Locale: en-US
 ---
 
@@ -57,6 +57,10 @@ Split principal to either user name or domain
 ### [Test-Credential](Test-Credential.md)
 
 Validates Windows user credentials.
+
+### [Test-SDDL](Test-SDDL.md)
+
+Validate SDDL string
 
 ### [Test-UPN](Test-UPN.md)
 

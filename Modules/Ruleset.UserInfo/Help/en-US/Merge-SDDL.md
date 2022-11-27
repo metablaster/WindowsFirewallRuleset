@@ -14,7 +14,7 @@ Merge 2 SDDL strings into one
 ## SYNTAX
 
 ```powershell
-Merge-SDDL [-SDDL] <PSReference> -From <String> [<CommonParameters>]
+Merge-SDDL [-SDDL] <PSReference> -From <String> [-Unique] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +27,7 @@ Referenced SDDL is expanded with new one
 ### EXAMPLE 1
 
 ```
-$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)
+$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)"
 $RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
 Merge-SDDL ([ref] $SDDL) -From $RefSDDL
 ```
@@ -62,6 +62,22 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Unique
+
+If specified, only SDDL's with unique SID are merged
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

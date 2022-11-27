@@ -17,7 +17,7 @@ Get Windows store app capabilities
 
 ```powershell
 Get-AppCapability [[-Name] <String>] [-PackageTypeFilter <String>] [-Domain <String>]
- [-Credential <PSCredential>] [-Session <PSSession>] [-User <String>] [-IncludeAuthority] [-Networking]
+ [-Credential <PSCredential>] [-Session <PSSession>] -User <String> [-IncludeAuthority] [-Networking]
  [<CommonParameters>]
 ```
 
@@ -25,7 +25,7 @@ Get-AppCapability [[-Name] <String>] [-PackageTypeFilter <String>] [-Domain <Str
 
 ```powershell
 Get-AppCapability -InputObject <Object[]> [-Domain <String>] [-Credential <PSCredential>]
- [-Session <PSSession>] [-User <String>] [-IncludeAuthority] [-Networking] [<CommonParameters>]
+ [-Session <PSSession>] -User <String> [-IncludeAuthority] [-Networking] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -80,15 +80,14 @@ Accept wildcard characters: True
 
 ### -PackageTypeFilter
 
-Specifies one or more comma-separated types of packages to gets from the package repository.
-If not specified processes only packages of types Main and Framework.
+Specifies the type of a packages to get from the package repository.
 
 Valid values are:
 Bundle
 Framework
 Main
 Resource
-None
+None (default)
 
 ```yaml
 Type: System.String
@@ -120,7 +119,7 @@ Accept wildcard characters: False
 
 ### -Domain
 
-Computer name which to check
+Computer name on which to run function
 
 ```yaml
 Type: System.String
@@ -168,16 +167,14 @@ Accept wildcard characters: False
 
 ### -User
 
-Specify user name for which to query app capabilities.
-This parameter is required only if input app or the app specified by -Name parameter is
-not from the main store.
+Specify user name for which to obtain store apps to query capabilities.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -233,8 +230,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: According to unit test there are some capabilities not implemented here
-HACK: Parameter set names for ComputerName vs Session
+TODO: There are some capabilities not implemented here
 
 ## RELATED LINKS
 
@@ -249,3 +245,4 @@ HACK: Parameter set names for ComputerName vs Session
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability)
 
 [https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes](https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes)
+

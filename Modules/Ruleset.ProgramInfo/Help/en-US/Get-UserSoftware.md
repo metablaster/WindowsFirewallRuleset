@@ -13,8 +13,16 @@ Get a list of programs installed by specific user
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-Get-UserSoftware [-User] <String> [[-Domain] <String>] [<CommonParameters>]
+Get-UserSoftware [-User] <String> [-Domain <String>] [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+Get-UserSoftware [-User] <String> [-CimSession <CimSession>] [-Session <PSSession>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,12 +67,44 @@ NETBIOS Computer name in form of "COMPUTERNAME"
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Domain
 Aliases: ComputerName, CN
 
 Required: False
-Position: 2
+Position: Named
 Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimSession
+
+Specifies the CIM session to use
+
+```yaml
+Type: Microsoft.Management.Infrastructure.CimSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

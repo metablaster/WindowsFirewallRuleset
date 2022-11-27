@@ -25,7 +25,7 @@ Get-SystemSKU [-Domain <String[]>] [<CommonParameters>]
 Get-SystemSKU -SKU <Int32> [<CommonParameters>]
 ```
 
-### Session
+### CimSession
 
 ```powershell
 Get-SystemSKU [-CimSession <CimSession>] [<CommonParameters>]
@@ -110,7 +110,7 @@ Specifies the CIM session to use
 
 ```yaml
 Type: Microsoft.Management.Infrastructure.CimSession
-Parameter Sets: Session
+Parameter Sets: CimSession
 Aliases:
 
 Required: False

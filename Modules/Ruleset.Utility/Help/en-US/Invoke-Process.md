@@ -17,14 +17,23 @@ Run process, format and redirect captured process output
 
 ```powershell
 Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
+ [-RunAsCredential <PSCredential>] [-LoadUserProfile] [-WorkingDirectory <String>] [<CommonParameters>]
+```
+
+### Domain
+
+```powershell
+Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-Domain <String>] [-Credential <PSCredential>]
+ [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw] [-RunAsCredential <PSCredential>] [-LoadUserProfile]
  [-WorkingDirectory <String>] [<CommonParameters>]
 ```
 
-### Credential
+### Session
 
 ```powershell
-Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-NoNewWindow] [-Timeout <Int32>] [-Async] [-Raw]
- -Credential <PSCredential> [-LoadUserProfile] -WorkingDirectory <String> [<CommonParameters>]
+Invoke-Process [-Path] <String> [[-ArgumentList] <String>] [-Session <PSSession>] [-NoNewWindow]
+ [-Timeout <Int32>] [-Async] [-Raw] [-RunAsCredential <PSCredential>] [-LoadUserProfile]
+ [-WorkingDirectory <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -77,6 +86,54 @@ Aliases:
 
 Required: False
 Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Domain
+
+Computer name on which to invoke process
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specify Credential used for authentication to Domain.
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -150,16 +207,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Credential
+### -RunAsCredential
 
-Optionally specify Windows user name and password to use when starting the process
+Optionally specify Windows user name and password to use when starting the process.
 
 ```yaml
 Type: System.Management.Automation.PSCredential
-Parameter Sets: Credential
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -171,10 +228,11 @@ Accept wildcard characters: False
 Specify whether the Windows user profile is to be loaded from the registry
 Because loading the profile can be time-consuming, it is best to use this value only if you must
 access the information in the HKEY_CURRENT_USER registry key.
+Requires RunAsCredential of the user to be specified.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Credential
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -191,22 +249,10 @@ The WorkingDirectory property must be set if Credential (UserName and Password) 
 
 ```yaml
 Type: System.String
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: System.String
-Parameter Sets: Credential
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

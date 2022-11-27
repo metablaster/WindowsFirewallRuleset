@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.ProgramInfo
 Module Guid: 49f11777-b8b6-4fed-bd82-32c8f48db81e
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.13.1
-Help Version: 0.13.1
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.14.0
+Help Version: 0.14.0
 Locale: en-US
 ---
 
@@ -22,6 +22,10 @@ Verify or set program installation directory
 
 Format file system path and fix syntax errors
 
+### [Get-AllUserProgram](Get-AllUserProgram.md)
+
+Search system wide program install properties
+
 ### [Get-AppCapability](Get-AppCapability.md)
 
 Get Windows store app capabilities
@@ -33,10 +37,6 @@ Get store app SID
 ### [Get-ExecutablePath](Get-ExecutablePath.md)
 
 Get a list of install locations for executable files
-
-### [Get-AllUserProgram](Get-AllUserProgram.md)
-
-Search system wide program install properties
 
 ### [Get-NetFramework](Get-NetFramework.md)
 

@@ -13,8 +13,17 @@ Convert SDDL string to Principal
 
 ## SYNTAX
 
+### Domain (Default)
+
 ```powershell
-ConvertFrom-SDDL [-SDDL] <String[]> [-Force] [<CommonParameters>]
+ConvertFrom-SDDL [-SDDL] <String[]> [-Domain <String>] [-Credential <PSCredential>] [-Force]
+ [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+ConvertFrom-SDDL [-SDDL] <String[]> [-Session <PSSession>] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,6 +66,54 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -Domain
+
+Computer name from which SDDL's were taken
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

@@ -68,6 +68,9 @@ EXAMPLES
 	Update-GptIniVersion
 	Increments the version counter in a gpt.ini file
 
+KEYWORDS
+	GPO
+
 SEE ALSO
     Protect-Data
     Unprotect-Data

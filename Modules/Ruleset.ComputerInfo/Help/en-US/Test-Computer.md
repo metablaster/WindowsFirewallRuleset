@@ -13,7 +13,7 @@ Test target computer (policy store) on which to deploy firewall
 
 ## SYNTAX
 
-### WSMan (Default)
+### TCP (Default)
 
 ```powershell
 Test-Computer [-Domain] <String> [-Protocol <String>] [-Port <Int32>] [-Credential <PSCredential>]
@@ -74,7 +74,10 @@ Accept wildcard characters: False
 
 Specify the kind of a test to perform.
 Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default
-The default is "Default" which tries connectivity in this order: HTTPS\HTTP\Ping
+The default is "Default" which tries connectivity in this order:
+- HTTPS
+- HTTP
+- Ping or TCP port test
 
 ```yaml
 Type: System.String
@@ -83,7 +86,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: $RemotingProtocol
+Default value: Default
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -92,10 +95,11 @@ Accept wildcard characters: False
 
 Optionally specify port number if the WinRM server specified by
 -Domain parameter listens on non default port
+Port can also be specified to test specific port unrelated to WinRM test
 
 ```yaml
 Type: System.Int32
-Parameter Sets: WSMan
+Parameter Sets: TCP
 Aliases:
 
 Required: False
@@ -111,7 +115,7 @@ Specify credentials required for authentication
 
 ```yaml
 Type: System.Management.Automation.PSCredential
-Parameter Sets: WSMan
+Parameter Sets: TCP
 Aliases:
 
 Required: False
@@ -134,7 +138,7 @@ CredSSP, use Credential Security Support Provider (CredSSP) authentication.
 
 ```yaml
 Type: System.String
-Parameter Sets: WSMan
+Parameter Sets: TCP
 Aliases:
 
 Required: False
@@ -150,7 +154,7 @@ Optionally specify certificate thumbprint which is to be used for WinRM over SSL
 
 ```yaml
 Type: System.String
-Parameter Sets: WSMan
+Parameter Sets: TCP
 Aliases:
 
 Required: False

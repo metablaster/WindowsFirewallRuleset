@@ -13,25 +13,19 @@ Get interface aliases of specified network adapters
 
 ## SYNTAX
 
-### None (Default)
+### Domain (Default)
 
 ```powershell
-Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Hidden] [-Connected]
+Get-InterfaceAlias [-AddressFamily <String>] [-Domain <String>] [-Credential <PSCredential>]
+ [-WildCardOption <WildcardOptions>] [-Physical] [-Virtual] [-Visible] [-Hidden] [-Connected]
  [<CommonParameters>]
 ```
 
-### Physical
+### Session
 
 ```powershell
-Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Physical] [-Hidden]
- [-Connected] [<CommonParameters>]
-```
-
-### Virtual
-
-```powershell
-Get-InterfaceAlias [-AddressFamily <String>] [-WildCardOption <WildcardOptions>] [-Virtual] [-Hidden]
- [-Connected] [<CommonParameters>]
+Get-InterfaceAlias [-AddressFamily <String>] [-Session <PSSession>] [-WildCardOption <WildcardOptions>]
+ [-Physical] [-Virtual] [-Visible] [-Hidden] [-Connected] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -78,6 +72,54 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Domain
+
+Computer name from which to obtain interface aliases
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WildCardOption
 
 Specify wildcard options that modify the wildcard patterns found in interface alias strings.
@@ -110,7 +152,7 @@ If specified, include only physical adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Physical
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -126,7 +168,23 @@ If specified, include only virtual adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Virtual
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Visible
+
+If specified, only visible interfaces are included
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
 Aliases:
 
 Required: False

@@ -16,24 +16,25 @@ Get interface broadcast address
 ### None (Default)
 
 ```powershell
-Get-InterfaceBroadcast [-Hidden] [<CommonParameters>]
+Get-InterfaceBroadcast [-Physical] [-Virtual] [-Visible] [-Hidden] [<CommonParameters>]
 ```
 
-### Physical
+### Domain
 
 ```powershell
-Get-InterfaceBroadcast [-Physical] [-Hidden] [<CommonParameters>]
+Get-InterfaceBroadcast [-Domain <String>] [-Credential <PSCredential>] [-Physical] [-Virtual] [-Visible]
+ [-Hidden] [<CommonParameters>]
 ```
 
-### Virtual
+### Session
 
 ```powershell
-Get-InterfaceBroadcast [-Virtual] [-Hidden] [<CommonParameters>]
+Get-InterfaceBroadcast [-Session <PSSession>] [-Physical] [-Virtual] [-Visible] [-Hidden] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Get broadcast addresses, for specified network interfaces.
+Get broadcast addresses for either physical or virtual network interfaces.
 Returned broadcast addresses are IPv4 and only for adapters connected to network.
 
 ## EXAMPLES
@@ -52,13 +53,61 @@ Get-InterfaceBroadcast -Virtual -Hidden
 
 ## PARAMETERS
 
+### -Domain
+
+Computer name which to query
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Physical
 
 If specified, include only physical adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Physical
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -70,11 +119,28 @@ Accept wildcard characters: False
 
 ### -Virtual
 
-If specified, include only virtual adapters
+If specified, include only virtual adapters.
+By default only physical adapters are reported
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Virtual
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Visible
+
+If specified, only visible interfaces are included
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
 Aliases:
 
 Required: False

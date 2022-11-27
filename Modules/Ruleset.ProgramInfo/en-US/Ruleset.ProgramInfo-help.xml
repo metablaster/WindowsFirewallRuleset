@@ -581,6 +581,97 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Get-AllUserProgram</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>AllUserProgram</command:noun>
+      <maml:description>
+        <maml:para>Search system wide program install properties</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Search separate location in the registry for programs installed for all users.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-AllUserProgram</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name which to check</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name which to check</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Get-AllUserProgram</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[PSCustomObject] list of programs installed for all users</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Should be renamed to something that best describes target registry key</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-AllUserProgram</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-AllUserProgram "COMPUTERNAME"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserProgram.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Get-AppCapability</command:name>
       <command:verb>Get</command:verb>
       <command:noun>AppCapability</command:noun>
@@ -609,8 +700,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PackageTypeFilter</maml:name>
           <maml:description>
-            <maml:para>Specifies one or more comma-separated types of packages to gets from the package repository. If not specified processes only packages of types Main and Framework.</maml:para>
-            <maml:para>Valid values are: Bundle Framework Main Resource None</maml:para>
+            <maml:para>Specifies the type of a packages to get from the package repository.</maml:para>
+            <maml:para>Valid values are: Bundle Framework Main Resource None (default)</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -622,7 +713,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Computer name which to check</maml:para>
+            <maml:para>Computer name on which to run function</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -655,10 +746,10 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
+            <maml:para>Specify user name for which to obtain store apps to query capabilities.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -707,7 +798,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>Computer name which to check</maml:para>
+            <maml:para>Computer name on which to run function</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -740,10 +831,10 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
+            <maml:para>Specify user name for which to obtain store apps to query capabilities.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -792,8 +883,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PackageTypeFilter</maml:name>
         <maml:description>
-          <maml:para>Specifies one or more comma-separated types of packages to gets from the package repository. If not specified processes only packages of types Main and Framework.</maml:para>
-          <maml:para>Valid values are: Bundle Framework Main Resource None</maml:para>
+          <maml:para>Specifies the type of a packages to get from the package repository.</maml:para>
+          <maml:para>Valid values are: Bundle Framework Main Resource None (default)</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -817,7 +908,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>Computer name which to check</maml:para>
+          <maml:para>Computer name on which to run function</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -850,10 +941,10 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>User</maml:name>
         <maml:description>
-          <maml:para>Specify user name for which to query app capabilities. This parameter is required only if input app or the app specified by -Name parameter is not from the main store.</maml:para>
+          <maml:para>Specify user name for which to obtain store apps to query capabilities.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -917,7 +1008,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: According to unit test there are some capabilities not implemented here HACK: Parameter set names for ComputerName vs Session</maml:para>
+        <maml:para>TODO: There are some capabilities not implemented here</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1144,97 +1235,6 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-InstallProperty</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>InstallProperty</command:noun>
-      <maml:description>
-        <maml:para>Search system wide program install properties</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Search separate location in the registry for programs installed for all users.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Get-InstallProperty</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
-          <maml:name>Domain</maml:name>
-          <maml:description>
-            <maml:para>Computer name which to check</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-          <dev:type>
-            <maml:name>System.String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
-        <maml:name>Domain</maml:name>
-        <maml:description>
-          <maml:para>Computer name which to check</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
-        <dev:type>
-          <maml:name>System.String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
-      </command:parameter>
-    </command:parameters>
-    <command:inputTypes>
-      <command:inputType>
-        <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-InstallProperty</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:inputType>
-    </command:inputTypes>
-    <command:returnValues>
-      <command:returnValue>
-        <dev:type>
-          <maml:name>[PSCustomObject] list of programs installed for all users</maml:name>
-        </dev:type>
-        <maml:description>
-          <maml:para></maml:para>
-        </maml:description>
-      </command:returnValue>
-    </command:returnValues>
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para>TODO: Should be renamed to something that best describes target registry key</maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-InstallProperty</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-InstallProperty "COMPUTERNAME"</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-InstallProperty.md</maml:uri>
-      </maml:navigationLink>
-    </command:relatedLinks>
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
       <command:name>Get-NetFramework</command:name>
       <command:verb>Get</command:verb>
       <command:noun>NetFramework</command:noun>
@@ -1351,7 +1351,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1362,6 +1362,57 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specifies the credential object to use for authentication</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-OneDrive</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User name in form of "USERNAME"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -1378,7 +1429,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -1389,6 +1440,42 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specifies the credential object to use for authentication</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -2276,7 +2363,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
             <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -2287,6 +2374,45 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-UserSoftware</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="UserName">
+          <maml:name>User</maml:name>
+          <maml:description>
+            <maml:para>User name in form of "USERNAME"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Specifies the CIM session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -2303,7 +2429,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="ComputerName, CN">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
           <maml:para>NETBIOS Computer name in form of "COMPUTERNAME"</maml:para>
@@ -2314,6 +2440,30 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Specifies the CIM session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimSession</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.Management.Infrastructure.CimSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

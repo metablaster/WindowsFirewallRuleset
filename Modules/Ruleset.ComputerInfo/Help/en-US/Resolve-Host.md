@@ -131,7 +131,7 @@ Accept wildcard characters: False
 
 ### -Physical
 
-Resolve local host name to IP of a physical adapter
+Resolve local host name to IP of any physical adapter
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -147,7 +147,7 @@ Accept wildcard characters: False
 
 ### -Virtual
 
-Resolve local host name to IP of a virtual adapter
+Resolve local host name to IP of any virtual adapter
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

@@ -70,8 +70,7 @@ validates it against the local user database.
 
 ### -Credential
 
-The \[PSCredential\] instance to validate, typically obtained with
-Get-Credential.
+The \[PSCredential\] instance to validate, typically obtained with Get-Credential.
 
 The .UserName value may be:
 * a mere username: e.g, "user"
@@ -119,10 +118,8 @@ Accept wildcard characters: False
 Use this switch to validate perform validation against the local machine's
 user database rather than against the current logon domain.
 
-If you're not currently logged on to a domain, use of this switch is
-optional.
-Conversely, however, the only way to validate against a domain
-is to be logged on to it.
+If you're not currently logged on to a domain, use of this switch is optional.
+Conversely, however, the only way to validate against a domain is to be logged on to it.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -141,6 +138,8 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
+
+### None. You cannot pipe objects to Test-Credential
 
 ## OUTPUTS
 

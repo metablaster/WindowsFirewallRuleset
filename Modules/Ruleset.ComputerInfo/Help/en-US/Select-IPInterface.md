@@ -13,25 +13,18 @@ Select IP configuration for specified network adapters
 
 ## SYNTAX
 
-### None (Default)
+### Domain (Default)
 
 ```powershell
-Select-IPInterface [-AddressFamily <String>] [-Hidden] [-Connected] [-CompartmentId <Int32>] [-Detailed]
- [<CommonParameters>]
+Select-IPInterface [-AddressFamily <String>] [-Domain <String>] [-Credential <PSCredential>] [-Physical]
+ [-Virtual] [-Visible] [-Hidden] [-Connected] [-CompartmentId <Int32>] [-Detailed] [<CommonParameters>]
 ```
 
-### Physical
+### Session
 
 ```powershell
-Select-IPInterface [-AddressFamily <String>] [-Physical] [-Hidden] [-Connected] [-CompartmentId <Int32>]
- [-Detailed] [<CommonParameters>]
-```
-
-### Virtual
-
-```powershell
-Select-IPInterface [-AddressFamily <String>] [-Virtual] [-Hidden] [-Connected] [-CompartmentId <Int32>]
- [-Detailed] [<CommonParameters>]
+Select-IPInterface [-AddressFamily <String>] [-Session <PSSession>] [-Physical] [-Virtual] [-Visible] [-Hidden]
+ [-Connected] [-CompartmentId <Int32>] [-Detailed] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,13 +65,61 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Domain
+
+Computer name on which to gather IP configuration
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specifies the credential object to use for authentication
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Physical
 
 If specified, include only physical adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Physical
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -94,7 +135,23 @@ If specified, include only virtual adapters
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Virtual
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Visible
+
+If specified, only visible interfaces are included
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -184,6 +241,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: If no candidates are selected it's not an error
+None.
 
 ## RELATED LINKS

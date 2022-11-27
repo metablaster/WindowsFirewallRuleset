@@ -12,7 +12,7 @@ the need to set these things over and over again.
 4. `HelpContent` constains cabinet help content which is at the moment of no use.
 5. `mTail` contains settings for mTail program.
 6. `procmon` contains settings for process monitor from sysinternals.
-7. `SSH` contains SSH server\client configuration for remote SSH development.
+7. `SSH` contains SSH server\client configuration for Remote SSH extension.
 8. `System` contains all other (ungrouped) settings.
 9. `WPA` contains settings for Windows Performance Analyzer
 

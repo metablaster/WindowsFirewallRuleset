@@ -1571,6 +1571,30 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which to invoke process</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify Credential used for authentication to Domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoNewWindow</maml:name>
           <maml:description>
@@ -1616,10 +1640,10 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RunAsCredential</maml:name>
           <maml:description>
-            <maml:para>Optionally specify Windows user name and password to use when starting the process</maml:para>
+            <maml:para>Optionally specify Windows user name and password to use when starting the process.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
           <dev:type>
@@ -1631,7 +1655,7 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>LoadUserProfile</maml:name>
           <maml:description>
-            <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key.</maml:para>
+            <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key. Requires RunAsCredential of the user to be specified.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1639,7 +1663,7 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>WorkingDirectory</maml:name>
           <maml:description>
             <maml:para>Set the working directory for the process to be started. The WorkingDirectory property must be set if Credential (UserName and Password) is provided.</maml:para>
@@ -1679,6 +1703,18 @@ binary</dev:code>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoNewWindow</maml:name>
           <maml:description>
             <maml:para>Whether to use the operating system shell to start the process</maml:para>
@@ -1716,6 +1752,29 @@ binary</dev:code>
           <maml:name>Raw</maml:name>
           <maml:description>
             <maml:para>If specified, process output is returned as string. By default process output is formatted and redirected to information and error stream.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RunAsCredential</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify Windows user name and password to use when starting the process.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LoadUserProfile</maml:name>
+          <maml:description>
+            <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key. Requires RunAsCredential of the user to be specified.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1758,6 +1817,42 @@ binary</dev:code>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which to invoke process</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specify Credential used for authentication to Domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1810,10 +1905,10 @@ binary</dev:code>
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Credential</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RunAsCredential</maml:name>
         <maml:description>
-          <maml:para>Optionally specify Windows user name and password to use when starting the process</maml:para>
+          <maml:para>Optionally specify Windows user name and password to use when starting the process.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
         <dev:type>
@@ -1825,7 +1920,7 @@ binary</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>LoadUserProfile</maml:name>
         <maml:description>
-          <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key.</maml:para>
+          <maml:para>Specify whether the Windows user profile is to be loaded from the registry Because loading the profile can be time-consuming, it is best to use this value only if you must access the information in the HKEY_CURRENT_USER registry key. Requires RunAsCredential of the user to be specified.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
