@@ -42,7 +42,9 @@ Contains scripts which are not part of modules as follows:
 
 | Experimental scripts        | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
+| Add-WTContext.ps1           | Script to add Windows Terminal context menu                          |
 | Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state       |
+| Deploy-SshKey.ps1           | Script to deploy SSH key to remote computer for Remote-SSH extension |
 | Initialize-Development.ps1  | Initialize development environment                                   |
 | Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis      |
 | Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |

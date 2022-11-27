@@ -338,7 +338,8 @@
 	},
 
 	// Extension: Trailing Spaces
-	"trailing-spaces.trimOnSave": true,
+	// NOTE: Enabling this causes issues writing code according to identations rules
+	"trailing-spaces.trimOnSave": false,
 
 	//Extension: XML Tools
 	"xmlTools.enforcePrettySelfClosingTagOnFormat": true

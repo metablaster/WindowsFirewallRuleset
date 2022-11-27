@@ -1,12 +1,29 @@
-
 # This is the ssh client configuration sample file
-# See ssh_config(5) for more information:
-# https://man7.org/linux/man-pages/man5/ssh_config.5.html
-# TODO: Add more hosts and other options as needed
+# File syntax info: https://man7.org/linux/man-pages/man5/ssh_config.5.html
 
+# Connection name as it will be displayed in Remote Explorer
 Host VM-PRO
-  HostName VM-PRO
-  User Admin
-  IdentityFile ~\\.ssh\\id_ecdsa-remote-ssh.pub
-  AddressFamily any
-  PasswordAuthentication no
+
+	# Specifies the real host name to log into.
+	HostName VM-PRO
+
+	# User name to which to log on on remote host
+	User Admin
+
+	# Specifies the protocol versions in order of preference.
+	# The possible values are '1' and '2'.
+	# protocol version 1 is NOT RECOMMENDED for security reasons.
+	Protocol 2
+
+	# Specifies which address family to use when connecting.
+	# Valid arguments are: any, inet, inet6.
+	AddressFamily inet
+
+	# Specifies the ciphers allowed for protocol version 2 in order of preference.
+	# Multiple ciphers must be comma-separated.
+	# Run: "ssh -Q cipher" to see available chipers
+	Ciphers aes256-cbc,aes256-ctr
+
+	# Specifies a file from which the user's identity key is read when using public key authentication.
+	# This should be public key
+	IdentityFile ~\\.ssh\\.ssh\\Remote-SSH.pub
