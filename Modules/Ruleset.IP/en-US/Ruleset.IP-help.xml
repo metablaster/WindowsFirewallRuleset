@@ -1509,6 +1509,33 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-Subnet</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Start</maml:name>
+          <maml:description>
+            <maml:para>The first IP address from a range.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Net.IPAddress</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>End</maml:name>
+          <maml:description>
+            <maml:para>The last IP address from a range.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Net.IPAddress</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
@@ -1543,6 +1570,30 @@
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Start</maml:name>
+        <maml:description>
+          <maml:para>The first IP address from a range.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Net.IPAddress</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>End</maml:name>
+        <maml:description>
+          <maml:para>The last IP address from a range.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Net.IPAddress</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Net.IPAddress</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

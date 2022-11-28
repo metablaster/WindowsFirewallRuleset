@@ -13,8 +13,16 @@ Get a list of subnets of a given size within a defined supernet
 
 ## SYNTAX
 
+### FromSupernet (Default)
+
 ```powershell
 Get-Subnet [-IPAddress] <String> [[-SubnetMask] <String>] -NewSubnetMask <String> [<CommonParameters>]
+```
+
+### FromStartAndEnd
+
+```powershell
+Get-Subnet -Start <IPAddress> -End <IPAddress> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,7 +58,7 @@ a network range expressed as CIDR notation, or an IP address and subnet mask in 
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: FromSupernet
 Aliases:
 
 Required: True
@@ -67,7 +75,7 @@ Mandatory if the subnet mask is not included in the IPAddress parameter.
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: FromSupernet
 Aliases:
 
 Required: False
@@ -83,7 +91,39 @@ Split the existing network described by the IPAddress and subnet mask using this
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: FromSupernet
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Start
+
+The first IP address from a range.
+
+```yaml
+Type: System.Net.IPAddress
+Parameter Sets: FromStartAndEnd
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -End
+
+The last IP address from a range.
+
+```yaml
+Type: System.Net.IPAddress
+Parameter Sets: FromStartAndEnd
 Aliases:
 
 Required: True

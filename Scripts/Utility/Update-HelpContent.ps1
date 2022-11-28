@@ -80,10 +80,12 @@ None. Update-HelpContent.ps1 does not generate any output
 
 .NOTES
 See CONTRIBUTING.md in "documentation" section for examples of comment based help that will
-produce errors while generating online help and how to avoid them.
+produce errors or unexpected behavior while generating online help and how to avoid them.
 Help version is automatically updated according to $ProjectVersion variable.
 For best results run first time with -Force switch and second time without -Force switch.
 Recommended to generate help files with Core edition because of file encoding.
+If using -Module parameter specify correct name casing of a module.
+
 TODO: some markdown files will end up with additional blank line at the end of document for each
 update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
@@ -216,13 +218,17 @@ if (!(Test-Path -PathType Container -Path $UpgradeLogsDir))
 	New-Item -ItemType Container -Path $UpgradeLogsDir | Out-Null
 }
 
-foreach ($ModuleName in $Module)
+foreach ($ModuleItem in $Module)
 {
-	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
-
 	# NOTE: Module must be imported to avoid warnings from platyPS
-	Import-Module -Name $ModuleName -Force
-	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName
+	Import-Module -Name $ModuleItem -Force
+	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleItem
+
+	# This is needed to get correct name casing of a module since $Module might be user input
+	# TODO: This is not handling "Module name:" in yaml header
+	$ModuleName = (Get-Item $ModuleInfo.Path).BaseName
+
+	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
 
 	# Root directory of current module
 	[string] $ModuleRoot = $ModuleInfo.ModuleBase
