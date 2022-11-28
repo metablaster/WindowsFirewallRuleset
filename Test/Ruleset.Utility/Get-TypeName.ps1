@@ -174,7 +174,7 @@ Test-NoReturn | Get-TypeName -Accelerator
 New-Section "Test pipeline with Get-Process"
 
 Start-Test "-InputObject" -Expected "System.Diagnostics.Process"
-Write-Warning -Message "Test did not run to reduce output"
+Write-Warning -Message "[$ThisScript] Test did not run to reduce output"
 # Get-Process | Get-TypeName -Verbose:$false -Debug:$false | Out-Null
 
 #

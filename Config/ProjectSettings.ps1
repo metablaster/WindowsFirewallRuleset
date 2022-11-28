@@ -634,7 +634,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 		catch
 		{
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value "UnknownUser"
-			Write-Warning -Message "No users exists in $($DefaultGroup[0]) group"
+			Write-Warning -Message "[$SettingsScript] No users exists in $($DefaultGroup[0]) group"
 		}
 
 		# Administrative user account name which will perform unit testing

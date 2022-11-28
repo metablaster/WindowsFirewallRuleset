@@ -218,7 +218,7 @@ New-NetFirewallRule -DisplayName "Bad adapter rule" `
 	-InterfaceAlias $BadAdapters `
 	-Description "Bad adapter test rule description" -ErrorAction SilentlyContinue |
 Format-RuleOutput
-Write-Warning -Message "TODO - Such rules should fail"
+Write-Warning -Message "[$ThisScript] TODO - Such rules should fail"
 
 Update-Log
 Exit-Test

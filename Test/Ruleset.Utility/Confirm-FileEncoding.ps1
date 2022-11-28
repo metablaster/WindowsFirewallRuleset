@@ -118,7 +118,7 @@ $ProjectFiles | ForEach-Object {
 		}
 		else
 		{
-			Write-Warning -Message "Encoding test on file $FileName expected to fail with PowerShell Desktop"
+			Write-Warning -Message "[$ThisScript] Encoding test on file $FileName expected to fail with PowerShell Desktop"
 		}
 	}
 }

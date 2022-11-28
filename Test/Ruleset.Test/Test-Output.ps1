@@ -83,7 +83,7 @@ $TempError = $null
 Start-Test "Test-Output FAIL"
 $ServiceController = Get-Service
 Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError
-Write-Warning -Message "Error ignored: $TempError"
+Write-Warning -Message "[$ThisScript] Error ignored: $TempError"
 
 <#
 .DESCRIPTION
@@ -94,7 +94,7 @@ function global:Test-NullFunction {}
 Start-Test "Test-Output NULL"
 $NullVariable = $null
 Test-Output $NullVariable -Command Test-NullFunction -ErrorAction SilentlyContinue -EV TempError
-Write-Warning -Message "Error ignored: $TempError"
+Write-Warning -Message "[$ThisScript] Error ignored: $TempError"
 
 Test-Output $Result -Command Test-Output
 

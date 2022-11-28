@@ -14,6 +14,9 @@ EXAMPLES
 	Connect-Computer
 	Connect to remote computer onto which to deploy firewall
 
+	Deploy-SshKey
+	Deploy public SSH key to remote host using SSH
+
 	Disable-RemoteRegistry
 	Disable remote registry service previously enabled by Enable-RemoteRegistry
 
@@ -34,9 +37,6 @@ EXAMPLES
 
 	Import-WinRM
 	Import WinRM configuration from file
-
-	Publish-SshKey
-	Deploy public SSH key to remote host using SSH
 
 	Register-SslCertificate
 	Install SSL certificate for PowerShell and CIM remoting

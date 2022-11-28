@@ -140,37 +140,37 @@ foreach ($Profile in $ProfileSettings)
 	$Value = $ProfileKey.GetValue("EnableFirewall")
 	if ($Value -ne 1)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'Enabled' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'Enabled' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("AllowLocalPolicyMerge")
 	if ($Value -ne 0)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'AllowLocalFirewallRules' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'AllowLocalFirewallRules' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("AllowLocalIPsecPolicyMerge")
 	if ($Value -ne 0)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'AllowLocalIPsecRules' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'AllowLocalIPsecRules' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DefaultInboundAction")
 	if ($Value -ne 1) # Block
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'DefaultInboundAction' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'DefaultInboundAction' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DefaultOutboundAction")
 	if ($Value -ne 1) # Block
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'DefaultOutboundAction' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'DefaultOutboundAction' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DisableNotifications")
 	if ($Value -ne 0)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'NotifyOnListen' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'NotifyOnListen' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DisableUnicastResponsesToMulticastBroadcast")
@@ -179,19 +179,19 @@ foreach ($Profile in $ProfileSettings)
 
 	if ($Value -ne $Setting)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'AllowUnicastResponseToMulticast' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'AllowUnicastResponseToMulticast' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DoNotAllowExceptions")
 	if ($Value -ne 0)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'AllowInboundRules' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'AllowInboundRules' is misconfigured"
 	}
 
 	$Value = $ProfileKey.GetValue("DisableStealthModeIPsecSecuredPacketExemption")
 	if ($Value -ne 1)
 	{
-		Write-Warning -Message "$($Profile.Name) profile 'EnableStealthModeForIPsec' is misconfigured"
+		Write-Warning -Message "[$ThisScript] $($Profile.Name) profile 'EnableStealthModeForIPsec' is misconfigured"
 	}
 }
 
@@ -201,37 +201,37 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Checking firewall global
 $Value = $RootKey.GetValue("DisableStatefulFTP")
 if ($Value -ne 0)
 {
-	Write-Warning -Message "Firewall setting 'EnableStatefulFtp' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'EnableStatefulFtp' is misconfigured"
 }
 
 $Value = $RootKey.GetValue("DisableStatefulPPTP")
 if ($Value -ne 1)
 {
-	Write-Warning -Message "Firewall setting 'EnableStatefulPptp' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'EnableStatefulPptp' is misconfigured"
 }
 
 $Value = $RootKey.GetValue("IPSecExempt")
 if ($Value -ne 0) # None
 {
-	Write-Warning -Message "Firewall setting 'Exemptions' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'Exemptions' is misconfigured"
 }
 
 $Value = $RootKey.GetValue("PresharedKeyEncoding")
 if ($Value -ne 1) # UTF8
 {
-	Write-Warning -Message "Firewall setting 'KeyEncoding' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'KeyEncoding' is misconfigured"
 }
 
 $Value = $RootKey.GetValue("SAIdlTime")
 if ($Value -ne 300)
 {
-	Write-Warning -Message "Firewall setting 'MaxSAIdleTimeSeconds' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'MaxSAIdleTimeSeconds' is misconfigured"
 }
 
 $Value = $RootKey.GetValue("StrongCRLCheck")
 if ($Value -ne 2) # RequireCrlCheck
 {
-	Write-Warning -Message "Firewall setting 'CertValidationLevel' is misconfigured"
+	Write-Warning -Message "[$ThisScript] Firewall setting 'CertValidationLevel' is misconfigured"
 }
 
 Update-Log

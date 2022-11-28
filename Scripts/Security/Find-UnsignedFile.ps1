@@ -187,6 +187,7 @@ param (
 )
 
 Write-Debug -Message "ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
 $InformationPreference = "Continue"
 
 if ($PSCmdlet.ParameterSetName -eq "LiteralPath")
@@ -240,7 +241,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	}
 	else
 	{
-		Write-Warning -Message "No executable files with '$Filter' extension have been found in $ExpandedPath"
+		Write-Warning -Message "[$ThisScript] No executable files with '$Filter' extension have been found in $ExpandedPath"
 		return
 	}
 
@@ -415,7 +416,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 		if ($Signature.Status -ne "Valid")
 		{
-			Write-Warning -Message "Unsigned file detected $FileName"
+			Write-Warning -Message "[$ThisScript] Unsigned file detected $FileName"
 
 			if ($VirusTotal -and $PSCmdlet.ShouldProcess($FilePath, "Upload file to virus total for malware analysis"))
 			{
@@ -425,7 +426,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 				if ($FileMegaBytes -gt $FileSize)
 				{
-					Write-Warning -Message "File size of $FileMegaBytes MB exceeded specified virus total maximum file size of $FileSize MB"
+					Write-Warning -Message "[$ThisScript] File size of $FileMegaBytes MB exceeded specified virus total maximum file size of $FileSize MB"
 
 					if ($Log)
 					{
@@ -463,7 +464,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 				# File which is to be scanned
 				$Process.StartInfo.Arguments += " `"$FilePath`""
-				Write-Debug -Message "Sigcheck arguments are $($Process.StartInfo.Arguments)"
+				Write-Debug -Message "[$ThisScript] Sigcheck arguments are $($Process.StartInfo.Arguments)"
 
 				if (!$Process.Start())
 				{
@@ -489,7 +490,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 					if (![string]::IsNullOrEmpty($StreamLine))
 					{
-						Write-Debug -Message "Processing $SigCheckFile output: $StreamLine"
+						Write-Debug -Message "[$ThisScript] Processing $SigCheckFile output: $StreamLine"
 
 						$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")
 						$VTLink = [regex]::Match($StreamLine, "(?<VTlink>VT link:\s+)(?<link>.*)")
@@ -547,8 +548,8 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				if ($Log)
 				{
 					$ScannedFiles += $ScanResult
-					Write-Debug -Message "Scan result is $($ScanResult | Out-String)"
-					Write-Debug -Message "ScannedFiles variable is $($ScannedFiles | Out-String)"
+					Write-Debug -Message "[$ThisScript] Scan result is $($ScanResult | Out-String)"
+					Write-Debug -Message "[$ThisScript] ScannedFiles variable is $($ScannedFiles | Out-String)"
 				}
 
 				# If sigcheck produces any errors it should write them here
@@ -565,7 +566,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 				if (!$StatusWait)
 				{
-					Write-Warning -Message "Process '$SigCheckFile' failed to exit, killing process"
+					Write-Warning -Message "[$ThisScript] Process '$SigCheckFile' failed to exit, killing process"
 
 					# Immediately stops the associated process, and optionally its child/descendent processes (true)
 					$Process.Kill()
@@ -576,13 +577,13 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				# closes the process handle, and clears process-specific properties.
 				# NOTE: Close does not close the standard output, input, and error readers and writers in
 				# case they are being referenced externally
-				Write-Debug -Message "Closing $SigcheckFile process"
+				Write-Debug -Message "[$ThisScript] Closing $SigcheckFile process"
 				$Process.Close()
 			}
 			elseif ($Log)
 			{
 				$SkippedFiles += $FilePath
-				Write-Debug -Message "SkippedFiles variable contains $($SkippedFiles | Out-String)"
+				Write-Debug -Message "[$ThisScript] SkippedFiles variable contains $($SkippedFiles | Out-String)"
 			}
 		} # if signature not valid
 	} # foreach file
@@ -591,13 +592,13 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	{
 		if ($SkippedFiles.Count -gt 0)
 		{
-			Write-Debug -Message "Adding skipped files to JSON root: $($SkippedFiles | Out-String)"
+			Write-Debug -Message "[$ThisScript] Adding skipped files to JSON root: $($SkippedFiles | Out-String)"
 			$JsonData.Add("Files skipped from virus total analysis", $SkippedFiles)
 		}
 
 		if ($ScannedFiles.Count -gt 0)
 		{
-			Write-Debug -Message "Adding skipped files to JSON root: $($ScannedFiles | Out-String)"
+			Write-Debug -Message "[$ThisScript] Adding skipped files to JSON root: $($ScannedFiles | Out-String)"
 			$JsonData.Add("Files analyzed by virus total", $ScannedFiles)
 		}
 
@@ -607,7 +608,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		}
 		else
 		{
-			Write-Debug -Message "There is nothing to write to file $($JsonData | Out-String)"
+			Write-Debug -Message "[$ThisScript] There is nothing to write to file $($JsonData | Out-String)"
 		}
 	}
 

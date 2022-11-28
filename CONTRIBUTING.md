@@ -28,6 +28,8 @@ firewall for your own needs.
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
   - [Debugging](#debugging)
+    - [Debugging without a virtual machine](#debugging-without-a-virtual-machine)
+    - [Debugging with Remote-SSH VSCode extension in virtual machine](#debugging-with-remote-ssh-vscode-extension-in-virtual-machine)
   - [Commits and pull requests](#commits-and-pull-requests)
   - [Portability and other systems](#portability-and-other-systems)
   - [Making new scripts or modules](#making-new-scripts-or-modules)
@@ -523,7 +525,9 @@ Administrator or run PS and VSCode as Admin which means your machine becomes an 
 Secondary aspect of debugging is testing firewall rules and networking issues which may or may not
 be as cool or as easy as debugging code.
 
-Knowing this here are some recommendations:
+### Debugging without a virtual machine
+
+Knowing this here are some recommendations if you whish to test without virtual environment:
 
 1. Forget about debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see
 what the code is doing, this is much faster and more useful and informative than stepping trough
@@ -545,6 +549,81 @@ system.
 5. Regarding testing rules, the easiest method is get confortable with all the tools and methods
 described in [MonitoringFirewall.md](/docs/MonitoringFirewall.md)\
 For remoting tests of course Hyper-V on same subnet and mapped drive proves most useful.
+
+### Debugging with Remote-SSH VSCode extension in virtual machine
+
+The most efficient and safe method to debug and test code is to use Remote-SSH extension in
+combination with virtual machine, this process consists of the following:
+
+1. Set up VM and enable OpenSSH SSH server in optional features in VM
+2. Start OpenSSH SSH service and set it to automatic in VM
+3. Install VSCode in virtual machine
+4. clone `WindowsFirewallRuleset` in your VM
+5. On your host create a new SSH key that will be used for Remote-SSH extension and put it into your
+your `$HOME\.ssh`
+6. On your host system copy `Config\SSH\config` file into your `$HOME\.ssh` folder and modify file
+with correct parameters
+7. In PowerShell cd into `WindowsFirewallRuleset` and run:
+
+```powershell
+.\Modules\Import-All.ps1
+# Update UPPERCASE parameters of the command below:
+Deploy-SshKey -Domain VM_GUEST_NAME -User VM_ADMIN -System -Key $HOME\.ssh\YOUR_KEY.pub
+```
+
+Next step is to add following settings into your VSCode settings which is found in:\
+`C:\Users\User\AppData\Roaming\Code\User\settings.json`
+
+```json
+ // Extension: remote - SSH
+ "remote.SSH.remotePlatform": {
+  "VM-PRO": "windows"
+ },
+ // Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
+ "remote.SSH.defaultExtensions": [
+  // AutoScroll
+  "pejmannikram.vscode-auto-scroll",
+  // Bookmarks
+  "alefragnani.bookmarks",
+  // Code Spell Checker
+  "streetsidesoftware.code-spell-checker",
+  // Filter Line
+  "everettjf.filter-line",
+  // Fix JSON
+  "oliversturm.fix-json",
+  // Hightlight Bad Chars
+  "wengerk.highlight-bad-chars",
+  // json
+  "zainchen.json",
+  // Log File Highlighter
+  "emilast.logfilehighlighter",
+  // Markdown All in One
+  "yzhang.markdown-all-in-one",
+  // markdownlint
+  "davidanson.vscode-markdownlint",
+  // PowerShell
+  "ms-vscode.powershell",
+  // Rainbow CSV
+  "mechatroner.rainbow-csv",
+  // Sort JSON objects
+  "richie5um2.vscode-sort-json",
+  // Todo Tree
+  "gruntfuggly.todo-tree",
+  // Trailing Spaces
+  "shardulm94.trailing-spaces",
+  // vscode-json
+  "andyyaldoo.vscode-json",
+  // XML Tools
+  "dotjoshjohnson.xml"
+ ]
+```
+
+Now restart VSCode on your host system and under `Remote Explorer` in VSCode you'll find an option
+to open VSCode to remote host, once you connect select `WindowsFirewallRuleset` to be your default
+remote directory for connection.
+
+At this point you can run code on remote host in VSCode from your host either in a new VSCode window
+or in same window.
 
 ## Commits and pull requests
 

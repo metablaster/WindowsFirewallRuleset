@@ -92,7 +92,7 @@ Reset-TestDrive
 # Prompt to set screen buffer to recommended value for tests
 Set-ScreenBuffer 3000
 
-Write-Warning -Message "Output of some tests cases may be unexpected with RunAllTests.ps1"
+Write-Warning -Message "[$ThisScript] Output of some tests cases may be unexpected with RunAllTests.ps1"
 
 if (!$Pester)
 {
@@ -126,7 +126,7 @@ if ($PSVersionTable.PSVersion -ge "6.1")
 }
 else
 {
-	Write-Warning -Message "Tests for 'Ruleset.Compatibility' module skipped, PowerShell Core >= 6.1 required to run them"
+	Write-Warning -Message "[$ThisScript] Tests for 'Ruleset.Compatibility' module skipped, PowerShell Core >= 6.1 required to run them"
 }
 
 if ($PesterTests)

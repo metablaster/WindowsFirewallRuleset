@@ -63,7 +63,7 @@ Import-WinRM
 Import WinRM configuration from file
 
 ```powershell
-Publish-SshKey
+Deploy-SshKey
 ```
 
 Deploy public SSH key to remote host using SSH

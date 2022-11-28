@@ -200,7 +200,7 @@ function Test-VirusTotal
 
 				# File which is to be scanned
 				$Process.StartInfo.Arguments += " `"$using:LiteralPath`""
-				Write-Debug -Message "Sigcheck arguments are $($Process.StartInfo.Arguments)"
+				Write-Debug -Message "[$InvocationName] Sigcheck arguments are $($Process.StartInfo.Arguments)"
 
 				$FileIsMalware = $false
 				if ($Process.Start())

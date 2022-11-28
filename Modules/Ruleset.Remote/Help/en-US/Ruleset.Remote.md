@@ -18,6 +18,10 @@ Module used for remoting configuration of WinRM, CIM and remote registry
 
 Connect to remote computer
 
+### [Deploy-SshKey](Deploy-SshKey.md)
+
+Deploy public SSH key to remote host using SSH
+
 ### [Disable-RemoteRegistry](Disable-RemoteRegistry.md)
 
 Disable remote registry
@@ -45,10 +49,6 @@ Export WinRM configuration to file
 ### [Import-WinRM](Import-WinRM.md)
 
 Import WinRM configuration from file
-
-### [Publish-SshKey](Publish-SshKey.md)
-
-Deploy public SSH key to remote host using SSH
 
 ### [Register-SslCertificate](Register-SslCertificate.md)
 

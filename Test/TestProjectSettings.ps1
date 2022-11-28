@@ -127,8 +127,8 @@ Remove-Module -Name Dynamic.TestPreference -ErrorAction Stop
 
 Start-Test "Bad call"
 & $PSScriptRoot\..\Config\ProjectSettings.ps1 -EV ErrorCapture -IV InfoCapture -INFA SilentlyContinue -EA SilentlyContinue
-Write-Warning -Message "Failure test: $ErrorCapture"
-Write-Warning -Message "Failure test: $InfoCapture"
+Write-Warning -Message "[$ThisScript] Failure test: $ErrorCapture"
+Write-Warning -Message "[$ThisScript] Failure test: $InfoCapture"
 
 Update-Log
 Exit-Test

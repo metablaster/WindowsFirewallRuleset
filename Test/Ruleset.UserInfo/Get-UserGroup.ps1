@@ -94,7 +94,7 @@ else
 
 	Start-Test "Failure test"
 	Get-UserGroup -Domain "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
-	Write-Warning -Message "Ignored error: $Failure"
+	Write-Warning -Message "[$ThisScript] Ignored error: $Failure"
 
 	Test-Output $Result -Command Get-UserGroup
 }

@@ -82,7 +82,7 @@ $PublicScripts = @(
 	"Enable-WinRMServer"
 	"Export-WinRM"
 	"Import-WinRM"
-	"Publish-SshKey"
+	"Deploy-SshKey"
 	"Register-SslCertificate"
 	"Reset-WinRM"
 	"Set-WinRMClient"

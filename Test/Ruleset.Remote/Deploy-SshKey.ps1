@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Publish-SshKey
+Unit test for Deploy-SshKey
 
 .DESCRIPTION
-Test correctness of Publish-SshKey function
+Test correctness of Deploy-SshKey function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Publish-SshKey.ps1
+PS> .\Deploy-SshKey.ps1
 
 .INPUTS
-None. You cannot pipe objects to Publish-SshKey.ps1
+None. You cannot pipe objects to Deploy-SshKey.ps1
 
 .OUTPUTS
-None. Publish-SshKey.ps1 does not generate any output
+None. Deploy-SshKey.ps1 does not generate any output
 
 .NOTES
 None.
@@ -66,16 +66,16 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Publish-SshKey"
+Enter-Test "Deploy-SshKey"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Upload SSH key to remote computer", "Accept potentially dangerous unit test"))
 {
 	# TODO: Test case not implemented
-	Start-Test "Publish-SshKey"
-	# $Result = Publish-SshKey -User ServerAdmin -Domain Server1 -Admin
+	Start-Test "Deploy-SshKey"
+	# $Result = Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin
 	# $Result
 
-	# Test-Output $Result -Command Publish-SshKey
+	# Test-Output $Result -Command Deploy-SshKey
 }
 
 Update-Log
