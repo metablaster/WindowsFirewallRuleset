@@ -55,6 +55,7 @@ limitations under the License.
 # - Performed code formatting and formatting of help files and comment based help
 # - Added source code for PolFileEditor.dll
 # - Modified *.psd file
+# - Renamed module to Ruleset.PolicyFileEditor
 
 #region Initialization
 param (

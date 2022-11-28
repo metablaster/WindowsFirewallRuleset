@@ -52,6 +52,7 @@ SOFTWARE.
 	)
 
 	# ID used to uniquely identify this module
+	# NOTE: guid of a original module was: da36f971-e698-46c7-bffc-5d2d35a6f505
 	GUID = "2f356d8c-aad0-462f-9cd7-fff31c7ab1d0"
 
 	# Author of this module

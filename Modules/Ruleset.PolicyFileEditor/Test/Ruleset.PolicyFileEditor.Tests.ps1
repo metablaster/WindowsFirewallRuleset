@@ -49,7 +49,7 @@ limitations under the License.
 
 Remove-Module [P]olicyFileEditor
 $scriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
-$psd1Path = Join-Path $scriptRoot PolicyFileEditor.psd1
+$psd1Path = Join-Path $scriptRoot Ruleset.PolicyFileEditor.psd1
 
 $module = $null
 
@@ -100,7 +100,7 @@ try
 	$gptIniPath = "$gpoPath\gpt.ini"
 
 	Describe 'KeyValueName parsing' {
-		InModuleScope PolicyFileEditor {
+		InModuleScope Ruleset.PolicyFileEditor {
 			$testCases = @(
 				@{
 					KeyValueName = 'Left\Right'

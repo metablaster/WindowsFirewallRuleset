@@ -1,11 +1,12 @@
 
-# PolicyFileEditor
+# Ruleset.PolicyFileEditor
 
-PowerShell functions and DSC resource wrappers around the TJX.PolFileEditor.PolFile .NET class.
+PowerShell functions for the TJX.PolFileEditor.PolFile .NET class.
 
 This is for modifying registry.pol files (Administrative Templates) of local GPOs.
-The .NET class code and examples of the original usage can be found at
-https://gallery.technet.microsoft.com/Read-or-modify-Registrypol-778fed6e.
+The .NET class code and examples of the original usage were hosted on
+`https://gallery.technet.microsoft.com/Read-or-modify-Registrypol-778fed6e.`
+You can find a copy of .NET class code in Ruleset.PolicyFileEditor\Sources directory.
 
 It was written when I was still very new to both C# and PowerShell, and is pretty ugly / painful to use.
  The new functions make this less of a problem, and the DSC resource wrapper around the functions
@@ -14,15 +15,11 @@ It was written when I was still very new to both C# and PowerShell, and is prett
 
 ## Quick start
 
-This example shows you how to install PolicyFileEditor from the gallery and use it to set a
-mandatory screen saver timout with logon:
+This example shows you how to use Ruleset.PolicyFileEditor to set a mandatory screen saver timout
+with logon:
 
 ```powershell
-Write-host "Trusting PS Gallery"
-Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-
-Write-Host "Installing PolicyFileEditor V3"
-Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
+Import-Module -Name PolicyFileEditor -Scope CurrentUser
 
 $UserDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
 

@@ -1,7 +1,7 @@
 ---
-external help file: PolicyFileEditor-help.xml
-Module Name: PolicyFileEditor
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/PolicyFileEditor/Help/en-US/Get-PolicyFileEntry.md
+external help file: Ruleset.PolicyFileEditor-help.xml
+Module Name: Ruleset.PolicyFileEditor
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.PolicyFileEditor/Help/en-US/Get-PolicyFileEntry.md
 schema: 2.0.0
 ---
 

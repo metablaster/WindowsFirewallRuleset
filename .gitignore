@@ -13,7 +13,7 @@
 *.dll
 !VSSetup/Microsoft.VisualStudio.Setup.Configuration.Interop.dll
 !VSSetup/Microsoft.VisualStudio.Setup.PowerShell.dll
-!Modules/PolicyFileEditor/PolFileEditor.dll
+!Modules/Ruleset.PolicyFileEditor/PolFileEditor.dll
 
 # Compiled static libraries (VS 2019)
 *.lib

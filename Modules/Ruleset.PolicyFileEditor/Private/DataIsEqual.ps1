@@ -64,7 +64,7 @@ function DataIsEqual
 	}
 
 	# If we get here, $Type is either MultiString or Binary, both of which need to compare arrays.
-	# The PolicyFileEditor module never returns type Unknown or None.
+	# The Ruleset.PolicyFileEditor module never returns type Unknown or None.
 
 	$First = @($First)
 	$Second = @($Second)

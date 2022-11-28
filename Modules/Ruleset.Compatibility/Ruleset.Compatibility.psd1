@@ -51,6 +51,7 @@ SOFTWARE.
 	CompatiblePSEditions = @("Core")
 
 	# ID used to uniquely identify this module
+	# NOTE: guid of a original module was: 9d427bc5-2ae1-4806-b9d1-2ae62461767e
 	GUID = "eb203a5b-d397-4909-9fe9-00b0f083f36a"
 
 	# Author of this module

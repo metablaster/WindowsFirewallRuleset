@@ -1,7 +1,7 @@
 
-# PolicyFileEditor
+# Ruleset.PolicyFileEditor
 
-## about_PolicyFileEditor
+## about_Ruleset.PolicyFileEditor
 
 # SHORT DESCRIPTION
 
@@ -9,7 +9,7 @@ Module for modifying registry.pol files (Administrative Templates) of local GPO'
 
 # LONG DESCRIPTION
 
-The PolicyFileEditor module allows you to modify the contents of registry.pol and gpt.ini files
+The Ruleset.PolicyFileEditor module allows you to modify the contents of registry.pol and gpt.ini files
 in local GPOs.  These .pol files correspond to the settings found under Administrative Templates
 in the Group Policy Object Editor console.  However, you need to know which registry values need
 to be modified in order to affect a particular Administrative Templates setting.
@@ -50,7 +50,7 @@ In this case, you can see that two registry values are being modified, named Max
 (indicated by the valueName attributes on the two <decimal> elements).  A <decimal> element indicates that the
 data type will be DWord.
 
-Armed with that information, you can now do something like this using the PolicyFileEditor module:
+Armed with that information, you can now do something like this using the Ruleset.PolicyFileEditor module:
 
 ```powershell
 $entries = @(
@@ -106,4 +106,4 @@ Get-ProtectedDataSupportedTypes
 
 Get-KeyEncryptionCertificate
 
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/PolicyFileEditor/Help/en-US
+<https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Modules/Ruleset.PolicyFileEditor/Help/en-US>
