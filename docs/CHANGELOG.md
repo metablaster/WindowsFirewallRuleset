@@ -34,6 +34,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
   - Updated rules for Simple DNS crypt, there was issue on systems with virtual adapters
   - Added rules for Azure Cloud Shell present in Windows Terminal
+  - PowerShell and git
 
 - Modules
 

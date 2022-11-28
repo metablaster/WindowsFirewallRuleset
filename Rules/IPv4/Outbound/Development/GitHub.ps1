@@ -127,7 +127,7 @@ if ((Confirm-Installation "Git" ([ref] $GitRoot)) -or $ForceLoad)
 		New-NetFirewallRule -DisplayName "Git - curl" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $CurlUsers `

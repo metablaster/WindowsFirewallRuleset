@@ -102,8 +102,7 @@ SOFTWARE.
 	# And = Connecting users to be members of a single group
 	# Requiring users must to belong to group A, or both groups B and C:
 	# @{ Or = 'GroupA', @{ And = 'GroupB', 'GroupC' } }
-	# NOTE: "Users" group is required for Remote-SSH with non elevated VSCode
-	RequiredGroups = @{ And = "Administrators", "Users" }
+	RequiredGroups = @{ And = "Administrators" }
 
 	# Language mode to apply when applied to a session:
 	# FullLanguage - All language elements are permitted.

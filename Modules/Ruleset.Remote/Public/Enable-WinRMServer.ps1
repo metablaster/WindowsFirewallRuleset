@@ -265,7 +265,7 @@ function Enable-WinRMServer
 			MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
 			MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
 			# NOTE: Remote is required for New-PSSession
-			AccessMode = $SessionConfigParams["AccessMode"]
+			AccessMode = "Local" # $SessionConfigParams["AccessMode"]
 			ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
 			ThreadOptions = $SessionConfigParams["ThreadOptions"]
 			TransportOption = New-PSTransportOption @TransportConfigParams

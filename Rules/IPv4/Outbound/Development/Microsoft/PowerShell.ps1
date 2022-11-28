@@ -126,7 +126,7 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 	$Program = "$PowerShell64Root\powershell.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "PowerShell x64" `
+		New-NetFirewallRule -DisplayName "Windows PowerShell x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -134,30 +134,19 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $PowerShellUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop help update" |
+			-Description "Rule to allow PowerShell Desktop x64 help update" |
 		Format-RuleOutput
 
 		# NOTE: Both IPv4 and IPv6
-		New-NetFirewallRule -DisplayName "PowerShell x64 remoting HTTP" `
+		New-NetFirewallRule -DisplayName "Windows PowerShell x64 remoting" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet `
-			-LocalPort Any -RemotePort 5985 `
+			-LocalPort Any -RemotePort 22, 5985, 5986 `
 			-LocalUser $AdminGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop remoting via HTTP" |
-		Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "PowerShell x64 remoting HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress LocalSubnet `
-			-LocalPort Any -RemotePort 5986 `
-			-LocalUser $AdminGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop remoting via HTTPS" |
+			-Description "Rule to allow PowerShell Desktop x64 remoting over WinRM or SSH" |
 		Format-RuleOutput
 	}
 
@@ -170,9 +159,20 @@ if ((Confirm-Installation "Powershell64" ([ref] $PowerShell64Root)) -or $ForceLo
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalUser $PowerShellUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell ISE help update" |
+			-Description "Rule to allow PowerShell ISE x64 help update" |
+		Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "PowerShell ISE x64 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 22, 5985, 5986 `
+			-LocalUser $AdminGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Rule to allow PowerShell ISE x64 remoting over WinRM or SSH" |
 		Format-RuleOutput
 	}
 }
@@ -195,26 +195,15 @@ if ((Confirm-Installation "PowershellCore64" ([ref] $PowerShellCore64Root)) -or 
 		Format-RuleOutput
 
 		# NOTE: Both IPv4 and IPv6
-		New-NetFirewallRule -DisplayName "PowerShell Core x64 remoting HTTP" `
+		New-NetFirewallRule -DisplayName "PowerShell Core x64 remoting" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress LocalSubnet `
-			-LocalPort Any -RemotePort 5985 `
+			-LocalPort Any -RemotePort 22, 5985, 5986 `
 			-LocalUser $AdminGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Core remoting via HTTP" |
-		Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "PowerShell Core x64 remoting HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress LocalSubnet `
-			-LocalPort Any -RemotePort 5986 `
-			-LocalUser $AdminGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Core remoting via HTTPS" |
+			-Description "Rule to allow PowerShell Core remoting over WinRM or SSH" |
 		Format-RuleOutput
 	}
 }
@@ -225,15 +214,27 @@ if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLo
 	$Program = "$PowerShell86Root\powershell.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "PowerShell x86" `
+		New-NetFirewallRule -DisplayName "Windows PowerShell x86" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalUser $PowerShellUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell Desktop help update" |
+			-Description "Rule to allow PowerShell Desktop x86 help update" |
+		Format-RuleOutput
+
+		# NOTE: Both IPv4 and IPv6
+		New-NetFirewallRule -DisplayName "Windows PowerShell x86 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress LocalSubnet `
+			-LocalPort Any -RemotePort 22, 5985, 5986 `
+			-LocalUser $AdminGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Rule to allow PowerShell Desktop x86 remoting over WinRM or SSH" |
 		Format-RuleOutput
 	}
 
@@ -246,9 +247,20 @@ if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLo
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
+			-LocalUser $PowerShellUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Rule to allow PowerShell ISE help update" |
+			-Description "Rule to allow PowerShell ISE x86 help update" |
+		Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "PowerShell ISE x86 remoting" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 22, 5985, 5986 `
+			-LocalUser $AdminGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Rule to allow PowerShell ISE x86 remoting over WinRM or SSH" |
 		Format-RuleOutput
 	}
 }

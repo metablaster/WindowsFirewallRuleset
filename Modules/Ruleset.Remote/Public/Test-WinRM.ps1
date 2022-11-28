@@ -370,7 +370,7 @@ function Test-WinRM
 			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
 		}
 
-		Remove-PSSession -Name TestSession
+		Get-PSSession -Name TestSession -ErrorAction Ignore | Remove-PSSession
 
 		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
@@ -448,7 +448,7 @@ function Test-WinRM
 			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
 		}
 
-		Remove-PSSession -Name TestSession
+		Get-PSSession -Name TestSession -ErrorAction Ignore | Remove-PSSession
 
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
 		{
