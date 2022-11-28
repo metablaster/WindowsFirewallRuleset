@@ -47,69 +47,45 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
-param (
-	[switch] $UseExisting
-)
-
-#region Initialization
-if (!$UseExisting)
-{
-	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
-	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
-
-	if ($null -ne $StubBase)
-	{
-		$StubBase | Import-Module -Force
+Describe 'ConvertTo-MaskLength' {
+	It 'Returns a 32-bit integer' {
+		ConvertTo-MaskLength 255.0.0.0 | Should -BeOfType [Int32]
 	}
 
-	Import-Module $ModuleBase -Force
-}
-#endregion
+	It 'Converts 0.0.0.0 to 0' {
+		ConvertTo-MaskLength 0.0.0.0 | Should -Be 0
+	}
 
-InModuleScope Ruleset.IP {
-	Describe 'ConvertTo-MaskLength' {
-		It 'Returns a 32-bit integer' {
-			ConvertTo-MaskLength 255.0.0.0 | Should -BeOfType [int32]
+	It 'Converts 255.255.224.0 to ' {
+		ConvertTo-MaskLength 255.255.224.0 | Should -Be 19
+	}
+
+	It 'Converts 255.255.255.255 to 32' {
+		ConvertTo-MaskLength 255.255.255.255 | Should -Be 32
+	}
+
+	It 'Accepts pipeline input' {
+		'128.0.0.0' | ConvertTo-MaskLength | Should -Be 1
+	}
+
+	It 'Throws an error if passed something other than an IPAddress' {
+		{ ConvertTo-MaskLength 'abcd' } | Should -Throw
+	}
+
+	It 'Example <Number> is valid' -TestCases (
+        (Get-Help ConvertTo-MaskLength).Examples.Example.Code | ForEach-Object -Begin {
+			$Number = 1
+		} -Process {
+			@{ Number = $Number++; Code = $_ }
 		}
+	) {
+		param (
+			$Number,
 
-		It 'Converts 0.0.0.0 to 0' {
-			ConvertTo-MaskLength 0.0.0.0 | Should -Be 0
-		}
+			$Code
+		)
 
-		It 'Converts 255.255.224.0 to ' {
-			ConvertTo-MaskLength 255.255.224.0 | Should -Be 19
-		}
-
-		It 'Converts 255.255.255.255 to 32' {
-			ConvertTo-MaskLength 255.255.255.255 | Should -Be 32
-		}
-
-		It 'Accepts pipeline input' {
-			'128.0.0.0' | ConvertTo-MaskLength | Should -Be 1
-		}
-
-		It 'Throws an error if passed something other than an IPAddress' {
-			{ ConvertTo-MaskLength "abcd" } | Should -Throw
-		}
-
-		It 'Example <Number> is valid' -TestCases (
-			(Get-Help ConvertTo-MaskLength).Examples.Example.Code | ForEach-Object -Begin {
-				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False Positive")]
-				$Number = 1
-			} -Process {
-				@{ Number = $Number++; Code = $_ }
-			}
-		) {
-			param (
-				$Number,
-				$Code
-			)
-
-			$ScriptBlock = [scriptblock]::Create($Code.Trim())
-			$ScriptBlock | Should -Not -Throw
-		}
+		$ScriptBlock = [ScriptBlock]::Create($Code.Trim())
+		$ScriptBlock | Should -Not -Throw
 	}
 }

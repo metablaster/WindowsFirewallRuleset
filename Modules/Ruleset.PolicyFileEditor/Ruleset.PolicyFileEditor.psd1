@@ -64,7 +64,7 @@ limitations under the License.
 	RootModule = "Ruleset.PolicyFileEditor.psm1"
 
 	# Version number of this module.
-	# NOTE: Last checked out official version was 3.1.0
+	# NOTE: Last checked out official version was 3.0.1
 	ModuleVersion = "0.14.0"
 
 	# Supported PSEditions
@@ -221,7 +221,7 @@ limitations under the License.
 			)
 
 			# A URL to the license for this module.
-			LicenseUri = "https://www.apache.org/licenses/LICENSE-2.0.html"
+			LicenseUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Modules/Ruleset.PolicyFileEditor/LICENSE"
 
 			# A URL to the main website for this project.
 			ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"

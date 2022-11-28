@@ -43,6 +43,7 @@ SOFTWARE.
 	RootModule = "Ruleset.IP.psm1"
 
 	# Version number of this module.
+	# NOTE: Last checked out official version was 6.3.2
 	ModuleVersion = "0.14.0"
 
 	# Supported PSEditions
@@ -176,6 +177,7 @@ SOFTWARE.
 		"Help\README.md"
 		"Private\ConvertTo-Network.ps1"
 		"Private\Get-Permutation.ps1"
+		"Private\New-Subnet.ps1"
 		"Private\README.md"
 		"Public\ConvertFrom-HexIP.ps1"
 		"Public\ConvertTo-BinaryIP.ps1"

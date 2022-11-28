@@ -26,11 +26,16 @@
 					<TableColumnHeader>
 						<!-- Optional element. Defines the label that is displayed at the top of the column. -->
 						<!-- If no label is specified, the name of the property whose value is displayed in the rows is used. -->
-						<Label>NetworkAddress</Label>
+						<Label>Cidr</Label>
 						<!-- Required element. Specifies the width (in characters) of the column. -->
 						<Width>15</Width>
 						<!-- Optional element. Specifies how the label of the column is displayed. -->
 						<!-- If no alignment is specified, the label is aligned on the left. -->
+						<Alignment>left</Alignment>
+					</TableColumnHeader>
+					<TableColumnHeader>
+						<Label>NetworkAddress</Label>
+						<Width>15</Width>
 						<Alignment>left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
@@ -51,7 +56,7 @@
 					<TableColumnHeader>
 						<Label>HostAddresses</Label>
 						<Width>15</Width>
-						<Alignment>left</Alignment>
+						<Alignment>right</Alignment>
 					</TableColumnHeader>
 				</TableHeaders>
 				<!-- Optional element. Provides the definitions of the table view. -->
@@ -61,6 +66,9 @@
 						<!-- Required element. Defines the properties or scripts whose values are displayed. -->
 						<TableColumnItems>
 							<!-- Required element. Defines the property or script whose value is displayed in a column of the row. -->
+							<TableColumnItem>
+								<PropertyName>Cidr</PropertyName>
+							</TableColumnItem>
 							<TableColumnItem>
 								<PropertyName>NetworkAddress</PropertyName>
 							</TableColumnItem>
@@ -98,6 +106,9 @@
 							<!-- Required element. Defines the property or script whose value is displayed by the list view. -->
 							<ListItem>
 								<!-- Specify the object property to be displayed at the specified location in the list. -->
+								<PropertyName>Cidr</PropertyName>
+							</ListItem>
+							<ListItem>
 								<PropertyName>NetworkAddress</PropertyName>
 							</ListItem>
 							<ListItem>

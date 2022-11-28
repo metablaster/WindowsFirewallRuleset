@@ -123,6 +123,7 @@ function Resolve-IPAddress
 							"InvalidArgument",
 							$Group.Value
 						)
+
 						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
 
@@ -140,6 +141,7 @@ function Resolve-IPAddress
 							"InvalidArgument",
 							$Group.Value
 						)
+
 						$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 					}
 

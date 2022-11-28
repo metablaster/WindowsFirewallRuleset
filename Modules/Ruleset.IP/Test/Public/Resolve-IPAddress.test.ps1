@@ -47,98 +47,52 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
-param (
-	[switch] $UseExisting
-)
+Describe 'Resolve-IPAddress' {
+	It 'Resolves an IPAddress <IPAddress> describing a range' -TestCases @(
+		@{ IPAddress = '[1-2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
+		@{ IPAddress = '0.[1-2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
+		@{ IPAddress = '0.0.[1-2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
+		@{ IPAddress = '0.0.0.[1-2]'; Expect = @('0.0.0.1', '0.0.0.2') }
+		@{ IPAddress = '[1-2].0.0.[1-2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
+	) {
+		param (
+			$IPAddress,
+			$Expect
+		)
 
-#region Initialization
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-Enter-Test -Pester
-
-if (!$UseExisting)
-{
-	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
-	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
-
-	if ($null -ne $StubBase)
-	{
-		$StubBase | Import-Module -Force
+		Resolve-IPAddress $IPAddress | Should -Be $Expect
 	}
 
-	Import-Module $ModuleBase -Force
-}
-#endregion
+	It 'Resolves an IPAddress <IPAddress> describing selected values' -TestCases @(
+		@{ IPAddress = '[1,2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
+		@{ IPAddress = '0.[1,2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
+		@{ IPAddress = '0.0.[1,2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
+		@{ IPAddress = '0.0.0.[1,2]'; Expect = @('0.0.0.1', '0.0.0.2') }
+		@{ IPAddress = '[1,2].0.0.[1,2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
+	) {
+		param (
+			$IPAddress,
+			$Expect
+		)
 
-InModuleScope 'Ruleset.IP' {
-	Describe 'Resolve-IPAddress' {
-		It 'Resolves an IPAddress <IPAddress> describing a range' -TestCases @(
-			@{ IPAddress = '[1-2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
-			@{ IPAddress = '0.[1-2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
-			@{ IPAddress = '0.0.[1-2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
-			@{ IPAddress = '0.0.0.[1-2]'; Expect = @('0.0.0.1', '0.0.0.2') }
-			@{ IPAddress = '[1-2].0.0.[1-2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
-		) {
-			param (
-				$IPAddress,
-				$Expect
-			)
+		Resolve-IPAddress $IPAddress | Should -Be $Expect
+	}
 
-			Resolve-IPAddress $IPAddress | Should -Be $Expect
-		}
+	It 'Throws RangeExpressionOutOfRange if a value is greater than 255' {
+		{ Resolve-IPAddress '[1-260].0.0.0' } | Should -Throw -ErrorId 'RangeExpressionOutOfRange,Resolve-IPAddress'
+	}
 
-		It 'Resolves an IPAddress <IPAddress> describing selected values' -TestCases @(
-			@{ IPAddress = '[1,2].0.0.0'; Expect = @('1.0.0.0', '2.0.0.0') }
-			@{ IPAddress = '0.[1,2].0.0'; Expect = @('0.1.0.0', '0.2.0.0') }
-			@{ IPAddress = '0.0.[1,2].0'; Expect = @('0.0.1.0', '0.0.2.0') }
-			@{ IPAddress = '0.0.0.[1,2]'; Expect = @('0.0.0.1', '0.0.0.2') }
-			@{ IPAddress = '[1,2].0.0.[1,2]'; Expect = @('1.0.0.1', '1.0.0.2', '2.0.0.1', '2.0.0.2') }
-		) {
-			param (
-				$IPAddress,
-				$Expect
-			)
+	It 'Throws SelectionExpressionOutOfRange if a value is greater than 255' {
+		{ Resolve-IPAddress '[0,260].0.0.0' } | Should -Throw -ErrorId 'SelectionExpressionOutOfRange,Resolve-IPAddress'
+	}
 
-			Resolve-IPAddress $IPAddress | Should -Be $Expect
-		}
+	It 'Supports * as a wildcard for 0 to 255' {
+		$AddressRange = Resolve-IPAddress '[1,2].*.0.0'
 
-		It 'Throws RangeExpressionOutOfRange if a value is greater than 255' {
-			{ Resolve-IPAddress '[1-260].0.0.0' } | Should -Throw -ErrorId 'RangeExpressionOutOfRange,Resolve-IPAddress'
-		}
-
-		It 'Throws SelectionExpressionOutOfRange if a value is greater than 255' {
-			{ Resolve-IPAddress '[0,260].0.0.0' } | Should -Throw -ErrorId 'SelectionExpressionOutOfRange,Resolve-IPAddress'
-		}
-
-		It 'Supports * as a wildcard for 0 to 255' {
-			$addressRange = Resolve-IPAddress '[1,2].*.0.0'
-
-			$addressRange.Count | Should -Be 512
-			$addressRange[0] | Should -Be '1.0.0.0'
-			$addressRange[255] | Should -Be '1.255.0.0'
-			$addressRange[256] | Should -Be '2.0.0.0'
-			$addressRange[511] | Should -Be '2.255.0.0'
-		}
-
-		It 'Example <Number> is valid' -TestCases (
-			(Get-Help Resolve-IPAddress).Examples.Example.Code | ForEach-Object -Begin {
-				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False positive")]
-				$Number = 1
-			} -Process {
-				@{ Number = $Number++; Code = $_ }
-			}
-		) {
-			param (
-				$Number,
-				$Code
-			)
-
-			$ScriptBlock = [scriptblock]::Create($Code.Trim())
-			$ScriptBlock | Should -Not -Throw
-		}
+		$AddressRange.Count | Should -Be 512
+		$AddressRange[0] | Should -Be '1.0.0.0'
+		$AddressRange[255] | Should -Be '1.255.0.0'
+		$AddressRange[256] | Should -Be '2.0.0.0'
+		$AddressRange[511] | Should -Be '2.255.0.0'
 	}
 }
-
-Exit-Test -Pester

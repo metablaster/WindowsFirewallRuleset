@@ -53,6 +53,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
 
 # TODO: Add Write-* streams to module functions
+# TODO: User double quotes in pester tests
 
 #region Initialization
 param (
@@ -79,6 +80,7 @@ if ($ListPreference)
 $PrivateScripts = @(
 	"ConvertTo-Network"
 	"Get-Permutation"
+	"New-Subnet"
 )
 
 foreach ($Script in $PrivateScripts)

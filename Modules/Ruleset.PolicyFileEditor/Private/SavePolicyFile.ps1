@@ -64,7 +64,7 @@ function SavePolicyFile
 		{
 			try
 			{
-				$null = New-Item -Path $parentPath -ItemType Directory -ErrorAction Stop -Confirm:$false -WhatIf:$false
+				New-Item -Path $parentPath -ItemType Directory -ErrorAction Stop -Confirm:$false -WhatIf:$false | Out-Null
 			}
 			catch
 			{

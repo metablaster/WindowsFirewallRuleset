@@ -169,6 +169,6 @@ function Get-NetworkSummary
 			'^0' { "A"; break }
 		}
 
-		$NetworkSummary
+		Write-Output $NetworkSummary
 	}
 }

@@ -58,7 +58,7 @@ function NewGptIni
 
 	if (-not (Test-Path $parent -PathType Container))
 	{
-		$null = New-Item -Path $parent -ItemType Directory -ErrorAction Stop
+		New-Item -Path $parent -ItemType Directory -ErrorAction Stop | Out-Null
 	}
 
 	$version = GetNewVersionNumber -Version 0 -PolicyType $PolicyType

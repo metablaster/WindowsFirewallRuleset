@@ -47,51 +47,105 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-Describe 'Get-BroadcastAddress' {
-	It 'Returns an IPAddress' {
-		Get-BroadcastAddress 1.2.3.4/24 | Should -BeOfType [IPAddress]
+<#
+.SYNOPSIS
+Creates an IP subnet object.
+
+.DESCRIPTION
+Creates an IP subnet object.
+
+.PARAMETER NetworkAddress
+TODO: Parameter description
+
+.PARAMETER BroadcastAddress
+TODO: Parameter description
+
+.PARAMETER SubnetMask
+TODO: Parameter description
+
+.PARAMETER MaskLength
+TODO: Parameter description
+
+.EXAMPLE
+See Resolve-IPAddress.ps1
+
+.INPUTS
+None. You cannot pipe objects to New-Subnet
+
+.OUTPUTS
+[PSCustomObject]
+
+.NOTES
+None.
+#>
+function New-Subnet
+{
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $true)]
+		$NetworkAddress,
+
+		[Parameter()]
+		$BroadcastAddress,
+
+		[Parameter()]
+		$SubnetMask,
+
+		[Parameter()]
+		$MaskLength
+	)
+
+	if ($NetworkAddress -isnot [IPAddress])
+	{
+		$NetworkAddress = ConvertTo-DottedDecimalIP $NetworkAddress
 	}
 
-	It 'Returns 0.0.0.0 when passed 0.0.0.0/32' {
-		Get-BroadcastAddress 0.0.0.0/32 | Should -Be '0.0.0.0'
-		Get-BroadcastAddress 0/32 | Should -Be '0.0.0.0'
-		Get-BroadcastAddress 0.0.0.0 255.255.255.255 | Should -Be '0.0.0.0'
+	if ($BroadcastAddress -and $BroadcastAddress -isnot [IPAddress])
+	{
+		$BroadcastAddress = ConvertTo-DottedDecimalIP $BroadcastAddress
 	}
 
-	It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
-		Get-BroadcastAddress 1.0.0.0/28 | Should -Be '1.0.0.15'
-		Get-BroadcastAddress 1/28 | Should -Be '1.0.0.15'
-		Get-BroadcastAddress 1.0.0.0 255.255.255.240 | Should -Be '1.0.0.15'
+	if ($NetworkAddress -eq $BroadcastAddress)
+	{
+		$SubnetMask = "255.255.255.255"
+		$MaskLength = 32
+		$HostAddresses = 0
 	}
 
-	It 'Returns 255.255.255.255 when passed 0.0.0.0/0' {
-		Get-BroadcastAddress 0.0.0.0/0 | Should -Be '255.255.255.255'
-		Get-BroadcastAddress 0/0 | Should -Be '255.255.255.255'
-		Get-BroadcastAddress 0.0.0.0 0.0.0.0 | Should -Be '255.255.255.255'
-	}
-
-	It 'Accepts pipeline input' {
-		'20/23' | Get-BroadcastAddress | Should -Be '20.0.1.255'
-	}
-
-	It 'Throws an error if passed something other than an IPAddress' {
-		{ Get-BroadcastAddress 'abcd' -ErrorAction Stop } | Should -Throw
-	}
-
-	It 'Example <Number> is valid' -TestCases (
-        (Get-Help Get-BroadcastAddress).Examples.Example.Code | ForEach-Object -Begin {
-			$Number = 1
-		} -Process {
-			@{ Number = $Number++; Code = $_ }
+	else
+	{
+		# One of these will be provided
+		if (!$SubnetMask)
+		{
+			$SubnetMask = ConvertTo-Mask $MaskLength
 		}
-	) {
-		param (
-			$Number,
 
-			$Code
-		)
+		if (!$MaskLength)
+		{
+			$MaskLength = ConvertTo-MaskLength $SubnetMask
+		}
 
-		$ScriptBlock = [ScriptBlock]::Create($Code.Trim())
-		$ScriptBlock | Should -Not -Throw
+		$HostAddresses = [Math]::Pow(2, (32 - $MaskLength)) - 2
+		if ($HostAddresses -lt 0)
+		{
+			$HostAddresses = 0
+		}
+	}
+
+	if (!$BroadcastAddress)
+	{
+		$BroadcastAddress = Get-BroadcastAddress -IPAddress $NetworkAddress -SubnetMask $SubnetMask
+	}
+
+	[PSCustomObject]@{
+		Cidr = '{0}/{1}' -f $NetworkAddress, $MaskLength
+		NetworkAddress = $NetworkAddress
+		BroadcastAddress = $BroadcastAddress
+		SubnetMask = $SubnetMask
+		MaskLength = $MaskLength
+		HostAddresses = $HostAddresses
+		PSTypeName = "Ruleset.IP.Subnet"
+	} | Add-Member ToString -MemberType ScriptMethod -Force -PassThru -Value {
+		return $this.Cidr
 	}
 }

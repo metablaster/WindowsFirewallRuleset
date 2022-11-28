@@ -47,78 +47,32 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
-param (
-	[switch] $UseExisting
-)
-
-#region Initialization
-New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
-Enter-Test -Pester
-
-if (!$UseExisting)
-{
-	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
-	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
-
-	if ($null -ne $StubBase)
-	{
-		$StubBase | Import-Module -Force
+Describe 'Get-NetworkAddress' {
+	It 'Returns an IPAddress' {
+		Get-NetworkAddress 1.2.3.4/24 | Should -BeOfType [IPAddress]
 	}
 
-	Import-Module $ModuleBase -Force
-}
-#endregion
+	It 'Returns 255.255.255.255 when passed 255.255.255.255/32' {
+		Get-NetworkAddress 255.255.255.255/32 | Should -Be '255.255.255.255'
+		Get-NetworkAddress 255.255.255.255 255.255.255.255 | Should -Be '255.255.255.255'
+	}
 
-InModuleScope Ruleset.IP {
-	Describe 'Get-NetworkAddress' {
-		It 'Returns an IPAddress' {
-			Get-NetworkAddress 1.2.3.4/24 | Should -BeOfType [IPAddress]
-		}
+	It 'Returns 1.0.0.15 when passwed 1.0.0.0/28' {
+		Get-NetworkAddress 1.0.0.18/28 | Should -Be '1.0.0.16'
+		Get-NetworkAddress 1.0.0.18 255.255.255.240 | Should -Be '1.0.0.16'
+	}
 
-		It 'Returns 255.255.255.255 when passed 255.255.255.255/32' {
-			Get-NetworkAddress 255.255.255.255/32 | Should -Be '255.255.255.255'
-			Get-NetworkAddress 255.255.255.255 255.255.255.255 | Should -Be '255.255.255.255'
-		}
+	It 'Returns 0.0.0.0 when passed 0.0.0.0/0' {
+		Get-NetworkAddress 0.0.0.0/0 | Should -Be '0.0.0.0'
+		Get-NetworkAddress 0/0 | Should -Be '0.0.0.0'
+		Get-NetworkAddress 0.0.0.0 0.0.0.0 | Should -Be '0.0.0.0'
+	}
 
-		It 'Returns 1.0.0.15 when passed 1.0.0.0/28' {
-			Get-NetworkAddress 1.0.0.18/28 | Should -Be '1.0.0.16'
-			Get-NetworkAddress 1.0.0.18 255.255.255.240 | Should -Be '1.0.0.16'
-		}
+	It 'Accepts pipeline input' {
+		'20/23' | Get-NetworkAddress | Should -Be '20.0.0.0'
+	}
 
-		It 'Returns 0.0.0.0 when passed 0.0.0.0/0' {
-			Get-NetworkAddress 0.0.0.0/0 | Should -Be '0.0.0.0'
-			Get-NetworkAddress 0/0 | Should -Be '0.0.0.0'
-			Get-NetworkAddress 0.0.0.0 0.0.0.0 | Should -Be '0.0.0.0'
-		}
-
-		It 'Accepts pipeline input' {
-			'20/23' | Get-NetworkAddress | Should -Be '20.0.0.0'
-		}
-
-		It 'Throws an error if passed something other than an IPAddress' {
-			{ Get-NetworkAddress "abcd" -ErrorAction Stop } | Should -Throw
-		}
-
-		It 'Example <Number> is valid' -TestCases (
-			(Get-Help Get-NetworkAddress).Examples.Example.Code | ForEach-Object -Begin {
-				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False positive")]
-				$Number = 1
-			} -Process {
-				@{ Number = $Number++; Code = $_ }
-			}
-		) {
-			param (
-				$Number,
-				$Code
-			)
-
-			$ScriptBlock = [scriptblock]::Create($Code.Trim())
-			$ScriptBlock | Should -Not -Throw
-		}
+	It 'Throws an error if passed something other than an IPAddress' {
+		{ Get-NetworkAddress 'abcd' -ErrorAction Stop } | Should -Throw
 	}
 }
-
-Exit-Test -Pester

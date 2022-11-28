@@ -127,6 +127,7 @@ function ConvertTo-Subnet
 		try
 		{
 			$Network = ConvertTo-Network @PSBoundParameters
+			New-Subnet -NetworkAddress (Get-NetworkAddress $network.ToString()) -MaskLength $network.MaskLength
 		}
 		catch
 		{
@@ -154,41 +155,11 @@ function ConvertTo-Subnet
 			do
 			{
 				$i--
-			}
-			until (($DecimalStart -band ([uint32]1 -shl $i)) -ne ($DecimalEnd -band ([uint32]1 -shl $i)))
+			} until (($DecimalStart -band ([uint32]1 -shl $i)) -ne ($DecimalEnd -band ([uint32]1 -shl $i)))
 
 			$MaskLength = 32 - $i - 1
 		}
 
-		try
-		{
-			$Network = ConvertTo-Network $Start $MaskLength
-		}
-		catch
-		{
-			$PSCmdlet.ThrowTerminatingError($_)
-		}
+		New-Subnet -NetworkAddress (Get-NetworkAddress $Start -SubnetMask $MaskLength) -MaskLength $MaskLength
 	}
-
-	$hostAddresses = [math]::Pow(2, (32 - $Network.MaskLength)) - 2
-
-	if ($hostAddresses -lt 0)
-	{
-		$hostAddresses = 0
-	}
-
-	$Subnet = [PSCustomObject]@{
-		NetworkAddress = Get-NetworkAddress $Network.ToString()
-		BroadcastAddress = Get-BroadcastAddress $Network.ToString()
-		SubnetMask = $Network.SubnetMask
-		MaskLength = $Network.MaskLength
-		HostAddresses = $hostAddresses
-		PSTypeName = "Ruleset.IP.Subnet"
-	}
-
-	$Subnet | Add-Member ToString -MemberType ScriptMethod -Force -Value {
-		return '{0}/{1}' -f $this.NetworkAddress, $this.MaskLength
-	}
-
-	$Subnet
 }

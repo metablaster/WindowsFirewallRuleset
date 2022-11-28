@@ -47,73 +47,32 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Number", Justification = "False positive")]
-param (
-	[switch] $UseExisting
-)
-
-#region Initialization
-if (!$UseExisting)
-{
-	$ModuleBase = $PSScriptRoot.Substring(0, $PSScriptRoot.IndexOf("\Test"))
-	$StubBase = Resolve-Path (Join-Path $ModuleBase "Test*\Stub\*")
-
-	if ($null -ne $StubBase)
-	{
-		$StubBase | Import-Module -Force
+Describe 'ConvertTo-BinaryIP' {
+	It 'Returns a string' {
+		ConvertTo-BinaryIP 1.2.3.4 | Should -BeOfType [String]
 	}
 
-	Import-Module $ModuleBase -Force
-}
-#endregion
+	It 'Converts 1.2.3.4 to 00000001.00000010.00000011.00000100' {
+		ConvertTo-BinaryIP 1.2.3.4 | Should -Be '00000001.00000010.00000011.00000100'
+	}
 
-InModuleScope Ruleset.IP {
-	Describe 'ConvertTo-BinaryIP' {
-		It 'Returns a string' {
-			ConvertTo-BinaryIP 1.2.3.4 | Should -BeOfType [string]
-		}
+	It 'Converts 129.129.129.129 to 10000001.10000001.10000001.10000001' {
+		ConvertTo-BinaryIP 129.129.129.129 | Should -Be '10000001.10000001.10000001.10000001'
+	}
 
-		It 'Converts 1.2.3.4 to 00000001.00000010.00000011.00000100' {
-			ConvertTo-BinaryIP 1.2.3.4 | Should -Be '00000001.00000010.00000011.00000100'
-		}
+	It 'Converts 255.255.255.255 to 11111111.11111111.11111111.11111111' {
+		ConvertTo-BinaryIP 255.255.255.255 | Should -Be '11111111.11111111.11111111.11111111'
+	}
 
-		It 'Converts 129.129.129.129 to 10000001.10000001.10000001.10000001' {
-			ConvertTo-BinaryIP 129.129.129.129 | Should -Be '10000001.10000001.10000001.10000001'
-		}
+	It 'Converts 0.0.0.0 to 00000000.00000000.00000000.00000000' {
+		ConvertTo-BinaryIP 0.0.0.0 | Should -Be '00000000.00000000.00000000.00000000'
+	}
 
-		It 'Converts 255.255.255.255 to 11111111.11111111.11111111.11111111' {
-			ConvertTo-BinaryIP 255.255.255.255 | Should -Be '11111111.11111111.11111111.11111111'
-		}
+	It 'Accepts pipeline input' {
+		'1.2.3.4' | ConvertTo-BinaryIP | Should -Be '00000001.00000010.00000011.00000100'
+	}
 
-		It 'Converts 0.0.0.0 to 00000000.00000000.00000000.00000000' {
-			ConvertTo-BinaryIP 0.0.0.0 | Should -Be '00000000.00000000.00000000.00000000'
-		}
-
-		It 'Accepts pipeline input' {
-			'1.2.3.4' | ConvertTo-BinaryIP | Should -Be '00000001.00000010.00000011.00000100'
-		}
-
-		It 'Throws an error if passed something other than an IPAddress' {
-			{ ConvertTo-BinaryIP "abcd" } | Should -Throw
-		}
-
-		It 'Example <Number> is valid' -TestCases (
-			(Get-Help ConvertTo-BinaryIP).Examples.Example.Code | ForEach-Object -Begin {
-				[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-					"PSUseDeclaredVarsMoreThanAssignment", "Number", Justification = "False Positive")]
-				$Number = 1
-			} -Process {
-				@{ Number = $Number++; Code = $_ }
-			}
-		) {
-			param (
-				$Number,
-				$Code
-			)
-
-			$ScriptBlock = [scriptblock]::Create($Code.Trim())
-			$ScriptBlock | Should -Not -Throw
-		}
+	It 'Throws an error if passed something other than an IPAddress' {
+		{ ConvertTo-BinaryIP 'abcd' } | Should -Throw
 	}
 }
