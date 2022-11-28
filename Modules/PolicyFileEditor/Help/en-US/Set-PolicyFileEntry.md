@@ -15,7 +15,7 @@ Creates or modifies a value in a .pol file.
 
 ```powershell
 Set-PolicyFileEntry [-Path] <String> [-Key] <String> [-ValueName] <String> [-Data] <Object>
- [-Type <RegistryValueKind>] [-NoGptIniUpdate] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Type <RegistryValueKind>] [-NoGptIniUpdate] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,17 +29,18 @@ By default, also updates the version number in the policy's gpt.ini file.
 
 ```powershell
 Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
 ```
 
-Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO.
+Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the
+local computer Machine GPO.
 Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini
 
 ### EXAMPLE 2
 
 ```powershell
 Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
 ```
 
 Same as example 1, except this one does not update gpt.ini right away.
@@ -49,8 +50,8 @@ values in the policy file and only trigger a single Group Policy refresh.
 ### EXAMPLE 3
 
 ```powershell
-et-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
+Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+    -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
 ```
 
 Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x)
@@ -58,15 +59,14 @@ can be assigned to the numeric types DWord, QWord and Binary.
 
 ### EXAMPLE 4
 
-```
+```powershell
 $entries = @(
-	New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-	New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
+$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
 ```
-
-$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol \`
-	-Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
 
 Example of using pipeline input to set multiple values at once.
 The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated
@@ -179,39 +179,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -230,11 +197,3 @@ If the specified policy file already contains the correct value, the file will n
 and the gpt.ini file will not be updated.
 
 ## RELATED LINKS
-
-[Get-PolicyFileEntry]()
-
-[Remove-PolicyFileEntry]()
-
-[Update-GptIniVersion]()
-
-[about_PolicyFileEditor.Help.txt]()

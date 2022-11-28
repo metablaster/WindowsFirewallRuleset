@@ -103,7 +103,7 @@ Todo's in this file are categorized into following sections:
     in these and similar cases we should return installation table which
     would be used within rule scripts to get individual paths for target programs.
     - Finish pipeline support, use begin/process/end blocks to make functions work for pipeline as
-    needed, revisit parameter arguments and aliases for this purpose
+    needed, revisit parameter arguments and aliases for this purpose.
     - Some function variables such as `ComputerName` take an array of values, make sure this functionality
     actually makes sense, and also for naming consistency for `ValueFromPipelineByPropertyName`
     - If there is `Path` parameter then also `LiteralPath` is required
@@ -153,6 +153,7 @@ Todo's in this file are categorized into following sections:
     - Some test case outputs will be messed up, ex. some output might be shown prematurely,
     while other won't be shown until 3-4 more test cases run.
     For an example, see `Get-UserGroup` test or `RunAllTests.ps1`
+    - A special unit tests should exist to test pipeline of module functions and scripts if applicable.
 
 5. Code style and design
 
@@ -183,6 +184,9 @@ Todo's in this file are categorized into following sections:
     - Any function that depend on "Users" group will fail if there are no users, just Administrator
     - When using PS Core, WinRM configuration will cause ghost consoles to pop up, to dismiss them
     one needs to close them manually on taskbar
+    - Repository initialization fails when hardware NIC is shared with virtual adapter configured
+    in Virtual switch manager (external switch) when and networking over default switch does not work.
+    - Need to test the behavior and errors when deploying on putlic network.
 
 [Table of Contents](#table-of-contents)
 

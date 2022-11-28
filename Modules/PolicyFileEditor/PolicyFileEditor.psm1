@@ -33,7 +33,6 @@ $PrivateScripts = @(
 	"GetNewVersionNumber"
 	"GetPolFilePath"
 	"GetSidForAccount"
-	"GetTargetResourceCommon"
 	"IncrementGptIniVersion"
 	"InvalidDataTypeCombinationErrorRecord"
 	"NewGptIni"
@@ -42,8 +41,6 @@ $PrivateScripts = @(
 	"PolEntryToPsObject"
 	"PolEntryTypeToRegistryValueKind"
 	"SavePolicyFile"
-	"SetTargetResourceCommon"
-	"TestTargetResourceCommon"
 	"UInt16PairToUInt32"
 	"UInt32ToUInt16Pair"
 )
@@ -63,7 +60,7 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Get-PolicyFileEntry"
-	"Get-PolicyFileEntry"
+	"Remove-PolicyFileEntry"
 	"Set-PolicyFileEntry"
 	"Update-GptIniVersion"
 )

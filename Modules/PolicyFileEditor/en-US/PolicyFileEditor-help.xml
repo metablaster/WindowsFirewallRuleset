@@ -69,7 +69,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>All</maml:name>
           <maml:description>
-            <maml:para>Switch indicating that all entries from the specified .pol file should be output, instead of searching for a specific key / ValueName pair.</maml:para>
+            <maml:para>Switch indicating that all entries from the specified .pol file should be output, instead of searching for a specific key\ValueName pair.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -119,7 +119,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>All</maml:name>
         <maml:description>
-          <maml:para>Switch indicating that all entries from the specified .pol file should be output, instead of searching for a specific key / ValueName pair.</maml:para>
+          <maml:para>Switch indicating that all entries from the specified .pol file should be output, instead of searching for a specific key\ValueName pair.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -132,7 +132,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None.  This command does not accept pipeline input.</maml:name>
+          <maml:name>None. This command does not accept pipeline input.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -150,7 +150,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>ValueName:  The same value that was passed to the -ValueName parameter</maml:name>
+          <maml:name>ValueName: The same value that was passed to the -ValueName parameter</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -158,7 +158,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Key:        The same value that was passed to the -Key parameter</maml:name>
+          <maml:name>Key: The same value that was passed to the -Key parameter</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -166,7 +166,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Data:       The current value assigned to the specified Key / ValueName in the .pol file.</maml:name>
+          <maml:name>Data: The current value assigned to the specified Key\ValueName in the .pol file.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -174,7 +174,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Type:       The RegistryValueKind type of the specified Key / ValueName in the .pol file.</maml:name>
+          <maml:name>Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -191,14 +191,14 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>None.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Get-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
--Key Software\Policies\Something -ValueName SomeValue</dev:code>
+    -Key Software\Policies\Something -ValueName SomeValue</dev:code>
         <dev:remarks>
           <maml:para>Reads the value of Software\Policies\Something\SomeValue from the Machine admin templates of the local GPO. Either returns an object with the data and type of this registry value (if present), or returns nothing, if not found.</maml:para>
         </dev:remarks>
@@ -216,21 +216,174 @@
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/PolicyFileEditor/Help/en-US/Get-PolicyFileEntry.md</maml:uri>
       </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Remove-PolicyFileEntry</command:name>
+      <command:verb>Remove</command:verb>
+      <command:noun>PolicyFileEntry</command:noun>
+      <maml:description>
+        <maml:para>Removes a value from a .pol file.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Removes a value from a .pol file. By default, also updates the version number in the policy's gpt.ini file.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-PolicyFileEntry</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path to the .pol file that is to be modified.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>Key</maml:name>
+          <maml:description>
+            <maml:para>The registry key inside the .pol file from which you want to remove a value.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>ValueName</maml:name>
+          <maml:description>
+            <maml:para>The name of the registry value to be removed. May be set to an empty string to remove the default value of a key.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoGptIniUpdate</maml:name>
+          <maml:description>
+            <maml:para>When this switch is used, the command will not attempt to update the version number in the gpt.ini file</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>Path to the .pol file that is to be modified.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>Key</maml:name>
+        <maml:description>
+          <maml:para>The registry key inside the .pol file from which you want to remove a value.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>ValueName</maml:name>
+        <maml:description>
+          <maml:para>The name of the registry value to be removed. May be set to an empty string to remove the default value of a key.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoGptIniUpdate</maml:name>
+        <maml:description>
+          <maml:para>When this switch is used, the command will not attempt to update the version number in the gpt.ini file</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>The Key and ValueName properties may be bound via the pipeline by property name.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. This command does not generate output.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>If the specified policy file is already not present in the .pol file, the file will not be modified, and the gpt.ini file will not be updated.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Remove-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+    -Key Software\Policies\Something -ValueName SomeValue</dev:code>
+        <dev:remarks>
+          <maml:para>Removes the value Software\Policies\Something\SomeValue from the local computer Machine GPO, if present. Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$Entries = @(
+    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+)
+$Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'</dev:code>
+        <dev:remarks>
+          <maml:para>Example of using pipeline input to remove multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be removed, and will be left alone if the file already did not contain any of those values.</maml:para>
+          <maml:para>The Key property could have also been specified via the pipeline objects instead of on the command line, but since both values shared the same Key, this example shows that you can pass the value in either way.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Set-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Remove-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Update-GptIniVersion</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>about_PolicyFileEditor.Help.txt</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/PolicyFileEditor/Help/en-US/Remove-PolicyFileEntry.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -330,28 +483,6 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
-          <maml:description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
-          <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -427,30 +558,6 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
-        <maml:description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
-        <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -481,7 +588,7 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String</dev:code>
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String</dev:code>
         <dev:remarks>
           <maml:para>Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO. Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini</maml:para>
         </dev:remarks>
@@ -489,15 +596,15 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate</dev:code>
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate</dev:code>
         <dev:remarks>
           <maml:para>Same as example 1, except this one does not update gpt.ini right away. This can be useful if you want to set multiple values in the policy file and only trigger a single Group Policy refresh.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>et-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord</dev:code>
+        <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+    -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord</dev:code>
         <dev:remarks>
           <maml:para>Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x) can be assigned to the numeric types DWord, QWord and Binary.</maml:para>
         </dev:remarks>
@@ -505,11 +612,12 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
         <dev:code>$entries = @(
-	New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-	New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
-)</dev:code>
+    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+)
+$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord</dev:code>
         <dev:remarks>
-          <maml:para>$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol ` 	-Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord</maml:para>
           <maml:para>Example of using pipeline input to set multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be modified, and will be left alone if the file already contained all of the correct values.</maml:para>
           <maml:para>The Key and Type properties could have also been specified via the pipeline objects instead of on the command line, but since both values shared the same Key and Type, this example shows that you can pass the values in either way.</maml:para>
         </dev:remarks>
@@ -519,22 +627,6 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/PolicyFileEditor/Help/en-US/Set-PolicyFileEntry.md</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Get-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Remove-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Update-GptIniVersion</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>about_PolicyFileEditor.Help.txt</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -577,28 +669,6 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-          <maml:name>WhatIf</maml:name>
-          <maml:description>
-            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-          <maml:name>Confirm</maml:name>
-          <maml:description>
-            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -626,35 +696,11 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
-        <maml:name>WhatIf</maml:name>
-        <maml:description>
-          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
-        <maml:name>Confirm</maml:name>
-        <maml:description>
-          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None.  This command does not accept pipeline input.</maml:name>
+          <maml:name>None. This command does not accept pipeline input.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -664,7 +710,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None.  This command does not generate output.</maml:name>
+          <maml:name>None. This command does not generate output.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -693,7 +739,7 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Update-GptIniVersion -Path $env:SystemRoot\system32\GroupPolicy\gpt.ini -PolicyType Machine,User</dev:code>
+        <dev:code>Update-GptIniVersion -Path $env:SystemRoot\system32\GroupPolicy\gpt.ini -PolicyType Machine, User</dev:code>
         <dev:remarks>
           <maml:para>Increments both the Machine and User version counters of the local GPO.</maml:para>
         </dev:remarks>
@@ -703,22 +749,6 @@
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/PolicyFileEditor/Help/en-US/Update-GptIniVersion.md</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Get-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Set-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>Remove-PolicyFileEntry</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>about_PolicyFileEditor.Help.txt</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

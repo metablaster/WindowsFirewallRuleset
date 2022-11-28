@@ -13,15 +13,16 @@ Path to the .pol file that is to be read.
 The registry key inside the .pol file that you want to read.
 
 .PARAMETER ValueName
-The name of the registry value.  May be set to an empty string to read the default value of a key.
+The name of the registry value.
+May be set to an empty string to read the default value of a key.
 
 .PARAMETER All
 Switch indicating that all entries from the specified .pol file should be output,
-instead of searching for a specific key / ValueName pair.
+instead of searching for a specific key\ValueName pair.
 
 .EXAMPLE
 Get-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
--Key Software\Policies\Something -ValueName SomeValue
+    -Key Software\Policies\Something -ValueName SomeValue
 
 Reads the value of Software\Policies\Something\SomeValue from the Machine admin templates of the local GPO.
 Either returns an object with the data and type of this registry value (if present),
@@ -33,30 +34,18 @@ Get-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.
 Outputs all of the registry values from the local machine Administrative Templates
 
 .INPUTS
- None.  This command does not accept pipeline input.
+None. This command does not accept pipeline input.
 
 .OUTPUTS
 If the specified registry value is found, the function outputs a PSCustomObject with the following properties:
-ValueName:  The same value that was passed to the -ValueName parameter
-Key:        The same value that was passed to the -Key parameter
-Data:       The current value assigned to the specified Key / ValueName in the .pol file.
-Type:       The RegistryValueKind type of the specified Key / ValueName in the .pol file.
+ValueName: The same value that was passed to the -ValueName parameter
+Key: The same value that was passed to the -Key parameter
+Data: The current value assigned to the specified Key\ValueName in the .pol file.
+Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file.
 If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced.
 
 .NOTES
 None.
-
-.LINK
-Set-PolicyFileEntry
-
-.LINK
-Remove-PolicyFileEntry
-
-.LINK
-Update-GptIniVersion
-
-.LINK
-about_PolicyFileEditor.Help.txt
 #>
 function Get-PolicyFileEntry
 {

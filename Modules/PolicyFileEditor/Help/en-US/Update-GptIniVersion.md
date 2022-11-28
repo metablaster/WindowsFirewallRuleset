@@ -14,7 +14,7 @@ Increments the version counter in a gpt.ini file.
 ## SYNTAX
 
 ```powershell
-Update-GptIniVersion [-Path] <String> [-PolicyType] <String[]> [-WhatIf] [-Confirm] [<CommonParameters>]
+Update-GptIniVersion [-Path] <String> [-PolicyType] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,7 +42,7 @@ Increments the User version counter of the local GPO.
 ### EXAMPLE 3
 
 ```powershell
-Update-GptIniVersion -Path $env:SystemRoot\system32\GroupPolicy\gpt.ini -PolicyType Machine,User
+Update-GptIniVersion -Path $env:SystemRoot\system32\GroupPolicy\gpt.ini -PolicyType Machine, User
 ```
 
 Increments both the Machine and User version counters of the local GPO.
@@ -82,50 +82,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None.  This command does not accept pipeline input.
+### None. This command does not accept pipeline input.
 
 ## OUTPUTS
 
-### None.  This command does not generate output.
+### None. This command does not generate output.
 
 ## NOTES
 
@@ -137,11 +104,3 @@ and the User counter is set to 5 can be found by evaluating this expression: (5 
 which will show up as decimal value 327683 in the INI file.
 
 ## RELATED LINKS
-
-[Get-PolicyFileEntry]()
-
-[Set-PolicyFileEntry]()
-
-[Remove-PolicyFileEntry]()
-
-[about_PolicyFileEditor.Help.txt]()

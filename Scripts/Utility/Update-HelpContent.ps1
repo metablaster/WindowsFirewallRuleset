@@ -90,7 +90,7 @@ TODO: Online hosting of help content is needed, for now the only purpose is to g
 help files
 TODO: about_ topic needs to be manually edited, currently we get template only
 To document private functions they must be exported first
-TODO: the "Module Name:" entry in help files (any maybe even "external help file:" entry),
+TODO: the "Module Name:" entry in help files (and maybe even "external help file:" entry),
 if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute
@@ -189,6 +189,7 @@ function Format-Document
 
 	# Empty code fences
 	# NOTE: module page has no code fences
+	# TODO: "powershell" is not inserted to module fence in cases when sample code spans multiple lines?
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting explicit code fences in $MarkdownFile"
 	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}powershell"
 
@@ -220,7 +221,7 @@ foreach ($ModuleName in $Module)
 	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
 
 	# NOTE: Module must be imported to avoid warnings from platyPS
-	Import-Module -Name $ModuleName
+	Import-Module -Name $ModuleName -Force
 	[PSModuleInfo] $ModuleInfo = Get-Module -Name $ModuleName
 
 	# Root directory of current module
@@ -331,7 +332,7 @@ specific subfolders
 			Write-Information -Tags $ThisScript -MessageData "INFO: Formatting document $Command.md"
 
 			# Read file and single line string preserving line break characters
-			$FileData = Get-Content -Path $OnlineHelp\$Command.md -Encoding $Encoding -Raw
+			$FileData = Get-Content -Path "$OnlineHelp\$Command.md" -Encoding $Encoding -Raw
 			$OnlineVersion = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/$ModuleName/Help/$CultureName/$Command.md"
 
 			# If online help link is out of date or missing set it
@@ -344,14 +345,14 @@ specific subfolders
 			# NOTE: NoNewline needed, otherwise each file ends up with 2 final new lines
 			Set-Content -NoNewline -Path $OnlineHelp\$Command.md -Value $FileData -Encoding $Encoding
 
-			Format-Document $OnlineHelp\$Command.md
+			Format-Document "$OnlineHelp\$Command.md"
 		}
 
 		# Format module page
 		Format-Document $ModulePage
 
 		# NOTE: Creating about_ topics is independent of both the Update and New-MarkdownHelp
-		if (Test-Path -Path $OnlineHelp\about_$ModuleName.md -PathType Leaf)
+		if (Test-Path -Path "$OnlineHelp\about_$ModuleName.md" -PathType Leaf)
 		{
 			Write-Verbose -Message "[$ThisScript] about_$ModuleName.md is present, no change to file"
 		}
@@ -364,7 +365,7 @@ specific subfolders
 		}
 
 		# Format about topic
-		Format-Document $OnlineHelp\about_$ModuleName.md
+		Format-Document "$OnlineHelp\about_$ModuleName.md"
 
 		Write-Verbose -Message "[$ThisScript] Generating external help"
 

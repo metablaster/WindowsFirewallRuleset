@@ -42,7 +42,7 @@
 
 	# Minimum version of the PowerShell engine required by this module
 	# Valid values are: 1.0 / 2.0 / 3.0 / 4.0 / 5.0 / 5.1 / 6.0 / 6.1 / 6.2 / 7.0 / 7.1
-	PowerShellVersion = "2.0"
+	PowerShellVersion = "5.1"
 
 	# Name of the Windows PowerShell host required by this module
 	# PowerShellHostName = ""
@@ -53,12 +53,12 @@
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
 	# Valid values are: 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4.0 / 4.5
-	DotNetFrameworkVersion = "2.0"
+	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
 	# Valid values are: 1.0 / 1.1 / 2.0 / 4.0
-	CLRVersion = "2.0"
+	CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module.
 	# Valid values are: x86 / AMD64 / Arm / IA64 / MSIL / None (unknown or unspecified).
@@ -90,9 +90,9 @@
 	# NOTE: When the value of any *ToExport key is an empty array,
 	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
-		"Set-PolicyFileEntry"
-		"Remove-PolicyFileEntry"
 		"Get-PolicyFileEntry"
+		"Remove-PolicyFileEntry"
+		"Set-PolicyFileEntry"
 		"Update-GptIniVersion"
 	)
 
@@ -120,12 +120,12 @@
 	FileList = @(
 		"en-US\about_PolicyFileEditor.Help.txt"
 		"en-US\PolicyFileEditor-help.xml"
-		"Help\en-US\PolicyFileEditor.md"
+		"Help\en-US\about_PolicyFileEditor.md"
 		"Help\en-US\Get-PolicyFileEntry.md"
+		"Help\en-US\PolicyFileEditor.md"
 		"Help\en-US\Remove-PolicyFileEntry.md"
 		"Help\en-US\Set-PolicyFileEntry.md"
 		"Help\en-US\Update-GptIniVersion.md"
-		"Help\en-US\PolicyFileEditor.md"
 		"Help\README.md"
 		"Private\Assert-ValidDataAndType.ps1"
 		"Private\DataIsEqual.ps1"
@@ -134,7 +134,6 @@
 		"Private\GetNewVersionNumber.ps1"
 		"Private\GetPolFilePath.ps1"
 		"Private\GetSidForAccount.ps1"
-		"Private\GetTargetResourceCommon.ps1"
 		"Private\IncrementGptIniVersion.ps1"
 		"Private\InvalidDataTypeCombinationErrorRecord.ps1"
 		"Private\NewGptIni.ps1"
@@ -144,8 +143,6 @@
 		"Private\PolEntryTypeToRegistryValueKind.ps1"
 		"Private\README.md"
 		"Private\SavePolicyFile.ps1"
-		"Private\SetTargetResourceCommon.ps1"
-		"Private\TestTargetResourceCommon.ps1"
 		"Private\UInt16PairToUInt32.ps1"
 		"Private\UInt32ToUInt16Pair.ps1"
 		"Public\Get-PolicyFileEntry.ps1"
@@ -153,10 +150,11 @@
 		"Public\Remove-PolicyFileEntry.ps1"
 		"Public\Set-PolicyFileEntry.ps1"
 		"Public\Update-GptIniVersion.ps1"
+		"Sources\PolFileEditor.cs"
 		"Test\PolicyFileEditor.Tests.ps1"
 		"LICENSE"
 		"PolFileEditor.dll"
-		"Ruleset.Initialize_41585bd3-3f4d-4669-9919-2d19c0451b73_HelpInfo.xml"
+		"PolicyFileEditor_110a2398-3053-4ffc-89d1-1b6a38a2dc86_HelpInfo.xml"
 		"PolicyFileEditor.psd1"
 		"PolicyFileEditor.psm1"
 	)

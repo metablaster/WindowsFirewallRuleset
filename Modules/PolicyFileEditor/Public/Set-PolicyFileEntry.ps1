@@ -30,34 +30,34 @@ When this switch is used, the command will not attempt to update the version num
 
 .EXAMPLE
 Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
 
-Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO.
+Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the
+local computer Machine GPO.
 Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini
 
 .EXAMPLE
 Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
+    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
 
 Same as example 1, except this one does not update gpt.ini right away.
 This can be useful if you want to set multiple
 values in the policy file and only trigger a single Group Policy refresh.
 
 .EXAMPLE
-et-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-	-Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
+Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+    -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
 
 Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x)
 can be assigned to the numeric types DWord, QWord and Binary.
 
 .EXAMPLE
 $entries = @(
-	New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-	New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-
 $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-	-Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
+    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
 
 Example of using pipeline input to set multiple values at once.
 The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated
@@ -77,22 +77,10 @@ None. This command does not generate output.
 .NOTES
 If the specified policy file already contains the correct value, the file will not be modified,
 and the gpt.ini file will not be updated.
-
-.LINK
-Get-PolicyFileEntry
-
-.LINK
-Remove-PolicyFileEntry
-
-.LINK
-Update-GptIniVersion
-
-.LINK
-about_PolicyFileEditor.Help.txt
 #>
 function Set-PolicyFileEntry
 {
-	[CmdletBinding(SupportsShouldProcess = $true)]
+	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
