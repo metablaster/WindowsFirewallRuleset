@@ -47,8 +47,8 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
-# NOTE: Following modifications by metablaster year 2020:
-# - Code formatting according to the rest of project design
+# NOTE: Following modifications by metablaster done to original Indented.NET.IP module year 2020:
+# - Code formatting according to the rest of repository design
 # - Added module boilerplate code
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
 

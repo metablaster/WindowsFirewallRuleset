@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# NOTE: Following modifications by metablaster November 2020:
+# NOTE: Following modifications by metablaster done to original WindowsCompatibility module November 2020:
 # - Move functions into separate scripts
 # - Code formatting according to the rest of project design
 # - Added module boilerplate code
