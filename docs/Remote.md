@@ -338,8 +338,8 @@ If credentials are required, this may happend due to invalid username\password.\
 It may also happen if the administrative account used to deploy firewall has no password set,
 in which case password must be set because WinRM doesn't support passwordless authentication.\
 Although it should be possible for passwordless logon by configuring GPO on remote computer:\
-`Computer Configuration/Windows Settings/Security Settings/Local Policies/Security Options/Accounts`
-"Limit local account use of blank passwords to console logon only"
+`Computer Configuration/Windows Settings/Security Settings/Local Policies/Security Options/Accounts:`
+`Limit local account use of blank passwords to console logon only`
 
 > [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
 

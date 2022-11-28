@@ -26,4 +26,4 @@ Host VM-PRO
 
 	# Specifies a file from which the user's identity key is read when using public key authentication.
 	# This should be public key
-	IdentityFile ~\\.ssh\\.ssh\\Remote-SSH.pub
+	IdentityFile ~\\.ssh\\Remote-SSH.pub
