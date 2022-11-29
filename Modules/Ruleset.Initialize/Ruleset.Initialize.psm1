@@ -51,8 +51,7 @@ if ($ListPreference)
 #
 
 $PrivateScripts = @(
-	"Find-UpdatableModule"
-	"Uninstall-DuplicateModule"
+	"Find-UpdatableModuleHelp"
 )
 
 foreach ($Script in $PrivateScripts)
@@ -69,11 +68,14 @@ foreach ($Script in $PrivateScripts)
 }
 
 $PublicScripts = @(
+	"Find-DuplicateModule"
 	"Initialize-Connection"
 	"Initialize-Module"
 	"Initialize-Project"
 	"Initialize-Provider"
 	"Initialize-Service"
+	"Uninstall-DuplicateModule"
+	"Update-ModuleHelp"
 )
 
 foreach ($Script in $PublicScripts)

@@ -28,30 +28,28 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Uninstall-DuplicateModule
+Unit test for Find-DuplicateModule
 
 .DESCRIPTION
-Test correctness of Uninstall-DuplicateModule function
+Test correctness of Find-DuplicateModule function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Uninstall-DuplicateModule.ps1
+PS> .\Find-DuplicateModule.ps1
 
 .INPUTS
-None. You cannot pipe objects to Uninstall-DuplicateModule.ps1
+None. You cannot pipe objects to Find-DuplicateModule.ps1
 
 .OUTPUTS
-None. Uninstall-DuplicateModule.ps1 does not generate any output
+None. Find-DuplicateModule.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
-#Requires -PSedition Desktop
 
 [CmdletBinding()]
 param (
@@ -63,25 +61,16 @@ param (
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\ContextSetup.ps1
 
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-if ($Force -or $PSCmdlet.ShouldContinue("Uninstall duplicate modules for testing", "Accept potentially dangerous unit test"))
-{
-	$ModulesToRemove = @("PSReadline", "PowerShellGet", "PackageManagement", "Pester")
+Enter-Test -Private
 
-	Start-Test "Get-Module"
-	Find-DuplicateModule -Name $ModulesToRemove
+Start-Test "Find-DuplicateModule"
+$Result = Find-DuplicateModule
+$Result
 
-	Start-Test "Uninstall-DuplicateModule -Name Pester"
-	Uninstall-DuplicateModule -Name Pester
-
-	Start-Test "Uninstall-DuplicateModule -Name $ModulesToRemove"
-	$Result = Uninstall-DuplicateModule -Name $ModulesToRemove
-	$Result
-
-	Test-Output $Result -Command Uninstall-DuplicateModule
-}
+Test-Output $Result -Command Find-DuplicateModule
 
 Update-Log
 Exit-Test

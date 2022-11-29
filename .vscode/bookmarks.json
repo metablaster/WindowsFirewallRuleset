@@ -1,0 +1,24 @@
+{
+	"files": [
+		{
+			"path": "Modules/Ruleset.Initialize/Private/Find-UpdatableModuleHelp.ps1",
+			"bookmarks": [
+				{
+					"line": 201,
+					"column": 6,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.ProgramInfo/Public/Get-SystemApp.ps1",
+			"bookmarks": [
+				{
+					"line": 169,
+					"column": 14,
+					"label": ""
+				}
+			]
+		}
+	]
+}

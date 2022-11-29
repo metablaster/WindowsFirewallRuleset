@@ -264,13 +264,16 @@ function Enable-WinRMServer
 			ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
 			MaximumReceivedDataSizePerCommandMB = $SessionConfigParams["MaximumReceivedDataSizePerCommandMB"]
 			MaximumReceivedObjectSizeMB = $SessionConfigParams["MaximumReceivedObjectSizeMB"]
-			# NOTE: Remote is required for New-PSSession
-			AccessMode = "Local" # $SessionConfigParams["AccessMode"]
+			# NOTE: "Remote" is required for New-PSSession even for localhost
+			AccessMode = $SessionConfigParams["AccessMode"]
 			ThreadApartmentState = $SessionConfigParams["ThreadApartmentState"]
 			ThreadOptions = $SessionConfigParams["ThreadOptions"]
 			TransportOption = New-PSTransportOption @TransportConfigParams
+			# RunAsCredential = $SessionConfigParams["RunAsCredential"]
 			UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
-			SecurityDescriptorSddl = & "$ProjectRoot\Scripts\Experiment\New-SDDL.ps1"
+			# TODO: Does not show the UI in Remote-SSH and it's unclear if what SDDL would make Remote-SSH work
+			# SecurityDescriptorSddl = "O:NSG:BAD:P(A;;GA;;;BA)(A;;GA;;;RM)(A;;GA;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+			# SecurityDescriptorSddl = & "$ProjectRoot\Scripts\Experiment\New-SDDL.ps1"
 		}
 
 		Set-StrictMode -Off

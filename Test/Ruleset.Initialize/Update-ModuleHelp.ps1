@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Find-UpdatableModule
+Unit test for Update-ModuleHelp
 
 .DESCRIPTION
-Test correctness of Find-UpdatableModule function
+Test correctness of Update-ModuleHelp function
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Find-UpdatableModule.ps1
+PS> .\Update-ModuleHelp.ps1
 
 .INPUTS
-None. You cannot pipe objects to Find-UpdatableModule.ps1
+None. You cannot pipe objects to Update-ModuleHelp.ps1
 
 .OUTPUTS
-None. Find-UpdatableModule.ps1 does not generate any output
+None. Update-ModuleHelp.ps1 does not generate any output
 
 .NOTES
 None.
@@ -66,40 +66,40 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test -Private
 
-Start-Test "Find-UpdatableModule"
-$Result = Find-UpdatableModule
+Start-Test "Update-ModuleHelp"
+$Result = Update-ModuleHelp
 $Result
 
 Start-Test "Test-Output"
-$Result | Test-Output -Command Find-UpdatableModule
+$Result | Test-Output -Command Update-ModuleHelp
 
-Start-Test "'PowerShellGet' | Find-UpdatableModule"
-"PowerShellGet" | Find-UpdatableModule
+# Start-Test "'PowerShellGet' | Update-ModuleHelp"
+# "PowerShellGet" | Update-ModuleHelp
 
-Start-Test "Find-UpdatableModule -Module 'PowerShellGet'"
-Find-UpdatableModule -Module "PowerShellGet"
+Start-Test "Update-ModuleHelp -Name 'PowerShellGet'"
+Update-ModuleHelp -Name "PowerShellGet"
 
-Start-Test 'Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US'
-Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US
+Start-Test 'Update-ModuleHelp "PowerShellGet" -UICulture ja-JP, en-US'
+Update-ModuleHelp "PowerShellGet" -UICulture ja-JP, en-US
 
-Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule'
-$Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModule
+# Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp'
+# $Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp
+# $Result
+
+Start-Test 'Update-ModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
+Update-ModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
+
+Start-Test 'Update-ModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
+$Result = Update-ModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
 $Result
+
+# Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp'
+# @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp
+
+Test-Output $Result -Command Update-ModuleHelp
 
 Start-Test "Get-TypeName"
 $Result | Get-TypeName
-
-Start-Test 'Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
-Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
-
-Start-Test 'Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
-$Result = Find-UpdatableModule @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
-$Result
-
-Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule'
-@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule
-
-Test-Output $Result -Command Find-UpdatableModule
 
 Update-Log
 Exit-Test

@@ -60,11 +60,13 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 param ()
 
 $SessionName = [guid]::NewGuid().Guid
-Register-PSSessionConfiguration -Name $SessionName -WarningAction SilentlyContinue `
+Register-PSSessionConfiguration -Name $SessionName -NoServiceRestart -WarningAction SilentlyContinue `
 	-SecurityDescriptorSddl "O:NSG:BAD:P(A;;GA;;;BA)(A;;GA;;;RM)(A;;GA;;;IU)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)" | Out-Null
 
 Set-PSSessionConfiguration -ShowSecurityDescriptorUI -Name $SessionName -WarningAction SilentlyContinue
-$SDDL = Get-PSSessionConfiguration -Name $SessionName | Select-Object -ExpandProperty SecurityDescriptorSddl
-Unregister-PSSessionConfiguration -Name $SessionName
+$Session = Get-PSSessionConfiguration -Name $SessionName
 
-Write-Output $SDDL
+Write-Information -MessageData $($Session.Permission) -InformationAction "Continue"
+Write-Output ($Session | Select-Object -ExpandProperty SecurityDescriptorSddl)
+
+Unregister-PSSessionConfiguration -Name $SessionName -NoServiceRestart

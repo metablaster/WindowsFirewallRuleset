@@ -417,54 +417,9 @@ function Initialize-Project
 
 				if ($Decision -ne $Default)
 				{
-					Write-Information -Tags $MyInvocation.InvocationName `
-						-MessageData "INFO: Please wait, checking online for help updates..."
-
-					$CultureNames = "en-US"
-
-					# NOTE: using UICulture en-US, otherwise errors may occur
-					$UpdateParams = @{
-						ErrorVariable = "UpdateError"
-						ErrorAction = "SilentlyContinue"
-						UICulture = $CultureNames
-					}
-
-					[string[]] $UpdatableModules = Find-UpdatableModule -UICulture $CultureNames |
-					Select-Object -ExpandProperty Name
-
-					if (!$UpdatableModules)
-					{
-						# HACK: UpdatableModules may be null, failed on Enterprise edition with 0 found
-						# helpinfo files.
-						# Even after updating modules and manually running Update-Help which btw. succeeded!
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] No modules contain HelpInfo files required to update help"
-
-						# Otherwise the cause may be because Update-Help was never run which is required to
-						# download helpinfo.xml files
-						Update-Help @UpdateParams
-					}
-					else
-					{
-						$UpdateParams["Module"] = $UpdatableModules
-
-						if (($PowerShellEdition -eq "Core") -and ($PSVersionTable.PSVersion -ge 6.1))
-						{
-							# The -Scope parameter was introduced in PowerShell Core version 6.1
-							Update-Help @UpdateParams -Scope AllUsers
-						}
-						else
-						{
-							Update-Help @UpdateParams
-						}
-
-						# In almost all cases there will be some errors, ignore up to 10 errors
-						if ($UpdateError.Count -gt 10)
-						{
-							$UpdateError
-						}
-					}
-				} #if Develop
-			} # if ModulesCheck
+					Update-ModuleModuleHelp
+				}
+			}
 		}
 		else
 		{

@@ -26,26 +26,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace Microsoft.PowerShell.Commands
+
 <#
 .SYNOPSIS
-Get modules that can be updated with no error
+Get modules for which help files can be updated without error
 
 .DESCRIPTION
-Find-UpdatableModule retrieves modules that can be updated without error,
+Find-UpdatableModuleHelp retrieves modules for which help files can be updated without error,
 the list of modules can then be used for Update-Help to minimize Update-Help errors
 Without any parameters all available modules on system are checked
 
-.PARAMETER Module
+.PARAMETER Name
 Optional list of module names for which to check if they can be updated
+Wildcard characters are supported.
 
 .PARAMETER FullyQualifiedName
-Optional module to check in the form of ModuleSpecification object
+The value can be a module name, a full module specification, or a path to a module file.
+
+When the value is a path, the path can be fully qualified or relative.
+A relative path is resolved relative to the script that contains the using statement.
+
+When the value is a name or module specification, PowerShell searches the PSModulePath for the specified module.
+A module specification is a hashtable that has the following keys:
+
+ModuleName - Required Specifies the module name.
+GUID - Optional Specifies the GUID of the module.
+It's also Required to specify at least one of the three below keys.
+ModuleVersion - Specifies a minimum acceptable version of the module.
+MaximumVersion - Specifies the maximum acceptable version of the module.
+RequiredVersion - Specifies an exact, required version of the module. This can't be used with the other Version keys.
 
 .PARAMETER UICulture
-Find updatable modules only for specified UI culture values
+Find updatable modules only for the specified UI culture values
 
 .EXAMPLE
-PS> Find-UpdatableModule
+PS> Find-UpdatableModuleHelp
 
 PackageManagement
 PowerShellGet
@@ -54,14 +70,14 @@ Microsoft.PowerShell.Archive
 PSDesiredStateConfiguration
 
 .EXAMPLE
-PS> Find-UpdatableModule -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
+PS> Find-UpdatableModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
 
 Culture                        en-US
 CultureVersion                 5.0.0.0
 Name                           WindowsErrorReporting
 
 .EXAMPLE
-PS> @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModule
+PS> @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModuleHelp
 
 Culture                        en-US
 CultureVersion                 5.2.0.0
@@ -71,7 +87,7 @@ CultureVersion                 5.2.0.0
 Name                           PackageManagement
 
 .EXAMPLE
-PS> Find-UpdatableModule "PowerShellGet" -UICulture ja-JP, en-US
+PS> Find-UpdatableModuleHelp "PowerShellGet" -UICulture ja-JP, en-US
 
 Name                           Value
 ----                           -----
@@ -96,72 +112,62 @@ for the purpose of testing project code for many environment scenarios that end 
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
 TODO: test UICulture from pipeline
-TODO: There can't be multiple inputs?
-NOTE: Before running this function Update-Help must be run as Administrator once on target system to
+TODO: Not using ValueFromPipeline because an array isn't distinguished from hashtable to select
+proper parameter set name
+TODO: Before running this function Update-Help must be run as Administrator once on target system to
 download required helpinfo.xml files
 #>
-function Find-UpdatableModule
+function Find-UpdatableModuleHelp
 {
-	[CmdletBinding(DefaultParameterSetName = "Name")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Name")]
+	[OutputType([PSModuleInfo])]
 	param (
-		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Name", Position = 0)]
-		[string[]] $Module = $null,
+		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name", Position = 0)]
+		[SupportsWildcards()]
+		[string[]] $Name = "*",
 
-		[Parameter(ValueFromPipeline = $true, ParameterSetName = "Full", Position = 0,
+		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full", Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
-		[hashtable] $FullyQualifiedName = $null,
+		[ModuleSpecification[]] $FullyQualifiedName,
 
-		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name")]
-		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full")]
+		[Parameter()]
 		[ValidatePattern("^[a-z]{2}-[A-Z]{2}$")]
-		[System.Globalization.CultureInfo[]] $UICulture
+		[System.Globalization.CultureInfo[]] $UICulture = $DefaultUICulture
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7
+		# https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema
 		$HelpInfoNamespace = @{ helpInfo = 'http://schemas.microsoft.com/powershell/help/2010/05' }
 
-		[PSModuleInfo[]] $Modules = @()
+		[PSModuleInfo[]] $Module = @()
 	}
 	process
 	{
-		if ($Module)
+		if ($PSCmdlet.ParameterSetName -eq "Name")
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -Name"
-			$Modules = Get-Module -ListAvailable -Name $Module | Where-Object -Property HelpInfoUri
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -Name '$Name'"
+			$Module = Get-Module -ListAvailable -Name $Name | Where-Object -Property HelpInfoUri
 		}
-		elseif ($FullyQualifiedName)
+		elseif ($PSCmdlet.ParameterSetName -eq "Full")
 		{
-			# Validate module specification
-			if ($FullyQualifiedName.Count -ge 2 -and
-				($FullyQualifiedName.ContainsKey("ModuleName") -and $FullyQualifiedName.ContainsKey("ModuleVersion")))
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -FullyQualifiedName"
-				$Modules = Get-Module -ListAvailable -FullyQualifiedName $FullyQualifiedName | Where-Object -Property HelpInfoUri
-			}
-			else
-			{
-				Write-Error -Category InvalidArgument -TargetObject $FullyQualifiedName `
-					-Message "ModuleSpecification parameter for: $($FullyQualifiedName.ModuleName) is not valid"
-				return
-			}
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -FullyQualifiedName '$FullyQualifiedName'"
+			$Module = Get-Module -ListAvailable -FullyQualifiedName $FullyQualifiedName | Where-Object -Property HelpInfoUri
 		}
 		else
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Get-Module -ListAvailable"
-			$Modules = Get-Module -ListAvailable | Where-Object -Property HelpInfoUri
+			$Module = Get-Module -ListAvailable | Where-Object -Property HelpInfoUri
 		}
 
-		if (!$Modules)
+		if (!$Module)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] No candidate modules found, aborting"
 		}
 
-		foreach ($TargetModule in $Modules)
+		foreach ($TargetModule in $Module)
 		{
 			# Each module has separate xml help info files for each culture
 			$InfoXMLFiles = "$($TargetModule.ModuleBase)\*"
@@ -173,34 +179,28 @@ function Find-UpdatableModule
 
 				if ($UICulture)
 				{
+					# Select only specified cultures
 					foreach ($NodeInfo in $Nodes)
 					{
 						$CultureName = $NodeInfo.Node.UICultureName
-						# Select only specified cultures
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Found culture $CultureName for module '$($TargetModule.Name)'"
+
 						if ($UICulture -contains $CultureName)
 						{
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Found culture $CultureName for module $($TargetModule.Name)"
-
-							[PSCustomObject] @{
-								Name = $TargetModule.Name
-								Culture = $CultureName
-								CultureVersion = $NodeInfo.Node.UICultureVersion
-							}
+							Add-Member -Type NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
+							Add-Member -Type NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
 						}
 					}
 				}
 				else
 				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting all cultures"
+					Write-Debug -Message "[$($MyInvocation.InvocationName)] Selecting all cultures for module '$($TargetModule.Name)'"
 
+					# Select all cultures
 					foreach ($NodeInfo in $Nodes)
 					{
-						# Select all cultures
-						[PSCustomObject] @{
-							Name = $TargetModule.Name
-							Culture = $NodeInfo.Node.UICultureName
-							CultureVersion = $NodeInfo.Node.UICultureVersion
-						}
+						Add-Member -Type NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
+						Add-Member -Type NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
 					}
 				}
 			}
