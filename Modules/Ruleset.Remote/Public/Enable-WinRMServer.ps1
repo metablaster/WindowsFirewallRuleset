@@ -270,6 +270,7 @@ function Enable-WinRMServer
 			ThreadOptions = $SessionConfigParams["ThreadOptions"]
 			TransportOption = New-PSTransportOption @TransportConfigParams
 			UseSharedProcess = $SessionConfigParams["UseSharedProcess"]
+			SecurityDescriptorSddl = & "$ProjectRoot\Scripts\Experiment\New-SDDL.ps1"
 		}
 
 		Set-StrictMode -Off
