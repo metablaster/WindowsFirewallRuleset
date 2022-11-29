@@ -138,8 +138,8 @@ function Uninstall-DuplicateModule
 				# Select lowest version, Find-DuplicateModule sorts modules in ascending order
 				$TargetModule = $Duplicates | Select-Object -First 1
 
-				$ModuleVersion = $TargetModule.Version
 				$ModuleName = $TargetModule.Name
+				$ModuleVersion = $TargetModule.Version
 				$ModuleRoot = $TargetModule.ModuleBase
 
 				if (!(Test-Path -LiteralPath $ModuleRoot -PathType Container))
@@ -212,16 +212,19 @@ function Uninstall-DuplicateModule
 	}
 	end
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Most recent versions of duplicates modules which where left installed are"
+		if ($Duplicates)
+		{
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Most recent versions of duplicates modules which where left installed are"
 
-		Get-Module -Name $Duplicates.Name -ListAvailable | ForEach-Object {
-			$Module = $_
-			switch -Wildcard ($_.Path)
-			{
-				$ShippingPath* { $Module }
-				$SystemPath* { $Module }
-				$HomePath* { $Module }
-				default { break }
+			Get-Module -Name $Duplicates.Name -ListAvailable | ForEach-Object {
+				$Module = $_
+				switch -Wildcard ($_.Path)
+				{
+					$ShippingPath* { $Module }
+					$SystemPath* { $Module }
+					$HomePath* { $Module }
+					default { break }
+				}
 			}
 		}
 	}

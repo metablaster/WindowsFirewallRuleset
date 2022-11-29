@@ -61,6 +61,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `ConvertFrom-SID`
     - `Test-Computer`
     - `Resolve-Host`
+    - `Uninstall-DuplicateModule` used to uninstall outdated modules
+    - `Publish-SshKey` Improved for Remote-SSH VSCode extension
 
   - New functionalities
 
@@ -68,6 +70,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Added `PolicyFileEditor` new external module to help with GPO management and renamed to
     Ruleset.PolicyFileEditor
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
+    - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
 
 - Scripts
 

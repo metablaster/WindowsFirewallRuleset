@@ -59,16 +59,16 @@ Valid only if the User parameter belongs to Administrators group on remote host.
 Overwrite file on remote host instead of appending key to existing file
 
 .EXAMPLE
-PS> Deploy-SshKey -User ServerAdmin -Domain Server1 -System
+PS> Publish-SshKey -User ServerAdmin -Domain Server1 -System
 
 .EXAMPLE
-PS> Deploy-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"
+PS> Publish-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"
 
 .INPUTS
-None. You cannot pipe objects to Deploy-SshKey
+None. You cannot pipe objects to Publish-SshKey
 
 .OUTPUTS
-None. Deploy-SshKey does not generate any output
+None. Publish-SshKey does not generate any output
 
 .NOTES
 Remote computer must install SSH server in optional features
@@ -84,15 +84,15 @@ TODO: Make use of certificates
 TODO: When specifying port for ssh.exe? progress bar doesn't remove it's status on completion
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md
 
 .LINK
 https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication
 #>
-function Deploy-SshKey
+function Publish-SshKey
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
-		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md")]
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]

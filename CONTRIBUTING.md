@@ -568,7 +568,7 @@ with correct parameters
 ```powershell
 .\Modules\Import-All.ps1
 # Update UPPERCASE parameters of the command below:
-Deploy-SshKey -Domain VM_GUEST_NAME -User VM_ADMIN -System -Key $HOME\.ssh\YOUR_KEY.pub
+Publish-SshKey -Domain VM_GUEST_NAME -User VM_ADMIN -System -Key $HOME\.ssh\YOUR_KEY.pub
 ```
 
 Next step is to add following settings into your VSCode settings which is found in:\

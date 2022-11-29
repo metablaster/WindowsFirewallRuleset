@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Remote-help.xml
 Module Name: Ruleset.Remote
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md
 schema: 2.0.0
 ---
 
-# Deploy-SshKey
+# Publish-SshKey
 
 ## SYNOPSIS
 
@@ -14,7 +14,7 @@ Deploy public SSH key to remote host using SSH
 ## SYNTAX
 
 ```powershell
-Deploy-SshKey [-Domain] <String> -User <String> [-Key <String>] [-Admin] [-Overwrite] [-WhatIf] [-Confirm]
+Publish-SshKey [-Domain] <String> -User <String> [-Key <String>] [-Admin] [-Overwrite] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -31,13 +31,13 @@ For standard users this is ~\.ssh\authorized_keys, for administrators it's
 ### EXAMPLE 1
 
 ```powershell
-Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin
+Publish-SshKey -User ServerAdmin -Domain Server1 -Admin
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Deploy-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"
+Publish-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"
 ```
 
 ## PARAMETERS
@@ -163,11 +163,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Deploy-SshKey
+### None. You cannot pipe objects to Publish-SshKey
 
 ## OUTPUTS
 
-### None. Deploy-SshKey does not generate any output
+### None. Publish-SshKey does not generate any output
 
 ## NOTES
 
@@ -179,6 +179,6 @@ TODO: Make use of certificates
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md)
 
 [https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication](https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication)

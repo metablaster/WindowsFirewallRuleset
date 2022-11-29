@@ -1408,7 +1408,7 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Deploy-SshKey</command:name>
+      <command:name>Publish-SshKey</command:name>
       <command:verb>Publish</command:verb>
       <command:noun>SshKey</command:noun>
       <maml:description>
@@ -1421,7 +1421,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Deploy-SshKey</maml:name>
+        <maml:name>Publish-SshKey</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
@@ -1593,7 +1593,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Deploy-SshKey</maml:name>
+          <maml:name>None. You cannot pipe objects to Publish-SshKey</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1603,7 +1603,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Deploy-SshKey does not generate any output</maml:name>
+          <maml:name>None. Publish-SshKey does not generate any output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1619,14 +1619,14 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Deploy-SshKey -User ServerAdmin -Domain Server1 -Admin</dev:code>
+        <dev:code>Publish-SshKey -User ServerAdmin -Domain Server1 -Admin</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Deploy-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"</dev:code>
+        <dev:code>Publish-SshKey -User ServerUser -Domain Server1 -Key "$HOME\.ssh\id_ecdsa.pub"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1634,8 +1634,8 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md</maml:linkText>
-        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Deploy-SshKey.md</maml:uri>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>https://code.visualstudio.com/docs/remote/troubleshooting#_configuring-key-based-authentication</maml:linkText>
