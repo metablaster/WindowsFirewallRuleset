@@ -45,9 +45,6 @@ possible, with the help of this function those outdated and useless modules are 
 Case from point 2 is recommended only when there are 2 exactly same modules installed,
 but the duplicate you are trying to remove is used (locked) instead of first one.
 
-.PARAMETER Module
-One or more explicit module objects which to uninstall if duplicates are found.
-
 .PARAMETER Name
 One or more module names which to uninstall if duplicates are found.
 Wildcard characters are supported.
@@ -86,18 +83,15 @@ TODO: Parameter needed which will specify which locations have priority to retai
 #>
 function Uninstall-DuplicateModule
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
-		DefaultParameterSetName = "Name", PositionalBinding = $false)]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", PositionalBinding = $false)]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = "Module")]
-		[PSModuleInfo[]] $Module,
-
-		[Parameter(Mandatory = $true, ParameterSetName = "Name", Position = 0)]
+		[Parameter(ValueFromPipeline = $true, Position = 0)]
 		[SupportsWildcards()]
-		[string[]] $Name,
+		[Alias("Module")]
+		[string[]] $Name = "*",
 
-		[Parameter(Mandatory = $true, ParameterSetName = "Name")]
+		[Parameter()]
 		[ValidateSet("Shipping", "System", "User")]
 		[string[]] $Scope
 	)
@@ -106,12 +100,13 @@ function Uninstall-DuplicateModule
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+		$ErrorActionPreference = "Stop"
 		. $PSScriptRoot\..\Scripts\ModuleDirectories.ps1
 
 		# Check if in elevated PowerShell
 		# NOTE: can't be part of begin block
 		# TODO: not tested if replacing with "Requires RunAs Administrator"
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking user account elevation"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking current user account elevation"
 		$Principal = New-Object -TypeName Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 
 		if (!$Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))
@@ -120,17 +115,17 @@ function Uninstall-DuplicateModule
 				-Message "Elevation required, please open PowerShell as Administrator and try again"
 		}
 
-		if ($Name)
-		{
-			$Module = Find-DuplicateModule -Name $Name -Scope $Scope
-		}
+		$SCopeParam = @{}
+		if ($Scope) { $SCopeParam.Scope = $Scope }
+
+		[PSModuleInfo[]] $Duplicates = @()
 	}
 	process
 	{
-		foreach ($Entry in $Module)
+		foreach ($Entry in $Name)
 		{
 			# Get all duplicates of a specific module name
-			$Duplicates = Find-DuplicateModule -Name $Entry.Name -Scope $Scope
+			$Duplicates = Find-DuplicateModule -Name $Entry @SCopeParam
 
 			if (!$Duplicates)
 			{
@@ -138,16 +133,16 @@ function Uninstall-DuplicateModule
 			}
 
 			# Iterate all duplicates until only latest version is left
-			while ($Duplicate.Count -gt 1)
+			while ($Duplicates.Count -gt 1)
 			{
 				# Select lowest version, Find-DuplicateModule sorts modules in ascending order
-				$TargetModule = $Duplicates | Select-Object -First
+				$TargetModule = $Duplicates | Select-Object -First 1
 
 				$ModuleVersion = $TargetModule.Version
 				$ModuleName = $TargetModule.Name
 				$ModuleRoot = $TargetModule.ModuleBase
 
-				if (!(Test-Path -Path $ModuleRoot -PathType Container))
+				if (!(Test-Path -LiteralPath $ModuleRoot -PathType Container))
 				{
 					Write-Error -Category ObjectNotFound -TargetObject $ModuleRoot `
 						-Message "Following module path was not found '$ModuleRoot'"
@@ -165,11 +160,11 @@ function Uninstall-DuplicateModule
 
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Taking ownership of $ModuleName $ModuleVersion"
 
-				if (Set-Permission -Owner "Administrators" -Path $ModuleRoot -Recurse -Confirm:$false -Force)
+				if (Set-Permission -Owner "Administrators" -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force)
 				{
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Granting permissions to Administrators group for $ModuleName $ModuleVersion"
 
-					if (Set-Permission -Principal "Administrators" -Path $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
+					if (Set-Permission -User "Administrators" -LiteralPath $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
 					{
 						try
 						{
@@ -186,7 +181,12 @@ function Uninstall-DuplicateModule
 
 							# Remove all folders and files of a target module
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing recursively $ModuleName $ModuleVersion"
-							Remove-Item -Path $ModuleRoot -Recurse -Confirm:$false -Force -ErrorAction Stop
+							Remove-Item -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force -ErrorAction Stop
+
+							# Remove uninstalled module from duplicates variable
+							$Duplicates = $Duplicates | Where-Object {
+								$_.GUID -ne $TargetModule.GUID
+							}
 						}
 						catch
 						{
@@ -212,9 +212,9 @@ function Uninstall-DuplicateModule
 	}
 	end
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Most up to date modules which where left installed are"
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Most recent versions of duplicates modules which where left installed are"
 
-		Get-Module -Name $Duplicates -ListAvailable | ForEach-Object {
+		Get-Module -Name $Duplicates.Name -ListAvailable | ForEach-Object {
 			$Module = $_
 			switch -Wildcard ($_.Path)
 			{

@@ -218,6 +218,8 @@ Todo's in this file are categorized into following sections:
     result to predefined hashes to ensure scripts were not modified externally, or sign whole module.
     - For functions which use remoting and call other functions which use remoting there must be
     well established way whether to specify -CIM switch, so that for localhost -CIM is not used
+    - Each module when imported must work on their own without having to initialize entire repository,
+    for this to test import all modules in clean environment and run individual functions.
 
 2. Scripts
 

@@ -48,7 +48,7 @@ Principal username who will be the new owner of a resource.
 Using this parameter means taking ownership of a resource.
 
 .PARAMETER User
-Principal username to which to grant specified permissions.
+Principal username or group name to which to grant specified permissions.
 Using this parameter means setting permissions on a resource.
 
 .PARAMETER Domain

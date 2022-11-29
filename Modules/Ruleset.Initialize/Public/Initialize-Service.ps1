@@ -27,6 +27,7 @@ SOFTWARE.
 #>
 
 using namespace System.ServiceProcess
+using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS

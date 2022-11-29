@@ -134,6 +134,7 @@ function Find-DuplicateModule
 	$ModulesNames = $TargetModules | Select-Object -ExpandProperty Name
 	$UniqueModules = $ModulesNames | Select-Object -Unique
 
+	$Duplicates = @()
 	if ($ModulesNames -and $UniqueModules)
 	{
 		$Duplicates = Compare-Object -ReferenceObject $UniqueModules -DifferenceObject $ModulesNames |

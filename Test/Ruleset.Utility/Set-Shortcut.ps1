@@ -108,7 +108,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Windows folder", "Test elevation"))
 
 		# Reset existing tree for re-test
 		Start-Test "Reset existing tree"
-		Set-Permission -Principal $TestAdmin -Path $Restricted -Reset -Grant $Access
+		Set-Permission -User $TestAdmin -Path $Restricted -Reset -Grant $Access
 	}
 
 	Set-Shortcut -Name "Test.lnk" -Path $Restricted `
