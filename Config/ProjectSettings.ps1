@@ -808,7 +808,8 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
-		# In that case for changes to take effect run Scripts\Complete-Firewall.ps1 and reboot system
+		# In that case for changes to take effect run Scripts\Complete-Firewall.ps1 and either restart firewall or reboot system.
+		# Then run Scripts\Grant-Logs -User USERNAME_WHICH_WILL_READ_LOGS
 		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value $LogsFolder\Firewall
 	}
 	else

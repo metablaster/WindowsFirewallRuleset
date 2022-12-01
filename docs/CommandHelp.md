@@ -50,6 +50,7 @@ In addition to the table below, see:
     - [Invoke PSScriptAnalyzer](#invoke-psscriptanalyzer)
     - [Add or use types from .NET assembly in PowerShell](#add-or-use-types-from-net-assembly-in-powershell)
     - [Get function definition](#get-function-definition)
+    - [List all of the assemblies loaded in a PowerShell session](#list-all-of-the-assemblies-loaded-in-a-powershell-session)
   - [Firewall and rule management](#firewall-and-rule-management)
     - [Get a list of predefined rule groups](#get-a-list-of-predefined-rule-groups)
     - [Apply predefined rules to GPO](#apply-predefined-rules-to-gpo)
@@ -380,6 +381,13 @@ Quickly see definition of some function to learn it's implementation
 
 ```powershell
 (Get-ChildItem function:Get-GitStatus).Definition
+```
+
+### List all of the assemblies loaded in a PowerShell session
+
+```powershell
+[System.AppDomain]::CurrentDomain.GetAssemblies() | Where-Object Location | Sort-Object -Property FullName |
+Select-Object -Property FullName, Location, GlobalAssemblyCache, IsFullyTrusted | Out-GridView
 ```
 
 [Table of Contents](#table-of-contents)

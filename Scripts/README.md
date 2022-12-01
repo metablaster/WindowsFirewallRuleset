@@ -44,8 +44,9 @@ Contains scripts which are not part of modules as follows:
 | --------------------------- | -------------------------------------------------------------------- |
 | Add-WTContext.ps1           | Script to add Windows Terminal context menu                          |
 | Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state       |
-| New-SDDL                    | Generate custom SDDL string by using a security dialog               |
+| Connect-IPInterface.ps1     | Troubleshooting script to connect NIC to network using DHCP          |
 | Initialize-Development.ps1  | Initialize development environment                                   |
+| New-SDDL                    | Generate custom SDDL string by using a security dialog               |
 | Start-PacketTrace.ps1       | Start capturing network traffic into an *.etl file for analysis      |
 | Stop-PacketTrace.ps1        | Stop capturing traffic previously started with Start-PacketTrace.ps1 |
 

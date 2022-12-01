@@ -27,10 +27,6 @@
 			"color": "#ff0000"
 		},
 	],
-	"workbench.colorCustomizations": {
-		"editorRuler.foreground": "#4063ff",
-		"tab.activeBorder": "#ff0000"
-	},
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
@@ -75,6 +71,12 @@
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
+
+	// workbench
+	"workbench.colorCustomizations": {
+		"editorRuler.foreground": "#4063ff",
+		"tab.activeBorder": "#ff0000"
+	},
 
 	// diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
@@ -218,6 +220,7 @@
 	"powershell.helpCompletion": "BlockComment",
 	// Other PowerShell extension settings
 	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
+
 	// Extension: Rainbow CSV
 	"rainbow_csv.enable_auto_csv_lint": true,
 	"rainbow_csv.csv_lint_detect_trailing_spaces": true,

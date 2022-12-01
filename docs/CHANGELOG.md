@@ -71,6 +71,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     Ruleset.PolicyFileEditor
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
+    - `Connect-IPInterface` experimental script to troubleshoot obtaining IP from DHCP
 
 - Scripts
 

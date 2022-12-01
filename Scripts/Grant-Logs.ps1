@@ -41,15 +41,17 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Grant permissions to read and write firewall logs in custom location
+Grant permissions to write and read firewall logs in custom location
 
 .DESCRIPTION
 When firewall is set to write logs into custom location inside repository, neither firewall service
 nor users can access them.
-Grant permissions to non administrative account to read firewall log files.
-Also grants firewall service to write logs to project specified location.
-The Microsoft Protection Service will automatically reset permissions on firewall logs either
-on system reboot, network reconnect or firewall settings change, for security reasons.
+This script grants permissions to non administrative account to read firewall log files.
+It also grants firewall service to write logs to project specified location.
+
+However the Microsoft Protection Service will automatically reset permissions on firewall logs
+on system reboot, network reconnect or firewall settings change, for security reasons, in which
+case this script needs to be run again.
 
 .PARAMETER User
 Standard (non administrative) user account for which to grant logs permission
@@ -76,8 +78,12 @@ None. Grant-Logs.ps1 does not generate any output
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
 The benefit is to have special syntax coloring and filtering functionality with VSCode.
-First time setup requires turning off/on Windows firewall for current network profile in order for
+Before running this script, for first time setup following must be done:
+1. Modify FirewallLogsFolder in Config\ProjectSettings to desired location
+2. Run Scripts\Complete-Firewall to apply the change from point one
+3. Turning off/on Windows firewall for desired network profile in order for
 Windows firewall to start logging into new location.
+
 TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
 
 .LINK
@@ -107,7 +113,7 @@ param (
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
-$MachineName = Format-ComputerName $Domain
+$Domain = Format-ComputerName $Domain
 
 # User prompt
 $Accept = "Grant permission to read firewall log files until system reboot"
@@ -147,7 +153,8 @@ foreach ($File in $OldLogFiles)
 }
 
 # Setup control rights
-$UserControl = [AccessControl.FileSystemRights] "ReadAndExecute, WriteData, Write"
+# NOTE: WriteData and Write are not granted because due to file encoding the logs might become corrupted
+$UserControl = [AccessControl.FileSystemRights]::ReadData
 $FullControl = [AccessControl.FileSystemRights]::FullControl
 
 if ($PSBoundParameters.ContainsKey("Confirm"))
@@ -179,13 +186,13 @@ if ($StandardUser)
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
-	if (Set-Permission $TargetFolder -User $User -Domain $MachineName -Rights $UserControl)
+	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -User $User -Domain $MachineName -Rights $UserControl | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
 		}
 	}
 }
@@ -193,7 +200,7 @@ if ($StandardUser)
 # If there is at least one change in logs location reboot is required
 foreach ($Location in $OldLocation)
 {
-	if (!(Compare-Path $Location $TargetFolder))
+	if (!(Compare-Path -Path $Location -ReferencePath $TargetFolder))
 	{
 		Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
 		break

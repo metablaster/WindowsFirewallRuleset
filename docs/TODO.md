@@ -394,6 +394,14 @@ Todo's in this file are categorized into following sections:
     - See how, could we make use of `Plaster` for template generation
     - Just like there is PSScriptAnalyzer to analyse code, there is also a need to develop a script
     or module to analyze code performance.
+    - Running the following will make network icon in taskbar show "No Network" if physical NIC is
+    shared with virtual switch, seems like some special rules are missing, see FAQ for manual solution
+
+    ```powershell
+    ipconfig /release
+    Clear-DnsClientCache
+    ipconfig /renew
+    ```
 
 [Table of Contents](#table-of-contents)
 

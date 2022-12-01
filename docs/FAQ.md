@@ -18,6 +18,7 @@ In addition, general questions and answers regarding this firewall.
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
   - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
   - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
+  - [Network icon in taskbar says it's "No Network"](#network-icon-in-taskbar-says-its-no-network)
 
 ## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
@@ -132,7 +133,7 @@ To resolve this issue ensure following:
 3. Verify that both the target directory and all the logs inside that directory grant write\
 permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
-4. For changes to take effect save your modifications and reboot system.
+4. For changes to take effect save your modifications and restart firewall or reboot system.
 
 Keep in mind that setting additional permissions afterwards will be reset by Windows firewall service
 on every system boot or firewall setting change for security reasons.\
@@ -286,10 +287,12 @@ In `Settings -> Network & Internet -> Status -> Properties` there should be opti
 or public profile for your adapter, but what if these options are gone and how to get them back?
 
 These profile settings go missing when some privileged process has modified network profile such
-as 3rd party firewalls.
+as 3rd party firewalls or by sharing your physical NIC with virtual machine virtual switch.\
+If you have configured external switch in your Hyper-V there is nothing you can do to except to
+stop sharing your hardware NIC with virtual switch.
 
-Here in this case this will happen when you run `Set-NetworkProfile.ps1` which runs only on demand,
-however you won't notice this problem until system is rebooted.
+Here in this repository this will also happen when you run `Set-NetworkProfile.ps1` which runs only
+on demand, however you won't notice this problem until system is rebooted.
 
 **NOTE:** In previous versions of Firewall Ruleset since v0.11.0, `Set-NetworkProfile` runs by
 default, however this is no longer the case in most recent versions.
@@ -366,6 +369,31 @@ The credentials are securely stored in an object of type [PSCredential][pscreden
 close down PowerShell the credential object is destroyed.
 
 Windows hello is neither supported nor necessary by PowerShell remoting or WinRM.
+
+## Network icon in taskbar says it's "No Network"
+
+You might stumble upon the following icon in your taskbar:
+
+![Alternate text](Screenshots/Disconnected.png)
+
+Internet might or might not work but the icon says "No Network".
+
+This problem happens due to something with DHCP, when your NIC is configured for DHCP,
+to resolve this problem run:
+
+```powershell
+ipconfig /release
+Clear-DnsClientCache
+ipconfig /renew
+```
+
+And then disable and re-enable your network adapter.
+
+This might not work if you're sharing your NIC with virtual switch with VM, in which case you'll
+need to release physical NIC in Hyper-V and re-share it again.\
+If in addition you use VPN it might have to be re-applied as well.
+
+This problem usually happens in cases such as network reset or manual renewal of IP via DHCP.
 
 [Table of Contents](#table-of-contents)
 

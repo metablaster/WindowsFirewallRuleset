@@ -149,15 +149,18 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Control Panel\Personalization
 	#
 
-	Write-Information -MessageData "[$ThisScript] Do not display the lock screen"
-	# TODO: Need to test expected behavior
-	# Enabled Value: decimal: 1
-	# Disabled Value: decimal: 0
-	$RegistryPath = "Software\Policies\Microsoft\Windows\Personalization"
-	$ValueName = "NoLockScreen"
-	$Value = 1
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	if ($false)
+	{
+		# NOTE: This doesn't work as expected, lock screen is shown regardless of what's set
+		Write-Information -MessageData "[$ThisScript] Do not display the lock screen"
+		# Enabled Value: decimal: 1
+		# Disabled Value: decimal: 0
+		$RegistryPath = "Software\Policies\Microsoft\Windows\Personalization"
+		$ValueName = "NoLockScreen"
+		$Value = 1
+		$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
+		Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
+	}
 
 	#
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Search
