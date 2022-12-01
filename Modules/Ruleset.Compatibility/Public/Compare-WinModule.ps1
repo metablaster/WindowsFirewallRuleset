@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Runspaces
+
 <#
 .SYNOPSIS
 Compare the set of modules against those in the compatibility session

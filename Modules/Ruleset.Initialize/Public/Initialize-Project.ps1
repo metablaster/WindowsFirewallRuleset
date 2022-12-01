@@ -66,7 +66,7 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
-TODO: we don't use logs in this module
+TODO: We don't use logs in this module
 TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
 TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
@@ -90,6 +90,10 @@ function Initialize-Project
 
 	if ($PSCmdlet.ShouldProcess("System", "Check minimum requirements"))
 	{
+		# TODO: Strict parameter might be redundant
+		# We need "Stop" since this function when run on it's own won't work
+		$ErrorActionPreference = "Stop"
+
 		# Disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
 		if (!$ProjectCheck)
 		{
@@ -419,7 +423,7 @@ function Initialize-Project
 
 				if ($Decision -ne $Default)
 				{
-					Update-ModuleModuleHelp
+					Update-ModuleHelp
 				}
 			}
 		}

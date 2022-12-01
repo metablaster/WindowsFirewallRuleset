@@ -27,8 +27,6 @@ SOFTWARE.
 #>
 
 #region Initialization
-using namespace System.ServiceProcess
-
 param (
 	[Parameter()]
 	[switch] $ListPreference

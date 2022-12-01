@@ -216,6 +216,7 @@ SOFTWARE.
 				"Ruleset.ComputerInfo"
 				"Ruleset.ProgramInfo"
 				"Ruleset.Utility"
+				"Ruleset.Logging"
 			)
 		} # End of PSData hashtable
 	} # End of PrivateData hashtable

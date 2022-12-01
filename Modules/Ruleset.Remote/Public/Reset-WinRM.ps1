@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.ServiceProcess
+
 <#
 .SYNOPSIS
 Reset WinRM and PS remoting configuration

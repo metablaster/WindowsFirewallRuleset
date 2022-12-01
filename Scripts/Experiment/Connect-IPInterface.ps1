@@ -49,6 +49,7 @@ If you reset network or release NIC IP a network icon on the taskbar might say "
 indicating that computer is not connected to network, this might be false positive and this
 script forces renewal of NIC IP and clears the DNS cache needed to resolve the taskbar icon
 false positive indicator.
+This issue can be present when hardware NIC is shared with virtual switch in Hyper-V.
 
 .PARAMETER Name
 Optionally specify one or more interface alias (name) of the NIC which is to be connected via DHCP

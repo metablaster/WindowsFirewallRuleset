@@ -26,7 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-using namespace Microsoft.PowerShell.Commands
+# NOTE: Must be specified only once in a module, Ruleset.Initialize.psm1
+# using namespace Microsoft.PowerShell.Commands
 
 <#
 .SYNOPSIS

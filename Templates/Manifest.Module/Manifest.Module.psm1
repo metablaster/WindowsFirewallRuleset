@@ -31,6 +31,8 @@ SOFTWARE.
 
 #region Initialization
 # TODO: Remove using statement
+# NOTE: "using namespace Microsoft.PowerShell.Commands" must be specified in a single place,
+# which is module file
 using namespace System
 
 param (

@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Management.Automation.Runspaces
+
 <#
 .SYNOPSIS
 Copy modules from the compatibility session that are directly usable in PowerShell Core

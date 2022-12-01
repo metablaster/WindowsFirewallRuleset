@@ -34,9 +34,6 @@ SOFTWARE.
 # - Fixed pester tests
 
 #region Initialization
-using namespace System.Management.Automation
-using namespace System.Management.Automation.Runspaces
-
 param (
 	[Parameter()]
 	[switch] $ListPreference

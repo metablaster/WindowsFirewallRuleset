@@ -27,7 +27,8 @@ SOFTWARE.
 #>
 
 #region Initialization
-using namespace System.Management.Automation.Host
+# Used in several scripts for [ModuleSpecification], must be defined in a single place
+using namespace Microsoft.PowerShell.Commands
 
 param (
 	[Parameter()]
