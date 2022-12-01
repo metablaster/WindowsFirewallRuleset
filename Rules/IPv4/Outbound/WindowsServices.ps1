@@ -174,13 +174,10 @@ New-NetFirewallRule -DisplayName "Windows Push Notifications System Service" `
 provider which handles the connection between the device and WNS server." |
 Format-RuleOutput
 
-# NOTE: this service's name isn't constant, need to query correct name
-# HACK: Produces an incomplete error on Server 2022 and with PS Core:
+# NOTE: this service's name isn't constant, but it starts with "WpnUserService" (DisplayName: Windows Push Notifications User Service)
+# NOTE: If using "Get-Service -Name "WpnUserService*" | Where-Object" to compare for both Name and DisplayName it would result in error:
 # Service 'McpManagementService (McpManagementService)' cannot be queried due to the following error: [blank]
-[string[]] $WpnUserServices = Get-Service | Where-Object {
-	$_.ServiceName -like "WpnUserService*" -or
-	$_.DisplayName -like "Windows Push Notifications User Service*"
-} | Select-Object -ExpandProperty Name
+[string[]] $WpnUserServices = Get-Service -Name "WpnUserService*" | Select-Object -ExpandProperty Name
 
 if ($WpnUserServices.Count)
 {

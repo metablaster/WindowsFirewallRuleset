@@ -175,7 +175,22 @@ function Get-InterfaceBroadcast
 				Select-Object -ExpandProperty IPAddressToString
 			}
 
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network broadcast addresses are: $BroadcastAddress"
+			if ($BroadcastAddress.Count -gt 1)
+			{
+				[string] $AddressesMessage = "addresses are: "
+				foreach ($Address in $BroadcastAddress)
+				{
+					$AddressesMessage += "$Address, "
+				}
+
+				$AddressesMessage = $AddressesMessage.TrimEnd(", ")
+			}
+			else
+			{
+				$AddressesMessage = "address is: $BroadcastAddress"
+			}
+
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Network broadcast $AddressesMessage"
 			Write-Output $BroadcastAddress
 			return
 		}

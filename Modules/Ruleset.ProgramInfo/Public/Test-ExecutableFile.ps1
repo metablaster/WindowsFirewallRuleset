@@ -269,7 +269,7 @@ function Test-ExecutableFile
 	} # if Test-FileSystemPath
 
 	Write-Information -Tags $MyInvocation.InvocationName `
-		-MessageData "INFO: To fix this problem locate '$Executable' file and update installation directory in $Caller"
+		-MessageData "INFO: To fix this problem locate '$Executable' file and update searched directory in '$Caller' script"
 
 	return $false
 }

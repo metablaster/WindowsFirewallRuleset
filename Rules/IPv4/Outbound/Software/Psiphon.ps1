@@ -58,7 +58,8 @@ None. You cannot pipe objects to Psiphon.ps1
 None. Psiphon.ps1 does not generate any output
 
 .NOTES
-TODO: Psiphon must be running for these rules to be applied
+TODO: Psiphon must be running for these rules to be applied,
+a possible solution is to handle this case in Search-Installation
 #>
 
 #Requires -Version 5.1

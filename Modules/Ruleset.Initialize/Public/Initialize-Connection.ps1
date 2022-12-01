@@ -67,7 +67,7 @@ function Initialize-Connection
 		if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 		{
 			# This may happen when remote host comes offline
-			Write-Information -MessageData "INFO: Verifying connection status to '$PolicyStore'"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Verifying connection status to '$PolicyStore'"
 			if (($SessionInstance.State -ne "Opened") -or (!$CimServer.TestConnection()))
 			{
 				Write-Error -Category ConnectionError -TargetObject $PolicyStore `

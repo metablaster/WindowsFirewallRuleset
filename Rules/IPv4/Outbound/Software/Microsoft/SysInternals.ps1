@@ -58,7 +58,9 @@ None. You cannot pipe objects to SysInternals.ps1
 None. SysInternals.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: If deploying rules to GPO which contains rules, it will delete rule for sigcheck which
+will make Test-VirusTotal fail.
+A possible solution is to not delete rules unless installation is found
 #>
 
 #Requires -Version 5.1

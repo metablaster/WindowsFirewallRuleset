@@ -125,7 +125,7 @@ if ((Confirm-Installation "DnsCrypt" ([ref] $DnsCryptRoot)) -or $ForceLoad)
 {
 	# NOTE: Administrators group was necessary for initial setup on fresh system
 	$DnsCryptUsers = $LocalSystem
-	Merge-SDDL $DnsCryptUsers -From $AdminGroupSDDL
+	Merge-SDDL ([ref] $DnsCryptUsers) -From $AdminGroupSDDL
 
 	# NOTE: Port 53 (unencrypted) is required for fallback resolver
 	# NOTE: Previously it was -Service dnscrypt-proxy, but now it's NT AUTHORITY SYSTEM

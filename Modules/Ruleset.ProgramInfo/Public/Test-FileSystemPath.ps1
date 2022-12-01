@@ -180,12 +180,12 @@ function Test-FileSystemPath
 		if ($Quiet)
 		{
 			# Make sure -Quiet switch does not make troubleshooting hard
-			Write-Debug -Message "[$InvocationName - WriteConditional] $Message"
+			Write-Debug -Message "[$InvocationName] $Message"
 		}
 		else
 		{
-			Write-Warning -Message "[$InvocationName - WriteConditional] $Message"
-			Write-Information -Tags "$InvocationName - WriteConditional" -MessageData "INFO: Path '$LiteralPath'"
+			Write-Warning -Message "[$InvocationName] $Message"
+			Write-Information -Tags "[$InvocationName]" -MessageData "INFO: Path '$LiteralPath'"
 		}
 	}
 

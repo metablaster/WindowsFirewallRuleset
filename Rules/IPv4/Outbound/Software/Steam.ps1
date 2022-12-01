@@ -85,6 +85,7 @@ param (
 
 Initialize-Project -Strict
 Import-Module -Name Ruleset.UserInfo
+Import-Module -Name Ruleset.ComputerInfo
 
 # Setup local variables
 $Group = "Software - Steam"

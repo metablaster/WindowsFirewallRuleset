@@ -27,9 +27,6 @@ SOFTWARE.
 #>
 
 #region Initialization
-# Used in several scripts for [ModuleSpecification], must be defined in a single place
-using namespace Microsoft.PowerShell.Commands
-
 param (
 	[Parameter()]
 	[switch] $ListPreference

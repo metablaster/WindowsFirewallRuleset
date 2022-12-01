@@ -177,7 +177,7 @@ foreach ($Principal in $Principals)
 	#
 
 	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -Session $SessionInstance -Networking
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
 
 		if (!$NetworkCapabilities)
 		{

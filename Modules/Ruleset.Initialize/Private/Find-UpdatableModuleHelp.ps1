@@ -26,9 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# NOTE: Must be specified only once in a module, Ruleset.Initialize.psm1
-# using namespace Microsoft.PowerShell.Commands
-
 <#
 .SYNOPSIS
 Get modules for which help files can be updated without error
@@ -112,6 +109,9 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
+If the result of Find-UpdatableModuleHelp is null you need to run Update-Help for to download
+help info files of installed modules and then try again.
+
 TODO: test UICulture from pipeline
 TODO: Not using ValueFromPipeline because an array isn't distinguished from hashtable to select
 proper parameter set name
@@ -129,7 +129,7 @@ function Find-UpdatableModuleHelp
 
 		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full", Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
-		[ModuleSpecification[]] $FullyQualifiedName,
+		[Microsoft.PowerShell.Commands.ModuleSpecification[]] $FullyQualifiedName,
 
 		[Parameter()]
 		[ValidatePattern("^[a-z]{2}-[A-Z]{2}$")]

@@ -243,7 +243,9 @@ function Test-VirusTotal
 										$FileIsMalware = $true
 									}
 								}
-								else
+								# May happen if ie there is no firewall rule for sigcheck.exe, we ignore
+								# this as an error because testing windows services would spam the console with errors
+								elseif ($Detection.Value -notlike "*connection with the server could not be established*")
 								{
 									Write-Error -Category ParserError -TargetObject $Detection `
 										-Message "Failed to match total count of infections for '$Executable'"

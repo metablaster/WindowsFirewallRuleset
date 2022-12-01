@@ -435,7 +435,7 @@ if ($TerminalApp)
 
 		# NOTE: Temporarily forcing because it's a genuine program, and quiet because
 		# there are 2 paths one of which is invalid
-		if (Test-ExecutableFile $Program -Force -Quiet)
+		if (Test-ExecutableFile $Program -Force)
 		{
 			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
 			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL

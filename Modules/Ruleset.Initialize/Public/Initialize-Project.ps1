@@ -88,12 +88,12 @@ function Initialize-Project
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	# TODO: Strict parameter might be redundant
+	# We need "Stop" since this function when run on it's own won't work
+	$ErrorActionPreference = "Stop"
+
 	if ($PSCmdlet.ShouldProcess("System", "Check minimum requirements"))
 	{
-		# TODO: Strict parameter might be redundant
-		# We need "Stop" since this function when run on it's own won't work
-		$ErrorActionPreference = "Stop"
-
 		# Disabled when running scripts from Deploy-Firewall.ps1 script, in which case it runs only once
 		if (!$ProjectCheck)
 		{

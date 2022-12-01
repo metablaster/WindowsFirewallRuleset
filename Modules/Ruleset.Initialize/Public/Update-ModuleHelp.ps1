@@ -26,9 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-# NOTE: Must be specified only once in a module, Ruleset.Initialize.psm1
-# using namespace Microsoft.PowerShell.Commands
-
 <#
 .SYNOPSIS
 Update PowerShell help files
@@ -93,7 +90,7 @@ function Update-ModuleHelp
 
 		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full", Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
-		[ModuleSpecification[]] $FullyQualifiedName,
+		[Microsoft.PowerShell.Commands.ModuleSpecification[]] $FullyQualifiedName,
 
 		[Parameter()]
 		[ValidatePattern("^[a-z]{2}-[A-Z]{2}$")]
@@ -132,7 +129,7 @@ function Update-ModuleHelp
 				$UpdatableModules = Find-UpdatableModuleHelp -FullyQualifiedName $FullyQualifiedName -UICulture $UICulture
 
 				# TODO: This should be done in Find-UpdatableModuleHelp with Add-Member
-				[ModuleSpecification[]] $ModuleSpecs = @()
+				[Microsoft.PowerShell.Commands.ModuleSpecification[]] $ModuleSpecs = @()
 				foreach ($ModuleItem in $UpdatableModules)
 				{
 					$ModuleSpecs += @{
@@ -157,6 +154,7 @@ function Update-ModuleHelp
 				# HACK: UpdatableModules may be null, failed on Enterprise edition with 0 found helpinfo files.
 				# Even after updating modules and manually running Update-Help which btw. succeeded!
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not all modules contain HelpInfo files required to update help"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please re-run 'Update-ModuleHelp' once again later"
 
 				# Otherwise the cause may be because Update-Help was never run which is required to
 				# download helpinfo.xml files
