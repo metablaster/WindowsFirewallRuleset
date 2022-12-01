@@ -34,7 +34,7 @@ Uninstall duplicate modules
 Uninstall-DuplicateModule uninstalls duplicate modules leaving only the most recent versions of a
 module.
 
-Sometimes uninstalling a module in conventional way is not possible, example cases are:
+Sometimes uninstalling a module in a conventional way is not possible, example cases are:
 1. Modules which ship with system
 2. Modules locked by other modules
 3. Modules which prevent updating them
@@ -42,7 +42,7 @@ Sometimes uninstalling a module in conventional way is not possible, example cas
 Updating modules which ship with system can't be done, only side by side installation is
 possible, with the help of this function those outdated and useless modules are removed from system.
 
-Case from point 2 is recommended only when there are 2 exactly same modules installed,
+Case from point 2 above is recommended only when there are 2 exactly same modules installed,
 but the duplicate you are trying to remove is used (locked) instead of first one.
 
 .PARAMETER Name
@@ -50,7 +50,7 @@ One or more module names which to uninstall if duplicates are found.
 Wildcard characters are supported.
 
 .PARAMETER Scope
-Specifies one or more scopes (installation locations) in which to uninstall duplicate modules,
+Specifies one or more scopes (installation locations) from which to uninstall duplicate modules,
 possible values are:
 Shipping: Modules which are part of PowerShell installation
 System: Modules installed for all users
@@ -67,19 +67,18 @@ PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredV
 First get module you know should be removed and pass it to pipeline
 
 .INPUTS
-[PSModuleInfo[]] module object
+[string] module name
+[PSModuleInfo] module object by property Name
 
 .OUTPUTS
 None. Uninstall-DuplicateModule does not generate any output
 
 .NOTES
-Target module must not be in use by:
+Module which is to be uninstalled must not be in use by:
 1. Other PowerShell session
 2. Some system process
 3. Session in VSCode
-Current session prompt must not point to anywhere in target module path
-TODO: we make no automated use of this function except for manual module removal
-TODO: Parameter needed which will specify which locations have priority to retain modules
+4. Current session prompt must not point to anywhere in target module path
 #>
 function Uninstall-DuplicateModule
 {
@@ -119,6 +118,7 @@ function Uninstall-DuplicateModule
 		if ($Scope) { $SCopeParam.Scope = $Scope }
 
 		[PSModuleInfo[]] $Duplicates = @()
+		[string[]] $KeptModule = @()
 	}
 	process
 	{
@@ -127,16 +127,25 @@ function Uninstall-DuplicateModule
 			# Get all duplicates of a specific module name
 			$Duplicates = Find-DuplicateModule -Name $Entry @SCopeParam
 
-			if (!$Duplicates)
+			if ($Duplicates)
+			{
+				# Show duplicates for easy decision making on what to remove
+				foreach ($Module in $Duplicates)
+				{
+					$Module
+				}
+			}
+			else
 			{
 				continue
 			}
 
 			# Iterate all duplicates until only latest version is left
-			while ($Duplicates.Count -gt 1)
+			while ($Duplicates -and ($Duplicates.Count -gt 1))
 			{
 				# Select lowest version, Find-DuplicateModule sorts modules in ascending order
 				$TargetModule = $Duplicates | Select-Object -First 1
+				$KeptModule = $Duplicates | Select-Object -Last 1
 
 				$ModuleName = $TargetModule.Name
 				$ModuleVersion = $TargetModule.Version
@@ -176,12 +185,21 @@ function Uninstall-DuplicateModule
 								# -Force, Indicates that this cmdlet removes read-only modules.
 								# By default, Remove-Module removes only read-write modules.
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing $ModuleName $ModuleVersion from current session"
-								Remove-Module -Name $ModuleName -Force -ErrorAction Stop
+								try
+								{
+									Remove-Module -Name $ModuleName -Force
+								}
+								catch
+								{
+									Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
+										-Message "Module '$ModuleName' could not be removed from current PS session which is required for uninstallation"
+									continue
+								}
 							}
 
 							# Remove all folders and files of a target module
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing recursively $ModuleName $ModuleVersion"
-							Remove-Item -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force -ErrorAction Stop
+							Remove-Item -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force
 
 							# Remove uninstalled module from duplicates variable
 							$Duplicates = $Duplicates | Where-Object {
@@ -201,7 +219,7 @@ function Uninstall-DuplicateModule
 							continue
 						}
 
-						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName $ModuleVersion was removed"
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Module $ModuleName $ModuleVersion was successfully removed"
 						continue
 					}
 				}
@@ -212,11 +230,11 @@ function Uninstall-DuplicateModule
 	}
 	end
 	{
-		if ($Duplicates)
+		if ($Duplicates -and ($KeptModule.Count -gt 0))
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Most recent versions of duplicates modules which where left installed are"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Duplicate modules which where left installed are"
 
-			Get-Module -Name $Duplicates.Name -ListAvailable | ForEach-Object {
+			Get-Module -Name $KeptModule.Name -ListAvailable | ForEach-Object {
 				$Module = $_
 				switch -Wildcard ($_.Path)
 				{

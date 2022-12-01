@@ -403,28 +403,10 @@ function Initialize-Project
 			if (Initialize-Module @{ ModuleName = "platyPS"; ModuleVersion = $RequirePlatyPSVersion } `
 					-InfoMessage "platyPS >= v$RequirePlatyPSVersion is recommended to generate online help files for modules" ) { }
 
-			# Update help regardless of module updates
 			if ($Develop)
 			{
-				# User prompt setup
-				[int32] $Default = 1
-				[ChoiceDescription[]] $Choices = @()
-				$Accept = [ChoiceDescription]::new("&Yes")
-				$Deny = [ChoiceDescription]::new("&No")
-
-				$Deny.HelpMessage = "No help files will be updated"
-				$Accept.HelpMessage = "Download and install the newest help files on your computer"
-				$Choices += $Accept
-				$Choices += $Deny
-
-				$Title = "Update help files for PowerShell modules"
-				$Question = "Do you want to update help files?"
-				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-				if ($Decision -ne $Default)
-				{
-					Update-ModuleHelp
-				}
+				# Exclude possibility of using outdated modules by removing them
+				Uninstall-DuplicateModule
 			}
 		}
 		else
@@ -432,6 +414,30 @@ function Initialize-Project
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] 3rd party modules may be missing or outdated which could result in unexpected behavior"
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: This can be automated by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
+		}
+
+		# Update help regardless of module updates
+		if ($Develop)
+		{
+			# User prompt setup
+			[int32] $Default = 1
+			[ChoiceDescription[]] $Choices = @()
+			$Accept = [ChoiceDescription]::new("&Yes")
+			$Deny = [ChoiceDescription]::new("&No")
+
+			$Deny.HelpMessage = "No help files will be updated"
+			$Accept.HelpMessage = "Download and install the newest help files on your computer"
+			$Choices += $Accept
+			$Choices += $Deny
+
+			$Title = "Update help files for PowerShell modules"
+			$Question = "Do you want to update help files?"
+			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
+
+			if ($Decision -ne $Default)
+			{
+				Update-ModuleHelp
+			}
 		}
 
 		# Otherwise this was performed before .NET checking
