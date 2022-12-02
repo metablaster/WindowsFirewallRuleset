@@ -172,7 +172,7 @@ function Initialize-WinSession
 	# Deal with the possibilities of multiple sessions.
 	# This might arise from the user hitting ctrl-C.
 	# We'll make the assumption that the first one returned is the correct one and we'll remove the rest.
-	# TODO: This needs to be tested, ex. Select-Object -First 1 should be removed
+	# TODO: This might need to be implemented in other places where New-PSSession is used
 	$Session, $Rest = $Session
 	if ($Rest)
 	{
@@ -217,7 +217,6 @@ function Initialize-WinSession
 		# NOTE: This will fail with "access is denied" if session configuration was disabled in Windows PowerShell,
 		# ex. by using Reset-Firewall -Remote, see Remote.md for fix
 		# It will also fail if remote server was configured in PS Core as HTTPS only.
-		# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
 		$Session = New-PSSession @PSSessionParams -EV test | Select-Object -First 1
 
 		# keep the compatibility session PWD in sync with the parent PWD.

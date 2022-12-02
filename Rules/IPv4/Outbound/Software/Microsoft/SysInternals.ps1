@@ -124,15 +124,15 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	$Program = "$SysInternalsRoot\Autoruns64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals Autoruns" `
+		New-NetFirewallRule -DisplayName "Sysinternals Autoruns x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Access to VirusTotal" | Format-RuleOutput
+			-Description "Access to VirusTotal and symbol server" | Format-RuleOutput
 	}
 
 	# TODO: It also uses port 80 but not known for what, not setting here.
@@ -140,21 +140,21 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	$Program = "$SysInternalsRoot\procexp64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals ProcessExplorer" `
+		New-NetFirewallRule -DisplayName "Sysinternals ProcessExplorer x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
+			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Access to VirusTotal" | Format-RuleOutput
+			-Description "Access to VirusTotal and symbol server" | Format-RuleOutput
 	}
 
-	$Program = "$SysInternalsRoot\Procmon.exe"
+	$Program = "$SysInternalsRoot\Procmon64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals ProcessMonitor" `
+		New-NetFirewallRule -DisplayName "Sysinternals ProcessMonitor x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -165,10 +165,10 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 			-Description "Access to symbols server" | Format-RuleOutput
 	}
 
-	$Program = "$SysInternalsRoot\Tcpview.exe"
+	$Program = "$SysInternalsRoot\Tcpview64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals TcpView" `
+		New-NetFirewallRule -DisplayName "Sysinternals TcpView x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -182,7 +182,7 @@ if ((Confirm-Installation "SysInternals" ([ref] $SysInternalsRoot)) -or $ForceLo
 	$Program = "$SysInternalsRoot\whois64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals WhoIs" `
+		New-NetFirewallRule -DisplayName "Sysinternals WhoIs x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -197,7 +197,7 @@ that you specify" | Format-RuleOutput
 	$Program = "$SysInternalsRoot\psping.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals PSPing client" `
+		New-NetFirewallRule -DisplayName "Sysinternals PSPing client x86" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol Any `
@@ -213,7 +213,7 @@ This rule serves to allow PSPing.exe to act as a client." | Format-RuleOutput
 	$Program = "$SysInternalsRoot\psping64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals PSPing64 client" `
+		New-NetFirewallRule -DisplayName "Sysinternals PSPing client x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol Any `
@@ -229,7 +229,7 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 	$Program = "$SysInternalsRoot\sigcheck.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals sigcheck" `
+		New-NetFirewallRule -DisplayName "Sysinternals sigcheck x86" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
@@ -244,7 +244,7 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 	$Program = "$SysInternalsRoot\sigcheck64.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Sysinternals sigcheck64" `
+		New-NetFirewallRule -DisplayName "Sysinternals sigcheck x64" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `

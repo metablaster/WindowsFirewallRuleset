@@ -35,6 +35,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Updated rules for Simple DNS crypt, there was issue on systems with virtual adapters
   - Added rules for Azure Cloud Shell present in Windows Terminal
   - PowerShell and git
+  - Sysinternals
+  - Nvidia
 
 - Modules
 

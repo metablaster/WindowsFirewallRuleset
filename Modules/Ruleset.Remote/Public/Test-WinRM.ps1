@@ -375,6 +375,13 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
+		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		{
+			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession HTTPS test creates a ghost window" -Debug
+			Read-Host "Enter to continue"
+		}
+
 		$PSSessionResult = New-PSSession @PSSessionParams
 
 		if (!$Quiet)
@@ -453,6 +460,13 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
+		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		{
+			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession HTTP test creates a ghost window" -Debug
+			Read-Host "Enter to continue"
+		}
+
 		$PSSessionResult = New-PSSession @PSSessionParams
 
 		if (!$Quiet)

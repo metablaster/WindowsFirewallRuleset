@@ -218,6 +218,15 @@ so you end up in Cat and Mouse game.
 
 - **TODO:** Investigation needed.
 
+> Port 0 Traffic
+> For WFP virtual switch callouts, traffic from port 0 (the default port ID) is trusted and should
+> not be filtered. This is because, generally, traffic over port 0 originates from other extensions
+> in the driver stack and is thus treated by the data path as privileged and trusted. Virtual switch
+> extensions will sparingly use port 0 for situations such as originating a control packet, which
+> should not be filtered and rejected by any underlying extensions.
+
+[Using Virtual Switch Filtering][virtual switch filtering]
+
 ### Case 5: Troubleshooting
 
 - **TODO:** Investigation needed.
@@ -411,3 +420,4 @@ Status: Partially resolved
 [issue rule interface]: https://aidanfinn.com/?p=15222
 [issue rule interface2]: https://www.nakivo.com/blog/hyper-v-networking-virtual-switches
 [issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules
+[virtual switch filtering]: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-virtual-switch-filtering

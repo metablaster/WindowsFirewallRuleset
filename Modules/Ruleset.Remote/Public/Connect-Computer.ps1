@@ -334,6 +334,14 @@ function Connect-Computer
 
 		# TODO: Will create new blank console windows in PS Core, see also:
 		# https://github.com/PowerShell/PowerShell/issues/16763
+		# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		{
+			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession remote session creates a ghost window" -Debug
+			Read-Host "Enter to continue"
+		}
+
 		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)
 
 		# TODO: For VM without external switch use -VMName

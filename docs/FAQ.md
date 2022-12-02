@@ -378,8 +378,9 @@ You might stumble upon the following icon in your taskbar:
 
 Internet might or might not work but the icon says "No Network".
 
-This problem happens due to something with DHCP, when your NIC is configured for DHCP,
-to resolve this problem run:
+If your internet connections works this problem happens either due to something with DHCP or DNS:
+
+- If you're using DHCP to resolve this problem run:
 
 ```powershell
 ipconfig /release
@@ -389,11 +390,13 @@ ipconfig /renew
 
 And then disable and re-enable your network adapter.
 
-This might not work if you're sharing your NIC with virtual switch with VM, in which case you'll
-need to release physical NIC in Hyper-V and re-share it again.\
-If in addition you use VPN it might have to be re-applied as well.
+- If you use custom DNS software such as dnscrypt-proxy which modifies DNS entry of a NIC you'll
+need to add alternate DNS server to the NIC.
 
-This problem usually happens in cases such as network reset or manual renewal of IP via DHCP.
+- If you're sharing your NIC with virtual switch in VM (ex. Hyper-V), you might need to release
+physical NIC in Hyper-V and re-share it again.
+
+- If you use VPN it might have to be re-applied or reconfigured as well.
 
 [Table of Contents](#table-of-contents)
 
