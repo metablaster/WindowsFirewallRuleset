@@ -48,7 +48,8 @@
 		#
 		"PSProvideCommentHelp"
 		"PSAvoidUsingWriteHost"
-		# New settings v1.19.1
+		# NOTE: New settings v1.19.1
+		# TODO: docs say it could be configured but it could not?
 		"AvoidUsingDoubleQuotesForConstantString"
 		"UseUsingScopeModifierInNewRunspaces"
 		"AvoidSemicolonsAsLineTerminators"
@@ -244,9 +245,16 @@
 			# Identifies syntax elements that are incompatible with targeted PowerShell versions
 			Enable = $true
 			TargetVersions = @(
-				"7.0",
+				"7.3",
 				"5.1"
 			)
+		}
+
+		PSAvoidLongLines = @{
+			# Default = false
+			Enable = $true
+			# Default = 120
+			MaximumLineLength = 120
 		}
 
 		#
@@ -297,6 +305,36 @@
 			IgnoreTypes = @(
 				"System.DirectoryServices.AccountManagement.PrincipalContext"
 			)
+		}
+
+		PSAvoidOverwritingBuiltInCmdlets = @{
+			# Default = "core-6.1.0-windows" if PS 6+ is installed, and "desktop-5.1.14393.206-windows" if not.
+			PowerShellVersion = @("core-6.1.0-windows")
+		}
+
+		UseCompatibleCommands = @{
+			# default = $false
+			Enable = $true
+			# Windows 10 1809 (RS5)
+			# TargetProfiles = "win-4_x64_10.0.17763.0_6.2.4_x64_3.1.2_core"
+
+			TargetProfiles = @(
+				# TODO: PowerShell 6.1.2 running on the same operating system
+				"win-4_x64_10.0.18312.0_6.1.2_x64_4.0.30319.42000_core"
+				# Windows 10 1903 (PowerShell 7.0)
+				"win-4_x64_10.0.18362.0_7.0.0_x64_3.1.2_core"
+				# Windows 10 1809 (PowerShell 5.1)
+				"win-48_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework"
+				# Windows Server 2019 (PowerShell 7.0)
+				"win-8_x64_10.0.17763.0_7.0.0_x64_3.1.2_core"
+				# Windows Server 2019 (PowerShell 5.1)
+				"win-8_x64_10.0.17763.0_5.1.17763.316_x64_4.0.30319.42000_framework"
+			)
+
+			# ProfileDirPath = ""
+
+			# Commands to ignore compatibility of in scripts
+			IgnoreCommands = @()
 		}
 	}
 }

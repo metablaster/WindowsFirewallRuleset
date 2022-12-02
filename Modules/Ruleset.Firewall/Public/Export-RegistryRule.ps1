@@ -103,6 +103,7 @@ None. Export-RegistryRule does not generate any output
 .NOTES
 TODO: Export to excel
 Excel is not friendly to CSV files
+TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md

@@ -3,14 +3,16 @@
 {
 	// files
 	"files.encoding": "utf8",
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 500,
+	"files.eol": "\r\n",
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 	"files.insertFinalNewline": true,
 	"files.associations": {
-		"*config": "ruby",
-		"*.config": "ruby"
+		"*config": "ssh_config",
+		"*.msc": "xml",
 	},
-
 	// editor
 	"editor.quickSuggestions": {
 		"other": true,
@@ -34,12 +36,20 @@
 	"editor.wordWrap": "off",
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
+	"editor.scrollBeyondLastLine": false,
+	"editor.scrollbar.horizontalScrollbarSize": 20,
+	"editor.minimap.showSlider": "always",
+	"editor.snippetSuggestions": "bottom",
+	"editor.comments.ignoreEmptyLines": false,
+	// markdown formatter is "markdownlint" extension
 	"[markdown]": {
 		"editor.wordWrap": "off",
 		"editor.detectIndentation": true,
-		"editor.insertSpaces": true
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": false,
+		"editor.formatOnPaste": true
 	},
-	// override the colors of the default log items:
+	// override the colors of the default log items (log files):
 	// log.constant
 	// log.date
 	// log.verbose
@@ -50,6 +60,9 @@
 	// log.string
 	// log.exceptiontype
 	// log.warning
+	// NOTE: This can also be handled with "logFileHighlighter.customPatterns"
+	// see also: https://macromates.com/manual/en/language_grammars
+	// https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide
 	"editor.tokenColorCustomizations": {
 		"textMateRules": [
 			{
@@ -71,23 +84,22 @@
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
-
 	// workbench
 	"workbench.colorCustomizations": {
 		"editorRuler.foreground": "#4063ff",
 		"tab.activeBorder": "#ff0000"
 	},
-
+	"workbench.editor.defaultBinaryEditor": "",
+	"workbench.editor.enablePreviewFromCodeNavigation": true,
+	"workbench.editor.enablePreviewFromQuickOpen": false,
+	"workbench.editor.highlightModifiedTabs": true,
 	// diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
-
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
-
 	// Extension: Bookmarks
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
-
 	// Extension: Code Spell Checker
 	// NOTE: This config isn't recognized in cspell.json
 	// File types for language ID's are defined in cspell.json
@@ -102,7 +114,14 @@
 		"csv (semicolon)", // exported rules
 		"ini" // mTail configuration
 	],
-
+	// Extension: Filter Line
+	"filter-line.historySize": 20,
+	// Extension: Fix JSON
+	"fixJson.indentationSpaces": null,
+	// Extension: Hightlight Bad Chars
+	"highlight-bad-chars.asciiOnly": false,
+	// Extension: JSON
+	"JSON-zain.json.autorefresh": true,
 	// Extension: Log File Hightlighter
 	// Custom highlighting patterns
 	// VS colors
@@ -182,19 +201,48 @@
 			"foreground": "#B8D7A3"
 		}
 	],
-
 	// Extension: Markdown All in One
 	"markdown.extension.orderedList.autoRenumber": true,
-
+	// Extension markdownlint
+	"markdownlint.run": "onType",
 	// Extension: PowerShell
-	// PowerShell updates
-	"powershell.pester.useLegacyCodeLens": false,
+	"powershell.startAutomatically": true,
+	"powershell.enableProfileLoading": true,
+	"powershell.enableReferencesCodeLens": true,
+	"powershell.analyzeOpenDocumentsOnly": false,
 	"powershell.promptToUpdatePowerShell": true,
+	"powershell.buttons.showRunButtons": true,
+	"powershell.buttons.showPanelMovementButtons": false,
+	"powershell.debugging.createTemporaryIntegratedConsole": false,
+	"powershell.developer.editorServicesLogLevel": "Warning",
+	"powershell.developer.editorServicesWaitForDebugger": false,
+	"powershell.developer.featureFlags": [],
+	"powershell.developer.waitForSessionFileTimeoutSeconds": 240,
+	//"powershell.developer.bundledModulesPath": "set custom modules path",
+	// pester
+	"powershell.pester.useLegacyCodeLens": false,
+	"powershell.pester.outputVerbosity": "FromPreference",
+	// integratedConsole
+	"powershell.integratedConsole.showOnStartup": false,
+	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
+	"powershell.integratedConsole.startInBackground": false,
+	"powershell.integratedConsole.focusConsoleOnExecute": true,
+	"powershell.integratedConsole.useLegacyReadLine": false,
+	"powershell.integratedConsole.suppressStartupBanner": true,
+	// code folding
+	"powershell.codeFolding.enable": true,
+	"powershell.codeFolding.showLastLine": true,
 	// PowerShell: script analysis
 	"powershell.scriptAnalysis.enable": true,
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
 	// PowerShell: code formatting
 	"powershell.codeFormatting.preset": "Allman",
+	// PSAvoidUsingCmdletAliases
+	"powershell.codeFormatting.autoCorrectAliases": false,
+	// AvoidSemicolonsAsLineTerminators
+	"powershell.codeFormatting.avoidSemicolonsAsLineTerminators": true,
+	// AvoidUsingDoubleQuotesForConstantString
+	"powershell.codeFormatting.useConstantStrings": false,
 	// PSPlaceOpenBrace
 	"powershell.codeFormatting.openBraceOnSameLine": false,
 	"powershell.codeFormatting.newLineAfterOpenBrace": true,
@@ -218,13 +266,22 @@
 	"powershell.codeFormatting.useCorrectCasing": true,
 	// PSProvideCommentHelp
 	"powershell.helpCompletion": "BlockComment",
-	// Other PowerShell extension settings
-	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
-
 	// Extension: Rainbow CSV
 	"rainbow_csv.enable_auto_csv_lint": true,
 	"rainbow_csv.csv_lint_detect_trailing_spaces": true,
-
+	// Extension: Sort JSON objects
+	"sortJSON.contextMenu": {
+		"sortJSON": false,
+		"sortJSONAlphaNum": false,
+		"sortJSONAlphaNumReverse": false,
+		"sortJSONKeyLength": false,
+		"sortJSONKeyLengthReverse": false,
+		"sortJSONReverse": false,
+		"sortJSONType": false,
+		"sortJSONTypeReverse": false,
+		"sortJSONValues": false,
+		"sortJSONValuesReverse": false
+	},
 	// Extension: Todo Tree
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
 	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
@@ -339,11 +396,25 @@
 			"FIX"
 		]
 	},
-
 	// Extension: Trailing Spaces
 	// NOTE: Enabling this causes issues writing code according to identations rules
 	"trailing-spaces.trimOnSave": false,
-
-	//Extension: XML Tools
-	"xmlTools.enforcePrettySelfClosingTagOnFormat": true
+	//Extension: XML
+	"redhat.telemetry.enabled": false,
+	"xml.fileAssociations": [
+		{
+			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd",
+			"pattern": "**/*.Format.ps1xml"
+		},
+		{
+			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd",
+			"pattern": "**/*.Types.ps1xml"
+		}
+	],
+	"xml.preferences.quoteStyle": "double",
+	"xml.codeLens.enabled": true,
+	"xml.logs.client": false,
+	"xml.format.emptyElements": "expand",
+	"xml.format.joinContentLines": true,
+	"xml.format.joinCommentLines": true
 }

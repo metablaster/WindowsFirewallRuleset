@@ -378,8 +378,8 @@ function Test-WinRM
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
 			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			# see https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession HTTPS test creates a ghost window" -Debug
-			Read-Host "Enter to continue"
 		}
 
 		$PSSessionResult = New-PSSession @PSSessionParams
@@ -463,8 +463,8 @@ function Test-WinRM
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
 			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			# see https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession HTTP test creates a ghost window" -Debug
-			Read-Host "Enter to continue"
 		}
 
 		$PSSessionResult = New-PSSession @PSSessionParams

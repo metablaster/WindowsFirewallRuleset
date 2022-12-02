@@ -338,8 +338,8 @@ function Connect-Computer
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
 			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			# see https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession remote session creates a ghost window" -Debug
-			Read-Host "Enter to continue"
 		}
 
 		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)

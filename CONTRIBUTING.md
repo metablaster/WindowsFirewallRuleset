@@ -10,6 +10,8 @@ firewall for your own needs.
   - [Table of Contents](#table-of-contents)
   - [General guidelines](#general-guidelines)
   - [Environment setup](#environment-setup)
+    - [Recommended workspace extensions are as follows:](#recommended-workspace-extensions-are-as-follows)
+    - [Repository settings](#repository-settings)
   - [Code style](#code-style)
     - [Automatic formatting](#automatic-formatting)
     - [Development Guidelines](#development-guidelines)
@@ -97,7 +99,7 @@ repository folder with VSCode
 To work with Windows PowerShell quickly in any directory see:
 [Windows PowerShell](/docs/WindowsPowerShell.md)
 
-Recommended workspace extensions are as follows:
+### Recommended workspace extensions are as follows:
 
 1. [TODO tree][extension todo-tree]
 
@@ -133,9 +135,9 @@ Recommended workspace extensions are as follows:
 
     Provides markdown language features
 
-9. [XML Tools][extension xml]
+9. [XML][extension xml]
 
-    Useful for navigation of xml files, can also help to detect issues with xml
+    Useful for xml language support, can also help to detect issues with xml
 
 10. [Log File Highlighter][extension logs]
 
@@ -173,11 +175,7 @@ Recommended workspace extensions are as follows:
 
     Alphabetically sorts the keys in selected JSON objects.
 
-18. [VSCode json][extension vscode json]
-
-    This vscode extension beautify/uglify/escape/unescape JSON.
-
-19. [Trailing Spaces][extension trailing spaces]
+18. [Trailing Spaces][extension trailing spaces]
 
     Highlight trailing spaces and delete them in a flash!
 
@@ -190,6 +188,8 @@ Following 2 extensions are optional and will not be automatically offerred for i
 - [GitHub Pull Requests and Issues][pull requests]
 
     Review and manage your GitHub pull requests and issues directly in VS Code
+
+### Repository settings
 
 Once your environment is set, next step is to visit `Config\ProjectSettings.ps1`
 located in repository root directory, at a minimum you should set following variables to `$true`
@@ -704,7 +704,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
 [extension gitlens]: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens "Visit Marketplace"
 [extension markdown aio]: https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one "Visit Marketplace"
-[extension xml]: https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml "Visit Marketplace"
+[extension xml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml "Visit Marketplace"
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
@@ -713,7 +713,6 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
 [extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
 [extension fix json]: https://marketplace.visualstudio.com/items?itemName=oliversturm.fix-json "Visit Marketplace"
-[extension vscode json]: https://marketplace.visualstudio.com/items?itemName=andyyaldoo.vscode-json "Visit Marketplace"
 [extension trailing spaces]: https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"

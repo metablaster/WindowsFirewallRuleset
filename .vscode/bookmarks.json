@@ -34,8 +34,8 @@
 			"path": "Modules/Ruleset.Remote/Public/Connect-Computer.ps1",
 			"bookmarks": [
 				{
-					"line": 344,
-					"column": 2,
+					"line": 341,
+					"column": 3,
 					"label": ""
 				}
 			]
@@ -44,12 +44,32 @@
 			"path": "Modules/Ruleset.Remote/Public/Test-WinRM.ps1",
 			"bookmarks": [
 				{
-					"line": 384,
-					"column": 2,
+					"line": 381,
+					"column": 3,
 					"label": ""
 				},
 				{
-					"line": 469,
+					"line": 466,
+					"column": 3,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": ".vscode/settings.json",
+			"bookmarks": [
+				{
+					"line": 241,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Config/PSScriptAnalyzerSettings.psd1",
+			"bookmarks": [
+				{
+					"line": 54,
 					"column": 2,
 					"label": ""
 				}

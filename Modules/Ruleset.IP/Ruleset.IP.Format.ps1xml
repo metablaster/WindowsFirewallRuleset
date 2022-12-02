@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/Format.xsd -->
 <!-- Represents the top-level element of a formatting file. -->
 <Configuration>
 	<!-- Optional element. Defines the views used to display .NET objects. -->
-	<!-- These views can display the properties and script values of an object  in a table format, list format, wide format, and custom control format. -->
+	<!-- These views can display the properties and script values of an object in a table format, list format, wide format, and custom control format. -->
 	<ViewDefinitions>
 		<!-- Defines a view that is used to display one or more .NET objects. -->
 		<View>

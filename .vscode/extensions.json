@@ -39,10 +39,8 @@
 		"gruntfuggly.todo-tree",
 		// Trailing Spaces
 		"shardulm94.trailing-spaces",
-		// vscode-json
-		"andyyaldoo.vscode-json",
-		// XML Tools
-		"dotjoshjohnson.xml"
+		// XML
+		"redhat.vscode-xml"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
