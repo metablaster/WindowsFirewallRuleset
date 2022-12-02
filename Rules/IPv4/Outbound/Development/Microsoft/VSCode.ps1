@@ -88,6 +88,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft VSCode"
+$ExtensionsGroup = "$Group extensions"
 $Accept = "Outbound rules for Microsoft VSCode will be loaded, recommended if Microsoft VSCode is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft VSCode will not be loaded into firewall"
 
@@ -110,6 +111,7 @@ $VSCodeRoot = "%ProgramFiles%\Microsoft VS Code"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ExtensionsGroup -Direction $Direction -ErrorAction Ignore
 
 #
 # Rules for Visual Studio Code
@@ -131,6 +133,30 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 			-InterfaceType $DefaultInterface `
 			-Description "Visual Studio Code check for updates, extensions download, telemetry and settings sync." |
 		Format-RuleOutput
+	}
+
+	# VSCode extensions which require internet access
+	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup -CimSession $CimServer))
+	{
+		$User = $Principal.User
+		$ExtensionDirectory = Get-ChildItem -Path "C:\Users\$User\.vscode\extensions\redhat.vscode-xml-*" |
+		Select-Object -ExpandProperty Name
+		$Program = "%SystemDrive%\Users\$User\.vscode\extensions\$ExtensionDirectory\server\lemminx-win32.exe"
+
+		# NOTE: Test-Path because it's very likely extension isn't installed by every user
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Red Hat XML extension" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $ExtensionsGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser (Get-SDDL -User $User) `
+				-InterfaceType $DefaultInterface `
+				-Description "Visual Studio Code rule for $ExtensionDirectory extension" |
+			Format-RuleOutput
+		}
 	}
 }
 

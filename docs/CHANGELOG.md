@@ -37,6 +37,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - PowerShell and git
   - Sysinternals
   - Nvidia
+  - Rule for VSCode extension - "XML Red Hat"
 
 - Modules
 
@@ -93,6 +94,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Generate sitemap xml
     - Auto assign labels to issues
     - Publish generated sitemap to google for crawling
+    - Replaced XML tools extension with XML Red Hat
 
 [Table of Contents](#table-of-contents)
 
