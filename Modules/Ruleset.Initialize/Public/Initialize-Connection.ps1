@@ -207,15 +207,14 @@ function Initialize-Connection
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -CertThumbprint $SslThumbprint -Confirm:$false
 					}
 
 					# Enable loopback only HTTP
 					Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 					Test-WinRM -Protocol HTTP -ErrorAction Stop -ConfigurationName "LocalFirewall.$($PSVersionTable.PSEdition)"
+					$WinRMClientSet = $true
 				}
-
-				$WinRMClientSet = $true
 			}
 
 			$TestParams = @{
@@ -242,7 +241,7 @@ function Initialize-Connection
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -CertThumbprint $SslThumbprint -Confirm:$false
 					}
 				}
 

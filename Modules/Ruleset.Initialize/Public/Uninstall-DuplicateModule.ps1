@@ -56,6 +56,9 @@ Shipping: Modules which are part of PowerShell installation
 System: Modules installed for all users
 User: Modules installed for current user
 
+.PARAMETER Force
+If specified all duplicate modules of a specific module are removed without further prompt
+
 .EXAMPLE
 PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
 
@@ -82,7 +85,7 @@ Module which is to be uninstalled must not be in use by:
 #>
 function Uninstall-DuplicateModule
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false)]
 	[OutputType([void])]
 	param (
 		[Parameter(ValueFromPipeline = $true, Position = 0)]
@@ -92,7 +95,10 @@ function Uninstall-DuplicateModule
 
 		[Parameter()]
 		[ValidateSet("Shipping", "System", "User")]
-		[string[]] $Scope
+		[string[]] $Scope,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	begin
@@ -140,8 +146,12 @@ function Uninstall-DuplicateModule
 				continue
 			}
 
+			# Whether to remove all duplicates of a module currently processed
+			$YesToAll = $false
+			$NoToAll = $false
+
 			# Iterate all duplicates until only latest version is left
-			while ($Duplicates -and ($Duplicates.Count -gt 1))
+			while ($Duplicates -and ((($Duplicates | Measure-Object).Count -gt 1)))
 			{
 				# Select lowest version, Find-DuplicateModule sorts modules in ascending order
 				$TargetModule = $Duplicates | Select-Object -First 1
@@ -152,7 +162,6 @@ function Uninstall-DuplicateModule
 
 				# Keep track of duplicate module names for report
 				$KeptModule += $ModuleName
-				$KeptModule = $KeptModule | Select-Object -Unique
 
 				if (!(Test-Path -LiteralPath $ModuleRoot -PathType Container))
 				{
@@ -161,8 +170,13 @@ function Uninstall-DuplicateModule
 					continue
 				}
 
-				if (!$PSCmdlet.ShouldProcess("$ModuleName $ModuleVersion", "Forced module uninstallation"))
+				if (!$PSCmdlet.ShouldContinue("$ModuleName v$ModuleVersion module", "Duplicate module uninstallation", $true, ([ref] $YesToAll), ([ref] $NoToAll)))
 				{
+					# Remove current module from candidates for uninstallation
+					$Duplicates = $Duplicates | Where-Object {
+						$_.GUID -ne $TargetModule.GUID
+					}
+
 					Write-Debug -Message "[$($MyInvocation.InvocationName)] Operation aborted by user"
 					continue
 				}
@@ -233,9 +247,11 @@ function Uninstall-DuplicateModule
 	}
 	end
 	{
-		if ($KeptModule.Count -gt 0)
+		$KeptModule = $KeptModule | Select-Object -Unique
+
+		if ((($KeptModule | Measure-Object).Count -gt 1) -gt 0)
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Duplicate modules which where left installed are"
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: From the initial duplicates the following modules remained installed:"
 
 			Get-Module -Name $KeptModule -ListAvailable | ForEach-Object {
 				$Module = $_

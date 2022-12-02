@@ -146,10 +146,10 @@ function Connect-Computer
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 	if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 	{
-		if ($MachineName -eq $PolicyStore)
+		if ($Domain -eq $PolicyStore)
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] Connection already established to '$Domain', run Disconnect-Computer to disconnect"
 			return
@@ -189,14 +189,14 @@ function Connect-Computer
 
 	if ($Protocol -eq "Default")
 	{
-		$PSSessionParams["UseSSL"] = $MachineName -ne ([System.Environment]::MachineName)
+		$PSSessionParams["UseSSL"] = $Domain -ne ([System.Environment]::MachineName)
 	}
 	else
 	{
 		$PSSessionParams["UseSSL"] = $Protocol -eq "HTTPS"
 	}
 
-	if (($MachineName -ne [System.Environment]::MachineName) -or ($Authentication -in $AuthRequiresCredentials))
+	if (($Domain -ne [System.Environment]::MachineName) -or ($Authentication -in $AuthRequiresCredentials))
 	{
 		if (!$Credential)
 		{
@@ -216,7 +216,7 @@ function Connect-Computer
 		}
 
 		# Use -ComputerName parameter only for remote connections
-		if ($MachineName -ne [System.Environment]::MachineName)
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
 			$CimParams["ComputerName"] = $Domain
 			$PSSessionParams["ComputerName"] = $Domain
@@ -274,7 +274,7 @@ function Connect-Computer
 	catch
 	{
 		# Fallback to HTTP
-		if ((($PSCmdlet.ParameterSetName -eq "Thumbprint") -or ($Protocol -eq "Default")) -and ($MachineName -ne ([System.Environment]::MachineName)))
+		if ((($PSCmdlet.ParameterSetName -eq "Thumbprint") -or ($Protocol -eq "Default")) -and ($Domain -ne ([System.Environment]::MachineName)))
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] HTTPS connection to '$Domain' failed, fallback to HTTP"
 
@@ -298,7 +298,7 @@ function Connect-Computer
 		return
 	}
 
-	if ($MachineName -ne ([System.Environment]::MachineName))
+	if ($Domain -ne ([System.Environment]::MachineName))
 	{
 		try
 		{

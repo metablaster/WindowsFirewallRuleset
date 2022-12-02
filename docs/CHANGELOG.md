@@ -55,6 +55,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug with `Get-UserSoftware` which didn't target a specified user
   - Fixed a bug in `Get-AppCapability` producing no result for remote session due to virtual admin
   - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
+  - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
 
   - Improved or updated module functions
 
@@ -63,6 +64,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Resolve-Host`
     - `Uninstall-DuplicateModule` used to uninstall outdated modules
     - `Publish-SshKey` Improved for Remote-SSH VSCode extension
+    - `Register-SslCertificate` improved to handle multiple certificates with same CN entry
 
   - New functionalities
 
@@ -72,6 +74,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
     - `Connect-IPInterface` experimental script to troubleshoot obtaining IP from DHCP
+    - Requirement for remote registry service now applies only for remoting
 
 - Scripts
 

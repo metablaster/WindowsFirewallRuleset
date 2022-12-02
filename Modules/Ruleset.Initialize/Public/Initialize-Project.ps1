@@ -196,7 +196,7 @@ function Initialize-Project
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking system services"
 
 			# These services are minimum required
-			$RequiredServices = @(
+			$AutomaticServices = @(
 				"lmhosts" # TCP/IP NetBIOS Helper
 				"LanmanWorkstation" # Workstation
 				"LanmanServer" # Server
@@ -209,16 +209,9 @@ function Initialize-Project
 				"WinRM" # Windows Remote Management (WS-Management)
 			)
 
-			# TODO: Learn why is RemoteRegistry service also required for localhost? (OpenRemoteBaseKey fails with "network path was not found")
-			if ($true) # ($PolicyStore -ne [System.Environment]::MachineName)
-			{
-				# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
-				$RequiredServices += "RemoteRegistry"
-			}
-
 			if ($Develop)
 			{
-				$RequiredServices += @(
+				$AutomaticServices += @(
 					# ssh-agent recommended for:
 					# 1. Remote SSH in VSCode
 					# 2. git over SSH
@@ -228,10 +221,22 @@ function Initialize-Project
 				)
 			}
 
-			if (!(Initialize-Service $RequiredServices))
+			if (!(Initialize-Service $AutomaticServices))
 			{
 				if ($Strict) { exit }
 				return
+			}
+
+			if ($PolicyStore -ne [System.Environment]::MachineName)
+			{
+				# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
+				$ManualServices = "RemoteRegistry"
+
+				if (!(Initialize-Service $ManualServices -Status Stopped -StartupType "Manual"))
+				{
+					if ($Strict) { exit }
+					return
+				}
 			}
 		}
 
@@ -406,6 +411,9 @@ function Initialize-Project
 			if ($Develop)
 			{
 				# Exclude possibility of using outdated modules by removing them
+				Write-Information -Tags $MyInvocation.InvocationName `
+					-MessageData "INFO: Checking for existence of module duplication"
+
 				Uninstall-DuplicateModule
 			}
 		}

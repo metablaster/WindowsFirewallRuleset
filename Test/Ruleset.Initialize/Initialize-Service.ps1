@@ -65,16 +65,22 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test "Initialize-Servic"
+Enter-Test "Initialize-Service"
+$DebugPreference = 'Continue'
 
-Start-Test "pipeline"
-@("lmhosts", "LanmanWorkstation", "LanmanServer") | Initialize-Service
-
-Start-Test "WinRM"
-$Result = Initialize-Service "WinRM"
+Start-Test "RemoteRegistry"
+Set-Service "RemoteRegistry" -StartupType Disabled
+Stop-Service -Name "RemoteRegistry"
+$Result = Initialize-Service "RemoteRegistry" -Status Stopped -StartupType Manual
 
 $Result
 Test-Output $Result -Command Initialize-Service
+
+Start-Test "pipeline"
+$Services = @("lmhosts", "LanmanWorkstation", "LanmanServer")
+Stop-Service -Name $Services
+$Services | Set-Service -StartupType Disabled
+$Services | Initialize-Service
 
 Update-Log
 Exit-Test

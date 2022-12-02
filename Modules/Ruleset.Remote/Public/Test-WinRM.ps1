@@ -120,6 +120,8 @@ None. You cannot pipe objects to Test-WinRM
 None. Test-WinRM does not generate any output
 
 .NOTES
+Regarding CertThumbprint problems with Test-WSMan see this issue https://github.com/PowerShell/PowerShell/issues/16752
+
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 TODO: Test for private profile to avoid cryptic error message
 
@@ -131,7 +133,7 @@ https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.runspac
 #>
 function Test-WinRM
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Protocol",
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Credential",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Test-WinRM.md")]
 	[OutputType([void], [System.Xml.XmlElement], [System.String], [System.URI], [System.Management.Automation.Runspaces.PSSession])]
 	param (
@@ -139,10 +141,10 @@ function Test-WinRM
 		[Alias("ComputerName", "CN")]
 		[string] $Domain = [System.Environment]::MachineName,
 
-		[Parameter()]
+		[Parameter(ParameterSetName = "Credential")]
 		[PSCredential] $Credential,
 
-		[Parameter(ParameterSetName = "Protocol")]
+		[Parameter()]
 		[ValidateSet("HTTP", "HTTPS", "Default")]
 		[string] $Protocol = $RemotingProtocol,
 
@@ -153,7 +155,7 @@ function Test-WinRM
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]
 		[string] $Authentication = $RemotingAuthentication,
 
-		[Parameter(ParameterSetName = "Thumbprint")]
+		[Parameter(ParameterSetName = "Cert")]
 		[string] $CertThumbprint,
 
 		[Parameter()]
@@ -274,7 +276,7 @@ function Test-WinRM
 		# authentication otherwise the error is:
 		# "The server certificate on the destination computer (localhost) has the following errors:
 		# Encountered an internal error in the SSL library"
-		if (!$Credential)
+		if (($PSCmdlet.ParameterSetName -ne "Cert") -and !$Credential)
 		{
 			$Credential = Get-Credential -Message "Credentials are required to access '$MachineName'"
 
@@ -299,7 +301,11 @@ function Test-WinRM
 			$PSSessionParams["ComputerName"] = $Domain
 		}
 
-		$WSManParams["Credential"] = $Credential
+		if ($Credential)
+		{
+			$WSManParams["Credential"] = $Credential
+		}
+
 		$CimParams["Credential"] = $Credential
 		$PSSessionParams["Credential"] = $Credential
 	}
@@ -318,7 +324,11 @@ function Test-WinRM
 		$WSManParams["UseSsl"] = $true
 		$PSSessionParams["UseSSL"] = $true
 
-		if (![string]::IsNullOrEmpty($CertThumbprint))
+		if ($Credential)
+		{
+			$WSManParams["Credential"] = $Credential
+		}
+		elseif (![string]::IsNullOrEmpty($CertThumbprint))
 		{
 			$WSManParams["CertificateThumbprint"] = $CertThumbprint
 			$CimParams["CertificateThumbprint"] = $CertThumbprint

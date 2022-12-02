@@ -284,14 +284,14 @@ function Set-WinRMClient
 		if ($Protocol -ne "HTTP")
 		{
 			# SSL certificate
-			[hashtable] $SSLCertParams = @{
+			[hashtable] $SslCertParams = @{
 				ProductType = "Client"
 				Domain = $MachineName
 			}
 
-			if (![string]::IsNullOrEmpty($CertFile)) { $SSLCertParams["CertFile"] = $CertFile }
-			elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SSLCertParams["CertThumbprint"] = $CertThumbprint }
-			Register-SslCertificate @SSLCertParams
+			if (![string]::IsNullOrEmpty($CertFile)) { $SslCertParams["CertFile"] = $CertFile }
+			elseif (![string]::IsNullOrEmpty($CertThumbprint)) { $SslCertParams["CertThumbprint"] = $CertThumbprint }
+			Register-SslCertificate @SslCertParams
 		}
 	}
 

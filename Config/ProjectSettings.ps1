@@ -425,6 +425,10 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 	# The default value is "Default"
 	New-Variable -Name RemotingProtocol -Scope Global -Option Constant -Value "Default"
 
+	# If there are multiple SSL certificates with same CN entries to use for remote host specify
+	# certificate thumbprint which to use for HTTPS
+	New-Variable -Name SslThumbprint -Scope Global -Option Constant -Value $null
+
 	# Specifies the authentication mechanism to be used at the server.
 	# The acceptable values for this parameter are:
 	# None, no authentication is performed, request is anonymous.

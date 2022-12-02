@@ -167,10 +167,45 @@ function Register-SslCertificate
 			$ExportFile = $CertFile
 		}
 
+		$ExportFileObject = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList $ExportFile
+
 		# Search personal store for certificate first
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching personal store for SSL certificate"
 		$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
 			$_.Subject -eq "CN=$Domain"
+		}
+
+		[scriptblock] $ImportCertificate = {
+			# Import certificate file from default repository location
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching default repository location for SSL certificate"
+
+			if ($ProductType -eq "Server")
+			{
+				$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
+					"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Please enter password for certificate $Domain.pfx"))
+
+				$ImportedCert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
+					-Password $CertPassword.Password -Exportable
+			}
+			else
+			{
+				$ImportedCert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
+			}
+
+			# HACK: When -AllowUntrustedRoot is specified, for a certificate that is expired test will pass
+			if (!(Test-Certificate -Cert $ImportedCert -Policy SSL -DNSName $Domain -AllowUntrustedRoot) -or
+					(![string]::IsNullOrEmpty($CertThumbprint) -and ($CertThumbprint -ne $ImportedCert.thumbprint)))
+			{
+				# Undo import operation
+				Get-ChildItem Cert:\LocalMachine\My |
+				Where-Object { $_.Thumbprint -eq $ImportedCert.thumbprint } | Remove-Item
+				Write-Error -Category SecurityError -TargetObject $ImportedCert -Message "Certificate verification from default repository location failed"
+			}
+
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: Importing certificate from default repository location '$($ImportedCert.thumbprint)'"
+
+			$ImportedCert
 		}
 
 		if (!$Cert)
@@ -180,23 +215,45 @@ function Register-SslCertificate
 			}
 		}
 
-		if (![string]::IsNullOrEmpty($CertThumbprint))
-		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating SSL thumbprint"
-
-			if ($Cert)
+		[scriptblock] $CheckThumbprint = {
+			if (![string]::IsNullOrEmpty($CertThumbprint))
 			{
-				$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbprint
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating SSL thumbprint"
+
+				if ($Cert)
+				{
+					$Cert = $Cert | Where-Object -Property Thumbprint -EQ $CertThumbprint
+				}
+
+				if (!$Cert)
+				{
+					Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbprint'"
+				}
 			}
 
-			if (!$Cert)
-			{
-				Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbprint'"
-			}
+			$Cert
 		}
+
+		$Cert = & $CheckThumbprint
 
 		if (($Cert | Measure-Object).Count -eq 1)
 		{
+			$DuplicateCert = $false
+			if (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
+			{
+				# Ensure that installed certificate is the one of the remote computer by comparing thumbprints
+				if ($ExportFileObject.Thumbprint -ne $Cert.thumbprint)
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Local store already has a certificate with same CN entry as the one to be imported but thumbprints differ"
+					if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate with duplicate CN entry from default repository location to personal store"))
+					{
+						$DuplicateCert = $true
+						$Cert = & $ImportCertificate
+						$Cert = & $CheckThumbprint
+					}
+				}
+			}
+
 			if (Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot)
 			{
 				if (($ProductType -eq "Server") -and (!$Cert.HasPrivateKey))
@@ -206,8 +263,9 @@ function Register-SslCertificate
 				}
 				else
 				{
+					if ($DuplicateCert) { $Message = "duplicate (CN)" } else { $Message = "existing" }
 					Write-Information -Tags $MyInvocation.InvocationName `
-						-MessageData "INFO: Using existing certificate with thumbprint '$($Cert.thumbprint)'"
+						-MessageData "INFO: Using $Message certificate with thumbprint '$($Cert.thumbprint)'"
 				}
 			}
 			else
@@ -217,40 +275,34 @@ function Register-SslCertificate
 		}
 		elseif ($Cert)
 		{
-			Write-Error -Category NotImplemented -TargetObject $Cert -Message "Multiple certificates exist for host '$Domain', please specify thumbprint"
+			foreach ($CertFound in $Cert)
+			{
+				if (!(Get-ChildItem -Path Cert:\LocalMachine\Root |
+						Where-Object {
+							($_.thumbprint -eq $CertFound.Thumbprint)
+						}
+					)
+				)
+				{
+					Write-Error -Category SecurityError -TargetObject $Cert `
+						-Message "Multiple certificates exist for host '$Domain' in certificate store, testing certificate and adding it to trusted root won't be performed"
+					break
+				}
+			}
+
+			# Not an error since if certificate is already trusted PS remoting will use the one which is required by remote host
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple certificates exist for '$Domain' domain name"
+
+			Write-Information -Tags $MyInvocation.InvocationName `
+				-MessageData "INFO: To resolve this, please specify thumbprint in 'Config\ProjectSettings.ps1'"
+
+			return
 		}
 		elseif (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
 		{
 			if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate from default repository location to personal store"))
 			{
-				# Import certificate file from default repository location
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching default repository location for SSL certificate"
-
-				if ($ProductType -eq "Server")
-				{
-					$CertPassword = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList (
-						"$Domain.pfx", (Read-Host -AsSecureString -Prompt "Please enter password for certificate $Domain.pfx"))
-
-					$Cert = Import-PfxCertificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My `
-						-Password $CertPassword.Password -Exportable
-				}
-				else
-				{
-					$Cert = Import-Certificate -FilePath $CertFile -CertStoreLocation Cert:\LocalMachine\My
-				}
-
-				# HACK: When -AllowUntrustedRoot is specified, for a certificate that is expired test will pass
-				if (!(Test-Certificate -Cert $Cert -Policy SSL -DNSName $Domain -AllowUntrustedRoot) -or
-					(![string]::IsNullOrEmpty($CertThumbprint) -and ($CertThumbprint -ne $Cert.thumbprint)))
-				{
-					# Undo import operation
-					Get-ChildItem Cert:\LocalMachine\My |
-					Where-Object { $_.Thumbprint -eq $Cert.thumbprint } | Remove-Item
-					Write-Error -Category SecurityError -TargetObject $Cert -Message "Certificate verification from default repository location failed"
-				}
-
-				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Using certificate from default repository location '$($Cert.thumbprint)'"
+				$Cert = & $ImportCertificate
 			}
 		}
 		elseif ($ProductType -eq "Server")
