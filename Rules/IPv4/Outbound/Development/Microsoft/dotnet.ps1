@@ -138,6 +138,7 @@ if ((Confirm-Installation "dotnet" ([ref] $dotnetRoot)) -or $ForceLoad)
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

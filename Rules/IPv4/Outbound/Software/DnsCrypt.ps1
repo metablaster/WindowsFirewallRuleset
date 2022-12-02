@@ -184,6 +184,7 @@ This rule applies to both TLS and HTTPS encrypted DNS using dnscrypt-proxy." |
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

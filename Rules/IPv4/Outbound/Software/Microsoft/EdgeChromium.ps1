@@ -237,6 +237,7 @@ Experimental transport layer network protocol developed by Google and implemente
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

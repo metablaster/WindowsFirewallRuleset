@@ -311,6 +311,7 @@ if ((Confirm-Installation "Nvidia86" ([ref] $NvidiaRoot86)) -or $ForceLoad)
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

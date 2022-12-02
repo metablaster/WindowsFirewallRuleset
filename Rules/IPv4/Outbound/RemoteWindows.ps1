@@ -153,6 +153,7 @@ session on the target. When a remote PowerShell session starts, svchost.exe exec
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

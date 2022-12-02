@@ -237,4 +237,5 @@ foreach ($Entry in $MpPreference)
 	}
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

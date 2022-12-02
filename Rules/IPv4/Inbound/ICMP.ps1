@@ -551,6 +551,7 @@ Code 0 may be received from a gateway or a host." | Format-RuleOutput
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

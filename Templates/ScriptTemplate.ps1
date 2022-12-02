@@ -119,4 +119,5 @@ if ($PSCmdlet.ShouldProcess("Template TARGET", "Template MESSAGE", "Template OPE
 	$TemplateVariable
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

@@ -234,4 +234,5 @@ if ($Value -ne 2) # RequireCrlCheck
 	Write-Warning -Message "[$ThisScript] Firewall setting 'CertValidationLevel' is misconfigured"
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

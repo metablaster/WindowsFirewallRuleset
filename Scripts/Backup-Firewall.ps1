@@ -127,6 +127,7 @@ $TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
 $TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
 Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log
 
 <# STATS for Export-FirewallRule

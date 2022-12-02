@@ -142,6 +142,7 @@ This rule applies to open source version of OpenSSH that is built into Windows."
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

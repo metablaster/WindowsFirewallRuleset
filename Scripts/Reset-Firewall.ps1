@@ -190,9 +190,6 @@ if ($InboundCount -gt 0)
 Write-Information -Tags $ThisScript -MessageData "INFO: Removing IPSec rules..."
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 
-# Update Local Group Policy for changes to take effect
-Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-
 # Reset WinRM and PS remoting configuration
 if ($Remoting)
 {
@@ -254,6 +251,12 @@ if ($Service)
 			Stop-Service -Name ssh-agent -Confirm
 		}
 	}
+}
+
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"

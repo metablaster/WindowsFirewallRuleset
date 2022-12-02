@@ -169,4 +169,5 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 	"PSReviewUnusedParameter", "", Justification = "Template")]
 $UnusedVariable = $null
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

@@ -700,4 +700,5 @@ if (![string]::IsNullOrEmpty($Principal))
 	& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Principal $Principal -SkipPrompt
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

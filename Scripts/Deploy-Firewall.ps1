@@ -596,9 +596,8 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall r
 
 # Set up global firewall setting, network and firewall profile and apply GPO changes
 & "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
-Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 
-# TODO: This is a temporary measure because currently we change log file location only for develop mode
+# TODO: This is a temporary measure because currently we change log file location only while debugging
 if ($Develop)
 {
 	# Verify permissions to write firewall logs if needed
@@ -610,6 +609,10 @@ Set-Shortcut -Name "Firewall.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
 	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
+
+Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
+Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+Disconnect-Computer -Domain $PolicyStore
 
 # Show execution status
 if ($ErrorStatus)
@@ -636,5 +639,4 @@ Set-Variable -Name ErrorStatus -Scope Global -Value $PreviousErrorStatus
 Set-Variable -Name WarningStatus -Scope Global -Value $PreviousWarningStatus
 Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 
-Disconnect-Computer $Domain
 Update-Log

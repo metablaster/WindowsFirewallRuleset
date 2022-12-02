@@ -165,7 +165,10 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 # HACK: Not used because setting in "Network & Internet" will be missing
 # Set-NetworkProfile
 
-# Update Local Group Policy for changes to take effect
-Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
+}
 
 Update-Log

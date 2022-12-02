@@ -414,6 +414,7 @@ https://docs.microsoft.com/en-us/deployoffice/compat/data-that-the-telemetry-age
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

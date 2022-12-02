@@ -136,6 +136,7 @@ if ((Confirm-Installation "PasswordSafe" ([ref] $PasswordSafeRoot)) -or $ForceLo
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

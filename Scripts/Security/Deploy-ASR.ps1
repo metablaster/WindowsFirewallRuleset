@@ -200,4 +200,5 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 	}
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

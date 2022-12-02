@@ -207,4 +207,9 @@ foreach ($Location in $OldLocation)
 	}
 }
 
+if ($UpdateGPO)
+{
+	Disconnect-Computer -Domain $PolicyStore
+}
+
 Update-Log

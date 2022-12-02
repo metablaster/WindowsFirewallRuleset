@@ -255,5 +255,5 @@ else
 Write-Information -Tags $ThisScript -MessageData "INFO: Starting session '$Name'"
 
 Start-NetEventSession -Name $Name
-
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

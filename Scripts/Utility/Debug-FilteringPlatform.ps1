@@ -353,4 +353,6 @@ foreach ($RawEvent in $Events)
 # Restore header to default
 $HeaderStack.Pop() | Out-Null
 
+Disconnect-Computer -Domain $PolicyStore
+
 Update-Log

@@ -136,6 +136,7 @@ if ((Confirm-Installation "EveOnline" ([ref] $EveOnlineRoot)) -or $ForceLoad)
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

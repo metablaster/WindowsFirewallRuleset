@@ -260,6 +260,7 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

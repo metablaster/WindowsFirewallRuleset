@@ -146,4 +146,5 @@ else
 	Write-Warning -Message "[$ThisScript] No session named '$Name' found"
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

@@ -422,4 +422,5 @@ specific subfolders
 	Update-Log
 } # foreach module
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

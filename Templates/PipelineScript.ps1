@@ -151,5 +151,6 @@ process
 
 end
 {
+	Disconnect-Computer -Domain $PolicyStore
 	Update-Log
 }

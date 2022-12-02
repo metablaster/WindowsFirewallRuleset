@@ -135,6 +135,7 @@ if ((Confirm-Installation "OpenSpace" ([ref] $OpenSpaceRoot)) -or $ForceLoad)
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
 }
 
 Update-Log

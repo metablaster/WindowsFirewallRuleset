@@ -573,3 +573,7 @@ process
 
 	Update-Log
 }
+end
+{
+	Disconnect-Computer -Domain $PolicyStore
+}

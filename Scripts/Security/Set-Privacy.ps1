@@ -179,4 +179,5 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 }
 
+Disconnect-Computer -Domain $PolicyStore
 Update-Log

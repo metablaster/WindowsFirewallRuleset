@@ -143,6 +143,12 @@ $TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
 $TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
 Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
 
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Disconnect-Computer -Domain $PolicyStore
+}
+
 Update-Log
 
 <# STATS for Import-FirewallRule
