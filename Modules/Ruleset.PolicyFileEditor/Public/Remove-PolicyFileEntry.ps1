@@ -103,7 +103,7 @@ the file will not be modified, and the gpt.ini file will not be updated.
 #>
 function Remove-PolicyFileEntry
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
@@ -138,17 +138,20 @@ function Remove-PolicyFileEntry
 
 	process
 	{
-		$entry = $policyFile.GetValue($Key, $ValueName)
-
-		if ($null -eq $entry)
+		if ($PSCmdlet.ShouldProcess("Group policy *.pol file", "Delete file entry"))
 		{
-			Write-Verbose "Entry '$Key\$ValueName' is already not present in file '$Path'."
-			return
-		}
+			$entry = $policyFile.GetValue($Key, $ValueName)
 
-		Write-Verbose "Removing entry '$Key\$ValueName' from file '$Path'"
-		$policyFile.DeleteValue($Key, $ValueName)
-		$dirty = $true
+			if ($null -eq $entry)
+			{
+				Write-Verbose "Entry '$Key\$ValueName' is already not present in file '$Path'."
+				return
+			}
+
+			Write-Verbose "Removing entry '$Key\$ValueName' from file '$Path'"
+			$policyFile.DeleteValue($Key, $ValueName)
+			$dirty = $true
+		}
 	}
 
 	end

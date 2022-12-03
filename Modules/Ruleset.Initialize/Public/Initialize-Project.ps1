@@ -76,6 +76,7 @@ TODO: Changes done to system services should be reverted to original values, new
 function Initialize-Project
 {
 	# TODO: Should be possible to replace Write-Host after updates done to formatting
+	# Also the should be a way to have colored output without using Write-Host
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host because of output formatting issues")]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low",

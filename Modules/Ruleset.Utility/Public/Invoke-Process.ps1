@@ -306,7 +306,7 @@ function Invoke-Process
 			{
 				# Adding event handler for StandardOutput
 				[scriptblock] $OutputDataReceived = {
-					# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
+					# BUG: Unable to surpress
 					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
 					param (
@@ -327,7 +327,7 @@ function Invoke-Process
 
 				# Adding event handler for StandardError
 				[scriptblock] $ErrorDataReceived = {
-					# TODO: Unable to surpress with SuppressMessageAttribute, parameter is required otherwise event will not work
+					# BUG: Unable to surpress
 					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
 					param (

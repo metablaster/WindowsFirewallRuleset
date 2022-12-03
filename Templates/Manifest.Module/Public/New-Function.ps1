@@ -69,6 +69,9 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Rulese
 #>
 function New-Function
 {
+	# NOTE: surpress function scope warning example
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Script scope supression")]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.MODULENAME/Help/en-US/FUNCTIONNAME.md")]
 	[OutputType([void])]

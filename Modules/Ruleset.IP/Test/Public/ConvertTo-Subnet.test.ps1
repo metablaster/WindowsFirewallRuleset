@@ -53,10 +53,14 @@ Describe 'ConvertTo-Subnet' {
 			return [PSCustomObject]@{} | Add-Member -TypeName 'Ruleset.IP.NetworkSummary' -PassThru
 		}
 
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSUseDeclaredVarsMoreThanAssignments", "FromIPAndMask", Justification = "False Positive")]
 		$FromIPAndMask = @{
 			IPAddress = '0.0.0.0/32'
 		}
 
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSUseDeclaredVarsMoreThanAssignments", "FromStartAndEnd", Justification = "False Positive")]
 		$FromStartAndEnd = @{
 			Start = '0.0.0.0'
 			End = '255.255.255.255'

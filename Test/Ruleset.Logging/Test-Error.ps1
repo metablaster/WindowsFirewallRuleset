@@ -87,9 +87,9 @@ function Test-Error
 #>
 function Test-Pipeline
 {
+	[CmdletBinding()]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 		"PSReviewUnusedParameter", "Param", Scope = "Function", Justification = "Needed for test case")]
-	[CmdletBinding()]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
 		$Param

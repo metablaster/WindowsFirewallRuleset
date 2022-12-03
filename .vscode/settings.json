@@ -36,7 +36,7 @@
 	"editor.wordWrap": "off",
 	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
-	"editor.scrollBeyondLastLine": false,
+	"editor.scrollBeyondLastLine": true,
 	"editor.scrollbar.horizontalScrollbarSize": 20,
 	"editor.minimap.showSlider": "always",
 	"editor.snippetSuggestions": "bottom",
@@ -95,6 +95,8 @@
 	"workbench.editor.highlightModifiedTabs": true,
 	// diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
+	// Terminal
+	"terminal.integrated.scrollback": 40000,
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
 	// Extension: Bookmarks
@@ -234,14 +236,15 @@
 	"powershell.codeFolding.showLastLine": true,
 	// PowerShell: script analysis
 	"powershell.scriptAnalysis.enable": true,
+	// TODO: PS extension doesn't flag all the rules that we defined
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
 	// PowerShell: code formatting
 	"powershell.codeFormatting.preset": "Allman",
 	// PSAvoidUsingCmdletAliases
 	"powershell.codeFormatting.autoCorrectAliases": false,
-	// AvoidSemicolonsAsLineTerminators
+	// PSAvoidSemicolonsAsLineTerminators
 	"powershell.codeFormatting.avoidSemicolonsAsLineTerminators": true,
-	// AvoidUsingDoubleQuotesForConstantString
+	// PSAvoidUsingDoubleQuotesForConstantString
 	"powershell.codeFormatting.useConstantStrings": false,
 	// PSPlaceOpenBrace
 	"powershell.codeFormatting.openBraceOnSameLine": false,

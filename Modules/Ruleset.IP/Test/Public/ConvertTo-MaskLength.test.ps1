@@ -74,11 +74,16 @@ Describe 'ConvertTo-MaskLength' {
 
 	It 'Example <Number> is valid' -TestCases (
         (Get-Help ConvertTo-MaskLength).Examples.Example.Code | ForEach-Object -Begin {
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+				"PSReviewUnusedParameter", "Number", Justification = "False Positive")]
 			$Number = 1
 		} -Process {
 			@{ Number = $Number++; Code = $_ }
 		}
 	) {
+		# BUG: Unable to suppress
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSReviewUnusedParameter", "Number", Justification = "False Positive")]
 		param (
 			$Number,
 

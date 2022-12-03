@@ -57,7 +57,7 @@ None.
 #Requires -RunAsAdministrator
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test")]
+	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test for simplicity")]
 [CmdletBinding()]
 param (
 	[Parameter()]

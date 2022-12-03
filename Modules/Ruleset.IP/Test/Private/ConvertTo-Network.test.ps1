@@ -143,6 +143,9 @@ Describe 'ConvertTo-Network' {
 	}
 
 	It 'Converts CIDR formatted subnets from <MaskLength> to <Mask>' -TestCases $MaskTable {
+		# BUG: Unable to suppress
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSReviewUnusedParameter", "MaskLength", Justification = "False Positive")]
 		param (
 			$MaskLength,
 
@@ -164,6 +167,9 @@ Describe 'ConvertTo-Network' {
 	}
 
 	It 'Converts dotted-decimal formatted subnets from <Mask> to <MaskLength>' -TestCases $MaskTable {
+		# BUG: Unable to suppress
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSReviewUnusedParameter", "Mask", Justification = "False Positive")]
 		param (
 			$MaskLength,
 

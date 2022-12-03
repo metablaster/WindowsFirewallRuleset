@@ -102,10 +102,10 @@ https://github.com/RamblingCookieMonster/PowerShell
 
 #Requires -Version 5.1
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Property", Justification = "False positive")]
 [CmdletBinding(PositionalBinding = $false)]
 [OutputType([hashtable])]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "Property", Justification = "False positive")]
 param (
 	[Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0)]
 	[PSCustomObject] $InputObject,

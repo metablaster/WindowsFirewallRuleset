@@ -80,72 +80,75 @@ None.
 #>
 function New-Subnet
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None")]
 	param (
 		[Parameter(Mandatory = $true)]
-		$NetworkAddress,
+		[IPAddress] $NetworkAddress,
 
 		[Parameter()]
-		$BroadcastAddress,
+		[IPAddress] $BroadcastAddress,
 
 		[Parameter()]
-		$SubnetMask,
+		[IPAddress] $SubnetMask,
 
 		[Parameter()]
-		$MaskLength
+		[uint32] $MaskLength
 	)
 
-	if ($NetworkAddress -isnot [IPAddress])
+	if ($PSCmdlet.ShouldProcess($NetworkAddress, "Create new subnet"))
 	{
-		$NetworkAddress = ConvertTo-DottedDecimalIP $NetworkAddress
-	}
-
-	if ($BroadcastAddress -and $BroadcastAddress -isnot [IPAddress])
-	{
-		$BroadcastAddress = ConvertTo-DottedDecimalIP $BroadcastAddress
-	}
-
-	if ($NetworkAddress -eq $BroadcastAddress)
-	{
-		$SubnetMask = "255.255.255.255"
-		$MaskLength = 32
-		$HostAddresses = 0
-	}
-
-	else
-	{
-		# One of these will be provided
-		if (!$SubnetMask)
+		if ($NetworkAddress -isnot [IPAddress])
 		{
-			$SubnetMask = ConvertTo-Mask $MaskLength
+			$NetworkAddress = ConvertTo-DottedDecimalIP $NetworkAddress
 		}
 
-		if (!$MaskLength)
+		if ($BroadcastAddress -and $BroadcastAddress -isnot [IPAddress])
 		{
-			$MaskLength = ConvertTo-MaskLength $SubnetMask
+			$BroadcastAddress = ConvertTo-DottedDecimalIP $BroadcastAddress
 		}
 
-		$HostAddresses = [Math]::Pow(2, (32 - $MaskLength)) - 2
-		if ($HostAddresses -lt 0)
+		if ($NetworkAddress -eq $BroadcastAddress)
 		{
+			$SubnetMask = "255.255.255.255"
+			$MaskLength = 32
 			$HostAddresses = 0
 		}
-	}
 
-	if (!$BroadcastAddress)
-	{
-		$BroadcastAddress = Get-BroadcastAddress -IPAddress $NetworkAddress -SubnetMask $SubnetMask
-	}
+		else
+		{
+			# One of these will be provided
+			if (!$SubnetMask)
+			{
+				$SubnetMask = ConvertTo-Mask $MaskLength
+			}
 
-	[PSCustomObject]@{
-		Cidr = '{0}/{1}' -f $NetworkAddress, $MaskLength
-		NetworkAddress = $NetworkAddress
-		BroadcastAddress = $BroadcastAddress
-		SubnetMask = $SubnetMask
-		MaskLength = $MaskLength
-		HostAddresses = $HostAddresses
-		PSTypeName = "Ruleset.IP.Subnet"
-	} | Add-Member ToString -MemberType ScriptMethod -Force -PassThru -Value {
-		return $this.Cidr
+			if (!$MaskLength)
+			{
+				$MaskLength = ConvertTo-MaskLength $SubnetMask
+			}
+
+			$HostAddresses = [Math]::Pow(2, (32 - $MaskLength)) - 2
+			if ($HostAddresses -lt 0)
+			{
+				$HostAddresses = 0
+			}
+		}
+
+		if (!$BroadcastAddress)
+		{
+			$BroadcastAddress = Get-BroadcastAddress -IPAddress $NetworkAddress -SubnetMask $SubnetMask
+		}
+
+		[PSCustomObject]@{
+			Cidr = '{0}/{1}' -f $NetworkAddress, $MaskLength
+			NetworkAddress = $NetworkAddress
+			BroadcastAddress = $BroadcastAddress
+			SubnetMask = $SubnetMask
+			MaskLength = $MaskLength
+			HostAddresses = $HostAddresses
+			PSTypeName = "Ruleset.IP.Subnet"
+		} | Add-Member ToString -MemberType ScriptMethod -Force -PassThru -Value {
+			return $this.Cidr
+		}
 	}
 }

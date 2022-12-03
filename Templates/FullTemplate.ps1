@@ -114,6 +114,9 @@ https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-help?view=powershell-7
 
+.LINK
+https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/using-scriptanalyzer
+
 .COMPONENT
 The technology or feature that the script uses, or to which it is related.
 This content appears when the Get-Help command includes the Component parameter of Get-Help.
@@ -137,14 +140,14 @@ using namespace System
 #Requires -RunAsAdministrator
 
 # NOTE: surpress script scope warning example
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute( # Scope = "Function"
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 	"PSAvoidUsingWriteHost", "", Justification = "Script scope supression")]
 [CmdletBinding()]
 [OutputType([void])]
+# NOTE: surpress parameter example
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSReviewUnusedParameter", "Force", Justification = "This will work for functions only")]
 param (
-	# NOTE: surpress parameter example
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSReviewUnusedParameter", "Force", Justification = "This will work for functions only")]
 	[Parameter()]
 	[switch] $Force
 )
@@ -164,9 +167,11 @@ $Deny = "Skip operation, template deny help message"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
+Write-Host "Template message"
+
 # NOTE: surpress variable example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "", Justification = "Template")]
+	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Template")]
 $UnusedVariable = $null
 
 Disconnect-Computer -Domain $PolicyStore

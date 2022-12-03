@@ -364,7 +364,6 @@ Format-RuleOutput
 # see "ProblematicTraffic.md" for more info
 #
 
-# TODO: how do we make use of an array of user accounts for Get-SDDLFromAccounts
 # TODO: network service use for wlidsvc doesn't seem to work, BITS also fails connecting to router
 # sometimes but receives data.
 

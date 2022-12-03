@@ -69,6 +69,7 @@ None. Set-ATP.ps1 does not generate any output
 .NOTES
 TODO: There are some exotic options for Set-MpPreference which we don't use
 TODO: Switches are required to optionally set non ATP settings
+TODO: Resolve PSSA warning
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts

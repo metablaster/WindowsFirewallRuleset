@@ -80,11 +80,16 @@ Describe 'Get-BroadcastAddress' {
 
 	It 'Example <Number> is valid' -TestCases (
         (Get-Help Get-BroadcastAddress).Examples.Example.Code | ForEach-Object -Begin {
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+				"PSUseDeclaredVarsMoreThanAssignments", "Number", Justification = "False Positive")]
 			$Number = 1
 		} -Process {
 			@{ Number = $Number++; Code = $_ }
 		}
 	) {
+		# BUG: Unable to suppress
+		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+			"PSReviewUnusedParameter", "Number", Justification = "False Positive")]
 		param (
 			$Number,
 

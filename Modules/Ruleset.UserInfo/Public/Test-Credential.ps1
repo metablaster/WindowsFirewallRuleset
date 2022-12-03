@@ -102,9 +102,6 @@ https://gist.github.com/mklement0/83e8e6a2b39ecec7b0a14a8e631769ce
 #>
 function Test-Credential
 {
-	# NOTE: SuppressMessageAttribute not working for manual analyzer run, type disabled in PSScriptAnalyzerSettings
-	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSUseCompatibleTypes", "", Scope = "Function", Justification = "PS 5.1.17763 is out of date")]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md")]
 	[OutputType([bool])]

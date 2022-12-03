@@ -94,7 +94,8 @@ https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/new-cimsession
 https://docs.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance
 #>
 
-[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive")]
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "False positive about preference variables")]
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Script")]
 param (
 	[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "Script")]

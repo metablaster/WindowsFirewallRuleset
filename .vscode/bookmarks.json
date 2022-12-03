@@ -59,8 +59,8 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 241,
-					"column": 1,
+					"line": 238,
+					"column": 65,
 					"label": ""
 				}
 			]
@@ -69,8 +69,98 @@
 			"path": "Config/PSScriptAnalyzerSettings.psd1",
 			"bookmarks": [
 				{
+					"line": 22,
+					"column": 2,
+					"label": ""
+				},
+				{
 					"line": 54,
 					"column": 2,
+					"label": ""
+				},
+				{
+					"line": 57,
+					"column": 2,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Firewall/Public/Export-FirewallRule.ps1",
+			"bookmarks": [
+				{
+					"line": 136,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Firewall/Public/Export-RegistryRule.ps1",
+			"bookmarks": [
+				{
+					"line": 115,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Firewall/Public/Remove-FirewallRule.ps1",
+			"bookmarks": [
+				{
+					"line": 96,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Initialize/Public/Initialize-Project.ps1",
+			"bookmarks": [
+				{
+					"line": 77,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Scripts/Utility/Get-ParameterAlias.ps1",
+			"bookmarks": [
+				{
+					"line": 133,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Test/Ruleset.Logging/Test-Error.ps1",
+			"bookmarks": [
+				{
+					"line": 90,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Test/Ruleset.Logging/Test-Info.ps1",
+			"bookmarks": [
+				{
+					"line": 87,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Scripts/Security/Set-ATP.ps1",
+			"bookmarks": [
+				{
+					"line": 71,
+					"column": 26,
 					"label": ""
 				}
 			]

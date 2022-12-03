@@ -52,7 +52,7 @@ https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/ab
 #Requires -Version 5.1
 
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "This is a settings script")]
+	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Settings used by other scripts")]
 [CmdletBinding()]
 param ()
 

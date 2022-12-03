@@ -558,7 +558,14 @@ try
 		)
 
 		It 'Gives a reasonable error when non-numeric data is passed to <Type> values' -TestCases $testCases {
-			param ($Type, $ExpectedMessage)
+			# BUG: Unable to suppress
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+				"PSReviewUnusedParameter", "Type", Justification = "False Positive")]
+			param (
+				$Type,
+
+				$ExpectedMessage
+			)
 
 			$scriptBlock = {
 				Set-PolicyFileEntry -Path $gpoPath\Machine\registry.pol `

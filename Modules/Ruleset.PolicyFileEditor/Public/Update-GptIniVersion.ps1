@@ -92,7 +92,7 @@ which will show up as decimal value 327683 in the INI file.
 #>
 function Update-GptIniVersion
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidateScript({
@@ -110,17 +110,20 @@ function Update-GptIniVersion
 		[string[]] $PolicyType
 	)
 
-	if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+	if ($PSCmdlet.ShouldProcess("gpt.ini file", "Increments the version counter"))
 	{
-		Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-	}
+		if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+		{
+			Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+		}
 
-	try
-	{
-		IncrementGptIniVersion @PSBoundParameters
-	}
-	catch
-	{
-		$PSCmdlet.ThrowTerminatingError($_)
+		try
+		{
+			IncrementGptIniVersion @PSBoundParameters
+		}
+		catch
+		{
+			$PSCmdlet.ThrowTerminatingError($_)
+		}
 	}
 }
