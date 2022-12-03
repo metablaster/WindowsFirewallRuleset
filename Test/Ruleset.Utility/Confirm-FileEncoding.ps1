@@ -77,8 +77,11 @@ $Excludes = @(
 	"*.wav"
 	"*.dll"
 	"*.pmc"
+	"*.pmf"
 	"*.msc"
 	"*.lnk"
+	"*.cer"
+	"*.gif"
 )
 
 $TestFiles = @(
@@ -94,7 +97,7 @@ $TestFiles = @(
 
 if ($PSVersionTable.PSEdition -eq "Core")
 {
-	# NOTE: Ignoring, see Update-Help.ps1 for more info
+	# NOTE: Ignoring, see New-ExternalHelpCab in Scripts\Update-HelpContent.ps1 for more info
 	$Excludes += "*_HelpInfo.xml"
 }
 

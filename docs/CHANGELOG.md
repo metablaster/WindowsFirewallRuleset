@@ -96,6 +96,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Publish generated sitemap to google for crawling
     - Replaced XML tools extension with XML Red Hat
 
+  - `TestFileEncoding.ps1` new test script to verify encoding of all files in repository
+
 [Table of Contents](#table-of-contents)
 
 ## v0.13.1 (current release)

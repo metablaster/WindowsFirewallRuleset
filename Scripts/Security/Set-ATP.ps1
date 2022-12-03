@@ -234,7 +234,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 
 	Write-Information -MessageData "[$ThisScript] Configure extended cloud check"
 	# Configure extended cloud check (50 max)
-	# This feature allows Microsoft Defender Antivirus to block a suspicious file for up to X seconds, and scan it in the cloud to make sure it´s safe.
+	# This feature allows Microsoft Defender Antivirus to block a suspicious file for up to X seconds, and scan it in the cloud to make sure it's safe.
 	# NOTE: This feature depends on three other MAPS settings:
 	# 1. "Configure the 'Block at First Sight' feature
 	# 2. "Join Microsoft MAPS"

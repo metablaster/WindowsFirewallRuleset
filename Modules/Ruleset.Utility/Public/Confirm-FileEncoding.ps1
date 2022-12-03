@@ -153,25 +153,25 @@ function Confirm-FileEncoding
 
 			if (($TargetEncoding -eq "Binary") -and $Binary)
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] File $FileName encoded as $TargetEncoding verification skipped"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] File '$FileName' encoded as '$TargetEncoding' verification skipped"
 				continue
 			}
 
 			# [array]::Find($Encoding, [System.Predicate[string]] { $TargetEncoding -eq $args[0] })
 			if ($TargetEncoding -in $Encoding)
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] File $FileName encoded as $TargetEncoding verification passed"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] File '$FileName' encoded as '$TargetEncoding' verification passed"
 			}
 			else
 			{
-				Write-Error -Category ReadError -TargetObject $File -Message "File read operation expects $Encoding encoding on file $File but file encoded as $TargetEncoding"
+				Write-Error -Category ReadError -TargetObject $File -Message "File read operation expects '$Encoding' encoding on file '$File' but file encoded as '$TargetEncoding'"
 
 				if ($PSCmdlet.ShouldProcess($FileName, "Abort due to bad file encoding"))
 				{
 					exit
 				}
 
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] $FileName, $TargetEncoding encoded might yield unexpected results"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] $FileName, '$TargetEncoding' encoded might yield unexpected results"
 			}
 		}
 	}

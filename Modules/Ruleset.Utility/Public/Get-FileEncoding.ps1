@@ -39,7 +39,8 @@ can be specified trough Encoding parameter.
 The path of the file to get the encoding of
 
 .PARAMETER Encoding
-Default encoding for non ASCII files.
+Default encoding to assume for non ASCII files without BOM.
+This encoding is also used to read file if needed.
 This parameter can be either a string identifying an encoding that is used by PowerShell commandlets
 such as "utf8" or System.Text.Encoding object.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition
@@ -118,7 +119,7 @@ function Get-FileEncoding
 
 	# TODO: Is encoding parameter needed?
 	# [System.String]
-	$Lines = Get-Content -Path $File -ErrorAction Ignore -TotalCount 5
+	$Lines = Get-Content -Path $File -TotalCount 5 -ErrorAction Ignore
 
 	$Result = @($Lines | Where-Object {
 			# Reports the zero-based index of the first occurrence in this instance of any character
@@ -178,7 +179,17 @@ function Get-FileEncoding
 	# bytes from file, and then see if it matches one of the encodings we know about.
 	foreach ($EncodingLength in $EncodingLengths | Sort-Object -Descending)
 	{
-		$Bytes = Get-Content @Params -ReadCount $EncodingLength -Path $File | Select-Object -First 1
+		try
+		{
+			# If file can't be read there is no point to continue, ex. access to file is denied
+			$Bytes = Get-Content @Params -ReadCount $EncodingLength -Path $File -ErrorAction Stop |
+			Select-Object -First 1
+		}
+		catch
+		{
+			Write-Error -ErrorRecord $_
+			return "unknown"
+		}
 
 		# [System.Text.Encoding]
 		$LocalEncoding = $Encodings[$Bytes -join '-']
@@ -223,7 +234,8 @@ function Get-FileEncoding
 			# This encoding only supports character values between U+0000 and U+007F. Code page 20127.
 			if ($Line -cmatch "[^\u0000-\u007F]")
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Non ASCII line: $Line"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Non ASCII line in file without BOM: $($Path.FullName)"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Line reads '$Line'"
 
 				# We only know it's not ASCII and there is no BOM, so use default encoding
 				$Result = $Encoding
