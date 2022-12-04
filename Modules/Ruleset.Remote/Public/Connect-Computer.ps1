@@ -332,12 +332,9 @@ function Connect-Computer
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
-		# TODO: Will create new blank console windows in PS Core, see also:
-		# https://github.com/PowerShell/PowerShell/issues/16763
-		# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
-			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
+			# TODO: Will create a new blank console window in PS Core, see also Test-WinRM
 			# see https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession remote session creates a ghost window" -Debug
 		}

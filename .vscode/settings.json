@@ -12,12 +12,29 @@
 	"files.associations": {
 		"*config": "ssh_config",
 		"*.msc": "xml",
+		// Test module for Config\ProjectSettings.psd1
+		"*PssaTest.Module*": "PssaTest",
+	},
+	// test module for Config\ProjectSettings.psd1 must not be formatted
+	"[PssaTest]": {
+		"editor.formatOnSave": false,
+		"editor.formatOnPaste": false,
+		"editor.trimAutoWhitespace": false,
+		"editor.formatOnType": false
+	},
+	// markdown formatter is "markdownlint" extension
+	"[markdown]": {
+		"editor.wordWrap": "off",
+		"editor.detectIndentation": true,
+		"editor.insertSpaces": true,
+		"editor.formatOnSave": false,
+		"editor.formatOnPaste": true
 	},
 	// editor
 	"editor.quickSuggestions": {
 		"other": true,
-		"comments": false,
-		"strings": false
+		"comments": true,
+		"strings": true
 	},
 	"editor.rulers": [
 		{
@@ -41,14 +58,6 @@
 	"editor.minimap.showSlider": "always",
 	"editor.snippetSuggestions": "bottom",
 	"editor.comments.ignoreEmptyLines": false,
-	// markdown formatter is "markdownlint" extension
-	"[markdown]": {
-		"editor.wordWrap": "off",
-		"editor.detectIndentation": true,
-		"editor.insertSpaces": true,
-		"editor.formatOnSave": false,
-		"editor.formatOnPaste": true
-	},
 	// PowerShell extension is default formatter
 	"[powershell]": {
 		"editor.defaultFormatter": "ms-vscode.powershell"
@@ -235,9 +244,49 @@
 	"powershell.developer.featureFlags": [],
 	"powershell.developer.waitForSessionFileTimeoutSeconds": 240,
 	//"powershell.developer.bundledModulesPath": "set custom modules path",
+	"powershell.sideBar.CommandExplorerVisibility": true,
+	"powershell.sideBar.CommandExplorerExcludeFilter": [
+		"ThreadJob",
+		"PSReadLine",
+		"BitsTransfer",
+		"PrintManagement",
+		"Storage",
+		"PSDesiredStateConfiguration",
+		"EventTracingManagement",
+		"Microsoft.PowerShell.Host",
+		"MsDtc",
+		"SmbShare",
+		"ConfigCI",
+		"HgsServer",
+		"HgsKeyProtection",
+		"iSCSI",
+		"KDS",
+		"BranchCache",
+		"MMAgent",
+		"Wdac",
+		"PnpDevice",
+		"WSSCmdlets",
+		"Az.Network",
+		"PCSVDevice",
+		"HgsDiagnostics",
+		"SmbWitness",
+		"DISM",
+		"TroubleshootingPack",
+		"DirectAccessClientComponents",
+		// Possibly wanted (network and security)
+		"VpnClient",
+		"TrustedPlatformModule",
+		"SecureBoot",
+		"BitLocker",
+		"TLS",
+		"NetQoS",
+		"Hyper-V",
+		"WindowsUpdate"
+	],
 	// pester
 	"powershell.pester.useLegacyCodeLens": false,
 	"powershell.pester.outputVerbosity": "FromPreference",
+	"powershell.pester.debugOutputVerbosity": "Minimal",
 	// integratedConsole
 	"powershell.integratedConsole.showOnStartup": false,
 	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
@@ -250,7 +299,6 @@
 	"powershell.codeFolding.showLastLine": true,
 	// PowerShell: script analysis
 	"powershell.scriptAnalysis.enable": true,
-	// TODO: PS extension doesn't flag all the rules that we defined
 	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
 	// PowerShell: code formatting
 	"powershell.codeFormatting.preset": "Allman",

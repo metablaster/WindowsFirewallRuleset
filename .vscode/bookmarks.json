@@ -34,7 +34,7 @@
 			"path": "Modules/Ruleset.Remote/Public/Connect-Computer.ps1",
 			"bookmarks": [
 				{
-					"line": 341,
+					"line": 338,
 					"column": 3,
 					"label": ""
 				}
@@ -51,26 +51,6 @@
 				{
 					"line": 466,
 					"column": 3,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": ".vscode/settings.json",
-			"bookmarks": [
-				{
-					"line": 252,
-					"column": 65,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Test/PSScriptAnalyzer.ps1",
-			"bookmarks": [
-				{
-					"line": 72,
-					"column": 1,
 					"label": ""
 				}
 			]

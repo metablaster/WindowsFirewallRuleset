@@ -2,8 +2,10 @@
 # https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/rules/readme
 # NOTE: PSGallery ruleset is a duplicate of these
 # TODO: Check for new or updated settings
-# NOTE: Last checked on 3.12.2022. v1.21.0
-# NOTE: Good portion of warnings is surpressed within repository because of false positives
+# NOTE: Last checked on 4.12.2022. v1.21.0
+# NOTE: A portion of warnings is surpressed within repository with
+# System.Diagnostics.CodeAnalysis.SuppressMessageAttribute because of false positives
+# TODO: See Test\PssaTest.Module\PssaTest.Module.ps1 which rules don't work and resolve
 
 # A Script Analyzer profile file is a text file that contains a hashtable with one or more of the following keys:
 # CustomRulePath, ExcludeRules, IncludeDefaultRules, IncludeRules, RecurseCustomRulePath, Rules, Severity
@@ -11,7 +13,7 @@
 @{
 	Severity = @(
 		# NOTE: Not configured because of Test\PSScriptAnalyzer.ps1
-		# If not specified all severities are severities are handled
+		# If not specified all severities are handled
 		# "Error"
 		# "Warning"
 		# "Information"
@@ -30,16 +32,17 @@
 
 	IncludeRules = @(
 		#
-		# CmdletDesign
+		# Cmdlet design
 		#
 		"PSUseApprovedVerbs"
+		# TODO: Not working
 		"PSReservedCmdletChar"
 		"PSReservedParams"
+		# TODO: Not working
 		"PSShouldProcess"
 		"PSUseSingularNouns"
 		"PSMissingModuleManifestField"
 		"PSAvoidDefaultValueSwitchParameter"
-		# NOTE: New settings v1.19.1
 		"PSAvoidMultipleTypeAttributes"
 		#
 		# "PSDSC*",
@@ -54,11 +57,12 @@
 		"PSDSCUseIdenticalParametersForDSC"
 		"PSDSCUseVerboseMessageInDSCResource"
 		#
-		# ScriptFunctions
+		# Script functions
 		#
 		"PSAvoidUsingCmdletAliases"
 		"PSAvoidUsingWMICmdlet"
 		"PSAvoidUsingEmptyCatchBlock"
+		# TODO: Not working
 		"PSUseCmdletCorrectly"
 		"PSUseShouldProcessForStateChangingFunctions"
 		"PSAvoidUsingPositionalParameters"
@@ -66,30 +70,30 @@
 		"PSUseDeclaredVarsMoreThanAssignments"
 		"PSAvoidUsingInvokeExpression"
 		#
-		# ScriptingStyle
+		# Scripting style
 		#
 		"PSProvideCommentHelp"
 		"PSAvoidUsingWriteHost"
-		# NOTE: New settings v1.19.1
 		# "PSAvoidUsingDoubleQuotesForConstantString"
 		"PSUseUsingScopeModifierInNewRunspaces"
 		"PSAvoidSemicolonsAsLineTerminators"
 		#
-		# ScriptSecurity
+		# Script security
 		#
 		"PSAvoidUsingPlainTextForPassword"
 		"PSAvoidUsingComputerNameHardcoded"
 		"PSUsePSCredentialType"
 		"PSAvoidUsingConvertToSecureStringWithPlainText"
 		"PSAvoidUsingUserNameAndPasswordParams"
-		# NOTE: New settings v1.19.1
 		"PSAvoidUsingBrokenHashAlgorithms"
 		#
-		# Rules not includes in samples
+		# Rules not included in samples
 		#
 		"PSAvoidAssignmentToAutomaticVariable"
 		"PSAvoidDefaultValueForMandatoryParameter"
+		# TODO: Not working
 		"PSAvoidGlobalAliases"
+		# TODO: Not working
 		"PSAvoidGlobalFunctions"
 		"PSAvoidInvokingEmptyMembers"
 		# "PSAvoidLongLines"
@@ -99,6 +103,7 @@
 		"PSAvoidUsingDeprecatedManifestFields"
 		"PSAvoidTrailingWhitespace"
 		"PSMisleadingBacktick"
+		# TODO: Not working
 		"PSPossibleIncorrectComparisonWithNull"
 		"PSPossibleIncorrectUsageOfAssignmentOperator"
 		"PSPossibleIncorrectUsageOfRedirectionOperator"
@@ -113,6 +118,7 @@
 		"PSUseCompatibleSyntax"
 		"PSUseCompatibleTypes"
 		"PSUseUTF8EncodingForHelpFile"
+		# TODO: Not tested
 		"PSUseBOMForUnicodeEncodedFile"
 		#
 		# Code formatting, Allman
@@ -204,6 +210,11 @@
 			# E.g. foo -bar $baz -bat instead of foo  -bar $baz  -bat
 			# default = false (powershell.codeFormatting.whitespaceBetweenParameters)
 			CheckParameter = $true
+
+			# When CheckOperator is set, ignore whitespace around assignment operators within multi-line hash tables.
+			# Set this option to use the AlignAssignmentStatement rule and still check whitespace around operators everywhere else.
+			# default = $false
+			IgnoreAssignmentOperatorInsideHashTable = $false
 		}
 
 		PSUseConsistentIndentation = @{
