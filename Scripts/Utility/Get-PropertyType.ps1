@@ -94,7 +94,7 @@ Replaced PSObject entries with PSCustomObject
 Added SuppressMessageAttribute for false positive
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://github.com/RamblingCookieMonster/PowerShell

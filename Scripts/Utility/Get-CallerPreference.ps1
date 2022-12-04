@@ -137,7 +137,7 @@ Added optional parent scope validation
 TODO: This script needs unit test to simplify or improve
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://devblogs.microsoft.com/scripting/weekend-scripter-access-powershell-preference-variables/

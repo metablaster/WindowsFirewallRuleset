@@ -86,7 +86,7 @@ None. Deploy-Firewall.ps1 does not generate any output
 TODO: Rule deployment should probably be separated into new script
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

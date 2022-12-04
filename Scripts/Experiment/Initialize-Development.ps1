@@ -92,7 +92,7 @@ TODO: Implement creating a backup of keys
 TODO: Implement GpgKey parameter
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

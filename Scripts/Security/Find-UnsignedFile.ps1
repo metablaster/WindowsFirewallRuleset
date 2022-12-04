@@ -127,7 +127,7 @@ TODO: More functionality can be implemented by handling more sigcheck switches
 TODO: Json output is not perfect, it includes empty braces for file not scanned by virus total
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck

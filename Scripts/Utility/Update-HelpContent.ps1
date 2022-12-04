@@ -99,7 +99,7 @@ TODO: OutputType attribute
 TODO: Get rid of blinking progress bar and make your own
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://github.com/PowerShell/platyPS

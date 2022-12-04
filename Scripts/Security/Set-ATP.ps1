@@ -71,7 +71,7 @@ TODO: There are some exotic options for Set-MpPreference which we don't use
 TODO: Switches are required to optionally set non ATP settings
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference

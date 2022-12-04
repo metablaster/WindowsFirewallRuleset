@@ -70,7 +70,7 @@ None. Connect-IPInterface.ps1 does not generate any output
 None.
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

@@ -74,7 +74,7 @@ To exclude folders or files from ASR use:
 Add-MpPreference -AttackSurfaceReductionOnlyExclusions $ExcludePath
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/attack-surface-reduction-rules-reference

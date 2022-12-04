@@ -172,7 +172,7 @@ Bugfix where Invoke-Command to get processes would return wrong process ID, need
 TODO: Need to handle multiple computers
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://github.com/RamblingCookieMonster/PowerShell

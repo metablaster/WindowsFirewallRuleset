@@ -73,7 +73,7 @@ TODO: This should probably be part of Ruleset.Firewall module
 TODO: OutputType attribute for [Selected.Microsoft.Management.Infrastructure.CimInstance]
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

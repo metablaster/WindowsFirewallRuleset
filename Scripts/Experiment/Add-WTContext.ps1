@@ -56,7 +56,7 @@ HACK: Context menu not shown
 TODO: Figure out why -d parameter value for wt.exe results in "Could not access starting directory " %V\. ""
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

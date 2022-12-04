@@ -87,7 +87,7 @@ Windows firewall to start logging into new location.
 TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 using namespace System.Security

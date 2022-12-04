@@ -104,7 +104,7 @@ Rename from Get-Type to Get-ExportedType
 Added links and notes to comment based help
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://github.com/RamblingCookieMonster/PowerShell

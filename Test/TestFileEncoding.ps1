@@ -47,6 +47,9 @@ None. TestFileEncoding.ps1 does not generate any output.
 
 .NOTES
 None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
 #>
 
 #Requires -Version 5.1

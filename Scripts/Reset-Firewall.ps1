@@ -77,7 +77,7 @@ TODO: Implement resetting only public, private or domain profile, ShouldProcess
 TODO: Remote registry reset is not implemented by Reset-WinRM
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

@@ -67,7 +67,7 @@ None. Confirm-Firewall.ps1 does not generate any output
 TODO: Need to check for consistency of rules as well
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

@@ -68,7 +68,7 @@ None. Set-Privacy.ps1 does not generate any output
 TODO: More Windows privacy options can be set in GPO
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://gpsearch.azurewebsites.net

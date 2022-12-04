@@ -126,7 +126,7 @@ update ValueFromPipeline arguments.
 NOTE: To use Format-List, Format-Wide or custom format specify -Stream parameter
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

@@ -58,7 +58,7 @@ another computer or media, you should "unblock" scripts by using this code.
 TODO: We should probably unblock only scripts, not all files.
 
 .LINK
-https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 #>
 
 #Requires -Version 5.1

@@ -55,6 +55,10 @@ NOTE: Delay happens when mixing Write-Output with other streams (none waits)
 NOTE: This might get fixed with consistent outputs, formats and better pipelines
 TODO: Test should be run in order of module or function (or both) inter dependency
 TODO: We should handle to skip "dangerous" tests
+
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
 #>
 
 #Requires -Version 5.1
