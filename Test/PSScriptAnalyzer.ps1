@@ -37,6 +37,10 @@ Run PSScriptAnalyzer on repository and format detailed and relevant output
 Specify severity of rules which are to be reported.
 By default all severities are reported.
 
+.PARAMETER Path
+If specified, only this file or directory is analyzed.
+By default entire repository is analyzed.
+
 .PARAMETER SuppressedOnly
 If specified only suppressed rules are reported
 
@@ -68,11 +72,14 @@ None.
 
 #Requires -Version 5.1
 
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 param (
-	[Parameter()]
+	[Parameter(Position = 0)]
 	[ValidateSet("Error", "Warning", "Information")]
 	[string[]] $Severity,
+
+	[Parameter()]
+	[string] $Path = $ProjectRoot,
 
 	[Parameter()]
 	[switch] $SuppressedOnly,
@@ -112,9 +119,10 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 	$Infos = 0
 
 	$AnalyzerParams = @{
-		Path = $ProjectRoot
+		Path = $Path
 		Recurse = $true
 		Settings = "$ProjectRoot\Config\PSScriptAnalyzerSettings.psd1"
+		ReportSummary = $true
 	}
 
 	if (![string]::IsNullOrEmpty($Severity))

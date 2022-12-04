@@ -49,6 +49,10 @@
 		"editor.formatOnSave": false,
 		"editor.formatOnPaste": true
 	},
+	// PowerShell extension is default formatter
+	"[powershell]": {
+		"editor.defaultFormatter": "ms-vscode.powershell"
+	},
 	// override the colors of the default log items (log files):
 	// log.constant
 	// log.date
@@ -121,7 +125,17 @@
 	// Extension: Fix JSON
 	"fixJson.indentationSpaces": null,
 	// Extension: Hightlight Bad Chars
-	"highlight-bad-chars.asciiOnly": false,
+	"highlight-bad-chars.asciiOnly": true,
+	"highlight-bad-chars.additionalUnicodeChars": [
+		// https://www.vertex42.com/ExcelTips/unicode-symbols.html
+	],
+	"highlight-bad-chars.badCharDecorationStyle": {
+		"cursor": "square",
+		"backgroundColor": "rgba(255,0,0,0.3)",
+		"borderWidth": "1px",
+		"borderStyle": "solid",
+		"borderColor": "rgba(255,0,0,0.6)"
+	},
 	// Extension: JSON
 	"JSON-zain.json.autorefresh": true,
 	// Extension: Log File Hightlighter

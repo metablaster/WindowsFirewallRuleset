@@ -59,28 +59,8 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 238,
+					"line": 252,
 					"column": 65,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Config/PSScriptAnalyzerSettings.psd1",
-			"bookmarks": [
-				{
-					"line": 22,
-					"column": 2,
-					"label": ""
-				},
-				{
-					"line": 54,
-					"column": 2,
-					"label": ""
-				},
-				{
-					"line": 57,
-					"column": 2,
 					"label": ""
 				}
 			]

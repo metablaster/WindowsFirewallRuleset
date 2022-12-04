@@ -115,7 +115,6 @@ SOFTWARE.
 	# no objects of that type are exported, regardless of the value in the Export-ModuleMember
 	FunctionsToExport = @(
 		"Approve-Execute"
-		"Write-ServiceList"
 		"Compare-Path"
 		"Confirm-FileEncoding"
 		"ConvertFrom-Wildcard"
@@ -130,6 +129,8 @@ SOFTWARE.
 		"Set-Permission"
 		"Set-ScreenBuffer"
 		"Set-Shortcut"
+		"Write-ColorMessage"
+		"Write-ServiceList"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -161,7 +162,6 @@ SOFTWARE.
 		"en-US\Ruleset.Utility-help.xml"
 		"Help\en-US\about_Ruleset.Utility.md"
 		"Help\en-US\Approve-Execute.md"
-		"Help\en-US\Write-ServiceList.md"
 		"Help\en-US\Compare-Path.md"
 		"Help\en-US\Confirm-FileEncoding.md"
 		"Help\en-US\ConvertFrom-Wildcard.md"
@@ -177,11 +177,12 @@ SOFTWARE.
 		"Help\en-US\Set-Permission.md"
 		"Help\en-US\Set-ScreenBuffer.md"
 		"Help\en-US\Set-Shortcut.md"
+		"Help\en-US\Write-ColorMessage.md"
+		"Help\en-US\Write-ServiceList.md"
 		"Help\README.md"
 		"Private\Convert-EncodingString.ps1"
 		"Private\Set-Privilege.ps1"
 		"Public\Approve-Execute.ps1"
-		"Public\Write-ServiceList.ps1"
 		"Public\Compare-Path.ps1"
 		"Public\Confirm-FileEncoding.ps1"
 		"Public\ConvertFrom-Wildcard.ps1"
@@ -197,6 +198,8 @@ SOFTWARE.
 		"Public\Set-Permission.ps1"
 		"Public\Set-ScreenBuffer.ps1"
 		"Public\Set-Shortcut.ps1"
+		"Public\Write-ColorMessage.ps1"
+		"Public\Write-ServiceList.ps1"
 		"Ruleset.Utility_5f38e46f-1bc4-489d-90df-72755129cfdd_HelpInfo.xml"
 		"Ruleset.Utility.psd1"
 		"Ruleset.Utility.psm1"

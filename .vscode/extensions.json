@@ -42,9 +42,14 @@
 		// XML
 		"redhat.vscode-xml"
 	],
-	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
+	// List of extensions which should not be recommended for users of this workspace.
+	// Following extensions cause issues when used with some extensions from recommended list
 	"unwantedRecommendations": [
+		// Git History
 		"donjayamanne.githistory",
-		"berublan.vscode-log-viewer"
+		// Log Viewer
+		"berublan.vscode-log-viewer",
+		// Unicode-Substitutions
+		"glenbuktenica.unicode-substitutions",
 	]
 }

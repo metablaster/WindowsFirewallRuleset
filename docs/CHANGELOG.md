@@ -78,6 +78,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
     - `Connect-IPInterface` experimental script to troubleshoot obtaining IP from DHCP
     - Requirement for remote registry service now applies only for remoting
+    - `Write-ColorMessage` function to write colored messsages as a replacement for `Write-Host`
 
 - Scripts
 

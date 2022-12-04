@@ -68,7 +68,6 @@ foreach ($Script in $PrivateScripts)
 
 $PublicScripts = @(
 	"Approve-Execute"
-	"Write-ServiceList"
 	"Compare-Path"
 	"Confirm-FileEncoding"
 	"ConvertFrom-Wildcard"
@@ -83,6 +82,8 @@ $PublicScripts = @(
 	"Set-Permission"
 	"Set-ScreenBuffer"
 	"Set-Shortcut"
+	"Write-ColorMessage"
+	"Write-ServiceList"
 )
 
 foreach ($Script in $PublicScripts)

@@ -2,11 +2,32 @@
 # https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/rules/readme
 # NOTE: PSGallery ruleset is a duplicate of these
 # TODO: Check for new or updated settings
-# NOTE: Last checked on 11.11.2022. v1.21.0
-# NOTE: Good portion of warnings is surpressed because of following false positive:
-# https://github.com/PowerShell/PSScriptAnalyzer/issues/1354
+# NOTE: Last checked on 3.12.2022. v1.21.0
+# NOTE: Good portion of warnings is surpressed within repository because of false positives
+
+# A Script Analyzer profile file is a text file that contains a hashtable with one or more of the following keys:
+# CustomRulePath, ExcludeRules, IncludeDefaultRules, IncludeRules, RecurseCustomRulePath, Rules, Severity
 
 @{
+	Severity = @(
+		# NOTE: Not configured because of Test\PSScriptAnalyzer.ps1
+		# If not specified all severities are severities are handled
+		# "Error"
+		# "Warning"
+		# "Information"
+	)
+
+	ExcludeRules = @(
+		# Temporary disabled
+		"PSAvoidLongLines"
+		# Requires generating custom updated settings
+		"PSUseCompatibleCmdlets"
+		"PSUseCompatibleCommands"
+		# Unwanted
+		"PSAlignAssignmentStatement"
+		"PSAvoidUsingDoubleQuotesForConstantString"
+	)
+
 	IncludeRules = @(
 		#
 		# CmdletDesign
@@ -19,7 +40,6 @@
 		"PSMissingModuleManifestField"
 		"PSAvoidDefaultValueSwitchParameter"
 		# NOTE: New settings v1.19.1
-		# TODO: Need to test
 		"PSAvoidMultipleTypeAttributes"
 		#
 		# "PSDSC*",
@@ -51,10 +71,8 @@
 		"PSProvideCommentHelp"
 		"PSAvoidUsingWriteHost"
 		# NOTE: New settings v1.19.1
-		# TODO: docs say it could be configured but it could not? and it's not working
-		"PSAvoidUsingDoubleQuotesForConstantString"
+		# "PSAvoidUsingDoubleQuotesForConstantString"
 		"PSUseUsingScopeModifierInNewRunspaces"
-		# TODO: Need to test, but formating works
 		"PSAvoidSemicolonsAsLineTerminators"
 		#
 		# ScriptSecurity
@@ -107,7 +125,8 @@
 		"PSUseCorrectCasing"
 	)
 
-	# NOTE: powershell.codeFormatting strings are settings for PowerShell VSCode extension
+	# NOTE: powershell.codeFormatting strings are settings for PSScriptAnalyzer which
+	# ships with PowerShell VSCode
 	# TODO: not all options have defaults mentioned in comments
 	Rules = @{
 		#
@@ -115,6 +134,7 @@
 		#
 
 		PSPlaceOpenBrace = @{
+			# default = $false
 			Enable = $true
 			# NOTE: Allman style (not on same line)
 			# Enforce open brace to be on the same line as that of its preceding keyword.
@@ -131,6 +151,7 @@
 		}
 
 		PSPlaceCloseBrace = @{
+			# default = $false
 			Enable = $true
 			# Indicates if a new line should follow a close brace.
 			# If set to true a close brace should be followed by a new line.
@@ -147,6 +168,7 @@
 		}
 
 		PSUseConsistentWhitespace = @{
+			# default = $false
 			Enable = $true
 			# Checks if there is a space after the opening brace and a space
 			# before the closing brace.
@@ -199,7 +221,6 @@
 			IndentationSize = 4 # editor.tabSize
 		}
 
-		# NOTE: unwanted
 		# Enforce alignment of assignment statements in a hashtable and in a DSC Configuration
 		PSAlignAssignmentStatement = @{
 			# default = false
@@ -220,6 +241,7 @@
 		#
 
 		PSProvideCommentHelp = @{
+			# default = $true
 			Enable = $true
 			# NOTE: unwanted
 			# If enabled, throw violation only on functions/cmdlets that are exported
@@ -250,7 +272,7 @@
 			# default = ?
 			Enable = $true
 
-			# default = $true
+			# PowerShell versions for which to check syntax compatibility
 			TargetVersions = @(
 				"7.3",
 				"5.1"
@@ -266,8 +288,21 @@
 			MaximumLineLength = 120
 		}
 
+		# Lines should not end with a semicolon.
+		PSAvoidSemicolonsAsLineTerminators = @{
+			# default = $false
+			Enable = $true
+		}
+
+		# NOTE: unwanted
+		# Single quotes should be used when the value of a string is constant.
+		PSAvoidUsingDoubleQuotesForConstantString = @{
+			# default = $false
+			Enable = $true
+		}
+
 		#
-		# TODO: Needs generating custom updated settings
+		# TODO: Following rules needs generating custom updated settings
 		#
 
 		# This rule flags cmdlets that are not available in a given Edition/Version of
@@ -340,6 +375,7 @@
 			)
 
 			# string: absolute path to new profile dir
+			# defaults to compatibility_profiles directory in PSScriptAnalyzer module
 			# ProfileDirPath = ""
 
 			# Full names of types or type accelerators to ignore compatibility of in scripts
@@ -370,9 +406,11 @@
 			)
 
 			# string: absolute path to new profile dir
+			# defaults to compatibility_profiles directory in PSScriptAnalyzer module
 			# ProfileDirPath = ""
 
 			# Commands to ignore compatibility of in scripts
+			# default = @()
 			IgnoreCommands = @()
 		}
 	}

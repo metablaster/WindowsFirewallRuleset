@@ -611,8 +611,6 @@ Next step is to add following settings into your VSCode settings which is found 
   "gruntfuggly.todo-tree",
   // Trailing Spaces
   "shardulm94.trailing-spaces",
-  // vscode-json
-  "andyyaldoo.vscode-json",
   // XML Tools
   "dotjoshjohnson.xml"
  ]
