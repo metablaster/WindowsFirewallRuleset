@@ -69,7 +69,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Write-ColorMessage"
 
 Start-Test "Green text"
-Write-ColorMessage "text in green" -Foregroundcolor Green
+Write-ColorMessage "text in green" Green
 
 $Result = Write-ColorMessage "text in green" -Foregroundcolor Green
 Test-Output $Result -Command Write-ColorMessage

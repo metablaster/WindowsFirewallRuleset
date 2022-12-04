@@ -255,7 +255,7 @@ function Import-FirewallRule
 		{
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-			New-NetFirewallRule -PolicyStore $MachineName @HashProps | Format-RuleOutput -Import
+			New-NetFirewallRule -PolicyStore $MachineName @HashProps | Format-RuleOutput -Label Import
 		}
 		else
 		{

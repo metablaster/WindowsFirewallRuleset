@@ -266,6 +266,7 @@ Todo's in this file are categorized into following sections:
     - Some Pester tests are out of date and don't work well with Pester 5.x
     - A function to detect and confirm file line endings
     - A function to test for duplicate GUID's in scripts that use them
+    - Test script need to test `PSScriptAnalyzerSettings.psd1` and each of the rules
 
 5. Code style and design
 

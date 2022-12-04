@@ -118,7 +118,13 @@ Set-Shortcut
 Create or set shortcut to file or online location
 
 ```powershell
-Build-ServiceList
+Write-ColorMessage
+```
+
+Write-ColorMessage writes colored output, which let's you avoid using Write-Host
+
+```powershell
+Write-ServiceList
 ```
 
 Build a list of windows services involved in script rules

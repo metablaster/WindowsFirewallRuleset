@@ -37,71 +37,79 @@ very fast, this function helps to output only relevant, formatted and colored ou
 .PARAMETER Rule
 Firewall rule to format, by default output status represents loading rule
 
-.PARAMETER Modify
-If specified, output status represents rule modification
+.PARAMETER Label
+Specify action on how to format rule processing, acceptable values are:
+Load, Modify, Import and Export.
+The default value is "Load" which represent loading rule into firewall.
 
-.PARAMETER Import
-If specified, output status represents importing rule
+.PARAMETER ForegroundColor
+Optionally specify text color of the output.
+For acceptable color values see link section
+The default is Cyan.
 
 .EXAMPLE
 PS> Net-NewFirewallRule ... | Format-RuleOutput
 
 .EXAMPLE
-PS> Net-NewFirewallRule ... | Format-RuleOutput -Import
+PS> Net-NewFirewallRule ... | Format-RuleOutput
 
 .INPUTS
 [Microsoft.Management.Infrastructure.CimInstance[]]
 
 .OUTPUTS
-None. Format-RuleOutput does not generate any output
+[string] colored version
 
 .NOTES
 TODO: For force loaded rules it should say: "Force Load Rule:"
+TODO: Implementation needed to format rules which are not CimInstance see,
+Remove-FirewallRule and Export-RegistryRule
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor
 #>
 function Format-RuleOutput
 {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Colored output is wanted")]
-	[CmdletBinding(DefaultParameterSetName = "None",
+	[CmdletBinding(DefaultParameterSetName = "None", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+		[Alias("InputObject")]
 		[Microsoft.Management.Infrastructure.CimInstance[]] $Rule,
 
-		[Parameter(ParameterSetName = "Modify")]
-		[switch] $Modify,
+		[Parameter()]
+		[ValidateSet("Load", "Modify", "Import", "Export", "Remove")]
+		[string] $Label = "Load",
 
-		[Parameter(ParameterSetName = "Import")]
-		[switch] $Import
+		[Parameter()]
+		[ConsoleColor] $ForegroundColor = [ConsoleColor]::Cyan
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		if ($Modify)
+		$DisplayLabel = switch ($Label)
 		{
-			$Label = "Modify Rule"
-		}
-		elseif ($Import)
-		{
-			$Label = "Import Rule"
-		}
-		else
-		{
-			$Label = "Load Rule"
+			"Load" { "Load Rule"; break }
+			"Modify" { "Modify Rule"; break }
+			"Import" { "Import Rule"; break }
+			"Export" { "Export Rule"; break }
+			"Remove" { "Export Rule"; break }
 		}
 	}
 	process
 	{
 		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
 		{
-			Write-Host "$($Label): $($Rule.DisplayName)" -ForegroundColor Cyan
+			Write-ColorMessage "$($DisplayLabel): $($Rule.DisplayName)" $ForegroundColor
 		}
 		else
 		{
-			Write-Host "$($Label): [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
+			Write-ColorMessage "$($DisplayLabel): [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" $ForegroundColor
 		}
 	}
 }

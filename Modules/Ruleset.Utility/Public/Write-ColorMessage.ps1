@@ -34,7 +34,7 @@ Write a colored output
 Write-ColorMessage writes colored output, which let's you avoid using Write-Host to
 avoid having to suppress code analysis warnings with PSScriptAnalyzer.
 
-.PARAMETER InputObject
+.PARAMETER Message
 An object such as test which is to be printed or outputted in color
 
 .PARAMETER ForegroundColor
@@ -65,6 +65,12 @@ works unexpectedly depending on PS edition used.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Write-ColorMessage.md
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshost
 #>
 function Write-ColorMessage
 {

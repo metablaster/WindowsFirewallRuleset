@@ -46,7 +46,8 @@ None. You cannot pipe objects to Show-Table
 None. Show-Table does not generate any output
 
 .NOTES
-This function is needed to avoid warning of write-host inside non "Show" function
+TODO: Needs to be tested if Write-Host can be removed
+TODO: PSScriptAnalyzer doesn't report use of Write-Host here, why?
 #>
 function Show-Table
 {

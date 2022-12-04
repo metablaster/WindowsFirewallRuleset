@@ -184,8 +184,7 @@ function Test-FileSystemPath
 		}
 		else
 		{
-			Write-Warning -Message "[$InvocationName] $Message"
-			Write-Information -Tags "[$InvocationName]" -MessageData "INFO: Path '$LiteralPath'"
+			Write-Warning -Message "[$InvocationName] $Message '$LiteralPath'"
 		}
 	}
 

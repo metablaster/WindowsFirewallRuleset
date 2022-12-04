@@ -69,7 +69,6 @@ None. Set-ATP.ps1 does not generate any output
 .NOTES
 TODO: There are some exotic options for Set-MpPreference which we don't use
 TODO: Switches are required to optionally set non ATP settings
-TODO: Resolve PSSA warning
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
@@ -338,16 +337,6 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Configure Advanced 
 	# Disabled Value: decimal: 1
 	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
 	$ValueName = "DisableRemovableDriveScanning"
-	$Value = 0
-	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
-	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind
-
-	Write-Information -MessageData "[$ThisScript] Run full scan on mapped network drives"
-	# Run full scan on mapped network drives (Optional)
-	# Enabled Value: decimal: 0
-	# Disabled Value: decimal: 1
-	$RegistryPath = "Software\Policies\Microsoft\Windows Defender\Scan"
-	$ValueName = "DisableScanningMappedNetworkDrivesForFullScan"
 	$Value = 0
 	$ValueKind = [Microsoft.Win32.RegistryValueKind]::DWord
 	Set-PolicyFileEntry -Path $PolicyPath -Key $RegistryPath -ValueName $ValueName -Data $Value -Type $ValueKind

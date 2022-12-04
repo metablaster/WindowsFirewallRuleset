@@ -134,9 +134,6 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Export-FirewallRule
 {
-	# TODO: Should be possible to use Format-RuleOutput function
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md")]
 	[OutputType([void])]
@@ -259,14 +256,7 @@ function Export-FirewallRule
 		Write-Progress @ProgressParams
 
 		# Iterate through rules
-		if ([string]::IsNullOrEmpty($Rule.DisplayGroup))
-		{
-			Write-Host "Export Rule: $($Rule.DisplayName)" -ForegroundColor Cyan
-		}
-		else
-		{
-			Write-Host "Export Rule: [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
-		}
+		Format-RuleOutput $Rule -Label Export
 
 		# NOTE: Filters are what makes this script ultra slow, each takes approx 1 second
 		# Retrieve addresses,

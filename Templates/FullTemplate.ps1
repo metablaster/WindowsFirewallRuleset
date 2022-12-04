@@ -141,7 +141,7 @@ using namespace System
 
 # NOTE: surpress script scope warning example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidUsingWriteHost", "", Justification = "Script scope supression")]
+	"PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Script scope supression")]
 [CmdletBinding()]
 [OutputType([void])]
 # NOTE: surpress parameter example
@@ -167,7 +167,7 @@ $Deny = "Skip operation, template deny help message"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Write-Host "Template message"
+Write-Information -Tag $MyInvocation.InvocationName -MessageData "INFO: Template message"
 
 # NOTE: surpress variable example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(

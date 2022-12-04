@@ -94,9 +94,6 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Remove-FirewallRule
 {
-	# TODO: Should be possible to use Format-RuleOutput function
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md")]
 	[OutputType([void])]
@@ -235,7 +232,7 @@ function Remove-FirewallRule
 				continue
 			}
 
-			Write-Host "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" -ForegroundColor Cyan
+			Write-ColorMessage "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" Cyan
 			Remove-NetFirewallRule -PolicyStore $MachineName -Name $CurrentRule.Name
 		}
 

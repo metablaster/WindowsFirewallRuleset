@@ -963,7 +963,7 @@ if ($ListPreference)
 
 			foreach ($Variable in $AllVariables)
 			{
-				Write-Host "[$Caller] $($Variable.Name) = $($Variable.Value)" -ForegroundColor Cyan
+				Write-ColorMessage "[$Caller] $($Variable.Name) = $($Variable.Value)" Cyan
 			}
 
 			if ($All)
@@ -973,17 +973,17 @@ if ($ListPreference)
 
 				foreach ($Entry in $DriveEntry)
 				{
-					Write-Host "[$Caller] $($Entry.Name):\ = $($Entry.Root)" -ForegroundColor Cyan
+					Write-ColorMessage "[$Caller] $($Entry.Name):\ = $($Entry.Root)" Cyan
 				}
 
 				foreach ($Entry in @($env:PSModulePath.Split(";")))
 				{
-					Write-Host "[$Caller] ModulePath = $Entry" -ForegroundColor Cyan
+					Write-ColorMessage "[$Caller] ModulePath = $Entry" Cyan
 				}
 
 				foreach ($Entry in @($env:Path.Split(";")))
 				{
-					Write-Host "[$Caller] Path = $Entry" -ForegroundColor Cyan
+					Write-ColorMessage "[$Caller] Path = $Entry" Cyan
 				}
 			}
 
@@ -991,29 +991,29 @@ if ($ListPreference)
 			{
 				# HACK: Find better way to enumerate PSSessionOption and use foreach
 				$Option = (Get-ChildItem -Path Variable:\PSSessionOption).Value
-				Write-Host "[$Caller.PSSessionOption.MaximumConnectionRedirectionCount] $($Option.MaximumConnectionRedirectionCount)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.NoCompression] $($Option.NoCompression)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.NoMachineProfile] $($Option.NoMachineProfile)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.ProxyAccessType] $($Option.ProxyAccessType)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.ProxyAuthentication] $($Option.ProxyAuthentication)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.ProxyCredential] $($Option.ProxyCredential)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.SkipCACheck] $($Option.SkipCACheck)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.SkipCNCheck] $($Option.SkipCNCheck)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.SkipRevocationCheck] $($Option.SkipRevocationCheck)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.OperationTimeout] $($Option.OperationTimeout)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.NoEncryption] $($Option.NoEncryption)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.UseUTF16] $($Option.UseUTF16)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.IncludePortInSPN] $($Option.IncludePortInSPN)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.OutputBufferingMode] $($Option.OutputBufferingMode)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.MaxConnectionRetryCount] $($Option.MaxConnectionRetryCount)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.Culture] $($Option.Culture)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.UICulture] $($Option.UICulture)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.MaximumReceivedDataSizePerCommand] $($Option.MaximumReceivedDataSizePerCommand)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.MaximumReceivedObjectSize] $($Option.MaximumReceivedObjectSize)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.ApplicationArguments] $($Option.ApplicationArguments)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.OpenTimeout] $($Option.OpenTimeout)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.CancelTimeout] $($Option.CancelTimeout)" -ForegroundColor Cyan
-				Write-Host "[$Caller.PSSessionOption.IdleTimeout] $($Option.IdleTimeout)" -ForegroundColor Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.MaximumConnectionRedirectionCount] $($Option.MaximumConnectionRedirectionCount)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.NoCompression] $($Option.NoCompression)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.NoMachineProfile] $($Option.NoMachineProfile)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.ProxyAccessType] $($Option.ProxyAccessType)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.ProxyAuthentication] $($Option.ProxyAuthentication)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.ProxyCredential] $($Option.ProxyCredential)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.SkipCACheck] $($Option.SkipCACheck)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.SkipCNCheck] $($Option.SkipCNCheck)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.SkipRevocationCheck] $($Option.SkipRevocationCheck)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.OperationTimeout] $($Option.OperationTimeout)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.NoEncryption] $($Option.NoEncryption)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.UseUTF16] $($Option.UseUTF16)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.IncludePortInSPN] $($Option.IncludePortInSPN)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.OutputBufferingMode] $($Option.OutputBufferingMode)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.MaxConnectionRetryCount] $($Option.MaxConnectionRetryCount)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.Culture] $($Option.Culture)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.UICulture] $($Option.UICulture)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.MaximumReceivedDataSizePerCommand] $($Option.MaximumReceivedDataSizePerCommand)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.MaximumReceivedObjectSize] $($Option.MaximumReceivedObjectSize)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.ApplicationArguments] $($Option.ApplicationArguments)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.OpenTimeout] $($Option.OpenTimeout)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.CancelTimeout] $($Option.CancelTimeout)" Cyan
+				Write-ColorMessage "[$Caller.PSSessionOption.IdleTimeout] $($Option.IdleTimeout)" Cyan
 			}
 		}
 	} | Import-Module -Scope Global

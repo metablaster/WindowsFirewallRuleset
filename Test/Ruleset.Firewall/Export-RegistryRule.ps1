@@ -80,7 +80,7 @@ if ($false)
 }
 else
 {
-	if ($true)
+	if ($false)
 	{
 		Start-Test "Persistent store"
 		Export-RegistryRule -DisplayGroup "" -Outbound -Path $Exports -FileName "RegNoGroupExport"

@@ -113,9 +113,6 @@ https://github.com/MScholtes/Firewall-Manager
 #>
 function Export-RegistryRule
 {
-	# TODO: Should be possible to use Format-RuleOutput function
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host for color consistency")]
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md")]
 	[OutputType([void])]
@@ -206,11 +203,11 @@ function Export-RegistryRule
 		# Iterate through rules
 		if ($Rule.DisplayGroup -like "")
 		{
-			Write-Host "Export Rule: $($Rule.DisplayName)" -ForegroundColor Cyan
+			Write-ColorMessage "Export Rule: $($Rule.DisplayName)" Cyan
 		}
 		else
 		{
-			Write-Host "Export Rule: [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" -ForegroundColor Cyan
+			Write-ColorMessage "Export Rule: [$($Rule.DisplayGroup)] -> $($Rule.DisplayName)" Cyan
 		}
 
 		# TODO: Using [ordered] will not work for PowerShell Desktop, however [ordered] was introduced in PowerShell 3.0

@@ -75,10 +75,6 @@ TODO: Changes done to system services should be reverted to original values, new
 #>
 function Initialize-Project
 {
-	# TODO: Should be possible to replace Write-Host after updates done to formatting
-	# Also the should be a way to have colored output without using Write-Host
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSAvoidUsingWriteHost", "", Scope = "Function", Justification = "Using Write-Host because of output formatting issues")]
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Project.md")]
 	[OutputType([void])]
@@ -104,11 +100,11 @@ function Initialize-Project
 		}
 
 		# Print watermark
-		Write-Host ""
-		Write-Host "Windows Firewall Ruleset v$ProjectVersion"
-		Write-Host "Copyright (C) 2019-2022 metablaster zebal@protonmail.ch"
-		Write-Host "https://github.com/metablaster/WindowsFirewallRuleset"
-		Write-Host ""
+		Write-ColorMessage
+		Write-ColorMessage "Windows Firewall Ruleset v$ProjectVersion" Cyan
+		Write-ColorMessage "Copyright (C) 2019-2022 metablaster zebal@protonmail.ch" Cyan
+		Write-ColorMessage "https://github.com/metablaster/WindowsFirewallRuleset" Cyan
+		Write-ColorMessage
 
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking operating system"
 
@@ -469,14 +465,14 @@ function Initialize-Project
 
 		# Everything OK, print environment status
 		# TODO: finally show loaded modules, providers and services stataus
-		Write-Host ""
-		Write-Host "Checking minimum requirements completed successfully!" -ForegroundColor Cyan
+		Write-ColorMessage
+		Write-ColorMessage "Checking system requirements completed successfully" Cyan
 
-		Write-Host ""
+		Write-ColorMessage
 		# TODO: This should include both, server and client system
 		# NOTE: No 'v' prefix because of possible "Insider" string
-		Write-Host "System:`t`t $OSCaption $OSBuildVersion"
-		Write-Host "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion"
-		Write-Host ""
+		Write-ColorMessage "System:`t`t $OSCaption $OSBuildVersion" Cyan
+		Write-ColorMessage "Environment:`t PowerShell $PowerShellEdition $TargetPSVersion" Cyan
+		Write-ColorMessage
 	} # if ShouldProcess
 }

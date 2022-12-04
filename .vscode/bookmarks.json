@@ -66,46 +66,6 @@
 			]
 		},
 		{
-			"path": "Modules/Ruleset.Firewall/Public/Export-FirewallRule.ps1",
-			"bookmarks": [
-				{
-					"line": 136,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Firewall/Public/Export-RegistryRule.ps1",
-			"bookmarks": [
-				{
-					"line": 115,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Firewall/Public/Remove-FirewallRule.ps1",
-			"bookmarks": [
-				{
-					"line": 96,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Initialize/Public/Initialize-Project.ps1",
-			"bookmarks": [
-				{
-					"line": 77,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Scripts/Utility/Get-ParameterAlias.ps1",
 			"bookmarks": [
 				{
@@ -136,11 +96,11 @@
 			]
 		},
 		{
-			"path": "Scripts/Security/Set-ATP.ps1",
+			"path": "Modules/Ruleset.ProgramInfo/Private/Show-Table.ps1",
 			"bookmarks": [
 				{
-					"line": 71,
-					"column": 26,
+					"line": 49,
+					"column": 0,
 					"label": ""
 				}
 			]
