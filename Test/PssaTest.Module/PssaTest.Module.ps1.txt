@@ -8,11 +8,12 @@ Test correctness Config\PSScriptAnalyzerSettings.psd1, ensure all rules are work
 ensure PowerShell extension makes squigglies in editor.
 
 .EXAMPLE
-This file is intentionally associated to "test_file" in vscode settings to avoid generating
-PSScriptAnalyzer warnings.
-To use it uncomment "test_file" line in .vscode\settings.json and invoke analyzer on module
-this way Config/PSScriptAnalyzerSettings.psd1 as well as PS extension squiggles are tested for
-code analysis.
+NOTE: This file is intentionally associated to "test_file" in vscode settings to avoid generating
+PSScriptAnalyzer warnings, and *.txt extension is intentionally added to skip automatically
+analyzing code.
+To use it uncomment "test_file" line in .vscode\settings.json, remove *.txt extension on module
+files and then invoke analyzer on module, this way Config/PSScriptAnalyzerSettings.psd1 as well as
+PS extension squiggles are tested for correctness of code analysis.
 
 .INPUTS
 None. You cannot pipe objects to Test-PSAnalyzerSettings.ps1.ps1

@@ -42,6 +42,7 @@ This function also serves as replacement for takeown.exe and icacls.exe whose sy
 .PARAMETER LiteralPath
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
+Note that for registry key you must specify PowerShell provider path, ex: HKLM:\
 
 .PARAMETER Owner
 Principal username who will be the new owner of a resource.
@@ -126,6 +127,11 @@ LanmanServer service is denied specified rights for specified directory and all 
 PS> Set-Permission -User SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
 
 Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
+
+.EXAMPLE
+Set-Permission -User Administrators -LiteralPath "HKLM:\$RegPath" -RegistryRight ChangePermissions -Inheritance None
+
+Allows Administrators to change permissions on registry path, and the path does not inherit parent permissions
 
 .INPUTS
 None. You cannot pipe objects to Set-Permission
@@ -277,6 +283,18 @@ function Set-Permission
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Recurse parameter ignored for leaf objects"
 	}
 
+	# TODO: Set-Acl should use -LiteralPath but we use -Path because when accessing registry -LiteralPath must be escaped,
+	# [regex]::Escape doesn't work and we currently have no algorithm to escape registry locations
+	$SetAclPath = @{}
+	if ($PSCmdlet.ParameterSetName -eq "Registry")
+	{
+		$SetAclPath.Path = $LiteralPath
+	}
+	else
+	{
+		$SetAclPath.LiteralPath = $LiteralPath
+	}
+
 	$Acl = Get-Acl -LiteralPath $LiteralPath
 
 	if ($Reset)
@@ -315,7 +333,7 @@ function Set-Permission
 			$Acl.SetAccessRuleProtection($false, $PreserveInheritance)
 			try
 			{
-				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+				Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 			}
 			catch
 			{
@@ -323,7 +341,7 @@ function Set-Permission
 				{
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 					Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
-					Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+					Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 				}
 				catch
 				{
@@ -340,7 +358,7 @@ function Set-Permission
 
 		try
 		{
-			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 		}
 		catch
 		{
@@ -348,7 +366,7 @@ function Set-Permission
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 				Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
-				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+				Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 			}
 			catch
 			{
@@ -391,7 +409,7 @@ function Set-Permission
 		$Acl.SetOwner($NTAccount)
 		try
 		{
-			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 		}
 		catch
 		{
@@ -399,7 +417,7 @@ function Set-Permission
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 				Set-Privilege SeSecurityPrivilege, SeTakeOwnershipPrivilege -ErrorAction Stop | Out-Null
-				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+				Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 			}
 			catch
 			{
@@ -463,7 +481,7 @@ function Set-Permission
 
 		try
 		{
-			Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+			Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 		}
 		catch
 		{
@@ -471,7 +489,7 @@ function Set-Permission
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] $($_.Exception.Message)"
 				Set-Privilege SeSecurityPrivilege -ErrorAction Stop | Out-Null
-				Set-Acl -AclObject $Acl -LiteralPath $LiteralPath -ErrorAction Stop
+				Set-Acl -AclObject $Acl @SetAclPath -ErrorAction Stop
 			}
 			catch
 			{

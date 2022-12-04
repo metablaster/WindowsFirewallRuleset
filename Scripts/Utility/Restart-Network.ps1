@@ -129,7 +129,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
@@ -451,42 +451,83 @@ else
 
 	if ($Reset)
 	{
-		Write-Information -Tags $ThisScript -MessageData "INFO: Reseting adapter properties"
+		Write-Information -Tags $ThisScript -MessageData "INFO: Reseting adapter properties to system defaults"
 
-		# Reset the advanced properties of a network adapter to their factory default values
-		Start-Job -Name "AdvancedProperties" -ArgumentList $AdapterAlias -ScriptBlock {
-			param ($AdapterAlias)
-			Reset-NetAdapterAdvancedProperty -InterfaceAlias $AdapterAlias -DisplayName "*" -NoRestart
+		try
+		{
+			Reset-NetAdapterAdvancedProperty -InterfaceAlias $AdapterAlias -DisplayName "*" -NoRestart -ErrorAction Stop
 		}
+		catch
+		{
+			# NOTE: https://davidvielmetter.com/tricks/netsh-int-ip-reset-says-access-denied"
+			$RegPath = "SYSTEM\CurrentControlSet\Control\Nsi\{eb004a00-9b1a-11d4-9123-0050047759bc}\26"
+			Write-Error -Category SecurityError -TargetObject $RegPath -Message "Access to registry key was denied"
 
-		Receive-Job -Name "AdvancedProperties" -Wait -AutoRemoveJob
+			if ($PSCmdlet.ShouldContinue("Windows registry: HKLM:\$RegPath", "Modify registry key permissions to allow Administrators resetting adapter advanced properties"))
+			{
+				$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
+				$RegistryView = [Microsoft.Win32.RegistryView]::Registry64
+
+				try
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening registry hive"
+					$RootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RegistryHive, $RegistryView)
+				}
+				catch
+				{
+					Write-Error -ErrorRecord $_
+					Update-Log
+				}
+
+				if ($RootKey)
+				{
+					$RegistryPermission = [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree
+					$RegistryRights = [System.Security.AccessControl.RegistryRights]::ChangePermissions
+
+					try
+					{
+						Write-Verbose -Message "[$ThisScript] Opening sub key: HKLM\$RegPath"
+						[Microsoft.Win32.RegistryKey] $SubKey = $RootKey.OpenSubkey($RegPath, $RegistryPermission, $RegistryRights)
+
+						if ($SubKey)
+						{
+							# Grant full control to Administrators
+							Write-Verbose -Message "[$ThisScript] Set permission to 'Administrators' on key '$($SubKey.Name)'"
+							Set-Permission -User Administrators -LiteralPath "HKLM:\$RegPath" -RegistryRight $RegistryRights -Inheritance None -Confirm:$false
+							$SubKey.Close()
+						}
+					}
+					catch
+					{
+						Write-Error -ErrorRecord $_
+						Update-Log
+					}
+
+					$RootKey.Dispose()
+				}
+			}
+		}
 
 		# Sets the interface-specific DNS client configurations on the computer
-		Start-Job -Name "AdvancedDNS" -ArgumentList $AdapterAlias -ScriptBlock {
-			param ($AdapterAlias)
-			Set-DnsClient -InterfaceAlias $AdapterAlias -RegisterThisConnectionsAddress $true -ResetConnectionSpecificSuffix `
-				-UseSuffixWhenRegistering $false
-		}
+		Set-DnsClient -InterfaceAlias $AdapterAlias -RegisterThisConnectionsAddress $true -ResetConnectionSpecificSuffix `
+			-UseSuffixWhenRegistering $false
 
-		Receive-Job -Name "AdvancedDNS" -Wait -AutoRemoveJob
+		# NETBIOS Option:
+		# 0 - Use NetBIOS setting from the DHCP server
+		# 1 - Enable NetBIOS over TCP/IP
+		# 2 - Disable NetBIOS over TCP/IP
 
-		# Set NETBIOS adapter option
-		Start-Job -Name "NETBIOS" -ArgumentList $AdapterAlias -ScriptBlock {
-			param ($AdapterAlias)
-			# NETBIOS Option:
-			# 0 - Use NetBIOS setting from the DHCP server
-			# 1 - Enable NetBIOS over TCP/IP
-			# 2 - Disable NetBIOS over TCP/IP
+		# NOTE: There is no InterfaceAlias in CIM selection
+		$Description = Get-NetAdapter -InterfaceAlias $AdapterAlias | Where-Object Status -EQ "Up" |
+		Select-Object -ExpandProperty InterfaceDescription
 
-			# NOTE: There is no InterfaceAlias in CIM selection
-			$Description = Get-NetAdapter -InterfaceAlias $AdapterAlias | Where-Object Status -EQ "Up" |
-			Select-Object -ExpandProperty InterfaceDescription
+		foreach ($Name in $Description)
+		{
+			$Adapter = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -QueryDialect "WQL" `
+				-Query "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE Description LIKE '$Name'"
 
-			foreach ($Name in $Description)
+			if ($Adapter)
 			{
-				$Adapter = Get-CimInstance -CimSession $CimServer -Namespace "root\cimv2" -QueryDialect "WQL" `
-					-Query "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE Description LIKE '$Name'"
-
 				# NOTE: Error code 72: An error occurred while accessing the registry for the requested information.
 				# Invalid domain name (Action requires elevation)
 				# NOTE: Error code 84: IP not enabled on adapter
@@ -495,17 +536,16 @@ else
 					TcpipNetbiosOptions = 0
 				} | Out-Null
 			}
+			else
+			{
+				Write-Error -Category ResourceUnavailable -TargetObject $Name -Message `
+					"Setting TcpipNetbios option skipped since retrieving adapter configuration from CIM server failed"
+			}
 		}
-
-		Receive-Job -Name "NETBIOS" -Wait -AutoRemoveJob
 
 		# TCP auto-tuning can improve throughput on high throughput, high latency networks
-		Start-Job -Name "AutoTuningLevel" -ScriptBlock {
-			# Normal. Sets the TCP receive window to grow to accommodate almost all scenarios
-			Set-NetTCPSetting -AutoTuningLevelLocal Normal
-		}
-
-		Receive-Job -Name "AutoTuningLevel" -Wait -AutoRemoveJob
+		# Normal. Sets the TCP receive window to grow to accommodate almost all scenarios
+		Set-NetTCPSetting -AutoTuningLevelLocal Normal
 	} # Reset
 
 	# NOTE: To set specific power saving options use Set-NetAdapterPowerManagement
@@ -521,54 +561,27 @@ else
 	}
 
 	# Remove primary and secondary DNS
-	Start-Job -Name "DNSServers" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
-	}
-
-	Receive-Job -Name "DNSServers" -Wait -AutoRemoveJob
+	Set-DnsClientServerAddress -InterfaceAlias $AdapterAlias -ResetServerAddress
 
 	# Remove IP address and subnet mask
 	# NOTE: Adapter must be enabled
-	Start-Job -Name "IPAddress" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
-	}
-
-	Receive-Job -Name "IPAddress" -Wait -AutoRemoveJob
+	Remove-NetIPAddress -InterfaceAlias $AdapterAlias -IncludeAllCompartments -Confirm:$false
 
 	# Remove "Default Gateway" entry and clear routing table for interface
 	# NOTE: Routes are available only when adapter is enabled (and in connected media state?)
 	# HACK: Remove-NetRoute: Element not found, error appears randomly
-	Start-Job -Name "RoutingTable" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Remove-NetRoute -InterfaceAlias $AdapterAlias -AddressFamily IPv4 -Confirm:$false
-	}
-
-	Receive-Job -Name "RoutingTable" -Wait -AutoRemoveJob
+	Remove-NetRoute -InterfaceAlias $AdapterAlias -AddressFamily IPv4 -Confirm:$false
 
 	# Set IPv6 interface to "Obtain an IP address automatically" and "Obtain DNS server address automatically"
-	Start-Job -Name "InterfaceIPv6" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-
-		# NOTE: By default, RouterDiscovery is ControlledByDHCP for IPv4 and Enabled for IPv6
-		# EcnMarking Allow an application or higher layer protocol, such as TCP, to decide how to apply ECN marking
-		# NOTE: In order for an application to fully control ECN capability value in the Network TCP setting must also be set to Enabled
-		Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery Enabled -AutomaticMetric Enabled `
-			-NeighborDiscoverySupported Yes -AddressFamily IPv6 -EcnMarking AppDecide -Dhcp Enabled
-	}
-
-	Receive-Job -Name "InterfaceIPv6" -Wait -AutoRemoveJob
+	# NOTE: By default, RouterDiscovery is ControlledByDHCP for IPv4 and Enabled for IPv6
+	# EcnMarking Allow an application or higher layer protocol, such as TCP, to decide how to apply ECN marking
+	# NOTE: In order for an application to fully control ECN capability value in the Network TCP setting must also be set to Enabled
+	Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery Enabled -AutomaticMetric Enabled `
+		-NeighborDiscoverySupported Yes -AddressFamily IPv6 -EcnMarking AppDecide -Dhcp Enabled
 
 	# Set IPv4 interface to "Obtain an IP address automatically" and "Obtain DNS server address automatically"
-	Start-Job -Name "InterfaceIPv4" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-
-		Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery ControlledByDHCP -AutomaticMetric Enabled `
-			-NeighborDiscoverySupported Yes -AddressFamily IPv4 -EcnMarking AppDecide -Dhcp Enabled
-	}
-
-	Receive-Job -Name "InterfaceIPv4" -Wait -AutoRemoveJob
+	Set-NetIPInterface -InterfaceAlias $AdapterAlias -RouterDiscovery ControlledByDHCP -AutomaticMetric Enabled `
+		-NeighborDiscoverySupported Yes -AddressFamily IPv4 -EcnMarking AppDecide -Dhcp Enabled
 
 	# Restart adapters for changes to take effect
 	Write-Information -Tags $ThisScript -MessageData "INFO: Disabling network adapters"
@@ -584,11 +597,7 @@ else
 	Start-Sleep -Seconds 10
 
 	# Clears the contents of the DNS client cache
-	Start-Job -Name "ClearDNSCache" -ScriptBlock {
-		Clear-DnsClientCache
-	}
-
-	Receive-Job -Name "ClearDNSCache" -Wait -AutoRemoveJob
+	Clear-DnsClientCache
 
 	# Make changes done to GPO firewall effective
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
@@ -677,21 +686,11 @@ else
 	}
 
 	# Registers all of the IP addresses on the computer onto the configured DNS server
-	Start-Job -Name "RegisterDNSClient" -ScriptBlock {
-		Register-DnsClient
-	}
-
-	Receive-Job -Name "RegisterDNSClient" -Wait -AutoRemoveJob
-
+	Register-DnsClient
 	Wait-Adapter Connected -InterfaceAlias $AdapterAlias
 
 	# TODO: Set to old profile, or define default profile in project settings
-	Start-Job -Name "NetworkProfile" -ArgumentList $AdapterAlias -ScriptBlock {
-		param ($AdapterAlias)
-		Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
-	}
-
-	Receive-Job -Name "NetworkProfile" -Wait -AutoRemoveJob
+	Set-NetConnectionProfile -InterfaceAlias $AdapterAlias -NetworkCategory Private
 }
 
 # Grant access to firewall logs

@@ -151,7 +151,7 @@ function Uninstall-DuplicateModule
 			$NoToAll = $false
 
 			# Iterate all duplicates until only latest version is left
-			while ($Duplicates -and ((($Duplicates | Measure-Object).Count -gt 1)))
+			while ($Duplicates -and (($Duplicates | Measure-Object).Count -gt 1))
 			{
 				# Select lowest version, Find-DuplicateModule sorts modules in ascending order
 				$TargetModule = $Duplicates | Select-Object -First 1

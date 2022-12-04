@@ -13,7 +13,7 @@
 		"*config": "ssh_config",
 		"*.msc": "xml",
 		// Test module for Config\ProjectSettings.psd1
-		"*PssaTest.Module*": "PssaTest",
+		"*PssaTest.Module*": "PssaTest"
 	},
 	// test module for Config\ProjectSettings.psd1 must not be formatted
 	"[PssaTest]": {

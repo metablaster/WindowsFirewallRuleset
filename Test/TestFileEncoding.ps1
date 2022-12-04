@@ -89,7 +89,7 @@ if (Approve-Execute -Accept "Check encoding of files in repository" -Deny "Skip 
 	# NOTE: This will exclude .git directory since it's attribute is "Hidden"
 	$Directories = Get-ChildItem -Path $ProjectRoot -Recurse -Attributes Directory | Where-Object {
 		# Exclude test files and firewall logs
-		$_.FullName -notmatch "(Ruleset\.Utility\\Encoding)|(Logs\\Firewall)"
+		$_.FullName -notmatch "(Ruleset\.Utility\\Encoding)|(Logs\\Firewall)|(Test\\PssaTest)"
 	}
 
 	[string[]] $Files = @()

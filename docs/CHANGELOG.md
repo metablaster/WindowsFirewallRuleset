@@ -59,6 +59,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Get-AppCapability` producing no result for remote session due to virtual admin
   - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
+  - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
 
   - Improved or updated module functions
 
@@ -86,6 +87,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Made possible to deploy rules for groups other than `Users`, this otherwise means it's now
   possible to deploy rules for Administrators which is useful for Windows Server without any
   standard account
+  - `Restart-Network.ps1` script updated, didn't work perfectly due to software regression
 
 - Development
 
@@ -97,7 +99,14 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Publish generated sitemap to google for crawling
     - Replaced XML tools extension with XML Red Hat
 
+  - Resolved many syntax errors in XML and PS files with the help of static code analysis
+  - Extensions settings improved, few recommended extensions replaced for better ones.
+
+- Unit test
+
   - `TestFileEncoding.ps1` new test script to verify encoding of all files in repository
+  - `PSScriptAnalyzer.ps1` test script significantly improved with the ability to log warnings
+  - New test module `PssaTest.Module` used to test PSScryptAnalyzer rules in `Config\PSScriptAnalyzer.ps1`
 
 [Table of Contents](#table-of-contents)
 
