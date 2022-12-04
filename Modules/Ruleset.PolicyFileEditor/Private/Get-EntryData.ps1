@@ -47,26 +47,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function NewGptIni
+function Get-EntryData
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	param (
-		[string] $Path,
-		[string[]] $PolicyType
+		[TJX.PolFileEditor.PolEntry] $Entry,
+		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
-	$parent = Split-Path $Path -Parent
-
-	if (-not (Test-Path $parent -PathType Container))
+	switch ($type)
 	{
-		New-Item -Path $parent -ItemType Directory -ErrorAction Stop | Out-Null
+        ([Microsoft.Win32.RegistryValueKind]::Binary)
+		{
+			return $Entry.BinaryValue
+		}
+
+        ([Microsoft.Win32.RegistryValueKind]::DWord)
+		{
+			return $Entry.DWORDValue
+		}
+
+        ([Microsoft.Win32.RegistryValueKind]::ExpandString)
+		{
+			return $Entry.StringValue
+		}
+
+        ([Microsoft.Win32.RegistryValueKind]::MultiString)
+		{
+			return $Entry.MultiStringValue
+		}
+
+        ([Microsoft.Win32.RegistryValueKind]::QWord)
+		{
+			return $Entry.QWORDValue
+		}
+
+        ([Microsoft.Win32.RegistryValueKind]::String)
+		{
+			return $Entry.StringValue
+		}
 	}
-
-	$version = GetNewVersionNumber -Version 0 -PolicyType $PolicyType
-
-	Set-Content -Path $Path -Encoding Ascii -Value @"
-[General]
-gPCMachineExtensionNames=$script:MachineExtensionGuids
-Version=$version
-gPCUserExtensionNames=$script:UserExtensionGuids
-"@
 }

@@ -47,8 +47,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function SavePolicyFile
+function Save-PolicyFile
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -109,14 +111,14 @@ function SavePolicyFile
 			{
 				if ($PSCmdlet.ShouldProcess($iniPath, 'Increment version number in INI file'))
 				{
-					IncrementGptIniVersion -Path $iniPath -PolicyType $Matches[2] -Confirm:$false -WhatIf:$false
+					Update-GptIniVersion -Path $iniPath -PolicyType $Matches[2] -Confirm:$false -WhatIf:$false
 				}
 			}
 			else
 			{
 				if ($PSCmdlet.ShouldProcess($iniPath, 'Create new gpt.ini file'))
 				{
-					NewGptIni -Path $iniPath -PolicyType $Matches[2]
+					New-GptIni -Path $iniPath -PolicyType $Matches[2]
 				}
 			}
 		}

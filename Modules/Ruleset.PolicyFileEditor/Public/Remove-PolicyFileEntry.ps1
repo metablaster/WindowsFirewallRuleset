@@ -128,7 +128,7 @@ function Remove-PolicyFileEntry
 
 		try
 		{
-			$policyFile = OpenPolicyFile -Path $Path -ErrorAction Stop
+			$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
 		}
 		catch
 		{
@@ -162,9 +162,9 @@ function Remove-PolicyFileEntry
 
 			try
 			{
-				# SavePolicyFile contains the calls to $PSCmdlet.ShouldProcess, and will inherit our
+				# Save-PolicyFile contains the calls to $PSCmdlet.ShouldProcess, and will inherit our
 				# WhatIfPreference / ConfirmPreference values from here.
-				SavePolicyFile -PolicyFile $policyFile -UpdateGptIni:$doUpdateGptIni -ErrorAction Stop
+				Save-PolicyFile -PolicyFile $policyFile -UpdateGptIni:$doUpdateGptIni -ErrorAction Stop
 			}
 			catch
 			{

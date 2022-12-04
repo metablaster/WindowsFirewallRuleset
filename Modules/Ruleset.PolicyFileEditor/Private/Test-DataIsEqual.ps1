@@ -47,47 +47,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function OpenPolicyFile
+function Test-DataIsEqual
 {
-	[CmdletBinding()]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	param (
-		[Parameter(Mandatory = $true)]
-		[string] $Path
+		[object] $First,
+		[object] $Second,
+		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
-	$policyFile = New-Object TJX.PolFileEditor.PolFile
-	$policyFile.FileName = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
-
-	if (Test-Path -LiteralPath $policyFile.FileName)
+	if ($Type -eq [Microsoft.Win32.RegistryValueKind]::String -or
+		$Type -eq [Microsoft.Win32.RegistryValueKind]::ExpandString -or
+		$Type -eq [Microsoft.Win32.RegistryValueKind]::DWord -or
+		$Type -eq [Microsoft.Win32.RegistryValueKind]::QWord)
 	{
-		try
-		{
-			$policyFile.LoadFile()
-		}
-		catch [TJX.PolFileEditor.FileFormatException]
-		{
-			$message = "File '$Path' is not a valid POL file."
-			$exception = New-Object System.Exception($message)
-
-			$errorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$exception, 'InvalidPolFileContents', [System.Management.Automation.ErrorCategory]::InvalidData, $Path
-			)
-
-			throw $errorRecord
-		}
-		catch
-		{
-			$errorRecord = $_
-			$message = "Error loading policy file at path '$Path': $($errorRecord.Exception.Message)"
-			$exception = New-Object System.Exception($message, $errorRecord.Exception)
-
-			$newErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$exception, 'FailedToOpenPolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
-			)
-
-			throw $newErrorRecord
-		}
+		return @($First)[0] -ceq @($Second)[0]
 	}
 
-	return $policyFile
+	# If we get here, $Type is either MultiString or Binary, both of which need to compare arrays.
+	# The Ruleset.PolicyFileEditor module never returns type Unknown or None.
+
+	$First = @($First)
+	$Second = @($Second)
+
+	if ($First.Count -ne $Second.Count) { return $false }
+
+	$count = $First.Count
+	for ($i = 0; $i -lt $count; $i++)
+	{
+		if ($First[$i] -cne $Second[$i]) { return $false }
+	}
+
+	return $true
 }

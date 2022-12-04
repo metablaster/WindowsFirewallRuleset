@@ -147,7 +147,7 @@ try
 
 			It -TestCases $testCases 'Properly parses KeyValueName with <Description>' {
 				param ($KeyValueName, $ExpectedKey, $ExpectedValue)
-				$key, $valueName = ParseKeyValueName $KeyValueName
+				$key, $valueName = Build-KeyValueName $KeyValueName
 
 				$key | Should Be $ExpectedKey
 				$valueName | Should Be $ExpectedValue

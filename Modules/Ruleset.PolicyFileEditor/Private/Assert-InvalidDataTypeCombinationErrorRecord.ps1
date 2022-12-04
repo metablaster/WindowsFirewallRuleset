@@ -47,27 +47,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function GetSidForAccount($Account)
+function Assert-InvalidDataTypeCombinationErrorRecord($Message)
 {
-	$acc = $Account
-	if ($acc -notlike '*\*') { $acc = "$env:COMPUTERNAME\$acc" }
-
-	try
-	{
-		$ntAccount = [System.Security.Principal.NTAccount]$acc
-		return $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
-	}
-	catch
-	{
-		$message = "Could not translate account '$acc' to a security identifier."
-		$exception = New-Object System.Exception($message, $_.Exception)
-		$errorRecord = New-Object System.Management.Automation.ErrorRecord(
-			$exception,
-			'CouldNotGetSidForAccount',
-			[System.Management.Automation.ErrorCategory]::ObjectNotFound,
-			$Acc
-		)
-
-		throw $errorRecord
-	}
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	$exception = New-Object System.Exception($Message)
+	return New-Object System.Management.Automation.ErrorRecord(
+		$exception, 'InvalidDataTypeCombination', [System.Management.Automation.ErrorCategory]::InvalidArgument, $null
+	)
 }

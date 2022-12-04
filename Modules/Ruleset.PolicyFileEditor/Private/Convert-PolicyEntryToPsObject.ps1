@@ -47,11 +47,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function UInt16PairToUInt32
+function Convert-PolicyEntryToPsObject
 {
-	param ([object] $UInt16Pair)
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param (
+		[TJX.PolFileEditor.PolEntry] $PolEntry
+	)
 
-	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
+	$type = Convert-PolicyEntryTypeToRegistryValueKind $PolEntry.Type
+	$data = Get-EntryData -Entry $PolEntry -Type $type
 
-	return ([UInt32] $UInt16Pair.HighPart) * 0x10000 + $UInt16Pair.LowPart
+	return New-Object psobject -Property @{
+		Key = $PolEntry.KeyName
+		ValueName = $PolEntry.ValueName
+		Type = $type
+		Data = $data
+	}
 }

@@ -47,43 +47,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function GetEntryData
+function Get-PolicyFilePath
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	param (
-		[TJX.PolFileEditor.PolEntry] $Entry,
-		[Microsoft.Win32.RegistryValueKind] $Type
+		[Parameter(Mandatory = $true, ParameterSetName = 'PolicyType')]
+		[string] $PolicyType,
+
+		[Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+		[string] $Account
 	)
 
-	switch ($type)
+	if ($PolicyType)
 	{
-        ([Microsoft.Win32.RegistryValueKind]::Binary)
+		switch ($PolicyType)
 		{
-			return $Entry.BinaryValue
-		}
+			'Machine'
+			{
+				return Join-Path $env:SystemRoot System32\GroupPolicy\Machine\registry.pol
+			}
 
-        ([Microsoft.Win32.RegistryValueKind]::DWord)
-		{
-			return $Entry.DWORDValue
-		}
+			'User'
+			{
+				return Join-Path $env:SystemRoot System32\GroupPolicy\User\registry.pol
+			}
 
-        ([Microsoft.Win32.RegistryValueKind]::ExpandString)
-		{
-			return $Entry.StringValue
-		}
+			'Administrators'
+			{
+				# BUILTIN\Administrators well-known SID
+				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-544\User\registry.pol
+			}
 
-        ([Microsoft.Win32.RegistryValueKind]::MultiString)
-		{
-			return $Entry.MultiStringValue
+			'NonAdministrators'
+			{
+				# BUILTIN\Users well-known SID
+				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-545\User\registry.pol
+			}
 		}
-
-        ([Microsoft.Win32.RegistryValueKind]::QWord)
+	}
+	else
+	{
+		try
 		{
-			return $Entry.QWORDValue
+			$sid = $Account -as [System.Security.Principal.SecurityIdentifier]
+
+			if ($null -eq $sid)
+			{
+				$sid = Get-SidForAccount $Account
+			}
+
+			return Join-Path $env:SystemRoot "System32\GroupPolicyUsers\$($sid.Value)\User\registry.pol"
 		}
-
-        ([Microsoft.Win32.RegistryValueKind]::String)
+		catch
 		{
-			return $Entry.StringValue
+			throw
 		}
 	}
 }

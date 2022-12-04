@@ -119,7 +119,7 @@ function Update-GptIniVersion
 
 		try
 		{
-			IncrementGptIniVersion @PSBoundParameters
+			Update-GptIniVersion @PSBoundParameters
 		}
 		catch
 		{

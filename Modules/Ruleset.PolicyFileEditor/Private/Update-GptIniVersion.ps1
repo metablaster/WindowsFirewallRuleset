@@ -47,8 +47,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function IncrementGptIniVersion
+function Update-GptIniVersion
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
 	param (
 		[string] $Path,
@@ -70,7 +72,7 @@ function IncrementGptIniVersion
 					if (-not $foundVersionLine)
 					{
 						$foundVersionLine = $true
-						$newVersion = GetNewVersionNumber -Version 0 -PolicyType $PolicyType
+						$newVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
 						"Version=$newVersion"
 					}
@@ -95,7 +97,7 @@ function IncrementGptIniVersion
 				$null -ne ($version = $matches[1] -as [uint32]))
 			{
 				$foundVersionLine = $true
-				$newVersion = GetNewVersionNumber -Version $version -PolicyType $PolicyType
+				$newVersion = Get-NewVersionNumber -Version $version -PolicyType $PolicyType
 				$line = "Version=$newVersion"
 			}
 			elseif ($section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
@@ -109,7 +111,7 @@ function IncrementGptIniVersion
 					$foundUserExtensionLine = $true
 				}
 
-				$line = EnsureAdminTemplateCseGuidsArePresent $line
+				$line = Confirm-AdminTemplateCseGuidsArePresent $line
 			}
 
 			$line
@@ -120,7 +122,7 @@ function IncrementGptIniVersion
 			if (-not $foundVersionLine)
 			{
 				$foundVersionLine = $true
-				$newVersion = GetNewVersionNumber -Version 0 -PolicyType $PolicyType
+				$newVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
 				"Version=$newVersion"
 			}

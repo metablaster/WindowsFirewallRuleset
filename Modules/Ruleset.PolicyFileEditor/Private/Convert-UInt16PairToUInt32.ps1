@@ -47,50 +47,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function PolEntryTypeToRegistryValueKind
+function Convert-UInt16PairToUInt32
 {
-	param ([TJX.PolFileEditor.PolEntryType] $PolEntryType)
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param ([object] $UInt16Pair)
 
-	switch ($PolEntryType)
-	{
-        ([TJX.PolFileEditor.PolEntryType]::REG_NONE)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::None
-		}
+	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
 
-        ([TJX.PolFileEditor.PolEntryType]::REG_DWORD)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::DWord
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_DWORD_BIG_ENDIAN)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::DWord
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_BINARY)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::Binary
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_EXPAND_SZ)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::ExpandString
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_MULTI_SZ)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::MultiString
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_QWORD)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::QWord
-		}
-
-        ([TJX.PolFileEditor.PolEntryType]::REG_SZ)
-		{
-			return [Microsoft.Win32.RegistryValueKind]::String
-		}
-	}
+	return ([UInt32] $UInt16Pair.HighPart) * 0x10000 + $UInt16Pair.LowPart
 }

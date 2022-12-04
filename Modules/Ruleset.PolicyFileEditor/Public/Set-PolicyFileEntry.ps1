@@ -175,7 +175,7 @@ function Set-PolicyFileEntry
 
 		try
 		{
-			$policyFile = OpenPolicyFile -Path $Path -ErrorAction Stop
+			$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
 		}
 		catch
 		{
@@ -189,10 +189,10 @@ function Set-PolicyFileEntry
 		{
 			$existingEntry = $policyFile.GetValue($Key, $ValueName)
 
-			if ($null -ne $existingEntry -and $Type -eq (PolEntryTypeToRegistryValueKind $existingEntry.Type))
+			if ($null -ne $existingEntry -and $Type -eq (Convert-PolicyEntryTypeToRegistryValueKind $existingEntry.Type))
 			{
-				$existingData = GetEntryData -Entry $existingEntry -Type $Type
-				if (DataIsEqual $Data $existingData -Type $Type)
+				$existingData = Get-EntryData -Entry $existingEntry -Type $Type
+				if (Test-DataIsEqual $Data $existingData -Type $Type)
 				{
 					Write-Verbose "Policy setting '$Key\$ValueName' is already set to '$Data' of type '$Type'."
 					return
@@ -210,7 +210,7 @@ function Set-PolicyFileEntry
 						$bytes = $Data -as [byte[]]
 						if ($null -eq $bytes)
 						{
-							$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to Binary, -Data must be passed a Byte[] array.'
+							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to Binary, -Data must be passed a Byte[] array.'
 							$PSCmdlet.ThrowTerminatingError($errorRecord)
 						}
 						else
@@ -227,7 +227,7 @@ function Set-PolicyFileEntry
 
 						if ($array.Count -ne 1)
 						{
-							$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to String, -Data must be passed a scalar value or single-element array.'
+							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to String, -Data must be passed a scalar value or single-element array.'
 							$PSCmdlet.ThrowTerminatingError($errorRecord)
 						}
 						else
@@ -244,7 +244,7 @@ function Set-PolicyFileEntry
 
 						if ($array.Count -ne 1)
 						{
-							$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array.'
+							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array.'
 							$PSCmdlet.ThrowTerminatingError($errorRecord)
 						}
 						else
@@ -261,7 +261,7 @@ function Set-PolicyFileEntry
 						$dword = ($array | Select-Object -First 1) -as [UInt32]
 						if ($null -eq $dword -or $array.Count -ne 1)
 						{
-							$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
+							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
 							$PSCmdlet.ThrowTerminatingError($errorRecord)
 						}
 						else
@@ -278,7 +278,7 @@ function Set-PolicyFileEntry
 						$qword = ($array | Select-Object -First 1) -as [UInt64]
 						if ($null -eq $qword -or $array.Count -ne 1)
 						{
-							$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to QWord, -Data must be passed a valid UInt64 value.'
+							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to QWord, -Data must be passed a valid UInt64 value.'
 							$PSCmdlet.ThrowTerminatingError($errorRecord)
 						}
 						else
@@ -321,9 +321,9 @@ function Set-PolicyFileEntry
 
 			try
 			{
-				# SavePolicyFile contains the calls to $PSCmdlet.ShouldProcess, and will inherit our
+				# Save-PolicyFile contains the calls to $PSCmdlet.ShouldProcess, and will inherit our
 				# WhatIfPreference / ConfirmPreference values from here.
-				SavePolicyFile -PolicyFile $policyFile -UpdateGptIni:$doUpdateGptIni -ErrorAction Stop
+				Save-PolicyFile -PolicyFile $policyFile -UpdateGptIni:$doUpdateGptIni -ErrorAction Stop
 			}
 			catch
 			{

@@ -47,18 +47,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function ParseKeyValueName
+function Convert-UInt32ToUInt16Pair
 {
-	param ([string] $KeyValueName)
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param ([UInt32] $UInt32)
 
-	$key = $KeyValueName -replace '^\\+|\\+$'
-	$valueName = ''
+	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
 
-	if ($KeyValueName -match '^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$')
-	{
-		$key = $matches['Key'] -replace '\\{2,}', '\'
-		$valueName = $matches['ValueName']
+	$lowPart = $UInt32 -band 0xFFFF
+	$highPart = ($UInt32 - $lowPart) / 0x10000
+
+	return New-Object psobject -Property @{
+		LowPart = [UInt16] $lowPart
+		HighPart = [UInt16] $highPart
 	}
-
-	return $key, $valueName
 }

@@ -47,35 +47,52 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function DataIsEqual
+function Convert-PolicyEntryTypeToRegistryValueKind
 {
-	param (
-		[object] $First,
-		[object] $Second,
-		[Microsoft.Win32.RegistryValueKind] $Type
-	)
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param ([TJX.PolFileEditor.PolEntryType] $PolicyEntryType)
 
-	if ($Type -eq [Microsoft.Win32.RegistryValueKind]::String -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::ExpandString -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::DWord -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::QWord)
+	switch ($PolicyEntryType)
 	{
-		return @($First)[0] -ceq @($Second)[0]
+        ([TJX.PolFileEditor.PolEntryType]::REG_NONE)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::None
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_DWORD)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::DWord
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_DWORD_BIG_ENDIAN)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::DWord
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_BINARY)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::Binary
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_EXPAND_SZ)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::ExpandString
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_MULTI_SZ)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::MultiString
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_QWORD)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::QWord
+		}
+
+        ([TJX.PolFileEditor.PolEntryType]::REG_SZ)
+		{
+			return [Microsoft.Win32.RegistryValueKind]::String
+		}
 	}
-
-	# If we get here, $Type is either MultiString or Binary, both of which need to compare arrays.
-	# The Ruleset.PolicyFileEditor module never returns type Unknown or None.
-
-	$First = @($First)
-	$Second = @($Second)
-
-	if ($First.Count -ne $Second.Count) { return $false }
-
-	$count = $First.Count
-	for ($i = 0; $i -lt $count; $i++)
-	{
-		if ($First[$i] -cne $Second[$i]) { return $false }
-	}
-
-	return $true
 }

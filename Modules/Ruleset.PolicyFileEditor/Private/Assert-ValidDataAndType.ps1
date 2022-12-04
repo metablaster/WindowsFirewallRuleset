@@ -49,6 +49,8 @@ limitations under the License.
 
 function Assert-ValidDataAndType
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	param (
 		[string[]] $Data,
 		[Microsoft.Win32.RegistryValueKind] $Type
@@ -58,7 +60,7 @@ function Assert-ValidDataAndType
 		$Type -ne [Microsoft.Win32.RegistryValueKind]::Binary -and
 		$Data.Count -gt 1)
 	{
-		$errorRecord = InvalidDataTypeCombinationErrorRecord -Message 'Do not pass arrays with multiple values to the -Data parameter when -Type is not set to either Binary or MultiString.'
+		$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'Do not pass arrays with multiple values to the -Data parameter when -Type is not set to either Binary or MultiString.'
 		throw $errorRecord
 	}
 }

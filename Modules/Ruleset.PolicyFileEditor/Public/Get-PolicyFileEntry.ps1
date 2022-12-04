@@ -119,7 +119,7 @@ function Get-PolicyFileEntry
 
 	try
 	{
-		$policyFile = OpenPolicyFile -Path $Path -ErrorAction Stop
+		$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
 	}
 	catch
 	{
@@ -132,14 +132,14 @@ function Get-PolicyFileEntry
 
 		if ($null -ne $entry)
 		{
-			PolEntryToPsObject -PolEntry $entry
+			Convert-PolicyEntryToPsObject -PolicyEntry $entry
 		}
 	}
 	else
 	{
 		foreach ($entry in $policyFile.Entries)
 		{
-			PolEntryToPsObject -PolEntry $entry
+			Convert-PolicyEntryToPsObject -PolicyEntry $entry
 		}
 	}
 }

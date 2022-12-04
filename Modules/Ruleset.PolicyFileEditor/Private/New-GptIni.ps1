@@ -47,10 +47,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function InvalidDataTypeCombinationErrorRecord($Message)
+function New-GptIni
 {
-	$exception = New-Object System.Exception($Message)
-	return New-Object System.Management.Automation.ErrorRecord(
-		$exception, 'InvalidDataTypeCombination', [System.Management.Automation.ErrorCategory]::InvalidArgument, $null
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param (
+		[string] $Path,
+		[string[]] $PolicyType
 	)
+
+	$parent = Split-Path $Path -Parent
+
+	if (-not (Test-Path $parent -PathType Container))
+	{
+		New-Item -Path $parent -ItemType Directory -ErrorAction Stop | Out-Null
+	}
+
+	$version = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+
+	Set-Content -Path $Path -Encoding Ascii -Value @"
+[General]
+gPCMachineExtensionNames=$script:MachineExtensionGuids
+Version=$version
+gPCUserExtensionNames=$script:UserExtensionGuids
+"@
 }

@@ -47,59 +47,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function GetPolFilePath
+function Open-PolicyFile
 {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
 	param (
-		[Parameter(Mandatory = $true, ParameterSetName = 'PolicyType')]
-		[string] $PolicyType,
-
-		[Parameter(Mandatory = $true, ParameterSetName = 'Account')]
-		[string] $Account
+		[Parameter(Mandatory = $true)]
+		[string] $Path
 	)
 
-	if ($PolicyType)
-	{
-		switch ($PolicyType)
-		{
-			'Machine'
-			{
-				return Join-Path $env:SystemRoot System32\GroupPolicy\Machine\registry.pol
-			}
+	$policyFile = New-Object TJX.PolFileEditor.PolFile
+	$policyFile.FileName = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
 
-			'User'
-			{
-				return Join-Path $env:SystemRoot System32\GroupPolicy\User\registry.pol
-			}
-
-			'Administrators'
-			{
-				# BUILTIN\Administrators well-known SID
-				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-544\User\registry.pol
-			}
-
-			'NonAdministrators'
-			{
-				# BUILTIN\Users well-known SID
-				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-545\User\registry.pol
-			}
-		}
-	}
-	else
+	if (Test-Path -LiteralPath $policyFile.FileName)
 	{
 		try
 		{
-			$sid = $Account -as [System.Security.Principal.SecurityIdentifier]
+			$policyFile.LoadFile()
+		}
+		catch [TJX.PolFileEditor.FileFormatException]
+		{
+			$message = "File '$Path' is not a valid POL file."
+			$exception = New-Object System.Exception($message)
 
-			if ($null -eq $sid)
-			{
-				$sid = GetSidForAccount $Account
-			}
+			$errorRecord = New-Object System.Management.Automation.ErrorRecord(
+				$exception, 'InvalidPolFileContents', [System.Management.Automation.ErrorCategory]::InvalidData, $Path
+			)
 
-			return Join-Path $env:SystemRoot "System32\GroupPolicyUsers\$($sid.Value)\User\registry.pol"
+			throw $errorRecord
 		}
 		catch
 		{
-			throw
+			$errorRecord = $_
+			$message = "Error loading policy file at path '$Path': $($errorRecord.Exception.Message)"
+			$exception = New-Object System.Exception($message, $errorRecord.Exception)
+
+			$newErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+				$exception, 'FailedToOpenPolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
+			)
+
+			throw $newErrorRecord
 		}
 	}
+
+	return $policyFile
 }

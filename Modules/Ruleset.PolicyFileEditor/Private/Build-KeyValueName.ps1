@@ -47,17 +47,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function UInt32ToUInt16Pair
+function Build-KeyValueName
 {
-	param ([UInt32] $UInt32)
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	param ([string] $KeyValueName)
 
-	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
+	$key = $KeyValueName -replace '^\\+|\\+$'
+	$valueName = ''
 
-	$lowPart = $UInt32 -band 0xFFFF
-	$highPart = ($UInt32 - $lowPart) / 0x10000
-
-	return New-Object psobject -Property @{
-		LowPart = [UInt16] $lowPart
-		HighPart = [UInt16] $highPart
+	if ($KeyValueName -match '^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$')
+	{
+		$key = $matches['Key'] -replace '\\{2,}', '\'
+		$valueName = $matches['ValueName']
 	}
+
+	return $key, $valueName
 }
