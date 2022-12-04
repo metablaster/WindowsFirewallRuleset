@@ -54,7 +54,7 @@ This is useful to troubleshoot problems or to generate network traffic that occu
 first time connection or system boot such as DHCP or IGMP
 
 .PARAMETER Principal
-If specified, also set permissions for firewall log files.
+If specified, also sets permissions for firewall log files.
 This is needed only for non standard log files locations, for more information see
 Scripts\Grant-Logs.ps1
 
@@ -152,7 +152,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Get adapter aliases of specified state
 
 .DESCRIPTION
-Select-AdapterAlias gets physical interface aliases of adapters that are in specified state
+Select-AdapterAlias gets physical interface aliases of adapters that are in the specified state
 
 .PARAMETER State
 Specify minimum state of network adapters for which to get interface aliases:
@@ -296,7 +296,7 @@ function Select-AdapterAlias
 				{
 					switch -Wildcard ($NetworkProfile.Name)
 					{
-						# NOTE: Known profiles when there is not internet access
+						# NOTE: Known profiles when there is no internet access
 						# Identifying...
 						# Unidentified network
 						"Identifying*" { }
@@ -697,7 +697,7 @@ else
 # Grant access to firewall logs
 if (![string]::IsNullOrEmpty($Principal))
 {
-	& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Principal $Principal -SkipPrompt
+	& "$ProjectRoot\Scripts\Grant-Logs.ps1" -Principal $Principal -Force -Confirm:$false
 }
 
 Disconnect-Computer -Domain $PolicyStore

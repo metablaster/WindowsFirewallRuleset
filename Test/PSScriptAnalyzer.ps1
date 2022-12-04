@@ -68,6 +68,12 @@ None. PSScriptAnalyzer.ps1 does not generate any output
 
 .NOTES
 None.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
+
+.LINK
+https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/using-scriptanalyzer
 #>
 
 #Requires -Version 5.1
@@ -79,7 +85,7 @@ param (
 	[string[]] $Severity,
 
 	[Parameter()]
-	[string] $Path = $ProjectRoot,
+	[string] $Path,
 
 	[Parameter()]
 	[switch] $SuppressedOnly,
@@ -96,22 +102,32 @@ param (
 if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip code analysis operation" -Force:$Force)
 {
 	$ErrorActionPreference = "Stop"
-	# NOTE: Importing the module explicitly resolves errors which the PSScriptAnalyzer may throw for first run
-	Import-Module -Name PSScriptAnalyzer -RequiredVersion $RequireAnalyzerVersion
+	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($log)
+	if ([string]::IsNullOrEmpty($Path))
 	{
-		$FileName = "$LogsFolder\Test\PSScriptAnalyzer_suppressed_$(Get-Date -Format "dd.MM.yy").log"
-	}
-	else
-	{
-		$FileName = "$LogsFolder\Test\PSScriptAnalyzer_$(Get-Date -Format "dd.MM.yy").log"
+		$Path = $ProjectRoot
 	}
 
-	if (Test-Path -Path $FileName)
+	if ($Log)
 	{
-		Write-Verbose -Message "[$ThisScript] Removing previous log '$FileName'"
-		Remove-Item -Path $FileName
+		if ($SuppressedOnly)
+		{
+			$FileBaseName = "PSScriptAnalyzer_suppressed"
+			$FileName = "$LogsFolder\Test\${FileBaseName}_$(Get-Date -Format "dd.MM.yy").log"
+		}
+		else
+		{
+			$FileBaseName = "PSScriptAnalyzer"
+			$FileName = "$LogsFolder\Test\${FileBaseName}_$(Get-Date -Format "dd.MM.yy").log"
+		}
+
+		Write-Verbose -Message "[$ThisScript] log file is '$((Resolve-FileSystemPath -Path $FileName -File).FullName)'"
+		if (Test-Path -Path $FileName)
+		{
+			Write-Verbose -Message "[$ThisScript] Removing previous log '$FileName'"
+			Remove-Item -Path $FileName
+		}
 	}
 
 	$Errors = 0
@@ -121,8 +137,8 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 	$AnalyzerParams = @{
 		Path = $Path
 		Recurse = $true
-		Settings = "$ProjectRoot\Config\PSScriptAnalyzerSettings.psd1"
 		ReportSummary = $true
+		Settings = "$ProjectRoot\Config\PSScriptAnalyzerSettings.psd1"
 	}
 
 	if (![string]::IsNullOrEmpty($Severity))
@@ -131,21 +147,22 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 		$AnalyzerParams.Severity = $Severity
 	}
 
-	Write-Information -Tags "Test" -MessageData "INFO: Analysing code..."
-
 	if ($SuppressedOnly)
 	{
 		$AnalyzerParams.SuppressedOnly = $SuppressedOnly
 
 		if ($Log)
 		{
-			$HeaderStack.Push("PSScryptAnalyzer surpressed rule analysis")
+			$HeaderStack.Push("PSScryptAnalyzer suppressed rule analysis")
 		}
 	}
 	elseif ($Log)
 	{
 		$HeaderStack.Push("PSScryptAnalyzer analysis")
 	}
+
+	Write-Information -Tags "Test" -MessageData "INFO: Analysing code..."
+	Write-Debug -Message "[$ThisScript] PSScryptAnalyzer settings are $($AnalyzerParams | Out-String)"
 
 	Invoke-ScriptAnalyzer @AnalyzerParams |	ForEach-Object {
 		switch ($_.Severity)
@@ -167,33 +184,31 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 				Line = $_.Line
 			}
 
-			Write-LogFile -Path $LogsFolder\Test -LogName PSScriptAnalyzer -Hash $HashMessage
+			Write-LogFile -Path $LogsFolder\Test -LogName $FileBaseName -Hash $HashMessage
 		}
 	}
-
-	$Message = "PSScriptAnalyzer completed with "
-	if ([string]::IsNullOrEmpty($Severity) -or ($Severity.Count -eq 3))
-	{
-		$Message += "$Errors errors, $Warnings warnings and $Infos information"
-	}
-	else
-	{
-		if ($Severity.Count -eq 2 ) { $Separator = " and " } else { $Separator = "" }
-		switch ($Severity)
-		{
-			"Error" { $Message += "$Errors errors$Separator" }
-			"Warning" { $Message += "$Warnings warnings$Separator" }
-			"Information" { $Message += "$Infos information" }
-		}
-
-		$Message = $Message.TrimEnd($Separator)
-	}
-
-	Write-Information -Tags "Test" -MessageData "[$ThisScript] INFO: $Message"
 
 	if ($Log)
 	{
-		Write-LogFile -Tags "PSScriptAnalyzer" -Path $LogsFolder\Test -LogName PSScriptAnalyzer -Message $Message
+		$Message = "PSScriptAnalyzer completed with "
+		if ([string]::IsNullOrEmpty($Severity) -or ($Severity.Count -eq 3))
+		{
+			$Message += "$Errors errors, $Warnings warnings and $Infos information"
+		}
+		else
+		{
+			if ($Severity.Count -eq 2 ) { $Separator = " and " } else { $Separator = "" }
+			switch ($Severity)
+			{
+				"Error" { $Message += "$Errors errors$Separator" }
+				"Warning" { $Message += "$Warnings warnings$Separator" }
+				"Information" { $Message += "$Infos information" }
+			}
+
+			$Message = $Message.TrimEnd($Separator)
+		}
+
+		Write-LogFile -Tags "PSScriptAnalyzer" -Path $LogsFolder\Test -LogName $FileBaseName -Message $Message
 		$HeaderStack.pop() | Out-Null
 	}
 

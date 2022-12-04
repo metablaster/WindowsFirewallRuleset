@@ -88,8 +88,6 @@ function Test-Error
 function Test-Pipeline
 {
 	[CmdletBinding()]
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSReviewUnusedParameter", "Param", Scope = "Function", Justification = "Needed for test case")]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
 		$Param
@@ -97,6 +95,9 @@ function Test-Pipeline
 
 	process
 	{
+		# Use param to avoid PSScriptAnalyzer warning
+		Write-Debug -Message $Param -Debug:$false
+
 		Write-Error -Category NotEnabled -Message "[$($MyInvocation.InvocationName)] End of pipe 1" -ErrorId 3
 		Write-Error -Category NotEnabled -Message "[$($MyInvocation.InvocationName)] End of pipe 2" -ErrorId 4
 	}

@@ -71,11 +71,11 @@ Enter-Test "Write-ColorMessage"
 Start-Test "Green text"
 Write-ColorMessage "text in green" Green
 
-$Result = Write-ColorMessage "text in green" -Foregroundcolor Green
+$Result = Write-ColorMessage "text in green" -ForegroundColor Green
 Test-Output $Result -Command Write-ColorMessage
 
 Start-Test "White text red background"
-Write-ColorMessage "White text red background" White -BackGroundColor Red
+Write-ColorMessage "White text red background" White -BackgroundColor Red
 
 # Not implemented
 if ($false)
@@ -95,7 +95,7 @@ Write-ColorMessage
 Write-ColorMessage "red text" Red
 
 Start-Test "Cyan text pipeline"
-"Cyan pipeline" | Write-ColorMessage -Foregroundcolor Cyan
+"Cyan pipeline" | Write-ColorMessage -ForegroundColor Cyan
 
 Update-Log
 Exit-Test

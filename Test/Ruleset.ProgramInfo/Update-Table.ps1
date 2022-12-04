@@ -56,8 +56,6 @@ None.
 # NOTE: As Administrator because of a test with OneDrive which loads reg hive of other users
 #Requires -RunAsAdministrator
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test for simplicity")]
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -88,36 +86,43 @@ if ($Domain -ne [System.Environment]::MachineName)
 Start-Test "Greenshot -UserProfile"
 Initialize-Table
 Update-Table -Search "Greenshot" -UserProfile @RemoteParams
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Failure Test"
 Initialize-Table
 Update-Table -Search "Failure" -UserProfile @RemoteParams
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
 Update-Table -Search "Visual Studio" -UserProfile @RemoteParams
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "-Executable PowerShell.exe"
 Initialize-Table
 Update-Table -Executable "PowerShell.exe" @RemoteParams
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "-Search EdgeChromium -Executable msedge.exe"
 Initialize-Table
 Update-Table -Search "EdgeChromium" -Executable "msedge.exe" @RemoteParams
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "OneDrive -UserProfile"
 Initialize-Table
 $Result = Update-Table -Search "OneDrive" -UserProfile @RemoteParams
 $Result
-$global:InstallTable | Format-Table -AutoSize
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Install Path"
-$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 Test-Output $Result -Command Update-Table
 

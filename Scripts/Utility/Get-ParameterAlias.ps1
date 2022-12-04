@@ -89,7 +89,7 @@ By default modules for matched commands are imported into global scope.
 
 .PARAMETER Cleanup
 If specified, removes all modules previously imported by Get-ParameterAlias from current session.
-Other parameters are ignored and nothing except cleanup is performed.
+Other parameters are all ignored and nothing except cleanup is performed.
 
 .EXAMPLE
 PS> Get-ParameterAlias -Command Test-DscConfiguration
@@ -131,8 +131,6 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 #Requires -Version 5.1
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Used because of simplicity")]
 [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Default")]
 [OutputType([System.Management.Automation.PSCustomObject], [string])]
 param (
@@ -186,23 +184,31 @@ begin
 
 	if ($Cleanup)
 	{
-		if (Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore)
+		# NOTE: This is to avoid PSScriptAnalyzer warning, we need global variable to keep cache of
+		# of imported modules so that subsequent runs of the function are faster
+		$GlobalImportedModules = Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore
+
+		if ($null -ne $GlobalImportedModules)
 		{
-			$global:ImportedModules | ForEach-Object {
+			$GlobalImportedModules | ForEach-Object {
 				Write-Information -Tags $ThisScript -MessageData "INFO: Removing module $($_.ModuleName) $($_.ModuleVersion)"
 				Remove-Module -FullyQualifiedName $_
 			}
 
 			Remove-Variable -Name ImportedModules -Scope Global
+			Remove-Variable -Name GlobalImportedModules
 		}
 
 		break
 	}
 
-	if (!(Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore))
+	$GlobalImportedModules = Get-Variable -Name ImportedModules -Scope Global -ErrorAction Ignore
+
+	if ($null -eq $GlobalImportedModules)
 	{
 		# [Microsoft.PowerShell.Commands.ModuleSpecification[]]
 		New-Variable -Name ImportedModules -Scope Global -Value @()
+		$GlobalImportedModules = @()
 	}
 
 	[array] $UniqueAlias = @()
@@ -261,7 +267,8 @@ process
 				if ($ModuleInfo)
 				{
 					Write-Information -Tags $ThisScript -MessageData "INFO: Importing module $($ModuleInfo.Name) $($ModuleInfo.Version)"
-					$global:ImportedModules += @{ ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
+					$GlobalImportedModules += @{ ModuleName = $ModuleInfo.Name; ModuleVersion = $ModuleInfo.Version }
+					Set-Variable -Name ImportedModules -Scope Global -Value $GlobalImportedModules
 				}
 				else
 				{

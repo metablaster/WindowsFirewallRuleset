@@ -127,5 +127,5 @@ function Add-WinFunction
 		Invoke-Command -Session $Session -ScriptBlock $ScriptBlock -ArgumentList $args
 	}
 
-	Set-Item function:Global:$Name $Wrapper.GetNewClosure();
+	Set-Item function:Global:$Name $Wrapper.GetNewClosure()
 }

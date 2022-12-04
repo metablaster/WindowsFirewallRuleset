@@ -118,7 +118,7 @@ function Get-ExecutablePath
 			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
-				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				# Default key can be empty
 				[string] $FilePath = $SubKey.GetValue("")

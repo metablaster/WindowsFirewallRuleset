@@ -85,8 +85,6 @@ function Test-Info
 function Test-Pipeline
 {
 	[CmdletBinding()]
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-		"PSReviewUnusedParameter", "Param", Scope = "Function", Justification = "Needed for test case")]
 	param (
 		[Parameter(ValueFromPipeline = $true)]
 		$Param
@@ -94,6 +92,9 @@ function Test-Pipeline
 
 	process
 	{
+		# Use param to avoid PSScriptAnalyzer warning
+		Write-Debug -Message $Param -Debug:$false
+
 		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: End of pipe 1"
 		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] INFO: End of pipe 2"
 	}

@@ -114,6 +114,9 @@ https://github.com/indented-automation/Indented.Net.IP
 #>
 function Get-Subnet
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSPossibleIncorrectUsageOfAssignmentOperator", "", Scope = "Function",
+		Justification = "https://github.com/indented-automation/Indented.Net.IP/issues/14#event-7903507075")]
 	[CmdletBinding(DefaultParameterSetName = "FromSupernet",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.IP/Help/en-US/Get-Subnet.md")]
 	[OutputType("Ruleset.IP.Subnet")]

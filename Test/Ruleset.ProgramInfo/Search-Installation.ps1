@@ -56,8 +56,6 @@ None.
 # NOTE: As Administrator because of a test with OneDrive which loads reg hive of other users
 #Requires -RunAsAdministrator
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test for simplicity")]
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -91,21 +89,25 @@ if ($Domain -ne [System.Environment]::MachineName)
 	# Uses Update-Table
 	# Start-Test "Remote 'EdgeChromium' -Domain"
 	# Search-Installation "EdgeChromium" -Domain $Domain -Credential $RemotingCredential
-	# $global:InstallTable | Format-Table -AutoSize
+	# Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	# Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	Start-Test "Remote 'EdgeChromium' -Session"
 	Search-Installation "EdgeChromium" -Session $SessionInstance -CimSession $CimServer
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	# Uses Edit-Table
 	Start-Test "Remote 'PowerShell86' -Session"
 	Search-Installation "PowerShell86" -Session $SessionInstance -CimSession $CimServer
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	# Uses custom case
 	Start-Test "Remote 'NETFramework' -Session"
 	Search-Installation "NETFramework" -Session $SessionInstance -CimSession $CimServer
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 }
 else
 {
@@ -114,33 +116,41 @@ else
 
 	Start-Test "Search-Installation 'EdgeChromium'"
 	Search-Installation "EdgeChromium"
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	Start-Test "Install Root EdgeChromium"
-	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Search-Installation 'FailureTest'"
 	Search-Installation "FailureTest"
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'VisualStudio'"
 	Search-Installation "VisualStudio"
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	Start-Test "Search-Installation 'Greenshot'"
 	Search-Installation "Greenshot"
-	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Install Root Greenshot"
-	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 	Start-Test "Search-Installation 'OneDrive'"
 	$Result = Search-Installation "OneDrive"
 	$Result
-	$global:InstallTable | Format-Table -AutoSize
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 	Start-Test "Install Root OneDrive"
-	$global:InstallTable | Select-Object -ExpandProperty InstallLocation
+	Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+	Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 	Test-Output $Result -Command Search-Installation
 }

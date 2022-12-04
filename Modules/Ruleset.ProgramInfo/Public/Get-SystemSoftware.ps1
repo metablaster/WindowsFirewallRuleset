@@ -119,7 +119,7 @@ function Get-SystemSoftware
 			{
 				# NOTE: Avoid spamming
 				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
-				$SubKey = $RootKey.OpenSubkey($HKLMSubKey);
+				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				if (!$SubKey)
 				{

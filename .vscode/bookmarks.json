@@ -66,30 +66,10 @@
 			]
 		},
 		{
-			"path": "Scripts/Utility/Get-ParameterAlias.ps1",
+			"path": "Test/PSScriptAnalyzer.ps1",
 			"bookmarks": [
 				{
-					"line": 133,
-					"column": 0,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Test/Ruleset.Logging/Test-Error.ps1",
-			"bookmarks": [
-				{
-					"line": 90,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Test/Ruleset.Logging/Test-Info.ps1",
-			"bookmarks": [
-				{
-					"line": 87,
+					"line": 72,
 					"column": 1,
 					"label": ""
 				}

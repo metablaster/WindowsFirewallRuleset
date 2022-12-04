@@ -51,8 +51,6 @@ None.
 
 #Requires -Version 5.1
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSAvoidGlobalVars", "", Justification = "Needed in this unit test for simplicity")]
 [CmdletBinding()]
 param (
 	[Parameter()]
@@ -73,15 +71,16 @@ Start-Test "default"
 $Result = Initialize-Table
 $Result
 
-if (!$global:InstallTable)
+if (!(Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore))
 {
 	Write-Error -Category ObjectNotFound -Message "Table not initialized"
 	exit
 }
 
-if ($global:InstallTable.Rows.Count -ne 0)
+$InstallTable = (Get-Variable -Name InstallTable -Scope Global).Value
+if ($InstallTable.Rows.Count -ne 0)
 {
-	Write-Error -Category InvalidResult -TargetObject $global:InstallTable -Message "Table not clear"
+	Write-Error -Category InvalidResult -TargetObject $InstallTable -Message "Table not clear"
 	exit
 }
 

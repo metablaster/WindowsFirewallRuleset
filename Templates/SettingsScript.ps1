@@ -62,7 +62,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Scripts
 
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "", Justification = "Settings used by other scripts")]
+	"PSReviewUnusedParameter", "", Justification = "Template settings used by other scripts")]
 param (
 	[Parameter()]
 	[switch] $Force
