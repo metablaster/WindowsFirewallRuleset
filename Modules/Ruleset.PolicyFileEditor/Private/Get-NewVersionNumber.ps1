@@ -51,25 +51,30 @@ function Get-NewVersionNumber
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	[OutputType([uint32])]
 	param (
+		[Parameter()]
 		[UInt32] $Version,
+
+		[Parameter()]
 		[string[]] $PolicyType
 	)
 
 	# User version is the high 16 bits, Machine version is the low 16 bits.
 	# Reference:  http://blogs.technet.com/b/grouppolicy/archive/2007/12/14/understanding-the-gpo-version-number.aspx
 
-	$pair = Convert-UInt32ToUInt16Pair -UInt32 $version
+	$Pair = Convert-UInt32ToUInt16Pair -UInt32 $version
 
 	if ($PolicyType -contains 'User')
 	{
-		$pair.HighPart++
+		$Pair.HighPart++
 	}
 
 	if ($PolicyType -contains 'Machine')
 	{
-		$pair.LowPart++
+		$Pair.LowPart++
 	}
 
-	return Convert-UInt16PairToUInt32 -UInt16Pair $pair
+	return Convert-UInt16PairToUInt32 -UInt16Pair $Pair
 }

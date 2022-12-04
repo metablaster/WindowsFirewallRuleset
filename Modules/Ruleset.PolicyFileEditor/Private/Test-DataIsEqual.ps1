@@ -51,16 +51,23 @@ function Test-DataIsEqual
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	[OutputType([bool])]
 	param (
+		[Parameter()]
 		[object] $First,
+
+		[Parameter()]
 		[object] $Second,
+
+		[Parameter()]
 		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
-	if ($Type -eq [Microsoft.Win32.RegistryValueKind]::String -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::ExpandString -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::DWord -or
-		$Type -eq [Microsoft.Win32.RegistryValueKind]::QWord)
+	if (($Type -eq [Microsoft.Win32.RegistryValueKind]::String) -or
+		($Type -eq [Microsoft.Win32.RegistryValueKind]::ExpandString) -or
+		($Type -eq [Microsoft.Win32.RegistryValueKind]::DWord) -or
+		($Type -eq [Microsoft.Win32.RegistryValueKind]::QWord))
 	{
 		return @($First)[0] -ceq @($Second)[0]
 	}
@@ -73,10 +80,10 @@ function Test-DataIsEqual
 
 	if ($First.Count -ne $Second.Count) { return $false }
 
-	$count = $First.Count
-	for ($i = 0; $i -lt $count; $i++)
+	$Count = $First.Count
+	for ($Index = 0; $Index -lt $Count; $Index++)
 	{
-		if ($First[$i] -cne $Second[$i]) { return $false }
+		if ($First[$Index] -cne $Second[$Index]) { return $false }
 	}
 
 	return $true

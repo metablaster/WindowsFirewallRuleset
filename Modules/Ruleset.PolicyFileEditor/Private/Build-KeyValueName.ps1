@@ -51,16 +51,21 @@ function Build-KeyValueName
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	param ([string] $KeyValueName)
+	[CmdletBinding()]
+	[OutputType([string])]
+	param (
+		[Parameter()]
+		[string] $KeyValueName
+	)
 
 	$key = $KeyValueName -replace '^\\+|\\+$'
-	$valueName = ''
+	$ValueName = ""
 
 	if ($KeyValueName -match '^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$')
 	{
-		$key = $matches['Key'] -replace '\\{2,}', '\'
-		$valueName = $matches['ValueName']
+		$key = $Matches["Key"] -replace '\\{2,}', '\'
+		$ValueName = $Matches["ValueName"]
 	}
 
-	return $key, $valueName
+	return $Key, $ValueName
 }

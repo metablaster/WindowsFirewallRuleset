@@ -51,24 +51,29 @@ function New-GptIni
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	[OutputType([void])]
 	param (
+		[Parameter()]
 		[string] $Path,
+
+		[Parameter()]
 		[string[]] $PolicyType
 	)
 
-	$parent = Split-Path $Path -Parent
+	$Parent = Split-Path $Path -Parent
 
-	if (-not (Test-Path $parent -PathType Container))
+	if (-not (Test-Path $Parent -PathType Container))
 	{
-		New-Item -Path $parent -ItemType Directory -ErrorAction Stop | Out-Null
+		New-Item -Path $Parent -ItemType Directory -ErrorAction Stop | Out-Null
 	}
 
-	$version = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+	$Version = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
 	Set-Content -Path $Path -Encoding Ascii -Value @"
 [General]
 gPCMachineExtensionNames=$script:MachineExtensionGuids
-Version=$version
+Version=$Version
 gPCUserExtensionNames=$script:UserExtensionGuids
 "@
 }

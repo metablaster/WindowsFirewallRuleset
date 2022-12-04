@@ -52,44 +52,45 @@ function Open-PolicyFile
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding()]
+	[OutputType([TJX.PolFileEditor.PolFile])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $Path
 	)
 
-	$policyFile = New-Object TJX.PolFileEditor.PolFile
-	$policyFile.FileName = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
+	$PolicyFile = New-Object TJX.PolFileEditor.PolFile
+	$PolicyFile.FileName = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
 
 	if (Test-Path -LiteralPath $policyFile.FileName)
 	{
 		try
 		{
-			$policyFile.LoadFile()
+			$PolicyFile.LoadFile()
 		}
 		catch [TJX.PolFileEditor.FileFormatException]
 		{
-			$message = "File '$Path' is not a valid POL file."
-			$exception = New-Object System.Exception($message)
+			$Message = "File '$Path' is not a valid POL file."
+			$Exception = New-Object System.Exception($Message)
 
-			$errorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$exception, 'InvalidPolFileContents', [System.Management.Automation.ErrorCategory]::InvalidData, $Path
+			$ErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+				$Exception, 'InvalidPolFileContents', [System.Management.Automation.ErrorCategory]::InvalidData, $Path
 			)
 
-			throw $errorRecord
+			throw $ErrorRecord
 		}
 		catch
 		{
-			$errorRecord = $_
-			$message = "Error loading policy file at path '$Path': $($errorRecord.Exception.Message)"
-			$exception = New-Object System.Exception($message, $errorRecord.Exception)
+			$ErrorRecord = $_
+			$Message = "Error loading policy file at path '$Path': $($ErrorRecord.Exception.Message)"
+			$Exception = New-Object System.Exception($message, $ErrorRecord.Exception)
 
-			$newErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$exception, 'FailedToOpenPolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
+			$NewErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+				$Exception, 'FailedToOpenPolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
 			)
 
-			throw $newErrorRecord
+			throw $NewErrorRecord
 		}
 	}
 
-	return $policyFile
+	return $PolicyFile
 }

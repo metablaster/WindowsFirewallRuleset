@@ -52,20 +52,19 @@ limitations under the License.
 # - Separated every function into it's own script
 # - Added module boilerplate code
 # - Generated help content and markdown help files
-# - Performed code formatting and formatting of help files and comment based help
+# - Performed code formatting, variable casing and formatting of help files and comment based help
 # - Added source code for PolFileEditor.dll
 # - Modified *.psd file
 # - Renamed module to Ruleset.PolicyFileEditor
+# NOTE: Following modifications in December 2022:
+# - Added to all functions OutputType and Parameter attributes
+# - Renamed private functions and files to PS recommended verbs
 
 #region Initialization
 param (
 	[Parameter()]
 	[switch] $ListPreference
 )
-
-$scriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
-$dllPath = Join-Path $scriptRoot PolFileEditor.dll
-Add-Type -Path $dllPath -ErrorAction Stop
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
 
@@ -77,6 +76,10 @@ if ($ListPreference)
 	Show-Preference # -All
 	Remove-Module -Name Dynamic.Preference
 }
+
+$ScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+$DllPath = Join-Path $ScriptRoot PolFileEditor.dll
+Add-Type -Path $DllPath -ErrorAction Stop
 #endregion
 
 #

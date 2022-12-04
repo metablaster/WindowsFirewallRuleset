@@ -259,6 +259,11 @@ $PSModuleAutoLoadingPreference = "All"
 # The system default application name is wsman
 $PSSessionApplicationName = "wsman"
 
+# The Output Field Separator (OFS) specifies the character that separates the elements of an array
+# that is converted to a string.
+# We declare it to avoid warning in Get-CallerPreference
+$OFS = " "
+
 # Set to true to enable development features, it does following at a minimum:
 # 1. Forces reloading modules and removable variables.
 # 2. Loads troubleshooting rules defined in Temporary.ps1
@@ -350,6 +355,12 @@ if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 	# Repository root directory, reallocating scripts should be easy if root directory is constant
 	New-Variable -Name ProjectRoot -Scope Global -Option Constant -Value (
 		Resolve-Path -Path "$PSScriptRoot\.." | Select-Object -ExpandProperty Path)
+
+	# Used by Start-Transcript to specify the name and location of the transcript file.
+	# TODO: This should be declared in preferences section but we need $ProjectRoot
+	# Declared to avoid warning in Get-CallerPreference
+	# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables
+	$Transcript = "$ProjectRoot\Logs\PowerShell_transcript_$(Get-Date -Format "dd.MM.yy")."
 
 	# These drives will help to have shorter prompt and to be able to jump to them with less typing
 	# TODO: Should we use these drives instead of "ProjectRoot" variable?

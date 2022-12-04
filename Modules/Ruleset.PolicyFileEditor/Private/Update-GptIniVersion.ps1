@@ -52,63 +52,67 @@ function Update-GptIniVersion
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
+	[OutputType([void])]
 	param (
+		[Parameter()]
 		[string] $Path,
+
+		[Parameter()]
 		[string[]] $PolicyType
 	)
 
-	$foundVersionLine = $false
-	$section = ''
+	$FoundVersionLine = $false
+	$Section = ""
 
-	$newContents = @(
-		foreach ($line in Get-Content $Path)
+	$NewContents = @(
+		foreach ($Line in Get-Content $Path)
 		{
 			# This might not be the most unreadable regex ever, but it's trying hard to be!
 			# It's looking for section lines:  [SectionName]
-			if ($line -match '^\s*\[([^\]]+)\]\s*$')
+			if ($Line -match '^\s*\[([^\]]+)\]\s*$')
 			{
-				if ($section -eq 'General')
+				if ($Section -eq 'General')
 				{
-					if (-not $foundVersionLine)
+					if (-not $FoundVersionLine)
 					{
-						$foundVersionLine = $true
-						$newVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+						$FoundVersionLine = $true
+						$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
-						"Version=$newVersion"
+						"Version=$NewVersion"
 					}
 
-					if (-not $foundMachineExtensionLine)
+					if (-not $FoundMachineExtensionLine)
 					{
-						$foundMachineExtensionLine = $true
+						$FoundMachineExtensionLine = $true
 						"gPCMachineExtensionNames=$script:MachineExtensionGuids"
 					}
 
-					if (-not $foundUserExtensionLine)
+					if (-not $FoundUserExtensionLine)
 					{
-						$foundUserExtensionLine = $true
+						$FoundUserExtensionLine = $true
 						"gPCUserExtensionNames=$script:UserExtensionGuids"
 					}
 				}
 
-				$section = $matches[1]
+				$Section = $matches[1]
 			}
-			elseif ($section -eq 'General' -and
-				$line -match '^\s*Version\s*=\s*(\d+)\s*$' -and
-				$null -ne ($version = $matches[1] -as [uint32]))
+			elseif (($section -eq "General") -and
+				($line -match '^\s*Version\s*=\s*(\d+)\s*$') -and
+				($null -ne ($Version = $matches[1] -as [uint32])))
 			{
-				$foundVersionLine = $true
-				$newVersion = Get-NewVersionNumber -Version $version -PolicyType $PolicyType
-				$line = "Version=$newVersion"
+				$FoundVersionLine = $true
+				$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
+				$line = "Version=$NewVersion"
 			}
-			elseif ($section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
+			elseif ($Section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
 			{
 				if ($matches[1] -eq 'Machine')
 				{
-					$foundMachineExtensionLine = $true
+					$FoundMachineExtensionLine = $true
 				}
 				else
 				{
-					$foundUserExtensionLine = $true
+					$FoundUserExtensionLine = $true
 				}
 
 				$line = Confirm-AdminTemplateCseGuidsArePresent $line
@@ -117,25 +121,25 @@ function Update-GptIniVersion
 			$line
 		}
 
-		if ($section -eq 'General')
+		if ($Section -eq 'General')
 		{
-			if (-not $foundVersionLine)
+			if (-not $FoundVersionLine)
 			{
-				$foundVersionLine = $true
-				$newVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+				$FoundVersionLine = $true
+				$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
-				"Version=$newVersion"
+				"Version=$NewVersion"
 			}
 
-			if (-not $foundMachineExtensionLine)
+			if (-not $FoundMachineExtensionLine)
 			{
-				$foundMachineExtensionLine = $true
+				$FoundMachineExtensionLine = $true
 				"gPCMachineExtensionNames=$script:MachineExtensionGuids"
 			}
 
-			if (-not $foundUserExtensionLine)
+			if (-not $FoundUserExtensionLine)
 			{
-				$foundUserExtensionLine = $true
+				$FoundUserExtensionLine = $true
 				"gPCUserExtensionNames=$script:UserExtensionGuids"
 			}
 		}
@@ -143,6 +147,6 @@ function Update-GptIniVersion
 
 	if ($PSCmdlet.ShouldProcess($Path, 'Increment Version number'))
 	{
-		Set-Content -Path $Path -Value $newContents -Encoding Ascii -Confirm:$false -WhatIf:$false
+		Set-Content -Path $Path -Value $NewContents -Encoding Ascii -Confirm:$false -WhatIf:$false
 	}
 }

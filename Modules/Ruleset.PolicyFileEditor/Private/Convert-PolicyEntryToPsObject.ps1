@@ -51,17 +51,20 @@ function Convert-PolicyEntryToPsObject
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	[OutputType([PSObject])]
 	param (
+		[Parameter()]
 		[TJX.PolFileEditor.PolEntry] $PolEntry
 	)
 
-	$type = Convert-PolicyEntryTypeToRegistryValueKind $PolEntry.Type
-	$data = Get-EntryData -Entry $PolEntry -Type $type
+	$Type = Convert-PolicyEntryTypeToRegistryValueKind $PolEntry.Type
+	$Data = Get-EntryData -Entry $PolEntry -Type $Type
 
-	return New-Object psobject -Property @{
+	return New-Object PSObject -Property @{
 		Key = $PolEntry.KeyName
 		ValueName = $PolEntry.ValueName
-		Type = $type
-		Data = $data
+		Type = $Type
+		Data = $Data
 	}
 }

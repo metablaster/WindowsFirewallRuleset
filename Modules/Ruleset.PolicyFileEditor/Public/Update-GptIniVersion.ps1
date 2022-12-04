@@ -93,6 +93,7 @@ which will show up as decimal value 327683 in the INI file.
 function Update-GptIniVersion
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[ValidateScript({
@@ -110,11 +111,12 @@ function Update-GptIniVersion
 		[string[]] $PolicyType
 	)
 
-	if ($PSCmdlet.ShouldProcess("gpt.ini file", "Increments the version counter"))
+	if ($PSCmdlet.ShouldProcess("gpt.ini file", "Increment the version counter"))
 	{
-		if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+		# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
+		if (Get-Command Get-CallerPreference -CommandType ExternalScript)
 		{
-			Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+			& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 		}
 
 		try

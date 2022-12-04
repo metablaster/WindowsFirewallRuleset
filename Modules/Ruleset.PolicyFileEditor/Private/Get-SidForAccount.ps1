@@ -47,29 +47,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Get-SidForAccount($Account)
+function Get-SidForAccount
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	$acc = $Account
-	if ($acc -notlike '*\*') { $acc = "$env:COMPUTERNAME\$acc" }
+	[CmdletBinding()]
+	[OutputType([void])]
+	param (
+		[Parameter()]
+		[string] $Account
+	)
+
+	$Acc = $Account
+	if ($Acc -notlike "*\*") { $Acc = "$env:COMPUTERNAME\$Acc" }
 
 	try
 	{
-		$ntAccount = [System.Security.Principal.NTAccount]$acc
-		return $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
+		$NTAccount = [System.Security.Principal.NTAccount] $Acc
+		return $NTAccount.Translate([System.Security.Principal.SecurityIdentifier])
 	}
 	catch
 	{
-		$message = "Could not translate account '$acc' to a security identifier."
-		$exception = New-Object System.Exception($message, $_.Exception)
-		$errorRecord = New-Object System.Management.Automation.ErrorRecord(
-			$exception,
-			'CouldNotGetSidForAccount',
-			[System.Management.Automation.ErrorCategory]::ObjectNotFound,
-			$Acc
+		$Message = "Could not translate account '$Acc' to a security identifier."
+		$Exception = New-Object System.Exception($Message, $_.Exception)
+
+		$ErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+			$Exception, "CouldNotGetSidForAccount",
+			[System.Management.Automation.ErrorCategory]::ObjectNotFound, $Acc
 		)
 
-		throw $errorRecord
+		throw $ErrorRecord
 	}
 }

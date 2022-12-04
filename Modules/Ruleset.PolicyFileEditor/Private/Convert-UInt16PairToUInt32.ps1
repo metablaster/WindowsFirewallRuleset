@@ -51,9 +51,13 @@ function Convert-UInt16PairToUInt32
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	param ([object] $UInt16Pair)
+	[CmdletBinding()]
+	[OutputType([uint32])]
+	param (
+		[Parameter()]
+		[object] $UInt16Pair
+	)
 
 	# Deliberately avoiding bitwise shift operators here, for PowerShell v2 compatibility.
-
-	return ([UInt32] $UInt16Pair.HighPart) * 0x10000 + $UInt16Pair.LowPart
+	return ([uint32] $UInt16Pair.HighPart) * 0x10000 + $UInt16Pair.LowPart
 }

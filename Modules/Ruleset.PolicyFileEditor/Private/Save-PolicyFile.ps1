@@ -52,33 +52,36 @@ function Save-PolicyFile
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding(SupportsShouldProcess = $true)]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[TJX.PolFileEditor.PolFile] $PolicyFile,
 
+		[Parameter()]
 		[switch] $UpdateGptIni
 	)
 
 	if ($PSCmdlet.ShouldProcess($PolicyFile.FileName, 'Save new settings'))
 	{
-		$parentPath = Split-Path $PolicyFile.FileName -Parent
-		if (-not (Test-Path -LiteralPath $parentPath -PathType Container))
+		$ParentPath = Split-Path $PolicyFile.FileName -Parent
+
+		if (-not (Test-Path -LiteralPath $ParentPath -PathType Container))
 		{
 			try
 			{
-				New-Item -Path $parentPath -ItemType Directory -ErrorAction Stop -Confirm:$false -WhatIf:$false | Out-Null
+				New-Item -Path $ParentPath -ItemType Directory -ErrorAction Stop -Confirm:$false -WhatIf:$false | Out-Null
 			}
 			catch
 			{
-				$errorRecord = $_
-				$message = "Error creating parent folder of path '$Path': $($errorRecord.Exception.Message)"
-				$exception = New-Object System.Exception($message, $errorRecord.Exception)
+				$ErrorRecord = $_
+				$Message = "Error creating parent folder of path '$Path': $($errorRecord.Exception.Message)"
+				$Exception = New-Object System.Exception($Message, $ErrorRecord.Exception)
 
-				$newErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-					$exception, 'CreateParentFolderError', $errorRecord.CategoryInfo.Category, $Path
+				$NewErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+					$Exception, 'CreateParentFolderError', $ErrorRecord.CategoryInfo.Category, $Path
 				)
 
-				throw $newErrorRecord
+				throw $NewErrorRecord
 			}
 		}
 
@@ -88,37 +91,37 @@ function Save-PolicyFile
 		}
 		catch
 		{
-			$errorRecord = $_
-			$message = "Error saving policy file to path '$($PolicyFile.FileName)': $($errorRecord.Exception.Message)"
-			$exception = New-Object System.Exception($message, $errorRecord.Exception)
+			$ErrorRecord = $_
+			$Message = "Error saving policy file to path '$($PolicyFile.FileName)': $($ErrorRecord.Exception.Message)"
+			$Exception = New-Object System.Exception($Message, $ErrorRecord.Exception)
 
-			$newErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$exception, 'FailedToSavePolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $PolicyFile
+			$NewErrorRecord = New-Object System.Management.Automation.ErrorRecord(
+				$Exception, "FailedToSavePolicyFile", [System.Management.Automation.ErrorCategory]::OperationStopped, $PolicyFile
 			)
 
-			throw $newErrorRecord
+			throw $NewErrorRecord
 		}
 	}
 
 	if ($UpdateGptIni)
 	{
-		if ($policyFile.FileName -match '^(.*)\\+([^\\]+)\\+[^\\]+$' -and
-			$Matches[2] -eq 'User' -or $Matches[2] -eq 'Machine')
+		if (($PolicyFile.FileName -match '^(.*)\\+([^\\]+)\\+[^\\]+$') -and
+			($Matches[2] -eq 'User' -or $Matches[2] -eq "Machine"))
 		{
-			$iniPath = Join-Path $Matches[1] GPT.ini
+			$IniPath = Join-Path $Matches[1] GPT.ini
 
-			if (Test-Path -LiteralPath $iniPath -PathType Leaf)
+			if (Test-Path -LiteralPath $IniPath -PathType Leaf)
 			{
-				if ($PSCmdlet.ShouldProcess($iniPath, 'Increment version number in INI file'))
+				if ($PSCmdlet.ShouldProcess($IniPath, "Increment version number in INI file"))
 				{
-					Update-GptIniVersion -Path $iniPath -PolicyType $Matches[2] -Confirm:$false -WhatIf:$false
+					Update-GptIniVersion -Path $IniPath -PolicyType $Matches[2] -Confirm:$false -WhatIf:$false
 				}
 			}
 			else
 			{
-				if ($PSCmdlet.ShouldProcess($iniPath, 'Create new gpt.ini file'))
+				if ($PSCmdlet.ShouldProcess($IniPath, "Create new gpt.ini file"))
 				{
-					New-GptIni -Path $iniPath -PolicyType $Matches[2]
+					New-GptIni -Path $IniPath -PolicyType $Matches[2]
 				}
 			}
 		}

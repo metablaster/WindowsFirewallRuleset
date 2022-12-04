@@ -51,12 +51,18 @@ function Get-EntryData
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	# TODO: in source code it's uint and ulong, source code update needed
+	[OutputType([uint32], [uint64], [string], [byte])]
 	param (
+		[Parameter()]
 		[TJX.PolFileEditor.PolEntry] $Entry,
+
+		[Parameter()]
 		[Microsoft.Win32.RegistryValueKind] $Type
 	)
 
-	switch ($type)
+	switch ($Type)
 	{
         ([Microsoft.Win32.RegistryValueKind]::Binary)
 		{

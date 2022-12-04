@@ -183,7 +183,9 @@ begin
 	}
 	catch
 	{
-		Write-Warning -Message "[$ThisScript] Unexpected parent scope"
+		# TODO: Not warning because some scripts in Ruleset.PolicyFileEditor call this script
+		# Also we should no limit calling this script only from Show-Preference function
+		Write-Verbose -Message "[$ThisScript] Unexpected parent scope"
 	}
 
 	$ParentScopeName = (Get-PSCallStack)[1].Command

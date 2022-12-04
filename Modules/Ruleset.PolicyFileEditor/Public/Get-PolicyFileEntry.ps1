@@ -97,24 +97,26 @@ None.
 #>
 function Get-PolicyFileEntry
 {
-	[CmdletBinding(DefaultParameterSetName = 'ByKeyAndValue')]
+	[CmdletBinding(DefaultParameterSetName = "ByKeyAndValue")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
 
-		[Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByKeyAndValue')]
+		[Parameter(Mandatory = $true, Position = 1, ParameterSetName = "ByKeyAndValue")]
 		[string] $Key,
 
-		[Parameter(Mandatory = $true, Position = 2, ParameterSetName = 'ByKeyAndValue')]
+		[Parameter(Mandatory = $true, Position = 2, ParameterSetName = "ByKeyAndValue")]
 		[string] $ValueName,
 
-		[Parameter(Mandatory = $true, ParameterSetName = 'All')]
+		[Parameter(Mandatory = $true, ParameterSetName = "All")]
 		[switch] $All
 	)
 
-	if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+	# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
+	if (Get-Command Get-CallerPreference -CommandType ExternalScript)
 	{
-		Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+		& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 	}
 
 	try
@@ -126,20 +128,20 @@ function Get-PolicyFileEntry
 		$PSCmdlet.ThrowTerminatingError($_)
 	}
 
-	if ($PSCmdlet.ParameterSetName -eq 'ByKeyAndValue')
+	if ($PSCmdlet.ParameterSetName -eq "ByKeyAndValue")
 	{
-		$entry = $policyFile.GetValue($Key, $ValueName)
+		$Entry = $policyFile.GetValue($Key, $ValueName)
 
-		if ($null -ne $entry)
+		if ($null -ne $Entry)
 		{
-			Convert-PolicyEntryToPsObject -PolicyEntry $entry
+			Convert-PolicyEntryToPsObject -PolicyEntry $Entry
 		}
 	}
 	else
 	{
-		foreach ($entry in $policyFile.Entries)
+		foreach ($Entry in $policyFile.Entries)
 		{
-			Convert-PolicyEntryToPsObject -PolicyEntry $entry
+			Convert-PolicyEntryToPsObject -PolicyEntry $Entry
 		}
 	}
 }

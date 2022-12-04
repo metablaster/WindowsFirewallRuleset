@@ -51,11 +51,13 @@ function Get-PolicyFilePath
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true, ParameterSetName = 'PolicyType')]
+		[Parameter(Mandatory = $true, ParameterSetName = "PolicyType")]
 		[string] $PolicyType,
 
-		[Parameter(Mandatory = $true, ParameterSetName = 'Account')]
+		[Parameter(Mandatory = $true, ParameterSetName = "Account")]
 		[string] $Account
 	)
 
@@ -63,23 +65,20 @@ function Get-PolicyFilePath
 	{
 		switch ($PolicyType)
 		{
-			'Machine'
+			"Machine"
 			{
 				return Join-Path $env:SystemRoot System32\GroupPolicy\Machine\registry.pol
 			}
-
-			'User'
+			"User"
 			{
 				return Join-Path $env:SystemRoot System32\GroupPolicy\User\registry.pol
 			}
-
-			'Administrators'
+			"Administrators"
 			{
 				# BUILTIN\Administrators well-known SID
 				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-544\User\registry.pol
 			}
-
-			'NonAdministrators'
+			"NonAdministrators"
 			{
 				# BUILTIN\Users well-known SID
 				return Join-Path $env:SystemRoot System32\GroupPolicyUsers\S-1-5-32-545\User\registry.pol
@@ -90,14 +89,14 @@ function Get-PolicyFilePath
 	{
 		try
 		{
-			$sid = $Account -as [System.Security.Principal.SecurityIdentifier]
+			$SID = $Account -as [System.Security.Principal.SecurityIdentifier]
 
-			if ($null -eq $sid)
+			if ($null -eq $SID)
 			{
-				$sid = Get-SidForAccount $Account
+				$SID = Get-SidForAccount $Account
 			}
 
-			return Join-Path $env:SystemRoot "System32\GroupPolicyUsers\$($sid.Value)\User\registry.pol"
+			return Join-Path $env:SystemRoot "System32\GroupPolicyUsers\$($SID.Value)\User\registry.pol"
 		}
 		catch
 		{

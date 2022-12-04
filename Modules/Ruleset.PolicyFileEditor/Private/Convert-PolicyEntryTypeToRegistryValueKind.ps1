@@ -51,7 +51,12 @@ function Convert-PolicyEntryTypeToRegistryValueKind
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	param ([TJX.PolFileEditor.PolEntryType] $PolicyEntryType)
+	[CmdletBinding()]
+	[OutputType([Microsoft.Win32.RegistryValueKind])]
+	param (
+		[Parameter()]
+		[TJX.PolFileEditor.PolEntryType] $PolicyEntryType
+	)
 
 	switch ($PolicyEntryType)
 	{

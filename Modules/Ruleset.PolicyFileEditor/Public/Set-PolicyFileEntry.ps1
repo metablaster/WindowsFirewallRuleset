@@ -129,6 +129,7 @@ and the gpt.ini file will not be updated.
 function Set-PolicyFileEntry
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
@@ -161,21 +162,23 @@ function Set-PolicyFileEntry
 			})]
 		[Microsoft.Win32.RegistryValueKind] $Type = [Microsoft.Win32.RegistryValueKind]::String,
 
+		[Parameter()]
 		[switch] $NoGptIniUpdate
 	)
 
 	begin
 	{
-		if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+		# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
+		if (Get-Command Get-CallerPreference -CommandType ExternalScript)
 		{
-			Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+			& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 		}
 
-		$dirty = $false
+		$Dirty = $false
 
 		try
 		{
-			$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
+			$PolicyFile = Open-PolicyFile -Path $Path -ErrorAction Stop
 		}
 		catch
 		{
@@ -187,19 +190,19 @@ function Set-PolicyFileEntry
 	{
 		if ($PSCmdlet.ShouldProcess("Group policy *.pol file", "Set file entry"))
 		{
-			$existingEntry = $policyFile.GetValue($Key, $ValueName)
+			$existingEntry = $PolicyFile.GetValue($Key, $ValueName)
 
 			if ($null -ne $existingEntry -and $Type -eq (Convert-PolicyEntryTypeToRegistryValueKind $existingEntry.Type))
 			{
 				$existingData = Get-EntryData -Entry $existingEntry -Type $Type
 				if (Test-DataIsEqual $Data $existingData -Type $Type)
 				{
-					Write-Verbose "Policy setting '$Key\$ValueName' is already set to '$Data' of type '$Type'."
+					Write-Verbose "Policy setting '$Key\$ValueName' is already set to '$Data' of type '$Type'"
 					return
 				}
 			}
 
-			Write-Verbose "Configuring '$Key\$ValueName' to value '$Data' of type '$Type'."
+			Write-Verbose "Configuring '$Key\$ValueName' to value '$Data' of type '$Type'"
 
 			try
 			{
@@ -207,15 +210,16 @@ function Set-PolicyFileEntry
 				{
                 ([Microsoft.Win32.RegistryValueKind]::Binary)
 					{
-						$bytes = $Data -as [byte[]]
-						if ($null -eq $bytes)
+						$Bytes = $Data -as [byte[]]
+						if ($null -eq $Bytes)
 						{
-							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to Binary, -Data must be passed a Byte[] array.'
-							$PSCmdlet.ThrowTerminatingError($errorRecord)
+							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+								-Message 'When -Type is set to Binary, -Data must be passed a Byte[] array.'
+							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 						}
 						else
 						{
-							$policyFile.SetBinaryValue($Key, $ValueName, $bytes)
+							$PolicyFile.SetBinaryValue($Key, $ValueName, $Bytes)
 						}
 
 						break
@@ -223,16 +227,17 @@ function Set-PolicyFileEntry
 
                 ([Microsoft.Win32.RegistryValueKind]::String)
 					{
-						$array = @($Data)
+						$Array = @($Data)
 
-						if ($array.Count -ne 1)
+						if ($Array.Count -ne 1)
 						{
-							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to String, -Data must be passed a scalar value or single-element array.'
-							$PSCmdlet.ThrowTerminatingError($errorRecord)
+							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+								-Message 'When -Type is set to String, -Data must be passed a scalar value or single-element array.'
+							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 						}
 						else
 						{
-							$policyFile.SetStringValue($Key, $ValueName, $array[0].ToString())
+							$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString())
 						}
 
 						break
@@ -240,16 +245,17 @@ function Set-PolicyFileEntry
 
                 ([Microsoft.Win32.RegistryValueKind]::ExpandString)
 					{
-						$array = @($Data)
+						$Array = @($Data)
 
-						if ($array.Count -ne 1)
+						if ($Array.Count -ne 1)
 						{
-							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array.'
-							$PSCmdlet.ThrowTerminatingError($errorRecord)
+							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+								-Message 'When -Type is set to ExpandString, -Data must be passed a scalar value or single-element array.'
+							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 						}
 						else
 						{
-							$policyFile.SetStringValue($Key, $ValueName, $array[0].ToString(), $true)
+							$PolicyFile.SetStringValue($Key, $ValueName, $Array[0].ToString(), $true)
 						}
 
 						break
@@ -257,16 +263,17 @@ function Set-PolicyFileEntry
 
                 ([Microsoft.Win32.RegistryValueKind]::DWord)
 					{
-						$array = @($Data)
-						$dword = ($array | Select-Object -First 1) -as [UInt32]
-						if ($null -eq $dword -or $array.Count -ne 1)
+						$Array = @($Data)
+						$Dword = ($Array | Select-Object -First 1) -as [UInt32]
+						if ($null -eq $Dword -or $Array.Count -ne 1)
 						{
-							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
-							$PSCmdlet.ThrowTerminatingError($errorRecord)
+							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+								-Message 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
+							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 						}
 						else
 						{
-							$policyFile.SetDWORDValue($key, $ValueName, $dword)
+							$PolicyFile.SetDWORDValue($Key, $ValueName, $Dword)
 						}
 
 						break
@@ -274,16 +281,17 @@ function Set-PolicyFileEntry
 
                 ([Microsoft.Win32.RegistryValueKind]::QWord)
 					{
-						$array = @($Data)
-						$qword = ($array | Select-Object -First 1) -as [UInt64]
-						if ($null -eq $qword -or $array.Count -ne 1)
+						$Array = @($Data)
+						$Qword = ($Array | Select-Object -First 1) -as [UInt64]
+						if ($null -eq $Qword -or $Array.Count -ne 1)
 						{
-							$errorRecord = Assert-InvalidDataTypeCombinationErrorRecord -Message 'When -Type is set to QWord, -Data must be passed a valid UInt64 value.'
-							$PSCmdlet.ThrowTerminatingError($errorRecord)
+							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
+								-Message 'When -Type is set to QWord, -Data must be passed a valid UInt64 value.'
+							$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 						}
 						else
 						{
-							$policyFile.SetQWORDValue($key, $ValueName, $qword)
+							$PolicyFile.SetQWORDValue($Key, $ValueName, $Qword)
 						}
 
 						break
@@ -291,20 +299,20 @@ function Set-PolicyFileEntry
 
                 ([Microsoft.Win32.RegistryValueKind]::MultiString)
 					{
-						$strings = [string[]] @(
+						$Strings = [string[]] @(
 							foreach ($item in @($Data))
 							{
 								$item.ToString()
 							}
 						)
 
-						$policyFile.SetMultiStringValue($Key, $ValueName, $strings)
+						$PolicyFile.SetMultiStringValue($Key, $ValueName, $Strings)
 
 						break
 					}
 				} # switch ($Type)
 
-				$dirty = $true
+				$Dirty = $true
 			}
 			catch
 			{
@@ -315,15 +323,15 @@ function Set-PolicyFileEntry
 
 	end
 	{
-		if ($dirty)
+		if ($Dirty)
 		{
-			$doUpdateGptIni = -not $NoGptIniUpdate
+			$DoUpdateGptIni = -not $NoGptIniUpdate
 
 			try
 			{
 				# Save-PolicyFile contains the calls to $PSCmdlet.ShouldProcess, and will inherit our
 				# WhatIfPreference / ConfirmPreference values from here.
-				Save-PolicyFile -PolicyFile $policyFile -UpdateGptIni:$doUpdateGptIni -ErrorAction Stop
+				Save-PolicyFile -PolicyFile $PolicyFile -UpdateGptIni:$DoUpdateGptIni -ErrorAction Stop
 			}
 			catch
 			{

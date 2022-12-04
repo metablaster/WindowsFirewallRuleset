@@ -51,7 +51,12 @@ function Confirm-AdminTemplateCseGuidsArePresent
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	param ([string] $Line)
+	[CmdletBinding()]
+	[OutputType([string])]
+	param (
+		[Parameter()]
+		[string] $Line
+	)
 
 	# These lines contain pairs of GUIDs in "registry" format (with the curly braces), separated by nothing, with
 	# each pair of GUIDs wrapped in square brackets.  Example:
@@ -65,10 +70,10 @@ function Confirm-AdminTemplateCseGuidsArePresent
 		throw "Malformed gpt.ini line: $Line"
 	}
 
-	$valueName = $matches[1]
-	$guidStrings = @($matches[2] -split '(?<=\])(?=\[)')
+	$ValueName = $Matches[1]
+	$guidStrings = @($Matches[2] -split '(?<=\])(?=\[)')
 
-	if ($matches[1] -eq 'gPCMachineExtensionNames')
+	if ($Matches[1] -eq "gPCMachineExtensionNames")
 	{
 		$toolExtensionGuid = $script:MachineExtensionGuids
 	}
@@ -77,12 +82,12 @@ function Confirm-AdminTemplateCseGuidsArePresent
 		$toolExtensionGuid = $script:UserExtensionGuids
 	}
 
-	$guidList = @(
-		$guidStrings
-		$toolExtensionGuid
+	$GuidList = @(
+		$GuidStrings
+		$ToolExtensionGuid
 	)
 
-	$newGuidString = ($guidList | Sort-Object -Unique) -join ''
+	$NewGuidString = ($GuidList | Sort-Object -Unique) -join ''
 
-	return "$valueName=$newGuidString"
+	return "$ValueName=$NewGuidString"
 }

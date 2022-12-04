@@ -104,6 +104,7 @@ the file will not be modified, and the gpt.ini file will not be updated.
 function Remove-PolicyFileEntry
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[string] $Path,
@@ -119,12 +120,13 @@ function Remove-PolicyFileEntry
 
 	begin
 	{
-		if (Get-Command [G]et-CallerPreference -CommandType Function -Module PreferenceVariables)
+		# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
+		if (Get-Command Get-CallerPreference -CommandType ExternalScript)
 		{
-			Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+			& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 		}
 
-		$dirty = $false
+		$Dirty = $false
 
 		try
 		{
@@ -140,11 +142,11 @@ function Remove-PolicyFileEntry
 	{
 		if ($PSCmdlet.ShouldProcess("Group policy *.pol file", "Delete file entry"))
 		{
-			$entry = $policyFile.GetValue($Key, $ValueName)
+			$Entry = $policyFile.GetValue($Key, $ValueName)
 
-			if ($null -eq $entry)
+			if ($null -eq $Entry)
 			{
-				Write-Verbose "Entry '$Key\$ValueName' is already not present in file '$Path'."
+				Write-Verbose "Entry '$Key\$ValueName' is already not present in file '$Path'"
 				return
 			}
 
@@ -156,9 +158,9 @@ function Remove-PolicyFileEntry
 
 	end
 	{
-		if ($dirty)
+		if ($Dirty)
 		{
-			$doUpdateGptIni = -not $NoGptIniUpdate
+			$DoUpdateGptIni = -not $NoGptIniUpdate
 
 			try
 			{

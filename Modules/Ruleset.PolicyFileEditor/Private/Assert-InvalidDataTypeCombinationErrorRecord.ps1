@@ -47,12 +47,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Assert-InvalidDataTypeCombinationErrorRecord($Message)
+function Assert-InvalidDataTypeCombinationErrorRecord
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	$exception = New-Object System.Exception($Message)
-	return New-Object System.Management.Automation.ErrorRecord(
-		$exception, 'InvalidDataTypeCombination', [System.Management.Automation.ErrorCategory]::InvalidArgument, $null
+	[CmdletBinding()]
+	[OutputType([System.Management.Automation.ErrorRecord])]
+	param (
+		[Parameter()]
+		[string] $Message
+	)
+
+	$Exception = New-Object System.Exception($Message)
+
+	return New-Object System.Management.Automation.ErrorRecord($Exception, "InvalidDataTypeCombination",
+		[System.Management.Automation.ErrorCategory]::InvalidArgument, $null
 	)
 }
