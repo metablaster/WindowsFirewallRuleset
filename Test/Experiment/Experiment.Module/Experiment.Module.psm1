@@ -47,7 +47,8 @@ if ($ListPreference)
 #
 # Script imports
 #
-Write-Debug -Message "[$ThisModule] Importing module scripts"
+
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
 
 $ScriptsToProcess = @(
 )
@@ -98,6 +99,8 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
@@ -105,14 +108,22 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Template variable
-New-Variable -Name ModuleVariable -Scope Global -Value "Module variable"
+New-Variable -Name ModuleVariable -Scope Script -Value "Module variable"
+
+#
+# Module aliases
+#
+
+Write-Debug -Message "[$ThisModule] Creating aliases"
+New-Alias -Name testvar -Value ModuleVariable
+Export-ModuleMember -Alias testvar
 
 #
 # Module cleanup
 #
 
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
+	Write-Debug -Message "[$ThisModule] Performing module cleanup"
 
-	Remove-Variable -Name ModuleVariable -Scope Global
+	# Do module cleanup here is necessary...
 }

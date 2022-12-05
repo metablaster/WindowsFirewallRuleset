@@ -360,7 +360,7 @@ if (!(Get-Variable -Name PathVariables -Scope Global -ErrorAction Ignore))
 	# TODO: This should be declared in preferences section but we need $ProjectRoot
 	# Declared to avoid warning in Get-CallerPreference
 	# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_preference_variables
-	$Transcript = "$ProjectRoot\Logs\PowerShell_transcript_$(Get-Date -Format "dd.MM.yy")."
+	$Transcript = "$ProjectRoot\Logs\PowerShell_transcript_$(Get-Date -Format "dd.MM.yy").txt"
 
 	# These drives will help to have shorter prompt and to be able to jump to them with less typing
 	# TODO: Should we use these drives instead of "ProjectRoot" variable?

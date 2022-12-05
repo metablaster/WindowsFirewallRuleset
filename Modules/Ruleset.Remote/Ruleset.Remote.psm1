@@ -52,6 +52,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PrivateScripts = @(
 	"Initialize-WinRM"
 	"Restore-NetProfile"
@@ -103,6 +105,8 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
@@ -110,11 +114,11 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Timeout to start and stop WinRM service
-New-Variable -Name ServiceTimeout -Scope Script -Value "00:00:50"
+New-Variable -Name ServiceTimeout -Scope Script -Option Constant -Value "00:00:50"
 
 # Firewall rules needed to be present to configure some of the WinRM options
-New-Variable -Name WinRMRules -Scope Script -Value "@FirewallAPI.dll,-30267"
-New-Variable -Name WinRMCompatibilityRules -Scope Script -Value "@FirewallAPI.dll,-30252"
+New-Variable -Name WinRMRules -Scope Script -Option Constant -Value "@FirewallAPI.dll,-30267"
+New-Variable -Name WinRMCompatibilityRules -Option Constant -Scope Script -Value "@FirewallAPI.dll,-30252"
 
 # Work Station (1)
 # Domain Controller (2)
@@ -123,7 +127,7 @@ New-Variable -Name Workstation -Scope Script -Option Constant -Value (
 	(Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
 	Select-Object -ExpandProperty ProductType) -eq 1)
 
-New-Variable -Name WinRM -Scope Script -Value (Get-Service -Name WinRM)
+New-Variable -Name WinRM -Scope Script -Option Constant -Value (Get-Service -Name WinRM)
 
 # Adapters modified by module
 New-Variable -Name AdapterProfile -Scope Script -Value $null
@@ -135,7 +139,7 @@ New-Variable -Name RemoteFirewallSession -Scope Script -Option Constant -Value "
 # PS edition specific local session, do not modify!
 New-Variable -Name LocalFirewallSession -Scope Script -Option Constant -Value "LocalFirewall.$($PSVersionTable.PSEdition)"
 
-# These functions are too verbose, disabling to be able use -Verbose on user code
+# CAUTION: These functions are too verbose, disabling to be able use -Verbose on user code
 $PSDefaultParameterValues["Get-PSSessionConfiguration:Verbose"] = $false
 $PSDefaultParameterValues["Unregister-PSSessionConfiguration:Verbose"] = $false
 $PSDefaultParameterValues["Register-PSSessionConfiguration:Verbose"] = $false

@@ -1,7 +1,9 @@
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
-// https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released/
+// https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released
+// NOTE: We explicity define all extension settings in alphabetical order as it is listed
+// in Extensions -> Feature Contributions to ensure that change to defaults doesn't affect us
 {
-	// files
+	// VSCode: workspace files
 	"files.encoding": "utf8",
 	"files.autoSave": "afterDelay",
 	"files.autoSaveDelay": 500,
@@ -15,14 +17,14 @@
 		// Test module for Config\ProjectSettings.psd1
 		"*PssaTest.Module*": "PssaTest"
 	},
-	// test module for Config\ProjectSettings.psd1 must not be formatted
+	// Test module for Config\ProjectSettings.psd1 must not be formatted
 	"[PssaTest]": {
 		"editor.formatOnSave": false,
 		"editor.formatOnPaste": false,
 		"editor.trimAutoWhitespace": false,
 		"editor.formatOnType": false
 	},
-	// markdown formatter is "markdownlint" extension
+	// Markdown formatter is "markdownlint" extension
 	"[markdown]": {
 		"editor.wordWrap": "off",
 		"editor.detectIndentation": true,
@@ -30,7 +32,11 @@
 		"editor.formatOnSave": false,
 		"editor.formatOnPaste": true
 	},
-	// editor
+	// PowerShell extension is default formatter
+	"[powershell]": {
+		"editor.defaultFormatter": "ms-vscode.powershell"
+	},
+	// VSCode: editor
 	"editor.quickSuggestions": {
 		"other": true,
 		"comments": true,
@@ -58,10 +64,6 @@
 	"editor.minimap.showSlider": "always",
 	"editor.snippetSuggestions": "bottom",
 	"editor.comments.ignoreEmptyLines": false,
-	// PowerShell extension is default formatter
-	"[powershell]": {
-		"editor.defaultFormatter": "ms-vscode.powershell"
-	},
 	// override the colors of the default log items (log files):
 	// log.constant
 	// log.date
@@ -82,7 +84,7 @@
 				"scope": "log.date",
 				"settings": {
 					"foreground": "#b3aeae",
-					//"fontStyle": "bold"
+					// "fontStyle": "bold"
 				}
 			}
 		]
@@ -91,14 +93,15 @@
 	// https://github.com/PowerShell/vscode-powershell/issues/3221
 	"editor.semanticHighlighting.enabled": false,
 	"editor.codeActionsOnSave": {
-		// TODO: need to verify if useful
+		// TODO: need to verify if result is desired
 		"source.fixAll.markdownlint": false
 	},
 	// PSUseConsistentIndentation
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
-	// workbench
+	// VSCode: workbench
 	"workbench.colorCustomizations": {
+		// TODO: Isn't this duplicate of "editor.rulers"
 		"editorRuler.foreground": "#4063ff",
 		"tab.activeBorder": "#ff0000"
 	},
@@ -106,9 +109,10 @@
 	"workbench.editor.enablePreviewFromCodeNavigation": true,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"workbench.editor.highlightModifiedTabs": true,
-	// diffeditor
+	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
-	// Terminal
+	// VSCode: Terminal
+	// NOTE: This hight number due to Test\PSScriptAnalyzer.ps1
 	"terminal.integrated.scrollback": 40000,
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
@@ -116,7 +120,7 @@
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
 	// Extension: Code Spell Checker
-	// NOTE: This config isn't recognized in cspell.json
+	// TODO: This config isn't recognized in cspell.json
 	// File types for language ID's are defined in cspell.json
 	"cSpell.enableFiletypes": [
 		"ignore",
@@ -130,6 +134,7 @@
 		"ini" // mTail configuration
 	],
 	// Extension: Filter Line
+	// CAUTION: Needs to be set in user settings
 	"filter-line.historySize": 20,
 	// Extension: Fix JSON
 	"fixJson.indentationSpaces": null,
@@ -355,20 +360,23 @@
 		"HACK",
 		"TODO",
 		"NOTE",
-		"MSDN",
-		"ALERT",
 		"BUG",
+		"MSDN",
+		"CAUTION",
+		"ISSUE",
 		"[ ]",
-		"[x]"
+		"[x]",
+		"INFO",
+		"FIX"
 	],
 	"todo-tree.highlights.customHighlight": {
-		// Very important and hard to resolve
+		// Hard to resolve
 		"HACK": {
 			// used to set a different icon in the tree view
 			// consider: info, bookmark, markdown, alert, bug, question, mark-github,
 			// issue-opened, check-circle, checklist, report, beaker
-			// icons and names: https://primer.style/octicons/
-			"icon": "alert",
+			// icons and names: https://primer.style/octicons
+			"icon": "zap",
 			// used to control how much is highlighted in the editor. Valid values are:
 			// tag - highlights just the tag
 			// text - highlights the tag and any text after the tag
@@ -379,7 +387,7 @@
 			"type": "tag",
 			// used to set the foreground colour of the highlight in the editor and the marker in the ruler
 			// Foreground and background can be: "red", "green", "blue", "yellow", "magenta", "cyan", "grey", "white" or "black"
-			// See also: https://en.wikipedia.org/wiki/Web_colors
+			// see https://www.w3schools.com/colors/default.asp
 			"foreground": "#ffffff",
 			// used to set the background colour of the highlight in the editor.
 			"background": "#ff0000",
@@ -396,7 +404,8 @@
 		},
 		// Needs additional work
 		"TODO": {
-			"icon": "check-circle",
+			"icon": "tools",
+			"type": "tag",
 			"foreground": "#000000",
 			"background": "#ffffff",
 			"iconColour": "#228B22", // ForestGreen
@@ -404,68 +413,95 @@
 		},
 		// Important comment(s)
 		"NOTE": {
-			"icon": "checklist",
+			"icon": "info",
+			"type": "tag",
 			"foreground": "#ffffff",
-			"background": "#2ec920", // custom green
+			"background": "#2ec920", // Custom green
+			"iconColour": "#ffffff",
 			"opacity": 40,
 			// TODO: setting not working
 			"hideFromTree ": true
 		},
-		"MSDN": {
-			"icon": "info",
-			"foreground": "#fff8dc", // Cornsilk
-			"background": "#008b8b", // DarkCyan
-			"iconColour": "#00bfff", // DeepSkyBlue
-			"opacity": 70
-		},
-		"ALERT": {
-			"icon": "alert",
-			"foreground": "#000000",
-			"background": "#FFD700", // Gold
-			"iconColour": "#FFD700", // Gold
-			"opacity": 70
-		},
+		// Known bug, need to fix
 		"BUG": {
 			"icon": "bug",
+			"type": "tag",
+			"foreground": "#ffffff", // White
+			"background": "#ff0000", // Red
+			"iconColour": "#ff0000", // Red
+			"opacity": 70
+		},
+		// Citing Microsoft documentation
+		"MSDN": {
+			"icon": "beaker",
+			"type": "tag",
 			"foreground": "#fff8dc", // Cornsilk
 			"background": "#008b8b", // DarkCyan
 			"iconColour": "#00bfff", // DeepSkyBlue
 			"opacity": 70
 		},
+		// Warning to developer
+		"CAUTION": {
+			"icon": "alert",
+			"type": "tag",
+			"foreground": "#ffffff",
+			"background": "#FDA50F", // Fire
+			"iconColour": "#FFF200", // Bright Yellow
+			"opacity": 70
+		},
+		// Citing GitHub issue
+		"ISSUE": {
+			"icon": "mark-github",
+			"type": "tag",
+			"foreground": "#fff8dc", // Cornsilk
+			"background": "#0d3dcf", // Custom blue
+			"iconColour": "#c0c0c0", // Silver
+			"opacity": 90
+		},
+		// Unchecked box
 		"[ ]": {
 			"icon": "markdown",
+			"type": "tag",
 			"foreground": "#000000",
 			"background": "#ffffff",
 			"iconColour": "#ffffff",
 			"opacity": 90
 		},
+		// Checked box
 		"[x]": {
 			"icon": "markdown",
+			"type": "tag",
 			"foreground": "#ffffff",
-			"background": "#2ec920", // custom green
-			"iconColour": "#2ec920", // custom green
+			"background": "#2ec920", // Custom green
+			"iconColour": "#2ec920", // Custom green
 			"opacity": 40,
 		}
 	},
 	"todo-tree.general.tagGroups": {
-		"HACK": [
-			"HACK",
-			"BUG"
-		],
 		"NOTE": [
 			"NOTE",
 			"INFO"
 		],
-		"TODO": [
-			"TODO",
+		"BUG": [
+			"BUG",
 			"FIX"
 		]
 	},
 	// Extension: Trailing Spaces
-	// NOTE: Enabling this causes issues writing code according to identations rules
+	// CAUTION: Enabling this causes issues writing code according to identations rules
 	"trailing-spaces.trimOnSave": false,
 	//Extension: XML
-	"redhat.telemetry.enabled": false,
+	// NOTE: Configure telemetry if you wish in user settings
+	// BUG: https://github.com/redhat-developer/vscode-yaml/issues/564
+	// "redhat.telemetry.enabled": false,
+	// CAUTION: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
+	"xml.server.preferBinary": true,
+	"xml.server.silenceExtensionWarning": false,
+	// NOTE: Configure if desired in user settings
+	// "xml.server.binary.trustedHashes": [],
+	"xml.trace.server": "off",
+	"xml.logs.client": false,
+	"xml.downloadExternalResources.enabled": true,
 	"xml.fileAssociations": [
 		{
 			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd",
@@ -476,10 +512,61 @@
 			"pattern": "**/*.Types.ps1xml"
 		}
 	],
-	"xml.preferences.quoteStyle": "double",
-	"xml.codeLens.enabled": true,
-	"xml.logs.client": false,
+	"xml.foldings.includeClosingTagInFold": false,
+	"xml.format.enabled": true,
 	"xml.format.emptyElements": "expand",
+	"xml.format.enforceQuoteStyle": "preferred",
+	"xml.format.experimental": false,
+	"xml.format.grammarAwareFormatting": true,
+	"xml.format.joinCDATALines": false,
+	"xml.format.joinCommentLines": false,
 	"xml.format.joinContentLines": true,
-	"xml.format.joinCommentLines": true
+	"xml.format.maxLineWidth": 120,
+	"xml.format.preserveAttributeLineBreaks": true,
+	"xml.format.preserveEmptyContent": false,
+	"xml.format.preservedNewlines": 2,
+	"xml.format.preserveSpace":[],
+	"xml.format.spaceBeforeEmptyCloseTag": true,
+	"xml.format.xsiSchemaLocationSplit": "onPair",
+	"xml.format.splitAttributes": false,
+	"xml.format.splitAttributesIndentSize": 2,
+	"xml.format.closingBracketNewLine": false,
+	"xml.completion.autoCloseTags": true,
+	"xml.completion.autoCloseRemovesContent": true,
+	"xml.codeLens.enabled": true,
+	"xml.preferences.quoteStyle": "double",
+	"xml.preferences.showSchemaDocumentationType": "all",
+	"xml.validation.enabled": true,
+	"xml.validation.namespaces.enabled": "always",
+	"xml.validation.schema.enabled": "always",
+	"xml.validation.disallowDocTypeDecl": false,
+	"xml.validation.resolveExternalEntities": false,
+	"xml.validation.noGrammar": "hint",
+	"xml.symbols.enabled": true,
+	"xml.validation.filters": [],
+	"xml.symbols.excluded": [],
+	"xml.symbols.maxItemsComputed": 5000,
+	"xml.symbols.showReferencedGrammars": true,
+	"xml.symbols.filters": [],
+	"xml.extension.jars": [],
+	// Extension: YAML
+	"yaml.yamlVersion": "1.2",
+	"yaml.trace.server": "off",
+	"yaml.format.enable": true,
+	"yaml.format.singleQuote": false,
+	"yaml.format.bracketSpacing": true,
+	"yaml.format.proseWrap": "preserve",
+	"yaml.format.printWidth": 120,
+	"yaml.validate": true,
+	"yaml.hover": true,
+	"yaml.completion": true,
+	"yaml.customTags": [],
+	"yaml.schemaStore.enable": true,
+	"yaml.schemaStore.url": "https://www.schemastore.org/api/json/catalog.json",
+	"yaml.disableAdditionalProperties": false,
+	"yaml.disableDefaultProperties": false,
+	"yaml.maxItemsComputed": 5000,
+	"yaml.suggest.parentSkeletonSelectedFirst": false,
+	"yaml.style.flowMapping": "allow",
+	"yaml.style.flowSequence": "allow",
 }

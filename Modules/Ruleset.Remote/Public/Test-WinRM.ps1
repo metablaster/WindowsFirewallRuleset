@@ -230,11 +230,11 @@ function Test-WinRM
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
 	}
-	elseif (($MachineName -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:LocalFirewallSession))
+	elseif (($MachineName -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $LocalFirewallSession))
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
-	elseif (($MachineName -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $script:RemoteFirewallSession))
+	elseif (($MachineName -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $RemoteFirewallSession))
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}

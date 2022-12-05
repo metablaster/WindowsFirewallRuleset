@@ -50,6 +50,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PrivateScripts = @(
 	"Initialize-Log"
 )
@@ -85,29 +87,13 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
 
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
-# To prevent callers from overwriting log headers of each other we need a stack of headers
-if (!(Get-Variable -Name HeaderStack -Scope Global -ErrorAction Ignore))
-{
-	# TODO: It would be better to have Push-Header and Pop-Header functions
-	New-Variable -Name HeaderStack -Scope Global -Value ([System.Collections.Stack]::new(@("")))
-}
-
-#
-# Module cleanup
-#
-
-$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
-
-	if ($HeaderStack.Count -eq 0)
-	{
-		# TODO: Need better solution to remove variable
-		Remove-Variable -Name HeaderStack -Scope Global
-	}
-}
+New-Variable -Name HeaderStack -Scope Script -Value ([System.Collections.Stack]::new(@("")))
+Export-ModuleMember -Variable HeaderStack

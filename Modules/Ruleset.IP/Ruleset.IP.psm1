@@ -77,6 +77,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PrivateScripts = @(
 	"ConvertTo-Network"
 	"Get-Permutation"
@@ -126,3 +128,5 @@ foreach ($Script in $PublicScripts)
 			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
 	}
 }
+
+Export-ModuleMember -Function $PublicScripts

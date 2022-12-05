@@ -48,6 +48,8 @@ if ($ListPreference)
 # Scripts imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PrivateScripts = @(
 	"Convert-ArrayToList"
 	"Convert-ListToArray"
@@ -97,3 +99,5 @@ foreach ($Script in $PublicScripts)
 			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
 	}
 }
+
+Export-ModuleMember -Function $PublicScripts

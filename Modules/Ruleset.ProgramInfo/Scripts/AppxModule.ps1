@@ -29,7 +29,7 @@ SOFTWARE.
 # Appx module must be imported in compatibility mode for PowerShell version 7.1+
 if ($PSVersionTable.PSVersion -ge "7.1")
 {
-	Write-Verbose -Message "[AppxModule.ps1] Importing Appx module"
+	Write-Verbose -Message "[AppxModule.ps1] Importing 'Appx' module for compatibility session"
 	# NOTE: New-PSSession for compatibility module is first time executed here and for remote
 	# session also in SessionStartupScript in remote session (Remote module)
 	Import-WinModule -Name Appx -ErrorAction Stop

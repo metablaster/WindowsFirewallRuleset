@@ -338,7 +338,7 @@ function Set-WinRMClient
 			-PolicyStore PersistentStore
 	}
 
-	if ($script:Workstation)
+	if ($Workstation)
 	{
 		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{

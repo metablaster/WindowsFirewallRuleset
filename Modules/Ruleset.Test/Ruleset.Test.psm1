@@ -51,6 +51,8 @@ if ($ListPreference)
 # TODO: Implement a set of Assert functions
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PublicScripts = @(
 	"Enter-Test"
 	"Exit-Test"
@@ -74,3 +76,5 @@ foreach ($Script in $PublicScripts)
 			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
 	}
 }
+
+Export-ModuleMember -Function $PublicScripts

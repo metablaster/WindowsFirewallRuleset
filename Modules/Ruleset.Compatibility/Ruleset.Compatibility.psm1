@@ -58,6 +58,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PublicScripts = @(
 	"Add-WindowsPSModulePath"
 	"Add-WinFunction"
@@ -82,6 +84,8 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
@@ -89,7 +93,7 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # A list of modules native to PowerShell Core that should never be imported
-New-Variable -Name NeverImportList -Scope Script -Value @(
+New-Variable -Name NeverImportList -Scope Script -Option Constant -Value @(
 	"PSReadLine",
 	"PackageManagement",
 	"PowerShellGet",
@@ -101,7 +105,7 @@ New-Variable -Name NeverImportList -Scope Script -Value @(
 # The following is a list of modules native to PowerShell Core that don't have all of
 # the functionality of Windows PowerShell 5.1 versions. These modules can be imported but
 # will not overwrite any existing PowerShell Core commands
-New-Variable -Name NeverClobberList -Scope Script -Value @(
+New-Variable -Name NeverClobberList -Scope Script -Option Constant -Value @(
 	"Microsoft.PowerShell.Management",
 	"Microsoft.PowerShell.Utility",
 	"Microsoft.PowerShell.Security",
@@ -111,7 +115,7 @@ New-Variable -Name NeverClobberList -Scope Script -Value @(
 # A list of compatible modules that exist in Windows PowerShell that aren't available
 # to PowerShell Core by default. These modules, along with CIM modules can be installed
 # in the PowerShell Core module repository using the Copy-WinModule command.
-New-Variable -Name CompatibleModules -Scope Script -Value @(
+New-Variable -Name CompatibleModules -Scope Script -Option Constant -Value @(
 	"AppBackgroundTask",
 	"AppLocker",
 	"Appx",
@@ -166,16 +170,14 @@ New-Variable -Name CompatibleModules -Scope Script -Value @(
 New-Variable -Name SessionName -Scope Script -Value $null
 
 # The computer name to use if one isn't provided.
-$SessionComputerName = "localhost"
+New-Variable -Name SessionComputerName -Scope Script -Value "localhost"
 
 # Specifies the default configuration to connect to when creating the compatibility session
-$SessionConfigurationName = "Microsoft.PowerShell"
-
-New-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
+New-Variable -Name SessionConfigurationName -Scope Script -Value "Microsoft.PowerShell"
 
 # Location Changed handler that keeps the compatibility session PWD in sync with the parent PWD
 # This only applies on localhost.
-$LocationChangedHandler = {
+[scriptblock] $LocationChangedHandler = {
 	[PSSession] $Session = Initialize-WinSession -Domain $SessionComputerName `
 		-ConfigurationName $SessionConfigurationName -PassThru
 
@@ -189,11 +191,19 @@ $LocationChangedHandler = {
 $ExecutionContext.InvokeCommand.LocationChangedAction = $LocationChangedHandler
 
 #
+# Module aliases
+#
+
+Write-Debug -Message "[$ThisModule] Creating aliases"
+New-Alias -Name Add-WinPSModulePath -Value Add-WindowsPSModulePath
+Export-ModuleMember -Alias Add-WinPSModulePath
+
+#
 # Module cleanup
 #
 
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
+	Write-Debug -Message "[$ThisModule] Performing module cleanup"
 
 	# Remove the location changed handler if the module is removed.
 	if ($ExecutionContext.InvokeCommand.LocationChangedAction -eq $LocationChangedHandler)

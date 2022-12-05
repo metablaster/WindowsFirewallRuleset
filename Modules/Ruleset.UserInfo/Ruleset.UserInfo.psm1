@@ -48,6 +48,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PublicScripts = @(
 	"ConvertFrom-SDDL"
 	"ConvertFrom-SID"
@@ -77,6 +79,8 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
@@ -95,32 +99,26 @@ New-Variable -Name KnownDomains -Scope Script -Option Constant -Value @(
 	"MicrosoftAccount"
 )
 
-if (!(Get-Variable -Name CheckInitUserInfo -Scope Global -ErrorAction Ignore))
-{
-	Write-Debug -Message "[$ThisModule] Initializing module constants"
+# Generate SDDL string for the most common user groups
+New-Variable -Name UsersGroupSDDL -Scope Script -Option ReadOnly -Value (
+	Get-SDDL -Merge -Group (Get-Variable -Name DefaultGroup -Scope Global).Value
+)
 
-	# check if constants already initialized, used for module reloading
-	New-Variable -Name CheckInitUserInfo -Scope Global -Option Constant -Value $null
+New-Variable -Name AdminGroupSDDL -Scope Script -Option ReadOnly -Value (
+	Get-SDDL -Group "Administrators"
+)
 
-	# Generate SDDL string for the most common user groups
-	New-Variable -Name UsersGroupSDDL -Scope Global -Option Constant -Value (
-		Get-SDDL -Merge -Group (Get-Variable -Name DefaultGroup -Scope Global).Value
-	)
+# Generate SDDL string for the most common system users
+New-Variable -Name LocalSystem -Scope Script -Option ReadOnly -Value (
+	Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+)
 
-	New-Variable -Name AdminGroupSDDL -Scope Global -Option Constant -Value (
-		Get-SDDL -Group "Administrators"
-	)
+New-Variable -Name LocalService -Scope Script -Option ReadOnly -Value (
+	Get-SDDL -Domain "NT AUTHORITY" -User "LOCAL SERVICE"
+)
 
-	# Generate SDDL string for the most common system users
-	New-Variable -Name LocalSystem -Scope Global -Option Constant -Value (
-		Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
-	)
+New-Variable -Name NetworkService -Scope Script -Option ReadOnly -Value (
+	Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
+)
 
-	New-Variable -Name LocalService -Scope Global -Option Constant -Value (
-		Get-SDDL -Domain "NT AUTHORITY" -User "LOCAL SERVICE"
-	)
-
-	New-Variable -Name NetworkService -Scope Global -Option Constant -Value (
-		Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE"
-	)
-}
+Export-ModuleMember -Variable UsersGroupSDDL, AdminGroupSDDL, LocalSystem, LocalService, NetworkService

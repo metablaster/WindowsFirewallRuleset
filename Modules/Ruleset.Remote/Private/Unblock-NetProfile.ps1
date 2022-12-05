@@ -57,7 +57,7 @@ function Unblock-NetProfile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($script:Workstation)
+	if ($Workstation)
 	{
 		[array] $PublicAdapter = Get-NetConnectionProfile |
 		Where-Object -Property NetworkCategory -NE Private

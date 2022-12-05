@@ -108,7 +108,11 @@ SOFTWARE.
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	ScriptsToProcess = @(
-		"Scripts\AppxModule.ps1"
+		# NOTE: *.psm dot sources it for it's own need, it's not needed in global environment
+		# Also this would produce an error if module is imported manually since module path isn't
+		# updated before module is loaded
+		# TODO: It's untested if importing appx module into global scope is necessary in PS Core
+		# "Scripts\AppxModule.ps1"
 		"Scripts\TargetProgram.ps1"
 	)
 
@@ -116,7 +120,9 @@ SOFTWARE.
 	# TypesToProcess = @()
 
 	# Format files (.ps1xml) to be loaded when importing this module
-	FormatsToProcess = @("Ruleset.ProgramInfo.Format.ps1xml")
+	FormatsToProcess = @(
+		"Ruleset.ProgramInfo.Format.ps1xml"
+	)
 
 	# Modules to import as nested modules of the module specified in RootModule.
 	# Loading (.ps1) files here is equivalent to dot sourcing the script in your root module.
@@ -158,7 +164,9 @@ SOFTWARE.
 	# Variables to export from this module.
 	# Wildcard characters are permitted, by default, all variables ("*") are exported.
 	VariablesToExport = @(
-		# NOTE: Following exports only for unit testing
+		# TODO: Following exports only for unit testing
+		# This should be resolved in Enter-Test function which picks up private functions but not
+		# script scope variables
 		"InstallTable"
 	)
 

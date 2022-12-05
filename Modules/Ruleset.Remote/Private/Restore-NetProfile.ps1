@@ -54,7 +54,7 @@ function Restore-NetProfile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($script:Workstation)
+	if ($Workstation)
 	{
 		if ($script:VirtualAdapter)
 		{

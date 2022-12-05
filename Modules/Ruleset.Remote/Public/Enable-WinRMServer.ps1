@@ -205,12 +205,12 @@ function Enable-WinRMServer
 		# Remove all default and repository specifc session configurations
 		Get-PSSessionConfiguration | Where-Object {
 			($_.Name -like $DefaultSession) -or
-			($_.Name -eq $script:RemoteFirewallSession) -or
-			($_.Name -eq $script:LocalFirewallSession)
+			($_.Name -eq $RemoteFirewallSession) -or
+			($_.Name -eq $LocalFirewallSession)
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
-	if ($script:Workstation)
+	if ($Workstation)
 	{
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)
@@ -259,7 +259,7 @@ function Enable-WinRMServer
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Registering custom session configuration"
 
 		$LocalSessionConfigParams = @{
-			Name = $script:LocalFirewallSession
+			Name = $LocalFirewallSession
 			Path = "$PSScriptRoot\..\Scripts\LocalFirewall.pssc"
 			# If the script generates any errors, including non-terminating errors, the New-PSSession command fails.
 			StartupScript = "$PSScriptRoot\..\Scripts\SessionStartupScript.ps1"
@@ -285,7 +285,7 @@ function Enable-WinRMServer
 		if (!$Loopback)
 		{
 			$RemoteSessionConfigParams = @{
-				Name = $script:RemoteFirewallSession
+				Name = $RemoteFirewallSession
 				Path = "$PSScriptRoot\..\Scripts\RemoteFirewall.pssc"
 				StartupScript = "$PSScriptRoot\..\Scripts\SessionStartupScript.ps1"
 				ProcessorArchitecture = $SessionConfigParams["ProcessorArchitecture"]
@@ -556,7 +556,7 @@ function Enable-WinRMServer
 		Remove-NetFirewallRule -Group $WinRMCompatibilityRules -Direction Inbound -PolicyStore PersistentStore
 	}
 
-	if ($script:Workstation)
+	if ($Workstation)
 	{
 		if ($PSCmdlet.ShouldProcess("Windows firewall, persistent store", "Restore 'Windows Remote Management' firewall rules to default"))
 		{

@@ -50,6 +50,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PublicScripts = @(
 	"ConvertFrom-OSBuild"
 	"Get-InterfaceAlias"
@@ -75,6 +77,8 @@ foreach ($Script in $PublicScripts)
 			-Message "Failed to import script '$ThisModule\Public\$Script.ps1' $($_.Exception.Message)"
 	}
 }
+
+Export-ModuleMember -Function $PublicScripts
 
 #
 # Module variables

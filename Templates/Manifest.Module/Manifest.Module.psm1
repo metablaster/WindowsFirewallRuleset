@@ -58,9 +58,10 @@ if ($ListPreference)
 #
 # Script imports
 #
-Write-Debug -Message "[$ThisModule] Importing module scripts"
 
-# NOTE: For scripts which should be private to this module
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
+# Additional scripts from Scripts directory
 $ScriptsToProcess = @(
 )
 
@@ -77,6 +78,7 @@ foreach ($Script in $ScriptsToProcess)
 	}
 }
 
+# Private function scripts which should not be exported
 $PrivateScripts = @(
 )
 
@@ -93,6 +95,7 @@ foreach ($Script in $PrivateScripts)
 	}
 }
 
+# Public function scripts which should be exported
 $PublicScripts = @(
 	"New-Function"
 )
@@ -110,6 +113,12 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+# NOTE: Without explicit Export-ModuleMember in addition to FunctionsToExport = @() in manifest file
+# verbose messages show private function exports even though they are not accessible and also
+# verbose messages will read "Exporting function" in addition to "Importing function" resulting nn
+# redundant verbose output
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
@@ -117,14 +126,23 @@ foreach ($Script in $PublicScripts)
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Template variable
-New-Variable -Name TemplateModuleVariable -Scope Global -Value $null
+New-Variable -Name TemplateModuleVariable -Scope Script -Value $null
+Export-ModuleMember -Variable TemplateModuleVariable
+
+#
+# Module aliases
+#
+
+Write-Debug -Message "[$ThisModule] Creating aliases"
+New-Alias -Name tv -Value TemplateModuleVariable
+Export-ModuleMember -Alias tv
 
 #
 # Module cleanup
 #
 
 $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
+	Write-Debug -Message "[$ThisModule] Performing module cleanup"
 
-	Remove-Variable -Name TemplateModuleVariable -Scope Global
+	# Do module cleanup here is necessary...
 }

@@ -40,10 +40,13 @@
 		// Trailing Spaces
 		"shardulm94.trailing-spaces",
 		// XML
-		"redhat.vscode-xml"
+		"redhat.vscode-xml",
+		// YAML
+		"redhat.vscode-yaml"
 	],
 	// List of extensions which should not be recommended for users of this workspace.
-	// Following extensions cause issues when used with some extensions from recommended list
+	// Following extensions cause issues with some recommended extensions or there is
+	// a better alternative in recommendations above.
 	"unwantedRecommendations": [
 		// Git History
 		"donjayamanne.githistory",
@@ -51,5 +54,7 @@
 		"berublan.vscode-log-viewer",
 		// Unicode-Substitutions
 		"glenbuktenica.unicode-substitutions",
+		// XML Tools
+		"DotJoshJohnson.xml"
 	]
 }

@@ -54,6 +54,8 @@ if ($ListPreference)
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $ScriptsToProcess = @(
 	"AppxModule"
 	"TargetProgram"
@@ -140,12 +142,6 @@ if ($Develop)
 		"Show-Table"
 		"Update-Table"
 	)
-
-	Export-ModuleMember -Variable InstallTable
-}
-else
-{
-	Export-ModuleMember -Variable @()
 }
 
 Export-ModuleMember -Function $PublicScripts
@@ -153,19 +149,11 @@ Export-ModuleMember -Function $PublicScripts
 #
 # Module variables
 #
+
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
 # Installation table holds user and program directory pair
-if ($Develop)
-{
-	Remove-Variable -Name InstallTable -Scope Script -ErrorAction Ignore
-	New-Variable -Name InstallTable -Scope Global -Value $null
-}
-else
-{
-	Remove-Variable -Name InstallTable -Scope Global -ErrorAction Ignore
-	New-Variable -Name InstallTable -Scope Script -Value $null
-}
+New-Variable -Name InstallTable -Scope Script -Value $null
 
 # If PolicyStore changed to another computer name script scope cache need to be updated
 New-Variable -Name LastPolicyStore -Scope Script -Value $null
@@ -213,15 +201,8 @@ New-Variable -Name BlackListExecutable -Scope Script -Option Constant -Value @{
 	WSH	= "Windows Script Preference"
 }
 
-#
-# Module cleanup
-#
-
-$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
-	Write-Debug -Message "[$ThisModule] Cleanup module"
-
-	if ($Develop)
-	{
-		Remove-Variable -Name InstallTable -Scope Global
-	}
+if ($Develop)
+{
+	# NOTE: manifest file must also specify this in VariablesToExport = @()
+	Export-ModuleMember -Variable InstallTable
 }

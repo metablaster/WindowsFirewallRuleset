@@ -86,6 +86,8 @@ Add-Type -Path $DllPath -ErrorAction Stop
 # Script imports
 #
 
+Write-Debug -Message "[$ThisModule] Dotsourcing scripts"
+
 $PrivateScripts = @(
 	"Assert-InvalidDataTypeCombinationErrorRecord"
 	"Assert-ValidDataAndType"
@@ -139,11 +141,13 @@ foreach ($Script in $PublicScripts)
 	}
 }
 
+Export-ModuleMember -Function $PublicScripts
+
 #
 # Module variables
 #
 
 Write-Debug -Message "[$ThisModule] Initializing module variables"
 
-New-Variable -Name MachineExtensionGuids -Scope Script -Value "[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]"
-New-Variable -Name UserExtensionGuids -Scope Script -Value "[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F73-3407-48AE-BA88-E8213C6761F1}]"
+New-Variable -Name MachineExtensionGuids -Scope Script -Option Constant -Value "[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]"
+New-Variable -Name UserExtensionGuids -Scope Script -Option Constant -Value "[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F73-3407-48AE-BA88-E8213C6761F1}]"
