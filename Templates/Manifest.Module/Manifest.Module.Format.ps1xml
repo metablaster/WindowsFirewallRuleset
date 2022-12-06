@@ -17,17 +17,15 @@
 			<!-- Defines how a new group of objects is displayed. -->
 			<!-- This element is used when defining a table, list, wide, or custom control view. -->
 			<GroupBy>
-				<!-- Optional element. Specifies a label that is displayed when a new group is encountered. -->
-				<Label>Label1</Label>
 				<!-- Specifies the object property by which items are to be grouped. -->
 				<PropertyName>Property1</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
 				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
-				<AutoSize>True</AutoSize>
+				<AutoSize>true</AutoSize>
 				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
-				<HideTableHeaders>False</HideTableHeaders>
+				<HideTableHeaders>false</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
@@ -71,7 +69,6 @@
 				<TypeName>TemplateType</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
-				<Label>Label1</Label>
 				<PropertyName>Property1</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a list format for the view. -->
@@ -105,7 +102,6 @@
 				<TypeName>TemplateType</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
-				<Label>Label1</Label>
 				<PropertyName>Property1</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a wide (single value) list format for the view. -->
@@ -113,9 +109,7 @@
 			<WideControl>
 				<!-- AutoSize and ColumnNumber are mutually exclusive. -->
 				<!-- Autosize may split one column into multiple columns -->
-				<AutoSize>True</AutoSize>
-				<!-- Optional element. Specifies the number of columns displayed in the wide view. -->
-				<ColumnNumber>1</ColumnNumber>
+				<AutoSize>true</AutoSize>
 				<!-- Required element. Provides the definitions of the wide view. -->
 				<WideEntries>
 					<!-- Provides a definition of the wide view. -->

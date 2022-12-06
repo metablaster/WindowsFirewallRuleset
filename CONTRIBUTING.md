@@ -447,6 +447,8 @@ generating online help files:
 - For anything else keep in mind that any markdown syntax in comments will be formatted in the
 resulting markdown file as markdown not as plain text, which may give unexpected results.
 
+See also [PlatyPS.schema][platyps_schema]
+
 ### In module Help directory (module online documentation)
 
 The `Scripts` directory contains `Update-HelpContent.ps1` which when run will scan comment based
@@ -731,3 +733,4 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [markdown tables]: https://www.tablesgenerator.com/markdown_tables "Visit table generator site"
 [badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [badge vscode link]: https://code.visualstudio.com
+[platyps_schema]: https://github.com/PowerShell/platyPS/blob/master/platyPS.schema.md "Visit PlatyPS repository"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/powershell/help/2010/05" xmlns="http://www.w3.org/2001/XMLSchema">
+	<element name="HelpInfo">
+		<complexType>
+			<sequence>
+				<element name="HelpContentURI" type="anyURI" minOccurs="1" maxOccurs="1"></element>
+				<element name="SupportedUICultures" minOccurs="1" maxOccurs="1">
+					<complexType>
+						<sequence>
+							<element name="UICulture" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<sequence>
+										<element name="UICultureName" type="language" minOccurs="1" maxOccurs="1"></element>
+										<element name="UICultureVersion" type="string" minOccurs="1" maxOccurs="1"></element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

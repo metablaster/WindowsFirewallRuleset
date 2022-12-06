@@ -17,17 +17,15 @@
 			<!-- Defines how a new group of objects is displayed. -->
 			<!-- This element is used when defining a table, list, wide, or custom control view. -->
 			<GroupBy>
-				<!-- Optional element. Specifies a label that is displayed when a new group is encountered. -->
-				<Label>Domain</Label>
 				<!-- Specifies the object property by which items are to be grouped. -->
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
 				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
-				<AutoSize>True</AutoSize>
+				<AutoSize>true</AutoSize>
 				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
-				<HideTableHeaders>False</HideTableHeaders>
+				<HideTableHeaders>false</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
@@ -87,7 +85,6 @@
 				<TypeName>Ruleset.UserInfo</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
-				<Label>Domain</Label>
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a list format for the view. -->
@@ -129,7 +126,6 @@
 				<TypeName>Ruleset.UserInfo</TypeName>
 			</ViewSelectedBy>
 			<GroupBy>
-				<Label>Domain</Label>
 				<PropertyName>Domain</PropertyName>
 			</GroupBy>
 			<!-- Optional element. Defines a wide (single value) list format for the view. -->

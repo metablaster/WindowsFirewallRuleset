@@ -17,9 +17,9 @@
 			<!-- Optional element. Defines a table format for the view. -->
 			<TableControl>
 				<!-- Optional element. Specifies whether the column size and the number of columns are adjusted based on the size of the data. -->
-				<AutoSize>True</AutoSize>
+				<AutoSize>true</AutoSize>
 				<!-- Optional element. Indicates whether the header of the table is not displayed. -->
-				<HideTableHeaders>False</HideTableHeaders>
+				<HideTableHeaders>false</HideTableHeaders>
 				<!-- Required element. Defines the labels, the widths, and the alignment of the data for the columns of the table view. -->
 				<TableHeaders>
 					<!-- Optional element. Defines the label, the width, and the alignment of the data for a column of a table view. -->
@@ -31,32 +31,32 @@
 						<Width>15</Width>
 						<!-- Optional element. Specifies how the label of the column is displayed. -->
 						<!-- If no alignment is specified, the label is aligned on the left. -->
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>NetworkAddress</Label>
 						<Width>15</Width>
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>BroadcastAddress</Label>
 						<Width>15</Width>
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>SubnetMask</Label>
 						<Width>15</Width>
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>MaskLength</Label>
 						<Width>5</Width>
-						<Alignment>left</Alignment>
+						<Alignment>Left</Alignment>
 					</TableColumnHeader>
 					<TableColumnHeader>
 						<Label>HostAddresses</Label>
 						<Width>15</Width>
-						<Alignment>right</Alignment>
+						<Alignment>Right</Alignment>
 					</TableColumnHeader>
 				</TableHeaders>
 				<!-- Optional element. Provides the definitions of the table view. -->

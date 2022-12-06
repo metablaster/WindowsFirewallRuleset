@@ -105,7 +105,7 @@
 			<WideControl>
 				<!-- AutoSize and ColumnNumber are mutually exclusive. -->
 				<!-- Autosize may split one column into multiple columns -->
-				<AutoSize>True</AutoSize>
+				<AutoSize>true</AutoSize>
 				<!-- Required element. Provides the definitions of the wide view. -->
 				<WideEntries>
 					<!-- Provides a definition of the wide view. -->

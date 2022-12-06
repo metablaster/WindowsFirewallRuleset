@@ -36,14 +36,29 @@ param ()
 # Import all modules into current session, useful to quickly load all module functions into session
 #
 
-if ($PSVersionTable.PSEdition -eq "Desktop")
+$ModulesToImport = @(
+	"Ruleset.ComputerInfo"
+	"Ruleset.Firewall"
+	"Ruleset.Initialize"
+	"Ruleset.IP"
+	"Ruleset.Logging"
+	"Ruleset.PolicyFileEditor"
+	"Ruleset.ProgramInfo"
+	"Ruleset.Remote"
+	"Ruleset.Test"
+	"Ruleset.UserInfo"
+	"Ruleset.Utility"
+	"VSSetup"
+)
+
+if ($PSVersionTable.PSEdition -eq "Core")
 {
-	$Modules = Get-ChildItem -Name Ruleset.* -Path "$ProjectRoot\Modules" -Directory -Exclude Ruleset.Compatibility
-}
-else
-{
-	$Modules = Get-ChildItem -Name Ruleset.* -Path "$ProjectRoot\Modules" -Directory
+	$ModulesToImport += "Ruleset.Compatibility"
 }
 
-Import-Module -Name $Modules -Scope Global -Force
+foreach ($Module in $ModulesToImport)
+{
+	Import-Module -Name "$ProjectRoot\Modules\$Module" -Scope Global -Force
+}
+
 Update-Log

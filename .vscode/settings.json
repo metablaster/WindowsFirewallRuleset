@@ -122,7 +122,8 @@
 	// Extension: Bookmarks
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
-	// Extension: Code Spell Checker (these settings are no recognized in cspell.json)
+	// Extension: Code Spell Checker
+	// CAUTION: settings for cSpell defined here are not recognized in cspell.json
 	"cSpell.checkOnlyEnabledFileTypes": true,
 	"cSpell.spellCheckOnlyWorkspaceFiles": true,
 	"cSpell.customDictionaries": {
@@ -594,7 +595,7 @@
 	// CAUTION: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
 	"xml.server.preferBinary": true,
 	"xml.server.silenceExtensionWarning": false,
-	// NOTE: Configure if desired in user settings
+	// NOTE: If desired, it must be configured in user settings
 	// "xml.server.binary.trustedHashes": [],
 	"xml.trace.server": "off",
 	"xml.logs.client": false,
@@ -608,6 +609,17 @@
 			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd",
 			"pattern": "**/*.Types.ps1xml"
 		}
+		// HACK: PlatyPS schema needed
+		// {
+		// 	"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/PSMaml/Maml.xsd",
+		// 	"pattern": "**/*-help.xml"
+		// }
+		// HACK: XTD schema needed,
+		// {
+		// 	// https://learn.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema
+		// 	"systemId": "${workspaceFolder}/Config/HelpInfo.xml-Schema.xml",
+		// 	"pattern": "**/*_HelpInfo.xml"
+		// }
 	],
 	"xml.foldings.includeClosingTagInFold": false,
 	"xml.format.enabled": true,
