@@ -168,12 +168,6 @@ function Set-PolicyFileEntry
 
 	begin
 	{
-		# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
-		if (Get-Command Get-CallerPreference -CommandType ExternalScript)
-		{
-			& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-		}
-
 		$Dirty = $false
 
 		try

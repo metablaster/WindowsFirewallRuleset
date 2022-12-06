@@ -47,61 +47,81 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-Remove-Module Ruleset.PolicyFileEditor
-$scriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
-$psd1Path = Join-Path $scriptRoot Ruleset.PolicyFileEditor.psd1
+# HACK: Pester tests are not compatible with pester 5
+Remove-Module Ruleset.PolicyFileEditor -ErrorAction Ignore
+$ScriptRoot = Split-Path -Path (Split-Path -Path $PSCommandPath -Parent) -Parent
+$Psd1Path = Join-Path $ScriptRoot Ruleset.PolicyFileEditor.psd1
 
-$module = $null
+$Module = $null
 
-function CreateDefaultGpo($Path)
+function New-DefaultGpo
 {
-	$paths = @(
-		$Path
-		Join-Path $Path Machine
-		Join-Path $Path User
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low")]
+	param (
+		[Parameter()]
+		[string] $Path
 	)
 
-	foreach ($p in $paths)
+	if ($PSCmdlet.ShouldProcess($Path, "Create new default GPO"))
 	{
-		if (-not (Test-Path $p -PathType Container))
-		{
-			New-Item -Path $p -ItemType Directory -ErrorAction Stop
-		}
-	}
+		$Paths = @(
+			$Path
+			Join-Path $Path Machine
+			Join-Path $Path User
+		)
 
-	$content = @'
+		foreach ($PathItem in $Paths)
+		{
+			if (!(Test-Path $PathItem -PathType Container))
+			{
+				New-Item -Path $PathItem -ItemType Directory -ErrorAction Stop
+			}
+		}
+
+		$Content = @'
 [General]
 gPCMachineExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]
 Version=65537
 gPCUserExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F73-3407-48AE-BA88-E8213C6761F1}]
 '@
 
-	$gptIniPath = Join-Path $Path gpt.ini
-	Set-Content -Path $gptIniPath -ErrorAction Stop -Encoding Ascii -Value $content
+		$GptIniPath = Join-Path $Path gpt.ini
+		Set-Content -Path $GptIniPath -ErrorAction Stop -Encoding Ascii -Value $Content
 
-	Get-ChildItem -Path $Path -Include registry.pol -Force | Remove-Item -Force
+		Get-ChildItem -Path $Path -Include registry.pol -Force | Remove-Item -Force
+	}
 }
 
-function GetGptIniVersion($Path)
+function Get-GptIniVersion
 {
-	foreach ($result in Select-String -Path $Path -Pattern '^\s*Version\s*=\s*(\d+)\s*$')
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
+		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
+	[CmdletBinding()]
+	param (
+		[Parameter()]
+		[string] $Path
+	)
+
+	foreach ($Result in Select-String -Path $Path -Pattern '^\s*Version\s*=\s*(\d+)\s*$')
 	{
-		foreach ($match in $result.Matches)
+		foreach ($Match in $Result.Matches)
 		{
-			$match.Groups[1].Value
+			$Match.Groups[1].Value
 		}
 	}
 }
 
 try
 {
-	$module = Import-Module $psd1Path -ErrorAction Stop -PassThru -Force
-	$gpoPath = 'TestDrive:\TestGpo'
-	$gptIniPath = "$gpoPath\gpt.ini"
+	$Module = Import-Module $Psd1Path -ErrorAction Stop -PassThru -Force
+	$GpoPath = 'TestDrive:\TestGpo'
+	$GptIniPath = "$GpoPath\gpt.ini"
 
 	Describe 'KeyValueName parsing' {
 		InModuleScope Ruleset.PolicyFileEditor {
-			$testCases = @(
+			$TestCases = @(
 				@{
 					KeyValueName = 'Left\Right'
 					ExpectedKey = 'Left'
@@ -145,30 +165,30 @@ try
 				}
 			)
 
-			It -TestCases $testCases 'Properly parses KeyValueName with <Description>' {
+			It -TestCases $TestCases 'Properly parses KeyValueName with <Description>' {
 				param ($KeyValueName, $ExpectedKey, $ExpectedValue)
-				$key, $valueName = Build-KeyValueName $KeyValueName
+				$Key, $ValueName = Get-KeyValueName $KeyValueName
 
-				$key | Should Be $ExpectedKey
-				$valueName | Should Be $ExpectedValue
+				$Key | Should -Be $ExpectedKey
+				$ValueName | Should -Be $ExpectedValue
 			}
 		}
 	}
 
 	Describe 'Happy Path' {
 		BeforeEach {
-			CreateDefaultGpo -Path $gpoPath
+			New-DefaultGpo -Path $GpoPath
 		}
 
 		Context 'Incrementing GPT.Ini version' {
 			# User version is the high 16 bits, Machine version is the low 16 bits.
 			# Reference:  http://blogs.technet.com/b/grouppolicy/archive/2007/12/14/understanding-the-gpo-version-number.aspx
 
-			# Default value set in our CreateDefaultGpo function is 65537, or (1 -shl 16) + 1 ; Machine and User version both set to 1.
+			# Default value set in our New-DefaultGpo function is 65537, or (1 -shl 16) + 1 ; Machine and User version both set to 1.
 			# Decimal values ard hard-coded here so we can run the tests on PowerShell v2, which didn't have the -shl / -shr operators.
 			# This puts the module's internal code which replaces these operators through a test as well.
 
-			$testCases = @(
+			$TestCases = @(
 				@{
 					PolicyType = 'Machine'
 					Expected = '65538' # (1 -shl 16) + 2
@@ -185,16 +205,16 @@ try
 				}
 			)
 
-			It 'Sets the correct value for <PolicyType> updates' -TestCases $testCases {
+			It 'Sets the correct value for <PolicyType> updates' -TestCases $TestCases {
 				param ($PolicyType, $Expected)
 
-				Update-GptIniVersion -Path $gptIniPath -PolicyType $PolicyType
-				$version = @(GetGptIniVersion -Path $gptIniPath)
+				Update-GptIniVersion -Path $GptIniPath -PolicyType $PolicyType
+				$Version = @(Get-GptIniVersion -Path $GptIniPath)
 
-				$version.Count | Should Be 1
-				$actual = $version[0]
+				$Version.Count | Should -Be 1
+				$Actual = $Version[0]
 
-				$actual | Should Be $Expected
+				$Actual | Should -Be $Expected
 			}
 		}
 
@@ -203,7 +223,7 @@ try
 			# Set-PolicyFileEntry and Remove-PolicyFileEntry.  We'll cover errors
 			# in a different section.
 
-			$testCases = @(
+			$TestCases = @(
 				@{
 					PolicyType = 'Machine'
 					ExpectedVersions = '65538', '65539' # (1 -shl 16) + 2, (1 -shl 16) + 2
@@ -255,7 +275,7 @@ try
 				}
 			)
 
-			It 'Behaves properly modifying <Count> entries in a <PolicyType> registry.pol file and NoGptIniUpdate is <NoGptIniUpdate>' -TestCases $testCases {
+			It 'Behaves properly modifying <Count> entries in a <PolicyType> registry.pol file and NoGptIniUpdate is <NoGptIniUpdate>' -TestCases $TestCases {
 				param ($PolicyType, [string[]] $ExpectedVersions, [switch] $NoGptIniUpdate, [object[]] $EntriesToModify)
 
 				if (-not $PSBoundParameters.ContainsKey('EntriesToModify'))
@@ -270,10 +290,10 @@ try
 					)
 				}
 
-				$polPath = Join-Path $gpoPath $PolicyType\registry.pol
+				$PolicyPath = Join-Path $GpoPath $PolicyType\registry.pol
 
-				$scriptBlock = {
-					$EntriesToModify | Set-PolicyFileEntry -Path $polPath -NoGptIniUpdate:$NoGptIniUpdate
+				$ScriptBlock = {
+					$EntriesToModify | Set-PolicyFileEntry -Path $PolicyPath -NoGptIniUpdate:$NoGptIniUpdate
 				}
 
 				# We do this next block of code twice to ensure that when "setting" a value that is already present in the
@@ -283,98 +303,98 @@ try
 				# the line numbers will tell us whether it was on the first or second execution of the duplicated
 				# parts.
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$expected = $ExpectedVersions[0]
-				$version = @(GetGptIniVersion -Path $gptIniPath)
+				$Expected = $ExpectedVersions[0]
+				$Version = @(Get-GptIniVersion -Path $GptIniPath)
 
-				$version.Count | Should Be 1
-				$actual = $version[0]
+				$Version.Count | Should -Be 1
+				$Actual = $Version[0]
 
-				$actual | Should Be $expected
+				$Actual | Should -Be $Expected
 
-				$entries = @(Get-PolicyFileEntry -Path $PolPath -All)
+				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
-				$entries.Count | Should Be $EntriesToModify.Count
+				$Entries.Count | Should -Be $EntriesToModify.Count
 
-				$count = $entries.Count
-				for ($i = 0; $i -lt $count; $i++)
+				$Count = $Entries.Count
+				for ($i = 0; $i -lt $Count; $i++)
 				{
-					$matchingEntry = $EntriesToModify | Where-Object { $_.Key -eq $entries[$i].Key -and $_.ValueName -eq $entries[$i].ValueName }
+					$MatchingEntry = $EntriesToModify | Where-Object { $_.Key -eq $Entries[$i].Key -and $_.ValueName -eq $Entries[$i].ValueName }
 
-					$entries[$i].ValueName | Should Be $matchingEntry.ValueName
-					$entries[$i].Key | Should Be $matchingEntry.Key
-					$entries[$i].Data | Should Be $matchingEntry.Data
-					$entries[$i].Type | Should Be $matchingEntry.Type
+					$Entries[$i].ValueName | Should -Be $MatchingEntry.ValueName
+					$Entries[$i].Key | Should -Be $MatchingEntry.Key
+					$Entries[$i].Data | Should -Be $MatchingEntry.Data
+					$Entries[$i].Type | Should -Be $MatchingEntry.Type
 				}
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$expected = $ExpectedVersions[0]
-				$version = @(GetGptIniVersion -Path $gptIniPath)
+				$Expected = $ExpectedVersions[0]
+				$Version = @(Get-GptIniVersion -Path $GptIniPath)
 
-				$version.Count | Should Be 1
-				$actual = $version[0]
+				$Version.Count | Should -Be 1
+				$Actual = $Version[0]
 
-				$actual | Should Be $expected
+				$Actual | Should -Be $Expected
 
-				$entries = @(Get-PolicyFileEntry -Path $polPath -All)
+				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
-				$entries.Count | Should Be $EntriesToModify.Count
+				$Entries.Count | Should -Be $EntriesToModify.Count
 
-				$count = $entries.Count
-				for ($i = 0; $i -lt $count; $i++)
+				$Count = $Entries.Count
+				for ($i = 0; $i -lt $Count; $i++)
 				{
-					$matchingEntry = $EntriesToModify | Where-Object { $_.Key -eq $entries[$i].Key -and $_.ValueName -eq $entries[$i].ValueName }
+					$MatchingEntry = $EntriesToModify | Where-Object { $_.Key -eq $Entries[$i].Key -and $_.ValueName -eq $Entries[$i].ValueName }
 
-					$entries[$i].ValueName | Should Be $matchingEntry.ValueName
-					$entries[$i].Key | Should Be $matchingEntry.Key
-					$entries[$i].Data | Should Be $matchingEntry.Data
-					$entries[$i].Type | Should Be $matchingEntry.Type
+					$Entries[$i].ValueName | Should -Be $MatchingEntry.ValueName
+					$Entries[$i].Key | Should -Be $MatchingEntry.Key
+					$Entries[$i].Data | Should -Be $MatchingEntry.Data
+					$Entries[$i].Type | Should -Be $MatchingEntry.Type
 				}
 
 				# End of duplicated bits; now we make sure that removing the entry
 				# works, and still updates the gpt.ini version (if appropriate.)
 
-				$scriptBlock = {
-					$EntriesToModify | Remove-PolicyFileEntry -Path $polPath -NoGptIniUpdate:$NoGptIniUpdate
+				$ScriptBlock = {
+					$EntriesToModify | Remove-PolicyFileEntry -Path $PolicyPath -NoGptIniUpdate:$NoGptIniUpdate
 				}
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$expected = $ExpectedVersions[1]
-				$version = @(GetGptIniVersion -Path $gptIniPath)
+				$Expected = $ExpectedVersions[1]
+				$Version = @(Get-GptIniVersion -Path $GptIniPath)
 
-				$version.Count | Should Be 1
-				$actual = $version[0]
+				$Version.Count | Should -Be 1
+				$Actual = $Version[0]
 
-				$actual | Should Be $expected
+				$Actual | Should -Be $Expected
 
-				$entries = @(Get-PolicyFileEntry -Path $polPath -All)
+				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
-				$entries.Count | Should Be 0
+				$Entries.Count | Should -Be 0
 
 				# Duplicate the Remove block for the same reasons; make sure the ini file isn't incremented
 				# when the value is already missing.
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$expected = $ExpectedVersions[1]
-				$version = @(GetGptIniVersion -Path $gptIniPath)
+				$Expected = $ExpectedVersions[1]
+				$Version = @(Get-GptIniVersion -Path $GptIniPath)
 
-				$version.Count | Should Be 1
-				$actual = $version[0]
+				$Version.Count | Should -Be 1
+				$Actual = $Version[0]
 
-				$actual | Should Be $expected
+				$Actual | Should -Be $Expected
 
-				$entries = @(Get-PolicyFileEntry -Path $polPath -All)
+				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
-				$entries.Count | Should Be 0
+				$Entries.Count | Should -Be 0
 			}
 		}
 
 		Context 'Get/Set parity' {
-			$testCases = @(
+			$TestCases = @(
 				@{
 					TestName = 'Creates a DWord value properly'
 					Type = [Microsoft.Win32.RegistryValueKind]::DWord
@@ -454,93 +474,93 @@ try
 				}
 			)
 
-			It '<TestName>' -TestCases $testCases {
+			It '<TestName>' -TestCases $TestCases {
 				param ($TestName, $Type, $Data, $ExpectedData)
 
-				$polPath = Join-Path $gpoPath Machine\registry.pol
+				$PolicyPath = Join-Path $GpoPath Machine\registry.pol
 
 				if (-not $PSBoundParameters.ContainsKey('ExpectedData'))
 				{
 					$ExpectedData = $Data
 				}
 
-				$scriptBlock = {
-					Set-PolicyFileEntry -Path $polPath `
+				$ScriptBlock = {
+					Set-PolicyFileEntry -Path $PolicyPath `
 						-Key Software\Testing `
 						-ValueName TestValue `
 						-Data $Data `
 						-Type $Type
 				}
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$entries = @(Get-PolicyFileEntry -Path $polPath -All)
+				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
-				$entries.Count | Should Be 1
+				$Entries.Count | Should -Be 1
 
-				$entries[0].ValueName | Should Be TestValue
-				$entries[0].Key | Should Be Software\Testing
-				$entries[0].Type | Should Be $Type
+				$Entries[0].ValueName | Should -Be TestValue
+				$Entries[0].Key | Should -Be Software\Testing
+				$Entries[0].Type | Should -Be $Type
 
-				$newData = @($entries[0].Data)
+				$NewData = @($Entries[0].Data)
 				$Data = @($Data)
 
-				$Data.Count | Should Be $newData.Count
+				$Data.Count | Should -Be $NewData.Count
 
-				$count = $Data.Count
-				for ($i = 0; $i -lt $count; $i++)
+				$Count = $Data.Count
+				for ($i = 0; $i -lt $Count; $i++)
 				{
-					$Data[$i] | Should BeExactly $newData[$i]
+					$Data[$i] | Should BeExactly $NewData[$i]
 				}
 			}
 
 			It 'Gets values by Key and PropertyName successfully' {
-				$polPath = Join-Path $gpoPath Machine\registry.pol
-				$key = 'Software\Testing'
-				$valueName = 'TestValue'
-				$data = 'I am a string'
-				$type = ([Microsoft.Win32.RegistryValueKind]::String)
+				$PolicyPath = Join-Path $GpoPath Machine\registry.pol
+				$Key = 'Software\Testing'
+				$ValueName = 'TestValue'
+				$Data = 'I am a string'
+				$Type = ([Microsoft.Win32.RegistryValueKind]::String)
 
-				$scriptBlock = {
-					Set-PolicyFileEntry -Path $polPath `
-						-Key $key `
-						-ValueName $valueName `
-						-Data $data `
-						-Type $type
+				$ScriptBlock = {
+					Set-PolicyFileEntry -Path $PolicyPath `
+						-Key $Key `
+						-ValueName $ValueName `
+						-Data $Data `
+						-Type $Type
 				}
 
-				$scriptBlock | Should Not Throw
+				$ScriptBlock | Should Not Throw
 
-				$entry = Get-PolicyFileEntry -Path $polPath -Key $key -ValueName $valueName
+				$Entry = Get-PolicyFileEntry -Path $PolicyPath -Key $Key -ValueName $ValueName
 
-				$entry | Should Not Be $null
-				$entry.ValueName | Should Be $valueName
-				$entry.Key | Should Be $key
-				$entry.Type | Should Be $type
-				$entry.Data | Should Be $data
+				$Entry | Should Not Be $null
+				$Entry.ValueName | Should -Be $ValueName
+				$Entry.Key | Should -Be $Key
+				$Entry.Type | Should -Be $Type
+				$Entry.Data | Should -Be $Data
 			}
 		}
 
 		Context 'Automatic creation of gpt.ini' {
 			It 'Creates a gpt.ini file if one is not found' {
-				Remove-Item $gptIniPath
+				Remove-Item $GptIniPath
 
-				$path = Join-Path $gpoPath Machine\registry.pol
+				$Path = Join-Path $GpoPath Machine\registry.pol
 
-				Set-PolicyFileEntry -Path $path -Key 'Whatever' -ValueName 'Whatever' -Data 'Whatever' -Type String
+				Set-PolicyFileEntry -Path $Path -Key 'Whatever' -ValueName 'Whatever' -Data 'Whatever' -Type String
 
-				$gptIniPath | Should Exist
-				GetGptIniVersion -Path $gptIniPath | Should Be 1
+				$GptIniPath | Should Exist
+				Get-GptIniVersion -Path $GptIniPath | Should -Be 1
 			}
 		}
 	}
 
 	Describe 'Not-so-happy Path' {
 		BeforeEach {
-			CreateDefaultGpo -Path $gpoPath
+			New-DefaultGpo -Path $GpoPath
 		}
 
-		$testCases = @(
+		$TestCases = @(
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::DWord
 				ExpectedMessage = 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
@@ -557,7 +577,7 @@ try
 			}
 		)
 
-		It 'Gives a reasonable error when non-numeric data is passed to <Type> values' -TestCases $testCases {
+		It 'Gives a reasonable error when non-numeric data is passed to <Type> values' -TestCases $TestCases {
 			# BUG: Unable to suppress
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 				"PSReviewUnusedParameter", "Type", Justification = "False Positive")]
@@ -567,8 +587,8 @@ try
 				$ExpectedMessage
 			)
 
-			$scriptBlock = {
-				Set-PolicyFileEntry -Path $gpoPath\Machine\registry.pol `
+			$ScriptBlock = {
+				Set-PolicyFileEntry -Path $GpoPath\Machine\registry.pol `
 					-Key Software\Testing `
 					-ValueName TestValue `
 					-Type $Type `
@@ -576,14 +596,14 @@ try
 					-ErrorAction Stop
 			}
 
-			$scriptBlock | Should Throw $ExpectedMessage
+			$ScriptBlock | Should Throw $ExpectedMessage
 		}
 	}
 }
 finally
 {
-	if ($null -ne $module)
+	if ($null -ne $Module)
 	{
-		Remove-Module -ModuleInfo $module -Force
+		Remove-Module -ModuleInfo $Module -Force
 	}
 }

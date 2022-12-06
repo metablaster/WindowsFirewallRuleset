@@ -51,7 +51,7 @@ function Save-PolicyFile
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	[CmdletBinding(SupportsShouldProcess = $true)]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	[OutputType([void])]
 	param (
 		[Parameter(Mandatory = $true)]
@@ -61,7 +61,7 @@ function Save-PolicyFile
 		[switch] $UpdateGptIni
 	)
 
-	if ($PSCmdlet.ShouldProcess($PolicyFile.FileName, 'Save new settings'))
+	if ($PSCmdlet.ShouldProcess($PolicyFile.FileName, "Save new settings"))
 	{
 		$ParentPath = Split-Path $PolicyFile.FileName -Parent
 
@@ -106,23 +106,17 @@ function Save-PolicyFile
 	if ($UpdateGptIni)
 	{
 		if (($PolicyFile.FileName -match '^(.*)\\+([^\\]+)\\+[^\\]+$') -and
-			($Matches[2] -eq 'User' -or $Matches[2] -eq "Machine"))
+			(($Matches[2] -eq "User") -or ($Matches[2] -eq "Machine")))
 		{
 			$IniPath = Join-Path $Matches[1] GPT.ini
 
 			if (Test-Path -LiteralPath $IniPath -PathType Leaf)
 			{
-				if ($PSCmdlet.ShouldProcess($IniPath, "Increment version number in INI file"))
-				{
-					Update-GptIniVersion -Path $IniPath -PolicyType $Matches[2] -Confirm:$false -WhatIf:$false
-				}
+				Update-GptIniVersion -Path $IniPath -PolicyType $Matches[2] # -Confirm:$false -WhatIf:$false
 			}
 			else
 			{
-				if ($PSCmdlet.ShouldProcess($IniPath, "Create new gpt.ini file"))
-				{
-					New-GptIni -Path $IniPath -PolicyType $Matches[2]
-				}
+				New-GptIni -Path $IniPath -PolicyType $Matches[2] # -Confirm:$false -WhatIf:$false
 			}
 		}
 	}

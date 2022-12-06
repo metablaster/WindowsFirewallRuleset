@@ -51,7 +51,7 @@ function New-GptIni
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	[OutputType([void])]
 	param (
 		[Parameter()]
@@ -61,19 +61,22 @@ function New-GptIni
 		[string[]] $PolicyType
 	)
 
-	$Parent = Split-Path $Path -Parent
-
-	if (-not (Test-Path $Parent -PathType Container))
+	if ($PSCmdlet.ShouldProcess($Path, "Create new gpt.ini file"))
 	{
-		New-Item -Path $Parent -ItemType Directory -ErrorAction Stop | Out-Null
-	}
+		$Parent = Split-Path $Path -Parent
 
-	$Version = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+		if (!(Test-Path $Parent -PathType Container))
+		{
+			New-Item -Path $Parent -ItemType Directory -ErrorAction Stop | Out-Null
+		}
 
-	Set-Content -Path $Path -Encoding Ascii -Value @"
+		$Version = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+
+		Set-Content -Path $Path -Encoding Ascii -Value @"
 [General]
 gPCMachineExtensionNames=$script:MachineExtensionGuids
 Version=$Version
 gPCUserExtensionNames=$script:UserExtensionGuids
 "@
+	}
 }

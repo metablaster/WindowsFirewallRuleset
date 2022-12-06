@@ -113,12 +113,6 @@ function Get-PolicyFileEntry
 		[switch] $All
 	)
 
-	# TODO: We should not use caller preferences since that's already inherited by ProjectSettings.ps1
-	if (Get-Command Get-CallerPreference -CommandType ExternalScript)
-	{
-		& Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-	}
-
 	try
 	{
 		$policyFile = Open-PolicyFile -Path $Path -ErrorAction Stop

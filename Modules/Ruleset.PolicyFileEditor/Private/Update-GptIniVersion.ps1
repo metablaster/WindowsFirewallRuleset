@@ -51,7 +51,7 @@ function Update-GptIniVersion
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	[CmdletBinding(SupportsShouldProcess = $true)]
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
 	[OutputType([void])]
 	param (
 		[Parameter()]
@@ -61,92 +61,92 @@ function Update-GptIniVersion
 		[string[]] $PolicyType
 	)
 
-	$FoundVersionLine = $false
-	$Section = ""
+	if ($PSCmdlet.ShouldProcess($Path, "Update version number in GPT.ini file"))
+	{
+		$FoundVersionLine = $false
+		$Section = ""
 
-	$NewContents = @(
-		foreach ($Line in Get-Content $Path)
-		{
-			# This might not be the most unreadable regex ever, but it's trying hard to be!
-			# It's looking for section lines:  [SectionName]
-			if ($Line -match '^\s*\[([^\]]+)\]\s*$')
+		$NewContents = @(
+			foreach ($Line in Get-Content $Path)
 			{
-				if ($Section -eq 'General')
+				# This might not be the most unreadable regex ever, but it's trying hard to be!
+				# It's looking for section lines:  [SectionName]
+				if ($Line -match '^\s*\[([^\]]+)\]\s*$')
 				{
-					if (-not $FoundVersionLine)
+					if ($Section -eq 'General')
 					{
-						$FoundVersionLine = $true
-						$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+						if (-not $FoundVersionLine)
+						{
+							$FoundVersionLine = $true
+							$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
 
-						"Version=$NewVersion"
+							"Version=$NewVersion"
+						}
+
+						if (-not $FoundMachineExtensionLine)
+						{
+							$FoundMachineExtensionLine = $true
+							"gPCMachineExtensionNames=$script:MachineExtensionGuids"
+						}
+
+						if (-not $FoundUserExtensionLine)
+						{
+							$FoundUserExtensionLine = $true
+							"gPCUserExtensionNames=$script:UserExtensionGuids"
+						}
 					}
 
-					if (-not $FoundMachineExtensionLine)
-					{
-						$FoundMachineExtensionLine = $true
-						"gPCMachineExtensionNames=$script:MachineExtensionGuids"
-					}
-
-					if (-not $FoundUserExtensionLine)
-					{
-						$FoundUserExtensionLine = $true
-						"gPCUserExtensionNames=$script:UserExtensionGuids"
-					}
+					$Section = $matches[1]
 				}
-
-				$Section = $matches[1]
-			}
-			elseif (($section -eq "General") -and
+				elseif (($section -eq "General") -and
 				($line -match '^\s*Version\s*=\s*(\d+)\s*$') -and
 				($null -ne ($Version = $matches[1] -as [uint32])))
-			{
-				$FoundVersionLine = $true
-				$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
-				$line = "Version=$NewVersion"
+				{
+					$FoundVersionLine = $true
+					$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
+					$line = "Version=$NewVersion"
+				}
+				elseif ($Section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
+				{
+					if ($matches[1] -eq 'Machine')
+					{
+						$FoundMachineExtensionLine = $true
+					}
+					else
+					{
+						$FoundUserExtensionLine = $true
+					}
+
+					$line = Confirm-AdminTemplateCseGuidsArePresent $line
+				}
+
+				$line
 			}
-			elseif ($Section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
+
+			if ($Section -eq "General")
 			{
-				if ($matches[1] -eq 'Machine')
+				if (-not $FoundVersionLine)
+				{
+					$FoundVersionLine = $true
+					$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
+
+					"Version=$NewVersion"
+				}
+
+				if (-not $FoundMachineExtensionLine)
 				{
 					$FoundMachineExtensionLine = $true
+					"gPCMachineExtensionNames=$script:MachineExtensionGuids"
 				}
-				else
+
+				if (-not $FoundUserExtensionLine)
 				{
 					$FoundUserExtensionLine = $true
+					"gPCUserExtensionNames=$script:UserExtensionGuids"
 				}
-
-				$line = Confirm-AdminTemplateCseGuidsArePresent $line
 			}
+		) # NewContents =
 
-			$line
-		}
-
-		if ($Section -eq 'General')
-		{
-			if (-not $FoundVersionLine)
-			{
-				$FoundVersionLine = $true
-				$NewVersion = Get-NewVersionNumber -Version 0 -PolicyType $PolicyType
-
-				"Version=$NewVersion"
-			}
-
-			if (-not $FoundMachineExtensionLine)
-			{
-				$FoundMachineExtensionLine = $true
-				"gPCMachineExtensionNames=$script:MachineExtensionGuids"
-			}
-
-			if (-not $FoundUserExtensionLine)
-			{
-				$FoundUserExtensionLine = $true
-				"gPCUserExtensionNames=$script:UserExtensionGuids"
-			}
-		}
-	)
-
-	if ($PSCmdlet.ShouldProcess($Path, 'Increment Version number'))
-	{
 		Set-Content -Path $Path -Value $NewContents -Encoding Ascii -Confirm:$false -WhatIf:$false
 	}
 }

@@ -482,7 +482,7 @@
 	"todo-tree.general.enableFileWatcher": false,
 	"todo-tree.general.revealBehaviour": "start of todo",
 	"todo-tree.general.rootFolder": "${workspaceFolder}",
-	"todo-tree.general.statusBar": "current file",
+	"todo-tree.general.statusBar": "none",
 	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
 	"todo-tree.general.statusBarClickBehaviour": "reveal",
 	"todo-tree.general.tagGroups": {
@@ -509,7 +509,7 @@
 		"INFO",
 		"FIX"
 	],
-	"todo-tree.general.showActivityBarBadge": true,
+	"todo-tree.general.showActivityBarBadge": false,
 	"todo-tree.highlights.customHighlight": {
 		// Hard to resolve
 		"HACK": {

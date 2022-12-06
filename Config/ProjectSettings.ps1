@@ -403,7 +403,7 @@ if ($Develop -and !$InModule)
 	# Skip removing modules if this script is called from within a module which would cause removing modules prematurely
 	Get-Module -Name Ruleset.* | ForEach-Object {
 		Write-Debug -Message "[$SettingsScript] Removing module $_"
-		Remove-Module -Name $_ -ErrorAction Stop
+		Remove-Module -Name $_ -Force -ErrorAction Stop
 	}
 }
 #endregion

@@ -123,6 +123,7 @@ Write-Information -Tags "Test" -MessageData "INFO: Starting pester tests"
 # Recursively get list of pester tests
 # TODO: Tests from Private folder excluded because out of date
 $PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Filter *.ps1
+# $PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.PolicyFileEditor\Test -Filter *.ps1
 
 if ($PSVersionTable.PSVersion -ge "6.1")
 {
@@ -154,4 +155,5 @@ if (!$Pester)
 Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 Write-Information -Tags "Test" -MessageData "INFO: Running all tests done"
 
+Disconnect-Computer $PolicyStore
 Update-Log

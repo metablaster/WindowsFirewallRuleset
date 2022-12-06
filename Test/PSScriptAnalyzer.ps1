@@ -67,7 +67,9 @@ None. You cannot pipe objects to PSScriptAnalyzer.ps1
 None. PSScriptAnalyzer.ps1 does not generate any output
 
 .NOTES
-None.
+Get-Command not found error and object not set to an instance,
+launch PS extension by opening PS file, launch another terminal twice if needed
+and re-run in each terminal until success.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
@@ -147,6 +149,11 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 		$AnalyzerParams.Severity = $Severity
 	}
 
+	if ($PSBoundParameters["Verbose"])
+	{
+		$AnalyzerParams.Verbose = $true
+	}
+
 	if ($SuppressedOnly)
 	{
 		$AnalyzerParams.SuppressedOnly = $SuppressedOnly
@@ -164,7 +171,7 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 	Write-Information -Tags "Test" -MessageData "INFO: Analysing code..."
 	Write-Debug -Message "[$ThisScript] PSScryptAnalyzer settings are $($AnalyzerParams | Out-String)"
 
-	Invoke-ScriptAnalyzer @AnalyzerParams |	ForEach-Object {
+	Invoke-ScriptAnalyzer @AnalyzerParams | ForEach-Object {
 		switch ($_.Severity)
 		{
 			"Error" { ++$Errors; break }

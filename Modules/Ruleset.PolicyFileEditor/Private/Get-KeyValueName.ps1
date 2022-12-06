@@ -47,12 +47,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-function Build-KeyValueName
+function Get-KeyValueName
 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
 		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
 	[CmdletBinding()]
-	[OutputType([string])]
+	[OutputType([object[]])]
 	param (
 		[Parameter()]
 		[string] $KeyValueName

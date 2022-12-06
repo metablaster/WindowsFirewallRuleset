@@ -209,5 +209,3 @@ Describe 'ConvertTo-Network' {
 		{ InModuleScope @module { ConvertTo-Network "10.0.0.0" "255.255.255.1" } } | Should -Throw -ErrorId 'InvalidSubnetMask,ConvertTo-Network'
 	}
 }
-
-Exit-Test -Pester

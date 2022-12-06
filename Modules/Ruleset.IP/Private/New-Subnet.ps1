@@ -55,16 +55,16 @@ Creates an IP subnet object.
 Creates an IP subnet object.
 
 .PARAMETER NetworkAddress
-TODO: Parameter description
+Network address as either IP address or 32-bit unsigned integer value
 
 .PARAMETER BroadcastAddress
-TODO: Parameter description
+Broadcast address as either IP address or 32-bit unsigned integer value
 
 .PARAMETER SubnetMask
-TODO: Parameter description
+Subnet mask
 
 .PARAMETER MaskLength
-TODO: Parameter description
+Mask length
 
 .EXAMPLE
 See Resolve-IPAddress.ps1
@@ -83,10 +83,10 @@ function New-Subnet
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "None")]
 	param (
 		[Parameter(Mandatory = $true)]
-		[IPAddress] $NetworkAddress,
+		$NetworkAddress,
 
 		[Parameter()]
-		[IPAddress] $BroadcastAddress,
+		$BroadcastAddress,
 
 		[Parameter()]
 		[IPAddress] $SubnetMask,
