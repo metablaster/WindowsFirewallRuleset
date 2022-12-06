@@ -42,7 +42,7 @@ Contains scripts which are not part of modules as follows:
 
 | Experimental scripts        | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
-| Add-WTContext.ps1           | Script to add Windows Terminal context menu                          |
+| Add-WTContext.ps1           | Script to add Windows Terminal context menu in Windows 10            |
 | Confirm-Firewall.ps1        | Validate firewall configuration and rules are in desired state       |
 | Connect-IPInterface.ps1     | Troubleshooting script to connect NIC to network using DHCP          |
 | Initialize-Development.ps1  | Initialize development environment                                   |

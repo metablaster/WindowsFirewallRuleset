@@ -24,7 +24,7 @@
     - [Manage GPO rules](#manage-gpo-rules)
     - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
-    - [Export\Import rules](#exportimport-rules)
+    - [Export\\Import rules](#exportimport-rules)
   - [Remote firewall deployment](#remote-firewall-deployment)
   - [Support, updates and documentation](#support-updates-and-documentation)
   - [The future](#the-future)
@@ -321,7 +321,7 @@ These steps here assume you have downloaded a zip file from "assets" section und
 2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
 (project root directory) into `C:\` root drive directly.
 
-1. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](WindowsPowerShell.md)\
+3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](WindowsPowerShell.md)\
 If you would like to use PowerShell Core instead keep in mind that in rare cases there might appear
 some issues hard to diagnose, in which case you can re-try with Windows PowerShell as suggested.
 

@@ -61,7 +61,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
-  - Make possible to import and remove modules on manually
+  - Made possible to import and remove modules manually outside deployment process.
+  - Updated Ruleset.IP module according to changes from upstream repository.
 
   - Improved or updated module functions
 
@@ -97,19 +98,21 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - Run PSScriptAnalyzer
     - Generate sitemap xml
-    - Auto assign labels to issues
     - Publish generated sitemap to google for crawling
-    - Replaced XML tools extension with XML Red Hat
 
   - Resolved many syntax errors in XML and PS files with the help of static code analysis
   - Extensions settings improved, few recommended extensions replaced for better ones.
   - improved spellcheking with custom dictionaries and configuration of spell check extension
+  - Replaced XML tools extension with XML Red Hat
+  - Added YAML extension to workspace recommendations for YAML support
+  - Workspace settings and settings for extensions vastly revisited for better coding experience.
 
 - Unit test
 
   - `TestFileEncoding.ps1` new test script to verify encoding of all files in repository
-  - `PSScriptAnalyzer.ps1` test script significantly improved with the ability to log warnings
+  - `PSScriptAnalyzer.ps1` test script significantly improved with the ability to log issues
   - New test module `PssaTest.Module` used to test PSScryptAnalyzer rules in `Config\PSScriptAnalyzer.ps1`
+  - Added several custom spellcheck dictionaries specific to words used in repository
 
 [Table of Contents](#table-of-contents)
 
@@ -368,7 +371,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 - Other
 
-  - Use old syntax highlighting thanks to workaround after silly changes introduced in PS extension
+  - Use old syntax highlighting thanks to workaround after unwanted changes introduced in PS extension
   - Added settings and extensions for remote SSH development
   - Added SSH configuration files and syntax highlighting setting for `*config` files
   - Updated `todo-tree` extension settings for markdown support
@@ -637,8 +640,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 - New features
 
   - Added functionality to import/export rules into CSV/JSON file and delete rules according to file
-  - Module for requirements renamed to "Initialize" and significantly improved to automatically enable
-    system services, check module updates, package providers and core project requirement checks
+  - Module for requirements renamed to "Initialize" and significantly improved to automatically
+    enable system services, check module updates, package providers and core project requirement checks.
     Note that some of this functionality must be manually enabled.
   - Added new variables to control requirements checks, and to reduce module imports and code bloat
   - All file input/output uses same encoding and file read operation is checked for encoding before read

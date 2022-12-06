@@ -26,6 +26,7 @@
 		"/.git",
 		"/Logs",
 		"/Test/Ruleset.Utility/Encoding",
+		"/Config/cSpell/foul/foul.dic",
 		"/Config/System/Firewall.msc",
 		"**/Modules/VSSetup/VSSetup.psd1",
 		"**/Modules/VSSetup//VSSetup.psm1",

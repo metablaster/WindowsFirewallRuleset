@@ -284,7 +284,8 @@ Following section lists other not so common problems and how to resolve them.
 #### The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available
 
 > Connecting to remote server COMPUTERNAME failed with the following error message :
-> The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL was not available.
+> The WinRM client sent a request to an HTTP server and got a response saying the requested HTTP URL
+> was not available.
 > This is usually returned by a HTTP server that does not support the WS-Management protocol.
 
 When you specify computername, it is translated to private IP address for which listener must exist.
@@ -341,7 +342,7 @@ Although it should be possible for passwordless logon by configuring GPO on remo
 `Computer Configuration/Windows Settings/Security Settings/Local Policies/Security Options/Accounts:`\
 `Limit local account use of blank passwords to console logon only`
 
-> [localhost] Connecting to remote server localhost failed with the following error message : Access is denied.
+> [localhost] Connecting to remote server localhost failed with the following error message: Access is denied.
 
 If this happens in `Initialize-WinSession` it's because session configuration was disabled in
 Windows PowerShell, ex. by using `Reset-Firewall -Remoting`, to fix this problem run in Windows PowerShell:
@@ -477,6 +478,6 @@ See following link [Troubleshooting Remote Registry][remote registry]
 [Disable-PSRemoting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/disable-psremoting "Visit Microsoft docs"
 [winrm polymorphism]: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-wsmv/474f8cfd-ad24-4b04-a946-d02eae8a4a2c "Visit Microsoft docs"
 [troubleshooting]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_remote_troubleshooting "Visit Microsoft docs"
-[remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552)
+[remote registry]: https://support.delphix.com/Delphix_Virtualization_Engine/MSSQL_Server/Troubleshooting_Remote_Registry_Read_Problems_During_Environment_Discoveries_And_Refreshes_(KBA1552) "Visit Microsoft docs"
 [RegistryKey]: https://docs.microsoft.com/en-us/dotnet/api/microsoft.win32.registrykey "Visit Microsoft docs"
 [WMI plugin]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management#wmi-plug-in-configuration-notes "Visit Microsoft docs"

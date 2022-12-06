@@ -278,7 +278,8 @@ things every time you open GPO firewall, you can customize it and re-save your p
 
 ## TCP View
 
-TCP view is another tool that wil let you see which programs are listening on which ports on local system
+TCP view is another tool that wil let you see which programs are listening on which ports on local
+system
 
 ![Alternate text](Screenshots/TCPView.png)
 
@@ -459,22 +460,22 @@ This problem can be solved with "Windows Performance Recorder" which generates r
 
 [Table of Contents](#table-of-contents)
 
-[ref process monitor]: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
+[ref process monitor]: https://docs.microsoft.com/en-us/sysinternals/downloads/procmon "Visit Microsoft site"
 [ref WFP]: https://docs.microsoft.com/en-us/windows/win32/fwp/about-windows-filtering-platform "Visit Microsoft docs"
 [ref WFP audit]: https://docs.microsoft.com/en-us/windows/win32/fwp/auditing-and-logging "Visit Microsoft docs"
 [WFP audit connection]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-filtering-platform-connection "Visit Microsoft docs"
 [WFP audit drop]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-filtering-platform-packet-drop "Visit Microsoft docs"
-[ref mtail]: http://ophilipp.free.fr/op_tail.htm
+[ref mtail]: http://ophilipp.free.fr/op_tail.htm "Visit external site"
 [ref event log]: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-logging "Visit Microsoft docs"
 [ref firewall]: https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit Microsoft docs"
-[ref firewall old]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/portal
+[ref firewall old]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ics/portal "Visit Microsoft site"
 [ref tcpview]: https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview "Visit Microsoft docs"
 [ref netstat]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/netstat "Visit Microsoft docs"
-[windows sdk]: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
+[windows sdk]: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk "Visit Microsoft site"
 [windwos adk]: https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install "Visit Microsoft docs"
-[intro wpa]: https://devblogs.microsoft.com/performance-diagnostics/wpa-intro
+[intro wpa]: https://devblogs.microsoft.com/performance-diagnostics/wpa-intro "Visit Microsoft site"
 [ref wpa]: https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer "Visit Microsoft docs"
-[protocol list]: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+[protocol list]: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml "Visit IANA site"
 [netsh]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11) "Visit Microsoft docs"
 [ref netsh]: https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts "Visit Microsoft docs"
 [ref netevent]: https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps "Visit Microsoft docs"

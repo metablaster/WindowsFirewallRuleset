@@ -10,7 +10,7 @@ firewall for your own needs.
   - [Table of Contents](#table-of-contents)
   - [General guidelines](#general-guidelines)
   - [Environment setup](#environment-setup)
-    - [Recommended workspace extensions are as follows:](#recommended-workspace-extensions-are-as-follows)
+    - [Recommended workspace extensions](#recommended-workspace-extensions)
     - [Repository settings](#repository-settings)
   - [Code style](#code-style)
     - [Automatic formatting](#automatic-formatting)
@@ -99,59 +99,60 @@ repository folder with VSCode
 To work with Windows PowerShell quickly in any directory see:
 [Windows PowerShell](/docs/WindowsPowerShell.md)
 
-### Recommended workspace extensions are as follows:
+### Recommended workspace extensions
 
-1. [TODO tree][extension todo-tree]
-
-    Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
-
-2. [PowerShell][extension powershell]
-
-    PowerShell syntax highlighting, intellisense, formatting and other language support.
-
-3. [Markdownlint][extension markdownlint]
-
-    Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
-
-4. [Code Spell Checker][extension spellcheck]
-
-    Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
-
-5. [Highlight Bad Chars][extension gremlins]
-
-    Helps to detect gremlins (bad chars), which cause issues such as unable to save file
-    in UTF-8 format
-
-6. [Bookmarks][extension bookmarks]
-
-    Helps you to bookmark various places in code to easily navigate various choke points.
-
-7. [Rainbow CSV][extension csv]
-
-    Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
-    CSV files
-
-8. [Markdown All in One][extension markdown aio]
-
-    Provides markdown language features
-
-9. [XML][extension xml]
-
-    Useful for xml language support, can also help to detect issues with xml
-
-10. [Log File Highlighter][extension logs]
-
-    Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
-    This extension complements `Auto Scroll` extension below.
-
-11. [Auto Scroll][extension scroll]
+1. [Auto Scroll][extension scroll]
 
     Automatic scrolling of log files, useful to tail firewall logs.\
     This extension complements `Log File Highlighter` extension above.
 
-12. [Filter Line][extension filterline]
+2. [Bookmarks][extension bookmarks]
+
+    Helps you to bookmark various places in code to easily navigate various choke points.
+
+3. [Code Spell Checker][extension spellcheck]
+
+    Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
+
+4. [Filter Line][extension filterline]
 
     Filter log files according to json config, string or regex pattern
+
+5. [Fix JSON][extension fix json]
+
+    fix-json uses jsonic to parse json data in the current editor,
+    then reformats the content using a simple JSON.stringify call.
+
+6. [Highlight Bad Chars][extension gremlins]
+
+    Helps to detect gremlins (bad chars), which cause issues such as unable to save file
+    in UTF-8 format
+
+7. [Json][extension json]
+
+    This extension adds json support for Visual Studio Code.
+
+8. [Log File Highlighter][extension logs]
+
+    Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
+    This extension complements `Auto Scroll` extension below.
+
+9. [Markdown All in One][extension markdown aio]
+
+    Provides markdown language features
+
+10. [Markdownlint][extension markdownlint]
+
+    Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
+
+11. [PowerShell][extension powershell]
+
+    PowerShell syntax highlighting, intellisense, formatting and other language support.
+
+12. [Rainbow CSV][extension csv]
+
+    Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
+    CSV files
 
 13. [Remote SSH][extension remote SSH]
 
@@ -162,32 +163,29 @@ To work with Windows PowerShell quickly in any directory see:
     This extension complements the `Remote - SSH` extension with syntax colorization,
     keyword intellisense, and simple snippets when editing SSH configuration files.
 
-15. [Json][extension json]
+15. [Remote Explorer][extension remote SSH explorer]
 
-    This extension adds json support for Visual Studio Code.
+    View remote machines for Remote - SSH in action bar
 
-16. [Fix JSON][extension fix json]
-
-    fix-json uses jsonic to parse json data in the current editor,
-    then reformats the content using a simple JSON.stringify call.
-
-17. [Sort JSON objects][extension sort json]
+16. [Sort JSON objects][extension sort json]
 
     Alphabetically sorts the keys in selected JSON objects.
+
+17. [TODO tree][extension todo-tree]
+
+    Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
 
 18. [Trailing Spaces][extension trailing spaces]
 
     Highlight trailing spaces and delete them in a flash!
 
-Following 2 extensions are optional and will not be automatically offerred for installation:
+19. [XML][extension xml]
 
-- [GitLens][extension gitlens]
+    Useful for xml language support, can also help to detect issues with xml
 
-    It provides so many great git features in VSCode it can't be explained in one line
+20. [YAML][extension yaml]
 
-- [GitHub Pull Requests and Issues][pull requests]
-
-    Review and manage your GitHub pull requests and issues directly in VS Code
+    Useful for xml language support, can also help to detect issues with xml
 
 ### Repository settings
 
@@ -290,8 +288,8 @@ For function nouns prefer 1 word or maximum 3 (distinguished by uppercase letter
 
 Sometimes this is not possible, for example `Get-SqlServer` function may collide with existing
 PowerShell commandlets, in this case it's better to use 3 words rather than naming your function to
-something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too, although
-such exceptions should be rare.
+something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too,
+although such exceptions should be rare.
 
 Noun word must be singular not plural, regardless if input or output is an array of objects.\
 For more information about naming see [Naming Convention](/docs/NamingConvention.md)
@@ -579,9 +577,10 @@ Next step is to add following settings into your VSCode settings which is found 
 ```json
  // Extension: remote - SSH
  "remote.SSH.remotePlatform": {
-  "VM-PRO": "windows"
+  "REMOTE_COMPUTER_NAME": "windows"
  },
  // Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
+ // This are all workspace recommended extensions excluding remote SSH:
  "remote.SSH.defaultExtensions": [
   // cSpell:disable
   // AutoScroll
@@ -614,8 +613,10 @@ Next step is to add following settings into your VSCode settings which is found 
   "gruntfuggly.todo-tree",
   // Trailing Spaces
   "shardulm94.trailing-spaces",
-  // XML Tools
-  "dotjoshjohnson.xml"
+  // XML
+  "redhat.vscode-xml",
+  // YAML
+  "redhat.vscode-yaml"
   // cSpell:enable
  ]
 ```
@@ -704,9 +705,9 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension gremlins]: https://marketplace.visualstudio.com/items?itemName=wengerk.highlight-bad-chars "Visit Marketplace"
 [extension bookmarks]: https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks "Visit Marketplace"
 [extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
-[extension gitlens]: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens "Visit Marketplace"
 [extension markdown aio]: https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one "Visit Marketplace"
 [extension xml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml "Visit Marketplace"
+[extension yaml]: <https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml "Visit Marketplace"
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
@@ -723,7 +724,6 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [nftables]: https://en.wikipedia.org/wiki/Nftables "Visit nftables wiki"
-[pull requests]: https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github "Visit Marketplace"
 [should continue]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldcontinue?view=powershellsdk-7.0.0
 [should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0
 [exceptions everything]: https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know "Visit blog"
@@ -734,3 +734,4 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [badge vscode link]: https://code.visualstudio.com
 [platyps_schema]: https://github.com/PowerShell/platyPS/blob/master/platyPS.schema.md "Visit PlatyPS repository"
+[extension remote SSH explorer]: <https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"

@@ -504,4 +504,4 @@ Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
 
 [Table of Contents](#table-of-contents)
 
-[tenforums]: https://www.tenforums.com/tutorials/16588-clear-all-event-logs-event-viewer-windows.html
+[tenforums]: https://www.tenforums.com/tutorials/16588-clear-all-event-logs-event-viewer-windows.html "Visit tutorial"

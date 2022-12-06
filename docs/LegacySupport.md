@@ -75,7 +75,8 @@ It's hard to tell what software or module dependencies might be required for you
 and once you learn that you should modify version requirements in `Config\ProjectSettings.ps1`
 
 For example .NET framework version 4.5 for Windows PowerShell may be required to be able to use some
-commandlets from modules, either those which ship with Windows or those which are part of this repository.
+commandlets from modules, either those which ship with Windows or those which are part of this
+repository.
 
 ## Testing
 

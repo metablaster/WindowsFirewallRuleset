@@ -64,4 +64,4 @@ Other Delivery Optimization PowerShell Cmdlets
 Get-DeliveryOptimizationLog | Set-Content C:\dosvc.log
 ```
 
-[delivery optimization]: https://docs.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization
+[delivery optimization]: https://docs.microsoft.com/en-us/windows/deployment/update/waas-delivery-optimization "Visit Microsoft docs"

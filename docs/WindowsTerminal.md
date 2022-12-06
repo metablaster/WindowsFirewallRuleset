@@ -34,6 +34,6 @@ Windows Terminal Preview however can be configured to be run as Administrator in
 To add context menu on right click for `Windows Terminal as Administrator` see:\
 [Add or Remove 'Open in Windows Terminal as administrator' context menu][terminal as admin]
 
-[terminal as admin]: https://www.tenforums.com/tutorials/178668-add-remove-open-windows-terminal-administrator-context-menu.html
-[install windows terminal]: https://docs.microsoft.com/en-us/windows/terminal/install
-[about terminal]: https://docs.microsoft.com/en-us/windows/terminal
+[terminal as admin]: https://www.tenforums.com/tutorials/178668-add-remove-open-windows-terminal-administrator-context-menu.html "Visit tutorial"
+[install windows terminal]: https://docs.microsoft.com/en-us/windows/terminal/install "Visit download page"
+[about terminal]: https://docs.microsoft.com/en-us/windows/terminal "About Windows Terminal"

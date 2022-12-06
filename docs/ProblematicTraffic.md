@@ -275,7 +275,8 @@ need to look for more information on MSDN
 - Making IPv6 loopback rule will not work, probably because both IPv4 and IPv6 loopback interfaces
 have exactly the same alias.
 - Solution is to set interface to "Any" for ICMPv6 and IPv6 multicast rules, that will work across
-restarts, however shuting down system and turning back on will reproduce the problem regardless of rules.
+restarts, however shuting down system and turning back on will reproduce the problem regardless of
+rules.
 - Another possible cause could be that some other hidden interface is generating this traffic.
 - Additional investigation needed by allowing all packets explicitly.
 
@@ -413,11 +414,11 @@ Status: Partially resolved
 
 [Table of Contents](#table-of-contents)
 
-[ref auditing]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157
-[ref wfp]: https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation
-[issue clicktorun]: https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through
-[hyperv switch]: https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1
-[issue rule interface]: https://aidanfinn.com/?p=15222
-[issue rule interface2]: https://www.nakivo.com/blog/hyper-v-networking-virtual-switches
-[issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules
-[virtual switch filtering]: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-virtual-switch-filtering
+[ref auditing]: https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5157 "Visit Microsoft docs"
+[ref wfp]: https://docs.microsoft.com/en-us/windows/win32/fwp/basic-operation "Visit Microsoft docs"
+[issue clicktorun]: https://www.reddit.com/r/sysadmin/comments/7hync7/updating_office_2016_hb_click_to_run_through "Visit reddit site"
+[hyperv switch]: https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1 "Visit external site"
+[issue rule interface]: https://aidanfinn.com/?p=15222 "Visit external site"
+[issue rule interface2]: https://www.nakivo.com/blog/hyper-v-networking-virtual-switches "Visit external site"
+[issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules "Visit epic site"
+[virtual switch filtering]: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-virtual-switch-filtering  "Visit Microsoft docs"

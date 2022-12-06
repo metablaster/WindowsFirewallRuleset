@@ -135,10 +135,11 @@ permission for Windows Firewall service which is `NT SERVICE\mpssvc`
 
 4. For changes to take effect save your modifications and restart firewall or reboot system.
 
-Keep in mind that setting additional permissions afterwards will be reset by Windows firewall service
-on every system boot or firewall setting change for security reasons.\
-If this doesn't resolve the problem remove all log files inside target directory, to be able to do this,
-you'll have to instruct firewall to write to different location to set your logs free, then reboot system.
+Keep in mind that setting additional permissions afterwards will be reset by Windows firewall
+service on every system boot or firewall setting change for security reasons.\
+If this doesn't resolve the problem remove all log files inside target directory, to be able to do
+this, you'll have to instruct firewall to write to different location to set your logs free,
+then reboot system.
 
 Also keep in mind that firewall service can't be stopped or manipulated in any way except trough UI
 followed by reboot.
@@ -216,7 +217,7 @@ them as follows:
     - You run experimental or dangerous tests from `Test` directory (default action for these tests
     is `No`)
 
-1. Here is a list of scripts that may behave unexpectedly because these are either experimental,
+8. Here is a list of scripts that may behave unexpectedly because these are either experimental,
    not intended for end user or hard to get right, therefore you might want to review them first
    to learn their purpose:
 
@@ -236,7 +237,7 @@ them as follows:
     except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in `Modules` and `Test` subdirectories.
 
-2. Following is a list of external executables that are run by some scripts
+9. Following is a list of external executables that are run by some scripts
 
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
@@ -246,7 +247,7 @@ them as follows:
     - [netstat.exe][netstat] (Used to get network statistics)
     - [sigcheck64.exe][sigcheck] (Used to scan digital signature of executable files)
 
-3.  There is nothing harmful to privacy or system security
+10. There is nothing harmful to privacy or system security
 
     - Some scripts such as `initialize-module.ps1` will contact online PowerShell repository
     to download or update modules, however this happens only if you manually enable setting
@@ -400,7 +401,7 @@ physical NIC in Hyper-V and re-share it again.
 
 [Table of Contents](#table-of-contents)
 
-[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
+[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
 [reg]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg "Visit Microsoft docs"

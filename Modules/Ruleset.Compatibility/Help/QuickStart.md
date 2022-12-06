@@ -29,6 +29,7 @@ Get-EventLog -Newest 5 -LogName "Application"
 Add-WinFunction -FunctionName Get-WinPSVersion -ScriptBlock {
     $PSVersionTable
 }
+
 Get-WinPSVersion
 ```
 

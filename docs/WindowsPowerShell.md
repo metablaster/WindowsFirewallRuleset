@@ -42,7 +42,8 @@ Here is how:
 
 Unfortunately there is no default way like in Windows 10, one solution is to follow steps explained
 in section\
-`Right click "Open Windows Terminal as Administrator" context menu for Windows 11` see [Windows Terminal](WindowsTerminal.md)
+`Right click "Open Windows Terminal as Administrator" context menu for Windows 11` see
+[Windows Terminal](WindowsTerminal.md)
 
 ## Right click "Open Windows PowerShell here" context menu in Windows 10
 
@@ -54,6 +55,6 @@ in section\
 
     [Open PowerShell window here as Administrator][powershell here as admin]
 
-[about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7
-[powershell here]: https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html
-[powershell here as admin]: https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html
+[about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7 "Visit Microsoft docs"
+[powershell here]: https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html "Visit tutorial"
+[powershell here as admin]: https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html "Visit tutorial"

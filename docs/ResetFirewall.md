@@ -37,7 +37,8 @@ Run following commands:
 
 ```powershell
 Disable-PSRemoting
-Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy -ErrorAction Ignore
+Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy `
+    -ErrorAction Ignore
 ```
 
 You might have to manually disable the firewall exceptions for WS-Management communications.
@@ -98,4 +99,4 @@ internet.
 
 See [Network troubleshooting detailed guide](NetworkTroubleshooting.md)
 
-[configure winrm]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
+[configure winrm]: https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management "Visit Microsoft docs"

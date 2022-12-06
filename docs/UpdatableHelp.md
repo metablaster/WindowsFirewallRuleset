@@ -109,6 +109,6 @@ makecab.exe Templates\Manifest.Module\Manifest.Module.help.txt Manifest.Module_6
 
 [Table of Contents](#table-of-contents)
 
-[sample helpifo]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-sample-file?view=powershell-7
-[sample helpifo schema]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7
-[updatable help file types]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/file-types-permitted-in-an-updatable-help-cab-file?view=powershell-7
+[sample helpifo]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-sample-file?view=powershell-7 "Visit Microsoft docs"
+[sample helpifo schema]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema?view=powershell-7 "Visit Microsoft docs"
+[updatable help file types]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/file-types-permitted-in-an-updatable-help-cab-file?view=powershell-7 "Visit Microsoft docs"

@@ -86,7 +86,7 @@ Parameter names and aliases
 - [switch] `CaseSensitive`
 - [switch] `Binary` (the cmdlet handles binary values)
 - [switch] `Quiet` (the cmdlet suppresses user feedback during its actions)
-- [switch] `Interactive` (Implement this parameter so that the cmdlet works interactively with the user when the parameter is specified)
+- [switch] `Interactive` (The cmdlet works interactively with the user when the parameter is specified)
 - [int32] `ErrorLevel` (Implement this parameter so that the user can specify the level of errors to report)
 - [switch] `Repair` (attempt to correct something from a broken state)
 - [switch] `Overwrite` (the cmdlet overwrites any existing data when the parameter is specified)

@@ -305,7 +305,8 @@ servers world wide and you're able to choose from a set of countries in the UI.
 When you wish to connect to some server such as `microsoft.com` your computer needs to resolve
 `microsoft.com` into an IP address which the computer understands.\
 You computer does this by contacting a DNS server such as google DNS, your computer then stores the
-IP address into local cache so that it doesn't need to contact DNS server again for subsequent queries.
+IP address into local cache so that it doesn't need to contact DNS server again for subsequent
+queries.
 
 Your ISP (Internet Service Provider) or an intermediate attacker might watch over your DNS
 queries and harvest your browsing habits, which is a hit to privacy.
@@ -313,8 +314,8 @@ queries and harvest your browsing habits, which is a hit to privacy.
 By using DNS encryption this can be prevented.\
 DNS encryption works by configuring computer to query DNS server which supports DNS encryption.
 
-You only have to be careful to use DNS server which is trusted and one which provides maximum security
-and privacy, this means servers which don't collect logs and those which support `DNSSEC`.
+You only have to be careful to use DNS server which is trusted and one which provides maximum
+security and privacy, this means servers which don't collect logs and those which support `DNSSEC`.
 
 DNS encryption is supported by some web browsers and even OS's however not all have this functionality.\
 Suggested DNS encryption software is open source [Simple DNSCrypt][dnscrpyt] which is a UI frontend

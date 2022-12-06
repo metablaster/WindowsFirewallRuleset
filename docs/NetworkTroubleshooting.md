@@ -236,7 +236,8 @@ then disable and enable back.
 
 ## Change DNS server
 
-google DNS servers are fast and reliable, see link below to change your DNS settings to use google DNS:
+google DNS servers are fast and reliable, see link below to change your DNS settings to use google
+DNS:
 
 [google DNS servers][google dns]
 
@@ -482,20 +483,20 @@ To get good support in forums make sure you provide as much details as you can, 
 
 [Table of Contents](#table-of-contents)
 
-[update windows]: https://support.microsoft.com/en-us/help/4027667/windows-10-update
-[fix wifi]: https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues
-[process elimination]: https://en.wikipedia.org/wiki/Process_of_elimination
-[google dns]: https://developers.google.com/speed/public-dns/docs/using
-[speedtest]: https://www.speedtest.net
-[netio]: https://sourceforge.net/projects/netiogui
-[device manager]: https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager
-[adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html
-[adapter eth settings]: http://techgenix.com/advanced-network-adapter-driver-settings
-[adapter eee issues]: https://www.dell.com/support/kbdoc/en-us/000134483/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lwp=rt
-[adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car
+[update windows]: https://support.microsoft.com/en-us/help/4027667/windows-10-update "Visit Microsoft site"
+[fix wifi]: https://support.microsoft.com/en-us/help/10741/windows-fix-network-connection-issues "Visit Microsoft site"
+[process elimination]: https://en.wikipedia.org/wiki/Process_of_elimination "Visit wikipedia"
+[google dns]: https://developers.google.com/speed/public-dns/docs/using "Visit google site"
+[speedtest]: https://www.speedtest.net "Visit external site"
+[netio]: https://sourceforge.net/projects/netiogui "Visit external site"
+[device manager]: https://support.microsoft.com/en-us/help/4026149/windows-open-device-manager "Visit Microsoft site"
+[adapter wifi settings]: https://www.intel.com/content/www/us/en/support/articles/000005585/network-and-i-o/wireless.html "Visit external site"
+[adapter eth settings]: http://techgenix.com/advanced-network-adapter-driver-settings "Visit external site"
+[adapter eee issues]: https://www.dell.com/support/kbdoc/en-us/000134483/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lwp=rt "Visit external site"
+[adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car "Visit superuser site"
 [hotseat]: https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode) "wikipedia hotseat"
-[ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps
-[wikipedia routing table]: https://en.wikipedia.org/wiki/Routing_table
-[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update
-[recover windows]: https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options
-[download windows]: https://www.microsoft.com/en-us/software-download/windows10
+[ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps "Visit Microsoft site"
+[wikipedia routing table]: https://en.wikipedia.org/wiki/Routing_table "Visit wikipedia"
+[name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
+[recover windows]: https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options "Visit Microsoft site"
+[download windows]: https://www.microsoft.com/en-us/software-download/windows10 "Visit Microsoft site"

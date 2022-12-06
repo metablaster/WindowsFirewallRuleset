@@ -1,7 +1,7 @@
 
 # Network Discovery
 
-Set or verify following services (in bold) are set to "Automatic" startup (Here listed alphabetically):\
+Set or verify following services (in bold) are set to "Automatic" startup (here listed alphabetically):\
 **NOTE:** For smooth startup of services set dependent services to delayed start.\
 **NOTE:** Values in parentheses are service short name and default startup type which should work too.
 

@@ -28,7 +28,7 @@ SOFTWARE.
 #>
 
 # TODO: Update script metadata, see Templates\New-PSScriptInfo.ps1 for details
-# NOTE: Run [guid]::NewGuid() to generate new guid
+# NOTE: Run [guid]::NewGuid() to generate a new guid
 <#PSScriptInfo
 
 .VERSION 0.14.0
@@ -146,7 +146,7 @@ using namespace System
 [OutputType([void])]
 # NOTE: surpress parameter example
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-	"PSReviewUnusedParameter", "Force", Justification = "This will work for functions only")]
+	"PSReviewUnusedParameter", "Force", Justification = "This will work for parameter only")]
 param (
 	[Parameter()]
 	[switch] $Force

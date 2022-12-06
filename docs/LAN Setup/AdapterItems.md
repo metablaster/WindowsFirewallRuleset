@@ -42,16 +42,16 @@ To view or manage these items follow steps below:
 - This protocol is used for Network Interface Card bonding, which is the combining of two ethernet
   cards to appear as one physical device in order to increase the available bandwidth.
 - NIC Teaming allows you to group physical Ethernet network adapters into one or more software-based
-  virtual network adapters, these virtual network adapters provide fast performance and fault tolerance
-in the event of a network adapter failure.
+  virtual network adapters, these virtual network adapters provide fast performance and fault
+  tolerance in the event of a network adapter failure.
 
 ## Link-Layer Topology Discovery  I/O Driver
 
 - Used to discover and locate other PC's, devices, and network infrastructure components on the network.
 - Also used to determine network bandwidth.
 - If the Link-Layer Topology Discovery Mapper I/O Driver fails to start, the error is logged,
-  Windows startup proceeds, but a message box is displayed informing you that the `lltdio` service has
-  failed to start.
+  Windows startup proceeds, but a message box is displayed informing you that the `lltdio` service
+  has failed to start.
 
 ## Link-Layer Topology Discovery Responder
 

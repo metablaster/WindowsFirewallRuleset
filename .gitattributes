@@ -12,7 +12,9 @@
 # whitespace attribute will help detect surplus spaces when using git diff
 ###############################################################################
 *.png		binary
+*.gif		binary
 *.pmc		binary
+*.pmf		binary
 *.msc		binary
 *.wav		binary
 *.cab		binary
@@ -25,5 +27,9 @@
 *.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.json		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.js		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.cs		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.sh		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*config		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.wpaPresets	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.wpaProfile	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
