@@ -38,6 +38,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Sysinternals
   - Nvidia
   - Rule for VSCode extension - "XML Red Hat"
+  - Fixed a typo in rule for WarThunder game
 
 - Modules
 
@@ -60,6 +61,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
+  - Make possible to import and remove modules on manually
 
   - Improved or updated module functions
 
@@ -101,6 +103,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Resolved many syntax errors in XML and PS files with the help of static code analysis
   - Extensions settings improved, few recommended extensions replaced for better ones.
+  - improved spellcheking with custom dictionaries and configuration of spell check extension
 
 - Unit test
 
@@ -595,7 +598,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rule for curl shipped with system
   - Updated rules for Visual Studio
   - Added initial rule for dotnet.exe
-  - Aded new rules for Windows version "20H2"
+  - Added new rules for Windows version "20H2"
   - Added rule for Microsoft account
   - Search algorithm and rule creation choice for OneDrive now includes all users,
   including those not logged into machine

@@ -68,7 +68,7 @@ PS> Format-Path '"C:\ProgramData\Git"'
 [string[]] File path to format
 
 .OUTPUTS
-[string] formatted path, includes environment variables, stripped off of junk
+[string] formatted path, includes environment variables, stripped off of bad characters
 
 .NOTES
 TODO: This should proably be in utility module, it's here since only this module uses this function.

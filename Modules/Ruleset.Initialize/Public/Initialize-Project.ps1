@@ -72,6 +72,7 @@ TODO: Any modules in standard user paths will override system wide modules
 TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
 Develop from false to true in clean session
 TODO: Changes done to system services should be reverted to original values, new function needed.
+TODO: code.exe --list-extensions and verify extensions installed
 #>
 function Initialize-Project
 {

@@ -1,6 +1,6 @@
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
 // https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released
-// NOTE: We explicity define all extension settings in alphabetical order as it is listed
+// NOTE: We explicitly define all extension settings in alphabetical order as it is listed
 // in Extensions -> Feature Contributions to ensure that change to defaults doesn't affect us
 {
 	// VSCode: workspace files
@@ -15,7 +15,8 @@
 		"*config": "ssh_config",
 		"*.msc": "xml",
 		// Test module for Config\ProjectSettings.psd1
-		"*PssaTest.Module*": "PssaTest"
+		"*PssaTest.Module*": "PssaTest",
+		"LICENSE": "plaintext"
 	},
 	// Test module for Config\ProjectSettings.psd1 must not be formatted
 	"[PssaTest]": {
@@ -30,7 +31,8 @@
 		"editor.detectIndentation": true,
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": false,
-		"editor.formatOnPaste": true
+		"editor.formatOnPaste": true,
+		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
 	},
 	// PowerShell extension is default formatter
 	"[powershell]": {
@@ -109,6 +111,7 @@
 	"workbench.editor.enablePreviewFromCodeNavigation": true,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"workbench.editor.highlightModifiedTabs": true,
+	"workbench.editor.wrapTabs": true,
 	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
 	// VSCode: Terminal
@@ -119,26 +122,108 @@
 	// Extension: Bookmarks
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
-	// Extension: Code Spell Checker
-	// TODO: This config isn't recognized in cspell.json
-	// File types for language ID's are defined in cspell.json
-	"cSpell.enableFiletypes": [
-		"ignore",
-		"jsonc",
-		"json",
-		"properties", // gitattributes
-		"log",
-		// NOTE: If "csv (semicolon)" is flagged it's false falg see:
-		// https://github.com/streetsidesoftware/vscode-spell-checker/discussions/2346
-		"csv (semicolon)", // exported rules
-		"ini" // mTail configuration
-	],
+	// Extension: Code Spell Checker (these settings are no recognized in cspell.json)
+	"cSpell.checkOnlyEnabledFileTypes": true,
+	"cSpell.spellCheckOnlyWorkspaceFiles": true,
+	"cSpell.customDictionaries": {
+		"programs": {
+			"name": "programs",
+			"path": "${workspaceRoot}/Config/cSpell/programs.dic",
+			"description": "Spellcheck words identifying executables, apps, services and drivers",
+			"addWords": true
+		},
+		"protocols": {
+			"name": "protocols",
+			"path": "${workspaceRoot}/Config/cSpell/protocols.dic",
+			"description": "Spellcheck words identifying computer and network protocols",
+			"addWords": true
+		},
+		"commands": {
+			"name": "commands",
+			"path": "${workspaceRoot}/Config/cSpell/commands.dic",
+			"description": "Spellcheck words related to command line commands and arguments",
+			"addWords": true
+		},
+		"firewall": {
+			"name": "firewall",
+			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
+			"description": "Spellcheck words related to networking, firewall and WFP terms",
+			"addWords": true
+		},
+		"names": {
+			"name": "names",
+			"path": "${workspaceRoot}/Config/cSpell/names.dic",
+			"description": "Spellcheck words related to names of repositories, websites and people",
+			"addWords": true
+		},
+		"computer": {
+			"name": "computer",
+			"path": "${workspaceRoot}/Config/cSpell/computer.dic",
+			"description": "Spellcheck words related to computer, system components and files",
+			"addWords": true
+		},
+		"programing": {
+			"name": "programing",
+			"path": "${workspaceRoot}/Config/cSpell/programing.dic",
+			"description": "Spellcheck words related to language keywords, files and programing terms",
+			"addWords": true
+		},
+		"project": {
+			"name": "project",
+			"path": "${workspaceRoot}/Config/cSpell/project.dic",
+			"description": "Spellcheck words specific to this repository such as setting names",
+			"addWords": true
+		},
+		"identifiers": {
+			"name": "identifiers",
+			"path": "${workspaceRoot}/Config/cSpell/identifiers.dic",
+			"description": "Spellcheck words for Windows store apps and VSCode extension identifiers",
+			"addWords": true
+		},
+		"foul": {
+			"name": "foul",
+			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
+			"description": "Spellcheck rude words which to mark as forbidden",
+			"addWords": true
+		},
+		"test": {
+			"name": "test",
+			"path": "${workspaceRoot}/Config/cSpell/test.dic",
+			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
+			"addWords": true
+		},
+		"unsorted": {
+			"name": "unsorted",
+			"path": "${workspaceRoot}/Config/cSpell/unsorted.dic",
+			"description": "Specific words used in this project which don't fit into any other category",
+			"addWords": true
+		}
+		// TODO: What are these used for?
+		// "custom": true, // Enable the "custom" dictionary
+		// "internal-terms": false // Disable the "internal-terms" dictionary
+	},
+	"cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 120,
+	"cSpell.blockCheckingWhenLineLengthGreaterThan": 10000,
+	"cSpell.blockCheckingWhenTextChunkSizeGreaterThan": 500,
+	"cSpell.checkLimit": 500,
+	// CAUTION: Needs to be set in uer settings
+	// "cSpell.spellCheckDelayMs": 50,
+	// TODO: see if desired
+	"cSpell.autoFormatConfigFile": false,
+	"cSpell.diagnosticLevel": "Information",
+	"cSpell.showAutocompleteSuggestions": true,
+	// CAUTION: Needs to be set in user settings
+	// "cSpell.showCommandsInEditorContextMenu": true,
+	// "cSpell.showStatus": true,
+	// "cSpell.showStatusAlignment": "Right",
+	// "cSpell.showSuggestionsLinkInEditorContextMenu": true,
+	"cSpell.suggestionMenuType": "quickPick",
 	// Extension: Filter Line
 	// CAUTION: Needs to be set in user settings
-	"filter-line.historySize": 20,
+	// "filter-line.historySize": 20,
 	// Extension: Fix JSON
 	"fixJson.indentationSpaces": null,
-	// Extension: Hightlight Bad Chars
+	// Extension: Highlight Bad Chars
 	"highlight-bad-chars.asciiOnly": true,
 	"highlight-bad-chars.additionalUnicodeChars": [
 		// https://www.vertex42.com/ExcelTips/unicode-symbols.html
@@ -157,11 +242,12 @@
 	// VS colors
 	// string D69D85
 	// comment 57A64A
-	// member func DCDCAA
 	// variables C8C8C8
 	// user types 1BC9B0
 	// enums B8D7A3
 	// functions FF8000
+	// cSpell:disable
+	// member func DCDCAA
 	"logFileHighlighter.customPatterns": [
 		{
 			// Action drop fc3737
@@ -231,6 +317,7 @@
 			"foreground": "#B8D7A3"
 		}
 	],
+	// cSpell:enable
 	// Extension: Markdown All in One
 	"markdown.extension.orderedList.autoRenumber": true,
 	// Extension markdownlint
@@ -364,6 +451,7 @@
 		"MSDN",
 		"CAUTION",
 		"ISSUE",
+		"cSpell",
 		"[ ]",
 		"[x]",
 		"INFO",
@@ -458,6 +546,15 @@
 			"iconColour": "#c0c0c0", // Silver
 			"opacity": 90
 		},
+		// Spell checker command
+		"cSpell": {
+			"icon": "check-circle",
+			"type": "text",
+			"foreground": "#ffffff",
+			"background": "#2ec920", // Custom green
+			"iconColour": "#FDA50F", // Fire
+			"opacity": 40
+		},
 		// Unchecked box
 		"[ ]": {
 			"icon": "markdown",
@@ -488,7 +585,7 @@
 		]
 	},
 	// Extension: Trailing Spaces
-	// CAUTION: Enabling this causes issues writing code according to identations rules
+	// CAUTION: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,
 	//Extension: XML
 	// NOTE: Configure telemetry if you wish in user settings

@@ -518,7 +518,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] formatted path, includes environment variables, stripped off of junk</maml:name>
+          <maml:name>[string] formatted path, includes environment variables, stripped off of bad characters</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1119,7 +1119,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Big thanks to Jani for this awesome solution, see issue from "related links" section TODO: remote computers?</maml:para>
+        <maml:para>Big thanks to ljani for this awesome solution, see issue from "related links" section TODO: remote computers?</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>

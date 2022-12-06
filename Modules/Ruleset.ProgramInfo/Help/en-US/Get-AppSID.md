@@ -61,7 +61,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Big thanks to Jani for this awesome solution, see issue from "related links" section
+Big thanks to ljani for this awesome solution, see issue from "related links" section
 TODO: remote computers?
 
 ## RELATED LINKS

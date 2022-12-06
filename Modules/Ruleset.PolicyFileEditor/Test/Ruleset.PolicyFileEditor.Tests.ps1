@@ -47,7 +47,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-Remove-Module [P]olicyFileEditor
+Remove-Module Ruleset.PolicyFileEditor
 $scriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 $psd1Path = Join-Path $scriptRoot Ruleset.PolicyFileEditor.psd1
 

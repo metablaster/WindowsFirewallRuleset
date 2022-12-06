@@ -46,7 +46,7 @@ None. You cannot pipe objects to Get-AppSID
 [string] store app SID (security identifier) if app found
 
 .NOTES
-Big thanks to Jani for this awesome solution, see issue from "related links" section
+Big thanks to ljani for this awesome solution, see issue from "related links" section
 TODO: remote computers?
 
 .LINK

@@ -581,6 +581,7 @@ Next step is to add following settings into your VSCode settings which is found 
  },
  // Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
  "remote.SSH.defaultExtensions": [
+  // cSpell:disable
   // AutoScroll
   "pejmannikram.vscode-auto-scroll",
   // Bookmarks
@@ -613,6 +614,7 @@ Next step is to add following settings into your VSCode settings which is found 
   "shardulm94.trailing-spaces",
   // XML Tools
   "dotjoshjohnson.xml"
+  // cSpell:enable
  ]
 ```
 

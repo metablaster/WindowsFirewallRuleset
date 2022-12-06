@@ -64,6 +64,16 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "Modules/Ruleset.PolicyFileEditor/Test/Ruleset.PolicyFileEditor.Tests.ps1",
+			"bookmarks": [
+				{
+					"line": 49,
+					"column": 14,
+					"label": ""
+				}
+			]
 		}
 	]
 }

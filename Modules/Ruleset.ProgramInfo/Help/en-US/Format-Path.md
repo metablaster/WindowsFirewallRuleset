@@ -94,7 +94,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [string] formatted path, includes environment variables, stripped off of junk
+### [string] formatted path, includes environment variables, stripped off of bad characters
 
 ## NOTES
 

@@ -11,4 +11,4 @@
 \\SERVER-01\Share\Directory DIR\file.exe
 \\SERVER-01\Share Name\Directory Name
 \SERVER-01\Share\Directory DIR
-\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE
+\\.\pipe\crashpad_2324_SAMPLE_STRING

@@ -146,7 +146,7 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 	$Program = "$WarThunderRoot\gaijin_downloader.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "WarThunder - gajin_downloader" `
+		New-NetFirewallRule -DisplayName "WarThunder - gaijin_downloader" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
@@ -156,7 +156,7 @@ if ((Confirm-Installation "WarThunder" ([ref] $WarThunderRoot)) -or $ForceLoad)
 			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
 
-		New-NetFirewallRule -DisplayName "WarThunder - gajin_downloader" `
+		New-NetFirewallRule -DisplayName "WarThunder - gaijin_downloader" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `

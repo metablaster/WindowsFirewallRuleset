@@ -451,7 +451,7 @@ if (!(Get-Variable -Name CheckRemotingVariables -Scope Global -ErrorAction Ignor
 	# Kerberos, the client computer and the server mutually authenticate by using Kerberos certificates.
 	# CredSSP, use Credential Security Support Provider (CredSSP) authentication.
 	# NOTE: If you specify an option other than "Default" you also need to ensure the corresponding
-	# WinRM authentication is enabled in Modules\Ruleset.Remote\Scripts\WinrRMSettings.ps1 -> $AuthenticationOptions
+	# WinRM authentication is enabled in Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1 -> $AuthenticationOptions
 	# NOTE: To use CredSSP it needs to be enabled in GPO or by Enable-WSManCredSSP for both the
 	# client and server computers
 	# The default value is "Default"

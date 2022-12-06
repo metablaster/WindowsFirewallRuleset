@@ -186,7 +186,7 @@ Todo's in this file are categorized into following sections:
     one needs to close them manually on taskbar
     - Repository initialization fails when hardware NIC is shared with virtual adapter configured
     in Virtual switch manager (external switch) when and networking over default switch does not work.
-    - Need to test the behavior and errors when deploying on putlic network.
+    - Need to test the behavior and errors when deploying on public network.
 
 [Table of Contents](#table-of-contents)
 

@@ -113,7 +113,7 @@ $TestString = "\SERVER-01\Share\Directory DIR"
 Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 
-$TestString = "\\.\pipe\crashpad_2324_ZXWSDFBXANSTVSQE"
+$TestString = "\\.\pipe\crashpad_2324_SAMPLE_STRING"
 Start-Test $TestString -Expected "FAIL"
 Test-UNC $TestString
 

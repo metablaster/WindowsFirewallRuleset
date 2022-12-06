@@ -138,7 +138,7 @@ SOFTWARE.
 	# NOTE: For loopback firewall session importing modules is required when functions from modules
 	# are called from within -ScriptBlock parameter of Invoke-Command
 	# NOTE: Specifying full path won't work if repository root is elsewhere and specifying only
-	# module name won't work for first time setup in PS Core for compatiblity session
+	# module name won't work for first time setup in PS Core for compatibility session
 	# ModulesToImport = @(
 	# 	"Ruleset.Compatibility"
 	# 	"Ruleset.ComputerInfo"

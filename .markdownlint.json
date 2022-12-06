@@ -3,9 +3,9 @@
 	"default": true,
 	"line-length":
 	{
-		"line_length": 100,
-		"heading_line_length": 100,
-		"code_block_line_length": 100,
+		"line_length": 120,
+		"heading_line_length": 120,
+		"code_block_line_length": 120,
 		"tables": false
 	}
 }

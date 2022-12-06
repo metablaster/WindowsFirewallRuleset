@@ -22,7 +22,7 @@ This document explains how to monitor Windows firewall and network activity on l
   - [netsh trace](#netsh-trace)
     - [capture=yes|no](#captureyesno)
     - [protocol](#protocol)
-    - [traceFile=path\filename](#tracefilepathfilename)
+    - [traceFile=path/filename](#tracefilepathfilename)
     - [persistent=yes|no](#persistentyesno)
     - [fileMode=single|circular|append](#filemodesinglecircularappend)
     - [maxSize](#maxsize)
@@ -120,7 +120,7 @@ the issue.
 - To grant permissions for your account and firewall service run `Scripts\Grant-Logs.ps1 YOUR_USERNAME`\
 Permission is valid until system reboot, any firewall setting change or manual permission removal.
 - In VSCode open individual firewall log file under `Logs\Firewall` node
-- To filter log contents open command palette `CTRL + SHIT + P`, type "Filter line by Config File"
+- To filter log contents open command palette `CTRL + SHIFT + P`, type "Filter line by Config File"
 and press enter.
 - This action will create additional (filtered) log file in same directory called `FILENAME.filterline.log`
 - Config file is located inside `.vscode\filterline.json` and supports regex to fine tune your filter.
@@ -399,7 +399,7 @@ The default is `no`
 Specifies IP protocol for which to trace or capture traffic.\
 For valid values and their meaning see: [Assigned Internet Protocol Numbers][protocol list]
 
-### traceFile=path\filename
+### traceFile=path/filename
 
 Specifies the location and file name where to save the output.\
 The default is: `%LOCALAPPDATA%\Temp\NetTraces\NetTrace.etl`
