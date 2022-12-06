@@ -20,7 +20,7 @@
 		"ssh_config", // Remote-SSH configuration
 		"javascript" // In Actions - publish sitemap
 	],
-	// BUG: Does not work but ${workspaceFolder} is the default
+	// BUG: Does not work, but ${workspaceFolder} is the default anyway
 	//"globRoot": "${workspaceFolder}",
 	"ignorePaths": [
 		"/.git",
@@ -68,6 +68,7 @@
 	"validateDirectives": false,
 	"words": [
 		"autoconfiguration",
+		"Behaviour",
 		"bigendianutf",
 		"Bugfixes",
 		"Cloneable",
@@ -98,6 +99,6 @@
 		"Uploader"
 	],
 	"flagWords": [
-		// Defined in Config\cSpell\foul.dic
+		// Defined in Config\cSpell\foul\foul.dic
 	]
 }

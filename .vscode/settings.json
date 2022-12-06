@@ -25,18 +25,30 @@
 		"editor.trimAutoWhitespace": false,
 		"editor.formatOnType": false
 	},
-	// Markdown formatter is "markdownlint" extension
 	"[markdown]": {
 		"editor.wordWrap": "off",
 		"editor.detectIndentation": true,
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": false,
 		"editor.formatOnPaste": true,
+		// markdownlint extension is default markdown formatter
 		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
 	},
-	// PowerShell extension is default formatter
 	"[powershell]": {
+		// PowerShell extension is default formatter for PowerShell files
 		"editor.defaultFormatter": "ms-vscode.powershell"
+	},
+	"files.exclude": {
+		"**/.git": true
+	},
+	// VSCode: search
+	"search.exclude": {
+		"**/.git": true,
+		// Auto generated files
+		"**/*-help.xml": true,
+		"**/*_HelpInfo.xml": true,
+		"/Modules/*/Help/*/*.md": true,
+		"/docs/sitemap.xml": true
 	},
 	// VSCode: editor
 	"editor.quickSuggestions": {
@@ -46,10 +58,12 @@
 	},
 	"editor.rulers": [
 		{
+			// Recommended line width
 			"column": 100,
 			"color": "#4063ff"
 		},
 		{
+			// Maximum line width
 			"column": 120,
 			"color": "#ff0000"
 		},
@@ -127,81 +141,103 @@
 	"cSpell.checkOnlyEnabledFileTypes": true,
 	"cSpell.spellCheckOnlyWorkspaceFiles": true,
 	"cSpell.customDictionaries": {
-		"programs": {
+		"dic.programs": {
 			"name": "programs",
 			"path": "${workspaceRoot}/Config/cSpell/programs.dic",
 			"description": "Spellcheck words identifying executables, apps, services and drivers",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"protocols": {
+		"dic.protocols": {
 			"name": "protocols",
 			"path": "${workspaceRoot}/Config/cSpell/protocols.dic",
 			"description": "Spellcheck words identifying computer and network protocols",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"commands": {
+		"dic.commands": {
 			"name": "commands",
 			"path": "${workspaceRoot}/Config/cSpell/commands.dic",
 			"description": "Spellcheck words related to command line commands and arguments",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"firewall": {
+		"dic.firewall": {
 			"name": "firewall",
 			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
 			"description": "Spellcheck words related to networking, firewall and WFP terms",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"names": {
+		"dic.names": {
 			"name": "names",
 			"path": "${workspaceRoot}/Config/cSpell/names.dic",
 			"description": "Spellcheck words related to names of repositories, websites and people",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"computer": {
+		"dic.computer": {
 			"name": "computer",
 			"path": "${workspaceRoot}/Config/cSpell/computer.dic",
 			"description": "Spellcheck words related to computer, system components and files",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"programing": {
-			"name": "programing",
-			"path": "${workspaceRoot}/Config/cSpell/programing.dic",
+		"dic.development": {
+			"name": "development",
+			"path": "${workspaceRoot}/Config/cSpell/development.dic",
 			"description": "Spellcheck words related to language keywords, files and programing terms",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"project": {
+		"dic.project": {
 			"name": "project",
 			"path": "${workspaceRoot}/Config/cSpell/project.dic",
 			"description": "Spellcheck words specific to this repository such as setting names",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"identifiers": {
+		"dic.identifiers": {
 			"name": "identifiers",
 			"path": "${workspaceRoot}/Config/cSpell/identifiers.dic",
 			"description": "Spellcheck words for Windows store apps and VSCode extension identifiers",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"foul": {
+		"dic.foul": {
 			"name": "foul",
 			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
 			"description": "Spellcheck rude words which to mark as forbidden",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"test": {
+		"dic.test": {
 			"name": "test",
 			"path": "${workspaceRoot}/Config/cSpell/test.dic",
 			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
-			"addWords": true
+			"addWords": true,
+			"scope": "workspace"
 		},
-		"unsorted": {
+		"dic.unsorted": {
 			"name": "unsorted",
 			"path": "${workspaceRoot}/Config/cSpell/unsorted.dic",
 			"description": "Specific words used in this project which don't fit into any other category",
-			"addWords": true
-		}
-		// TODO: What are these used for?
-		// "custom": true, // Enable the "custom" dictionary
-		// "internal-terms": false // Disable the "internal-terms" dictionary
+			"addWords": true,
+			"scope": "workspace"
+		},
+		// Enable\disable specific dictionaries:
+		"programs": true,
+		"protocols": true,
+		"commands": true,
+		"firewall": true,
+		"names": true,
+		"computer": true,
+		"development": true,
+		"project": true,
+		"identifiers": true,
+		"foul": true,
+		"test": true,
+		"unsorted": true
 	},
 	"cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 120,
 	"cSpell.blockCheckingWhenLineLengthGreaterThan": 10000,
@@ -332,7 +368,7 @@
 	"powershell.buttons.showRunButtons": true,
 	"powershell.buttons.showPanelMovementButtons": false,
 	"powershell.debugging.createTemporaryIntegratedConsole": false,
-	"powershell.developer.editorServicesLogLevel": "Warning",
+	"powershell.developer.editorServicesLogLevel": "Normal",
 	"powershell.developer.editorServicesWaitForDebugger": false,
 	"powershell.developer.featureFlags": [],
 	"powershell.developer.waitForSessionFileTimeoutSeconds": 240,
@@ -379,7 +415,7 @@
 	// pester
 	"powershell.pester.useLegacyCodeLens": false,
 	"powershell.pester.outputVerbosity": "FromPreference",
-	"powershell.pester.debugOutputVerbosity": "Minimal",
+	"powershell.pester.debugOutputVerbosity": "Diagnostic",
 	// integratedConsole
 	"powershell.integratedConsole.showOnStartup": false,
 	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
@@ -442,8 +478,23 @@
 	},
 	// Extension: Todo Tree
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
-	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
-	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+	"todo-tree.general.debug": false,
+	"todo-tree.general.enableFileWatcher": false,
+	"todo-tree.general.revealBehaviour": "start of todo",
+	"todo-tree.general.rootFolder": "${workspaceFolder}",
+	"todo-tree.general.statusBar": "current file",
+	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
+	"todo-tree.general.statusBarClickBehaviour": "reveal",
+	"todo-tree.general.tagGroups": {
+		"NOTE": [
+			"NOTE",
+			"INFO"
+		],
+		"BUG": [
+			"BUG",
+			"FIX"
+		]
+	},
 	"todo-tree.general.tags": [
 		"HACK",
 		"TODO",
@@ -458,6 +509,7 @@
 		"INFO",
 		"FIX"
 	],
+	"todo-tree.general.showActivityBarBadge": true,
 	"todo-tree.highlights.customHighlight": {
 		// Hard to resolve
 		"HACK": {
@@ -575,16 +627,42 @@
 			"opacity": 40,
 		}
 	},
-	"todo-tree.general.tagGroups": {
-		"NOTE": [
-			"NOTE",
-			"INFO"
-		],
-		"BUG": [
-			"BUG",
-			"FIX"
-		]
-	},
+	"todo-tree.highlights.enabled": true,
+	"todo-tree.highlights.highlightDelay": 500,
+	"todo-tree.highlights.useColourScheme": false,
+	"todo-tree.filtering.includeHiddenFiles": false,
+	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
+	"todo-tree.tree.autoRefresh": true,
+	"todo-tree.tree.disableCompactFolders": false,
+	"todo-tree.tree.expanded": false,
+	"todo-tree.tree.filterCaseSensitive": false,
+	"todo-tree.tree.flat": false,
+	"todo-tree.tree.groupedByTag": false,
+	"todo-tree.tree.groupedBySubTag": false,
+	"todo-tree.tree.hideIconsWhenGroupedByTag": false,
+	"todo-tree.tree.hideTreeWhenEmpty": false,
+	"todo-tree.tree.scanAtStartup": true,
+	"todo-tree.tree.scanMode": "workspace",
+	"todo-tree.tree.showBadges": true,
+	"todo-tree.tree.showCountsInTree": true,
+	"todo-tree.tree.showCurrentScanMode": true,
+	"todo-tree.tree.sortTagsOnlyViewAlphabetically": false,
+	"todo-tree.tree.sort": true,
+	"todo-tree.tree.tagsOnly": false,
+	"todo-tree.tree.trackFile": true,
+	"todo-tree.tree.buttons.reveal": true,
+	"todo-tree.tree.buttons.scanMode": true,
+	"todo-tree.tree.buttons.viewStyle": true,
+	"todo-tree.tree.buttons.groupByTag": true,
+	"todo-tree.tree.buttons.groupBySubTag": false,
+	"todo-tree.tree.buttons.filter": true,
+	"todo-tree.tree.buttons.refresh": true,
+	"todo-tree.tree.buttons.expand": true,
+	"todo-tree.tree.buttons.export": true,
+	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
+	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+	"todo-tree.regex.regexCaseSensitive": true,
+	"todo-tree.regex.enableMultiLine": false,
 	// Extension: Trailing Spaces
 	// CAUTION: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,
@@ -598,8 +676,9 @@
 	// NOTE: If desired, it must be configured in user settings
 	// "xml.server.binary.trustedHashes": [],
 	"xml.trace.server": "off",
-	"xml.logs.client": false,
+	"xml.logs.client": true,
 	"xml.downloadExternalResources.enabled": true,
+	// see: https://github.com/redhat-developer/vscode-xml/blob/main/docs/Validation.md
 	"xml.fileAssociations": [
 		{
 			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd",
@@ -611,6 +690,7 @@
 		}
 		// HACK: PlatyPS schema needed
 		// {
+		// 	// https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/PSMaml/Maml.xsd
 		// 	"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/PSMaml/Maml.xsd",
 		// 	"pattern": "**/*-help.xml"
 		// }
@@ -634,7 +714,7 @@
 	"xml.format.preserveAttributeLineBreaks": true,
 	"xml.format.preserveEmptyContent": false,
 	"xml.format.preservedNewlines": 2,
-	"xml.format.preserveSpace":[],
+	"xml.format.preserveSpace": [],
 	"xml.format.spaceBeforeEmptyCloseTag": true,
 	"xml.format.xsiSchemaLocationSplit": "onPair",
 	"xml.format.splitAttributes": false,
@@ -677,5 +757,5 @@
 	"yaml.maxItemsComputed": 5000,
 	"yaml.suggest.parentSkeletonSelectedFirst": false,
 	"yaml.style.flowMapping": "allow",
-	"yaml.style.flowSequence": "allow",
+	"yaml.style.flowSequence": "allow"
 }

@@ -74,6 +74,31 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": ".vscode/settings.json",
+			"bookmarks": [
+				{
+					"line": 370,
+					"column": 1,
+					"label": ""
+				},
+				{
+					"line": 416,
+					"column": 1,
+					"label": ""
+				},
+				{
+					"line": 480,
+					"column": 1,
+					"label": ""
+				},
+				{
+					"line": 678,
+					"column": 1,
+					"label": ""
+				}
+			]
 		}
 	]
 }
