@@ -69,22 +69,22 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 371,
+					"line": 410,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 417,
+					"line": 456,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 481,
+					"line": 520,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 679,
+					"line": 718,
 					"column": 1,
 					"label": ""
 				}
@@ -96,6 +96,16 @@
 				{
 					"line": 76,
 					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "docs/sitemap.xml",
+			"bookmarks": [
+				{
+					"line": 1,
+					"column": 28,
 					"label": ""
 				}
 			]

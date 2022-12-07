@@ -24,7 +24,7 @@
     - [Manage GPO rules](#manage-gpo-rules)
     - [Deploying individual rulesets](#deploying-individual-rulesets)
     - [Deleting rules](#deleting-rules)
-    - [Export\Import rules](#exportimport-rules)
+    - [Export/Import rules](#exportimport-rules)
   - [Remote firewall deployment](#remote-firewall-deployment)
   - [Support, updates and documentation](#support-updates-and-documentation)
   - [The future](#the-future)
@@ -547,7 +547,7 @@ Note that you'll also need to re-import your exported GPO rules if you had them.
 
 [Table of Contents](#table-of-contents)
 
-### Export\Import rules
+### Export/Import rules
 
 If you want to export rules from GPO there are two methods available:
 
@@ -692,7 +692,10 @@ and firewall settings
 [badge status]: https://img.shields.io/static/v1?label=Status&message=Alpha&color=red&style=plastic
 [badge system]: https://img.shields.io/static/v1?label=OS&message=Windows&color=informational&style=plastic&logo=Windows
 [badge language]: https://img.shields.io/static/v1?label=Language&message=PowerShell&color=informational&style=plastic&logo=PowerShell
-[badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
 [sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"
+<!-- unused link or image reference false positive-->
+<!-- markdownlint-disable MD053 -->
+[badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
+<!-- markdownlint-enable MD053 -->

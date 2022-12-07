@@ -420,5 +420,8 @@ Status: Partially resolved
 [hyperv switch]: https://www.altaro.com/hyper-v/the-hyper-v-virtual-switch-explained-part-1 "Visit external site"
 [issue rule interface]: https://aidanfinn.com/?p=15222 "Visit external site"
 [issue rule interface2]: https://www.nakivo.com/blog/hyper-v-networking-virtual-switches "Visit external site"
-[issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules "Visit epic site"
 [virtual switch filtering]: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-virtual-switch-filtering  "Visit Microsoft docs"
+<!-- unused link or image false positive -->
+<!-- markdownlint-disable MD053 -->
+[issue epic games]: https://forums.unrealengine.com/unreal-engine/feedback-for-epic/1800085-please-stop-violating-iana-rules "Visit epic site"
+<!-- markdownlint-enable MD053 -->

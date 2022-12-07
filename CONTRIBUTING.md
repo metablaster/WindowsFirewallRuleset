@@ -708,12 +708,13 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
 [extension markdown aio]: https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one "Visit Marketplace"
 [extension xml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml "Visit Marketplace"
-[extension yaml]: <https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml "Visit Marketplace"
+[extension yaml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml "Visit Marketplace"
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
 [extension remote SSH]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh "Visit Marketplace"
 [extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
+[extension remote SSH explorer]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"
 [extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
 [extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
 [extension fix json]: https://marketplace.visualstudio.com/items?itemName=oliversturm.fix-json "Visit Marketplace"
@@ -735,4 +736,3 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [badge vscode link]: https://code.visualstudio.com
 [platyps_schema]: https://github.com/PowerShell/platyPS/blob/master/platyPS.schema.md "Visit PlatyPS repository"
-[extension remote SSH explorer]: <https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"

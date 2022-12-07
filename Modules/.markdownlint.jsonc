@@ -1,0 +1,7 @@
+
+{
+	// Disable reporting long lines for help files
+	"MD013": false,
+	// Disable reporting bare URL's which come from comment based help
+	"MD034": false
+}

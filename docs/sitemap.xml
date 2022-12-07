@@ -1,135 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/CHANGELOG.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/CommandHelp.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/DirectoryStructure.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/DisableFirewall.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/FAQ.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/FirewallParameters.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LegacySupport.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/ManageGPOFirewall.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/MonitoringFirewall.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/NamingConvention.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/NetworkTroubleshooting.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/PredefinedRules.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/ProblematicTraffic.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/README.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/Reference.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/Regex.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/Remote.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/ResetFirewall.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/SecurityAndPrivacy.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/TODO.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/UpdatableHelp.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/WindowsPowerShell.md</loc>
-<lastmod>2022-11-19T21:45:25+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/WindowsTerminal.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/google_verification.html</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/AdapterItems.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/AdapterSettings.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/Additional.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/DeliveryOptimization.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/FileAndPrinterSharing.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/NetworkDiscovery.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/README.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/RemoteDesktop.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
-<url>
-<loc>https://metablaster.github.io/WindowsFirewallRuleset/Screenshots/README.md</loc>
-<lastmod>2022-11-19T21:34:37+01:00</lastmod>
-</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/CHANGELOG.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/CommandHelp.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/DirectoryStructure.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/DisableFirewall.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/FAQ.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/FirewallParameters.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LegacySupport.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/ManageGPOFirewall.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/MonitoringFirewall.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/NamingConvention.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/NetworkTroubleshooting.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/PredefinedRules.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/ProblematicTraffic.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/README.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/Reference.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/Regex.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/Remote.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/ResetFirewall.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/SecurityAndPrivacy.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/TODO.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/UpdatableHelp.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/WindowsPowerShell.md</loc>
+		<lastmod>2022-11-19T21:45:25+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/WindowsTerminal.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/google_verification.html</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/AdapterItems.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/AdapterSettings.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/Additional.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/DeliveryOptimization.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/FileAndPrinterSharing.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/NetworkDiscovery.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/README.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/LAN Setup/RemoteDesktop.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
+	<url>
+		<loc>https://metablaster.github.io/WindowsFirewallRuleset/Screenshots/README.md</loc>
+		<lastmod>2022-11-19T21:34:37+01:00</lastmod>
+	</url>
 </urlset>

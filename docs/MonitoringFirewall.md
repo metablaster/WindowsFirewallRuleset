@@ -476,6 +476,9 @@ This problem can be solved with "Windows Performance Recorder" which generates r
 [intro wpa]: https://devblogs.microsoft.com/performance-diagnostics/wpa-intro "Visit Microsoft site"
 [ref wpa]: https://docs.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-analyzer "Visit Microsoft docs"
 [protocol list]: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml "Visit IANA site"
+[ref netevent]: https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps "Visit Microsoft docs"
+<!-- unused link or image false positive -->
+<!-- markdownlint-disable MD053 -->
 [netsh]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj129382(v=ws.11) "Visit Microsoft docs"
 [ref netsh]: https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts "Visit Microsoft docs"
-[ref netevent]: https://docs.microsoft.com/en-us/powershell/module/neteventpacketcapture/?view=win10-ps "Visit Microsoft docs"
+<!-- markdownlint-enable MD053 -->

@@ -31,13 +31,14 @@
 		"editor.insertSpaces": true,
 		"editor.formatOnSave": false,
 		"editor.formatOnPaste": true,
-		// markdownlint extension is default markdown formatter
-		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+		// Markdown All in One extension is default markdown formatter
+		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
 	"[powershell]": {
 		// PowerShell extension is default formatter for PowerShell files
 		"editor.defaultFormatter": "ms-vscode.powershell"
 	},
+	// Files or directories which to exclude from explorer
 	"files.exclude": {
 		"**/.git": true
 	},
@@ -51,11 +52,13 @@
 		"/docs/sitemap.xml": true
 	},
 	// VSCode: editor
+	// https://code.visualstudio.com/docs/editor/intellisense
 	"editor.quickSuggestions": {
 		"other": true,
 		"comments": true,
 		"strings": true
 	},
+	"editor.acceptSuggestionOnEnter": "off",
 	"editor.rulers": [
 		{
 			// Recommended line width
@@ -357,9 +360,45 @@
 	],
 	// cSpell:enable
 	// Extension: Markdown All in One
+	"markdown.extension.completion.respectVscodeSearchExclude": false,
+	"markdown.extension.completion.root": "${workspaceFolder}",
+	"markdown.extension.italic.indicator": "*",
+	"markdown.extension.bold.indicator": "**",
+	"markdown.extension.list.indentationSize": "inherit",
+	"markdown.extension.math.enabled": true,
 	"markdown.extension.orderedList.autoRenumber": true,
+	"markdown.extension.orderedList.marker": "one",
+	"markdown.extension.preview.autoShowPreviewToSide": false,
+	"markdown.extension.print.absoluteImgPath": true,
+	"markdown.extension.print.imgToBase64": false,
+	"markdown.extension.print.includeVscodeStylesheets": true,
+	"markdown.extension.print.onFileSave": true,
+	"markdown.extension.print.theme": "light",
+	"markdown.extension.print.validateUrls": true,
+	"markdown.extension.syntax.decorationFileSizeLimit": 50000,
+	"markdown.extension.tableFormatter.enabled": true,
+	"markdown.extension.tableFormatter.normalizeIndentation": false,
+	"markdown.extension.tableFormatter.delimiterRowNoPadding": false,
+	"markdown.extension.toc.levels": "1..6",
+	"markdown.extension.toc.orderedList": false,
+	"markdown.extension.toc.plaintext": false,
+	"markdown.extension.toc.slugifyMode": "github",
+	"markdown.extension.toc.unorderedList.marker": "-",
+	"markdown.extension.toc.updateOnSave": true,
 	// Extension markdownlint
 	"markdownlint.run": "onType",
+	// NOTE: There is markdown.jsonc in Modules directory which disables some rules,
+	// consider enabling them temporary to find issues.
+	// Some false positives are suppressed per file with HTML comments
+	"markdownlint.config": {
+		"default": true,
+		"line-length": {
+			"line_length": 120,
+			"heading_line_length": 120,
+			"code_block_line_length": 120,
+			"tables": false
+		}
+	},
 	// Extension: PowerShell
 	"powershell.startAutomatically": true,
 	"powershell.enableProfileLoading": true,

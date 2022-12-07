@@ -58,6 +58,8 @@ the meaning is same or similar.
   - [Templates](#templates)
   - [Test](#test-1)
 
+<!-- no duplicate header -->
+<!-- markdownlint-disable MD024 -->
 ## .github
 
 Contains GitHub templates and workflows
@@ -242,4 +244,5 @@ Contains script and module templates with boilerplate code
 
 Contains test scripts sorted by module to test out individual functions and concepts
 
+<!-- markdownlint-enable MD024 -->
 [Table of Contents](#table-of-contents)
