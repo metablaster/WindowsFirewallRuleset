@@ -1,7 +1,7 @@
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
 // https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released
 // NOTE: We explicitly define all extension settings in alphabetical order as it is listed
-// in Extensions -> Feature Contributions to ensure that change to defaults doesn't affect us
+// in Extensions -> Feature Contributions to ensure that changes to defaults doesn't affect us
 {
 	// VSCode: workspace files
 	"files.encoding": "utf8",
@@ -105,8 +105,8 @@
 			}
 		]
 	},
-	// NOTE: Work around ugly syntax highlighting:
-	// https://github.com/PowerShell/vscode-powershell/issues/3221
+	// Work around ugly syntax highlighting:
+	// ISSUE: https://github.com/PowerShell/vscode-powershell/issues/3221
 	"editor.semanticHighlighting.enabled": false,
 	"editor.codeActionsOnSave": {
 		// TODO: need to verify if result is desired
@@ -129,7 +129,8 @@
 	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
 	// VSCode: Terminal
-	// NOTE: This hight number due to Test\PSScriptAnalyzer.ps1
+	// NOTE: This high number due to Test\Invoke-CodeAnalysis.ps1
+	// TODO: We should use Set-ScreenBuffer function there
 	"terminal.integrated.scrollback": 40000,
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,

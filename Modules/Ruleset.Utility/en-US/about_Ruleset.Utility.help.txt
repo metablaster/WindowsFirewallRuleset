@@ -12,9 +12,6 @@ VARIABLES
 	ServiceHost
 	Windows service host
 
-	CheckInitUtility
-	Serves to prevent double initialization of constants
-
 EXAMPLES
 	Approve-Execute
 	Prompt user to continue running script

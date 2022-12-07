@@ -37,13 +37,13 @@ Use to temporarily test whatever
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\BlankTest.ps1
+PS> .\Invoke-BlankTest.ps1
 
 .INPUTS
-None. You cannot pipe objects to BlankTest.ps1.
+None. You cannot pipe objects to Invoke-BlankTest.ps1.
 
 .OUTPUTS
-None. BlankTest.ps1 does not generate any output.
+None. Invoke-BlankTest.ps1 does not generate any output.
 
 .NOTES
 None.

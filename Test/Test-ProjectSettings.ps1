@@ -37,13 +37,13 @@ Unit test to test global variables and preferences set in Config\ProjectSettings
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\TestProjectSettings.ps1
+PS> .\Test-ProjectSettings.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestProjectSettings.ps1
+None. You cannot pipe objects to Test-ProjectSettings.ps1
 
 .OUTPUTS
-None. TestProjectSettings.ps1 does not generate any output
+None. Test-ProjectSettings.ps1 does not generate any output
 
 .NOTES
 None.
@@ -60,7 +60,7 @@ param (
 	[switch] $Force
 )
 
-Write-Warning -Message "Unit test 'TestProjectSettings' is out of date, skipped..."
+Write-Warning -Message "Unit test 'Test-ProjectSettings' is out of date, skipped..."
 return
 
 #region Initialization

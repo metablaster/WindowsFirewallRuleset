@@ -51,20 +51,20 @@ If specified, analysis results are logged
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\PSScriptAnalyzer.ps1
+PS> .\Invoke-CodeAnalysis.ps1
 
 Shows code analysis status in the terminal only
 
 .EXAMPLE
-PS> .\PSScriptAnalyzer.ps1 -Force -Log
+PS> .\Invoke-CodeAnalysis.ps1 -Force -Log
 
 Shows code analysis status in the terminal and writes results to log file
 
 .INPUTS
-None. You cannot pipe objects to PSScriptAnalyzer.ps1
+None. You cannot pipe objects to Invoke-CodeAnalysis.ps1
 
 .OUTPUTS
-None. PSScriptAnalyzer.ps1 does not generate any output
+None. Invoke-CodeAnalysis.ps1 does not generate any output
 
 .NOTES
 Get-Command not found error and object not set to an instance,
@@ -101,7 +101,7 @@ param (
 
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 
-if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip code analysis operation" -Force:$Force)
+if (Approve-Execute -Accept "Run code analysis on repository" -Deny "Skip code analysis operation" -Force:$Force)
 {
 	$ErrorActionPreference = "Stop"
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -197,7 +197,7 @@ if (Approve-Execute -Accept "Run PSScriptAnalyzer on repository" -Deny "Skip cod
 
 	if ($Log)
 	{
-		$Message = "PSScriptAnalyzer completed with "
+		$Message = "Code analysis completed with "
 		if ([string]::IsNullOrEmpty($Severity) -or ($Severity.Count -eq 3))
 		{
 			$Message += "$Errors errors, $Warnings warnings and $Infos information"

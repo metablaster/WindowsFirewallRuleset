@@ -28,22 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test out script info metadata
+Unit test for rules with relative path
 
 .DESCRIPTION
-Verifies that scripts accurately describe the contents of the individual script
+Unit test for adding rules based on relative paths.
+Also serves to test adding rule based on application.
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\TestScriptInfo.ps1
+PS> .\New-RuleRelativePath.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestScriptInfo.ps1
+None. You cannot pipe objects to New-RuleRelativePath.ps1
 
 .OUTPUTS
-None. TestScriptInfo.ps1 does not generate any output
+None. New-RuleRelativePath.ps1 does not generate any output
 
 .NOTES
 None.
@@ -53,6 +54,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
 #>
 
 #Requires -Version 5.1
+#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -65,17 +67,34 @@ param (
 . $PSScriptRoot\ContextSetup.ps1
 
 Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
+if (!(Approve-Execute -Accept "Load test rule into firewall" -Deny $Deny -Force:$Force)) { exit }
+
+# Setup local variables
+$Group = "Test - Relative path"
+$LocalProfile = "Any"
+$TargetProgramRoot = "C:\Program Files (x86)\GnuPG\share\..\bin"
 
 Enter-Test
 
-$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter *.ps1 -Exclude "ContextSetup.ps1", *.ps1xml |
-Where-Object { $_.FullName -notlike "*\External\*" }
+# First remove all existing rules matching group
+Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-foreach ($Script in $Scripts)
+Start-Test "Relative path"
+
+# Test if installation exists on system
+$Program = "$TargetProgramRoot\gpg.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
 {
-	Test-ScriptFileInfo -Path $Script.FullName
+	New-NetFirewallRule -DisplayName "TargetProgram" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443, 26002 `
+		-LocalUser $LocalService `
+		-InterfaceType $DefaultInterface `
+		-Description "Relative path test" |
+	Format-RuleOutput
 }
 
 Update-Log

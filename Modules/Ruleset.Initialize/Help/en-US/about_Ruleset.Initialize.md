@@ -17,6 +17,12 @@ that end users may have.
 ## EXAMPLES
 
 ```powershell
+ Find-DuplicateModule
+```
+
+Finds duplicate modules installed on system taking care of PS edition being used
+
+```powershell
 Initialize-Connection
 ```
 
@@ -26,25 +32,37 @@ Initialize connection for firewall deployment
 Initialize-Module
 ```
 
-Update or install specified modules
+Update or install recommended and required modules
 
 ```powershell
 Initialize-Project
 ```
 
-Check repository system requirements
+Check repository environment requirements
 
 ```powershell
 Initialize-Provider
 ```
 
-Update or install specified package providers
+Update or install package providers required or recommended by this project
 
 ```powershell
 Initialize-Service
 ```
 
-Configure and start required system services
+Configure and start system services required by this project
+
+```powershell
+ Uninstall-DuplicateModule
+```
+
+ Uninstalls duplicate modules per PS edition leaving only the most recent versions of a module
+
+```powershell
+ Update-ModuleHelp
+```
+
+ Updates help files for modules installed with PowerShell edition which is used to run this function
 
 ## KEYWORDS
 

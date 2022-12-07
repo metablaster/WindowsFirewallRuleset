@@ -28,23 +28,23 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test out module manifests
+Unit test to test module manifest files
 
 .DESCRIPTION
-Verifies that a module manifest files accurately describe the contents of project modules
-For binary files also verify digital signature is valid
+Verifies that a module manifest files accurately describe the contents of modules in repository,
+for binary files also verify digital signature is valid
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\TestModuleManifest.ps1
+PS> .\Test-ModuleManifest.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestModuleManifest.ps1
+None. You cannot pipe objects to Test-ModuleManifest.ps1
 
 .OUTPUTS
-None. TestModuleManifest.ps1 does not generate any output
+None. Test-ModuleManifest.ps1 does not generate any output
 
 .NOTES
 None.

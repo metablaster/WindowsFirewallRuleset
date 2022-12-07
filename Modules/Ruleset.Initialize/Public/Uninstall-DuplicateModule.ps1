@@ -31,8 +31,8 @@ SOFTWARE.
 Uninstall duplicate modules
 
 .DESCRIPTION
-Uninstall-DuplicateModule uninstalls duplicate modules leaving only the most recent versions of a
-module.
+Uninstall-DuplicateModule uninstalls duplicate modules per PS edition leaving only the most
+recent versions of a module.
 
 Sometimes uninstalling a module in a conventional way is not possible, example cases are:
 1. Modules which ship with system

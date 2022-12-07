@@ -31,7 +31,7 @@ SOFTWARE.
 Update PowerShell help files
 
 .DESCRIPTION
-Update-ModuleHelp updates help files for modules installed in PowerShell edition
+Update-ModuleHelp updates help files for modules installed with PowerShell edition
 which is used to run this function.
 Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules
 for which update is possible without generating errors with update.

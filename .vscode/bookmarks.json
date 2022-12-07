@@ -69,23 +69,43 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 370,
+					"line": 371,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 416,
+					"line": 417,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 480,
+					"line": 481,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 678,
+					"line": 679,
 					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Initialize/Help/en-US/about_Ruleset.Initialize.md",
+			"bookmarks": [
+				{
+					"line": 74,
+					"column": 103,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.IP/Public/ConvertTo-DottedDecimalIP.ps1",
+			"bookmarks": [
+				{
+					"line": 76,
+					"column": 0,
 					"label": ""
 				}
 			]

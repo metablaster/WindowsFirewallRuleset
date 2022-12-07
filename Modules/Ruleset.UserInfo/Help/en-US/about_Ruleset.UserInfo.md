@@ -15,12 +15,6 @@ computers.
 ## VARIABLES
 
 ```powershell
-CheckInitUserInfo
-```
-
-Serves to prevent double initialization of constants
-
-```powershell
 UsersGroupSDDL
 ```
 

@@ -31,19 +31,19 @@ SOFTWARE.
 Check encoding of files
 
 .DESCRIPTION
-TestFileEncoding.ps1 checks all files in repository are properly encoded
+Test-FileEncoding.ps1 checks all files in repository are properly encoded
 
 .PARAMETER Force
 If specified, no prompt to run encoding analysis is shown
 
 .EXAMPLE
-PS> .\TestFileEncoding.ps1
+PS> .\Test-FileEncoding.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestFileEncoding.ps1.
+None. You cannot pipe objects to Test-FileEncoding.ps1.
 
 .OUTPUTS
-None. TestFileEncoding.ps1 does not generate any output.
+None. Test-FileEncoding.ps1 does not generate any output.
 
 .NOTES
 None.
@@ -101,6 +101,6 @@ if (Approve-Execute -Accept "Check encoding of files in repository" -Deny "Skip 
 
 	Confirm-FileEncoding -Path $Files
 
-	Write-Information -Tags "Test" -MessageData "INFO: Total items processed is $($Directories.Count) directories and $($Files.Count) files"
+	Write-Information -Tags "Test" -MessageData "INFO: Total items processed was $($Directories.Count) directories and $($Files.Count) files"
 	Update-Log
 }

@@ -37,13 +37,13 @@ Unit test for adding rules based on interface alias
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\RuleInterfaceAlias.ps1
+PS> .\New-RuleInterfaceAlias.ps1
 
 .INPUTS
-None. You cannot pipe objects to RuleInterfaceAlias.ps1
+None. You cannot pipe objects to New-RuleInterfaceAlias.ps1
 
 .OUTPUTS
-None. RuleInterfaceAlias.ps1 does not generate any output
+None. New-RuleInterfaceAlias.ps1 does not generate any output
 
 .NOTES
 None.

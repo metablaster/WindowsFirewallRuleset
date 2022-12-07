@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2019-2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,23 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for rules with relative path
+Unit test for rules based on store apps
 
 .DESCRIPTION
-Unit test for adding rules based on relative paths.
-Also serves to test adding rule based on application.
+Unit test for adding store apps rules based on computer users
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\RuleRelativePath.ps1
+PS> .\New-RuleAppSID.ps1
 
 .INPUTS
-None. You cannot pipe objects to RuleRelativePath.ps1
+None. You cannot pipe objects to New-RuleAppSID.ps1
 
 .OUTPUTS
-None. RuleRelativePath.ps1 does not generate any output
+None. New-RuleAppSID.ps1 does not generate any output
 
 .NOTES
 None.
@@ -67,35 +66,51 @@ param (
 . $PSScriptRoot\ContextSetup.ps1
 
 Initialize-Project -Strict
+Import-Module -Name Ruleset.UserInfo
+
 if (!(Approve-Execute -Accept "Load test rule into firewall" -Deny $Deny -Force:$Force)) { exit }
 
 # Setup local variables
-$Group = "Test - Relative path"
+$Group = "Test - AppSID"
 $LocalProfile = "Any"
-$TargetProgramRoot = "C:\Program Files (x86)\GnuPG\share\..\bin"
 
 Enter-Test
 
-# First remove all existing rules matching group
+Start-Test "Remove-NetFirewallRule"
+# Remove previous test
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-Start-Test "Relative path"
+Start-Test "Get-GroupPrincipal"
+$Principals = Get-GroupPrincipal "Users"
+$Principals
 
-# Test if installation exists on system
-$Program = "$TargetProgramRoot\gpg.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
+[string] $PackageSID = ""
+[string] $OwnerSID = ""
+foreach ($Account in $Principals)
 {
-	New-NetFirewallRule -DisplayName "TargetProgram" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 80, 443, 26002 `
-		-LocalUser $LocalService `
-		-InterfaceType $DefaultInterface `
-		-Description "Relative path test" |
-	Format-RuleOutput
+	Start-Test "Processing for: $($Account.Principal)"
+	$OwnerSID = (Get-PrincipalSID $Account.User -Domain $Account.Domain).SID
+	$OwnerSID
+
+	Get-UserApp -User $Account.User | ForEach-Object {
+		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
+		$PackageSID
+	}
 }
+
+Start-Test "New-NetFirewallRule"
+
+New-NetFirewallRule -DisplayName "Get-AppSID" `
+	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+	-Service Any -Program Any -Group $Group `
+	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+	-LocalAddress Any -RemoteAddress Any `
+	-LocalPort Any -RemotePort Any `
+	-LocalUser Any `
+	-InterfaceType $DefaultInterface `
+	-Owner $OwnerSID -Package $PackageSID `
+	-Description "TargetProgram test rule description" |
+Format-RuleOutput
 
 Update-Log
 Exit-Test

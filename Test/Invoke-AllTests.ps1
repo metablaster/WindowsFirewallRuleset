@@ -40,13 +40,13 @@ If specified, run only pester tests
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\RunAllTests.ps1
+PS> .\Invoke-AllTests.ps1
 
 .INPUTS
-None. You cannot pipe objects to RunAllTests.ps1
+None. You cannot pipe objects to Invoke-AllTests.ps1
 
 .OUTPUTS
-None. RunAllTests.ps1 does not generate any output
+None. Invoke-AllTests.ps1 does not generate any output
 
 .NOTES
 TODO: This script might yield odd and unexpected results
@@ -96,7 +96,7 @@ Reset-TestDrive
 # Prompt to set screen buffer to recommended value for tests
 Set-ScreenBuffer 3000
 
-Write-Warning -Message "[$ThisScript] Output of some tests cases may be unexpected with RunAllTests.ps1"
+Write-Warning -Message "[$ThisScript] Output of some tests cases may be unexpected with Invoke-AllTests.ps1"
 
 if (!$Pester)
 {

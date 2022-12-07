@@ -37,13 +37,13 @@ Unit test for adding rules based on computer accounts
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\RuleSDDL.ps1
+PS> .\New-RuleSDDL.ps1
 
 .INPUTS
-None. You cannot pipe objects to RuleSDDL.ps1
+None. You cannot pipe objects to New-RuleSDDL.ps1
 
 .OUTPUTS
-None. RuleSDDL.ps1 does not generate any output
+None. New-RuleSDDL.ps1 does not generate any output
 
 .NOTES
 None.

@@ -12,6 +12,9 @@ LONG DESCRIPTION
 	that end users may have.
 
 EXAMPLES
+	Find-DuplicateModule
+	Finds duplicate modules installed on system taking care of PS edition being used
+
 	Initialize-Connection
 	Initialize connection for firewall deployment
 
@@ -26,6 +29,12 @@ EXAMPLES
 
 	Initialize-Service
 	Configure and start required system services
+
+	Uninstall-DuplicateModule
+	Uninstalls duplicate modules per PS edition leaving only the most recent versions of a module
+
+	Update-ModuleHelp
+	Updates help files for modules installed with PowerShell edition which is used to run this function
 
 KEYWORDS
 	Initialization

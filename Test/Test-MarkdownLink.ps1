@@ -28,23 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test out session configuration file
+Run markdown link test
 
 .DESCRIPTION
-Test if a session configuration file contains valid keys and the values are of the correct type.
-For enumerated values, the cmdlet verifies that the specified values are valid.
+Run markdown link test on all markdown files in repository
 
 .PARAMETER Force
-If specified, no prompt to run script is shown
+If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\TestSessionConfig.ps1
+PS> .\Test-MarkdownLink.ps1
 
 .INPUTS
-None. You cannot pipe objects to TestSessionConfig.ps1
+None. You cannot pipe objects to Test-MarkdownLink.ps1
 
 .OUTPUTS
-None. TestSessionConfig.ps1 does not generate any output
+None. Test-MarkdownLink.ps1 does not generate any output
 
 .NOTES
 None.
@@ -61,27 +60,10 @@ param (
 	[switch] $Force
 )
 
-#region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
-. $PSScriptRoot\ContextSetup.ps1
 
-Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
-#endregion
-
-Enter-Test
-
-$ConfigFile = Get-ChildItem -Recurse -Path "$ProjectRoot\Config" -Filter *.pssc
-
-foreach ($File in $ConfigFile)
+if (Approve-Execute -Title "Markdown links" -Question "Run markdown link test?" -Force:$Force `
+		-Accept "Run markdown link test on entire repository" -Deny "Skip link test operation")
 {
-	Write-Information -Tags "Project" -MessageData "INFO: Testing $File"
-	if (!(Test-PSSessionConfigurationFile -Path $File.FullName))
-	{
-		Write-Error -Category SyntaxError -TargetObject $File `
-			-Message "Session configuration file is not valid: $($File.FullName)"
-	}
+	Test-MarkdownLink $ProjectRoot -Recurse -Log
 }
-
-Update-Log
-Exit-Test

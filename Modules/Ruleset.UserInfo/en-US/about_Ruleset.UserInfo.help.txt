@@ -24,9 +24,6 @@ VARIABLES
 	NetworkService
 	SDDL string for "NT AUTHORITY\NETWORK SERVICE"
 
-	CheckInitUserInfo
-	Serves to prevent double initialization of constants
-
 EXAMPLES
 	ConvertFrom-SDDL
 	Convert SDDL string to Principal

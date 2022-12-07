@@ -19,12 +19,6 @@ ServiceHost
 
 Windows service host
 
-```powershell
-CheckInitUtility
-```
-
-Serves to prevent double initialization of constants
-
 ## EXAMPLES
 
 ```powershell

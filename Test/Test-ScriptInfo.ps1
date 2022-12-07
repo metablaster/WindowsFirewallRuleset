@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,22 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for rules based on store apps
+Unit test to test out script info metadata
 
 .DESCRIPTION
-Unit test for adding store apps rules based on computer users
+Verifies that scripts accurately describe the contents of the individual script
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\RuleAppSID.ps1
+PS> .\Test-ScriptInfo.ps1
 
 .INPUTS
-None. You cannot pipe objects to RuleAppSID.ps1
+None. You cannot pipe objects to Test-ScriptInfo.ps1
 
 .OUTPUTS
-None. RuleAppSID.ps1 does not generate any output
+None. Test-ScriptInfo.ps1 does not generate any output
 
 .NOTES
 None.
@@ -53,7 +53,6 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
 #>
 
 #Requires -Version 5.1
-#Requires -RunAsAdministrator
 
 [CmdletBinding()]
 param (
@@ -66,51 +65,18 @@ param (
 . $PSScriptRoot\ContextSetup.ps1
 
 Initialize-Project -Strict
-Import-Module -Name Ruleset.UserInfo
-
-if (!(Approve-Execute -Accept "Load test rule into firewall" -Deny $Deny -Force:$Force)) { exit }
-
-# Setup local variables
-$Group = "Test - AppSID"
-$LocalProfile = "Any"
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+#endregion
 
 Enter-Test
 
-Start-Test "Remove-NetFirewallRule"
-# Remove previous test
-Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
+$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter *.ps1 -Exclude "ContextSetup.ps1", *.ps1xml |
+Where-Object { $_.FullName -notlike "*\External\*" }
 
-Start-Test "Get-GroupPrincipal"
-$Principals = Get-GroupPrincipal "Users"
-$Principals
-
-[string] $PackageSID = ""
-[string] $OwnerSID = ""
-foreach ($Account in $Principals)
+foreach ($Script in $Scripts)
 {
-	Start-Test "Processing for: $($Account.Principal)"
-	$OwnerSID = (Get-PrincipalSID $Account.User -Domain $Account.Domain).SID
-	$OwnerSID
-
-	Get-UserApp -User $Account.User | ForEach-Object {
-		$PackageSID = Get-AppSID -FamilyName $_.PackageFamilyName
-		$PackageSID
-	}
+	Test-ScriptFileInfo -Path $Script.FullName
 }
-
-Start-Test "New-NetFirewallRule"
-
-New-NetFirewallRule -DisplayName "Get-AppSID" `
-	-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
-	-Service Any -Program Any -Group $Group `
-	-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
-	-LocalAddress Any -RemoteAddress Any `
-	-LocalPort Any -RemotePort Any `
-	-LocalUser Any `
-	-InterfaceType $DefaultInterface `
-	-Owner $OwnerSID -Package $PackageSID `
-	-Description "TargetProgram test rule description" |
-Format-RuleOutput
 
 Update-Log
 Exit-Test
