@@ -43,7 +43,7 @@ a new header, and popped before writing to previous log.
 
 ### EXAMPLE 1
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message1", "Sample message 2"
 PS> $HeaderStack.Pop() | Out-Null
@@ -53,7 +53,7 @@ Will write "Sample message" InformationRecord to log C:\logs\Settings_15.12.20.l
 
 ### EXAMPLE 2
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> [hashtable] $HashResult = Get-SomeHashTable
 PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Hash $HashResult
@@ -64,7 +64,7 @@ Will write entire $HashResult to log C:\logs\Settings_15.12.20.log with a header
 
 ### EXAMPLE 3
 
-```
+```powershell
 $HeaderStack.Push("My Header")
 PS> Write-LogFile -Path "C:\logs" -LogName "Settings" -Tags "MyTag" -Message "Sample message"
 PS> $HeaderStack.Push("Another Header")
@@ -78,7 +78,7 @@ Will write "Another message" InformationRecord to log C:\logs\next\Admin_15.12.2
 
 ### EXAMPLE 4
 
-```
+```powershell
 $HeaderStack.Push("Raw message overwrite")
 PS> Write-LogFile -Message "Raw message overwrite" -LogName "MyRawLog" -Path "C:\logs" -Raw -Overwrite
 ```

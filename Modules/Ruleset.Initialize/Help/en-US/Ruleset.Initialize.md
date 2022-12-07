@@ -14,6 +14,10 @@ Initialize repository development environment
 
 ## Ruleset.Initialize Cmdlets
 
+### [Find-DuplicateModule](Find-DuplicateModule.md)
+
+Finds duplicate modules
+
 ### [Initialize-Connection](Initialize-Connection.md)
 
 Initialize connection for firewall deployment
@@ -33,3 +37,11 @@ Update or install specified package providers
 ### [Initialize-Service](Initialize-Service.md)
 
 Configure and start specified system services
+
+### [Uninstall-DuplicateModule](Uninstall-DuplicateModule.md)
+
+Uninstall duplicate modules
+
+### [Update-ModuleHelp](Update-ModuleHelp.md)
+
+Update PowerShell help files

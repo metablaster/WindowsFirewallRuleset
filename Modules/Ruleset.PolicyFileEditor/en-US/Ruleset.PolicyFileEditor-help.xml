@@ -132,7 +132,7 @@
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. This command does not accept pipeline input.</maml:name>
+          <maml:name>None. Get-PolicyFileEntry does not accept pipeline input</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -142,7 +142,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>If the specified registry value is found, the function outputs a PSCustomObject with the following properties:</maml:name>
+          <maml:name>If the specified registry value is found, the function outputs a PSCustomObject with the following properties</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -150,7 +150,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>ValueName: The same value that was passed to the -ValueName parameter</maml:name>
+          <maml:name>- ValueName: The same value that was passed to the -ValueName parameter</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -158,7 +158,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Key: The same value that was passed to the -Key parameter</maml:name>
+          <maml:name>- Key: The same value that was passed to the -Key parameter</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -166,7 +166,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Data: The current value assigned to the specified Key\ValueName in the .pol file.</maml:name>
+          <maml:name>- Data: The current value assigned to the specified Key\ValueName in the .pol file</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -174,7 +174,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file.</maml:name>
+          <maml:name>- Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -182,7 +182,7 @@
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced.</maml:name>
+          <maml:name>If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -280,6 +280,28 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -331,11 +353,35 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>The Key and ValueName properties may be bound via the pipeline by property name.</maml:name>
+          <maml:name>The Key and ValueName properties may be bound via the pipeline by property name</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -345,7 +391,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. This command does not generate output.</maml:name>
+          <maml:name>None. Remove-PolicyFileEntry does not generate output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -372,7 +418,7 @@
     New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
     New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-$Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+PS&gt; $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
     -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'</dev:code>
         <dev:remarks>
           <maml:para>Example of using pipeline input to remove multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be removed, and will be left alone if the file already did not contain any of those values.</maml:para>
@@ -483,6 +529,28 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -558,11 +626,35 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>The Key, ValueName, Data, and Type properties may be bound via the pipeline by property name.</maml:name>
+          <maml:name>The Key, ValueName, Data, and Type properties may be bound via the pipeline by property name</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -572,7 +664,7 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. This command does not generate output.</maml:name>
+          <maml:name>None. Set-PolicyFileEntry does not generate output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -588,7 +680,7 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String</dev:code>
         <dev:remarks>
           <maml:para>Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO. Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini</maml:para>
         </dev:remarks>
@@ -596,7 +688,7 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate</dev:code>
         <dev:remarks>
           <maml:para>Same as example 1, except this one does not update gpt.ini right away. This can be useful if you want to set multiple values in the policy file and only trigger a single Group Policy refresh.</maml:para>
         </dev:remarks>
@@ -604,7 +696,7 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord</dev:code>
         <dev:remarks>
           <maml:para>Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x) can be assigned to the numeric types DWord, QWord and Binary.</maml:para>
         </dev:remarks>
@@ -615,8 +707,8 @@ $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Mac
     New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
     New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord</dev:code>
+PS&gt; $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+        -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord</dev:code>
         <dev:remarks>
           <maml:para>Example of using pipeline input to set multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be modified, and will be left alone if the file already contained all of the correct values.</maml:para>
           <maml:para>The Key and Type properties could have also been specified via the pipeline objects instead of on the command line, but since both values shared the same Key and Type, this example shows that you can pass the values in either way.</maml:para>
@@ -669,6 +761,28 @@ $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machin
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -696,11 +810,35 @@ $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machin
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. This command does not accept pipeline input.</maml:name>
+          <maml:name>None. You cannot pipe objects to Update-GptIniVersion</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -710,7 +848,7 @@ $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machin
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. This command does not generate output.</maml:name>
+          <maml:name>None. Update-GptIniVersion does not generate output</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

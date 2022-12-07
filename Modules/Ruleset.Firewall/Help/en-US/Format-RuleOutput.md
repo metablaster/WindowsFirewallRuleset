@@ -13,22 +13,9 @@ Format output of the Net-NewFirewallRule commandlet
 
 ## SYNTAX
 
-### None (Default)
-
 ```powershell
-Format-RuleOutput -Rule <CimInstance[]> [<CommonParameters>]
-```
-
-### Modify
-
-```powershell
-Format-RuleOutput -Rule <CimInstance[]> [-Modify] [<CommonParameters>]
-```
-
-### Import
-
-```powershell
-Format-RuleOutput -Rule <CimInstance[]> [-Import] [<CommonParameters>]
+Format-RuleOutput [-Rule] <CimInstance[]> [-Label <String>] [-ForegroundColor <ConsoleColor>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +34,7 @@ Net-NewFirewallRule ... | Format-RuleOutput
 ### EXAMPLE 2
 
 ```powershell
-Net-NewFirewallRule ... | Format-RuleOutput -Import
+Net-NewFirewallRule ... | Format-RuleOutput
 ```
 
 ## PARAMETERS
@@ -59,43 +46,48 @@ Firewall rule to format, by default output status represents loading rule
 ```yaml
 Type: Microsoft.Management.Infrastructure.CimInstance[]
 Parameter Sets: (All)
-Aliases:
+Aliases: InputObject
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Modify
+### -Label
 
-If specified, output status represents rule modification
+Specify action on how to format rule processing, acceptable values are:
+Load, Modify, Import and Export.
+The default value is "Load" which represent loading rule into firewall.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Modify
+Type: System.String
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: Load
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Import
+### -ForegroundColor
 
-If specified, output status represents importing rule
+Optionally specify text color of the output.
+For acceptable color values see link section
+The default is Cyan.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Import
+Type: System.ConsoleColor
+Parameter Sets: (All)
 Aliases:
+Accepted values: Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow, Gray, DarkGray, Blue, Green, Cyan, Red, Magenta, Yellow, White
 
 Required: False
 Position: Named
-Default value: False
+Default value: Cyan
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -110,10 +102,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Format-RuleOutput does not generate any output
+### [string] colored version
 
 ## NOTES
 
 TODO: For force loaded rules it should say: "Force Load Rule:"
+TODO: Implementation needed to format rules which are not CimInstance see,
+Remove-FirewallRule and Export-RegistryRule
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md)
+
+[https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor](https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor)

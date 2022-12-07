@@ -13,7 +13,7 @@ Test WinRM service configuration
 
 ## SYNTAX
 
-### Protocol (Default)
+### Credential (Default)
 
 ```powershell
 Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>] [-Port <Int32>]
@@ -22,10 +22,10 @@ Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Protocol <String>
  [-Status <PSReference>] [-Quiet] [<CommonParameters>]
 ```
 
-### Thumbprint
+### Cert
 
 ```powershell
-Test-WinRM [[-Domain] <String>] [-Credential <PSCredential>] [-Port <Int32>] [-Authentication <String>]
+Test-WinRM [[-Domain] <String>] [-Protocol <String>] [-Port <Int32>] [-Authentication <String>]
  [-CertThumbprint <String>] [-UICulture <CultureInfo>] [-Culture <CultureInfo>] [-ApplicationName <String>]
  [-SessionOption <PSSessionOption>] [-ConfigurationName <String>] [-CimOptions <CimSessionOptions>]
  [-Status <PSReference>] [-Quiet] [<CommonParameters>]
@@ -53,7 +53,7 @@ Test-WinRM -Domain Server1 -Protocol Any
 
 ### EXAMPLE 3
 
-```
+```powershell
 $RemoteStatus = $false
 PS> Test-WinRM HTTP -Quiet -Status $RemoteStatus
 ```
@@ -85,7 +85,7 @@ If not specified, you'll be asked for credentials
 
 ```yaml
 Type: System.Management.Automation.PSCredential
-Parameter Sets: (All)
+Parameter Sets: Credential
 Aliases:
 
 Required: False
@@ -102,7 +102,7 @@ The default value is "Default", which means HTTPS is tested first and if failed 
 
 ```yaml
 Type: System.String
-Parameter Sets: Protocol
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -161,7 +161,7 @@ Use this parameter when there are multiple certificates with same DNS entries.
 
 ```yaml
 Type: System.String
-Parameter Sets: Thumbprint
+Parameter Sets: Cert
 Aliases:
 
 Required: False
@@ -321,6 +321,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. Test-WinRM does not generate any output
 
 ## NOTES
+
+Regarding CertThumbprint problems with Test-WSMan see this issue https://github.com/PowerShell/PowerShell/issues/16752
 
 TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?)
 TODO: Test for private profile to avoid cryptic error message

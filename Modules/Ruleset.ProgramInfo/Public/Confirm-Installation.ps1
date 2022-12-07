@@ -70,7 +70,7 @@ PS> Confirm-Installation "Office" ([ref] $ProgramInstallPath)
 None. You cannot pipe objects to Confirm-Installation
 
 .OUTPUTS
-[bool] True if the reference variable contains valid path or was updated, false otherwise.
+[bool] True if the reference variable contains valid path or was updated, false otherwise
 
 .NOTES
 TODO: ComputerName parameter is missing for remote test

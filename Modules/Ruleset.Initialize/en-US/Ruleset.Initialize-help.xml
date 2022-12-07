@@ -2,6 +2,122 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
+      <command:name>Find-DuplicateModule</command:name>
+      <command:verb>Find</command:verb>
+      <command:noun>DuplicateModule</command:noun>
+      <maml:description>
+        <maml:para>Finds duplicate modules</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Finds duplicate modules installed on system taking care of PS edition being used.</maml:para>
+      <maml:para>To find duplicate modules for Windows PowerShell, Desktop edition should be used, otherwise to find duplicates for PS Core, Core edition should be used.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Find-DuplicateModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>One or more module names which to check for duplicates. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Scope</maml:name>
+          <maml:description>
+            <maml:para>Specifies one or more scopes (installation locations) in which to search for duplicate modules, possible values are: Shipping: Modules which are part of PowerShell installation System: Modules installed for all users User: Modules installed for current user</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>One or more module names which to check for duplicates. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Scope</maml:name>
+        <maml:description>
+          <maml:para>Specifies one or more scopes (installation locations) in which to search for duplicate modules, possible values are: Shipping: Modules which are part of PowerShell installation System: Modules installed for all users User: Modules installed for current user</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Find-DuplicateModule</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[PSModuleInfo]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>None.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Find-DuplicateModule</dev:code>
+        <dev:remarks>
+          <maml:para>ModuleType Version    Name                  ExportedCommands Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     3.4.0      Pester                {Describe, Context, It, Should...} Script     5.3.3      Pester                {Invoke-Pester, Describe, Context, It...} Script     1.0.0.1    PowerShellGet         {Install-Module, Find-Module, Save-Module, Update-Module...} Script     2.2.5      PowerShellGet         {Find-Command, Find-DSCResource, Find-Module, Find-RoleCapability...} Script     2.0.0      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...} Script     2.2.6      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...}</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Find-DuplicateModule -Name PackageMan* -Scope System</dev:code>
+        <dev:remarks>
+          <maml:para>ModuleType Version    Name                  ExportedCommands Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Find-DuplicateModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
       <command:name>Initialize-Connection</command:name>
       <command:verb>Initialize</command:verb>
       <command:noun>Connection</command:noun>
@@ -451,7 +567,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>TODO: we don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session TODO: Changes done to system services should be reverted to original values, new function needed.</maml:para>
+        <maml:para>TODO: We don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session TODO: Changes done to system services should be reverted to original values, new function needed. TODO: code.exe --list-extensions and verify extensions installed</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -627,7 +743,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>Enter one or more services to configure</maml:para>
+            <maml:para>Enter one or more service (short) names to configure</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -636,13 +752,37 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Status</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify service status, acceptable values are Running or Stopped</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Running</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StartupType</maml:name>
+          <maml:description>
+            <maml:para>Optionally specify service startup type, acceptable values are Automatic or Manual. The default Automatic startup type.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Automatic</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
-          <maml:para>Enter one or more services to configure</maml:para>
+          <maml:para>Enter one or more service (short) names to configure</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -650,6 +790,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Status</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify service status, acceptable values are Running or Stopped</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Running</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>StartupType</maml:name>
+        <maml:description>
+          <maml:para>Optionally specify service startup type, acceptable values are Automatic or Manual. The default Automatic startup type.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Automatic</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -707,6 +871,384 @@ $true if WinRM service was started $false otherwise</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Uninstall-DuplicateModule</command:name>
+      <command:verb>Uninstall</command:verb>
+      <command:noun>DuplicateModule</command:noun>
+      <maml:description>
+        <maml:para>Uninstall duplicate modules</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Uninstall-DuplicateModule uninstalls duplicate modules per PS edition leaving only the most recent versions of a module.</maml:para>
+      <maml:para>Sometimes uninstalling a module in a conventional way is not possible, example cases are: 1. Modules which ship with system 2. Modules locked by other modules 3. Modules which prevent updating them</maml:para>
+      <maml:para>Updating modules which ship with system can't be done, only side by side installation is possible, with the help of this function those outdated and useless modules are removed from system.</maml:para>
+      <maml:para>Case from point 2 above is recommended only when there are 2 exactly same modules installed, but the duplicate you are trying to remove is used (locked) instead of first one.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Uninstall-DuplicateModule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="Module">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>One or more module names which to uninstall if duplicates are found. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scope</maml:name>
+          <maml:description>
+            <maml:para>Specifies one or more scopes (installation locations) from which to uninstall duplicate modules, possible values are: Shipping: Modules which are part of PowerShell installation System: Modules installed for all users User: Modules installed for current user</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified all duplicate modules of a specific module are removed without further prompt</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="Module">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>One or more module names which to uninstall if duplicates are found. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Scope</maml:name>
+        <maml:description>
+          <maml:para>Specifies one or more scopes (installation locations) from which to uninstall duplicate modules, possible values are: Shipping: Modules which are part of PowerShell installation System: Modules installed for all users User: Modules installed for current user</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified all duplicate modules of a specific module are removed without further prompt</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string] module name</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[PSModuleInfo] module object by property Name</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Uninstall-DuplicateModule does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Module which is to be uninstalled must not be in use by: 1. Other PowerShell session 2. Some system process 3. Session in VSCode 4. Current session prompt must not point to anywhere in target module path</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System</dev:code>
+        <dev:remarks>
+          <maml:para>Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
+Uninstall-DuplicateModule</dev:code>
+        <dev:remarks>
+          <maml:para>First get module you know should be removed and pass it to pipeline</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Uninstall-DuplicateModule.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Update-ModuleHelp</command:name>
+      <command:verb>Update</command:verb>
+      <command:noun>ModuleHelp</command:noun>
+      <maml:description>
+        <maml:para>Update PowerShell help files</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Update-ModuleHelp updates help files for modules installed with PowerShell edition which is used to run this function. Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules for which update is possible without generating errors with update.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Update-ModuleHelp</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName)" position="1" aliases="Module">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Updates help for the specified modules. Enter one or more module names or name patterns in a comma-separated list. Wildcard characters are supported.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UICulture</maml:name>
+          <maml:description>
+            <maml:para>If specified, only modules supporting the specified UI culture are updated. The default value is en-US</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Globalization.CultureInfo[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Globalization.CultureInfo[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Update-ModuleHelp</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>FullyQualifiedName</maml:name>
+          <maml:description>
+            <maml:para>The value can be a module name, a full module specification, or a path to a module file.</maml:para>
+            <maml:para>When the value is a path, the path can be fully qualified or relative. A relative path is resolved relative to the script that contains the using statement.</maml:para>
+            <maml:para>When the value is a name or module specification, PowerShell searches the PSModulePath for the specified module. A module specification is a hashtable that has the following keys:</maml:para>
+            <maml:para>ModuleName - Required Specifies the module name. GUID - Optional Specifies the GUID of the module. It's also Required to specify at least one of the three below keys. ModuleVersion - Specifies a minimum acceptable version of the module. MaximumVersion - Specifies the maximum acceptable version of the module. RequiredVersion - Specifies an exact, required version of the module. This can't be used with the other Version keys.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Microsoft.PowerShell.Commands.ModuleSpecification[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Microsoft.PowerShell.Commands.ModuleSpecification[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UICulture</maml:name>
+          <maml:description>
+            <maml:para>If specified, only modules supporting the specified UI culture are updated. The default value is en-US</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Globalization.CultureInfo[]</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Globalization.CultureInfo[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName)" position="1" aliases="Module">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Updates help for the specified modules. Enter one or more module names or name patterns in a comma-separated list. Wildcard characters are supported.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>FullyQualifiedName</maml:name>
+        <maml:description>
+          <maml:para>The value can be a module name, a full module specification, or a path to a module file.</maml:para>
+          <maml:para>When the value is a path, the path can be fully qualified or relative. A relative path is resolved relative to the script that contains the using statement.</maml:para>
+          <maml:para>When the value is a name or module specification, PowerShell searches the PSModulePath for the specified module. A module specification is a hashtable that has the following keys:</maml:para>
+          <maml:para>ModuleName - Required Specifies the module name. GUID - Optional Specifies the GUID of the module. It's also Required to specify at least one of the three below keys. ModuleVersion - Specifies a minimum acceptable version of the module. MaximumVersion - Specifies the maximum acceptable version of the module. RequiredVersion - Specifies an exact, required version of the module. This can't be used with the other Version keys.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Microsoft.PowerShell.Commands.ModuleSpecification[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Microsoft.PowerShell.Commands.ModuleSpecification[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UICulture</maml:name>
+        <maml:description>
+          <maml:para>If specified, only modules supporting the specified UI culture are updated. The default value is en-US</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Globalization.CultureInfo[]</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Globalization.CultureInfo[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$DefaultUICulture</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None. You cannot pipe objects to Update-ModuleModuleHelp</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None. Update-ModuleModuleHelp does not generate any output</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>TODO: Not using ValueFromPipeline because an array isn't distinguished from hashtable to select proper parameter set name</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Update-ModuleModuleHelp</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Update-ModuleHelp "PowerShellGet" -UICulture ja-JP, en-US</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Update-ModuleHelp.md</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

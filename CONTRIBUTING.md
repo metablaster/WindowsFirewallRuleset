@@ -436,12 +436,13 @@ For examples, and comment based syntax see:
 - [Examples of Comment-Based Help][comment based help examples]
 
 You must avoid following comment based content to avoid errors and unexpected output while
-generating online help files:
+generating online help (markdown) files:
 
 - `.LINK` entries must contains only one link and nothing else
 - Do not use multiple dashes in comments such as `------`
 - Use spaces instead of tabs and do not indent comments
-- Code samples in `.EXAMPLE` portion must not be separated by blank lines
+- Code samples in `.EXAMPLE` portion must not be separated by blank lines except for sample output
+- To number out things with `-` keep one line between commend and listed things
 - For anything else keep in mind that any markdown syntax in comments will be formatted in the
 resulting markdown file as markdown not as plain text, which may give unexpected results.
 

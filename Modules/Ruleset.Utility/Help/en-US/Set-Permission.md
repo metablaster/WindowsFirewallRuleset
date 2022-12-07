@@ -73,7 +73,7 @@ Only "Remote Management Users" have permissions on "D:\SomePath", other entries 
 
 ```powershell
 Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
-	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
+    -Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 ```
 
 LanmanServer service is denied specified rights for specified directory and all it's contents
@@ -86,12 +86,21 @@ Set-Permission -User SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"
 
 Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser
 
+### EXAMPLE 5
+
+```powershell
+Set-Permission -User Administrators -LiteralPath "HKLM:\$RegPath" -RegistryRight ChangePermissions -Inheritance None
+```
+
+Allows Administrators to change permissions on registry path, and the path does not inherit parent permissions
+
 ## PARAMETERS
 
 ### -LiteralPath
 
 Resource on which to set ownership or permissions.
 Valid resources are files, directories, registry keys and registry entries.
+Note that for registry key you must specify PowerShell provider path, ex: HKLM:\
 
 ```yaml
 Type: System.String
@@ -124,7 +133,7 @@ Accept wildcard characters: False
 
 ### -User
 
-Principal username to which to grant specified permissions.
+Principal username or group name to which to grant specified permissions.
 Using this parameter means setting permissions on a resource.
 
 ```yaml

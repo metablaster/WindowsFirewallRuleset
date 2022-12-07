@@ -1720,8 +1720,8 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>$SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)"
-$RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
-Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
+PS&gt; $RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+PS&gt; Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1890,9 +1890,10 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
           <maml:name>Credential</maml:name>
           <maml:description>
             <maml:para>The [PSCredential] instance to validate, typically obtained with Get-Credential.</maml:para>
-            <maml:para>The .UserName value may be: * a mere username: e.g, "user"</maml:para>
-            <maml:para>* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
-            <maml:para>* in UPN format: e.g., "user@domain.example.org"</maml:para>
+            <maml:para>The .UserName value may be:</maml:para>
+            <maml:para>- A mere username: e.g, "user"</maml:para>
+            <maml:para>- Prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
+            <maml:para>- In UPN format: e.g., "user@domain.example.org"</maml:para>
             <maml:para></maml:para>
             <maml:para>IMPORTANT: If the logon domain is the current machine, validation happens against the local user database.</maml:para>
             <maml:para>IRRESPECTIVE OF THE DOMAIN NAME SPECIFIED, VALIDATION IS ONLY EVER PERFORMED AGAINST THE CURRENT USER'S LOGON DOMAIN.</maml:para>
@@ -1927,9 +1928,10 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
         <maml:name>Credential</maml:name>
         <maml:description>
           <maml:para>The [PSCredential] instance to validate, typically obtained with Get-Credential.</maml:para>
-          <maml:para>The .UserName value may be: * a mere username: e.g, "user"</maml:para>
-          <maml:para>* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
-          <maml:para>* in UPN format: e.g., "user@domain.example.org"</maml:para>
+          <maml:para>The .UserName value may be:</maml:para>
+          <maml:para>- A mere username: e.g, "user"</maml:para>
+          <maml:para>- Prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"</maml:para>
+          <maml:para>- In UPN format: e.g., "user@domain.example.org"</maml:para>
           <maml:para></maml:para>
           <maml:para>IMPORTANT: If the logon domain is the current machine, validation happens against the local user database.</maml:para>
           <maml:para>IRRESPECTIVE OF THE DOMAIN NAME SPECIFIED, VALIDATION IS ONLY EVER PERFORMED AGAINST THE CURRENT USER'S LOGON DOMAIN.</maml:para>
@@ -1972,7 +1974,7 @@ Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] A Boolean indicating whether the credentials were successfully validated.</maml:name>
+          <maml:name>[bool] A Boolean indicating whether the credentials were successfully validated</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

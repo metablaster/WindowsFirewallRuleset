@@ -49,6 +49,7 @@ Specifies the PS session to use
 
 .PARAMETER From
 A named group of system environment variables to get as follows:
+
 - UserProfile: Any variables that lead to or mentions user profile
 - Whitelist: Variables that are allowed to be part of firewall rules
 - FullyQualified: Variables which are fully qualified paths
@@ -93,7 +94,6 @@ cached result.
 PS> Select-EnvironmentVariable -From UserProfile
 
 Name              Value
-----              -----
 %APPDATA%         C:\Users\SomeUser\AppData\Roaming
 %HOME%            C:\Users\SomeUser
 %HOMEPATH%        \Users\SomeUser

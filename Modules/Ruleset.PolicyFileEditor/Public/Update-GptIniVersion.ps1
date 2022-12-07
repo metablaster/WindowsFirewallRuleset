@@ -77,10 +77,10 @@ Update-GptIniVersion -Path $env:SystemRoot\system32\GroupPolicy\gpt.ini -PolicyT
 Increments both the Machine and User version counters of the local GPO.
 
 .INPUTS
-None. This command does not accept pipeline input.
+None. You cannot pipe objects to Update-GptIniVersion
 
 .OUTPUTS
-None. This command does not generate output.
+None. Update-GptIniVersion does not generate output
 
 .NOTES
 A gpt.ini file contains only a single Version value.

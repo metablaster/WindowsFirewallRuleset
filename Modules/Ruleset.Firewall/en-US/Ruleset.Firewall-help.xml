@@ -861,7 +861,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: Export to excel Excel is not friendly to CSV files</maml:para>
+        <maml:para>TODO: Export to excel Excel is not friendly to CSV files TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1290,7 +1290,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Format-RuleOutput</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="InputObject">
           <maml:name>Rule</maml:name>
           <maml:description>
             <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
@@ -1303,46 +1303,51 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Modify</maml:name>
+          <maml:name>Label</maml:name>
           <maml:description>
-            <maml:para>If specified, output status represents rule modification</maml:para>
+            <maml:para>Specify action on how to format rule processing, acceptable values are: Load, Modify, Import and Export. The default value is "Load" which represent loading rule into firewall.</maml:para>
           </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Format-RuleOutput</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
-          <maml:name>Rule</maml:name>
-          <maml:description>
-            <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Microsoft.Management.Infrastructure.CimInstance[]</command:parameterValue>
-          <dev:type>
-            <maml:name>Microsoft.Management.Infrastructure.CimInstance[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>Load</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Import</maml:name>
+          <maml:name>ForegroundColor</maml:name>
           <maml:description>
-            <maml:para>If specified, output status represents importing rule</maml:para>
+            <maml:para>Optionally specify text color of the output. For acceptable color values see link section The default is Cyan.</maml:para>
           </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:name>System.ConsoleColor</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
+          <dev:defaultValue>Cyan</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="InputObject">
         <maml:name>Rule</maml:name>
         <maml:description>
           <maml:para>Firewall rule to format, by default output status represents loading rule</maml:para>
@@ -1355,28 +1360,28 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Modify</maml:name>
+        <maml:name>Label</maml:name>
         <maml:description>
-          <maml:para>If specified, output status represents rule modification</maml:para>
+          <maml:para>Specify action on how to format rule processing, acceptable values are: Load, Modify, Import and Export. The default value is "Load" which represent loading rule into firewall.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>Load</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Import</maml:name>
+        <maml:name>ForegroundColor</maml:name>
         <maml:description>
-          <maml:para>If specified, output status represents importing rule</maml:para>
+          <maml:para>Optionally specify text color of the output. For acceptable color values see link section The default is Cyan.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
         <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:name>System.ConsoleColor</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
+        <dev:defaultValue>Cyan</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1392,7 +1397,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Format-RuleOutput does not generate any output</maml:name>
+          <maml:name>[string] colored version</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1401,7 +1406,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: For force loaded rules it should say: "Force Load Rule:"</maml:para>
+        <maml:para>TODO: For force loaded rules it should say: "Force Load Rule:" TODO: Implementation needed to format rules which are not CimInstance see, Remove-FirewallRule and Export-RegistryRule</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1414,7 +1419,7 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Net-NewFirewallRule ... | Format-RuleOutput -Import</dev:code>
+        <dev:code>Net-NewFirewallRule ... | Format-RuleOutput</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1422,8 +1427,12 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

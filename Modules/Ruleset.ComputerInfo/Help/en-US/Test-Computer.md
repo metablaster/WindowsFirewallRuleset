@@ -75,6 +75,7 @@ Accept wildcard characters: False
 Specify the kind of a test to perform.
 Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default
 The default is "Default" which tries connectivity in this order:
+
 - HTTPS
 - HTTP
 - Ping or TCP port test

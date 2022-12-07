@@ -47,14 +47,12 @@ Specifies the CIM session to use
 PS> Get-SystemSKU
 
 Domain      SystemSKU     SKU
-------      ---------     ---
 MY-DESKTOP  Professional  48
 
 .EXAMPLE
 PS> @(Server1, Server2, Server3) | Get-SystemSKU
 
 Domain    SystemSKU                SKU
-------    ---------                ---
 Server1   Professional             48
 Server2   Home Premium N           26
 Server3   Microsoft Hyper-V Server 42
@@ -63,7 +61,6 @@ Server3   Microsoft Hyper-V Server 42
 PS> Get-SystemSKU -SKU 7
 
 Domain   SystemSKU   SKU
-------   ---------   ---
          Server      Standard  7
 
 .INPUTS

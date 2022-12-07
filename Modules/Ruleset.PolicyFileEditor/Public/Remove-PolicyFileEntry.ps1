@@ -76,11 +76,11 @@ Removes the value Software\Policies\Something\SomeValue from the local computer 
 Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini
 
 .EXAMPLE
-$Entries = @(
+PS> $Entries = @(
     New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
     New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-$Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+PS> $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
     -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
 
 Example of using pipeline input to remove multiple values at once.
@@ -92,10 +92,10 @@ The Key property could have also been specified via the pipeline objects instead
 but since both values shared the same Key, this example shows that you can pass the value in either way.
 
 .INPUTS
-The Key and ValueName properties may be bound via the pipeline by property name.
+The Key and ValueName properties may be bound via the pipeline by property name
 
 .OUTPUTS
-None. This command does not generate output.
+None. Remove-PolicyFileEntry does not generate output
 
 .NOTES
 If the specified policy file is already not present in the .pol file,

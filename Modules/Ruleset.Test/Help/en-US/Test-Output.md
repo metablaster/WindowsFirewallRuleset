@@ -28,7 +28,7 @@ TypeName and OutputType including equality test is printed to console
 
 ### EXAMPLE 1
 
-```
+```powershell
 $Result = Some-Function
 PS> Test-Output $Result -Command Some-Function
 ```

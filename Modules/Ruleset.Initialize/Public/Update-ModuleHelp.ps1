@@ -79,8 +79,8 @@ proper parameter set name
 #>
 function Update-ModuleHelp
 {
-	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Name",
-		SupportsShouldProcess = $true, ConfirmImpact = "Medium")]
+	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Name", SupportsShouldProcess = $true, ConfirmImpact = "Medium",
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Update-ModuleHelp.md")]
 	[OutputType([void])]
 	param (
 		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name", Position = 0)]

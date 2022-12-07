@@ -245,4 +245,3 @@ TODO: There are some capabilities not implemented here
 [https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability](https://docs.microsoft.com/en-us/uwp/schemas/appxpackage/uapmanifestschema/element-capability)
 
 [https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes](https://docs.microsoft.com/en-us/uwp/api/Windows.Management.Deployment.PackageTypes)
-

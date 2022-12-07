@@ -11,9 +11,10 @@ against the current user's logon domain or local machine.
 The [PSCredential] instance to validate, typically obtained with Get-Credential.
 
 The .UserName value may be:
-* a mere username: e.g, "user"
-* prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"
-* in UPN format: e.g., "user@domain.example.org"
+
+- A mere username: e.g, "user"
+- Prefixed with a NETBIOS domain name (NTLM format): e.g., "domain\user"
+- In UPN format: e.g., "user@domain.example.org"
 
 IMPORTANT:
 If the logon domain is the current machine, validation happens against the local user database.
@@ -79,7 +80,7 @@ validates it against the local user database.
 None. You cannot pipe objects to Test-Credential
 
 .OUTPUTS
-[bool] A Boolean indicating whether the credentials were successfully validated.
+[bool] A Boolean indicating whether the credentials were successfully validated
 
 .NOTES
 Gratefully adapted from:

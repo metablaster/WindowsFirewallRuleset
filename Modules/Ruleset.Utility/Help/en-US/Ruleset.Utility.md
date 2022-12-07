@@ -74,6 +74,10 @@ Set vertical screen buffer to recommended value
 
 Set desktop or online shortcut
 
+### [Write-ColorMessage](Write-ColorMessage.md)
+
+Write a colored output
+
 ### [Write-ServiceList](Write-ServiceList.md)
 
 Build a list of windows services involved in script rules

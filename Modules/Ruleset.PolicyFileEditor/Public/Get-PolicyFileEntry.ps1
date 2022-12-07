@@ -82,15 +82,17 @@ Get-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.
 Outputs all of the registry values from the local machine Administrative Templates
 
 .INPUTS
-None. This command does not accept pipeline input.
+None. Get-PolicyFileEntry does not accept pipeline input
 
 .OUTPUTS
-If the specified registry value is found, the function outputs a PSCustomObject with the following properties:
-ValueName: The same value that was passed to the -ValueName parameter
-Key: The same value that was passed to the -Key parameter
-Data: The current value assigned to the specified Key\ValueName in the .pol file.
-Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file.
-If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced.
+If the specified registry value is found, the function outputs a PSCustomObject with the following properties
+
+- ValueName: The same value that was passed to the -ValueName parameter
+- Key: The same value that was passed to the -Key parameter
+- Data: The current value assigned to the specified Key\ValueName in the .pol file
+- Type: The RegistryValueKind type of the specified Key\ValueName in the .pol file
+
+If the specified registry value is not found in the .pol file, the command returns nothing. No error is produced
 
 .NOTES
 None.

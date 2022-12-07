@@ -65,7 +65,8 @@ PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location S
 Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope
 
 .EXAMPLE
-PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } | Uninstall-DuplicateModule
+PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
+Uninstall-DuplicateModule
 
 First get module you know should be removed and pass it to pipeline
 
@@ -85,7 +86,8 @@ Module which is to be uninstalled must not be in use by:
 #>
 function Uninstall-DuplicateModule
 {
-	[CmdletBinding(PositionalBinding = $false)]
+	[CmdletBinding(PositionalBinding = $false,
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Uninstall-DuplicateModule")]
 	[OutputType([void])]
 	param (
 		[Parameter(ValueFromPipeline = $true, Position = 0)]

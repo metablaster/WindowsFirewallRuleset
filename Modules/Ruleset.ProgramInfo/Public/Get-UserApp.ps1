@@ -66,7 +66,7 @@ None. You cannot pipe objects to Get-UserApp
 
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
-[object] if using PowerShell Core which outputs deserialized object:
+[object] if using PowerShell Core which outputs deserialized object
 [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
 
 .NOTES

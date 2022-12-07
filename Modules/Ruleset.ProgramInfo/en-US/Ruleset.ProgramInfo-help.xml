@@ -431,7 +431,7 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[bool] True if the reference variable contains valid path or was updated, false otherwise.</maml:name>
+          <maml:name>[bool] True if the reference variable contains valid path or was updated, false otherwise</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2289,7 +2289,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>[object] if using PowerShell Core which outputs deserialized object:</maml:name>
+          <maml:name>[object] if using PowerShell Core which outputs deserialized object</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

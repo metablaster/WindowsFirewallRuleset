@@ -31,7 +31,7 @@ Split-Principal COMPUTERNAME\USERNAME
 
 ### EXAMPLE 2
 
-```
+```powershell
 @(SERVER\USER, user@domain.lan, SERVER2\USER2) | Split-Principal -DomainName
 ```
 

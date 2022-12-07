@@ -51,23 +51,21 @@ User: Modules installed for current user
 Find-DuplicateModule
 
 ModuleType Version    Name                  ExportedCommands
----------- -------    ----                  ----------------
 Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
 Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
 Script     3.4.0      Pester                {Describe, Context, It, Should...}
 Script     5.3.3      Pester                {Invoke-Pester, Describe, Context, It...}
 Script     1.0.0.1    PowerShellGet         {Install-Module, Find-Module, Save-Module, Update-Module...}
 Script     2.2.5      PowerShellGet         {Find-Command, Find-DSCResource, Find-Module, Find-RoleCapability...}
-Script     2.0.0      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...}
-Script     2.2.6      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...}
+Script     2.0.0      PSReadline            {Get-PSReadLineKeyHandler, Get-PSReadLineOption...}
+Script     2.2.6      PSReadline            {Get-PSReadLineKeyHandler, Get-PSReadLineOption...}
 
 .EXAMPLE
 Find-DuplicateModule -Name PackageMan* -Scope System
 
-ModuleType Version    Name                                ExportedCommands
----------- -------    ----                                ----------------
-Binary     1.0.0.1    PackageManagement                   {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
-Script     1.4.8.1    PackageManagement                   {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
+ModuleType Version    Name                  ExportedCommands
+Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
+Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...}
 
 .INPUTS
 None. You cannot pipe objects to Find-DuplicateModule
@@ -80,7 +78,8 @@ None.
 #>
 function Find-DuplicateModule
 {
-	[CmdletBinding()]
+	[CmdletBinding(
+		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Find-DuplicateModule.md")]
 	[OutputType([PSModuleInfo], [void])]
 	param (
 		[Parameter()]

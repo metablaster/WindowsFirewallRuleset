@@ -75,16 +75,13 @@ None. You cannot pipe objects to Show-WinRMConfig
 [Microsoft.WSMan.Management.WSManConfigLeafElement]
 
 .NOTES
-None.
+See also output of: winrm get winrm/config
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Show-WinRMConfig.md
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management
-
-.LINK
-winrm get winrm/config
 #>
 function Show-WinRMConfig
 {

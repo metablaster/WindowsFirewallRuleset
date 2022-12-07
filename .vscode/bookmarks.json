@@ -4,7 +4,7 @@
 			"path": "Modules/Ruleset.Initialize/Private/Find-UpdatableModuleHelp.ps1",
 			"bookmarks": [
 				{
-					"line": 202,
+					"line": 200,
 					"column": 6,
 					"label": ""
 				}
@@ -86,16 +86,6 @@
 				{
 					"line": 679,
 					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Initialize/Help/en-US/about_Ruleset.Initialize.md",
-			"bookmarks": [
-				{
-					"line": 74,
-					"column": 103,
 					"label": ""
 				}
 			]

@@ -119,7 +119,7 @@ Only "Remote Management Users" have permissions on "D:\SomePath", other entries 
 
 .EXAMPLE
 PS> Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
-	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"
+    -Type "Deny" -Rights "TakeOwnership, Delete, Modify"
 
 LanmanServer service is denied specified rights for specified directory and all it's contents
 

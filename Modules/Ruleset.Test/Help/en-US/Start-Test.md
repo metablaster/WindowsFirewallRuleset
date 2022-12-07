@@ -32,9 +32,7 @@ This function must be called before single test case starts executing
 Start-Test "some test"
 ```
 
-************************************
-* Testing: Get-Something some test *
-************************************
+Prints formatted header
 
 ### EXAMPLE 2
 
@@ -42,9 +40,7 @@ Start-Test "some test"
 Start-Test "some test" -Expected "output 123" -Command "Set-Something"
 ```
 
-*****************************************************
-* Testing: Set-Something some test -\> output 123 *
-*****************************************************
+Prints formatted header
 
 ## PARAMETERS
 

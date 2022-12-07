@@ -145,6 +145,7 @@ WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+See also output of: winrm get winrm/config
 
 ## RELATED LINKS
 
@@ -155,5 +156,3 @@ TODO: Implement -NoServiceRestart parameter if applicable so that only configura
 [https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management](https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management)
 
 [https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations)
-
-[winrm help config]()

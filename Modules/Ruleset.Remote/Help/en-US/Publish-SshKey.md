@@ -14,8 +14,8 @@ Deploy public SSH key to remote host using SSH
 ## SYNTAX
 
 ```powershell
-Publish-SshKey [-Domain] <String> -User <String> [-Key <String>] [-Admin] [-Overwrite] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Publish-SshKey [-Domain] <String> -User <String> -Key <String> [-Port <UInt32>] [-System] [-Force] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,7 +31,7 @@ For standard users this is ~\.ssh\authorized_keys, for administrators it's
 ### EXAMPLE 1
 
 ```powershell
-Publish-SshKey -User ServerAdmin -Domain Server1 -Admin
+Publish-SshKey -User ServerAdmin -Domain Server1 -System
 ```
 
 ### EXAMPLE 2
@@ -84,14 +84,31 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: "$HOME\.ssh\id_ecdsa-remote-ssh.pub"
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Admin
+### -Port
+
+Specify SSH port on which the remote server is listening.
+The default is port 22
+
+```yaml
+Type: System.UInt32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 22
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -System
 
 If specified, the key is added to system wide configuration.
 Valid only if the User parameter belongs to Administrators group on remote host.
@@ -108,7 +125,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Overwrite
+### -Force
 
 Overwrite file on remote host instead of appending key to existing file
 
@@ -171,11 +188,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
+Remote computer must install SSH server in optional features
+Remote computer must have OpenSSH SSH server service running
+Local computer must create a "config" file in $HOME\.ssh\
+Sample config file can be found in Config\SSH
+
 Password based authentication is needed for first time setup or
 if no existing public SSH key is ready on remote host.
 
 TODO: Optionally deploy sshd_config to remote
 TODO: Make use of certificates
+TODO: When specifying port for ssh.exe?
+progress bar doesn't remove it's status on completion
 
 ## RELATED LINKS
 

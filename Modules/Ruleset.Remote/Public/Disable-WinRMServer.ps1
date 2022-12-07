@@ -71,6 +71,7 @@ WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?)
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+See also output of: winrm get winrm/config
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Disable-WinRMServer.md
@@ -83,9 +84,6 @@ https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configurat
 
 .LINK
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations
-
-.LINK
-winrm help config
 #>
 function Disable-WinRMServer
 {

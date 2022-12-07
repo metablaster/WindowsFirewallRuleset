@@ -14,8 +14,8 @@ Removes a value from a .pol file.
 ## SYNTAX
 
 ```powershell
-Remove-PolicyFileEntry [-Path] <String> [-Key] <String> [-ValueName] <String> [-NoGptIniUpdate]
- [<CommonParameters>]
+Remove-PolicyFileEntry [-Path] <String> [-Key] <String> [-ValueName] <String> [-NoGptIniUpdate] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,7 +42,7 @@ $Entries = @(
     New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
     New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-$Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+PS> $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
     -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
 ```
 
@@ -121,17 +121,50 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### The Key and ValueName properties may be bound via the pipeline by property name.
+### The Key and ValueName properties may be bound via the pipeline by property name
 
 ## OUTPUTS
 
-### None. This command does not generate output.
+### None. Remove-PolicyFileEntry does not generate output
 
 ## NOTES
 

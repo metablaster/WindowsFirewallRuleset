@@ -68,7 +68,7 @@ System.Management.Automation.SwitchParameter
 
 ### EXAMPLE 4
 
-```
+```powershell
 ([System.Environment]::MachineName) | Get-TypeName -Accelerator
 ```
 

@@ -50,16 +50,12 @@ This value overrides default Command parameter specified in Enter-Test.
 .EXAMPLE
 PS> Start-Test "some test"
 
-************************************
-* Testing: Get-Something some test *
-************************************
+Prints formatted header
 
 .EXAMPLE
 PS> Start-Test "some test" -Expected "output 123" -Command "Set-Something"
 
-*****************************************************
-* Testing: Set-Something some test -> output 123 *
-*****************************************************
+Prints formatted header
 
 .INPUTS
 None. You cannot pipe objects to Start-Test

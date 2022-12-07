@@ -1210,7 +1210,7 @@ False</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Encoding</maml:name>
           <maml:description>
-            <maml:para>Default encoding for non ASCII files. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
+            <maml:para>Default encoding to assume for non ASCII files without BOM. This encoding is also used to read file if needed. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
           <dev:type>
@@ -1237,7 +1237,7 @@ False</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Encoding</maml:name>
         <maml:description>
-          <maml:para>Default encoding for non ASCII files. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
+          <maml:para>Default encoding to assume for non ASCII files without BOM. This encoding is also used to read file if needed. This parameter can be either a string identifying an encoding that is used by PowerShell commandlets such as "utf8" or System.Text.Encoding object. The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object</command:parameterValue>
         <dev:type>
@@ -2103,7 +2103,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic.  This would not catch empty strings, zero, $false and other non-null items 							  - Added perhaps pointless error handling</maml:para>
+        <maml:para>Adapted from script by Marc van Orsouw and function from Chad Miller Version History v1.0  - Chad Miller - Initial Release v1.1  - Chad Miller - Fixed Issue with Properties v1.2  - Chad Miller - Added setting column datatype by property as suggested by emp0 v1.3  - Chad Miller - Corrected issue with setting datatype on empty properties v1.4  - Chad Miller - Corrected issue with DBNull v1.5  - Chad Miller - Updated example v1.6  - Chad Miller - Added column datatype logic with default to string v1.7  - Chad Miller - Fixed issue with IsArray v1.8  - ramblingcookiemonster - Removed if($Value) logic. This would not catch empty strings, zero, $false and other non-null items       - Added perhaps pointless error handling</maml:para>
         <maml:para>Modifications by metablaster January 2021: Updated formatting, casing and naming according to the rest of project Updated comment based help Convert inner function to scriptblock</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -2333,7 +2333,8 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
           <maml:description>
-            <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
+            <maml:para>A named group of system environment variables to get as follows:</maml:para>
+            <maml:para>- UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
             <maml:para>- Rooted: Variables for any path that has root qualifier</maml:para>
@@ -2437,7 +2438,8 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
           <maml:description>
-            <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
+            <maml:para>A named group of system environment variables to get as follows:</maml:para>
+            <maml:para>- UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
             <maml:para>- Rooted: Variables for any path that has root qualifier</maml:para>
@@ -2552,7 +2554,8 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>From</maml:name>
           <maml:description>
-            <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
+            <maml:para>A named group of system environment variables to get as follows:</maml:para>
+            <maml:para>- UserProfile: Any variables that lead to or mentions user profile</maml:para>
             <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
             <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
             <maml:para>- Rooted: Variables for any path that has root qualifier</maml:para>
@@ -2655,7 +2658,8 @@ binary</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>From</maml:name>
         <maml:description>
-          <maml:para>A named group of system environment variables to get as follows: - UserProfile: Any variables that lead to or mentions user profile</maml:para>
+          <maml:para>A named group of system environment variables to get as follows:</maml:para>
+          <maml:para>- UserProfile: Any variables that lead to or mentions user profile</maml:para>
           <maml:para>- Whitelist: Variables that are allowed to be part of firewall rules</maml:para>
           <maml:para>- FullyQualified: Variables which are fully qualified paths</maml:para>
           <maml:para>- Rooted: Variables for any path that has root qualifier</maml:para>
@@ -2789,7 +2793,7 @@ binary</dev:code>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Select-EnvironmentVariable -From UserProfile</dev:code>
         <dev:remarks>
-          <maml:para>Name              Value ----              ----- %APPDATA%         C:\Users\SomeUser\AppData\Roaming %HOME%            C:\Users\SomeUser %HOMEPATH%        \Users\SomeUser %USERNAME%        SomeUser</maml:para>
+          <maml:para>Name              Value %APPDATA%         C:\Users\SomeUser\AppData\Roaming %HOME%            C:\Users\SomeUser %HOMEPATH%        \Users\SomeUser %USERNAME%        SomeUser</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -2988,7 +2992,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
           <maml:description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Note that for registry key you must specify PowerShell provider path, ex: HKLM:\</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3071,7 +3075,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
           <maml:description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Note that for registry key you must specify PowerShell provider path, ex: HKLM:\</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3083,7 +3087,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+            <maml:para>Principal username or group name to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3274,7 +3278,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
           <maml:description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Note that for registry key you must specify PowerShell provider path, ex: HKLM:\</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3286,7 +3290,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
           <maml:name>User</maml:name>
           <maml:description>
-            <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+            <maml:para>Principal username or group name to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3468,7 +3472,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
           <maml:name>LiteralPath</maml:name>
           <maml:description>
-            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+            <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Note that for registry key you must specify PowerShell provider path, ex: HKLM:\</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3572,7 +3576,7 @@ binary</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="LP">
         <maml:name>LiteralPath</maml:name>
         <maml:description>
-          <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries.</maml:para>
+          <maml:para>Resource on which to set ownership or permissions. Valid resources are files, directories, registry keys and registry entries. Note that for registry key you must specify PowerShell provider path, ex: HKLM:\</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -3596,7 +3600,7 @@ binary</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="UserName">
         <maml:name>User</maml:name>
         <maml:description>
-          <maml:para>Principal username to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
+          <maml:para>Principal username or group name to which to grant specified permissions. Using this parameter means setting permissions on a resource.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -3807,7 +3811,7 @@ binary</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Set-Permission -User "LanmanServer" -Domain "NT SERVICE" -LiteralPath "D:\SomeFolder" `
-	-Type "Deny" -Rights "TakeOwnership, Delete, Modify"</dev:code>
+    -Type "Deny" -Rights "TakeOwnership, Delete, Modify"</dev:code>
         <dev:remarks>
           <maml:para>LanmanServer service is denied specified rights for specified directory and all it's contents</maml:para>
         </dev:remarks>
@@ -3817,6 +3821,13 @@ binary</dev:code>
         <dev:code>Set-Permission -User SomeUser -Domain COMPUTERNAME -LiteralPath "D:\SomeFolder"</dev:code>
         <dev:remarks>
           <maml:para>Allows to ReadAndExecute, ListDirectory and Traverse to "SomeFolder" and it's contents for COMPUTERNAME\SomeUser</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>Set-Permission -User Administrators -LiteralPath "HKLM:\$RegPath" -RegistryRight ChangePermissions -Inheritance None</dev:code>
+        <dev:remarks>
+          <maml:para>Allows Administrators to change permissions on registry path, and the path does not inherit parent permissions</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -4467,6 +4478,189 @@ binary</dev:code>
       <maml:navigationLink>
         <maml:linkText>Online Version:</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Shortcut.md</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-ColorMessage</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>ColorMessage</command:noun>
+      <maml:description>
+        <maml:para>Write a colored output</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Write-ColorMessage writes colored output, which let's you avoid using Write-Host to avoid having to suppress code analysis warnings with PSScriptAnalyzer.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-ColorMessage</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="InputObject">
+          <maml:name>Message</maml:name>
+          <maml:description>
+            <maml:para>An object such as test which is to be printed or outputted in color</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>ForegroundColor</maml:name>
+          <maml:description>
+            <maml:para>Specifies foreground color</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>System.ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BackgroundColor</maml:name>
+          <maml:description>
+            <maml:para>Specifies background color</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>System.ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="InputObject">
+        <maml:name>Message</maml:name>
+        <maml:description>
+          <maml:para>An object such as test which is to be printed or outputted in color</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>ForegroundColor</maml:name>
+        <maml:description>
+          <maml:para>Specifies foreground color</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>System.ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BackgroundColor</maml:name>
+        <maml:description>
+          <maml:para>Specifies background color</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>System.ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[string]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>HACK: Should be possible for input object to be any object not just string, but it works unexpectedly depending on PS edition used.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Write-ColorMessage sample_text Green</dev:code>
+        <dev:remarks>
+          <maml:para>sample_text (in green)</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Write-ColorMessage sample_text Red -BackGroundColor White</dev:code>
+        <dev:remarks>
+          <maml:para>sample_text (in red with white background)</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Write-ColorMessage.md</maml:linkText>
+        <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Write-ColorMessage.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.consolecolor</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshost</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshost</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

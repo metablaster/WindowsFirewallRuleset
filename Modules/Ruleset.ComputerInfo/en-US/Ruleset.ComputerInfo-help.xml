@@ -900,21 +900,21 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Get-SystemSKU</dev:code>
         <dev:remarks>
-          <maml:para>Domain      SystemSKU     SKU ------      ---------     --- MY-DESKTOP  Professional  48</maml:para>
+          <maml:para>Domain      SystemSKU     SKU MY-DESKTOP  Professional  48</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>@(Server1, Server2, Server3) | Get-SystemSKU</dev:code>
         <dev:remarks>
-          <maml:para>Domain    SystemSKU                SKU ------    ---------                --- Server1   Professional             48 Server2   Home Premium N           26 Server3   Microsoft Hyper-V Server 42</maml:para>
+          <maml:para>Domain    SystemSKU                SKU Server1   Professional             48 Server2   Home Premium N           26 Server3   Microsoft Hyper-V Server 42</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Get-SystemSKU -SKU 7</dev:code>
         <dev:remarks>
-          <maml:para>Domain   SystemSKU   SKU ------   ---------   ---          Server      Standard  7</maml:para>
+          <maml:para>Domain   SystemSKU   SKU          Server      Standard  7</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1794,7 +1794,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order:</maml:para>
+            <maml:para>- HTTPS</maml:para>
             <maml:para>- HTTP</maml:para>
             <maml:para>- Ping or TCP port test</maml:para>
           </maml:description>
@@ -1871,7 +1872,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+            <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order:</maml:para>
+            <maml:para>- HTTPS</maml:para>
             <maml:para>- HTTP</maml:para>
             <maml:para>- Ping or TCP port test</maml:para>
           </maml:description>
@@ -1924,7 +1926,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Protocol</maml:name>
         <maml:description>
-          <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order: - HTTPS</maml:para>
+          <maml:para>Specify the kind of a test to perform. Acceptable values are HTTP (WSMan), HTTPS (WSMan), Ping or Default The default is "Default" which tries connectivity in this order:</maml:para>
+          <maml:para>- HTTPS</maml:para>
           <maml:para>- HTTP</maml:para>
           <maml:para>- Ping or TCP port test</maml:para>
         </maml:description>
@@ -2397,11 +2400,15 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>According to Microsoft: NetBIOS computer names can't contain the following characters \ / : * ? " &lt; &gt; | Computers names can contain a period (.) but the name can't start with a period. Computers that are members of an AD domain can't have names that are composed completely of numbers Computer name must not be reserved word. Minimum computer name length: 1 character Maximum computer name length: 15 characters Logon names can be up to 104 characters. However, it isn't practical to use logon names that are longer than 64 characters. Logon names can't contain following characters " / \ [ ] : ; | = , + * ? &lt; &gt; Logon names can contain all other special characters, including spaces, periods, dashes, and underscores. But it's generally not a good idea to use spaces in account names.</maml:para>
-        <maml:para>TODO: The use of NetBIOS scopes in names is a legacy configuration. It shouldn't be used with Active Directory forests. TODO: There is a best practices list on MS site, for which we should generate warnings.</maml:para>
-        <maml:para>According to IBM: NetBIOS names are always converted to uppercase when sent to other systems, and may consist of any character, except: - Any character less than a space (0x20)</maml:para>
+        <maml:para>According to Microsoft: NetBIOS computer names can't contain the following characters: \ / : * ? " &lt; &gt; |</maml:para>
+        <maml:para>Computers names can contain a period (.) but the name can't start with a period. Computers that are members of an AD domain can't have names that are composed completely of numbers Computer name must not be reserved word. Minimum computer name length: 1 character Maximum computer name length: 15 characters Logon names can be up to 104 characters. However, it isn't practical to use logon names that are longer than 64 characters. Logon names can't contain following characters: " / \ [ ] : ; | = , + * ? &lt; &gt;</maml:para>
+        <maml:para>Logon names can contain all other special characters, including spaces, periods, dashes, and underscores. But it's generally not a good idea to use spaces in account names.</maml:para>
+        <maml:para>TODO: The use of NetBIOS scopes in names is a legacy configuration. It shouldn't be used with Active Directory forests. TODO: There is a best practices list on MS site, for which we should generate warnings. TODO: In markdown from listed characters `\` will be interpreted as new line</maml:para>
+        <maml:para>According to IBM: NetBIOS names are always converted to uppercase when sent to other systems, and may consist of any character, except:</maml:para>
+        <maml:para>- Any character less than a space (0x20)</maml:para>
         <maml:para>- the characters " .</maml:para>
-        <maml:para>/ \ [ ] : | &lt; &gt; + = ; , The name should not start with an asterisk (*) The NetBIOS name is 16 ASCII characters, however Microsoft limits the host name to 15 characters and reserves the 16th character as a NetBIOS Suffix</maml:para>
+        <maml:para>/ \ [ ] : | &lt; &gt; + = ; ,</maml:para>
+        <maml:para>The name should not start with an asterisk (*) The NetBIOS name is 16 ASCII characters, however Microsoft limits the host name to 15 characters and reserves the 16th character as a NetBIOS Suffix</maml:para>
         <maml:para>Microsoft allows the dot, while IBM does not Space character may work on Windows system as well even though it's not allowed, it may be useful for domains such as NT AUTHORITY\NETWORK SERVICE Important to understand is, the choice of name used by a higher-layer protocol or application is up to that protocol or application and not NetBIOS.</maml:para>
       </maml:alert>
     </maml:alertSet>

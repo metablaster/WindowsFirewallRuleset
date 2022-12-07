@@ -37,7 +37,7 @@ If the installation directory can't be determined reference variable remains unc
 
 ### EXAMPLE 1
 
-```
+```powershell
 $MyProgram = "%ProgramFiles(x86)%\Microsoft Office\root\Office16"
 PS> Confirm-Installation "Office" ([ref] $ProgramInstallPath)
 ```
@@ -186,7 +186,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [bool] True if the reference variable contains valid path or was updated, false otherwise.
+### [bool] True if the reference variable contains valid path or was updated, false otherwise
 
 ## NOTES
 

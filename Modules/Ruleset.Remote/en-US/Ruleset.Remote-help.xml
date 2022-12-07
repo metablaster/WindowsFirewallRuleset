@@ -665,7 +665,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected</maml:para>
+        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected See also output of: winrm get winrm/config</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -707,10 +707,6 @@
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_session_configurations</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>winrm help config</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1224,7 +1220,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges</maml:para>
+        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges See also output of: winrm get winrm/config</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1281,10 +1277,6 @@
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>winrm help config</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1446,7 +1438,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Key</maml:name>
           <maml:description>
             <maml:para>Specify public SSH key with is to be transferred. By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub</maml:para>
@@ -1456,10 +1448,22 @@
             <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>"$HOME\.ssh\id_ecdsa-remote-ssh.pub"</dev:defaultValue>
+          <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Admin</maml:name>
+          <maml:name>Port</maml:name>
+          <maml:description>
+            <maml:para>Specify SSH port on which the remote server is listening. The default is port 22</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
+          <dev:type>
+            <maml:name>System.UInt32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>22</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>System</maml:name>
           <maml:description>
             <maml:para>If specified, the key is added to system wide configuration. Valid only if the User parameter belongs to Administrators group on remote host.</maml:para>
           </maml:description>
@@ -1470,7 +1474,7 @@
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Overwrite</maml:name>
+          <maml:name>Force</maml:name>
           <maml:description>
             <maml:para>Overwrite file on remote host instead of appending key to existing file</maml:para>
           </maml:description>
@@ -1529,7 +1533,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Key</maml:name>
         <maml:description>
           <maml:para>Specify public SSH key with is to be transferred. By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub</maml:para>
@@ -1539,10 +1543,22 @@
           <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>"$HOME\.ssh\id_ecdsa-remote-ssh.pub"</dev:defaultValue>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Admin</maml:name>
+        <maml:name>Port</maml:name>
+        <maml:description>
+          <maml:para>Specify SSH port on which the remote server is listening. The default is port 22</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
+        <dev:type>
+          <maml:name>System.UInt32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>22</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>System</maml:name>
         <maml:description>
           <maml:para>If specified, the key is added to system wide configuration. Valid only if the User parameter belongs to Administrators group on remote host.</maml:para>
         </maml:description>
@@ -1554,7 +1570,7 @@
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Overwrite</maml:name>
+        <maml:name>Force</maml:name>
         <maml:description>
           <maml:para>Overwrite file on remote host instead of appending key to existing file</maml:para>
         </maml:description>
@@ -1612,14 +1628,15 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>Remote computer must install SSH server in optional features Remote computer must have OpenSSH SSH server service running Local computer must create a "config" file in $HOME\.ssh\ Sample config file can be found in Config\SSH</maml:para>
         <maml:para>Password based authentication is needed for first time setup or if no existing public SSH key is ready on remote host.</maml:para>
-        <maml:para>TODO: Optionally deploy sshd_config to remote TODO: Make use of certificates</maml:para>
+        <maml:para>TODO: Optionally deploy sshd_config to remote TODO: Make use of certificates TODO: When specifying port for ssh.exe? progress bar doesn't remove it's status on completion</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Publish-SshKey -User ServerAdmin -Domain Server1 -Admin</dev:code>
+        <dev:code>Publish-SshKey -User ServerAdmin -Domain Server1 -System</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2405,7 +2422,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected</maml:para>
+        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected See also output of: winrm get winrm/config</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2443,10 +2460,6 @@
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>winrm help config</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2578,7 +2591,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>None.</maml:para>
+        <maml:para>See also output of: winrm get winrm/config</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2612,10 +2625,6 @@
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management</maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
-        <maml:linkText>winrm get winrm/config</maml:linkText>
-        <maml:uri></maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2958,16 +2967,16 @@
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Credential</maml:name>
+          <maml:name>Protocol</maml:name>
           <maml:description>
-            <maml:para>Specify credentials which to use to test connection to remote computer. Credentials are required for HTTPS and remote connections. If not specified, you'll be asked for credentials</maml:para>
+            <maml:para>Specify protocol to use for test, HTTP, HTTPS or Default. The default value is "Default", which means HTTPS is tested first and if failed HTTP is tested.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>$RemotingProtocol</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Port</maml:name>
@@ -3294,6 +3303,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>Regarding CertThumbprint problems with Test-WSMan see this issue https://github.com/PowerShell/PowerShell/issues/16752</maml:para>
         <maml:para>TODO: Test all options are applied, reset by Enable-PSSessionConfiguration or (Set-WSManInstance or wait service restart?) TODO: Test for private profile to avoid cryptic error message</maml:para>
       </maml:alert>
     </maml:alertSet>

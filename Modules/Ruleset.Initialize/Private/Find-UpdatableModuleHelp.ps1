@@ -87,8 +87,6 @@ Name                           PackageManagement
 .EXAMPLE
 PS> Find-UpdatableModuleHelp "PowerShellGet" -UICulture ja-JP, en-US
 
-Name                           Value
-----                           -----
 Culture                        en-US
 CultureVersion                 5.2.0.0
 Name                           PowerShellGet

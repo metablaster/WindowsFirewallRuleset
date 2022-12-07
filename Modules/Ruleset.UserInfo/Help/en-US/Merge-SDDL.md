@@ -26,10 +26,10 @@ Referenced SDDL is expanded with new one
 
 ### EXAMPLE 1
 
-```
+```powershell
 $SDDL = "D:(A;;CC;;;S-1-5-32-545)(A;;CC;;;S-1-5-32-544)"
-$RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
-Merge-SDDL ([ref] $SDDL) -From $RefSDDL
+PS> $RefSDDL = "D:(A;;CC;;;S-1-5-32-333)(A;;CC;;;S-1-5-32-222)"
+PS> Merge-SDDL ([ref] $SDDL) -From $RefSDDL
 ```
 
 ## PARAMETERS

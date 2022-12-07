@@ -135,7 +135,8 @@ The first character must be alphabetical or numeric.
 The last character must not be a minus sign or a period.
 Minimum name length: 2 characters
 Maximum name length: 255 characters
-The maximum length of the host name and of the fully qualified domain name (FQDN) is 63 bytes per label and 255 characters per FQDN.
+The maximum length of the host name and of the fully qualified domain name (FQDN) is 63 bytes per
+label and 255 characters per FQDN.
 The latter is based on the maximum path length possible with an Active Directory Domain name with the
 paths needed in SYSVOL, and it needs to obey to the 260 character MAX_PATH limitation.
 

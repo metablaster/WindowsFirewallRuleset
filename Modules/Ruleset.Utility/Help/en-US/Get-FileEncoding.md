@@ -74,7 +74,8 @@ Accept wildcard characters: True
 
 ### -Encoding
 
-Default encoding for non ASCII files.
+Default encoding to assume for non ASCII files without BOM.
+This encoding is also used to read file if needed.
 This parameter can be either a string identifying an encoding that is used by PowerShell commandlets
 such as "utf8" or System.Text.Encoding object.
 The default is set by global variable, UTF8 no BOM for Core or UTF8 with BOM for Desktop edition

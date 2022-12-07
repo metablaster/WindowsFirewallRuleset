@@ -44,7 +44,7 @@ ConvertFrom-Wildcard "*[0-9][[]Po?er[A-Z]he*l?"
 
 ### EXAMPLE 2
 
-```
+```powershell
 $Result = ConvertFrom-Wildcard "Po?er[A-Z]hell*" -AsRegex -TimeSpan ([System.TimeSpan]::FromSeconds(3))
 ```
 
@@ -60,7 +60,7 @@ ConvertFrom-Wildcard "a_b*c%d[e..f]..?g_%%_**[?]??[*]\i[[]*??***[%%]\Z\w+"
 
 ### EXAMPLE 4
 
-```
+```powershell
 $Result = ConvertFrom-Wildcard "MatchThis*" -AsRegex -Options "IgnoreCase"
 ```
 

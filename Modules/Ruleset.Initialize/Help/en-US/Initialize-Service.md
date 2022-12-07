@@ -14,7 +14,7 @@ Configure and start specified system services
 ## SYNTAX
 
 ```powershell
-Initialize-Service [-Name] <String[]> [<CommonParameters>]
+Initialize-Service [-Name] <String[]> [-Status <String>] [-StartupType <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,7 +45,7 @@ $true if WinRM service was started $false otherwise
 
 ### -Name
 
-Enter one or more services to configure
+Enter one or more service (short) names to configure
 
 ```yaml
 Type: System.String[]
@@ -56,6 +56,39 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Status
+
+Optionally specify service status, acceptable values are Running or Stopped
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Running
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartupType
+
+Optionally specify service startup type, acceptable values are Automatic or Manual.
+The default Automatic startup type.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Automatic
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

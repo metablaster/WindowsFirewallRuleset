@@ -838,14 +838,14 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Start-Test "some test"</dev:code>
         <dev:remarks>
-          <maml:para>* * * * * * * * Testing: Get-Something some test * * * * * * * *</maml:para>
+          <maml:para>Prints formatted header</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Start-Test "some test" -Expected "output 123" -Command "Set-Something"</dev:code>
         <dev:remarks>
-          <maml:para>* * * * * * * * * * * Testing: Set-Something some test -&gt; output 123 * * * * * * * * * * *</maml:para>
+          <maml:para>Prints formatted header</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

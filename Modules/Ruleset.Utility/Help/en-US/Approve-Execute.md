@@ -45,7 +45,7 @@ Approve-Execute -Unsafe -Title "Sample title" -Question "Sample question"
 
 ### EXAMPLE 2
 
-```
+```powershell
 [bool] $YesToAll = $false
 PS> [bool] $NoToAll = $false
 PS> Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)

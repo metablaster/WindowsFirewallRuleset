@@ -96,6 +96,7 @@ TODO: Optionally authenticate users using certificates in addition to credential
 TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict)
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
+See also output of: winrm get winrm/config
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Set-WinRMClient.md
@@ -105,9 +106,6 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.wsman.management
 
 .LINK
 https://docs.microsoft.com/en-us/windows/win32/winrm/installation-and-configuration-for-windows-remote-management
-
-.LINK
-winrm help config
 #>
 function Set-WinRMClient
 {

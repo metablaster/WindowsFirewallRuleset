@@ -97,6 +97,7 @@ if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute
 TODO: Get rid of blinking progress bar and make your own
+TODO: When run in fresh session for first time it does nothing
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -129,7 +130,6 @@ param (
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
 
 if ($null -eq $Encoding)
 {
@@ -194,9 +194,8 @@ function Format-Document
 
 	# Empty code fences
 	# NOTE: module page has no code fences
-	# TODO: "powershell" is not inserted to module fence in cases when sample code spans multiple lines?
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting explicit code fences in $MarkdownFile"
-	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\w+)', "`${fence}powershell"
+	$FileData = $FileData -replace '(?m)(?<fence>^```)(?=\r\n\S)', "`${fence}powershell"
 
 	# TODO: new line is inserted in module page, NoNewline ignored
 	Set-Content -NoNewline -Path $FileName -Value $FileData -Encoding $Encoding
@@ -425,5 +424,4 @@ specific subfolders
 	Update-Log
 } # foreach module
 
-Disconnect-Computer -Domain $PolicyStore
 Update-Log

@@ -66,8 +66,8 @@ v1.4  - Chad Miller - Corrected issue with DBNull
 v1.5  - Chad Miller - Updated example
 v1.6  - Chad Miller - Added column datatype logic with default to string
 v1.7  - Chad Miller - Fixed issue with IsArray
-v1.8  - ramblingcookiemonster - Removed if($Value) logic.  This would not catch empty strings, zero, $false and other non-null items
-							  - Added perhaps pointless error handling
+v1.8  - ramblingcookiemonster - Removed if($Value) logic. This would not catch empty strings, zero, $false and other non-null items
+      - Added perhaps pointless error handling
 
 Modifications by metablaster January 2021:
 Updated formatting, casing and naming according to the rest of project

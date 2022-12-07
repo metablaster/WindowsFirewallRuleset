@@ -77,35 +77,35 @@ Cannot be set to Unknown or None, but all other values of the RegistryValueKind 
 When this switch is used, the command will not attempt to update the version number in the gpt.ini file
 
 .EXAMPLE
-Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
+PS> Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String
 
 Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the
 local computer Machine GPO.
 Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini
 
 .EXAMPLE
-Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
+PS> Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate
 
 Same as example 1, except this one does not update gpt.ini right away.
 This can be useful if you want to set multiple
 values in the policy file and only trigger a single Group Policy refresh.
 
 .EXAMPLE
-Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-    -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
+PS> Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
+        -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord
 
 Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x)
 can be assigned to the numeric types DWord, QWord and Binary.
 
 .EXAMPLE
-$entries = @(
+PS> $entries = @(
     New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
     New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 )
-$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
+PS> $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
+        -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord
 
 Example of using pipeline input to set multiple values at once.
 The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated
@@ -117,10 +117,10 @@ command line, but since both values shared the same Key and Type, this example s
 pass the values in either way.
 
 .INPUTS
-The Key, ValueName, Data, and Type properties may be bound via the pipeline by property name.
+The Key, ValueName, Data, and Type properties may be bound via the pipeline by property name
 
 .OUTPUTS
-None. This command does not generate output.
+None. Set-PolicyFileEntry does not generate output
 
 .NOTES
 If the specified policy file already contains the correct value, the file will not be modified,

@@ -284,6 +284,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 TODO: Export to excel
 Excel is not friendly to CSV files
+TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.
 
 ## RELATED LINKS
 

@@ -83,7 +83,9 @@ False
 
 .NOTES
 According to Microsoft:
-NetBIOS computer names can't contain the following characters \ / : * ? " < > |
+NetBIOS computer names can't contain the following characters:
+\ / : * ? " < > |
+
 Computers names can contain a period (.) but the name can't start with a period.
 Computers that are members of an AD domain can't have names that are composed completely of numbers
 Computer name must not be reserved word.
@@ -91,19 +93,24 @@ Minimum computer name length: 1 character
 Maximum computer name length: 15 characters
 Logon names can be up to 104 characters.
 However, it isn't practical to use logon names that are longer than 64 characters.
-Logon names can't contain following characters " / \ [ ] : ; | = , + * ? < >
+Logon names can't contain following characters:
+" / \ [ ] : ; | = , + * ? < >
+
 Logon names can contain all other special characters, including spaces, periods, dashes, and underscores.
 But it's generally not a good idea to use spaces in account names.
 
 TODO: The use of NetBIOS scopes in names is a legacy configuration.
 It shouldn't be used with Active Directory forests.
 TODO: There is a best practices list on MS site, for which we should generate warnings.
+TODO: In markdown from listed characters `\` will be interpreted as new line
 
 According to IBM:
 NetBIOS names are always converted to uppercase when sent to other
 systems, and may consist of any character, except:
+
 - Any character less than a space (0x20)
 - the characters " . / \ [ ] : | < > + = ; ,
+
 The name should not start with an asterisk (*)
 The NetBIOS name is 16 ASCII characters, however Microsoft limits the host name to 15 characters and
 reserves the 16th character as a NetBIOS Suffix
