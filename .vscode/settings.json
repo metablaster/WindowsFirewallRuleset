@@ -727,6 +727,11 @@
 		{
 			"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd",
 			"pattern": "**/*.Types.ps1xml"
+		},
+		{
+			// https://www.google.com/schemas/sitemap/0.84/
+			"systemId": "https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
+			"pattern": "**/*sitemap.xml"
 		}
 		// HACK: PlatyPS schema needed
 		// {

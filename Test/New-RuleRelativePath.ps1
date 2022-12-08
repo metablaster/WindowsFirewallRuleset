@@ -75,7 +75,7 @@ $LocalProfile = "Any"
 $TargetProgramRoot = "C:\Program Files (x86)\GnuPG\share\..\bin"
 
 Enter-Test
-
+Import-Module Ruleset.UserInfo
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
@@ -83,7 +83,7 @@ Start-Test "Relative path"
 
 # Test if installation exists on system
 $Program = "$TargetProgramRoot\gpg.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
+if ((Test-ExecutableFile $Program -Session $SessionInstance) -or $ForceLoad)
 {
 	New-NetFirewallRule -DisplayName "TargetProgram" `
 		-Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `

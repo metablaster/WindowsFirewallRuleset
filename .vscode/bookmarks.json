@@ -89,26 +89,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Modules/Ruleset.IP/Public/ConvertTo-DottedDecimalIP.ps1",
-			"bookmarks": [
-				{
-					"line": 76,
-					"column": 0,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "docs/sitemap.xml",
-			"bookmarks": [
-				{
-					"line": 1,
-					"column": 28,
-					"label": ""
-				}
-			]
 		}
 	]
 }

@@ -39,7 +39,9 @@ $Params = @{
 	# ExternalScriptDependencies = @()
 
 	# Specifies an array of tags
-	Tags = @("TemplateTag")
+	Tags = @(
+		"TemplateTag"
+	)
 
 	# Specifies the URL of a web page about this project
 	ProjectUri = "https://github.com/metablaster/WindowsFirewallRuleset"

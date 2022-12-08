@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test out session configuration file
+Unit test to test session configuration files
 
 .DESCRIPTION
-Test if a session configuration file contains valid keys and the values are of the correct type.
+Test if a session configuration files contain valid keys and the values are of the correct type.
 For enumerated values, the cmdlet verifies that the specified values are valid.
 
 .PARAMETER Force
@@ -65,15 +65,14 @@ param (
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\ContextSetup.ps1
 
-Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
 
-$ConfigFile = Get-ChildItem -Recurse -Path "$ProjectRoot\Config" -Filter *.pssc
+$ConfigFiles = Get-ChildItem -Recurse -Path $ProjectRoot -Filter *.pssc
 
-foreach ($File in $ConfigFile)
+foreach ($File in $ConfigFiles)
 {
 	Write-Information -Tags "Project" -MessageData "INFO: Testing $File"
 	if (!(Test-PSSessionConfigurationFile -Path $File.FullName))

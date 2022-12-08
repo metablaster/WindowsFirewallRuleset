@@ -50,6 +50,7 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
     - [Email validation](#email-validation)
     - [IPv6 validation](#ipv6-validation)
     - [IPv4 validation](#ipv4-validation)
+    - [Match comment block in script](#match-comment-block-in-script)
 
 ## Filterline
 
@@ -468,6 +469,20 @@ For regex below all credits to [Validating IPv4 addresses with regexp][ipv4 rege
 
 ```none
 \b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b
+```
+
+### Match comment block in script
+
+function comment:
+
+```regex
+\<#[\s\S]+?(?=#\>)
+```
+
+ScriptInfo comment:
+
+```regex
+\<#PSScriptInfo[\s\S]+?(?=#\>)
 ```
 
 [Table of Contents](#table-of-contents)

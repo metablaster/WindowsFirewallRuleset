@@ -238,6 +238,7 @@ param (
 begin
 {
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 
 	[hashtable] $CimParams = @{}
 	[hashtable] $SessionParams = @{}
@@ -258,9 +259,6 @@ begin
 			$SessionParams.Credential = $Credential
 		}
 	}
-
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
-	Initialize-Project -Strict
 
 	# Define properties
 	$Properties = "Domain", "Protocol", "LocalAddress", "LocalPort", "RemoteAddress", "RemotePort", "State", "ProcessName", "PID"
@@ -572,8 +570,4 @@ process
 	}
 
 	Update-Log
-}
-end
-{
-	Disconnect-Computer -Domain $PolicyStore
 }

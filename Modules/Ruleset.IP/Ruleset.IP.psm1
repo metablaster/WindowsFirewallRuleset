@@ -51,6 +51,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # - Code formatting according to the rest of repository design
 # - Added module boilerplate code
 # - Renamed module from "Indented.NET.IP" to "Ruleset.IP"
+# - December 2022, updated entire module for changes done in upstream
 
 # TODO: Add Write-* streams to module functions
 # TODO: Use double quotes in pester tests

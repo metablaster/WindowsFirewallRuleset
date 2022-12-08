@@ -39,7 +39,7 @@ None. You cannot pipe objects to Get-DevicePath.ps1
 [PSCustomObject]
 
 .NOTES
-TODO: Make it work with PowerShell Core, see: Add-WinFunction
+HACK: Make it work with PowerShell Core, see: Add-WinFunction
 #>
 
 using namespace System
@@ -55,6 +55,12 @@ param (
 	[Parameter(ParameterSetName = "Path")]
 	[string] $DevicePath
 )
+
+#region Initialization
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+Initialize-Project -Strict
+#endregion
 
 # Build System Assembly in order to call Kernel32:QueryDosDevice.
 $DynAssembly = New-Object System.Reflection.AssemblyName("SysUtils")
@@ -144,3 +150,4 @@ if ($DevicePath)
 }
 
 Write-Output $ResultTable
+Disconnect-Computer $PolicyStore

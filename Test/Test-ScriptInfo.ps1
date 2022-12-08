@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test out script info metadata
+Unit test to test script info metadata
 
 .DESCRIPTION
-Verifies that scripts accurately describe the contents of the individual script
+Verifies that scripts accurately describe the contents of all the scripts in repository
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -64,18 +64,53 @@ param (
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\ContextSetup.ps1
 
-Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test
 
-$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter *.ps1 -Exclude "ContextSetup.ps1", *.ps1xml |
-Where-Object { $_.FullName -notlike "*\External\*" }
+# GUID cache
+[string[]] $GUID = @()
+
+$Scripts = Get-ChildItem -Recurse -Path "$ProjectRoot\Scripts" -Filter *.ps1 -Exclude *.ps1xml
 
 foreach ($Script in $Scripts)
 {
-	Test-ScriptFileInfo -Path $Script.FullName
+	$ScriptInfo = Test-ScriptFileInfo -Path $Script.FullName
+
+	if ($ScriptInfo)
+	{
+		$RelativePath = $Script.FullName.Remove(0, ([string] $ProjectRoot).Length + 1)
+		Write-Debug "Processing script $RelativePath"
+
+		if ($ScriptInfo.Version -ne $ProjectVersion)
+		{
+			Write-Error -Category InvalidResult -TargetObject $ScriptInfo `
+				-Message "Script version does not match project version"
+		}
+
+		if ($ScriptInfo.GUID)
+		{
+			# Check no script with duplicate GUID exists among scripts
+			if ([array]::Find($GUID, [System.Predicate[string]] { $ScriptInfo.GUID -eq $args[0] }))
+			{
+				Write-Error -Category InvalidData -TargetObject $ScriptInfo -Message "Duplicate GUID '$($ScriptInfo.GUID)' in '$RelativePath' script"
+			}
+
+			# Add current script GUID to cache
+			$GUID += $ScriptInfo.GUID
+		}
+
+		if ([string]::IsNullOrEmpty($ScriptInfo.Author))
+		{
+			Write-Error -Category InvalidResult -TargetObject $ScriptInfo `
+				-Message "ScriptInfo is missing author field"
+		}
+	}
+
+	# Must be set to null because if Test-ScriptFileInfo results in an error ScriptInfo variable
+	# would be pointing to previous script
+	$ScriptInfo = $null
 }
 
 Update-Log
