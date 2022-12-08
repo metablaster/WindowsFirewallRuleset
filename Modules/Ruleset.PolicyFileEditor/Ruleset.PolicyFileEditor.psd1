@@ -121,7 +121,7 @@ limitations under the License.
 		"PolFileEditor.dll"
 	)
 
-	# TODO: Script files (.ps1) that are run in the caller's environment prior to importing this module.
+	# Script files (.ps1) that are run in the caller's environment prior to importing this module.
 	# ScriptsToProcess = @()
 
 	# Type files (.ps1xml) to be loaded when importing this module
@@ -202,7 +202,7 @@ limitations under the License.
 		"Sources\PolicyFileEditor.cs"
 		"Test\Ruleset.PolicyFileEditor.Tests.ps1"
 		"LICENSE"
-		"PolicyFileEditor.dll"
+		"PolFileEditor.dll"
 		"README.md"
 		"Ruleset.PolicyFileEditor_c321c0fc-a6d8-4251-8f71-c69d8a57ce8f_HelpInfo.xml"
 		"Ruleset.PolicyFileEditor.psd1"
@@ -229,13 +229,13 @@ limitations under the License.
 
 			# A URL to an icon representing this module.
 			# The specified icon is displayed on the gallery webpage for the module
-			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/docs/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
 			# A PreRelease string that identifies the module as a prerelease version in online galleries.
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install, update, or save.

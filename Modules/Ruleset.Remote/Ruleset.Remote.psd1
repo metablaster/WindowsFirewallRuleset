@@ -160,12 +160,15 @@ SOFTWARE.
 		"Help\en-US\Connect-Computer.md"
 		"Help\en-US\Disable-RemoteRegistry.md"
 		"Help\en-US\Disable-WinRMServer.md"
+		"Help\en-US\Disconnect-Computer.md"
+		"Help\en-US\Enable-RemoteRegistry.md"
 		"Help\en-US\Enable-WinRMServer.md"
 		"Help\en-US\Export-WinRM.md"
 		"Help\en-US\Import-WinRM.md"
 		"Help\en-US\Publish-SshKey.md"
 		"Help\en-US\Register-SslCertificate.md"
 		"Help\en-US\Reset-WinRM.md"
+		"Help\en-US\Ruleset.Remote.md"
 		"Help\en-US\Set-WinRMClient.md"
 		"Help\en-US\Show-WinRMConfig.md"
 		"Help\en-US\Test-RemoteRegistry.md"
@@ -179,6 +182,8 @@ SOFTWARE.
 		"Public\Connect-Computer.ps1"
 		"Public\Disable-RemoteRegistry.ps1"
 		"Public\Disable-WinRMServer.ps1"
+		"Public\Disconnect-Computer.ps1"
+		"Public\Enable-RemoteRegistry.ps1"
 		"Public\Enable-WinRMServer.ps1"
 		"Public\README.md"
 		"Public\Export-WinRM.ps1"
@@ -224,13 +229,13 @@ SOFTWARE.
 
 			# A URL to an icon representing this module.
 			# The specified icon is displayed on the gallery webpage for the module
-			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/docs/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
 			# A PreRelease string that identifies the module as a prerelease version in online galleries.
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install, update, or save.

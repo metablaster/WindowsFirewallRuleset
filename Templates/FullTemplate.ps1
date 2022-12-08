@@ -45,7 +45,7 @@ SOFTWARE.
 
 .PROJECTURI https://github.com/metablaster/WindowsFirewallRuleset
 
-.RELEASENOTES https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md
+.RELEASENOTES https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md
 #>
 
 <#

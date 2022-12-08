@@ -48,7 +48,9 @@ SOFTWARE.
 	ModuleVersion = "0.14.0"
 
 	# Supported PSEditions
-	CompatiblePSEditions = @("Core")
+	CompatiblePSEditions = @(
+		"Core"
+	)
 
 	# ID used to uniquely identify this module
 	# NOTE: guid of a original module was: 9d427bc5-2ae1-4806-b9d1-2ae62461767e
@@ -84,12 +86,12 @@ commands much as if they were native to PowerShell Core.
 	# Minimum version of Microsoft .NET Framework required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
 	# Valid values are: 1.0 / 1.1 / 2.0 / 3.0 / 3.5 / 4.0 / 4.5
-	# DotNetFrameworkVersion = "4.5"
+	DotNetFrameworkVersion = "4.5"
 
 	# Minimum version of the common language runtime (CLR) required by this module.
 	# This prerequisite is valid for the PowerShell Desktop edition only.
 	# Valid values are: 1.0 / 1.1 / 2.0 / 4.0
-	# CLRVersion = "4.0"
+	CLRVersion = "4.0"
 
 	# Processor architecture (None, X86, Amd64) required by this module.
 	# Valid values are: x86 / AMD64 / Arm / IA64 / MSIL / None (unknown or unspecified).
@@ -139,7 +141,9 @@ commands much as if they were native to PowerShell Core.
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not
 	# delete the entry, use an empty array if there are no aliases to export.
-	AliasesToExport = @("Add-WinPSModulePath")
+	AliasesToExport = @(
+		"Add-WinPSModulePath"
+	)
 
 	# DSC resources to export from this module
 	# DscResourcesToExport = @()
@@ -205,7 +209,7 @@ commands much as if they were native to PowerShell Core.
 
 			# A URL to an icon representing this module.
 			# The specified icon is displayed on the gallery webpage for the module
-			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/docs/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			ReleaseNotes = @'

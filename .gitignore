@@ -88,17 +88,17 @@ Logs/*
 Logs/*/*
 !Logs/*/README.md
 
-# Firewall exports
+# Repository exports
 !Exports/
 Exports/*
 !Exports/README.md
 
-# Auto generated files
+# Auto generated temporary files
 Modules/**/Help/**/Content/
 Modules/**/Help/**/External/
 
 # Auto generated test folders
 Test/TestDrive/
 
-# Personal
-Readme/Notes.txt
+# Personal notes in root directory
+Personal.txt

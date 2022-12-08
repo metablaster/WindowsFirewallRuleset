@@ -239,6 +239,7 @@ SOFTWARE.
 		"Public\Test-FileSystemPath.ps1"
 		"Public\Test-Service.ps1"
 		"Public\Test-VirusTotal.ps1"
+		"Scripts\AppxModule.ps1"
 		"Scripts\README.md"
 		"Scripts\TargetProgram.ps1"
 		"Ruleset.ProgramInfo_49f11777-b8b6-4fed-bd82-32c8f48db81e_HelpInfo.xml"
@@ -270,13 +271,13 @@ SOFTWARE.
 
 			# A URL to an icon representing this module.
 			# The specified icon is displayed on the gallery webpage for the module
-			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/docs/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
 			# A PreRelease string that identifies the module as a prerelease version in online galleries.
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install, update, or save.

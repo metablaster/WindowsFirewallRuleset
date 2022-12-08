@@ -54,7 +54,7 @@ $Params = @{
 	# Specifies a string array that contains release notes or comments that you want available to
 	# users of this version of the script
 	ReleaseNotes = @(
-		"https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+		"https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 	)
 
 	# Specifies modules that must be in the global session state.

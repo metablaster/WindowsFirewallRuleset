@@ -113,7 +113,9 @@ SOFTWARE.
 	# TypesToProcess = @()
 
 	# Format files (.ps1xml) to be loaded when importing this module
-	FormatsToProcess = @("Manifest.Module.Format.ps1xml")
+	FormatsToProcess = @(
+		"Manifest.Module.Format.ps1xml"
+	)
 
 	# Modules to import as nested modules of the module specified in RootModule.
 	# Loading (.ps1) files here is equivalent to dot sourcing the script in your root module.
@@ -182,13 +184,13 @@ SOFTWARE.
 
 			# A URL to an icon representing this module.
 			# The specified icon is displayed on the gallery webpage for the module
-			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Readme/Screenshots/bluewall.png"
+			IconUri = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/docs/Screenshots/bluewall.png"
 
 			# ReleaseNotes of this module
 			# ReleaseNotes = ""
 
 			# A PreRelease string that identifies the module as a prerelease version in online galleries.
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install, update, or save.

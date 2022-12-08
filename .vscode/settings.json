@@ -372,7 +372,7 @@
 	"markdown.extension.print.absoluteImgPath": true,
 	"markdown.extension.print.imgToBase64": false,
 	"markdown.extension.print.includeVscodeStylesheets": true,
-	"markdown.extension.print.onFileSave": true,
+	"markdown.extension.print.onFileSave": false,
 	"markdown.extension.print.theme": "light",
 	"markdown.extension.print.validateUrls": true,
 	"markdown.extension.syntax.decorationFileSizeLimit": 50000,

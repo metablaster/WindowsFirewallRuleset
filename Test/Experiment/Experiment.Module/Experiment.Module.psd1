@@ -163,7 +163,7 @@ SOFTWARE.
 			# ReleaseNotes = ""
 
 			# A PreRelease string that identifies the module as a prerelease version in online galleries.
-			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Readme/CHANGELOG.md"
+			Prerelease = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/docs/CHANGELOG.md"
 
 			# Flag to indicate whether the module requires explicit user acceptance for
 			# install, update, or save.
