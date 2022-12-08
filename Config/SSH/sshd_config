@@ -1,39 +1,122 @@
 
 # This is the sshd server system-wide configuration file.
-# See sshd_config(5) for more information:
+# See sshd_config for more information:
 # https://man7.org/linux/man-pages/man5/sshd_config.5.html
-# TODO: Add other options as needed
+# TODO: Add other options or modify existing as needed
 
 # The strategy used for options in the default sshd_config shipped with OpenSSH is to
 # specify options with their default value where possible, but leave them commented.
 # Uncommented options override the default value.
 
+#
 # Network:
-#Port 22
-#AddressFamily any
-#ListenAddress 0.0.0.0
-#ListenAddress ::
+#
 
-#HostKey __PROGRAMDATA__/ssh/ssh_host_rsa_key
-#HostKey __PROGRAMDATA__/ssh/ssh_host_dsa_key
-#HostKey __PROGRAMDATA__/ssh/ssh_host_ecdsa_key
-#HostKey __PROGRAMDATA__/ssh/ssh_host_ed25519_key
+# Specifies the port number that sshd listens on, the default is 22
+Port 22
 
+# Specifies which address family should be used by sshd.
+# Valid arguments are any (the default), inet (use IPv4only), or inet6 (use IPv6 only).
+AddressFamily any
+
+# Specifies the local addresses sshd should listen on
+# The following forms may be used:
+# hostname|address
+# hostname:port
+# IPv4_address:port
+# [hostname|address]
+# The default is to listen on all local addresses on the current default routing domain.
+# Multiple ListenAddress options are permitted.
+ListenAddress VM-PRO
+# ListenAddress ::
+
+# Specifies a file containing a private host key used by SSH
+HostKey __PROGRAMDATA__/ssh/ssh_host_dsa_key
+HostKey __PROGRAMDATA__/ssh/ssh_host_ecdsa_key
+HostKey __PROGRAMDATA__/ssh/ssh_host_ed25519_key
+HostKey __PROGRAMDATA__/ssh/ssh_host_rsa_key
+
+#
 # Ciphers and keying:
-#RekeyLimit default none
+#
 
+# Specifies the maximum amount of data that may be transmitted before the session key is renegotiated,
+# optionally followed by a maximum amount of time that may pass before the session key is renegotiated.
+# The first argument is specified in bytes and may have a suffix of 'K', 'M', or 'G' to indicate
+# Kilobytes, Megabytes, or Gigabytes, respectively.
+# The default is (default) between '1G' and '4G', depending on the cipher.
+# The optional second value is specified in seconds:
+# (none)  seconds
+# s | S   seconds
+# m | M   minutes
+# h | H   hours
+# d | D   days
+# w | W   weeks
+# RekeyLimit default none
+
+# Specifies the ciphers allowed.
+# Multiple ciphers must be comma-separated.
+# If the list begins with a '+', the specified ciphers will be appended to the default set instead of replacing them.
+# If the list begins with a '-', the specified ciphers (including wildcards) will be removed from the default set instead of replacing them.
+# If the  list begins with a '^', the specified ciphers will be placed at the head of the default set.
+# The list of available ciphers may also be obtained using "ssh -Q cipher".
+Ciphers aes256-cbc,aes256-ctr
+
+# Specifies the host key signature algorithms that the server offers.
+# The list of available signature algorithms may be obtained using "ssh -Q key".
+# NOTE: Not all listed keys with ssh -Q key will work, take a look into individual public keys in ProgramData\ssh
+HostKeyAlgorithms ecdsa-sha2-nistp256
+
+# Specifies revoked public keys file, or none to not use one.
+# Keys listed in this file will be refused for public key authentication.
+#RevokedKeys
+
+#
 # Logging:
+#
+
+# Gives the facility code that is used when logging messages from sshd.
+# The possible values are: DAEMON, USER, AUTH, LOCAL0, LOCAL1, LOCAL2, LOCAL3, LOCAL4, LOCAL5, LOCAL6, LOCAL7.
+# The default is AUTH.
 #SyslogFacility AUTH
+
+# the verbosity level that is used when logging messages from sshd.
+# The possible values are: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3.
+# The default is INFO.
 #LogLevel INFO
 
+#
 # Authentication:
-#LoginGraceTime 2m
-#PermitRootLogin prohibit-password
-#StrictModes yes
-#MaxAuthTries 6
-#MaxSessions 10
+#
 
-#PubkeyAuthentication yes
+# The server disconnects after this time if the user has not successfully logged in.
+# If the value is 0, there is no time limit, the default is 120 seconds.
+LoginGraceTime 2m
+
+# Whether root can log in using ssh.
+# The argument must be yes, prohibit-password, forced-commands-only, or no.
+# The default is prohibit-password.
+# prohibit-password means password and keyboard-interactive authentication are disabled for root.
+# forced-commands-only, root login with public key authentication will be allowed, but only if
+# the command option has been specified.
+PermitRootLogin prohibit-password
+
+# Whether sshd should check file modes and ownership of the user's files and home
+# directory before accepting login, the default is yes.
+StrictModes yes
+
+# The maximum number of authentication attempts permitted per connection.
+# Once the number of failures reaches half this value, additional failures are logged.
+# The default is 6.
+MaxAuthTries 6
+
+# The maximum number of open shell, login or subsystem (e.g. sftp) sessions permitted per network connection.
+# The default is 10
+MaxSessions 10
+
+# Whether public key authentication is allowed.
+# The default is yes.
+PubkeyAuthentication yes
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
@@ -43,53 +126,173 @@
 # https://github.com/microsoft/vscode-remote-release/issues/2648#issuecomment-812183291
 AuthorizedKeysFile .ssh/authorized_keys
 
-#AuthorizedPrincipalsFile none
+# A file that lists principal names that are accepted for certificate authentication.
+# The default is none
+AuthorizedPrincipalsFile none
 
-# For this to work you will also need host keys in %programData%/ssh/ssh_known_hosts:
-#HostbasedAuthentication no
+# For this to work you will also need host keys in %programData%/ssh/ssh_known_hosts
+# The default is no
+HostbasedAuthentication no
 
-# Change to yes if you don't trust ~/.ssh/known_hosts for "HostbasedAuthentication":
-#IgnoreUserKnownHosts no
+# Change to yes if you don't trust ~/.ssh/known_hosts for "HostbasedAuthentication"
+# The default is no
+IgnoreUserKnownHosts no
 
-# Don't read the user's ~/.rhosts and ~/.shosts files:
-#IgnoreRhosts yes
+# Whether to ignore per-user .rhosts and .shosts files during HostbasedAuthentication
+# Accepted values are yes (the default) to ignore all per-user files, shosts-only to allow the use
+# of .shosts but to ignore .rhosts or no to allow both
+IgnoreRhosts yes
 
-# To disable tunneled clear text passwords, change to "no" here:
-# NOTE: Default is yes
-PasswordAuthentication no
-#PermitEmptyPasswords no
+# Whether password authentication is allowed, the default is yes.
+PasswordAuthentication yes
 
-#AllowAgentForwarding yes
-#AllowTcpForwarding yes
-#GatewayPorts no
-#PermitTTY yes
-#PrintMotd yes
-#PrintLastLog yes
-#TCPKeepAlive yes
+# When password authentication is allowed, it specifies whether the server allows login to accounts
+# with empty password strings.
+# The default is no.
+PermitEmptyPasswords no
+
+# Whether ssh-agent forwarding is permitted, the default is yes.
+# Note that disabling agent forwarding does not improve security unless users are also denied shell
+# access, as they can always install their own forwarders.
+# It allows you to use your local SSH keys remotely without worrying about leaving confidential
+# data on the server you're working with with the help of ssh-agent.
+AllowAgentForwarding yes
+
+# Whether TCP forwarding is permitted.
+# The available options are yes (the default) or all to allow TCP forwarding, no to prevent all TCP forwarding,
+# local to allow local (from the perspective of ssh) forwarding only or remote to allow remote forwarding only.
+# OpenSSH provides TCP port forwarding, also known as tunnelling, which allows other TCP applications
+# to forward their network data over a secure SSH connection.
+# In other words, existing TCP applications that do not encrypt their data before sending it across
+# the network can send their network traffic through an SSH channel, thereby securing it.
+AllowTcpForwarding yes
+
+# Whether remote hosts are allowed to connect to ports forwarded for the client.
+# By default, sshd binds remote port forwardings to the loopback address.
+# This prevents other remote hosts from connecting to forwarded ports.
+# The default is no.
+GatewayPorts no
+
+# Whether pty allocation is permitted.
+# The default is yes.
+# PermitTTY yes
+
+# Whether sshd should print /etc/motd when a user logs in interactively.
+# (On some systems it is also printed by the shell, /etc/profile, or equivalent.)
+# The default is yes.
+# PrintMotd yes
+
+# Whether sshd should print the date and time of the last user login when a user logs in interactively.
+# The default is yes.
+PrintLastLog yes
+
+# Whether the system should send TCP keepalive messages to the other side.
+# If they are sent, death of the connection or crash of one of the machines will be properly noticed.
+TCPKeepAlive yes
+
+# TODO: Unknown option
 #UseLogin no
-#PermitUserEnvironment no
-#ClientAliveInterval 0
-#ClientAliveCountMax 3
-#UseDNS no
-#PidFile /var/run/sshd.pid
-#MaxStartups 10:30:100
-#PermitTunnel no
-#ChrootDirectory none
-#VersionAddendum none
 
-# no default banner path:
-#Banner none
+# Whether ~/.ssh/environment and environment= options in ~/.ssh/authorized_keys are processed by sshd
+PermitUserEnvironment no
+
+# Sets a timeout interval in seconds after which if no data has been received from the client,
+# sshd will send a message through the encrypted channel to request a response from the client.
+# The default is 0, indicating that these messages will not be sent to the client.
+ClientAliveInterval 0
+
+# Sets the number of client alive messages which may be sent without sshd receiving any messages back from the client.
+# The default value is 3.
+ClientAliveCountMax 3
+
+# Whether sshd should look up the remote host name, and to check that the resolved host name for
+# the remote IP address maps back to the very same IP address.
+# If this option is set to no (the default) then only addresses and not host names may be used in  ~/.ssh/authorized_keys
+UseDNS no
+
+# The file that contains the process ID of the SSH daemon, or none to not write one.
+PidFile __PROGRAMDATA__/ssh/sshd.pid
+
+# The maximum number of concurrent unauthenticated connections to the SSH daemon.  Additional connections will
+# be dropped until authentication succeeds or the LoginGraceTime expires for a connection.
+# The default is 10:30:100.
+# MaxStartups 10:30:100
+
+# whether tun device forwarding is allowed.
+# The argument must be yes, point-to-point (layer 3), ethernet (layer 2), or no.
+# The default is no.
+PermitTunnel no
+
+#
+# Other settings
+#
+
+# Specifies whether compression is enabled after the user has authenticated successfully.
+# The argument must be yes, delayed (a legacy synonym for yes) or no.
+# The default is yes.
+Compression yes
+
+# A list of group name patterns, separated by spaces.
+# If specified, login is allowed only for users whose primary group or supplementary group list matches one of the patterns.
+#AllowGroups
+
+# a list of user name patterns, separated by spaces.
+# If specified, login is allowed only for user names that match one of the patterns.
+# AllowUsers
+
+# A list of group name patterns, separated by spaces.
+# Login is disallowed for users whose primary group or supplementary group list matches one of the patterns.
+# DenyGroups
+
+# A list of user name patterns, separated by spaces.
+# Login is disallowed for user names that match one of the patterns.
+#DenyUsers
+
+# the pathname of a directory to chroot to after authentication.
+# At session startup sshd checks that all components of the pathname are root-owned directories
+# which are not writable by any other user or group.
+# After the chroot, sshd changes the working directory to the user's home directory.
+# The default is none, indicating not to chroot
+# ChrootDirectory none
+
+# Optionally specifies additional text to append to the SSH protocol banner sent by the server upon connection.
+# The default is none.
+# VersionAddendum none
+
+# The contents of the specified file are sent to the remote user before authentication is allowed.
+# If the argument is none then no banner is displayed.
+# By default, no banner is displayed.
+Banner none
+
+# Specifies the hash algorithm used when logging key fingerprints.
+# Valid options are: md5 and sha256, the default is sha256.
+FingerprintHash sha256
+
+# Include the specified configuration file(s).
+# Multiple pathnames may be specified and each pathname may contain glob wildcards that will be
+# expanded and processed in lexical order.
+# Files without absolute paths are assumed to be in /etc/ssh.
+# An Include directive may appear inside a Match block to perform conditional inclusion.
+#Include
+
+#
+# Overrides
+#
 
 # override default of no subsystems:
-# NOTE: Arguments should be a subsystem name and a command (with optional arguments)
-# to execute upon subsystem request.
+# NOTE: Arguments should be a subsystem name and a command (with optional arguments) to execute upon subsystem request.
+# By default no subsystems are defined.
 #Subsystem sftp sftp-server.exe
 
-# Example of overriding settings on a per-user basis:
+# Example of overriding settings on a per-user basis
+# Introduces a conditional block, if all of the criteria on the Match line are satisfied,
+# the keywords on the following lines override those set in the global section of the
+# config file, until either another Match line or the end of the file.
+# For Match patterns see: https://linux.die.net/man/5/ssh_config
 #Match User anoncvs
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
 
 Match Group administrators
-       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+	AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys

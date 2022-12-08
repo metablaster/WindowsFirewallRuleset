@@ -1,5 +1,6 @@
 # This is the ssh client configuration sample file
 # File syntax info: https://man7.org/linux/man-pages/man5/ssh_config.5.html
+# TODO: Add other options or modify existing as needed
 
 # Connection name as it will be displayed in Remote Explorer
 Host VM-PRO
@@ -10,6 +11,10 @@ Host VM-PRO
 	# User name to which to log on on remote host
 	User Admin
 
+	# Specifies the port number to connect on the remote host.
+	# The default is 22.
+	Port 22
+
 	# Specifies the protocol versions in order of preference.
 	# The possible values are '1' and '2'.
 	# protocol version 1 is NOT RECOMMENDED for security reasons.
@@ -17,13 +22,102 @@ Host VM-PRO
 
 	# Specifies which address family to use when connecting.
 	# Valid arguments are: any, inet, inet6.
-	AddressFamily inet
+	AddressFamily any
 
 	# Specifies the ciphers allowed for protocol version 2 in order of preference.
 	# Multiple ciphers must be comma-separated.
 	# Run: "ssh -Q cipher" to see available chipers
 	Ciphers aes256-cbc,aes256-ctr
 
+	# Specifies the host key signature algorithms that the server offers.
+	# The list of available signature algorithms may be obtained using "ssh -Q key".
+	# TODO: Not working
+	# HostbasedAcceptedAlgorithms ecdsa-sha2-nistp256
+
+	# Specifies the maximum amount of data that may be transmitted before the session key is renegotiated,
+	# optionally followed by a maximum amount of time that may pass before the session key is renegotiated.
+	# The first argument is specified in bytes and may have a suffix of 'K', 'M', or 'G' to indicate
+	# Kilobytes, Megabytes, or Gigabytes, respectively.
+	# The default is (default) between '1G' and '4G', depending on the cipher.
+	# The optional second value is specified in seconds:
+	# (none)  seconds
+	# s | S   seconds
+	# m | M   minutes
+	# h | H   hours
+	# d | D   days
+	# w | W   weeks
+	RekeyLimit default none
+
 	# Specifies a file from which the user's identity key is read when using public key authentication.
 	# This should be public key
 	IdentityFile ~\\.ssh\\Remote-SSH.pub
+
+	# Specifies whether to use password authentication.
+	# The default is yes
+	PasswordAuthentication yes
+
+	# Specifies the number of password prompts before giving up.
+	# The default is 3
+	NumberOfPasswordPrompts 3
+
+	# Specifies whether to try rhosts based authentication with public key authentication.
+	HostbasedAuthentication no
+
+	# the signature algorithms that will be used for hostbased authentication as a comma-separated list of patterns.
+	HostbasedAcceptedAlgorithms ecdsa-sha2-nistp256
+
+	# This allows it to detect if a host key changed due to DNS spoofing and will add addresses of
+	# destination hosts to ~/.ssh/known_hosts in the process, regardless of the setting of StrictHostKeyChecking
+	# The default is no
+	CheckHostIP no
+
+	# ssh will never automatically add host keys to the ~/.ssh/known_hosts file, and refuses to
+	# connect to hosts whose host key has changed.
+	# This provides maximum protection against man-in-the-middle (MITM) attacks
+	# "ask" means a new host keys will be added to the user known host files only after the user
+	# has confirmed that is what they really want to do
+	StrictHostKeyChecking ask
+
+	# Specifies whether to use compression.
+	# The default is no
+	Compression no
+
+	# Specifies the number of tries (one per second) to make before exiting.
+	# The default is 1
+	ConnectionAttempts 1
+
+	# The timeout (in seconds) used when connecting to the SSH server, instead of using the default system TCP timeout.
+	ConnectTimeout 10
+
+	# Specifies whether remote hosts are allowed to connect to local forwarded ports.
+	# The default is no
+	GatewayPorts no
+
+	# Indicates that ssh(1) should hash host names and addresses when they are added to ~/.ssh/known_hosts.
+	# These hashed names may be used normally by ssh(1) and sshd(8), but they do not visually reveal
+	# identifying information if the file's contents are disclosed.
+	# The default is no.
+	HashKnownHosts no
+
+	# Sets the number of server alive messages (see below) which may be sent without ssh receiving
+	# any messages back from the server.
+	# The default is 3
+	ServerAliveCountMax 3
+
+	# The argument to this keyword must be none (same as the -N option),
+	# subsystem (same as the -s option) or default (shell or command execution)
+	# TODO: not working
+	# SessionType default
+
+	# Directly specify one or more environment variables and their contents to be sent to the server.
+	#SetEnv
+
+	# Keys listed in this file will be refused for host authentication.
+	#RevokedHostKeys
+
+	#Specifies a command to execute on the remote machine after successfully connecting to the server.
+	#RemoteCommand
+
+	# Include the specified configuration file(s).
+	# Multiple pathnames may be specified and each pathname may contain glob wildcards
+	#Include

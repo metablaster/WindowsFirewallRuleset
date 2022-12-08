@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+using namespace System.Text.RegularExpressions
+
 <#
 .SYNOPSIS
 Deploy public SSH key to remote host using SSH
@@ -118,7 +120,7 @@ function Publish-SshKey
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	$KeyFileName = Split-Path -Path $Key -Leaf
+	$KeyFileName = Resolve-Path -Path $Key | Split-Path -Leaf
 
 	if (!(Get-Command -Name ssh.exe -CommandType Application))
 	{
@@ -142,6 +144,34 @@ function Publish-SshKey
 	{
 		# PS might fail but SSH connection could work regardless
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to test connection to '$Domain' computer on SSH port $Port"
+	}
+
+	# if known_hosts file exists ensure entry for remote host is valid to avoid ssh error about
+	# possibility of DNS spoofing, although this will work only if the IP doesn't match
+	$KnownHostsFile = "$HOME\.ssh\known_hosts"
+
+	if (Test-Path -Path $KnownHostsFile)
+	{
+		$KnownHosts = Get-Content -Path $KnownHostsFile -Raw -Encoding $DefaultEncoding
+		[regex] $Regex = "$Domain,(?<IPAddress>([0-9]{1,3}\.){3}[0-9]{1,3})"
+		$Match = [regex]::Match($KnownHosts, $Regex, [RegexOptions]::IgnoreCase)
+
+		if ($Match.Success)
+		{
+			[IPAddress] $KnownIP = $Match.Groups["IPAddress"].Value
+			$HostIP = Resolve-Host -FlushDNS -Domain $Domain -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress
+
+			if ($KnownIP -ne $HostIP)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The IP of '$Domain' computer $HostIP does not match the IP entry in 'known_hosts' file $KnownIP"
+
+				if ($PSCmdlet.ShouldProcess($KnownHostsFile, "Delete known_hosts file"))
+				{
+					# remove file, ssh will ask to add remote host and regenerate the file
+					Remove-Item -Path $KnownHostsFile
+				}
+			}
+		}
 	}
 
 	# Set remote key destination and command to run
