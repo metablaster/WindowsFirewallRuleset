@@ -45,6 +45,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - `FDResPub` and `fdPHost` services are now required for remote deployment to rule out host
   discovery issues
   - `Merge-SDDL` Added `-Unique` switch to be able to merge SDDL's excluding duplicate ones
+  - Update of module help is now done with a new function `Update-ModuleHelp` which updates
+  all modules on system which are updatable, reducing update errors to 0
   - Implemented remoting functionality for the following public functions:
 
     - `ConvertFrom-SDDL`
@@ -76,7 +78,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - New functionalities
 
     - `Test-SDDL` function to validate SDDL syntax
-    - Added `PolicyFileEditor` new external module to help with GPO management and renamed to
+    - Added `PolicyFileEditor` new 3r party module to help with GPO management and renamed to
     Ruleset.PolicyFileEditor
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
@@ -100,19 +102,20 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Generate sitemap xml
     - Publish generated sitemap to google for crawling
 
-  - Resolved many syntax errors in XML and PS files with the help of static code analysis
-  - Extensions settings improved, few recommended extensions replaced for better ones.
   - improved spellcheking with custom dictionaries and configuration of spell check extension
   - Replaced XML tools extension with XML Red Hat
   - Added YAML extension to workspace recommendations for YAML support
   - Workspace settings and settings for extensions vastly revisited for better coding experience.
+  - Resolved almost all issuses reporeted by markdown, xml and yaml linter and PSScriptAnalyzer
 
 - Unit test
 
-  - `TestFileEncoding.ps1` new test script to verify encoding of all files in repository
-  - `PSScriptAnalyzer.ps1` test script significantly improved with the ability to log issues
+  - `Test-FileEncoding.ps1` new test script to verify encoding of all files in repository
+  - `Invoke-CodeAnalysis.ps1` (renamed) test script significantly improved with the ability to log issues
+  - `Test-ModuleExports.ps1` new test script to ensure all expected symbols are exported
+  - `Test-ModuleManifest.ps1` (renamed) script improved to handle more entries for correctness in manifest files
+  - `Test-ScriptInfo.ps1` improved for better reporting of issues with script info section
   - New test module `PssaTest.Module` used to test PSScryptAnalyzer rules in `Config\PSScriptAnalyzer.ps1`
-  - Added several custom spellcheck dictionaries specific to words used in repository
 
 [Table of Contents](#table-of-contents)
 

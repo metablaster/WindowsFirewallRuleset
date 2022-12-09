@@ -81,7 +81,7 @@
 	"editor.scrollBeyondLastLine": true,
 	"editor.scrollbar.horizontalScrollbarSize": 20,
 	"editor.minimap.showSlider": "always",
-	"editor.snippetSuggestions": "bottom",
+	"editor.snippetSuggestions": "inline",
 	"editor.comments.ignoreEmptyLines": false,
 	// override the colors of the default log items (log files):
 	// log.constant
@@ -108,6 +108,10 @@
 			}
 		]
 	},
+	"editor.renderControlCharacters": false,
+	"editor.renderWhitespace": "none",
+	"editor.minimap.enabled": true,
+	"editor.largeFileOptimizations": false,
 	// Work around ugly syntax highlighting:
 	// ISSUE: https://github.com/PowerShell/vscode-powershell/issues/3221
 	"editor.semanticHighlighting.enabled": false,
@@ -129,12 +133,23 @@
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"workbench.editor.highlightModifiedTabs": true,
 	"workbench.editor.wrapTabs": true,
+	"workbench.startupEditor": "none",
+	"workbench.sideBar.location": "left",
+	"workbench.iconTheme": "vs-seti",
 	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
+	// VSCode: explorer
+	"explorer.confirmDelete": false,
+	"explorer.confirmDragAndDrop": false,
+	// VSCode: problems
+	"problems.showCurrentInStatus": true,
 	// VSCode: Terminal
 	// NOTE: This high number due to Test\Invoke-CodeAnalysis.ps1
 	// TODO: We should use Set-ScreenBuffer function there
 	"terminal.integrated.scrollback": 40000,
+	// VSCode audio cues
+	"audioCues.lineHasError": "off",
+	"audioCues.lineHasWarning": "off",
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
 	// Extension: Bookmarks

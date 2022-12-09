@@ -11,25 +11,47 @@
 # and convert them to CRLF when the file is checked out.
 # whitespace attribute will help detect surplus spaces when using git diff
 ###############################################################################
+
+# Binary files
 *.png		binary
 *.gif		binary
 *.pmc		binary
 *.pmf		binary
 *.msc		binary
 *.wav		binary
+*.dll		binary
 *.cab		binary
+# PowerShell code files
 *.ps1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.psd1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.pssc		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.psm1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.txt		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.psd1		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.ps1xml	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.pssc		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Markup code files
 *.xml		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.yml		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.json		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.jsonc		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.html		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Other code files
 *.js		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.cs		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.sh		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
-*config		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Text files
+*.md		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.ini		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.txt		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.dic		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Configuration files
 *.wpaPresets	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
 *.wpaProfile	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Files without extensions
+LICENSE		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+config		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+sshd_config	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+# Should be Ignored
+*.zip		binary
+*.cer		binary
+*.log		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.csv		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
+*.old		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=1
