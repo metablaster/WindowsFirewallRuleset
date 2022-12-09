@@ -118,15 +118,14 @@ To work with Windows PowerShell quickly in any directory see:
 
     Filter log files according to json config, string or regex pattern
 
-5. [Fix JSON][extension fix json]
-
-    fix-json uses jsonic to parse json data in the current editor,
-    then reformats the content using a simple JSON.stringify call.
-
-6. [Highlight Bad Chars][extension gremlins]
+5. [Highlight Bad Chars][extension gremlins]
 
     Helps to detect gremlins (bad chars), which cause issues such as unable to save file
     in UTF-8 format
+
+6. [Ini for VSCode][extension ini]
+
+    Provides support for `INI` files
 
 7. [Json][extension json]
 
@@ -167,23 +166,31 @@ To work with Windows PowerShell quickly in any directory see:
 
     View remote machines for Remote - SSH in action bar
 
-16. [Sort JSON objects][extension sort json]
+16. [Select Line Status Bar][extension select line status bar]
 
-    Alphabetically sorts the keys in selected JSON objects.
+    Show count of selected lines in status bar
 
-17. [TODO tree][extension todo-tree]
+17. [Sort JSON objects][extension sort json]
+
+    Sorts the keys in selected JSON objects according to selected criteria
+
+18. [Sort Lines][extension sort lines]
+
+    Let's you sort lines in file according to selected criteria
+
+19. [TODO tree][extension todo-tree]
 
     Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
 
-18. [Trailing Spaces][extension trailing spaces]
+20. [Trailing Spaces][extension trailing spaces]
 
     Highlight trailing spaces and delete them in a flash!
 
-19. [XML][extension xml]
+21. [XML][extension xml]
 
     Useful for xml language support, can also help to detect issues with xml
 
-20. [YAML][extension yaml]
+22. [YAML][extension yaml]
 
     Useful for xml language support, can also help to detect issues with xml
 
@@ -708,16 +715,18 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension csv]: https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv "Visit Marketplace"
 [extension markdown aio]: https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one "Visit Marketplace"
 [extension xml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml "Visit Marketplace"
+[extension sort lines]: https://marketplace.visualstudio.com/items?itemName=Tyriar.sort-lines  "Visit Marketplace"
 [extension yaml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml "Visit Marketplace"
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
+[extension select line status bar]: https://marketplace.visualstudio.com/items?itemName=tomoki1207.selectline-statusbar "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"
 [extension remote SSH]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh "Visit Marketplace"
+[extension ini]: https://marketplace.visualstudio.com/items?itemName=DavidWang.ini-for-vscode "Visit Marketplace"
 [extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
 [extension remote SSH explorer]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"
 [extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
 [extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
-[extension fix json]: https://marketplace.visualstudio.com/items?itemName=oliversturm.fix-json "Visit Marketplace"
 [extension trailing spaces]: https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"

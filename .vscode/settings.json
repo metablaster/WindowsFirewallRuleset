@@ -1,88 +1,91 @@
 // https://code.visualstudio.com/docs/getstarted/settings#_default-settings
-// https://devblogs.microsoft.com/powershell/psscriptanalyzer-pssa-1-19-0-has-been-released
-// NOTE: We explicitly define all extension settings in alphabetical order as it is listed
-// in Extensions -> Feature Contributions to ensure that changes to defaults doesn't affect us
+// NOTE: We explicitly define most extension settings to ensure that changes to
+// defaults don't affect us.
+// NOTE: For easy navigation groups of settings are sorted alphabetically and
+// settings within individual groups are also alphabetically sorted.
+// Extension settings go after VSCode settings
 {
-	// VSCode: workspace files
-	"files.encoding": "utf8",
-	"files.autoSave": "afterDelay",
-	"files.autoSaveDelay": 500,
-	"files.eol": "\r\n",
-	"files.trimTrailingWhitespace": true,
-	"files.trimFinalNewlines": true,
-	"files.insertFinalNewline": true,
-	"files.associations": {
-		"*config": "ssh_config",
-		"*.msc": "xml",
-		// Test module for Config\ProjectSettings.psd1
-		"*PssaTest.Module*": "PssaTest",
-		"LICENSE": "plaintext"
-	},
-	// Test module for Config\ProjectSettings.psd1 must not be formatted
-	"[PssaTest]": {
-		"editor.formatOnSave": false,
-		"editor.formatOnPaste": false,
-		"editor.trimAutoWhitespace": false,
-		"editor.formatOnType": false
-	},
+	// VSCode: File specific settings
 	"[markdown]": {
-		"editor.wordWrap": "off",
-		"editor.detectIndentation": true,
-		"editor.insertSpaces": true,
-		"editor.formatOnSave": false,
-		"editor.formatOnPaste": true,
-		// Markdown All in One extension is default markdown formatter
-		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
+		// Markdown standard is 2 spaces for indentation
+		"editor.tabSize": 2,
+		// Markdown All in One extension
+		"editor.defaultFormatter": "yzhang.markdown-all-in-one",
+		"editor.insertSpaces": true
 	},
 	"[powershell]": {
-		// PowerShell extension is default formatter for PowerShell files
+		// PowerShell extension
 		"editor.defaultFormatter": "ms-vscode.powershell"
 	},
-	// Files or directories which to exclude from explorer
-	"files.exclude": {
-		"**/.git": true
+	"[PssaTest]": {
+		// Test module for Config\ProjectSettings.psd1 must not be formatted
+		"editor.formatOnPaste": false,
+		"editor.formatOnSave": false,
+		"editor.formatOnType": false,
+		"editor.trimAutoWhitespace": false
 	},
-	// VSCode: search
-	"search.exclude": {
-		"**/.git": true,
-		// Auto generated files
-		"**/*-help.xml": true,
-		"**/*_HelpInfo.xml": true,
-		"/Modules/*/Help/*/*.md": true,
-		"/docs/sitemap.xml": true
+	"[xml]": {
+		// Standard for html and xml is 2
+		"editor.tabSize": 2,
+		// XML extension
+		"editor.defaultFormatter": "redhat.vscode-xml"
 	},
+	"[yaml]": {
+		"editor.tabSize": 2,
+		// YAML extension
+		"editor.defaultFormatter": "redhat.vscode-yaml",
+		// NOTE: yaml standard forbids tabs which the extension handles
+		"editor.insertSpaces": true
+	},
+	// VSCode audio cues
+	"audioCues.lineHasError": "off",
+	"audioCues.lineHasWarning": "off",
+	// VSCode: diffeditor
+	"diffEditor.ignoreTrimWhitespace": false,
 	// VSCode: editor
-	// https://code.visualstudio.com/docs/editor/intellisense
-	"editor.quickSuggestions": {
-		"other": true,
-		"comments": true,
-		"strings": true
-	},
 	"editor.acceptSuggestionOnEnter": "off",
-	"editor.rulers": [
-		{
-			// Recommended line width
-			"column": 100,
-			"color": "#4063ff"
-		},
-		{
-			// Maximum line width
-			"column": 120,
-			"color": "#ff0000"
-		},
-	],
+	"editor.autoIndent": "full",
+	"editor.codeActionsOnSave": {
+		// TODO: need to verify if result is desired
+		"source.fixAll.markdownlint": false
+	},
+	"editor.comments.ignoreEmptyLines": false,
+	// PSUseConsistentIndentation
+	"editor.detectIndentation": false,
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
 	"editor.formatOnType": true,
-	"editor.autoIndent": "full",
-	"editor.wordWrap": "off",
-	"editor.trimAutoWhitespace": true,
 	"editor.insertSpaces": false,
-	"editor.scrollBeyondLastLine": true,
-	"editor.scrollbar.horizontalScrollbarSize": 20,
+	"editor.largeFileOptimizations": false,
+	"editor.minimap.enabled": true,
 	"editor.minimap.showSlider": "always",
+	// https://code.visualstudio.com/docs/editor/intellisense
+	"editor.quickSuggestions": {
+		"comments": true,
+		"other": true,
+		"strings": true
+	},
+	"editor.renderControlCharacters": false,
+	"editor.renderWhitespace": "selection",
+	"editor.rulers": [
+		{
+			"color": "#4063ff",
+			// Recommended line width
+			"column": 100
+		},
+		{
+			"color": "#ff0000",
+			// Maximum line width
+			"column": 120
+		}
+	],
+	"editor.scrollbar.horizontalScrollbarSize": 20,
+	"editor.scrollBeyondLastLine": true,
+	// Work around ugly syntax highlighting:
+	// ISSUE: https://github.com/PowerShell/vscode-powershell/issues/3221
+	"editor.semanticHighlighting.enabled": false,
 	"editor.snippetSuggestions": "inline",
-	"editor.comments.ignoreEmptyLines": false,
+	"editor.tabSize": 4,
 	// override the colors of the default log items (log files):
 	// log.constant
 	// log.date
@@ -102,27 +105,60 @@
 			{
 				"scope": "log.date",
 				"settings": {
-					"foreground": "#b3aeae",
+					"foreground": "#b3aeae"
 					// "fontStyle": "bold"
 				}
 			}
 		]
 	},
-	"editor.renderControlCharacters": false,
-	"editor.renderWhitespace": "none",
-	"editor.minimap.enabled": true,
-	"editor.largeFileOptimizations": false,
-	// Work around ugly syntax highlighting:
-	// ISSUE: https://github.com/PowerShell/vscode-powershell/issues/3221
-	"editor.semanticHighlighting.enabled": false,
-	"editor.codeActionsOnSave": {
-		// TODO: need to verify if result is desired
-		"source.fixAll.markdownlint": false
+	"editor.trimAutoWhitespace": true,
+	"editor.wordWrap": "off",
+	// VSCode: explorer
+	"explorer.confirmDelete": false,
+	"explorer.confirmDragAndDrop": false,
+	// VSCode: Workspace files
+	"files.associations": {
+		// Contains binary data and must not be formatted
+		"*.msc": "plaintext",
+		// Associated to have xml icon associated in VSCode explorer
+		"*.wpaPresets": "xml",
+		"*.wpaProfile": "xml",
+		// Test module for Config\ProjectSettings.psd1 must not be formatted
+		// TODO: Test with "plaintext" after renaming files to *.ps1
+		"*PssaTest.Module*": "PssaTest",
+		"config": "ssh_config",
+		"LICENSE": "plaintext",
+		"sshd_config": "ssh_config"
 	},
-	// PSUseConsistentIndentation
-	"editor.detectIndentation": false,
-	"editor.tabSize": 4,
+	"files.autoSave": "afterDelay",
+	"files.autoSaveDelay": 500,
+	"files.encoding": "utf8",
+	"files.eol": "\r\n",
+	// Files or directories which to exclude from explorer
+	"files.exclude": {
+		"**/.git": true
+	},
+	"files.insertFinalNewline": true,
+	"files.trimFinalNewlines": true,
+	"files.trimTrailingWhitespace": true,
+	// VSCode: problems
+	"problems.showCurrentInStatus": true,
+	// VSCode: search
+	"search.exclude": {
+		"**/.git": true,
+		// Auto generated files
+		"**/*-help.xml": true,
+		"**/*_HelpInfo.xml": true,
+		"/Modules/*/Help/*/*.md": true,
+		"/docs/sitemap.xml": true
+	},
+	// VSCode: Terminal
+	// NOTE: This high number due to Test\Invoke-CodeAnalysis.ps1
+	// TODO: We should use Set-ScreenBuffer function there
+	"terminal.integrated.scrollback": 40000,
 	// VSCode: workbench
+	// TODO: What is the new option, needed for autogenrated files
+	"workbench.action.files.saveWithoutFormatting": [],
 	"workbench.colorCustomizations": {
 		// TODO: Isn't this duplicate of "editor.rulers"
 		"editorRuler.foreground": "#4063ff",
@@ -133,157 +169,141 @@
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"workbench.editor.highlightModifiedTabs": true,
 	"workbench.editor.wrapTabs": true,
-	"workbench.startupEditor": "none",
-	"workbench.sideBar.location": "left",
 	"workbench.iconTheme": "vs-seti",
-	// VSCode: diffeditor
-	"diffEditor.ignoreTrimWhitespace": false,
-	// VSCode: explorer
-	"explorer.confirmDelete": false,
-	"explorer.confirmDragAndDrop": false,
-	// VSCode: problems
-	"problems.showCurrentInStatus": true,
-	// VSCode: Terminal
-	// NOTE: This high number due to Test\Invoke-CodeAnalysis.ps1
-	// TODO: We should use Set-ScreenBuffer function there
-	"terminal.integrated.scrollback": 40000,
-	// VSCode audio cues
-	"audioCues.lineHasError": "off",
-	"audioCues.lineHasWarning": "off",
+	"workbench.sideBar.location": "left",
+	"workbench.startupEditor": "none",
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
 	// Extension: Bookmarks
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
 	// Extension: Code Spell Checker
-	// CAUTION: settings for cSpell defined here are not recognized in cspell.json
-	"cSpell.checkOnlyEnabledFileTypes": true,
-	"cSpell.spellCheckOnlyWorkspaceFiles": true,
-	"cSpell.customDictionaries": {
-		"dic.programs": {
-			"name": "programs",
-			"path": "${workspaceRoot}/Config/cSpell/programs.dic",
-			"description": "Spellcheck words identifying executables, apps, services and drivers",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.protocols": {
-			"name": "protocols",
-			"path": "${workspaceRoot}/Config/cSpell/protocols.dic",
-			"description": "Spellcheck words identifying computer and network protocols",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.commands": {
-			"name": "commands",
-			"path": "${workspaceRoot}/Config/cSpell/commands.dic",
-			"description": "Spellcheck words related to command line commands and arguments",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.firewall": {
-			"name": "firewall",
-			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
-			"description": "Spellcheck words related to networking, firewall and WFP terms",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.names": {
-			"name": "names",
-			"path": "${workspaceRoot}/Config/cSpell/names.dic",
-			"description": "Spellcheck words related to names of repositories, websites and people",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.computer": {
-			"name": "computer",
-			"path": "${workspaceRoot}/Config/cSpell/computer.dic",
-			"description": "Spellcheck words related to computer, system components and files",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.development": {
-			"name": "development",
-			"path": "${workspaceRoot}/Config/cSpell/development.dic",
-			"description": "Spellcheck words related to language keywords, files and programing terms",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.project": {
-			"name": "project",
-			"path": "${workspaceRoot}/Config/cSpell/project.dic",
-			"description": "Spellcheck words specific to this repository such as setting names",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.identifiers": {
-			"name": "identifiers",
-			"path": "${workspaceRoot}/Config/cSpell/identifiers.dic",
-			"description": "Spellcheck words for Windows store apps and VSCode extension identifiers",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.foul": {
-			"name": "foul",
-			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
-			"description": "Spellcheck rude words which to mark as forbidden",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.test": {
-			"name": "test",
-			"path": "${workspaceRoot}/Config/cSpell/test.dic",
-			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		"dic.unsorted": {
-			"name": "unsorted",
-			"path": "${workspaceRoot}/Config/cSpell/unsorted.dic",
-			"description": "Specific words used in this project which don't fit into any other category",
-			"addWords": true,
-			"scope": "workspace"
-		},
-		// Enable\disable specific dictionaries:
-		"programs": true,
-		"protocols": true,
-		"commands": true,
-		"firewall": true,
-		"names": true,
-		"computer": true,
-		"development": true,
-		"project": true,
-		"identifiers": true,
-		"foul": true,
-		"test": true,
-		"unsorted": true
-	},
+	// CAUTION: settings for cSpell defined in settings.json are not recognized in cspell.json
+	// TODO: see if desired
+	"cSpell.autoFormatConfigFile": false,
 	"cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 120,
 	"cSpell.blockCheckingWhenLineLengthGreaterThan": 10000,
 	"cSpell.blockCheckingWhenTextChunkSizeGreaterThan": 500,
 	"cSpell.checkLimit": 500,
-	// CAUTION: Needs to be set in uer settings
-	// "cSpell.spellCheckDelayMs": 50,
-	// TODO: see if desired
-	"cSpell.autoFormatConfigFile": false,
+	"cSpell.checkOnlyEnabledFileTypes": true,
+	"cSpell.customDictionaries": {
+		"dic.commands": {
+			"description": "Spellcheck words related to command line commands and arguments",
+			"name": "commands",
+			"path": "${workspaceRoot}/Config/cSpell/commands.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.computer": {
+			"description": "Spellcheck words related to computer, system components and files",
+			"name": "computer",
+			"path": "${workspaceRoot}/Config/cSpell/computer.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.development": {
+			"description": "Spellcheck words related to language keywords, files and programing terms",
+			"name": "development",
+			"path": "${workspaceRoot}/Config/cSpell/development.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.firewall": {
+			"description": "Spellcheck words related to networking, firewall and WFP terms",
+			"name": "firewall",
+			"path": "${workspaceRoot}/Config/cSpell/firewall.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.foul": {
+			"description": "Spellcheck rude words which to mark as forbidden",
+			"name": "foul",
+			"path": "${workspaceRoot}/Config/cSpell/foul/foul.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.identifiers": {
+			"description": "Spellcheck words for Windows store apps and VSCode extension identifiers",
+			"name": "identifiers",
+			"path": "${workspaceRoot}/Config/cSpell/identifiers.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.names": {
+			"description": "Spellcheck words related to names of repositories, websites and people",
+			"name": "names",
+			"path": "${workspaceRoot}/Config/cSpell/names.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.programs": {
+			"description": "Spellcheck words identifying executables, apps, services and drivers",
+			"name": "programs",
+			"path": "${workspaceRoot}/Config/cSpell/programs.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.project": {
+			"description": "Spellcheck words specific to this repository such as setting names",
+			"name": "project",
+			"path": "${workspaceRoot}/Config/cSpell/project.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.protocols": {
+			"description": "Spellcheck words identifying computer and network protocols",
+			"name": "protocols",
+			"path": "${workspaceRoot}/Config/cSpell/protocols.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.test": {
+			"description": "Spellcheck words used in unit tests in this repository, intentionally bad words",
+			"name": "test",
+			"path": "${workspaceRoot}/Config/cSpell/test.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		"dic.unsorted": {
+			"description": "Specific words used in this project which don't fit into any other category",
+			"name": "unsorted",
+			"path": "${workspaceRoot}/Config/cSpell/unsorted.dic",
+			"scope": "workspace",
+			"addWords": true
+		},
+		// Enable\disable specific dictionaries:
+		"commands": true,
+		"computer": true,
+		"development": true,
+		"firewall": true,
+		"foul": true,
+		"identifiers": true,
+		"names": true,
+		"programs": true,
+		"project": true,
+		"protocols": true,
+		"test": true,
+		"unsorted": true
+	},
 	"cSpell.diagnosticLevel": "Information",
-	"cSpell.showAutocompleteSuggestions": true,
 	// CAUTION: Needs to be set in user settings
 	// "cSpell.showCommandsInEditorContextMenu": true,
 	// "cSpell.showStatus": true,
 	// "cSpell.showStatusAlignment": "Right",
 	// "cSpell.showSuggestionsLinkInEditorContextMenu": true,
+	"cSpell.showAutocompleteSuggestions": true,
+	"cSpell.spellCheckOnlyWorkspaceFiles": true,
 	"cSpell.suggestionMenuType": "quickPick",
+	// CAUTION: Needs to be set in uer settings
+	// "cSpell.spellCheckDelayMs": 50,
 	// Extension: Filter Line
 	// CAUTION: Needs to be set in user settings
 	// "filter-line.historySize": 20,
-	// Extension: Fix JSON
-	"fixJson.indentationSpaces": null,
 	// Extension: Highlight Bad Chars
-	"highlight-bad-chars.asciiOnly": true,
 	"highlight-bad-chars.additionalUnicodeChars": [
 		// https://www.vertex42.com/ExcelTips/unicode-symbols.html
 	],
+	"highlight-bad-chars.asciiOnly": true,
 	"highlight-bad-chars.badCharDecorationStyle": {
 		"cursor": "square",
 		"backgroundColor": "rgba(255,0,0,0.3)",
@@ -375,10 +395,10 @@
 	],
 	// cSpell:enable
 	// Extension: Markdown All in One
+	"markdown.extension.bold.indicator": "**",
 	"markdown.extension.completion.respectVscodeSearchExclude": false,
 	"markdown.extension.completion.root": "${workspaceFolder}",
 	"markdown.extension.italic.indicator": "*",
-	"markdown.extension.bold.indicator": "**",
 	"markdown.extension.list.indentationSize": "inherit",
 	"markdown.extension.math.enabled": true,
 	"markdown.extension.orderedList.autoRenumber": true,
@@ -391,9 +411,9 @@
 	"markdown.extension.print.theme": "light",
 	"markdown.extension.print.validateUrls": true,
 	"markdown.extension.syntax.decorationFileSizeLimit": 50000,
+	"markdown.extension.tableFormatter.delimiterRowNoPadding": false,
 	"markdown.extension.tableFormatter.enabled": true,
 	"markdown.extension.tableFormatter.normalizeIndentation": false,
-	"markdown.extension.tableFormatter.delimiterRowNoPadding": false,
 	"markdown.extension.toc.levels": "1..6",
 	"markdown.extension.toc.orderedList": false,
 	"markdown.extension.toc.plaintext": false,
@@ -401,7 +421,6 @@
 	"markdown.extension.toc.unorderedList.marker": "-",
 	"markdown.extension.toc.updateOnSave": true,
 	// Extension markdownlint
-	"markdownlint.run": "onType",
 	// NOTE: There is markdown.jsonc in Modules directory which disables some rules,
 	// consider enabling them temporary to find issues.
 	// Some false positives are suppressed per file with HTML comments
@@ -414,114 +433,120 @@
 			"tables": false
 		}
 	},
+	"markdownlint.run": "onType",
 	// Extension: PowerShell
-	"powershell.startAutomatically": true,
-	"powershell.enableProfileLoading": true,
-	"powershell.enableReferencesCodeLens": true,
-	"powershell.analyzeOpenDocumentsOnly": false,
-	"powershell.promptToUpdatePowerShell": true,
-	"powershell.buttons.showRunButtons": true,
-	"powershell.buttons.showPanelMovementButtons": false,
-	"powershell.debugging.createTemporaryIntegratedConsole": false,
-	"powershell.developer.editorServicesLogLevel": "Normal",
-	"powershell.developer.editorServicesWaitForDebugger": false,
-	"powershell.developer.featureFlags": [],
-	"powershell.developer.waitForSessionFileTimeoutSeconds": 240,
-	//"powershell.developer.bundledModulesPath": "set custom modules path",
-	"powershell.sideBar.CommandExplorerVisibility": true,
-	"powershell.sideBar.CommandExplorerExcludeFilter": [
-		"ThreadJob",
-		"PSReadLine",
-		"BitsTransfer",
-		"PrintManagement",
-		"Storage",
-		"PSDesiredStateConfiguration",
-		"EventTracingManagement",
-		"Microsoft.PowerShell.Host",
-		"MsDtc",
-		"SmbShare",
-		"ConfigCI",
-		"HgsServer",
-		"HgsKeyProtection",
-		"iSCSI",
-		"KDS",
-		"BranchCache",
-		"MMAgent",
-		"Wdac",
-		"PnpDevice",
-		"WSSCmdlets",
-		"Az.Network",
-		"PCSVDevice",
-		"HgsDiagnostics",
-		"SmbWitness",
-		"DISM",
-		"TroubleshootingPack",
-		"DirectAccessClientComponents",
-		// Possibly wanted (network and security)
-		"VpnClient",
-		"TrustedPlatformModule",
-		"SecureBoot",
-		"BitLocker",
-		"TLS",
-		"NetQoS",
-		"Hyper-V",
-		"WindowsUpdate"
-	],
-	// pester
-	"powershell.pester.useLegacyCodeLens": false,
-	"powershell.pester.outputVerbosity": "FromPreference",
-	"powershell.pester.debugOutputVerbosity": "Diagnostic",
-	// integratedConsole
-	"powershell.integratedConsole.showOnStartup": false,
-	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
-	"powershell.integratedConsole.startInBackground": false,
-	"powershell.integratedConsole.focusConsoleOnExecute": true,
-	"powershell.integratedConsole.useLegacyReadLine": false,
-	"powershell.integratedConsole.suppressStartupBanner": true,
-	// code folding
+	// PowerShell: Code folding
 	"powershell.codeFolding.enable": true,
 	"powershell.codeFolding.showLastLine": true,
-	// PowerShell: script analysis
-	"powershell.scriptAnalysis.enable": true,
-	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
-	// PowerShell: code formatting
-	"powershell.codeFormatting.preset": "Allman",
+	// PowerShell: Code formatting
+	// PSAlignAssignmentStatement
+	"powershell.codeFormatting.alignPropertyValuePairs": false,
 	// PSAvoidUsingCmdletAliases
 	"powershell.codeFormatting.autoCorrectAliases": false,
 	// PSAvoidSemicolonsAsLineTerminators
 	"powershell.codeFormatting.avoidSemicolonsAsLineTerminators": true,
-	// PSAvoidUsingDoubleQuotesForConstantString
-	"powershell.codeFormatting.useConstantStrings": false,
 	// PSPlaceOpenBrace
-	"powershell.codeFormatting.openBraceOnSameLine": false,
-	"powershell.codeFormatting.newLineAfterOpenBrace": true,
 	"powershell.codeFormatting.ignoreOneLineBlock": true,
+	"powershell.codeFormatting.newLineAfterOpenBrace": true,
+	"powershell.codeFormatting.openBraceOnSameLine": false,
 	// PSPlaceCloseBrace
 	"powershell.codeFormatting.newLineAfterCloseBrace": true,
+	// PSUseConsistentIndentation
+	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",
+	"powershell.codeFormatting.preset": "Allman",
+	// PSAvoidUsingDoubleQuotesForConstantString
+	"powershell.codeFormatting.useConstantStrings": false,
+	// PSUseCorrectCasing
+	"powershell.codeFormatting.useCorrectCasing": true,
 	// PSUseConsistentWhitespace
+	"powershell.codeFormatting.addWhitespaceAroundPipe": true,
+	"powershell.codeFormatting.trimWhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceInsideBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
 	"powershell.codeFormatting.whitespaceBeforeOpenParen": true,
 	"powershell.codeFormatting.whitespaceAroundOperator": true,
-	"powershell.codeFormatting.addWhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceAfterSeparator": true,
-	"powershell.codeFormatting.trimWhitespaceAroundPipe": true,
 	"powershell.codeFormatting.whitespaceBetweenParameters": true,
-	// PSUseConsistentIndentation
-	"powershell.codeFormatting.pipelineIndentationStyle": "NoIndentation",
-	// PSAlignAssignmentStatement
-	"powershell.codeFormatting.alignPropertyValuePairs": false,
-	// PSUseCorrectCasing
-	"powershell.codeFormatting.useCorrectCasing": true,
+	// PowerShell: Integrated console
+	"powershell.integratedConsole.focusConsoleOnExecute": true,
+	"powershell.integratedConsole.forceClearScrollbackBuffer": true,
+	"powershell.integratedConsole.showOnStartup": false,
+	"powershell.integratedConsole.startInBackground": false,
+	"powershell.integratedConsole.suppressStartupBanner": true,
+	"powershell.integratedConsole.useLegacyReadLine": false,
+	// PowerShell: Script analysis
+	"powershell.scriptAnalysis.enable": true,
+	"powershell.scriptAnalysis.settingsPath": "Config\\PSScriptAnalyzerSettings.psd1",
+	// PowerShell: Other settings
+	"powershell.analyzeOpenDocumentsOnly": false,
+	"powershell.buttons.showPanelMovementButtons": false,
+	"powershell.buttons.showRunButtons": true,
+	"powershell.debugging.createTemporaryIntegratedConsole": false,
+	// "powershell.developer.bundledModulesPath": "set custom modules path",
+	"powershell.developer.editorServicesLogLevel": "Normal",
+	"powershell.developer.editorServicesWaitForDebugger": false,
+	"powershell.developer.featureFlags": [],
+	"powershell.developer.waitForSessionFileTimeoutSeconds": 240,
+	"powershell.enableProfileLoading": true,
+	"powershell.enableReferencesCodeLens": true,
 	// PSProvideCommentHelp
 	"powershell.helpCompletion": "BlockComment",
+	"powershell.promptToUpdatePowerShell": true,
+	"powershell.sideBar.CommandExplorerVisibility": true,
+	"powershell.startAutomatically": true,
+	"powershell.sideBar.CommandExplorerExcludeFilter": [
+		"Az.Network",
+		"BitsTransfer",
+		"BranchCache",
+		"ConfigCI",
+		"DISM",
+		"DirectAccessClientComponents",
+		"EventTracingManagement",
+		"HgsDiagnostics",
+		"HgsKeyProtection",
+		"HgsServer",
+		"KDS",
+		"MMAgent",
+		"Microsoft.PowerShell.Host",
+		"MsDtc",
+		"PCSVDevice",
+		"PSDesiredStateConfiguration",
+		"PSReadLine",
+		"PnpDevice",
+		"PrintManagement",
+		"SmbShare",
+		"SmbWitness",
+		"Storage",
+		"ThreadJob",
+		"TroubleshootingPack",
+		"WSSCmdlets",
+		"Wdac",
+		"iSCSI",
+		// Possibly wanted (network and security)
+		"BitLocker",
+		"Hyper-V",
+		"NetQoS",
+		"SecureBoot",
+		"TLS",
+		"TrustedPlatformModule",
+		"VpnClient",
+		"WindowsUpdate"
+	],
+	// PowerShell: Pester
+	"powershell.pester.useLegacyCodeLens": false,
+	"powershell.pester.outputVerbosity": "FromPreference",
+	"powershell.pester.debugOutputVerbosity": "Diagnostic",
 	// Extension: Rainbow CSV
-	"rainbow_csv.enable_auto_csv_lint": true,
 	"rainbow_csv.csv_lint_detect_trailing_spaces": true,
+	"rainbow_csv.enable_auto_csv_lint": true,
+	// Extension: Select Line Status Bar
+	"selectline.alignment": "left",
+	"selectline.statusbarPriority": 100,
 	// Extension: Sort JSON objects
+	// BUG: Does not filter selection (in jsonc?)
 	"sortJSON.contextMenu": {
 		"sortJSON": false,
-		"sortJSONAlphaNum": false,
+		"sortJSONAlphaNum": true,
 		"sortJSONAlphaNumReverse": false,
 		"sortJSONKeyLength": false,
 		"sortJSONKeyLengthReverse": false,
@@ -531,40 +556,13 @@
 		"sortJSONValues": false,
 		"sortJSONValuesReverse": false
 	},
+	// Extension: Sort Lines
+	"sortLines.filterBlankLines": false,
+	"sortLines.sortEntireFile": true,
 	// Extension: Todo Tree
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
-	"todo-tree.general.debug": false,
-	"todo-tree.general.enableFileWatcher": false,
-	"todo-tree.general.revealBehaviour": "start of todo",
-	"todo-tree.general.rootFolder": "${workspaceFolder}",
-	"todo-tree.general.statusBar": "none",
-	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
-	"todo-tree.general.statusBarClickBehaviour": "reveal",
-	"todo-tree.general.tagGroups": {
-		"NOTE": [
-			"NOTE",
-			"INFO"
-		],
-		"BUG": [
-			"BUG",
-			"FIX"
-		]
-	},
-	"todo-tree.general.tags": [
-		"HACK",
-		"TODO",
-		"NOTE",
-		"BUG",
-		"MSDN",
-		"CAUTION",
-		"ISSUE",
-		"cSpell",
-		"[ ]",
-		"[x]",
-		"INFO",
-		"FIX"
-	],
-	"todo-tree.general.showActivityBarBadge": false,
+	"todo-tree.filtering.includeHiddenFiles": false,
+	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
 	"todo-tree.highlights.customHighlight": {
 		// Hard to resolve
 		"HACK": {
@@ -590,7 +588,7 @@
 			// 100% will produce an opaque background
 			"opacity": 70,
 			// used to set the colour of the icon in the tree
-			"iconColour": "#ff0000",
+			"iconColour": "#ff0000"
 			// used to hide tags from the tree, but still highlight in files
 			// "hideFromTree ": false,
 			// set to true to show the icon in the editor gutter
@@ -654,7 +652,7 @@
 			"iconColour": "#c0c0c0", // Silver
 			"opacity": 90
 		},
-		// Spell checker command
+		// cSpell checker command
 		"cSpell": {
 			"icon": "check-circle",
 			"type": "text",
@@ -679,21 +677,66 @@
 			"foreground": "#ffffff",
 			"background": "#2ec920", // Custom green
 			"iconColour": "#2ec920", // Custom green
-			"opacity": 40,
+			"opacity": 40
 		}
 	},
 	"todo-tree.highlights.enabled": true,
 	"todo-tree.highlights.highlightDelay": 500,
 	"todo-tree.highlights.useColourScheme": false,
-	"todo-tree.filtering.includeHiddenFiles": false,
-	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
+	"todo-tree.general.revealBehaviour": "start of todo",
+	"todo-tree.general.rootFolder": "${workspaceFolder}",
+	"todo-tree.general.statusBar": "none",
+	"todo-tree.general.statusBarClickBehaviour": "reveal",
+	"todo-tree.general.debug": false,
+	"todo-tree.general.enableFileWatcher": false,
+	"todo-tree.general.showActivityBarBadge": false,
+	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
+	"todo-tree.general.tags": [
+		"HACK",
+		"TODO",
+		"NOTE",
+		"BUG",
+		"MSDN",
+		"CAUTION",
+		"ISSUE",
+		"cSpell",
+		"[ ]",
+		"[x]",
+		"INFO",
+		"FIX",
+		"Extension"
+	],
+	"todo-tree.general.tagGroups": {
+		"NOTE": [
+			"NOTE",
+			"INFO",
+			"Extension"
+		],
+		"BUG": [
+			"BUG",
+			"FIX"
+		]
+	},
+	"todo-tree.regex.enableMultiLine": false,
+	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
+	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+	"todo-tree.regex.regexCaseSensitive": true,
 	"todo-tree.tree.autoRefresh": true,
+	"todo-tree.tree.buttons.expand": true,
+	"todo-tree.tree.buttons.export": true,
+	"todo-tree.tree.buttons.filter": true,
+	"todo-tree.tree.buttons.groupBySubTag": false,
+	"todo-tree.tree.buttons.groupByTag": true,
+	"todo-tree.tree.buttons.refresh": true,
+	"todo-tree.tree.buttons.reveal": true,
+	"todo-tree.tree.buttons.scanMode": true,
+	"todo-tree.tree.buttons.viewStyle": true,
 	"todo-tree.tree.disableCompactFolders": false,
 	"todo-tree.tree.expanded": false,
 	"todo-tree.tree.filterCaseSensitive": false,
 	"todo-tree.tree.flat": false,
-	"todo-tree.tree.groupedByTag": false,
 	"todo-tree.tree.groupedBySubTag": false,
+	"todo-tree.tree.groupedByTag": false,
 	"todo-tree.tree.hideIconsWhenGroupedByTag": false,
 	"todo-tree.tree.hideTreeWhenEmpty": false,
 	"todo-tree.tree.scanAtStartup": true,
@@ -701,38 +744,19 @@
 	"todo-tree.tree.showBadges": true,
 	"todo-tree.tree.showCountsInTree": true,
 	"todo-tree.tree.showCurrentScanMode": true,
-	"todo-tree.tree.sortTagsOnlyViewAlphabetically": false,
 	"todo-tree.tree.sort": true,
+	"todo-tree.tree.sortTagsOnlyViewAlphabetically": false,
 	"todo-tree.tree.tagsOnly": false,
 	"todo-tree.tree.trackFile": true,
-	"todo-tree.tree.buttons.reveal": true,
-	"todo-tree.tree.buttons.scanMode": true,
-	"todo-tree.tree.buttons.viewStyle": true,
-	"todo-tree.tree.buttons.groupByTag": true,
-	"todo-tree.tree.buttons.groupBySubTag": false,
-	"todo-tree.tree.buttons.filter": true,
-	"todo-tree.tree.buttons.refresh": true,
-	"todo-tree.tree.buttons.expand": true,
-	"todo-tree.tree.buttons.export": true,
-	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
-	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
-	"todo-tree.regex.regexCaseSensitive": true,
-	"todo-tree.regex.enableMultiLine": false,
 	// Extension: Trailing Spaces
 	// CAUTION: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,
 	//Extension: XML
-	// NOTE: Configure telemetry if you wish in user settings
-	// BUG: https://github.com/redhat-developer/vscode-yaml/issues/564
-	// "redhat.telemetry.enabled": false,
-	// CAUTION: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
-	"xml.server.preferBinary": true,
-	"xml.server.silenceExtensionWarning": false,
-	// NOTE: If desired, it must be configured in user settings
-	// "xml.server.binary.trustedHashes": [],
-	"xml.trace.server": "off",
-	"xml.logs.client": true,
+	"xml.codeLens.enabled": true,
+	"xml.completion.autoCloseRemovesContent": true,
+	"xml.completion.autoCloseTags": true,
 	"xml.downloadExternalResources.enabled": true,
+	"xml.extension.jars": [],
 	// see: https://github.com/redhat-developer/vscode-xml/blob/main/docs/Validation.md
 	"xml.fileAssociations": [
 		{
@@ -762,8 +786,9 @@
 		// }
 	],
 	"xml.foldings.includeClosingTagInFold": false,
-	"xml.format.enabled": true,
+	"xml.format.closingBracketNewLine": false,
 	"xml.format.emptyElements": "expand",
+	"xml.format.enabled": true,
 	"xml.format.enforceQuoteStyle": "preferred",
 	"xml.format.experimental": false,
 	"xml.format.grammarAwareFormatting": true,
@@ -772,50 +797,56 @@
 	"xml.format.joinContentLines": true,
 	"xml.format.maxLineWidth": 120,
 	"xml.format.preserveAttributeLineBreaks": true,
-	"xml.format.preserveEmptyContent": false,
 	"xml.format.preservedNewlines": 2,
+	"xml.format.preserveEmptyContent": false,
 	"xml.format.preserveSpace": [],
 	"xml.format.spaceBeforeEmptyCloseTag": true,
-	"xml.format.xsiSchemaLocationSplit": "onPair",
 	"xml.format.splitAttributes": false,
 	"xml.format.splitAttributesIndentSize": 2,
-	"xml.format.closingBracketNewLine": false,
-	"xml.completion.autoCloseTags": true,
-	"xml.completion.autoCloseRemovesContent": true,
-	"xml.codeLens.enabled": true,
+	"xml.format.xsiSchemaLocationSplit": "onPair",
+	"xml.logs.client": true,
 	"xml.preferences.quoteStyle": "double",
 	"xml.preferences.showSchemaDocumentationType": "all",
-	"xml.validation.enabled": true,
-	"xml.validation.namespaces.enabled": "always",
-	"xml.validation.schema.enabled": "always",
-	"xml.validation.disallowDocTypeDecl": false,
-	"xml.validation.resolveExternalEntities": false,
-	"xml.validation.noGrammar": "hint",
+	// NOTE: Configure telemetry if you wish in user settings
+	// ISSUE: https://github.com/redhat-developer/vscode-yaml/issues/564
+	// "redhat.telemetry.enabled": false,
+	// NOTE: If desired, it must be configured in user settings
+	// "xml.server.binary.trustedHashes": [],
+	// CAUTION: For XML extension to work it must be allowed internet access, there is rule in Rules\VSCode.ps1
+	"xml.server.preferBinary": true,
+	"xml.server.silenceExtensionWarning": false,
 	"xml.symbols.enabled": true,
-	"xml.validation.filters": [],
 	"xml.symbols.excluded": [],
+	"xml.symbols.filters": [],
 	"xml.symbols.maxItemsComputed": 5000,
 	"xml.symbols.showReferencedGrammars": true,
-	"xml.symbols.filters": [],
-	"xml.extension.jars": [],
+	"xml.trace.server": "off",
+	"xml.validation.disallowDocTypeDecl": false,
+	"xml.validation.enabled": true,
+	"xml.validation.filters": [],
+	"xml.validation.namespaces.enabled": "always",
+	"xml.validation.noGrammar": "hint",
+	"xml.validation.resolveExternalEntities": false,
+	"xml.validation.schema.enabled": "always",
 	// Extension: YAML
-	"yaml.yamlVersion": "1.2",
-	"yaml.trace.server": "off",
-	"yaml.format.enable": true,
-	"yaml.format.singleQuote": false,
-	"yaml.format.bracketSpacing": true,
-	"yaml.format.proseWrap": "preserve",
-	"yaml.format.printWidth": 120,
-	"yaml.validate": true,
-	"yaml.hover": true,
 	"yaml.completion": true,
 	"yaml.customTags": [],
-	"yaml.schemaStore.enable": true,
-	"yaml.schemaStore.url": "https://www.schemastore.org/api/json/catalog.json",
 	"yaml.disableAdditionalProperties": false,
 	"yaml.disableDefaultProperties": false,
+	"yaml.format.bracketSpacing": true,
+	// BUG: Does not format file on demand if there is error?
+	"yaml.format.enable": true,
+	"yaml.format.printWidth": 120,
+	"yaml.format.proseWrap": "preserve",
+	"yaml.format.singleQuote": false,
+	"yaml.hover": true,
 	"yaml.maxItemsComputed": 5000,
-	"yaml.suggest.parentSkeletonSelectedFirst": false,
+	"yaml.schemaStore.enable": true,
+	"yaml.schemaStore.url": "https://www.schemastore.org/api/json/catalog.json",
 	"yaml.style.flowMapping": "allow",
-	"yaml.style.flowSequence": "allow"
+	"yaml.style.flowSequence": "allow",
+	"yaml.suggest.parentSkeletonSelectedFirst": false,
+	"yaml.trace.server": "off",
+	"yaml.validate": true,
+	"yaml.yamlVersion": "1.2"
 }

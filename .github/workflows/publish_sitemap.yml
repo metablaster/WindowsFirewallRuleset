@@ -1,4 +1,3 @@
-
 # Workflow syntax:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
@@ -31,30 +30,29 @@ jobs:
 
     # Groups together all the steps that run in this job ID
     steps:
+      # Specifies that this step will run v3 of the actions/checkout action
+      # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Specifies that this step will run v3 of the actions/checkout action
-    # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # initialize npm
+      - uses: actions/setup-node@v3
+        with:
+          # If not supplied, the node version from PATH will be used.
+          # Major versions: 14, 16, 18
+          node-version: 16
+          check-latest: false
 
-    # initialize npm
-    - uses: actions/setup-node@v3
-      with:
-        # If not supplied, the node version from PATH will be used.
-        # Major versions: 14, 16, 18
-        node-version: 16
-        check-latest: false
+      # Install dependent modules
+      - run: npm install googleapis
+      - run: npm install google-auth-library
 
-    # Install dependent modules
-    - run: npm install googleapis
-    - run: npm install google-auth-library
+      # make publish.sh executable
+      - name: chmod file
+        run: chmod +x ./Actions/publish_sitemap/publish.sh
 
-    # make publish.sh executable
-    - name: chmod file
-      run: chmod +x ./Actions/publish_sitemap/publish.sh
-
-    # Publish Sitemap action
-    - name: Publish Sitemap
-      env:
-        GOOGLE_SEARCH_CONSOLE_JSON_KEY: $
-      run: ./Actions/publish_sitemap/publish.sh
+      # Publish Sitemap action
+      - name: Publish Sitemap
+        env:
+          GOOGLE_SEARCH_CONSOLE_JSON_KEY: $
+        run: ./Actions/publish_sitemap/publish.sh

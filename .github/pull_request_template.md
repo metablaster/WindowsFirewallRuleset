@@ -1,5 +1,5 @@
 
-## Status
+# Status
 
 Specify status that best describes this PR:
 
@@ -13,10 +13,10 @@ A few sentences describing the overall goals of the pull request's commits.
 
 If applicable list related PRs against other branches:
 
-branch | PR
------- | ------
-other_pr_production | [link]()
-other_pr_master | [link]()
+| branch              | PR                       |
+| ------------------- | ------------------------ |
+| other_pr_production | [link](insert_link_here) |
+| other_pr_master     | [link](insert_link_here) |
 
 ## Todo's
 

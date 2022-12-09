@@ -1,4 +1,3 @@
-
 # Workflow syntax:
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
@@ -18,18 +17,18 @@ jobs:
     runs-on: windows-2022
     # Groups together all the steps that run in this job ID
     steps:
-    # Specifies that this step will run v3 of the actions/checkout action
-    # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Specifies that this step will run v3 of the actions/checkout action
+      # This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # PSScriptAnalyzer custom action
-    - name: Run PSScriptAnalyzer
-      # Used to tell GitHub which action you want to use
-      # The specified path and branch needs to have action.yml file
-      uses: metablaster/WindowsFirewallRuleset/Actions/PSScriptAnalyzer@develop
-      # Initialize settings declared in action.yml
-      with:
-        path: .\
-        recurse: true
-        settings: Config/PSScriptAnalyzerSettings.psd1
+      # PSScriptAnalyzer custom action
+      - name: Run PSScriptAnalyzer
+        # Used to tell GitHub which action you want to use
+        # The specified path and branch needs to have action.yml file
+        uses: metablaster/WindowsFirewallRuleset/Actions/PSScriptAnalyzer@develop
+        # Initialize settings declared in action.yml
+        with:
+          path: .\
+          recurse: true
+          settings: Config/PSScriptAnalyzerSettings.psd1

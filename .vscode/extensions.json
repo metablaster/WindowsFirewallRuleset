@@ -11,10 +11,10 @@
 		"streetsidesoftware.code-spell-checker",
 		// Filter Line
 		"everettjf.filter-line",
-		// Fix JSON
-		"oliversturm.fix-json",
 		// Hightlight Bad Chars
 		"wengerk.highlight-bad-chars",
+		// Ini for VSCode
+		"DavidWang.ini-for-vscode",
 		// json
 		"zainchen.json",
 		// Log File Highlighter
@@ -33,8 +33,12 @@
 		"ms-vscode-remote.remote-ssh-edit",
 		// Remote Explorer
 		"ms-vscode.remote-explorer",
+		// Select Line Status Bar
+		"tomoki1207.selectline-statusbar",
 		// Sort JSON objects
 		"richie5um2.vscode-sort-json",
+		// Sort Lines
+		"Tyriar.sort-lines",
 		// Todo Tree
 		"gruntfuggly.todo-tree",
 		// Trailing Spaces
@@ -45,7 +49,7 @@
 		"redhat.vscode-yaml"
 	],
 	// List of extensions which should not be recommended for users of this workspace.
-	// Following extensions cause issues with some recommended extensions or there is
+	// Following extensions either cause issues with some recommended extensions or there is
 	// a better alternative in recommendations above.
 	"unwantedRecommendations": [
 		// Git History

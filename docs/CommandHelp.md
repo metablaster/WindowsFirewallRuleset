@@ -63,6 +63,7 @@ In addition to the table below, see:
   - [Module management](#module-management)
   - [Windows System](#windows-system)
     - [Clear event logs](#clear-event-logs)
+  - [VSCode](#vscode)
 
 ## Store Apps
 
@@ -500,6 +501,17 @@ WFP and PowerShell may generate log entries
 Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
   [System.Diagnostics.Eventing.Reader.EventLogSession]::GlobalSession.ClearLog($_.LogName)
 }
+```
+
+[Table of Contents](#table-of-contents)
+
+## VSCode
+
+Some VSCode commands useful to troubleshoot issues (`CTRL + SHIFT + P`)
+
+```none
+Developer: Reload Window
+Developer: Set Log Level...
 ```
 
 [Table of Contents](#table-of-contents)

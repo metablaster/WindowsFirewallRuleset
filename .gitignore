@@ -1,4 +1,5 @@
 
+# https://git-scm.com/docs/gitignore
 
 # Compiled Object files (VS 2019)
 *.obj
@@ -13,7 +14,7 @@
 *.dll
 !VSSetup/Microsoft.VisualStudio.Setup.Configuration.Interop.dll
 !VSSetup/Microsoft.VisualStudio.Setup.PowerShell.dll
-!Modules/Ruleset.PolicyFileEditor/PolFileEditor.dll
+!Ruleset.PolicyFileEditor/PolFileEditor.dll
 
 # Compiled static libraries (VS 2019)
 *.lib
@@ -79,23 +80,29 @@
 Build/
 Intermediate/
 
-# Log files
-!Logs/
-Logs/*
-!Logs/README.md
+# Repository specific ignore files
+*.zip
+*.cer
+*.csv
+*.old
 
-!Logs/*/
-Logs/*/*
-!Logs/*/README.md
+# Logs in log directory
+!/Logs/
+/Logs/*
+!/Logs/README.md
 
-# Repository exports
-!Exports/
-Exports/*
-!Exports/README.md
+!/Logs/*/
+/Logs/*/*
+!/Logs/*/README.md
+
+# Project exports
+!/Exports/
+/Exports/*
+!/Exports/README.md
 
 # Auto generated temporary files
-Modules/**/Help/**/Content/
-Modules/**/Help/**/External/
+/Modules/**/Help/**/Content/
+/Modules/**/Help/**/External/
 
 # Auto generated test folders
-Test/TestDrive/
+/Test/TestDrive/

@@ -30,7 +30,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 - Rules
 
-  - Updated rules for mail apps from Windows store so that ports for POP3, IMAP and SMTP are specified
+  - Updated rules for mail apps from Windows store so that ports for `POP3`, `IMAP` and `SMTP` etc.
+  are specified
   - Display name of rules for store apps are now title case, ex. `Microsoft.Xboxapp` instead of `microsoft.xboxapp`
   - Updated rules for Simple DNS crypt, there was issue on systems with virtual adapters
   - Added rules for Azure Cloud Shell present in Windows Terminal
@@ -64,7 +65,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
   - Made possible to import and remove modules manually outside deployment process.
-  - Updated Ruleset.IP module according to changes from upstream repository.
+  - Updated `Ruleset.IP` module according to changes from upstream repository.
 
   - Improved or updated module functions
 
@@ -79,7 +80,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - `Test-SDDL` function to validate SDDL syntax
     - Added `PolicyFileEditor` new 3r party module to help with GPO management and renamed to
-    Ruleset.PolicyFileEditor
+    `Ruleset.PolicyFileEditor`
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
     - `Connect-IPInterface` experimental script to troubleshoot obtaining IP from DHCP
@@ -104,9 +105,12 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - improved spellcheking with custom dictionaries and configuration of spell check extension
   - Replaced XML tools extension with XML Red Hat
-  - Added YAML extension to workspace recommendations for YAML support
+  - Added `YAML` extension to workspace recommendations for YAML support
   - Workspace settings and settings for extensions vastly revisited for better coding experience.
   - Resolved almost all issuses reporeted by markdown, xml and yaml linter and PSScriptAnalyzer
+  - Added `Sort Lines` extension to workspace recommendations
+  - Added `Select Line Status Bar` extension to workspace recommendations
+  - Removed `Fix Json` extension from workspace recomendations
 
 - Unit test
 
