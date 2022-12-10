@@ -104,7 +104,7 @@ function Get-GroupPrincipal
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 		# Include/Exclude filter
-		[scriptblock] $SkipUser = {
+		[ScriptBlock] $SkipUser = {
 			param ([string] $User)
 
 			if ($User -notlike $Include)

@@ -131,7 +131,7 @@ function ConvertFrom-Wildcard
 	$InvocationName = $MyInvocation.InvocationName
 
 	# Optimize dots and stars excluding escaped dots
-	[scriptblock] $Optimize = {
+	[ScriptBlock] $Optimize = {
 		param ([string] $Target)
 
 		[regex] $Regex = [regex]::new("(\*|\.(?<!\\\.)){2,}", $Options)

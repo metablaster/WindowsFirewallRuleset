@@ -169,7 +169,7 @@ function Test-VirusTotal
 
 			if (![string]::IsNullOrEmpty($SigCheckFile))
 			{
-				Write-Verbose -Message "Using sigcheck file: $SigCheckFile"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Using sigcheck file: $SigCheckFile"
 
 				# Create sigcheck process object
 				$Process = New-Object System.Diagnostics.Process

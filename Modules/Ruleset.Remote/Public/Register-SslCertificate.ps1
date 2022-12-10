@@ -175,7 +175,7 @@ function Register-SslCertificate
 			$_.Subject -eq "CN=$Domain"
 		}
 
-		[scriptblock] $ImportCertificate = {
+		[ScriptBlock] $ImportCertificate = {
 			# Import certificate file from default repository location
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching default repository location for SSL certificate"
 
@@ -215,7 +215,7 @@ function Register-SslCertificate
 			}
 		}
 
-		[scriptblock] $CheckThumbprint = {
+		[ScriptBlock] $CheckThumbprint = {
 			if (![string]::IsNullOrEmpty($CertThumbprint))
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating SSL thumbprint"

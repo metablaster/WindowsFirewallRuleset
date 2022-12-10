@@ -77,8 +77,8 @@ Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.
 
 .EXAMPLE
 PS> $Entries = @(
-    New-Object psobject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
+    New-Object PSObject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
+    New-Object PSObject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
 )
 PS> $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
     -Key "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
@@ -140,11 +140,11 @@ function Remove-PolicyFileEntry
 
 			if ($null -eq $Entry)
 			{
-				Write-Verbose "Entry '$Key\$ValueName' is already not present in file '$Path'"
+				Write-Verbose -Message "Entry '$Key\$ValueName' is already not present in file '$Path'"
 				return
 			}
 
-			Write-Verbose "Removing entry '$Key\$ValueName' from file '$Path'"
+			Write-Verbose -Message "Removing entry '$Key\$ValueName' from file '$Path'"
 			$policyFile.DeleteValue($Key, $ValueName)
 			$dirty = $true
 		}

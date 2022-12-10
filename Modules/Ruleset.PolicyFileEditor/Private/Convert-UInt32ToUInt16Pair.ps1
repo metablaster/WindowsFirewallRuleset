@@ -64,7 +64,7 @@ function Convert-UInt32ToUInt16Pair
 	$HighPart = ($UInt32 - $LowPart) / 0x10000
 
 	return New-Object PSObject -Property @{
-		LowPart = [UInt16] $LowPart
-		HighPart = [UInt16] $HighPart
+		LowPart = [uint16] $LowPart
+		HighPart = [uint16] $HighPart
 	}
 }

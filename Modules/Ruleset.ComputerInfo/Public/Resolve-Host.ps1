@@ -95,7 +95,7 @@ function Resolve-Host
 
 		[Parameter(ParameterSetName = "Host")]
 		[Parameter(ParameterSetName = "IP")]
-		[Switch] $FlushDNS,
+		[switch] $FlushDNS,
 
 		[Parameter(ParameterSetName = "Host")]
 		[Parameter(ParameterSetName = "Physical")]

@@ -177,7 +177,7 @@ New-Variable -Name SessionConfigurationName -Scope Script -Value "Microsoft.Powe
 
 # Location Changed handler that keeps the compatibility session PWD in sync with the parent PWD
 # This only applies on localhost.
-[scriptblock] $LocationChangedHandler = {
+[ScriptBlock] $LocationChangedHandler = {
 	[PSSession] $Session = Initialize-WinSession -Domain $SessionComputerName `
 		-ConfigurationName $SessionConfigurationName -PassThru
 

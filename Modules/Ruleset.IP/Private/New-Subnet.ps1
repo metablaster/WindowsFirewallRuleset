@@ -127,7 +127,7 @@ function New-Subnet
 				$MaskLength = ConvertTo-MaskLength $SubnetMask
 			}
 
-			$HostAddresses = [Math]::Pow(2, (32 - $MaskLength)) - 2
+			$HostAddresses = [math]::Pow(2, (32 - $MaskLength)) - 2
 			if ($HostAddresses -lt 0)
 			{
 				$HostAddresses = 0

@@ -81,7 +81,7 @@ foreach ($Script in $Scripts)
 	if ($ScriptInfo)
 	{
 		$RelativePath = $Script.FullName.Remove(0, ([string] $ProjectRoot).Length + 1)
-		Write-Debug "Processing script $RelativePath"
+		Write-Debug -Message "Processing script $RelativePath"
 
 		if ($ScriptInfo.Version -ne $ProjectVersion)
 		{

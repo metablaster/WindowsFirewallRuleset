@@ -110,7 +110,7 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Camera
 	#
 
-	Write-Information -MessageData "[$ThisScript] Allow Use of Camera"
+	Write-Information -MessageData "INFO: Allow Use of Camera"
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
 	$RegistryPath = "Software\Policies\Microsoft\Camera"
@@ -123,7 +123,7 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Credential User Interface
 	#
 
-	Write-Information -MessageData "[$ThisScript] Enumerate administrator accounts on elevation"
+	Write-Information -MessageData "INFO: Enumerate administrator accounts on elevation"
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
 	$RegistryPath = "Software\Microsoft\Windows\CurrentVersion\Policies\CredUI"
@@ -136,7 +136,7 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Data Collection and Preview Builds
 	#
 
-	Write-Information -MessageData "[$ThisScript] Allow device name to be sent in Windows diagnostic data"
+	Write-Information -MessageData "INFO: Allow device name to be sent in Windows diagnostic data"
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
 	$RegistryPath = "Software\Policies\Microsoft\Windows\DataCollection"
@@ -152,7 +152,7 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	if ($false)
 	{
 		# NOTE: This doesn't work as expected, lock screen is shown regardless of what's set
-		Write-Information -MessageData "[$ThisScript] Do not display the lock screen"
+		Write-Information -MessageData "INFO: Do not display the lock screen"
 		# Enabled Value: decimal: 1
 		# Disabled Value: decimal: 0
 		$RegistryPath = "Software\Policies\Microsoft\Windows\Personalization"
@@ -166,7 +166,7 @@ if ($PSCmdlet.ShouldProcess("Operating system", "Configure Windows privacy"))
 	# GPO: Computer Configuration\Administrative Templates\Windows Components\Search
 	#
 
-	Write-Information -MessageData "[$ThisScript] Allow Cortana"
+	Write-Information -MessageData "INFO: Allow Cortana"
 	# Enabled Value: decimal: 1
 	# Disabled Value: decimal: 0
 	$RegistryPath = "Software\Policies\Microsoft\Windows\Windows Search"

@@ -258,14 +258,14 @@ try
 					NoGptIniUpdate = $false
 					Count = 2
 					EntriesToModify = @(
-						New-Object psobject -Property @{
+						New-Object PSObject -Property @{
 							Key = 'Software\Testing'
 							ValueName = 'Value1'
 							Type = 'String'
 							Data = 'Data'
 						}
 
-						New-Object psobject -Property @{
+						New-Object PSObject -Property @{
 							Key = 'Software\Testing'
 							ValueName = 'Value2'
 							Type = 'MultiString'
@@ -281,7 +281,7 @@ try
 				if (-not $PSBoundParameters.ContainsKey('EntriesToModify'))
 				{
 					$EntriesToModify = @(
-						New-Object psobject -Property @{
+						New-Object PSObject -Property @{
 							Key = 'Software\Testing'
 							ValueName = 'TestValue'
 							Data = 1
@@ -398,13 +398,13 @@ try
 				@{
 					TestName = 'Creates a DWord value properly'
 					Type = [Microsoft.Win32.RegistryValueKind]::DWord
-					Data = @([UInt32]1)
+					Data = @([uint32] 1)
 				}
 
 				@{
 					TestName = 'Creates a QWord value properly'
 					Type = [Microsoft.Win32.RegistryValueKind]::QWord
-					Data = @([UInt64]0x100000000L)
+					Data = @([UInt64] 0x100000000L)
 				}
 
 				@{
@@ -428,28 +428,28 @@ try
 				@{
 					TestName = 'Creates a Binary value properly'
 					Type = [Microsoft.Win32.RegistryValueKind]::Binary
-					Data = [byte[]](1..32)
+					Data = [byte[]] (1..32)
 				}
 
 				@{
 					TestName = 'Allows hex strings to be assigned to DWord values'
 					Type = [Microsoft.Win32.RegistryValueKind]::DWord
 					Data = @('0x12345')
-					ExpectedData = [UInt32]0x12345
+					ExpectedData = [uint32] 0x12345
 				}
 
 				@{
 					TestName = 'Allows hex strings to be assigned to QWord values'
 					Type = [Microsoft.Win32.RegistryValueKind]::QWord
 					Data = @('0x12345789')
-					ExpectedData = [Uint64]0x123456789L
+					ExpectedData = [Uint64] 0x123456789L
 				}
 
 				@{
 					TestName = 'Allows hex strings to be assigned to Binary types'
 					Type = [Microsoft.Win32.RegistryValueKind]::Binary
 					Data = '0x1', '0xFF', '0x12'
-					ExpectedData = [byte[]](0x1, 0xFF, 0x12)
+					ExpectedData = [byte[]] (0x1, 0xFF, 0x12)
 				}
 
 				@{

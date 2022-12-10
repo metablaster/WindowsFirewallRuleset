@@ -61,7 +61,7 @@ PSDSC
 PSEDITION
 psmaximumreceiveddatasizepercommandmb
 psmaximumreceivedobjectsizemb
-psobject
+PSObject
 psscriptroot
 PSUICulture
 PSVERSION

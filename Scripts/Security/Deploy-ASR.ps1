@@ -192,7 +192,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		Set-MpPreference -AttackSurfaceReductionRules_Ids $Rules -CimSession $CimServer `
 			-AttackSurfaceReductionRules_Actions $Actions -ErrorAction Stop
 
-		Write-Information -MessageData "[$ThisScript] Successfully deployed ASR rules to '$Domain' computer"
+		Write-Information -MessageData "INFO: Successfully deployed ASR rules to '$Domain' computer"
 	}
 	catch
 	{

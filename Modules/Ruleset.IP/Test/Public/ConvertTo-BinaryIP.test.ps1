@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Describe "ConvertTo-BinaryIP" {
 	It "Returns a string" {
-		ConvertTo-BinaryIP 1.2.3.4 | Should -BeOfType [String]
+		ConvertTo-BinaryIP 1.2.3.4 | Should -BeOfType [string]
 	}
 
 	It "Converts 1.2.3.4 to 00000001.00000010.00000011.00000100" {

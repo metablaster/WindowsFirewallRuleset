@@ -52,7 +52,7 @@ PS> Test-Credential -Credential user
 True
 
 Prompts for the password for user "user" and validates it against the current
-logon domain (which may be the local machine). 'True' ($True) as the output
+logon domain (which may be the local machine). 'True' ($true) as the output
 indicates successful validation.
 
 .EXAMPLE
@@ -242,14 +242,14 @@ namespace net.same2u.util
 		{
 			# An exception occurring in .ValidateCredentials() often suggests that the credentials were valid in principle,
 			# but there's a problem with the *account*, such as it being disabled or
-			# the password having expired; we return $False in that case, but issue a *warning*
+			# the password having expired; we return $false in that case, but issue a *warning*
 			# with the cause of the problem.
 			# !! However, it can also indicate the inability to connect to the server.
 			# Note: The underlying exception message is wrapped as follows, so we must extract it:
 			#          Exception calling "ValidateCredentials" with "2" argument(s): "<msg>"<newline>
 			Write-Warning -Message ($_.Exception.Message -replace "\r?\n" -split '"' -ne "")[-1]
 
-			# Output $False, given that *in effect* the credentials do not work.
+			# Output $false, given that *in effect* the credentials do not work.
 			$false
 		}
 		finally

@@ -99,7 +99,7 @@ function Out-DataTable
 		$Table = New-Object -TypeName System.Data.datatable
 		$First = $true
 
-		[scriptblock] $GetODTType =	{
+		[ScriptBlock] $GetODTType =	{
 			param ($Type)
 
 			$Types = @(

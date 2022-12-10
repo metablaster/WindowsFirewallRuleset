@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Describe "ConvertTo-DecimalIP" {
 	It "Returns a unsigned 32-bit integer" {
-		ConvertTo-DecimalIP 0.0.0.0 | Should -BeOfType [UInt32]
+		ConvertTo-DecimalIP 0.0.0.0 | Should -BeOfType [uint32]
 	}
 
 	It "Converts 0.0.0.0 to 0" {

@@ -242,12 +242,12 @@ function Show-WinRMConfig
 	if ($Detailed)
 	{
 		# TODO: More configuration data can be harvested here
-		Write-Verbose -Message "Showing shell (WinRS) configuration" -Verbose
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Showing shell (WinRS) configuration" -Verbose
 		# winrm get winrm/config/winrs
 		Get-Item WSMan:\localhost\Shell\* | Select-Object -Property Name, Value | Format-Table -AutoSize
 
 		# winrm enumerate winrm/config/plugin
-		Write-Verbose -Message "Showing plugin status" -Verbose
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Showing plugin status" -Verbose
 		Get-Item WSMan:\localhost\Plugin\* | ForEach-Object {
 			$Enabled = Get-Item "WSMan:\localhost\Plugin\$($_.Name)\Enabled" |
 			Select-Object -ExpandProperty Value

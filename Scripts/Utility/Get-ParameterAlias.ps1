@@ -388,7 +388,8 @@ end
 		foreach ($Item in $NotFound)
 		{
 			# This could be either non found command or alias
-			Write-Error -Category ObjectNotFound -Message "No matches for '$($Item.TargetObject)' found" -EV ThrowAway
+			Write-Error -Category ObjectNotFound -TargetObject $Item.TargetObject `
+				-Message "No matches for '$($Item.TargetObject)' found" -EV ThrowAway
 		}
 	}
 }

@@ -156,7 +156,7 @@ function Test-Computer
 		{
 			if (Get-Variable -Name SessionEstablished -Scope Global -ErrorAction Ignore)
 			{
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing PS and CIM session"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' using existing PS and CIM session"
 				$Status = (($SessionInstance.State -eq "Opened") -and $CimServer.TestConnection())
 			}
 			else
@@ -193,7 +193,7 @@ function Test-Computer
 						$WSManParams["Port"] = 5986
 					}
 
-					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WSMan"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTPS using WSMan"
 					$WSManResult = Test-WSMan @WSManParams
 					if ($null -ne $WSManResult) { $Status = $true }
 				}
@@ -213,7 +213,7 @@ function Test-Computer
 						$WSManParams["Port"] = 5985
 					}
 
-					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WSMan"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' over HTTP using WSMan"
 					$WSManResult = Test-WSMan @WSManParams
 					if ($null -ne $WSManResult) { $Status = $true }
 				}
@@ -234,7 +234,7 @@ function Test-Computer
 				return $false
 			}
 
-			Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' on TCP port $Port"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' on TCP port $Port"
 
 			# TODO: This will also perform IPv6 ping test
 			$Status = Test-NetConnection -ComputerName $Domain -Port $Port |
@@ -277,12 +277,12 @@ function Test-Computer
 				if ($ConnectionIPv4)
 				{
 					$PingParams["IPv4"] = $true
-					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv4"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv4"
 				}
 				else
 				{
 					$PingParams["IPv6"] = $true
-					Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv6"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping over IPv6"
 				}
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Ping params $($PingParams | Out-String)"
@@ -295,7 +295,7 @@ function Test-Computer
 				# NOTE: Test-Connection defaults to IPv6 in Windows PowerShell,
 				# if you test NetBios name it will fail because NetBios works only over IPv4
 				# $Status = Test-Connection -ComputerName $Domain -Count $Retry -Quiet -EA Stop
-				Write-Verbose "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Contacting computer '$Domain' with ping"
 
 				# [NetConnectionResults]
 				$Status = Test-NetConnection -ComputerName $Domain |

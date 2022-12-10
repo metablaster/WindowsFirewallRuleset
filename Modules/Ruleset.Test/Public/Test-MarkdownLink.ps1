@@ -224,7 +224,7 @@ function Test-MarkdownLink
 	# Save progress preference
 	$DefaultProgress = $ProgressPreference
 
-	[scriptblock] $GetElapsedTime = {
+	[ScriptBlock] $GetElapsedTime = {
 		param ([timespan] $SecondsElapsed)
 
 		# Convert elapsed time to short time string: [double] -> [string] -> [System.DateTime] -> [string]
@@ -276,7 +276,7 @@ function Test-MarkdownLink
 	}
 
 	# Include/Exclude link
-	[scriptblock] $SkipLink = {
+	[ScriptBlock] $SkipLink = {
 		param (
 			[Parameter(Mandatory = $true)]
 			[uri] $Link,

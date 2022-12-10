@@ -166,7 +166,7 @@ function Test-FileSystemPath
 	}
 
 	$InvocationName = $MyInvocation.InvocationName
-	[scriptblock] $WriteConditional = {
+	[ScriptBlock] $WriteConditional = {
 		param (
 			[Parameter(Mandatory = $true)]
 			[string] $Message,
@@ -300,7 +300,7 @@ function Test-FileSystemPath
 		}
 
 		Invoke-Command @SessionParams -ArgumentList $WriteConditional, $PathType, $ExpandedPath, $Quiet, $InvocationName -ScriptBlock {
-			# NOTE: Must not be declared as [scriptblock], otherwise [ScriptBlock]::Create() (later) fails
+			# NOTE: Must not be declared as [ScriptBlock], otherwise [ScriptBlock]::Create() (later) fails
 			param ($WriteConditional, $PathType, $ExpandedPath, $Quiet, $InvocationName)
 
 			if ($PathType -eq "Any")

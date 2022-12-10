@@ -164,8 +164,8 @@ function Get-Subnet
 			$PSCmdlet.ThrowTerminatingError($ErrorRecord)
 		}
 
-		$NumberOfNets = [Math]::Pow(2, ($NewNetwork.MaskLength - $Network.MaskLength))
-		$numberOfAddresses = [Math]::Pow(2, (32 - $NewNetwork.MaskLength))
+		$NumberOfNets = [math]::Pow(2, ($NewNetwork.MaskLength - $Network.MaskLength))
+		$numberOfAddresses = [math]::Pow(2, (32 - $NewNetwork.MaskLength))
 
 		$DecimalAddress = ConvertTo-DecimalIP (Get-NetworkAddress $Network.ToString())
 		for ($i = 0; $i -lt $NumberOfNets; $i++)
@@ -201,7 +201,7 @@ function Get-Subnet
 		do
 		{
 			$MaximumHostBits--
-		} until (($Range["Start"] -band ([uint32]1 -shl $MaximumHostBits)) -ne ($Range["End"] -band ([uint32]1 -shl $MaximumHostBits)))
+		} until (($Range["Start"] -band ([uint32] 1 -shl $MaximumHostBits)) -ne ($Range["End"] -band ([uint32] 1 -shl $MaximumHostBits)))
 
 		$MaximumHostBits++
 

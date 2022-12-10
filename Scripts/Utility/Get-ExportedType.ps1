@@ -150,7 +150,7 @@ if ($PSBoundParameters.ContainsKey("IsEnum")) { $WhereArray += '$_.IsENum -like 
 
 # Give verbose output, convert where string to scriptblock
 $WhereString = $WhereArray -Join " -and "
-$WhereBlock = [scriptblock]::Create($WhereString)
+$WhereBlock = [ScriptBlock]::Create($WhereString)
 Write-Verbose -Message "[$ThisScript] Where ScriptBlock: { $WhereString }"
 
 # Invoke the search

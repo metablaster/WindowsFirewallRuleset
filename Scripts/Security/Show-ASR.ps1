@@ -132,7 +132,7 @@ $Deny = "Abort operation, no ASR rules on '$Domain' computer will be listed"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-[scriptblock] $Convert = {
+[ScriptBlock] $Convert = {
 	param([string] $Value)
 
 	switch ($Value)
@@ -158,11 +158,11 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 if ($PSCmdlet.ParameterSetName -eq "None")
 {
-	Write-Information -MessageData "[$ThisScript] Listing all rules and rule status on '$Domain' computer"
+	Write-Information -MessageData "INFO: Listing all rules and rule status on '$Domain' computer"
 }
 else
 {
-	Write-Information -MessageData "[$ThisScript] Listing '$($PSCmdlet.ParameterSetName)' rules on '$Domain' computer"
+	Write-Information -MessageData "INFO: Listing '$($PSCmdlet.ParameterSetName)' rules on '$Domain' computer"
 }
 
 Write-Information -MessageData ""
@@ -182,7 +182,7 @@ foreach ($Entry in $MpPreference)
 			{
 				if ($Disabled)
 				{
-					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					Write-Information -MessageData "INFO: $RuleInfo"
 					continue
 				}
 
@@ -192,7 +192,7 @@ foreach ($Entry in $MpPreference)
 			{
 				if ($Enabled)
 				{
-					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					Write-Information -MessageData "INFO: $RuleInfo"
 					continue
 				}
 
@@ -202,7 +202,7 @@ foreach ($Entry in $MpPreference)
 			{
 				if ($Audit)
 				{
-					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					Write-Information -MessageData "INFO: $RuleInfo"
 					continue
 				}
 
@@ -212,7 +212,7 @@ foreach ($Entry in $MpPreference)
 			{
 				if ($NotConfigured)
 				{
-					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					Write-Information -MessageData "INFO: $RuleInfo"
 					continue
 				}
 
@@ -222,7 +222,7 @@ foreach ($Entry in $MpPreference)
 			{
 				if ($Warn)
 				{
-					Write-Information -MessageData "[$ThisScript] $RuleInfo"
+					Write-Information -MessageData "INFO: $RuleInfo"
 					continue
 				}
 
@@ -232,7 +232,7 @@ foreach ($Entry in $MpPreference)
 
 		if (!($Enabled -or $Disabled -or $Audit -or $NotConfigured -or $Warn))
 		{
-			Write-Information -MessageData "[$ThisScript] $Status -> $RuleInfo"
+			Write-Information -MessageData "INFO: $Status -> $RuleInfo"
 		}
 	}
 }

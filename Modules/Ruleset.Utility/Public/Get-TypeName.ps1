@@ -122,7 +122,7 @@ function Get-TypeName
 		$InvocationName = $MyInvocation.InvocationName
 
 		# TODO: This scriptblock should probably be a separate function called "Trace-TypeName" which would serve for troubleshooting
-		[scriptblock] $CheckType = {
+		[ScriptBlock] $CheckType = {
 			param (
 				[Parameter()]
 				[string] $TypeName

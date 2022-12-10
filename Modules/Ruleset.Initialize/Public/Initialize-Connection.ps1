@@ -136,7 +136,8 @@ function Initialize-Connection
 			if (!$RemotingCredential)
 			{
 				# Will happen if credential request was dismissed using ESC key or by pressing Cancel.
-				Write-Error -Category InvalidOperation -Message "Credentials are required for remote session on '$PolicyStore'"
+				Write-Error -Category InvalidOperation -TargetObject $PolicyStore `
+					-Message "Credentials are required for remote session on '$PolicyStore'"
 			}
 			# Will happen when no password is specified
 			elseif ($RemotingCredential.Password.Length -eq 0)
@@ -148,7 +149,8 @@ function Initialize-Connection
 
 				$UserName = $RemotingCredential.UserName
 				Set-Variable -Name RemotingCredential -Scope Global -Force -Value $null
-				Write-Error -Category InvalidData -Message "User '$UserName' must have a password"
+				Write-Error -Category InvalidData -TargetObject $UserName `
+					-Message "User '$UserName' must have a password"
 			}
 
 			$ConnectParams["Credential"] = $RemotingCredential

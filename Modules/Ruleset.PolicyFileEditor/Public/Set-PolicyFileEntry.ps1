@@ -101,8 +101,8 @@ can be assigned to the numeric types DWord, QWord and Binary.
 
 .EXAMPLE
 PS> $entries = @(
-    New-Object psobject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
+    New-Object PSObject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
+    New-Object PSObject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
 )
 PS> $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
         -Key "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Type DWord
@@ -191,12 +191,12 @@ function Set-PolicyFileEntry
 				$existingData = Get-EntryData -Entry $existingEntry -Type $Type
 				if (Test-DataIsEqual $Data $existingData -Type $Type)
 				{
-					Write-Verbose "Policy setting '$Key\$ValueName' is already set to '$Data' of type '$Type'"
+					Write-Verbose -Message "Policy setting '$Key\$ValueName' is already set to '$Data' of type '$Type'"
 					return
 				}
 			}
 
-			Write-Verbose "Configuring '$Key\$ValueName' to value '$Data' of type '$Type'"
+			Write-Verbose -Message "Configuring '$Key\$ValueName' to value '$Data' of type '$Type'"
 
 			try
 			{
@@ -258,7 +258,7 @@ function Set-PolicyFileEntry
                 ([Microsoft.Win32.RegistryValueKind]::DWord)
 					{
 						$Array = @($Data)
-						$Dword = ($Array | Select-Object -First 1) -as [UInt32]
+						$Dword = ($Array | Select-Object -First 1) -as [uint32]
 						if ($null -eq $Dword -or $Array.Count -ne 1)
 						{
 							$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `

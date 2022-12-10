@@ -71,7 +71,7 @@ begin
 
 process
 {
-	Write-Debug -Message "INFO: Run script function"
+	Write-Debug -Message "[$ThisScript] INFO: Run script function"
 }
 
 end

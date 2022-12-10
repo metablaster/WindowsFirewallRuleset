@@ -102,7 +102,7 @@ function Add-WinFunction
 		[string] $Name,
 
 		[Parameter(Mandatory = $true, Position = 1)]
-		[scriptblock] $ScriptBlock,
+		[ScriptBlock] $ScriptBlock,
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
@@ -123,7 +123,7 @@ function Add-WinFunction
 
 	# the session variable will be captured in the closure
 	$Session = Initialize-WinSession @PSBoundParameters -PassThru
-	[scriptblock] $Wrapper = {
+	[ScriptBlock] $Wrapper = {
 		Invoke-Command -Session $Session -ScriptBlock $ScriptBlock -ArgumentList $args
 	}
 

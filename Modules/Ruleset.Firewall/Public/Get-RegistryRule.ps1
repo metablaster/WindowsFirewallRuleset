@@ -165,7 +165,7 @@ function Get-RegistryRule
 			return
 		}
 
-		[scriptblock] $ParseAddressKeyword = {
+		[ScriptBlock] $ParseAddressKeyword = {
 			param ([string] $EntryValue)
 
 			switch ($EntryValue)
@@ -178,7 +178,7 @@ function Get-RegistryRule
 			}
 		}
 
-		[scriptblock] $ParsePortKeyword = {
+		[ScriptBlock] $ParsePortKeyword = {
 			param ([string] $EntryValue)
 
 			switch ($EntryValue)
@@ -404,7 +404,7 @@ function Get-RegistryRule
 							# HACK: Similarly as for "EmbedCtxt" below, should be implemented here
 							if ($EntryValue.StartsWith("@"))
 							{
-								Write-Verbose -Message "Translating rule name, source string to localized string, not implemented"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Translating rule name, source string to localized string, not implemented"
 							}
 
 							$HashProps.DisplayName = $EntryValue

@@ -188,7 +188,7 @@ function Invoke-Process
 		}
 	}
 
-	[scriptblock] $Code = {
+	[ScriptBlock] $Code = {
 		param (
 			$Path,
 			$NoNewWindow,
@@ -286,7 +286,7 @@ function Invoke-Process
 
 			if ($Raw)
 			{
-				[scriptblock] $OutputDataReceived = {
+				[ScriptBlock] $OutputDataReceived = {
 					if (![string]::IsNullOrEmpty($EventArgs.Data))
 					{
 						Write-Debug -Message "[$InvocationName & OutputDataReceived] OutputDataReceived: $($EventArgs.Data)"
@@ -294,7 +294,7 @@ function Invoke-Process
 					}
 				}
 
-				[scriptblock] $ErrorDataReceived = {
+				[ScriptBlock] $ErrorDataReceived = {
 					if (![string]::IsNullOrEmpty($EventArgs.Data))
 					{
 						Write-Debug -Message "[$InvocationName & ErrorDataReceived] ErrorDataReceived: $($EventArgs.Data)"
@@ -305,7 +305,7 @@ function Invoke-Process
 			else
 			{
 				# Adding event handler for StandardOutput
-				[scriptblock] $OutputDataReceived = {
+				[ScriptBlock] $OutputDataReceived = {
 					# BUG: Unable to surpress
 					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
@@ -326,7 +326,7 @@ function Invoke-Process
 				}
 
 				# Adding event handler for StandardError
-				[scriptblock] $ErrorDataReceived = {
+				[ScriptBlock] $ErrorDataReceived = {
 					# BUG: Unable to surpress
 					[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 						"PSReviewUnusedParameter", "SendingProcess", Justification = "Needed for the event to work")]
@@ -375,7 +375,7 @@ function Invoke-Process
 			# ErrorDataReceived: Occurs when an application writes to its redirected StandardError stream
 			$ErrorEvent = Register-ObjectEvent @ErrorEventParams
 
-			[scriptblock] $UnregisterEvents = {
+			[ScriptBlock] $UnregisterEvents = {
 				Write-Debug -Message "[$InvocationName & UnregisterEvents] Unregistering asynchronous operations"
 
 				try

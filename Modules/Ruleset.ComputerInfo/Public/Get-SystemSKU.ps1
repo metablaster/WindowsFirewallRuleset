@@ -110,7 +110,7 @@ function Get-SystemSKU
 			Property = "OperatingSystemSku"
 		}
 
-		[scriptblock] $GetStringSKU = {
+		[ScriptBlock] $GetStringSKU = {
 			param ([int32] $SKU)
 
 			switch ($SKU)

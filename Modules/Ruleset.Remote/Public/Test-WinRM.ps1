@@ -283,12 +283,14 @@ function Test-WinRM
 			if (!$Credential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -Message "Credentials are required to access '$MachineName'"
+				Write-Error -Category InvalidOperation -TargetObject $MachineName `
+					-Message "Credentials are required to access '$MachineName'"
 			}
 			elseif ($Credential.Password.Length -eq 0)
 			{
 				# Will happen when no password is specified
-				Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+				Write-Error -Category InvalidData -TargetObject $Credential `
+					-Message "User '$($Credential.UserName)' must have a password"
 				$Credential = $null
 			}
 		}

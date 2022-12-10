@@ -155,7 +155,7 @@ function ConvertTo-Subnet
 			do
 			{
 				$i--
-			} until (($DecimalStart -band ([uint32]1 -shl $i)) -ne ($DecimalEnd -band ([uint32]1 -shl $i)))
+			} until (($DecimalStart -band ([uint32] 1 -shl $i)) -ne ($DecimalEnd -band ([uint32] 1 -shl $i)))
 
 			$MaskLength = 32 - $i - 1
 		}

@@ -154,7 +154,7 @@ function Set-Privilege
 		public static extern bool LookupPrivilegeValue(string host, string name, out long pluid);'
 	Add-Type -MemberDefinition $Signature -Namespace AdjPriv -Name Privilege
 
-	[scriptblock] $GetPrivilegeConstant = {
+	[ScriptBlock] $GetPrivilegeConstant = {
 		param ([string] $StringParam)
 
 		if ($StringParam -eq "TrustedComputingBase")

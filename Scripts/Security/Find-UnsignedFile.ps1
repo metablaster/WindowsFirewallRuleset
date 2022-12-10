@@ -186,8 +186,8 @@ param (
 	[int32] $TimeOut = 300
 )
 
-Write-Debug -Message "ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 New-Variable -Name ThisScript -Scope Private -Option Constant -Value ((Get-Item $PSCommandPath).Basename)
+Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 $InformationPreference = "Continue"
 
 if ($PSCmdlet.ParameterSetName -eq "LiteralPath")
@@ -282,12 +282,13 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -Message "$SigcheckExecutable was not found in specified path '$SigcheckDir'"
+				Write-Error -Category ObjectNotFound -TargetObject $SigcheckExecutable `
+					-Message "$SigcheckExecutable was not found in specified path '$SigcheckDir'"
 				return
 			}
 		}
 
-		Write-Verbose -Message "Using sigcheck file: $SigCheckFile"
+		Write-Verbose -Message "[$ThisScript] Using sigcheck file: $SigCheckFile"
 
 		# Create sigcheck process object
 		$Process = New-Object System.Diagnostics.Process
@@ -317,7 +318,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		$InvocationName = $MyInvocation.InvocationName
 
 		# Script block used to write scan results into JSON file
-		[scriptblock] $WriteFile = {
+		[ScriptBlock] $WriteFile = {
 			[CmdletBinding(PositionalBinding = $false)]
 			param (
 				# Full path to JSON file
@@ -409,7 +410,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		}
 		else
 		{
-			Write-Verbose -Message "Processing file $FilePath"
+			Write-Verbose -Message "[$ThisScript] Processing file $FilePath"
 		}
 
 		$Signature = Get-AuthenticodeSignature -LiteralPath $FilePath
@@ -437,7 +438,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				}
 				else
 				{
-					Write-Verbose -Message "$FileName is $FileMegaBytes MB which is less than specified maximum of $FileSize MB"
+					Write-Verbose -Message "[$ThisScript] $FileName is $FileMegaBytes MB which is less than specified maximum of $FileSize MB"
 				}
 
 				# A collection of command-line arguments to use when starting the application
@@ -478,7 +479,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 					continue
 				}
 
-				Write-Verbose -Message "Parsing sigcheck output, synchronous read operation"
+				Write-Verbose -Message "[$ThisScript] Parsing sigcheck output, synchronous read operation"
 				[hashtable] $ScanResult = @{}
 
 				while (!$Process.StandardOutput.EndOfStream)
@@ -515,7 +516,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 						if ($Link.Success)
 						{
-							Write-Verbose -Message "$FileName VT Link is $($Link.Value)"
+							Write-Verbose -Message "[$ThisScript] $FileName VT Link is $($Link.Value)"
 
 							if ($Log)
 							{
@@ -525,7 +526,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 						if ($Publisher.Success)
 						{
-							Write-Verbose -Message "$FileName Publisher is $($Publisher.Value)"
+							Write-Verbose -Message "[$ThisScript] $FileName Publisher is $($Publisher.Value)"
 
 							if ($Log)
 							{
@@ -535,7 +536,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 						if ($Description.Success)
 						{
-							Write-Verbose -Message "$FileName Description is $($Description.Value)"
+							Write-Verbose -Message "[$ThisScript] $FileName Description is $($Description.Value)"
 
 							if ($Log)
 							{

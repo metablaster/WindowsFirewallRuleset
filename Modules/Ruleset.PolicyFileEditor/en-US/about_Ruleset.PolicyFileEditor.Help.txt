@@ -51,8 +51,8 @@ LONG DESCRIPTION
 	Armed with that information, you can now do something like this using the Ruleset.PolicyFileEditor module:
 
 	$entries = @(
-		New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-		New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+		New-Object PSObject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
+		New-Object PSObject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
 	)
 
 	$entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `

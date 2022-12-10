@@ -55,7 +55,7 @@ function Get-NewVersionNumber
 	[OutputType([uint32])]
 	param (
 		[Parameter()]
-		[UInt32] $Version,
+		[uint32] $Version,
 
 		[Parameter()]
 		[string[]] $PolicyType

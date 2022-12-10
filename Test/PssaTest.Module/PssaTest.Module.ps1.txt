@@ -98,7 +98,7 @@ function Test-Script
 	[CmdletBinding()]
 	Param
 	(
-		[switch] $Switch = $True
+		[switch] $Switch = $true
 	)
 
 	$Switch | Out-Null
@@ -239,7 +239,7 @@ Function Invoke-MyRemoteCommand ()
 
 # PSSA: pass, PS: pass
 "PSUsePSCredentialType"
-function Credential([String] $Credential)
+function Credential([string] $Credential)
 {
 }
 
@@ -254,7 +254,7 @@ function Test-Script
 	[CmdletBinding()]
 	Param
 	(
-		[String] $Username,
+		[string] $Username,
 		[SecureString] $Password
 	)
 
@@ -316,7 +316,7 @@ Function BadFuncEmptyHelpMessageEmpty
 {
 	Param(
 		[Parameter(HelpMessage = '')]
-		[String] $Param
+		[string] $Param
 	)
 
 	$Param | Out-Null
@@ -326,7 +326,7 @@ Function BadFuncEmptyHelpMessageNull
 {
 	Param(
 		[Parameter(HelpMessage = $null)]
-		[String] $Param
+		[string] $Param
 	)
 
 	$Param | Out-Null
@@ -336,7 +336,7 @@ Function BadFuncEmptyHelpMessageNoAssignment
 {
 	Param(
 		[Parameter(HelpMessage)]
-		[String] $Param
+		[string] $Param
 	)
 
 	$Param | Out-Null

@@ -151,7 +151,8 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 	elseif ($Credential.Password.Length -eq 0)
 	{
 		# Will happen when no password is specified
-		Write-Error -Category InvalidData -Message "User '$($Credential.UserName)' must have a password"
+		Write-Error -Category InvalidData -TargetObject $Credential `
+			-Message "User '$($Credential.UserName)' must have a password"
 		$Credential = $null
 	}
 

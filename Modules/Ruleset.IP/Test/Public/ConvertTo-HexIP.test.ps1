@@ -49,7 +49,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Describe "ConvertTo-HexIP" {
 	It "Returns a string" {
-		ConvertTo-HexIP 1.2.3.4 | Should -BeOfType [String]
+		ConvertTo-HexIP 1.2.3.4 | Should -BeOfType [string]
 	}
 
 	It "Converts 0.0.0.0 to 00000000" {

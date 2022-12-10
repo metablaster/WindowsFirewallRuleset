@@ -106,7 +106,7 @@ function Invoke-WinCommand
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Invoke-WinCommand.md")]
 	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
-		[scriptblock] $ScriptBlock,
+		[ScriptBlock] $ScriptBlock,
 
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
