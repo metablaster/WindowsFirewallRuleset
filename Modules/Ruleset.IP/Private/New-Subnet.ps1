@@ -140,7 +140,7 @@ function New-Subnet
 		}
 
 		[PSCustomObject]@{
-			Cidr = '{0}/{1}' -f $NetworkAddress, $MaskLength
+			Cidr = "{0}/{1}" -f $NetworkAddress, $MaskLength
 			NetworkAddress = $NetworkAddress
 			BroadcastAddress = $BroadcastAddress
 			SubnetMask = $SubnetMask

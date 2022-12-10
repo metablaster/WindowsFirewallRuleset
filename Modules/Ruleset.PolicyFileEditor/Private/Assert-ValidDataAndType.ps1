@@ -66,7 +66,7 @@ function Assert-ValidDataAndType
 		($Data.Count -gt 1))
 	{
 		$ErrorRecord = Assert-InvalidDataTypeCombinationErrorRecord `
-			-Message 'Do not pass arrays with multiple values to the -Data parameter when -Type is not set to either Binary or MultiString.'
+			-Message "Do not pass arrays with multiple values to the -Data parameter when -Type is not set to either Binary or MultiString"
 
 		throw $ErrorRecord
 	}

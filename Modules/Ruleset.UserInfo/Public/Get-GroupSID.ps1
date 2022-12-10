@@ -121,7 +121,7 @@ function Get-GroupSID
 			if ([string]::IsNullOrEmpty($GroupSID))
 			{
 				Write-Error -Category InvalidResult -TargetObject $UserGroup `
-					-Message "User group '$UserGroup' cannot be resolved to a SID."
+					-Message "User group '$UserGroup' cannot be resolved to a SID"
 			}
 			else
 			{

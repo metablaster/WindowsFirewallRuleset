@@ -87,7 +87,7 @@ limitations under the License.
 	Copyright = "Copyright (C) 2015 Dave Wyatt"
 
 	# Description of the functionality provided by this module
-	Description = "Module for modifying Administrative Templates settings in local GPO registry.pol files."
+	Description = "Module for modifying Administrative Templates settings in local GPO registry.pol files"
 
 	# Minimum version of the PowerShell engine required by this module
 	# Valid values are: 1.0 / 2.0 / 3.0 / 4.0 / 5.0 / 5.1 / 6.0 / 6.1 / 6.2 / 7.0 / 7.1

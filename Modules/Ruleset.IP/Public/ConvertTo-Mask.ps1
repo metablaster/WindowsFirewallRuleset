@@ -105,6 +105,6 @@ function ConvertTo-Mask
 	}
 	process
 	{
-		[IPAddress][uint64][convert]::ToUInt32(('1' * $MaskLength).PadRight(32, '0'), 2)
+		[IPAddress][uint64][convert]::ToUInt32(("1" * $MaskLength).PadRight(32, "0"), 2)
 	}
 }

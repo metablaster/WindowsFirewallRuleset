@@ -58,12 +58,12 @@ function Get-KeyValueName
 		[string] $KeyValueName
 	)
 
-	$key = $KeyValueName -replace '^\\+|\\+$'
+	$key = $KeyValueName -replace "^\\+|\\+$"
 	$ValueName = ""
 
-	if ($KeyValueName -match '^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$')
+	if ($KeyValueName -match "^\\*(?<Key>.+?)\\+(?<ValueName>[^\\]*)$")
 	{
-		$key = $Matches["Key"] -replace '\\{2,}', '\'
+		$key = $Matches["Key"] -replace "\\{2,}", "\"
 		$ValueName = $Matches["ValueName"]
 	}
 

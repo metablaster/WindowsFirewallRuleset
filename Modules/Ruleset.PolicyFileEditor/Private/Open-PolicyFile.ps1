@@ -69,11 +69,11 @@ function Open-PolicyFile
 		}
 		catch [TJX.PolFileEditor.FileFormatException]
 		{
-			$Message = "File '$Path' is not a valid POL file."
+			$Message = "File '$Path' is not a valid POL file"
 			$Exception = New-Object System.Exception($Message)
 
 			$ErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$Exception, 'InvalidPolFileContents', [System.Management.Automation.ErrorCategory]::InvalidData, $Path
+				$Exception, "InvalidPolFileContents", [System.Management.Automation.ErrorCategory]::InvalidData, $Path
 			)
 
 			throw $ErrorRecord
@@ -85,7 +85,7 @@ function Open-PolicyFile
 			$Exception = New-Object System.Exception($message, $ErrorRecord.Exception)
 
 			$NewErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-				$Exception, 'FailedToOpenPolicyFile', [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
+				$Exception, "FailedToOpenPolicyFile", [System.Management.Automation.ErrorCategory]::OperationStopped, $Path
 			)
 
 			throw $NewErrorRecord

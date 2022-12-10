@@ -106,7 +106,7 @@ function Add-WindowsPSModulePath
 
 		if ($PSCmdlet.ShouldProcess($PathEntry, "Add to PSModulePath"))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding '$PathEntry' to the PSModulePath."
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Adding '$PathEntry' to the PSModulePath"
 			$PathTable[$PathEntry] = $true
 		}
 	}

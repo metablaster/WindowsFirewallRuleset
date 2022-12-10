@@ -65,13 +65,13 @@ function Confirm-AdminTemplateCseGuidsArePresent
 
 	# Per Darren Mar-Elia, these GUIDs must be in alphabetical order, or GP processing will have problems.
 
-	if ($Line -notmatch '\s*(gPC(?:Machine|User)ExtensionNames)\s*=\s*(.*)$')
+	if ($Line -notmatch "\s*(gPC(?:Machine|User)ExtensionNames)\s*=\s*(.*)$")
 	{
 		throw "Malformed gpt.ini line: $Line"
 	}
 
 	$ValueName = $Matches[1]
-	$guidStrings = @($Matches[2] -split '(?<=\])(?=\[)')
+	$guidStrings = @($Matches[2] -split "(?<=\])(?=\[)")
 
 	if ($Matches[1] -eq "gPCMachineExtensionNames")
 	{
@@ -87,7 +87,7 @@ function Confirm-AdminTemplateCseGuidsArePresent
 		$ToolExtensionGuid
 	)
 
-	$NewGuidString = ($GuidList | Sort-Object -Unique) -join ''
+	$NewGuidString = ($GuidList | Sort-Object -Unique) -join ""
 
 	return "$ValueName=$NewGuidString"
 }

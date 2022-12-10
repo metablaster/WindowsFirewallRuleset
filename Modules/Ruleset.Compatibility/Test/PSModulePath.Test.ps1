@@ -45,13 +45,13 @@ Describe "Test Add-WindowsPSModulePath cmdlet" {
 		Add-WindowsPSModulePath | Should -BeNullOrEmpty
 		# a table of the current PSModulePath components
 		[hashtable] $CurrentPathTable = @{}
-		$env:PSModulePath.Split(';').foreach{ $CurrentPathTable[$_] = $true }
+		$env:PSModulePath.Split(";").foreach{ $CurrentPathTable[$_] = $true }
 		$WindowsPSModulePath = [System.Environment]::GetEnvironmentVariable("PSModulePath", [System.EnvironmentVariableTarget]::Machine)
 		$AllComponentsInPath = $true
 
 		# Verify that all of the path components in the machine-scoped PSModulePath are
 		# also in the session module path.
-		foreach ($Path in $WindowsPSModulePath.Split(';'))
+		foreach ($Path in $WindowsPSModulePath.Split(";"))
 		{
 			if ( -not $CurrentPathTable.ContainsKey($Path) )
 			{

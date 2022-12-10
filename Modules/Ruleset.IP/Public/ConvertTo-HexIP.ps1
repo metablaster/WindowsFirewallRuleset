@@ -103,6 +103,6 @@ function ConvertTo-HexIP
 	{
 		$Bytes = $IPAddress.GetAddressBytes()
 		[array]::Reverse($Bytes)
-		'{0:x8}' -f [BitConverter]::ToUInt32($Bytes, 0)
+		"{0:x8}" -f [BitConverter]::ToUInt32($Bytes, 0)
 	}
 }

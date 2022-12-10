@@ -77,11 +77,11 @@ Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.
 
 .EXAMPLE
 PS> $Entries = @(
-    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+    New-Object psobject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
+    New-Object psobject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
 )
 PS> $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'
+    -Key "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
 
 Example of using pipeline input to remove multiple values at once.
 The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated

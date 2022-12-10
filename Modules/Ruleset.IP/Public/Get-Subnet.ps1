@@ -216,7 +216,7 @@ function Get-Subnet
 
 			if ($RangeSize -eq 1)
 			{
-				New-Subnet -NetworkAddress $Range['Start'] -BroadcastAddress $Range['End']
+				New-Subnet -NetworkAddress $Range["Start"] -BroadcastAddress $Range["End"]
 				continue
 			}
 
@@ -262,7 +262,7 @@ function Get-Subnet
 
 		if ($Iteration -ge $MaximumIterations)
 		{
-			Write-Warning "Exceeded the maximum number of iterations while generating subnets."
+			Write-Warning "Exceeded the maximum number of iterations while generating subnets"
 		}
 
 		$Subnets | Sort-Object { [version] $_.NetworkAddress.ToString() }

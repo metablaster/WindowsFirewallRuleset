@@ -182,15 +182,19 @@ To work with Windows PowerShell quickly in any directory see:
 
     Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
 
-20. [Trailing Spaces][extension trailing spaces]
+20. [Toggle Quotes][extension quotes]
+
+    Toggle single quotes to double or vice versa
+
+21. [Trailing Spaces][extension trailing spaces]
 
     Highlight trailing spaces and delete them in a flash!
 
-21. [XML][extension xml]
+22. [XML][extension xml]
 
     Useful for xml language support, can also help to detect issues with xml
 
-22. [YAML][extension yaml]
+23. [YAML][extension yaml]
 
     Useful for xml language support, can also help to detect issues with xml
 
@@ -718,6 +722,7 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension sort lines]: https://marketplace.visualstudio.com/items?itemName=Tyriar.sort-lines  "Visit Marketplace"
 [extension yaml]: https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml "Visit Marketplace"
 [extension logs]: https://marketplace.visualstudio.com/items?itemName=emilast.LogFileHighlighter "Visit Marketplace"
+[extension quotes]: https://marketplace.visualstudio.com/items?itemName=BriteSnow.vscode-toggle-quotes "Visit Marketplace"
 [extension scroll]: https://marketplace.visualstudio.com/items?itemName=pejmannikram.vscode-auto-scroll "Visit Marketplace"
 [extension select line status bar]: https://marketplace.visualstudio.com/items?itemName=tomoki1207.selectline-statusbar "Visit Marketplace"
 [extension filterline]: https://marketplace.visualstudio.com/items?itemName=everettjf.filter-line "Visit Marketplace"

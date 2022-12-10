@@ -88,7 +88,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - Microsoft dotnet"
-$Accept = "Outbound rules for dotnet which provides commands for working with .NET Core projects."
+$Accept = "Outbound rules for dotnet which provides commands for working with .NET Core projects"
 $Deny = "Skip operation, outbound rules for dotnet will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }

@@ -104,9 +104,9 @@ function ConvertTo-BinaryIP
 	{
 		$Binary = foreach ($Byte in $IPAddress.GetAddressBytes())
 		{
-			[convert]::ToString($Byte, 2).PadLeft(8, '0')
+			[convert]::ToString($Byte, 2).PadLeft(8, "0")
 		}
 
-		$Binary -join '.'
+		$Binary -join "."
 	}
 }

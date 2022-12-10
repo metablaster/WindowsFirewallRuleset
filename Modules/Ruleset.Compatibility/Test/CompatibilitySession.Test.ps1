@@ -38,13 +38,13 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	}
 
 	It "Make sure the <command> command exists" -TestCases @(
-		@{command = 'Initialize-WinSession' },
-		@{command = 'Add-WinFunction' },
-		@{command = 'Invoke-WinCommand' },
-		@{command = 'Get-WinModule' },
-		@{command = 'Import-WinModule' },
-		@{command = 'Compare-WinModule' },
-		@{command = 'Copy-WinModule' }
+		@{command = "Initialize-WinSession" },
+		@{command = "Add-WinFunction" },
+		@{command = "Invoke-WinCommand" },
+		@{command = "Get-WinModule" },
+		@{command = "Import-WinModule" },
+		@{command = "Compare-WinModule" },
+		@{command = "Copy-WinModule" }
 	) {
 		param ($command)
 		Get-Command $command | Should -Not -BeNullOrEmpty
@@ -84,7 +84,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		$results = Get-PnpDevice
 		$results | Should -Not -BeNullOrEmpty
 		$results | Should -BeOfType ([Microsoft.Management.Infrastructure.CimInstance])
-		$results[0].PSObject.TypeNames[0] | Should -Be 'Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity'
+		$results[0].PSObject.TypeNames[0] | Should -Be "Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity"
 
 		# Clean up
 		Get-Module PnpDevice | Remove-Module
@@ -106,7 +106,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		# and that these commands work
 		$ele = Get-EventLog -LogName Application -Newest 1
 		$ele | Should -Not -BeNullOrEmpty
-		$ele.PSObject.TypeNames -eq 'Deserialized.System.Diagnostics.EventLogEntry' | Should -Be Deserialized.System.Diagnostics.EventLogEntry
+		$ele.PSObject.TypeNames -eq "Deserialized.System.Diagnostics.EventLogEntry" | Should -Be Deserialized.System.Diagnostics.EventLogEntry
 	}
 
 	It "Add-WinFunction should define a function in the current session and return information from the compatibility session" {
@@ -124,7 +124,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 	}
 
 	It "Compare-WinModule should return a non-null collection of modules" {
-		$pattern = 'Microsoft*'
+		$pattern = "Microsoft*"
 		$modules = Compare-WinModule $pattern
 		$modules | Should -Not -BeNullOrEmpty
 		$modules[0].Name | Should -BeLike $pattern
@@ -163,7 +163,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		$results = Get-PnpDevice
 		$results | Should -Not -BeNullOrEmpty
 		$results | Should -BeOfType ([Microsoft.Management.Infrastructure.CimInstance])
-		$results[0].PSObject.TypeNames[0] | Should -BeExactly 'Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity'
+		$results[0].PSObject.TypeNames[0] | Should -BeExactly "Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity"
 
 		# Finally remove the module from memory to clean up
 		Remove-Module PnpDevice
@@ -210,7 +210,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 			$results = Get-PnpDevice
 			$results | Should -Not -BeNullOrEmpty
 			$results | Should -BeOfType ([Microsoft.Management.Infrastructure.CimInstance])
-			$results[0].PSObject.TypeNames[0] | Should -BeExactly 'Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity'
+			$results[0].PSObject.TypeNames[0] | Should -BeExactly "Microsoft.Management.Infrastructure.CimInstance#ROOT/cimv2/Win32_PnPEntity"
 
 			# Finally remove the module from memory to clean up
 			Remove-Module PnpDevice
@@ -219,7 +219,7 @@ Describe "Test the Windows PowerShell Compatibility Session functions" {
 		}
 	}
 
-	It 'Should mirror directory changes in the compatibility session' {
+	It "Should mirror directory changes in the compatibility session" {
 		# Verify that the initial directories are synced
 		Invoke-WinCommand { $pwd.Path } | Should -Be $pwd.Path
 		# Change location and verify that the compat session directory also changed

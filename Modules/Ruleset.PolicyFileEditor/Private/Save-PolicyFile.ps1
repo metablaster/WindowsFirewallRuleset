@@ -78,7 +78,7 @@ function Save-PolicyFile
 				$Exception = New-Object System.Exception($Message, $ErrorRecord.Exception)
 
 				$NewErrorRecord = New-Object System.Management.Automation.ErrorRecord(
-					$Exception, 'CreateParentFolderError', $ErrorRecord.CategoryInfo.Category, $Path
+					$Exception, "CreateParentFolderError", $ErrorRecord.CategoryInfo.Category, $Path
 				)
 
 				throw $NewErrorRecord
@@ -105,7 +105,7 @@ function Save-PolicyFile
 
 	if ($UpdateGptIni)
 	{
-		if (($PolicyFile.FileName -match '^(.*)\\+([^\\]+)\\+[^\\]+$') -and
+		if (($PolicyFile.FileName -match "^(.*)\\+([^\\]+)\\+[^\\]+$") -and
 			(($Matches[2] -eq "User") -or ($Matches[2] -eq "Machine")))
 		{
 			$IniPath = Join-Path $Matches[1] GPT.ini

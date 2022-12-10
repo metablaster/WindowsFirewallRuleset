@@ -68,7 +68,7 @@ function Get-SidForAccount
 	}
 	catch
 	{
-		$Message = "Could not translate account '$Acc' to a security identifier."
+		$Message = "Could not translate account '$Acc' to a security identifier"
 		$Exception = New-Object System.Exception($Message, $_.Exception)
 
 		$ErrorRecord = New-Object System.Management.Automation.ErrorRecord(

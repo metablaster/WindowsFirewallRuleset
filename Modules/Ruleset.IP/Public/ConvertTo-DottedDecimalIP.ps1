@@ -116,7 +116,7 @@ function ConvertTo-DottedDecimalIP
 			}
 			else
 			{
-				[IPAddress][uint64][convert]::ToUInt32($IPAddress.Replace('.', ''), 2)
+				[IPAddress][uint64][convert]::ToUInt32($IPAddress.Replace(".", ""), 2)
 			}
 		}
 		catch

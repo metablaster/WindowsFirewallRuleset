@@ -107,9 +107,9 @@ function Get-Permutation
 
 	foreach ($Value in $Group[$Index].ReplaceWith)
 	{
-		$Octets = $BaseAddress -split '\.'
+		$Octets = $BaseAddress -split "\."
 		$Octets[$Group[$Index].Position] = $Value
-		$Address = $Octets -join '.'
+		$Address = $Octets -join "."
 
 		if ($Index -lt $Group.Count - 1)
 		{

@@ -176,7 +176,7 @@ function Copy-WinModule
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching for CIM modules..."
 	$ModulesToCopy += Invoke-Command $Session -ScriptBlock {
 		Get-Module -ListAvailable |
-		Where-Object { $_.NestedModules[0].path -match '\.cdxml$' } |
+		Where-Object { $_.NestedModules[0].path -match "\.cdxml$" } |
 		Select-Object Name, ModuleBase
 	}
 

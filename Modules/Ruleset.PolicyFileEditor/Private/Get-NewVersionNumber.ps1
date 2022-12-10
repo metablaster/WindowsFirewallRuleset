@@ -66,12 +66,12 @@ function Get-NewVersionNumber
 
 	$Pair = Convert-UInt32ToUInt16Pair -UInt32 $version
 
-	if ($PolicyType -contains 'User')
+	if ($PolicyType -contains "User")
 	{
 		$Pair.HighPart++
 	}
 
-	if ($PolicyType -contains 'Machine')
+	if ($PolicyType -contains "Machine")
 	{
 		$Pair.LowPart++
 	}

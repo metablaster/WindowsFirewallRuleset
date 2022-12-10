@@ -135,7 +135,7 @@ function Get-NetworkSummary
 			Mask = $Network.SubnetMask
 			MaskLength = $MaskLength = ConvertTo-MaskLength $Network.SubnetMask
 			MaskHexadecimal = ConvertTo-HexIP $Network.SubnetMask
-			CIDRNotation = '{0}/{1}' -f $NetworkAddress, $MaskLength
+			CIDRNotation = "{0}/{1}" -f $NetworkAddress, $MaskLength
 			HostRange = ""
 			NumberOfAddresses = $DecimalBroadcast - $DecimalNetwork + 1
 			NumberOfHosts = $DecimalBroadcast - $DecimalNetwork - 1
@@ -151,7 +151,7 @@ function Get-NetworkSummary
 		}
 		if ($NetworkSummary.MaskLength -lt 31)
 		{
-			$NetworkSummary.HostRange = '{0} - {1}' -f @(
+			$NetworkSummary.HostRange = "{0} - {1}" -f @(
 				(ConvertTo-DottedDecimalIP ($DecimalNetwork + 1))
 				(ConvertTo-DottedDecimalIP ($DecimalBroadcast - 1))
 			)
@@ -159,14 +159,14 @@ function Get-NetworkSummary
 
 		$NetworkSummary.Class = switch -Regex (ConvertTo-BinaryIP $Network.IPAddress)
 		{
-			'^1111' { "E"; break }
-			'^1110' { "D"; break }
-			'^11000000\.10101000' { if ($NetworkSummary.MaskLength -ge 16) { $NetworkSummary.IsPrivate = $true } }
-			'^110' { "C"; break }
-			'^10101100\.0001' { if ($NetworkSummary.MaskLength -ge 12) { $NetworkSummary.IsPrivate = $true } }
-			'^10' { "B"; break }
-			'^00001010' { if ($NetworkSummary.MaskLength -ge 8) { $NetworkSummary.IsPrivate = $true } }
-			'^0' { "A"; break }
+			"^1111" { "E"; break }
+			"^1110" { "D"; break }
+			"^11000000\.10101000" { if ($NetworkSummary.MaskLength -ge 16) { $NetworkSummary.IsPrivate = $true } }
+			"^110" { "C"; break }
+			"^10101100\.0001" { if ($NetworkSummary.MaskLength -ge 12) { $NetworkSummary.IsPrivate = $true } }
+			"^10" { "B"; break }
+			"^00001010" { if ($NetworkSummary.MaskLength -ge 8) { $NetworkSummary.IsPrivate = $true } }
+			"^0" { "A"; break }
 		}
 
 		Write-Output $NetworkSummary

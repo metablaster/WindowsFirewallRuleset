@@ -129,7 +129,7 @@ function ConvertTo-Network
 
 	# Override ToString
 	$Network | Add-Member ToString -MemberType ScriptMethod -Force -Value {
-		'{0}/{1}' -f $this.IPAddress, $this.MaskLength
+		"{0}/{1}" -f $this.IPAddress, $this.MaskLength
 	}
 
 	if (!$PSBoundParameters.ContainsKey("SubnetMask") -or $SubnetMask -eq "")
@@ -138,9 +138,9 @@ function ConvertTo-Network
 	}
 
 	# IPAddress
-	while ($IPAddress.Split('.').Count -lt 4)
+	while ($IPAddress.Split(".").Count -lt 4)
 	{
-		$IPAddress += '.0'
+		$IPAddress += ".0"
 	}
 
 	if ([IPAddress]::TryParse($IPAddress, [ref] $null))

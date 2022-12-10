@@ -102,6 +102,6 @@ function ConvertTo-MaskLength
 	}
 	process
 	{
-		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace('0', '').Length
+		[convert]::ToString([IPAddress]::HostToNetworkOrder($SubnetMask.Address), 2).Replace("0", "").Length
 	}
 }

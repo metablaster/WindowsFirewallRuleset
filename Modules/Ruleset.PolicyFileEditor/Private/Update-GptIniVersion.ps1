@@ -71,9 +71,9 @@ function Update-GptIniVersion
 			{
 				# This might not be the most unreadable regex ever, but it's trying hard to be!
 				# It's looking for section lines:  [SectionName]
-				if ($Line -match '^\s*\[([^\]]+)\]\s*$')
+				if ($Line -match "^\s*\[([^\]]+)\]\s*$")
 				{
-					if ($Section -eq 'General')
+					if ($Section -eq "General")
 					{
 						if (-not $FoundVersionLine)
 						{
@@ -99,16 +99,16 @@ function Update-GptIniVersion
 					$Section = $matches[1]
 				}
 				elseif (($section -eq "General") -and
-				($line -match '^\s*Version\s*=\s*(\d+)\s*$') -and
+				($line -match "^\s*Version\s*=\s*(\d+)\s*$") -and
 				($null -ne ($Version = $matches[1] -as [uint32])))
 				{
 					$FoundVersionLine = $true
 					$NewVersion = Get-NewVersionNumber -Version $Version -PolicyType $PolicyType
 					$line = "Version=$NewVersion"
 				}
-				elseif ($Section -eq 'General' -and $line -match '^\s*gPC(Machine|User)ExtensionNames\s*=')
+				elseif ($Section -eq "General" -and $line -match "^\s*gPC(Machine|User)ExtensionNames\s*=")
 				{
-					if ($matches[1] -eq 'Machine')
+					if ($matches[1] -eq "Machine")
 					{
 						$FoundMachineExtensionLine = $true
 					}

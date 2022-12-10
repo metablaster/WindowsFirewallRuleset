@@ -58,7 +58,7 @@ Increments the version counter in a gpt.ini file.
 Path to the gpt.ini file that is to be modified.
 
 .PARAMETER PolicyType
-Can be set to either 'Machine', 'User', or both.
+Can be set to either "Machine", "User", or both.
 This affects how the value of the Version number in the ini file is changed.
 
 .EXAMPLE
@@ -102,12 +102,12 @@ function Update-GptIniVersion
 					return $true
 				}
 
-				throw "Path '$_' does not exist."
+				throw "Path '$_' does not exist"
 			})]
 		[string] $Path,
 
 		[Parameter(Mandatory = $true)]
-		[ValidateSet('Machine', 'User')]
+		[ValidateSet("Machine", "User")]
 		[string[]] $PolicyType
 	)
 

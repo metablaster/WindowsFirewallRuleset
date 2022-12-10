@@ -748,6 +748,11 @@
 	"todo-tree.tree.sortTagsOnlyViewAlphabetically": false,
 	"todo-tree.tree.tagsOnly": false,
 	"todo-tree.tree.trackFile": true,
+	// Extension: Toggle Quotes
+	"togglequotes.chars": [
+		"'",
+		"\""
+	],
 	// Extension: Trailing Spaces
 	// CAUTION: Enabling this causes issues writing code according to indentation rules
 	"trailing-spaces.trimOnSave": false,

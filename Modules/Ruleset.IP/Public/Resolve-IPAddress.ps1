@@ -106,14 +106,14 @@ function Resolve-IPAddress
 	process
 	{
 		$Groups = [regex]::Matches($IPAddress, "\[(?:(?<Range>\d+(?:-\d+))|(?<Selected>(?:\d+, *)*\d+))\]|(?<All>\*)").Groups.Captures |
-		Where-Object { $_ -and ($_.Name -ne '0') } | ForEach-Object {
+		Where-Object { $_ -and ($_.Name -ne "0") } | ForEach-Object {
 			$Group = $_
 
 			$Values = switch ($Group.Name)
 			{
 				"Range"
 				{
-					[int32] $Start, [int32] $End = $Group.Value -split '-'
+					[int32] $Start, [int32] $End = $Group.Value -split "-"
 
 					if ($Start, $End -gt 255)
 					{
@@ -155,7 +155,7 @@ function Resolve-IPAddress
 
 			[PSCustomObject]@{
 				Name = $_.Name
-				Position = [int32] $IPAddress.Substring(0, $_.Index).Split('.').Count - 1
+				Position = [int32] $IPAddress.Substring(0, $_.Index).Split(".").Count - 1
 				ReplaceWith = $Values
 				PSTypeName = "ExpansionGroupInfo"
 			}
@@ -165,7 +165,7 @@ function Resolve-IPAddress
 		{
 			Get-Permutation $Groups -BaseAddress $IPAddress
 		}
-		elseif (![IPAddress]::TryParse(($IPAddress -replace '/\d+$'), [ref] $null))
+		elseif (![IPAddress]::TryParse(($IPAddress -replace "/\d+$"), [ref] $null))
 		{
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] The IPAddress argument is not a valid IP address and cannot be resolved"
 		}

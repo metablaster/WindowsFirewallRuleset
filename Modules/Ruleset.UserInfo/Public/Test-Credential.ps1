@@ -150,11 +150,11 @@ function Test-Credential
 	{
 		if ($Local -and $SpecifiedDomain -ne $env:COMPUTERNAME)
 		{
-			throw "You've requested validation of machine-local credentials with -Local, so your username must not have a domain component that differs from the local machine name."
+			throw "You've requested validation of machine-local credentials with -Local, so your username must not have a domain component that differs from the local machine name"
 		}
 		elseif (-not $IsUpn -and $SpecifiedDomain -ne $LogonDomain)
 		{
-			throw "Specified NETBIOS domain prefix ($SpecifiedDomain) does not match the logon domain ($LogonDomain)."
+			throw "Specified NETBIOS domain prefix ($SpecifiedDomain) does not match the logon domain ($LogonDomain)"
 		}
 		elseif ($IsUpn -and -not $LoggedOnToDomain)
 		{
