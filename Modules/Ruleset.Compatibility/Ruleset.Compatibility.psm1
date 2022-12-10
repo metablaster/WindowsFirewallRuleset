@@ -32,6 +32,8 @@ SOFTWARE.
 # - Added module boilerplate code
 # - Renamed module from "WindowsCompatibility" to "Ruleset.Compatibility"
 # - Fixed pester tests
+# - December 2022:
+# - Replaced single quotes with double quotes where possible
 
 #region Initialization
 param (

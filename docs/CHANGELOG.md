@@ -112,6 +112,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added `Select Line Status Bar` extension to workspace recommendations
   - Removed `Fix Json` extension from workspace recomendations
   - Added `Toggle Quotes` extension to workspace recommendations
+  - Removed `Json` extension from workspace recommendations
 
 - Unit test
 

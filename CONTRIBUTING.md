@@ -127,74 +127,70 @@ To work with Windows PowerShell quickly in any directory see:
 
     Provides support for `INI` files
 
-7. [Json][extension json]
-
-    This extension adds json support for Visual Studio Code.
-
-8. [Log File Highlighter][extension logs]
+7. [Log File Highlighter][extension logs]
 
     Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
     This extension complements `Auto Scroll` extension below.
 
-9. [Markdown All in One][extension markdown aio]
+8. [Markdown All in One][extension markdown aio]
 
     Provides markdown language features
 
-10. [Markdownlint][extension markdownlint]
+9. [Markdownlint][extension markdownlint]
 
     Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
 
-11. [PowerShell][extension powershell]
+10. [PowerShell][extension powershell]
 
     PowerShell syntax highlighting, intellisense, formatting and other language support.
 
-12. [Rainbow CSV][extension csv]
+11. [Rainbow CSV][extension csv]
 
     Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
     CSV files
 
-13. [Remote SSH][extension remote SSH]
+12. [Remote SSH][extension remote SSH]
 
     Lets you use any remote machine with a SSH server as your development environment.
 
-14. [Remote SSH editing][extension remote SSH editing]
+13. [Remote SSH editing][extension remote SSH editing]
 
     This extension complements the `Remote - SSH` extension with syntax colorization,
     keyword intellisense, and simple snippets when editing SSH configuration files.
 
-15. [Remote Explorer][extension remote SSH explorer]
+14. [Remote Explorer][extension remote SSH explorer]
 
     View remote machines for Remote - SSH in action bar
 
-16. [Select Line Status Bar][extension select line status bar]
+15. [Select Line Status Bar][extension select line status bar]
 
     Show count of selected lines in status bar
 
-17. [Sort JSON objects][extension sort json]
+16. [Sort JSON objects][extension sort json]
 
     Sorts the keys in selected JSON objects according to selected criteria
 
-18. [Sort Lines][extension sort lines]
+17. [Sort Lines][extension sort lines]
 
     Let's you sort lines in file according to selected criteria
 
-19. [TODO tree][extension todo-tree]
+18. [TODO tree][extension todo-tree]
 
     Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
 
-20. [Toggle Quotes][extension quotes]
+19. [Toggle Quotes][extension quotes]
 
     Toggle single quotes to double or vice versa
 
-21. [Trailing Spaces][extension trailing spaces]
+20. [Trailing Spaces][extension trailing spaces]
 
     Highlight trailing spaces and delete them in a flash!
 
-22. [XML][extension xml]
+21. [XML][extension xml]
 
     Useful for xml language support, can also help to detect issues with xml
 
-23. [YAML][extension yaml]
+22. [YAML][extension yaml]
 
     Useful for xml language support, can also help to detect issues with xml
 

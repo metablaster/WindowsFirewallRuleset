@@ -106,6 +106,7 @@ if (Approve-Execute -Accept "Run code analysis on repository" -Deny "Skip code a
 	$ErrorActionPreference = "Stop"
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	Set-ScreenBuffer 20000
 	if ([string]::IsNullOrEmpty($Path))
 	{
 		$Path = $ProjectRoot

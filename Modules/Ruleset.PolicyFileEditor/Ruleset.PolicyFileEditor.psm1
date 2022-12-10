@@ -59,6 +59,7 @@ limitations under the License.
 # NOTE: Following modifications in December 2022:
 # - Added to all functions OutputType and Parameter attributes
 # - Renamed private functions and files to PS recommended verbs
+# - Replaced single quotes with double quotes where possible
 
 #region Initialization
 param (

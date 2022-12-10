@@ -303,7 +303,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 				else
 				{
 					# NOTE: ssh-add without arguments adds the default keys ~/.ssh/id_rsa, ~/.ssh/id_dsa,
-					# ~/.ssh/id_ecdsa. ~/ssh/id_ed25519, and ~/.ssh/identity if they exist
+					# ~/.ssh/id_ecdsa. ~/ssh/id_ed25519, or ~/.ssh/identity if they exist
 					Invoke-Process $SshAdd @InvokeParams
 
 					# Check if ssh agent has no keys, in which case previous command did nothing

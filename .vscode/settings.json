@@ -8,10 +8,10 @@
 	// VSCode: File specific settings
 	"[markdown]": {
 		// Markdown standard is 2 spaces for indentation
+		"editor.insertSpaces": true,
 		"editor.tabSize": 2,
 		// Markdown All in One extension
-		"editor.defaultFormatter": "yzhang.markdown-all-in-one",
-		"editor.insertSpaces": true
+		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
 	"[powershell]": {
 		// PowerShell extension
@@ -32,12 +32,12 @@
 	},
 	"[yaml]": {
 		"editor.tabSize": 2,
-		// YAML extension
-		"editor.defaultFormatter": "redhat.vscode-yaml",
 		// NOTE: yaml standard forbids tabs which the extension handles
-		"editor.insertSpaces": true
+		"editor.insertSpaces": true,
+		// YAML extension
+		"editor.defaultFormatter": "redhat.vscode-yaml"
 	},
-	// VSCode audio cues
+	// VSCode: audio cues
 	"audioCues.lineHasError": "off",
 	"audioCues.lineHasWarning": "off",
 	// VSCode: diffeditor
@@ -46,8 +46,10 @@
 	"editor.acceptSuggestionOnEnter": "off",
 	"editor.autoIndent": "full",
 	"editor.codeActionsOnSave": {
-		// TODO: need to verify if result is desired
-		"source.fixAll.markdownlint": false
+		// No because we don't want to fix auto generated markdown and
+		// also because Markdown All in One is default formatter
+		"source.fixAll.markdownlint": false,
+		"source.fixAll.sortJSON": false
 	},
 	"editor.comments.ignoreEmptyLines": false,
 	// PSUseConsistentIndentation
@@ -134,7 +136,7 @@
 	"files.autoSaveDelay": 500,
 	"files.encoding": "utf8",
 	"files.eol": "\r\n",
-	// Files or directories which to exclude from explorer
+	// Files and directories which to exclude from VSCode explorer
 	"files.exclude": {
 		"**/.git": true
 	},
@@ -152,18 +154,11 @@
 		"/Modules/*/Help/*/*.md": true,
 		"/docs/sitemap.xml": true
 	},
-	// VSCode: Terminal
-	// NOTE: This high number due to Test\Invoke-CodeAnalysis.ps1
-	// TODO: We should use Set-ScreenBuffer function there
-	"terminal.integrated.scrollback": 40000,
+	// VSCode: outline
+	"outline.collapseItems": "alwaysCollapse",
 	// VSCode: workbench
 	// TODO: What is the new option, needed for autogenrated files
 	"workbench.action.files.saveWithoutFormatting": [],
-	"workbench.colorCustomizations": {
-		// TODO: Isn't this duplicate of "editor.rulers"
-		"editorRuler.foreground": "#4063ff",
-		"tab.activeBorder": "#ff0000"
-	},
 	"workbench.editor.defaultBinaryEditor": "",
 	"workbench.editor.enablePreviewFromCodeNavigation": true,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
@@ -178,8 +173,7 @@
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
 	// Extension: Code Spell Checker
-	// CAUTION: settings for cSpell defined in settings.json are not recognized in cspell.json
-	// TODO: see if desired
+	// CAUTION: Settings for cSpell defined in settings.json are not recognized in cspell.json
 	"cSpell.autoFormatConfigFile": false,
 	"cSpell.blockCheckingWhenAverageChunkSizeGreaterThan": 120,
 	"cSpell.blockCheckingWhenLineLengthGreaterThan": 10000,
@@ -271,7 +265,7 @@
 			"scope": "workspace",
 			"addWords": true
 		},
-		// Enable\disable specific dictionaries:
+		// Enable\disable specific custom dictionaries:
 		"commands": true,
 		"computer": true,
 		"development": true,
@@ -311,8 +305,6 @@
 		"borderStyle": "solid",
 		"borderColor": "rgba(255,0,0,0.6)"
 	},
-	// Extension: JSON
-	"JSON-zain.json.autorefresh": true,
 	// Extension: Log File Hightlighter
 	// Custom highlighting patterns
 	// VS colors
@@ -402,7 +394,7 @@
 	"markdown.extension.list.indentationSize": "inherit",
 	"markdown.extension.math.enabled": true,
 	"markdown.extension.orderedList.autoRenumber": true,
-	"markdown.extension.orderedList.marker": "one",
+	"markdown.extension.orderedList.marker": "ordered",
 	"markdown.extension.preview.autoShowPreviewToSide": false,
 	"markdown.extension.print.absoluteImgPath": true,
 	"markdown.extension.print.imgToBase64": false,
@@ -413,7 +405,7 @@
 	"markdown.extension.syntax.decorationFileSizeLimit": 50000,
 	"markdown.extension.tableFormatter.delimiterRowNoPadding": false,
 	"markdown.extension.tableFormatter.enabled": true,
-	"markdown.extension.tableFormatter.normalizeIndentation": false,
+	"markdown.extension.tableFormatter.normalizeIndentation": true,
 	"markdown.extension.toc.levels": "1..6",
 	"markdown.extension.toc.orderedList": false,
 	"markdown.extension.toc.plaintext": false,
@@ -563,8 +555,48 @@
 	// NOTE: For markdown settings https://github.com/Gruntfuggly/todo-tree#markdown-support
 	"todo-tree.filtering.includeHiddenFiles": false,
 	"todo-tree.filtering.useBuiltInExcludes": "file and search excludes",
+	"todo-tree.general.debug": false,
+	"todo-tree.general.enableFileWatcher": false,
+	"todo-tree.general.revealBehaviour": "start of todo",
+	"todo-tree.general.rootFolder": "${workspaceFolder}",
+	"todo-tree.general.showActivityBarBadge": false,
+	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
+	"todo-tree.general.statusBar": "none",
+	"todo-tree.general.statusBarClickBehaviour": "reveal",
+	"todo-tree.general.tags": [
+		"HACK",
+		"TODO",
+		"NOTE",
+		"INFO",
+		"BUG",
+		"FIX",
+		"MSDN",
+		"DOCS",
+		"CAUTION",
+		"ISSUE",
+		"cSpell",
+		"[ ]",
+		"[x]"
+	],
+	"todo-tree.general.tagGroups": {
+		"NOTE": [
+			"NOTE",
+			// Important information
+			"INFO"
+		],
+		"BUG": [
+			"BUG",
+			// A bug that needs fixing
+			"FIX"
+		],
+		"MSDN": [
+			"MSDN",
+			// Citing non Microsoft documentation
+			"DOCS"
+		]
+	},
 	"todo-tree.highlights.customHighlight": {
-		// Hard to resolve
+		// Hard to resolve or it requires huge rework
 		"HACK": {
 			// used to set a different icon in the tree view
 			// consider: info, bookmark, markdown, alert, bug, question, mark-github,
@@ -582,47 +614,56 @@
 			// used to set the foreground colour of the highlight in the editor and the marker in the ruler
 			// Foreground and background can be: "red", "green", "blue", "yellow", "magenta", "cyan", "grey", "white" or "black"
 			// see https://www.w3schools.com/colors/default.asp
+			// Useful colors:
+			// #FDA50F", // Fire
+			// #008b8b", // DarkCyan
+			// #FFF200", // Bright Yellow
+			// #c0c0c0", // Silver
+			// #0d3dcf", // Custom blue
+			// #fff8dc", // Cornsilk
 			"foreground": "#ffffff",
 			// used to set the background colour of the highlight in the editor.
 			"background": "#ff0000",
+			// Percentage value used with the background color.
 			// 100% will produce an opaque background
 			"opacity": 70,
 			// used to set the colour of the icon in the tree
 			"iconColour": "#ff0000"
 			// used to hide tags from the tree, but still highlight in files
+			// ISSUE: https://github.com/Gruntfuggly/todo-tree/issues/704
 			// "hideFromTree ": false,
 			// set to true to show the icon in the editor gutter
 			// "gutterIcon": true,
 			// prevents the tag from being included in the status bar counts
 			// "hideFromStatusBar": false
+			// fontWeight, fontStyle, textDecoration - can be used to style the highlight with standard CSS values.
 		},
-		// Needs additional work
+		// Needs additional work or update
 		"TODO": {
 			"icon": "tools",
 			"type": "tag",
 			"foreground": "#000000",
 			"background": "#ffffff",
-			"iconColour": "#228B22", // ForestGreen
+			"iconColour": "#ffffff",
 			"opacity": 90
 		},
-		// Important comment(s)
+		// Important comment
 		"NOTE": {
 			"icon": "info",
 			"type": "tag",
 			"foreground": "#ffffff",
 			"background": "#2ec920", // Custom green
-			"iconColour": "#ffffff",
+			"iconColour": "#228B22", // ForestGreen
 			"opacity": 40,
-			// TODO: setting not working
 			"hideFromTree ": true
 		},
 		// Known bug, need to fix
 		"BUG": {
 			"icon": "bug",
 			"type": "tag",
-			"foreground": "#ffffff", // White
-			"background": "#ff0000", // Red
-			"iconColour": "#ff0000", // Red
+			"foreground": "#ffffff",
+			"background": "#ff0000",
+			"iconColour": "#ff0000",
 			"opacity": 70
 		},
 		// Citing Microsoft documentation
@@ -630,9 +671,9 @@
 			"icon": "beaker",
 			"type": "tag",
 			"foreground": "#fff8dc", // Cornsilk
-			"background": "#008b8b", // DarkCyan
+			"background": "#00bfff", // DeepSkyBlue
 			"iconColour": "#00bfff", // DeepSkyBlue
-			"opacity": 70
+			"opacity": 65
 		},
 		// Warning to developer
 		"CAUTION": {
@@ -640,26 +681,28 @@
 			"type": "tag",
 			"foreground": "#ffffff",
 			"background": "#FDA50F", // Fire
-			"iconColour": "#FFF200", // Bright Yellow
-			"opacity": 70
+			"iconColour": "#FDA50F", // Fire
+			"opacity": 60
 		},
-		// Citing GitHub issue
+		// Citing GitHub issue or a link to the issue
 		"ISSUE": {
 			"icon": "mark-github",
 			"type": "tag",
-			"foreground": "#fff8dc", // Cornsilk
-			"background": "#0d3dcf", // Custom blue
-			"iconColour": "#c0c0c0", // Silver
+			"foreground": "#000000",
+			"background": "#ffffff",
+			"iconColour": "#ffffff",
 			"opacity": 90
 		},
 		// cSpell checker command
 		"cSpell": {
-			"icon": "check-circle",
+			"icon": "info",
 			"type": "text",
 			"foreground": "#ffffff",
 			"background": "#2ec920", // Custom green
-			"iconColour": "#FDA50F", // Fire
-			"opacity": 40
+			"iconColour": "#2ec920", // Custom green
+			"opacity": 40,
+			"fontStyle": "italic",
+			"hideFromTree ": true
 		},
 		// Unchecked box
 		"[ ]": {
@@ -668,7 +711,8 @@
 			"foreground": "#000000",
 			"background": "#ffffff",
 			"iconColour": "#ffffff",
-			"opacity": 90
+			"opacity": 90,
+			"hideFromTree ": true
 		},
 		// Checked box
 		"[x]": {
@@ -677,46 +721,13 @@
 			"foreground": "#ffffff",
 			"background": "#2ec920", // Custom green
 			"iconColour": "#2ec920", // Custom green
-			"opacity": 40
+			"opacity": 40,
+			"hideFromTree ": true
 		}
 	},
 	"todo-tree.highlights.enabled": true,
 	"todo-tree.highlights.highlightDelay": 500,
 	"todo-tree.highlights.useColourScheme": false,
-	"todo-tree.general.revealBehaviour": "start of todo",
-	"todo-tree.general.rootFolder": "${workspaceFolder}",
-	"todo-tree.general.statusBar": "none",
-	"todo-tree.general.statusBarClickBehaviour": "reveal",
-	"todo-tree.general.debug": false,
-	"todo-tree.general.enableFileWatcher": false,
-	"todo-tree.general.showActivityBarBadge": false,
-	"todo-tree.general.showIconsInsteadOfTagsInStatusBar": true,
-	"todo-tree.general.tags": [
-		"HACK",
-		"TODO",
-		"NOTE",
-		"BUG",
-		"MSDN",
-		"CAUTION",
-		"ISSUE",
-		"cSpell",
-		"[ ]",
-		"[x]",
-		"INFO",
-		"FIX",
-		"Extension"
-	],
-	"todo-tree.general.tagGroups": {
-		"NOTE": [
-			"NOTE",
-			"INFO",
-			"Extension"
-		],
-		"BUG": [
-			"BUG",
-			"FIX"
-		]
-	},
 	"todo-tree.regex.enableMultiLine": false,
 	// NOTE: The default regex will be updated to reflect these changes at some point in the future.
 	"todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",

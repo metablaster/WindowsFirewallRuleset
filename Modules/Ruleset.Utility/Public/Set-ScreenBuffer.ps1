@@ -49,6 +49,12 @@ None. Set-ScreenBuffer does not generate any output
 
 .NOTES
 TODO: A parameter to restore previous value may be useful
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshostrawuserinterface
 #>
 function Set-ScreenBuffer
 {
@@ -57,7 +63,7 @@ function Set-ScreenBuffer
 	[OutputType([void])]
 	param (
 		[Parameter()]
-		[uint16] $Height = 3000
+		[uint32] $Height = 3000
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"

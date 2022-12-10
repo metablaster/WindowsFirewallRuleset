@@ -183,8 +183,8 @@ begin
 	}
 	catch
 	{
-		# TODO: Not warning because some scripts in Ruleset.PolicyFileEditor call this script
-		# Also we should no limit calling this script only from Show-Preference function
+		# TODO: Not warning because some scripts in Ruleset.PolicyFileEditor called this script
+		# Also we should not limit calling this script only from Show-Preference function
 		Write-Verbose -Message "[$ThisScript] Unexpected parent scope"
 	}
 
