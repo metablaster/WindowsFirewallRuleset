@@ -42,6 +42,8 @@
 	"audioCues.lineHasWarning": "off",
 	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
+	// BUG: For some reason "inherit" does not work
+	"diffEditor.wordWrap": "off",
 	// VSCode: editor
 	"editor.acceptSuggestionOnEnter": "off",
 	"editor.autoIndent": "full",

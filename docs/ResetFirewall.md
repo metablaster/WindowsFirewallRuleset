@@ -10,7 +10,7 @@ automatically, example how to run it:
 ```powershell
 C:
 cd \
-cd WindowsFirewallRuleset-master
+cd WindowsFirewallRuleset*
 .\Scripts\Reset-Firewall.ps1 -Remoting -Service
 # Restart PowerShell
 ```
@@ -61,14 +61,16 @@ The log file lists all the services whose startup mode and\or status status was 
 If you're unable to find the file or you don't know defaults, the following table lists all the
 services which `Windows Firewal Ruleset` might have modified and their system defaults:
 
-| Service                      | Startup                   | Status  |
-|------------------------------|---------------------------|---------|
-| TCP/IP NetBIOS Helper        | Manual (Trigger Start)    | Running |
-| Workstation                  | Automatic                 | Running |
-| Server                       | Automatic (Trigger Start) | Running |
-| Windows Remote Management    | Manual                    | Stopped |
-| OpenSSH Authentication Agent | Disabled                  | Stopped |
-| Remote Registry              | Manual                    | Stopped |
+| Service                                            | Startup                   | Status  |
+|----------------------------------------------------|---------------------------|---------|
+| TCP/IP NetBIOS Helper (lmhosts)                    | Manual (Trigger Start)    | Running |
+| Workstation (LanmanWorkstation)                    | Automatic                 | Running |
+| Server (LanmanServer)                              | Automatic (Trigger Start) | Running |
+| Windows Remote Management (WinRM)                  | Manual                    | Stopped |
+| OpenSSH Authentication Agent (ssh-agent)           | Disabled                  | Stopped |
+| Remote Registry (RemoteRegistry)                   | Manual                    | Stopped |
+| Function Discovery Provider host (fdPHost)         | Manual                    | Running |
+| Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
 ## Problem still not resolved
 
@@ -81,7 +83,7 @@ take a look into that script to see what it does if you insist to do things by h
 
 ## Reset control panel firewall
 
-It could be you modified firewall in control panel.\
+It could be you modified firewall in control panel manually.\
 Follow steps below to reset windows firewall in control panel:
 
 **WARNING:** Resetting control Panel firewall leaves only default rules shipped with system and

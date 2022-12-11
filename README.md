@@ -36,7 +36,7 @@
 A fully automated solution for Windows firewall with PowerShell
 
 `Windows Firewall Ruleset` configures Windows firewall automatically and applies restrictive
-firewall rules specific for target system and software installed on that system.
+firewall rules specific for target system and software installed on the system.
 
 This project consists of two major parts, firewall rules and firewall framework as follows:
 
@@ -82,7 +82,7 @@ and functionalities as desired.
 - Currently there are some 800+ firewall rules, 10+ modules with 100+ functions, several scripts
 and a good portion of useful documentation.
 - You can interactively choose which rules you want, and deploy only those or you could automate the
-process and deploy all necessary rules and settings to your firewall.
+process and deploy all the necessary rules and settings to your firewall.
 
 [Table of Contents](#table-of-contents)
 
@@ -120,9 +120,9 @@ tied to explicit user accounts, rules apply to specific ports, network interface
 executables, services etc. all of which is learned automatically from target system.
 
 7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is
-much easier since these rules are in scripts, you can use editor tools such as regex, multicursor
-or `CTRL + F` to perform bulk operations on your rules, doing this in any firewall UI is not always
-possible due to interface limitations.
+much easier since these rules are in scripts, you can use editor tools such as [regex](/docs/Regex.md),
+[multicursor][multicursor] or `CTRL + F` to perform bulk operations on your rules, doing this in
+any firewall UI is not always possible due to user interface limitations.
 
 8. A good portion of code is dedicated to provide automated solution to build and define firewall
 specialized for target system and users, minimizing the need to do something manually thus saving
@@ -186,11 +186,11 @@ instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
 
 - `sigcheck64.exe` is a digital signature verification tool which you can download from Microsoft site
-and should be placed either into `C:\tools` directory or into `%PATH%` environment variable.\
+and should be placed either into `C:\tools` directory or to `%PATH%` environment variable.\
 `Windows Firewall Ruleset` will use it to perform online malware analysis on virus total for every
 executable that is not digitally signed before a firewall rule is made for that executable.\
 This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
-Of course this is only a recommendation, if there is no `sigcheck64.exe` in PATH no malware analysis
+Of course this is only a recommendation, if there is no `sigcheck64.exe` in `PATH` no malware analysis
 is made.
 
 - You might want to have git to check out for updates,
@@ -273,7 +273,7 @@ IPv4 broadcast address. (Otherwise errors may be generated without completing th
 contains rules will be significantly slower (depends on number of existing rules)
 
 - All errors and warnings will be saved to `Logs` directory, you can review these logs later if you
-want to fix some problem, most warnings and even some errors can be safely ignored, in certain cases
+whish to fix some problem, most warnings and even some errors can be safely ignored, in certain cases
 you might want to resolve errors if possible.
 
 - Any rule that results in "Access is denied" while loading should be reloaded by executing specific
@@ -322,8 +322,8 @@ These steps here assume you have downloaded a zip file from "assets" section und
 (project root directory) into `C:\` root drive directly.
 
 3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](/docs/WindowsPowerShell.md)\
-If you would like to use PowerShell Core instead keep in mind that in rare cases there might appear
-some issues hard to diagnose, in which case you can re-try with Windows PowerShell as suggested.
+If you would like to use PowerShell Core instead keep in mind that there is an issue with
+`PowerShell Core` which brings up a blank console window which you may minimize but not terminate.
 
 4. Otherwise the procedure for both PowerShell Core and Windows PowerShell is similar:\
 Open up extracted folder, right click into an empty space and there is an option to run
@@ -393,10 +393,10 @@ It is recommended to close down all other programs before running master script 
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 
-    To deploy firewall automatically without any prompt and concise output run:
+    To deploy firewall automatically without any prompt run:
 
     ```powershell
-    .\Scripts\Deploy-Firewall.ps1 -Force -Quiet
+    .\Scripts\Deploy-Firewall.ps1 -Force
     ```
 
     Otherwise to be interactively prompted which rules to load run:
@@ -498,9 +498,9 @@ rules with no restriction or add new ones.
 What ever your plan or setup is, you will surely want to perform additional work such as customizing
 rules, or adding new rules for programs not yet covered by this firewall.
 
-Rules are loaded into local group policy, if during firewall setup you accepted creating shortcut to
-personalized firewall management console you can run the schortcut, otherwise follow steps mentioned
-in [Manage GPO Firewall](/docs/ManageGPOFirewall.md)
+Rules are loaded into local group policy, if during firewall setup you accepted creating a shortcut
+to personalized firewall management console you can run the schortcut, otherwise follow steps
+mentioned in [Manage GPO Firewall](/docs/ManageGPOFirewall.md)
 
 For more information about GPO see:
 [Configure security policy settings][configure security policy settings]
@@ -595,7 +595,7 @@ For implementation details see `Modules\Ruleset.Remote` module
 localhost by design requires working WinRM and PS remoting configuration as well.
 
 Before remote deployment can be performed, remote computer (server) needs to be configured to accept
-connection, example on how to establish SSL connection as follows:
+connection, example on how to establish SSL connection is as follows:
 
 To allow execution, configure WinRM service and remote registry on server computer by running:
 
@@ -695,6 +695,7 @@ and firewall settings
 [badge vscode]: https://img.shields.io/static/v1?label=Managed%20in&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
 [sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"
+[multicursor]: https://code.visualstudio.com/Docs/editor/codebasics#_multiple-selections-multicursor: "Visit VSCode documentation"
 <!-- unused link or image reference false positive-->
 <!-- markdownlint-disable MD053 -->
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic

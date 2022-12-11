@@ -27,6 +27,7 @@ and how to maximize security of a personal computer.
     - [VPN or proxy](#vpn-or-proxy)
     - [DNS encryption](#dns-encryption)
     - [Browser extensions](#browser-extensions)
+    - [Common privacy mistakes](#common-privacy-mistakes)
   - [How do I regain trust in my computer](#how-do-i-regain-trust-in-my-computer)
   - [Additional research](#additional-research)
 
@@ -346,12 +347,59 @@ Suggested browser extensions are:
 
 [Table of Contents](#table-of-contents)
 
+### Common privacy mistakes
+
+There are some privacy mistakes which we all did at least once.
+
+First obvious privacy mistake is having just one email and using it for everything.\
+It is suggested to have three different emails as follows:
+
+- One for personal real life use, which you share with institutional entities and your real life
+  friends such as your bank or, your lawyer, your family, your relatives or paypal.
+
+- Second one for your regular online activity such as forums and web services which you regularly use.
+
+- And third one which is a "junk" mail which you use to register to unknown sites or services,
+  sites which have poor or aggressive privacy policy or to register for a newsletter until you're
+  sure that the newsletter isn't about spamming you or sharing your email with hostile services.
+
+It's also important that these email accounts aren't registed at same email provider, some providers
+care more about your privacy than others, for your real life use the best one.
+
+You should also take care of in which country are email provider HQ located, for example swiss
+privacy laws are strict and more protective than those in the EU or US, therefore choose a
+provider from switzerland as your primary email.\
+For more information see [Data protection in Switzerland][swiss law] and also
+[New Federal Act on Data Protection (nFADP)][swiss new law]
+
+If you have to choose between a provider in the EU and the US, choose the one in EU, for more
+infomation see `Additional Research` section below.
+
+Second common privacy mistake some people do (including me) is having same online profile on
+multiple sites, for example same username, avatar or bio on multiple forums and similar sites.
+
+One reason why people do this is because they build up on their reputation and good online conduct.
+
+But regardless of your reasons I believe it's bad for privacy because you run the risk of being
+stalked and also if your identity is somehow revealed you'll be revealed in all places where you
+use same handle or avatar and then people who are in fact not stalkers may become one, most likely
+someone who knows you in real life.
+
+Third privacy mistake is using your real name or family name or a portion of it in username,
+someone from your real life could easily connect the dots between your username and your online
+behavior and then the risk is same as with reuse of avatars and usernames mentioned before.
+
+To guard your online privacy you should have separate email accounts and your online usernames and
+avatars should be unique for each site and you should never use any personally identifiable
+information even if just partial for anything except for what's absolutely required by the law,
+for ex. you can't give fake name to your lawyer or to paypal service.
+
 ## How do I regain trust in my computer
 
 The question is how do I regain trust in my computer?
 
 I installed unsigned software recently, I recall visiting potentially bad website, I didn't know
-I can encrypt my DNS, I was using Administrator account to go online etc. etc.
+I could encrypt my DNS, I was using Administrator account to go online etc. etc.
 
 If you ask yourself such or similar questions then you can't trust your computer which means
 trust must be regained.
@@ -400,7 +448,7 @@ The following web sites are good starting point for additional research regardin
 - [PRISM ⚡ BREAK][prism break]
 - [Technical analysis of client identification mechanisms][client identification]
 - [Safe computing][safe computing]
-- [Data protection and online privacy][eu privacy]
+- [EU Data protection and online privacy][eu privacy]
 
 [Table of Contents](#table-of-contents)
 
@@ -432,3 +480,5 @@ The following web sites are good starting point for additional research regardin
 [dnscrypt-proxy]: https://github.com/DNSCrypt/dnscrypt-proxy "Visit github site"
 [eu privacy]: https://europa.eu/youreurope/citizens/consumers/internet-telecoms/data-protection-online-privacy/index_en.htm "Visit EU site"
 [dead horse]: https://en.wikipedia.org/wiki/Flogging_a_dead_horse "What means beating a dead horse?"
+[swiss new law]: https://www.kmu.admin.ch/kmu/en/home/facts-and-trends/digitization/data-protection/new-federal-act-on-data-protection-nfadp.html "Visit The Swiss Federal Council"
+[swiss law]: https://www.kmu.admin.ch/kmu/en/home/facts-and-trends/digitization/data-protection.html "Visit The Swiss Federal Council"

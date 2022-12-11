@@ -69,53 +69,23 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 480,
+					"line": 482,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 532,
+					"line": 534,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 564,
+					"line": 566,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 829,
+					"line": 831,
 					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "README.md",
-			"bookmarks": [
-				{
-					"line": 583,
-					"column": 14,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "docs/ResetFirewall.md",
-			"bookmarks": [
-				{
-					"line": 61,
-					"column": 9,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Remote/Private/Unblock-NetProfile.ps1",
-			"bookmarks": [
-				{
-					"line": 75,
-					"column": 19,
 					"label": ""
 				}
 			]

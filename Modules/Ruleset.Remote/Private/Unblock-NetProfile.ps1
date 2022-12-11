@@ -73,6 +73,8 @@ function Unblock-NetProfile
 			{
 				if ($PSCmdlet.ShouldProcess($Adapter.InterfaceAlias, "Set adapter to private network profile"))
 				{
+					# TODO: Deleting this registry value might help to restore issue with hidden
+					# profile settings in settings app
 					# NOTE: This will modify the following registry key:
 					# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles
 					# The "Category" value of corresponded NIC:
