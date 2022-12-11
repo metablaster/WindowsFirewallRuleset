@@ -307,7 +307,7 @@ function Disable-WinRMServer
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling remote access to members of the Administrators group"
 
-			# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+			# NOTE: The following is set by Enable-PSRemoting, it prevents UAC and
 			# allows remote access to members of the Administrators group on the computer.
 			Set-ItemProperty -Name LocalAccountTokenFilterPolicy -Value 0 `
 				-Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System

@@ -133,7 +133,7 @@ Update-Log
 <# STATS for Export-FirewallRule
 # NOTE: With Export-FirewallRule Export speed is 10 rules per minute
 # 450 rules in 46 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
-# NOTE: to speed up a little add following to defender exclusions:
+# NOTE: to speed up a little add the following to defender exclusions:
 # C:\Windows\System32\wbem\WmiPrvSE.exe
 
 Outbound export took over 1h and the result was 1 minute

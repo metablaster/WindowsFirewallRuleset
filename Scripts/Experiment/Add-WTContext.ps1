@@ -87,7 +87,7 @@ if ($PSCmdlet.ShouldProcess("Windows registry", "Add 'Open in Windows Terminal a
 
 		if (!$RootKey)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: HKCR\$HKCR"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: HKCR\$HKCR"
 			$BaseKey.Dispose()
 			return
 		}
@@ -175,7 +175,7 @@ if ($PSCmdlet.ShouldProcess("Windows registry", "Add 'Open in Windows Terminal a
 
 		if (!$RootKey)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: HKCR\$HKCR"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: HKCR\$HKCR"
 			$BaseKey.Dispose()
 			return
 		}

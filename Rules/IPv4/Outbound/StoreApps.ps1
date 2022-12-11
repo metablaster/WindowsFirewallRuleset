@@ -54,7 +54,7 @@ None. You cannot pipe objects to StoreApps.ps1
 None. StoreApps.ps1 does not generate any output
 
 .NOTES
-NOTE: Following "rules" apply for store apps for blocking/allowing users
+NOTE: The following "rules" apply for store apps for blocking/allowing users
 1. -Owner - Only one explicit user account can be specified (not group, not capability etc...)
 2. -LocalUser - Anything can be specified
 3. Either -Owner or -LocalUser can be specified, not both which would make the rule not working and useless
@@ -336,7 +336,7 @@ foreach ($Principal in $Users)
 }
 
 #
-# Following are executables and service rules needed by apps for web authentication
+# The following are executables and service rules needed by apps for web authentication
 #
 
 $Program = "%SystemRoot%\System32\RuntimeBroker.exe"

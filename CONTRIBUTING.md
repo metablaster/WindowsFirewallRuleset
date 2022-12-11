@@ -48,7 +48,7 @@ Here is a list of introductory material to help you get started.
 It's recommended to read up to date version of this document which is located on `develop` branch
 [here][contributing develop]
 
-Following two pages below explain general starting guidelines regarding open source
+The following two pages below explain general starting guidelines regarding open source
 
 - [How to contribute to open source][contribute to open source]
 - [Open Source Contribution Etiquette][open source etiquette]
@@ -239,7 +239,7 @@ before doing anything else:
 5. `ErrorLogging`
 6. `WarningLogging`
 
-In addition verify following variables are set to desired user
+In addition verify the following variables are set to desired user
 
 1. `DefaultUser`
 2. `TestAdmin`
@@ -484,7 +484,7 @@ For examples, and comment based syntax see:
 - [About Comment-based Help][about comment based help]
 - [Examples of Comment-Based Help][comment based help examples]
 
-You must avoid following comment based content to avoid errors and unexpected output while
+You must avoid the following comment based content to avoid errors and unexpected output while
 generating online help (markdown) files:
 
 - `.LINK` entries must contains only one link and nothing else.
@@ -556,8 +556,8 @@ experimental script called `Initialize-Development.ps1` which will attempt to se
 update or install missing modules and start required system services.\
 It's recommended to do this manually because this script is unfinished.
 
-A hint to quickly run any function from any module in this repository is to run following command
-in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
+A hint to quickly run any function from any module in this repository is to run the following
+command in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project root):
 
 ```powershell
 .\Modules\Import-All.ps1
@@ -657,7 +657,7 @@ Publish-SshKey -Domain VM_GUEST_NAME -User VM_ADMIN -System -Key $HOME\.ssh\YOUR
 Next step is to add the following settings into your VSCode user settings which is found in:\
 `%UserProfile%\AppData\Roaming\Code\User\settings.json`
 
-```json
+```jsonc
   // Extension: remote - SSH
   "remote.SSH.remotePlatform": {
   "REMOTE_COMPUTER_NAME": "windows"
@@ -792,9 +792,9 @@ You might find all there guidelines and rules described here too much to chew an
 understand.
 
 Please run `git log --reverse` search for commit hash and see for yourself how horrible my knowledge
-of PowerShell was and perhaps still is, my background is C++ not PowerShell (where guidelines are
-even more rigorous) and I'm not system admin, this is in fact my first PowerShell project and all
-these rules and guidelines you see here is what I learned on my own mistakes over time and by
+of PowerShell was and perhaps still is, I'm not system admin and my background is C++ not PowerShell
+(where guidelines are even more rigorous), this is in fact my first PowerShell project and all
+these rules and guidelines described here is what I learned on my own mistakes over time and by
 reading various guidelines and documentation on the internet and still learning new stuff.
 
 You might hate pascal case for ex. and a lot of coders don't like pascal case either and there is
@@ -802,6 +802,9 @@ surely a bunch of thing to disagree with but that's the style used in this repos
 
 Knowing this I don't expect you follow all of this immediately but I expect you to be pedantic,
 explicit and to seek writing quality code.
+
+Of course suggestions regarding coding style and practices are welcome, I might consider changing
+my mind on some things.
 
 [Table of Contents](#table-of-contents)
 

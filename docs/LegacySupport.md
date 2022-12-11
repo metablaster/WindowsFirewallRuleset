@@ -33,7 +33,7 @@ Edit the module named `Ruleset.Initialize` to allow execution for older system.
 ## Project settings
 
 Edit script `Config\ProjectSettings.ps1` and define new variable that defines your system version,\
-following variable is defined to target Windows 10.0 versions and above by default for all rules.\
+the following variable is defined to target Windows 10.0 versions and above by default for all rules.\
 ```New-Variable -Name Platform -Option Constant -Scope Global -Value "10.0+""```
 
 For example for Windows 7, define a new variable that looks like this:\

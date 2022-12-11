@@ -166,10 +166,10 @@ For reference see [RegistryKey][RegistryKey]
 
 ### Remote registry requirements in PowerShell
 
-Following requirements apply to both endpoints involved (client and server computers):
+The following requirements apply to both endpoints involved (client and server computers):
 
 - `RemoteRegistry` service is `Running` and set to `Automatic` startup on both endpoints
-- Enable at a minimum following **predefined** (not custom) firewall rules:
+- Enable at a minimum the following **predefined** (not custom) firewall rules:
   - `File and Printer sharing`
   - `Network Discovery`
 - Network adapter is on `Private` or `Domain` network profile on both endpoints.
@@ -206,7 +206,7 @@ code bloat.
 At a minimum you should handle `OpenRemoteBaseKey` and opening root key (but not subsequent subkeys)
 with `OpenSubkey` exceptions.
 
-Following is an example that you can copy\paste to problem script to get detailed problem description.
+The following is an example that you can copy\paste to problem script to get detailed problem description.
 
 ```powershell
 try
@@ -239,7 +239,7 @@ try
 
     if (!$RootKey)
     {
-        throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLM")
+        throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: HKLM:\$HKLM")
     }
 }
 catch [System.Security.SecurityException]
@@ -269,9 +269,9 @@ For additional breakdown of registry key naming convention and exceptions see [N
 
 ## Troubleshooting
 
-Following link lists common troubleshooting with remoting [About Remote Troubleshooting][troubleshooting]
+The following link lists common troubleshooting with remoting [About Remote Troubleshooting][troubleshooting]
 
-Following section lists other not so common problems and how to resolve them.
+The following section lists other not so common problems and how to resolve them.
 
 ### Troubleshooting WinRM
 
@@ -351,7 +351,7 @@ Windows PowerShell, ex. by using `Reset-Firewall -Remoting`, to fix this problem
 Set-PSSessionConfiguration -Name Microsoft.PowerShell -AccessMode Remote
 ```
 
-Otherwise check following 3 things:
+Otherwise check the following 3 things:
 
 1. Verify PS session configuration which is being used is enabled
 
@@ -385,7 +385,7 @@ Otherwise check following 3 things:
 
 ### Troubleshooting CIM
 
-Following sections list CIM related errors and how to resolve them
+The following sections list CIM related errors and how to resolve them
 
 #### WS-Management service does not support the specified polymorphism mode
 
@@ -466,7 +466,7 @@ Most likely you need to specify credentials
 
 ### Troubleshooting remote registry
 
-See following link [Troubleshooting Remote Registry][remote registry]
+See the following link [Troubleshooting Remote Registry][remote registry]
 
 [Table of Contents](#table-of-contents)
 

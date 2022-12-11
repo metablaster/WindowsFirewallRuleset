@@ -55,7 +55,7 @@ None. You cannot pipe objects to Convert-ListToArray
 
 .NOTES
 TODO: DefaultValue can't be string, try string[]
-Following modifications by metablaster:
+The Following modifications by metablaster:
 August 2020:
 - Make Convert-ListToArray Advanced function
 - Change code style to be same as the rest of a project code

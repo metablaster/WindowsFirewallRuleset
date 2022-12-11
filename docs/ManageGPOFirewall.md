@@ -5,7 +5,7 @@ For general reference see:
 
 [Windows Defender Firewall with Advanced Security][ref firewall]
 
-Following is an older reference for servers with some unique information:
+The following is an older reference for servers with some unique information:
 
 [Windows Firewall with Advanced Security Administration with Windows PowerShell][ref firewall powershell]
 

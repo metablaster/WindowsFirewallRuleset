@@ -89,6 +89,36 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "README.md",
+			"bookmarks": [
+				{
+					"line": 583,
+					"column": 14,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "docs/ResetFirewall.md",
+			"bookmarks": [
+				{
+					"line": 61,
+					"column": 9,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Private/Unblock-NetProfile.ps1",
+			"bookmarks": [
+				{
+					"line": 75,
+					"column": 19,
+					"label": ""
+				}
+			]
 		}
 	]
 }

@@ -109,7 +109,7 @@ Same as Example 2, but sends variable names to the Name parameter via pipeline i
 None. This function does not produce pipeline output.
 
 .NOTES
-Following modifications by metablaster, November 2020:
+The Following modifications by metablaster, November 2020:
 
 Removed max* variables for Core edition as per: https://github.com/PowerShell/PowerShell/issues/2221
 - MaximumAliasCount

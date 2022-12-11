@@ -166,7 +166,7 @@ if (!$Default)
 
 		# The specified script runs in the new session that uses the session configuration.
 		# If the script generates an error, even a non-terminating error, the session is not created.
-		# TODO: Following path is created by "MountUserDrive" option in Firewall.pssc (another option is: ScriptsToProcess in *.pssc)
+		# TODO: The following path is created by "MountUserDrive" option in Firewall.pssc (another option is: ScriptsToProcess in *.pssc)
 		# StartupScript = "$env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME\ProjectSettings.ps1"
 
 		# Advanced options for a session configuration

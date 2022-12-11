@@ -235,7 +235,7 @@ function Get-RegistryRule
 
 				if (!$RootKey)
 				{
-					throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKLMRootKey")
+					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKLMRootKey")
 				}
 			}
 			catch

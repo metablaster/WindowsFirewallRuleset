@@ -115,7 +115,7 @@ address at field that say:
 
 ## Reset network
 
-Type following commands into console to reset network
+Type the following commands into the console to reset network
 
 ```powershell
 ipconfig /flushdns

@@ -312,7 +312,7 @@ function Set-Shortcut
 			}
 		}
 
-		# Following properties are valid for file system shortcuts only
+		# The following properties are valid for file system shortcuts only
 		# NOTE: Internet shortcuts support only two properties: FullName and TargetPath (the URL target).
 		if ($TargetPath)
 		{

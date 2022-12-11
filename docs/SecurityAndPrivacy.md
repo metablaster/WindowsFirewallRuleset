@@ -61,7 +61,7 @@ by supplying your administrative credentials.
 Administrative account is needed as well but it should be used for administration only,
 if possible offline.
 
-Following site explains how to create local (standard) account:\
+The following site explains how to create local (standard) account:\
 [Create a local user or administrator account in Windows][local account]
 
 [Table of Contents](#table-of-contents)
@@ -73,7 +73,7 @@ ensure integrity of a system, because by running unsigned software you run the r
 malware or spyware.
 
 Installing cracks, warez and similar is the most common way to let hackers in.\
-Following site explains [How to verify Digital Signatures of programs in Windows][digital signature]
+The following site explains [How to verify Digital Signatures of programs in Windows][digital signature]
 
 To enforce digital signature requirement for all software on your system follow steps below:
 
@@ -118,13 +118,13 @@ interaction between the two is not possible by default.\
 This helps to prevent malware or an attacker gain access to your system or personal information.
 
 How to configure isolated browser session depends on your web browser.\
-For `MS Edge Chromium` following site explains how to get started:\
+For `MS Edge Chromium` the following site explains how to get started:\
 [Microsoft Edge support for Microsoft Defender Application Guard][app guard]
 
 If your browser does not support isolated browser session an alternative is to use virtual machine,
 however virtual machine consumes system resources since you would be running two systems at once.
 
-Following site explains how to get started with Hyper-V virtual machine in Windows:\
+The following site explains how to get started with Hyper-V virtual machine in Windows:\
 [Install Hyper-V on Windows 10][hyper-v]
 
 [Table of Contents](#table-of-contents)
@@ -232,7 +232,7 @@ You can read more about this on the links below:
 - [Microsoft Defender for Office][defender office]
 
 As already said good news is that you need none of these expensive software, in this repository in\
-`Scripts\Security` directory you'll find following scripts which automate these things as follows:
+`Scripts\Security` directory you'll find the following scripts which automate these things as follows:
 
 1. `Deploy-ASR` is used to deploy attack surface reduction rules on your system
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
@@ -368,31 +368,34 @@ won't detect FUD malware.
 Changing your passwords on an untrusted computer is worse than not changing them at all, since if
 your computer isn't trusted then how do you know your input isn't intercepted? better do nothing.
 
-Switching from Admin account to standard account if you were Admin is beating a dead horse since
-if you were Admin then your system already was vulnerable and it's impossible to be sure nothing
-wrong happened so far.
+Switching from Admin account to standard account if you were Admin is [beating a dead horse][dead horse]
+since if you were Admin then your system already was vulnerable and it's impossible to be sure
+nothing wrong happened so far.
 
-Clean reload though isn't 100% certainty either, for neither security nor privacy, security wise
+Clean reload isn't 100% certainty though, for neither security nor privacy, security wise
 clean reload won't get rid or hardware based malware if there is one, and privacy wise your computer
 ID's are permanent and already stored on servers which you visit.
 
-To also rule out this one would have to purchase a brand new computer and even then it won't be
-100% certainty because you can't know whether hardware manufacturer or perhaps their employee is
-trusted, nor can you know for certain what did people in computer shop do to the hardware.
+To also rule out this, one would have to purchase a brand new computer and even then it won't be
+100% certainty because we can't know whether hardware manufacturer or perhaps their employee is
+trusted, nor can we know for certain what did people in computer shop do to the hardware.
 
 But going that far makes not much sense, hardware malware is difficult to write and is usually used
 to target corporations not individual users, and preventing share of your PC ID's can't be prevented
 without harming your comfort of computing, so buying a new computer would only create a new identity
 but not solve the problem.
 
-Therefore clean reload is the most sane and economically efficient method and is some 99% certainty.
+Therefore clean reload is the most sane and economically efficient method and it gives let's say 99%
+certainty.
 
-Of course, to have 100% certainty one would have recycle the computer, bury the remains underground
-and never use computer again.
+But to have 100% certainty one would have to recycle the computer, bury the remains
+underground and never use computer again.
+
+[Table of Contents](#table-of-contents)
 
 ## Additional research
 
-Following web sites are good starting point for additional research regarding security and privacy
+The following web sites are good starting point for additional research regarding security and privacy
 
 - [PRISM ⚡ BREAK][prism break]
 - [Technical analysis of client identification mechanisms][client identification]
@@ -428,3 +431,4 @@ Following web sites are good starting point for additional research regarding se
 [safe computing]: https://www.cisa.gov/uscert/ncas/tips "Visit government site"
 [dnscrypt-proxy]: https://github.com/DNSCrypt/dnscrypt-proxy "Visit github site"
 [eu privacy]: https://europa.eu/youreurope/citizens/consumers/internet-telecoms/data-protection-online-privacy/index_en.htm "Visit EU site"
+[dead horse]: https://en.wikipedia.org/wiki/Flogging_a_dead_horse "What means beating a dead horse?"

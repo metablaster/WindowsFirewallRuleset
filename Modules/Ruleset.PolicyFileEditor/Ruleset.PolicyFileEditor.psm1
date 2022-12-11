@@ -47,7 +47,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-# NOTE: Following modifications by metablaster done to original PolicyFileEditor module November 2022:
+# NOTE: The following modifications by metablaster done to original PolicyFileEditor module November 2022:
 # - Removed DSC related code because it's not needed
 # - Separated every function into it's own script
 # - Added module boilerplate code
@@ -56,7 +56,7 @@ limitations under the License.
 # - Added source code for PolFileEditor.dll
 # - Modified *.psd file
 # - Renamed module to Ruleset.PolicyFileEditor
-# NOTE: Following modifications in December 2022:
+# NOTE: The following modifications in December 2022:
 # - Added to all functions OutputType and Parameter attributes
 # - Renamed private functions and files to PS recommended verbs
 # - Replaced single quotes with double quotes where possible

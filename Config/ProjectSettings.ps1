@@ -182,7 +182,7 @@ if ($PSCmdlet.ParameterSetName -eq "Module")
 	# Modifying these preferences applies to all module scopes, only common parameters bound to
 	# module functions and preferences set in module scope can override preference variables set here.
 
-	# NOTE: Following preferences should be always the same, do not modify!
+	# NOTE: The following preferences should be always the same, do not modify!
 	$ErrorActionPreference = "Continue"
 	$WarningPreference = "Continue"
 	$InformationPreference = "Continue"
@@ -264,7 +264,7 @@ $PSSessionApplicationName = "wsman"
 # We declare it to avoid warning in Get-CallerPreference
 $OFS = " "
 
-# Set to true to enable development features, it does following at a minimum:
+# Set to true to enable development features, it does the following at a minimum:
 # 1. Forces reloading modules and removable variables.
 # 2. Loads troubleshooting rules defined in Temporary.ps1
 # 3. Performs additional requirements checks needed or recommended for development

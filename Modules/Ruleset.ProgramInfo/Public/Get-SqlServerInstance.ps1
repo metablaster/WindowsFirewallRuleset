@@ -130,7 +130,7 @@ v1.0 Boe Prox -  07 Sept 2013:
 
 - Initial Version
 
-Following modifications by metablaster based on both originals 15 Feb 2020:
+The Following modifications by metablaster based on both originals 15 Feb 2020:
 
 - change syntax, casing, code style and function name
 - resolve warnings, replacing aliases with full names
@@ -232,7 +232,7 @@ function Get-SqlServerInstance
 
 					if (!$RootKey)
 					{
-						throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLMRootKey")
+						throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: HKLM:\$HKLMRootKey")
 					}
 				}
 				catch
@@ -253,7 +253,7 @@ function Get-SqlServerInstance
 						if (!$RootKey)
 						{
 							throw [System.Data.ObjectNotFoundException]::new(
-								"Following registry key does not exist: HKLM:\$KeyPath")
+								"The following registry key does not exist: HKLM:\$KeyPath")
 						}
 					}
 					catch
@@ -294,7 +294,7 @@ function Get-SqlServerInstance
 							if (!$InstanceReg)
 							{
 								throw [System.Data.ObjectNotFoundException]::new(
-									"Following registry key does not exist: HKLM:\$KeyPath")
+									"The following registry key does not exist: HKLM:\$KeyPath")
 							}
 						}
 						catch
@@ -330,7 +330,7 @@ function Get-SqlServerInstance
 								if (!$ClusterReg)
 								{
 									throw [System.Data.ObjectNotFoundException]::new(
-										"Following registry key does not exist: HKLM:\$KeyPath")
+										"The following registry key does not exist: HKLM:\$KeyPath")
 								}
 							}
 							catch
@@ -385,7 +385,7 @@ function Get-SqlServerInstance
 								if (!$ServicesReg)
 								{
 									throw [System.Data.ObjectNotFoundException]::new(
-										"Following registry key does not exist: HKLM:\$KeyPath")
+										"The following registry key does not exist: HKLM:\$KeyPath")
 								}
 							}
 							catch
@@ -437,7 +437,7 @@ function Get-SqlServerInstance
 							if (!$VersionKey)
 							{
 								throw [System.Data.ObjectNotFoundException]::new(
-									"Following registry key does not exist: HKLM:\$KeyPath")
+									"The following registry key does not exist: HKLM:\$KeyPath")
 							}
 						}
 						catch

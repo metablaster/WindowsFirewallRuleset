@@ -169,7 +169,7 @@ Follow steps below to check for updates once you installed git and [cloned][clon
 
 The following two sets of commands are typed only once for initial setup:
 
-1. If you cloned your fork with `SSH` then run following command:
+1. If you cloned your fork with `SSH` then run the following command:
 
     ```git remote add upstream git@github.com:metablaster/WindowsFirewallRuleset.git```
 

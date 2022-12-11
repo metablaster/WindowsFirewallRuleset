@@ -110,7 +110,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 	Set-NetFirewallRule @Params
 }
 
-# NOTE: Following rules are no longer relevant
+# NOTE: The following rules are no longer relevant
 return
 
 #

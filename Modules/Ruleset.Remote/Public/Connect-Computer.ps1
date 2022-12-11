@@ -33,7 +33,7 @@ Connect to remote computer
 .DESCRIPTION
 Connect local machine to local (loopback) or remote computer onto which to deploy firewall.
 
-Following global variables are set and objects created:
+The following global variables are set and objects created:
 RemoteCim (CimSession), CIM session object
 RemoteSession (PSSession), PS session object which represent remote session
 RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication)

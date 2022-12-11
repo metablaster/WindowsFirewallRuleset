@@ -312,7 +312,7 @@ function Register-SslCertificate
 				# Create new self signed server certificate
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new SSL certificate"
 
-				# NOTE: Yellow exclamation mark on "Key Usage" means following:
+				# NOTE: Yellow exclamation mark on "Key Usage" means the following:
 				# The key usage extension defines the purpose (e.g., encipherment,
 				# signature, certificate signing) of the key contained in the certificate.
 				# The usage restriction might be employed when a key that could be used for more than one

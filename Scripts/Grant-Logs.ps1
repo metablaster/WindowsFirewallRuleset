@@ -78,7 +78,7 @@ None. Grant-Logs.ps1 does not generate any output
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
 The benefit is to have special syntax coloring and filtering functionality with VSCode.
-Before running this script, for first time setup following must be done:
+Before running this script, for first time setup the following must be done:
 1. Modify FirewallLogsFolder in Config\ProjectSettings to desired location
 2. Run Scripts\Complete-Firewall to apply the change from point one
 3. Turning off/on Windows firewall for desired network profile in order for

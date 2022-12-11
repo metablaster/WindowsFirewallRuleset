@@ -168,7 +168,7 @@ function Uninstall-DuplicateModule
 				if (!(Test-Path -LiteralPath $ModuleRoot -PathType Container))
 				{
 					Write-Error -Category ObjectNotFound -TargetObject $ModuleRoot `
-						-Message "Following module path was not found '$ModuleRoot'"
+						-Message "The following module path was not found '$ModuleRoot'"
 					continue
 				}
 

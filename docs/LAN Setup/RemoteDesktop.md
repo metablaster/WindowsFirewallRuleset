@@ -3,7 +3,7 @@
 
 ## Enable remote desktop
 
-Following applies to remote computer:
+The following applies to remote computer:
 
 - Settings -> System -> Remote desktop -> Enable Remote Desktop
   - Make my PC discoverable on private network to enable automatic connection from a remote device.
@@ -16,7 +16,7 @@ Alternative way:
 
 ## Services
 
-Following services (in bold) need to run remote computer,
+The following services (in bold) need to run remote computer,
 set or verify these services are set to "Automatic" startup:\
 **NOTE:** For smooth startup of services set dependent services to delayed start.\
 **NOTE:** Values in parentheses are service short name and default startup type which should work too.

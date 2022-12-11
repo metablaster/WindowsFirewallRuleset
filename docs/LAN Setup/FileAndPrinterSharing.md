@@ -4,7 +4,7 @@
 1. Enable SMB Direct. (In program features)
 
     For older USB network drive or connecting to an older Windows than Windows 10 SMB1 might be required.\
-    You will/might need to enable SMB1 in following cases:
+    You will/might need to enable SMB1 in the following cases:
 
     - Connecting to an older Windows than Windows 10
     - An older USB network drive
@@ -33,7 +33,7 @@
 
 5. Configure all firewalls in the network to allow File and Printer sharing rules.
 
-6. Set or verify following services (in bold) are set to "Automatic" startup:\
+6. Set or verify the following services (in bold) are set to "Automatic" startup:\
 **NOTE:** For smooth startup of services set dependent services to delayed start.\
 **NOTE:** Values in parentheses are service short name and default startup type which should work too.
 

@@ -143,7 +143,7 @@ for this reason license and Copyright notices are maintained **"per file"**.
 
 [![Windows][badge system]][windows]
 
-Following table lists operating systems on which `Windows Firewall Ruleset` has been tested
+The following table lists operating systems on which `Windows Firewall Ruleset` has been tested
 
 | OS                  | Edition       | Version     | Architecture |
 | ------------------- | ------------- | ----------- | ------------ |
@@ -228,7 +228,7 @@ Windows Server 2008 see [Legacy Support](/docs/LegacySupport.md)
 
 ## First time user
 
-Following are brief warnings and notices first time user should be aware of before deploying firewall
+The following are brief warnings and notices first time user should be aware of before deploying firewall
 
 ### Warning
 
@@ -330,9 +330,9 @@ Open up extracted folder, right click into an empty space and there is an option
 PowerShell Core as Administrator (Assumes you enabled context menu during installment of PowerShell
 Core) if not open it manually.
 
-5. If you don't have PowerShell context menu then move to `C:\` root drive by executing following
-two lines (type or copy/paste following commands and hit enter for each), this is where you
-extracted your downloaded zip file
+5. If you don't have PowerShell context menu then move to `C:\` root drive by executing the
+following two lines (type or copy/paste the commands and hit enter for each),
+this is where you extracted your downloaded zip file
 
     ```powershell
     c:
@@ -450,7 +450,7 @@ For example `Windows Remote Management` service should not run if not needed
 
 ## Firewall management
 
-Following section gives some hints to manage firewall with ease
+The following section gives some hints to manage firewall with ease
 
 ### Automated and interactive firewall deployment
 
@@ -478,7 +478,7 @@ and to attempt to resolve issues on the fly run:
 ```
 
 To learn the meaning of parmaters to be able to combine them on your own see `Deploy-Firewall.ps1`
-script comment or run following command:
+script comment or run the following command:
 
 ```powershell
 Get-Help .\Scripts\Deploy-Firewall.ps1 -Detailed
@@ -581,7 +581,7 @@ one is called management computer (client) and all others are called managed com
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
 configured on multiple server computers simultaneously.
 
-At the moment following rudimentary remoting capabilities are implemented:
+At the moment the following rudimentary remoting capabilities are implemented:
 
 1. Automatic creation of PS and CIM sessions
 2. Drilling registry remotely
@@ -653,7 +653,7 @@ periodically update this firewall please refer to [SUPPORT.md](SUPPORT.md)
 
 ## The future
 
-Following features are desired and might be available at some point in the future:
+The following features are desired and might be available at some point in the future:
 
 1. Remote firewall administration
 

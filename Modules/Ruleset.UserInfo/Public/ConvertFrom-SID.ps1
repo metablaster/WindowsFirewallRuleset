@@ -313,7 +313,7 @@ function ConvertFrom-SID
 				# NOTE: Added in Windows Vista and Windows Server 2008
 				'^S-1-5-80-0$' { "All Services"; break }
 				# TODO: unknown system for NT SERVICE\TrustedInstaller
-				# NOTE: following SID is not listed on well known SID list: (SID confirmed with PsGetsid64)
+				# NOTE: The following SID is not listed on well known SID list: (SID confirmed with PsGetsid64)
 				# NOTE: for NT SERVICE reference name is required, just display name won't be found
 				'^S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464$' { "NT SERVICE\TrustedInstaller"; break }
 				# Windows Server 2008 and later
@@ -336,11 +336,11 @@ function ConvertFrom-SID
 				# TODO: Unknown system (Name confirmed with PsGetsid64)
 				'^S-1-5-21-0-0-0-496$' { "Compound Identity Present"; break } # NT AUTHORITY\Compound Identity Present (COMPOUNDED_AUTHENTICATION)
 				'^S-1-5-21-0-0-0-497$' { "Claims Valid"; break } # NT AUTHORITY\Claims Valid (CLAIMS_VALID)
-				# Following SID is for application packages from second link
+				# The following SID is for application packages from second link
 				'^S-1-15-2-1$' { "All Application Packages"; break } # APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES
-				# Following SID is for application packages that is not listed on well known SID's
+				# The following SID is for application packages that is not listed on well known SID's
 				'^S-1-15-2-2$' { "All Restricted Application Packages"; break } # APPLICATION PACKAGE AUTHORITY\ALL RESTRICTED APPLICATION PACKAGES
-				# Following list is mentioned in firewall GUI (SID's learned with PsGetsid64)
+				# The following list is mentioned in firewall GUI (SID's learned with PsGetsid64)
 				# From all of the below S-1-15-3- accounts the "APPLICATION PACKAGE AUTHORITY\" was removed
 				'^S-1-15-3-1$' { "Your Internet connection"; break }
 				'^S-1-15-3-2$' { "Your Internet connection, including incoming connections from the Internet"; break }
@@ -356,7 +356,7 @@ function ConvertFrom-SID
 				'^S-1-15-3-12$' { "Your Contacts"; break }
 				# TODO: More capability categories must exist (not listed on well known SID's list), see also:
 				# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SecurityManager\CapabilityClasses\AllCachedCapabilities\capabilityClass_*
-				# NOTE: following SID is not listed on well known SID list: (Name confirmed with PsGetsid64)
+				# NOTE: The following SID is not listed on well known SID list: (Name confirmed with PsGetsid64)
 				'^S-1-5-22' { "Enterprise Read-Only Domain Controllers Beta"; break } # NT AUTHORITY\ENTERPRISE READ-ONLY DOMAIN CONTROLLERS BETA
 				default
 				{

@@ -470,7 +470,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed rules and search for Adobe reader and Acrobat
   - Updated rules for Java runtime
 
-  - Partially improved following rules:
+  - Partially improved the following rules:
     - ICMPv6
     - CoreNetworking
     - Multicast

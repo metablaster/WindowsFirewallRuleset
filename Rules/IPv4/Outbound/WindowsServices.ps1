@@ -380,7 +380,7 @@ New-NetFirewallRule -DisplayName "Extension rule for complex services" `
 	-LocalPort Any -RemotePort 80, 443 `
 	-LocalUser $ExtensionAccounts `
 	-InterfaceType $DefaultInterface `
-	-Description "Extension rule for active users and NT localsystem, following services need
+	-Description "Extension rule for active users and NT localsystem, the following services need
 access based on logged on user:
 Cryptographic Services(CryptSvc),
 Microsoft Account Sign-in Assistant(wlidsvc),
@@ -391,7 +391,7 @@ local service account" |
 Format-RuleOutput
 
 #
-# Following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
+# The following rules are in "ProblematicTraffic" pseudo group, these need extension rules (above)
 #
 
 New-NetFirewallRule -DisplayName "Background Intelligent Transfer Service" `

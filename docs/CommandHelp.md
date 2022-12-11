@@ -253,7 +253,7 @@ Get-NetIPConfiguration -AllCompartments -Detailed
 
 ### Repository creation date
 
-To figure out the date and time some repository was created run curl against following URL format:
+To figure out the date and time some repository was created run curl against the following URL format:
 
 `https://api.github.com/repos/<REPO_OWNER>/<REPO_NAME>`
 

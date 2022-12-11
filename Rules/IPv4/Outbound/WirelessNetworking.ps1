@@ -31,7 +31,7 @@ SOFTWARE.
 Outbound firewall rules for wireless networking
 
 .DESCRIPTION
-Following predefined groups are included:
+The following predefined groups are included:
 1. WI-FI Direct network discovery
 2. Wireless display
 3. Wireless protable devices

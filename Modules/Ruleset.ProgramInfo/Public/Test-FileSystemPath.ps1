@@ -171,7 +171,7 @@ function Test-FileSystemPath
 			[Parameter(Mandatory = $true)]
 			[string] $Message,
 
-			# Following parameters are needed only in remote execution context
+			# The following parameters are needed only in remote execution context
 			[switch] $Quiet = $Quiet,
 			[string] $LiteralPath = $LiteralPath,
 			[string] $InvocationName = $InvocationName

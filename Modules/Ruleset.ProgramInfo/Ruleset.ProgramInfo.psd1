@@ -164,7 +164,7 @@ SOFTWARE.
 	# Variables to export from this module.
 	# Wildcard characters are permitted, by default, all variables ("*") are exported.
 	VariablesToExport = @(
-		# TODO: Following exports only for unit testing
+		# TODO: The following exports only for unit testing
 		# This should be resolved in Enter-Test function which picks up private functions but not
 		# script scope variables
 		"InstallTable"

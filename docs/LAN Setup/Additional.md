@@ -25,7 +25,7 @@ this firewall project here:\
 
 ## Services
 
-Following services may help in specific scenarios:\
+The following services may help in specific scenarios:\
 **NOTE:** Values in parentheses are service short name and default startup type which should work too.
 
 - Internet connection sharing (SharedAccess, Manual - Trigger Start)
@@ -33,7 +33,7 @@ Following services may help in specific scenarios:\
 - Link-layer topology discovery mapper (lltdsvc, Manual)
 - PNRP Machine Name Publication Service (PNRPAutoReg, Manual)
 
-Following services may help with UNC name resolution:
+The following services may help with UNC name resolution:
 
 - Network Connections (Netman, Manual)
 - Peer Name Resolution Protocol (PNRPsvc, Manual)
@@ -72,7 +72,7 @@ Get-SmbShare
 
 ## more discovery tools
 
-Restart following services on both computers:
+Restart the following services on both computers:
 
 - Function discovery resource publication
 - Workstation ("Computer browser" on systems older than Windows 10)

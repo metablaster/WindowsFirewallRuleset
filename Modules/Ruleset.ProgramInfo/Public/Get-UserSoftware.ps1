@@ -193,7 +193,7 @@ function Get-UserSoftware
 
 			if (!$RootKey)
 			{
-				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: $HKU")
+				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKU")
 			}
 		}
 		catch

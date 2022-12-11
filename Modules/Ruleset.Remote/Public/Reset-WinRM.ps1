@@ -113,7 +113,7 @@ function Reset-WinRM
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Resetting remote access to members of the Administrators group"
 
-			# NOTE: Following is set by Enable-PSRemoting, it prevents UAC and
+			# NOTE: The following is set by Enable-PSRemoting, it prevents UAC and
 			# allows remote access to members of the Administrators group on the computer.
 			# By default this value does not exist
 			Remove-Item -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\LocalAccountTokenFilterPolicy -ErrorAction Ignore

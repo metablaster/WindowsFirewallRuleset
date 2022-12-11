@@ -439,7 +439,7 @@ For more information see [Interpreting the Windows Firewall Log][firewall logs]
 
 ## Conversion of parameter direction
 
-Following are mappings between log file, firewall UI and PowerShell parameters.
+The following are mappings between log file, firewall UI and PowerShell parameters.
 
 The true meaning of source/destination is not straightforward, explanation is given in section above
 and here is how to convert this info to other firewall/traffic contexts.
@@ -466,7 +466,7 @@ and here is how to convert this info to other firewall/traffic contexts.
 
 ## Hidden parameters
 
-Following hidden parameters are part of CIM class and are not visible in firewall UI
+The following hidden parameters are part of CIM class and are not visible in firewall UI
 
 ### StatusCode
 

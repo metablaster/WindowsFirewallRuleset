@@ -57,7 +57,7 @@ None. You cannot pipe objects to Convert-ValueToBoolean
 [bool]
 
 .NOTES
-Following modifications by metablaster:
+The Following modifications by metablaster:
 August 2020:
 - Make Convert-ValueToBoolean Advanced function
 - Change code style to be same as the rest of a project code

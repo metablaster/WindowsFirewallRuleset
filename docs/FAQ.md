@@ -44,8 +44,8 @@ Other than this, if problem persists, you'll have to debug the problem, to get s
 
 ## I get an error "Network path not found", "Unable to contact computer" or "The client cannot connect"
 
-First verify following network adapter items are enabled (checked) and if not restart adapter for
-any changes to take effect:
+First verify the following network adapter items are enabled (checked) and if not restart adapter
+for any changes to take effect:
 
 1. Client for Microsoft Networks
 2. File and Printer Sharing for Microsoft Networks
@@ -56,7 +56,7 @@ any changes to take effect:
 
 For more information about these items and how to manage them see [AdapterItems.md](LAN%20Setup/AdapterItems.md)
 
-Next ensure at the minimum following network services are `Running` and optionally set to
+Next ensure at the minimum the following network services are `Running` and optionally set to
 `Automatic` startup
 
 1. LanmanWorkstation: `Workstation`
@@ -76,8 +76,8 @@ network profile:
 This can be enabled in the following location:\
 `Start->System->Network & Internet->Network and Sharing Center->Change advanced sharing settings`
 
-If this doesn't work verify the command that is causing this problem, for example following command
-tries to get firewall rules from GPO and will produce this problem:
+If this doesn't work verify the command that is causing this problem, for example the following
+command tries to get firewall rules from GPO and will produce this problem:
 
 ```powershell
 Get-NetFirewallRule -PolicyStore [System.Environment]::MachineName
@@ -91,7 +91,7 @@ Get-NetFirewallRule -PolicyStore ([System.Environment]::MachineName)
 
 If you're trying to deploy or manage firewall remotely see this document [Remote.md](Remote.md)
 
-If none of this works even after reboot of all involved computers, following link might help:
+If none of this works even after reboot of all involved computers, the following link might help:
 
 - [Computer Name Won't Resolve on Network][name resolution issue]
 
@@ -113,7 +113,7 @@ For maximum security you'll need much more than just good firewall, for start yo
 
 This could happen if you change default log file location in Windows Firewall settings
 
-To resolve this issue ensure following:
+To resolve this issue ensure the following:
 
 1. Verify current logging setting is enabled and is pointing to expected log file location.
 
@@ -190,7 +190,7 @@ So here is an overview to help you see what they do hopefully answering all of y
     - Custom session configurations are created which is used for local and remote firewall deployment
     - Your own PowerShell session configurations if you made them will be removed
 
-6. Following default firewall rules are recreated or removed in control panel firewall
+6. The following default firewall rules are recreated or removed in control panel firewall
 
     - Rules for Network Discovery, File and Printer Sharing, WinRM and WinRM compatibility rules
 
@@ -206,7 +206,7 @@ them as follows:
     - Modify settings for specific software (Process monitor, mTail and Windows Performance Analyzer
     only)
 
-    All of modifications above are done in following situations:
+    All of modifications above are done in the following situations:
 
     - VScode might ask you to install recommended extensions
     - Some script might ask you to confirm whether you want to do this or that, and you're free to
@@ -237,7 +237,7 @@ them as follows:
     except as explained in point 5.\
     Those scripts listed above which begin with `...\` exist in `Modules` and `Test` subdirectories.
 
-9. Following is a list of external executables that are run by some scripts
+9. The following is a list of external executables that are run by some scripts
 
     - [gpupdate.exe][gpupdate] (Apply GPO to avoid system restart)
     - [reg.exe][reg] (To load offline registry hive)
@@ -314,7 +314,7 @@ actually bring these options back, so here are my favorites that should fix it i
    be the cause for this message.
 
 2. If you can't get rid of a message and profile options are not back even after reboot, next step
-is to verify following location in GPO:\
+is to verify the following location in GPO:\
 `Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
 
     - Here make sure everything is set to `Not Configured`, and if you change something reboot

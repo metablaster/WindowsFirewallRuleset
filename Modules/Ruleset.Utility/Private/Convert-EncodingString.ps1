@@ -117,12 +117,12 @@ function Convert-EncodingString
 		"utf32" { "utf-32"; break }
 		# The default encoding for MS-DOS and console programs
 		"oem" { break }
-		# NOTE: Following values are valid for Core edition only:
+		# NOTE: The following values are valid for Core edition only:
 		# UTF-8 format with Byte Order Mark (BOM)
 		"utf8BOM" { "utf-8"; break }
 		# UTF-8 format without Byte Order Mark (BOM)
 		"utf8NoBOM" { "utf-8"; break }
-		# NOTE: Following values are valid For Desktop edition only:
+		# NOTE: The following values are valid For Desktop edition only:
 		# A sequence of bytes
 		"byte" { break }
 		# The system's active code page (usually ANSI)
@@ -131,7 +131,7 @@ function Convert-EncodingString
 		"string" { "utf-16"; break }
 		# Same as Unicode
 		"unknown" { "utf-16"; break }
-		# NOTE: Following values are reverse of previous values
+		# NOTE: The following values are reverse of previous values
 		# US-ASCII
 		"us-ascii" { "ascii"; break }
 		# Unicode (UTF-7)

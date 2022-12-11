@@ -120,13 +120,13 @@ $TargetProgramRoot = "%ProgramFiles%\TargetProgram"
 # Test if installation exists on system
 if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $ForceLoad)
 {
-	# Following lines/options are not used:
+	# The following lines/options are not used:
 	# -Name (if used then on first line, DisplayName should be adjusted for 100 col. line)
 	# -RemoteUser $RemoteUser -RemoteMachine $RemoteMachine
 	# -Authentication NotRequired -Encryption NotRequired -OverrideBlockRules False
 	# -InterfaceAlias "loopback" (if used, goes on line with InterfaceType)
 
-	# Following lines/options are used only where appropriate:
+	# The following lines/options are used only where appropriate:
 	# LocalOnlyMapping $false -LooseSourceMapping $false
 	# -Owner $PrincipalSID -Package $PackageSID
 

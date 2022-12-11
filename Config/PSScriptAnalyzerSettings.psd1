@@ -136,7 +136,7 @@
 	# TODO: not all options have defaults mentioned in comments
 	Rules = @{
 		#
-		# Following settings are related to Allman above
+		# The following settings are related to Allman above
 		#
 
 		PSPlaceOpenBrace = @{
@@ -248,7 +248,7 @@
 		}
 
 		#
-		# Following settings are related to those not included in samples
+		# The following settings are related to those not included in samples
 		#
 
 		PSProvideCommentHelp = @{
@@ -313,7 +313,7 @@
 		}
 
 		#
-		# TODO: Following rules needs generating custom updated settings
+		# TODO: The following rules need generating custom updated settings
 		#
 
 		# This rule flags cmdlets that are not available in a given Edition/Version of

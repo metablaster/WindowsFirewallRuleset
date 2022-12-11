@@ -154,6 +154,6 @@ Update-Log
 <# STATS for Import-FirewallRule
 NOTE: import speed is 26 rules per minute, slowed down by "Test-Computer" for store app rules
 450 rules in 17 minutes on 3,6 Ghz quad core CPU with 16GB single channel RAM @2400 Mhz
-NOTE: to speed up a little add following to defender exclusions:
+NOTE: to speed up a little add the following to defender exclusions:
 C:\Windows\System32\wbem\WmiPrvSE.exe
 #>

@@ -92,7 +92,7 @@ function Get-SqlManagementStudio
 
 			if (!$RootKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Following registry key does not exist: $HKLM"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: $HKLM"
 				$RemoteKey.Dispose()
 				return
 			}

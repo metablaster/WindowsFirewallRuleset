@@ -211,7 +211,7 @@ function Initialize-Provider
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Using following package sources: $($PackageSource.ProviderName)"
+				-MessageData "INFO: Using the following package sources: $($PackageSource.ProviderName)"
 		}
 		else
 		{

@@ -64,7 +64,7 @@ License attached as Exhibit A
 TODO: After runing this script, seems like some variables are removed, See Exit-Text "UnitTest" variable
 TODO: A function to convert NTSTATUS code to message would be great
 
-Following modifications by metablaster, November 2020:
+The Following modifications by metablaster, November 2020:
 
 -Format code according to project best practices
 -Added boilerplate code

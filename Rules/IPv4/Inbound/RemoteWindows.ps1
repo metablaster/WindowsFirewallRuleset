@@ -55,7 +55,7 @@ None. You cannot pipe objects to RemoteWindows.ps1
 None. RemoteWindows.ps1 does not generate any output
 
 .NOTES
-NOTE: Following rules from predefined groups are used:
+NOTE: The following rules from predefined groups are used:
 1. Remote Desktop
 2. Remote Desktop (WebSocket)
 3. Windows remote management (PowerShell remoting)

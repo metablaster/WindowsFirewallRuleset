@@ -22,7 +22,7 @@ Settings -> Updates & Security -> Allow download from other PC's (PC's on my loc
 
 ## Services
 
-For delivery optimization set or verify following services (in bold) to "Automatic" startup:\
+For delivery optimization set or verify the following services (in bold) to "Automatic" startup:\
 **NOTE:** For smooth startup of services set dependent services to delayed start.\
 **NOTE:** Values in parentheses are service short name and default startup type which should work too.
 

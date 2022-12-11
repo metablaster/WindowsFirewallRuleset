@@ -128,7 +128,7 @@ No clear conventions for the following parameters
 
 ## Registry keys
 
-Following is a legend and sample table for `HKEY_LOCAL_MACHINE`\
+The following is a legend and sample table for `HKEY_LOCAL_MACHINE`\
 Starting with `RootKey` toward specific `key value` each subsequent sub key follows naming convention
 according to this table until `key value` is reached.
 

@@ -358,7 +358,7 @@ function Initialize-Module
 	}
 
 	# No need to specify type of repository, it's explained by user action
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using following repositories: $RepositoryList"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using the following repositories: $RepositoryList"
 
 	# Check if module could be downloaded
 	[PSCustomObject] $FoundModule = $null

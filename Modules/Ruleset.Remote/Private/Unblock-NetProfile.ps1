@@ -73,7 +73,7 @@ function Unblock-NetProfile
 			{
 				if ($PSCmdlet.ShouldProcess($Adapter.InterfaceAlias, "Set adapter to private network profile"))
 				{
-					# NOTE: This will modify following registry key:
+					# NOTE: This will modify the following registry key:
 					# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles
 					# The "Category" value of corresponded NIC:
 					# 0 = public

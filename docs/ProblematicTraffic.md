@@ -360,7 +360,7 @@ One of the following should make the difference to confirm the issuse:
 - Allow rule merging
 - Apply "Network Discovery" predefined rules
 
-Setting following GPO options explicitly makes no difference:
+Setting the following GPO options explicitly makes no difference:
 
 `Computer Configuration\Administrative Templates\Link-Layer Topology Discovery\`
 

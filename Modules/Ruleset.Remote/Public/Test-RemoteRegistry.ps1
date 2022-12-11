@@ -117,7 +117,7 @@ function Test-RemoteRegistry
 
 			if (!$RootKey)
 			{
-				throw [System.Data.ObjectNotFoundException]::new("Following registry key does not exist: HKLM:\$HKLM")
+				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: HKLM:\$HKLM")
 			}
 		}
 		catch [System.Security.SecurityException]

@@ -1,7 +1,7 @@
 
 # Network Adapter Settings
 
-Following are bare minimum adapter settings for IPv4:
+The following are bare minimum adapter settings for IPv4:
 
 ## Adapter items
 

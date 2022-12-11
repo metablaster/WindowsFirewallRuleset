@@ -93,7 +93,7 @@ Minimum computer name length: 1 character
 Maximum computer name length: 15 characters
 Logon names can be up to 104 characters.
 However, it isn't practical to use logon names that are longer than 64 characters.
-Logon names can't contain following characters:
+Logon names can't contain the following characters:
 " / \ [ ] : ; | = , + * ? < >
 
 Logon names can contain all other special characters, including spaces, periods, dashes, and underscores.

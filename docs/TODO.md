@@ -9,7 +9,7 @@ recommended extension `todo-tree` to navigate `TODO`, `HACK`, `NOTE` and other t
 Some todo's listed here are duplicate of todo's inside individual scripts, this is intentionally
 for important todo's to make is easier to tell where to look at while resolving this list.
 
-Todo's in this file are categorized into following sections:
+Todo's in this file are categorized into the following sections:
 
 1. **Ongoing**              Never ending or continuous work
 2. **High priority**        Should be resolved ASAP
@@ -183,7 +183,7 @@ Todo's in this file are categorized into following sections:
 
 1. Modules
 
-    - Provide following keywords in function comments: `.COMPONENT` `.ROLE` `.FUNCTIONALITY`
+    - Provide the following keywords in function comments: `.COMPONENT` `.ROLE` `.FUNCTIONALITY`
     - `DefaultParameterSetName` for functions with parameter sets is missing but might be desired,
     on another side many functions name default parameter set name to `None` which isn't descriptive.
     - Revisit function return statements, return keyword or Write-Output should be preferred for visibility
@@ -220,6 +220,7 @@ Todo's in this file are categorized into following sections:
     - Rules for services, need to check services are networking services, if not write warning,
     could be implemented in `Test-Service` function
     - Parameter HelpMessage for mandatory parameters
+    - Rule scripts should have a `.LINK` section to program and repository.
 
 3. Rules
 

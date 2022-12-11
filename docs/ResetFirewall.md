@@ -33,7 +33,7 @@ next sections as needed.
 To disable PowerShell remoting open PowerShell as Administrator, the edition you run depends on
 edition that was used to deploy firewall.
 
-Run following commands:
+Run the following commands:
 
 ```powershell
 Disable-PSRemoting
@@ -58,8 +58,8 @@ which services were modified take a look into `Logs` folder and find `Services-<
 
 The log file lists all the services whose startup mode and\or status status was changed.
 
-If you're unable to find the file or you don't know defaults, following table lists all the services
-which `Windows Firewal Ruleset` might have modified and their system defaults:
+If you're unable to find the file or you don't know defaults, the following table lists all the
+services which `Windows Firewal Ruleset` might have modified and their system defaults:
 
 | Service                      | Startup                   | Status  |
 |------------------------------|---------------------------|---------|

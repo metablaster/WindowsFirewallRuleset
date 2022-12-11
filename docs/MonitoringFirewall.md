@@ -195,7 +195,7 @@ click on image to enlarge:
 is built.
 - **NOTE:** you need to enable at a minimum, auditing of dropped packet as explained in the section
 "Event log" above.
-- You can access WFP logs, filter and state by executing following commands:\
+- You can access WFP logs, filter and state by executing the following commands:\
 ```netsh wfp show state``` to show current state, such as detailed information about dropped or
 allowed network packets.
 ```netsh wfp show filters``` to show current firewall filters

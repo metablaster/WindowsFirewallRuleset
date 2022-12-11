@@ -208,7 +208,7 @@ if ($Remoting)
 # | Function Discovery Provider host (fdPHost)         | Manual                    | Running |
 # | Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
-# Services listed above depend on following services which are also affected
+# Services listed above depend on the following services which are also affected
 # | Service                                            | Startup                   | Status  |
 # |----------------------------------------------------|---------------------------|---------|
 # | Network Store Interface Service (nsi)              | Automatic                 | Running |
@@ -239,7 +239,7 @@ if ($Service)
 	Stop-Service -Name WinRM
 	Stop-Service -Name RemoteRegistry
 
-	# Disabling following services might not be desired so ask for confirmation
+	# Disabling the following services might not be desired so ask for confirmation
 	if ($Develop)
 	{
 		Set-Service -Name ssh-agent -StartupType Disabled -Confirm

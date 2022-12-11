@@ -58,12 +58,12 @@ utf7: UTF-7 format.
 utf8: UTF-8 format.
 utf32: UTF-32 format.
 
-Following values are valid for Core edition only:
+The following values are valid for Core edition only:
 
 utf8BOM: UTF-8 format with Byte Order Mark (BOM)
 utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)
 
-Following values are valid For Desktop edition only:
+The following values are valid For Desktop edition only:
 
 byte: A sequence of bytes.
 default: Encoding that corresponds to the system's active code page (usually ANSI).

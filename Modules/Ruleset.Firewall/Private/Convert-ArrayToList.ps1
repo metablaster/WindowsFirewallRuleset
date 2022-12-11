@@ -54,7 +54,7 @@ PS> Convert-ArrayToList @("192.168.1.1", "192.168.2.1", "172.24.33.100")
 [string] Comma separated list
 
 .NOTES
-Following modifications by metablaster:
+The Following modifications by metablaster:
 August 2020:
 - Make Convert-ArrayToList Advanced function
 - Change code style to be same as the rest of a project code
