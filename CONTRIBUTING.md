@@ -30,8 +30,10 @@ firewall for your own needs.
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
   - [Debugging](#debugging)
-    - [Debugging without a virtual machine](#debugging-without-a-virtual-machine)
+    - [Debugging code](#debugging-code)
+    - [Debugging code without a debugger](#debugging-code-without-a-debugger)
     - [Debugging with Remote-SSH VSCode extension in virtual machine](#debugging-with-remote-ssh-vscode-extension-in-virtual-machine)
+    - [Debugging firewall](#debugging-firewall)
   - [Commits and pull requests](#commits-and-pull-requests)
   - [Portability and other systems](#portability-and-other-systems)
   - [Making new scripts or modules](#making-new-scripts-or-modules)
@@ -508,7 +510,7 @@ successful.
 
 To test code on different OS editions you should use Hyper-V and set up virtual machines, there is
 experimental script called `Initialize-Development.ps1` which will attempt to set up git, gpg, ssh,
-update or install missing modules and start requires system services.\
+update or install missing modules and start required system services.\
 It's recommended to do this manually because this script is unfinished.
 
 A hint to quickly run any function from any module in this repository is to run following command
@@ -518,60 +520,88 @@ in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project r
 .\Modules\Import-All.ps1
 ```
 
-This will add all repository `Modules` to current session module path
+This will add all repository `Modules` to current session module path and will import them all at once.
 
 [Table of Contents](#table-of-contents)
 
 ## Debugging
 
-At the moment debugging is one area in this repository which can be hard and is not well maintained.
+Debugging `Windows Firewall Ruleset` consists of two parts, debugging code and auditing firewall rules.
 
-Regarding code major problem is that scripts and modules require elevation, this means you can't
-simply use integrated terminal in VSCode nor any VSCode debugging features unless you're
-Administrator or run PS and VSCode as Admin which means your machine becomes an elevated test machine.
+### Debugging code
 
-Secondary aspect of debugging is testing firewall rules and networking issues which may or may not
-be as cool or as easy as debugging code.
+Precondition to debug code is to run `VSCode` as Administrator because scripts and module functions
+require elevation.
 
-### Debugging without a virtual machine
+There is workspace debugging configuration for each module function and script in repository which
+you can access from `Run and Debug` badge in action bar, at the top is a drop down list listing
+module functions and scripts sorted alphabetically.
 
-Knowing this here are some recommendations if you whish to test without virtual environment:
+These configurations actually run unit tests from `Test` directory, you can set break points in
+referenced module function or script if desired and click `Start Debugging` button.
 
-1. Forget about debugger and instead just use `Write-Debug` and `Write-Verbose` commandlets to see
-what the code is doing, this is much faster and more useful and informative than stepping trough
-code.
+The debugging configuration itself is located in `.vscode\launch.json` file.
+
+For more information about how to debug see the following links:
+
+- [Debugging in VSCode][vscode debugging] and
+- [Integrate with External Tools via Tasks][tasks]
+- [Variables Reference][variables reference]
+
+### Debugging code without a debugger
+
+There are few good reasons why would you wish to debug to wild, such as:
+
+1. A function or script you wish to debug is not configured or appropriate for debugger or there
+is no unit test which would call module function or script.
+
+2. A function or script is relatively simple or there is no space for mistakes to appear.
+
+3. You want testing procedure to go faster and immediately affecting target system.
+
+4. You prefer running code in the console as Administrator and\or do everything else as
+standard user.
+
+Here are recommendations if you whish to debug code without using debugger:
+
+1. Use `Write-Debug` and `Write-Verbose` commandlets in your code to see what the code is doing,
+this is much faster and sometimes more useful and informative than stepping trough code.
 
 2. Run PS as Admin and type command by commad which you wish to test by copying code out of editor
 into the console, this is much more practical than stepping trough code because you can handle
 various scenarios by simply modifying variables and using console history to repeat steps.
 
-3. In `Config\ProjectSettings.ps1` debug and verbose preferences are set in single place and entire
-repository is affected, you don't even have to restart PS or reimport modules when `$Develop` is set
-because each run of some scripts gives you fresh environment for testing.\
+3. In `Config\ProjectSettings.ps1` debug and verbose preferences can be set in single place and entire
+repository is affected, you don't even have to restart PS or reimport modules when `$Develop`
+variable is set because each run of some scripts gives you fresh environment for testing.\
 Some variables are however exception to this and will require restart of PS.
 
-4. For deployment testing or testing which affects firewall on your host simply set up multiple
-Hyper-V guest systems with external switch (NIC) and optionally map your repo from host to guest
-system.
-
-5. Regarding testing rules, the easiest method is get confortable with all the tools and methods
-described in [MonitoringFirewall.md](/docs/MonitoringFirewall.md)\
-For remoting tests of course Hyper-V on same subnet and mapped drive proves most useful.
+4. For deployment testing or testing which affects firewall or system configuration on your host
+simply set up multiple Hyper-V guest systems attached to external switch (NIC) and optionally map
+your repo from host to guest system.\
+For remoting tests Hyper-V guest on same subnet and mapped drive proves most useful since you
+neither need additional hardware nor do you affect your host system.
 
 ### Debugging with Remote-SSH VSCode extension in virtual machine
 
-The most efficient and safe method to debug and test code is to use Remote-SSH extension in
+The most efficient and safe method to debug and test code is to use `Remote-SSH` extension in
 combination with virtual machine, this process consists of the following:
 
-1. Set up VM and enable OpenSSH SSH server in optional features in VM
-2. Start OpenSSH SSH service and set it to automatic in VM
-3. Install VSCode in virtual machine
-4. clone `WindowsFirewallRuleset` in your VM
-5. On your host create a new SSH key that will be used for Remote-SSH extension and put it into your
-your `$HOME\.ssh`
-6. On your host system copy `Config\SSH\config` file into your `$HOME\.ssh` folder and modify file
-with correct parameters
-7. In PowerShell cd into `WindowsFirewallRuleset` and run:
+1. Set up Hyper-V, install a new guest system and enable `OpenSSH` SSH server in optional features
+in the guest system.
+2. clone `WindowsFirewallRuleset` into your VM, for this you'll need git and other development
+environment setup configured in VM.
+3. Edit `Config\SSH\sshd_config` file and update parameters with correct values as needed.
+4. Copy your edited `Config\SSH\sshd_config` in the guest system into `%ProgramData%\ssh`
+5. Restart `OpenSSH` SSH service to pick up copied configuration and set it to automatic startup
+6. Make sure you install VSCode in virtual machine which will provide server services for `Remote SSH`
+7. On your host system create a new SSH key that will be used for `Remote-SSH` extension and put it
+into your your `$HOME\.ssh` directory
+8. On your host system edit `Config\SSH\config` file and update parameters with correct values as
+needed.
+9. On your host system copy editted `Config\SSH\config` file into your `$HOME\.ssh` folder
+10. On your host system restart `OpenSSH client` service to pick up your config file.
+11. Fire up PowerShell console and cd into `WindowsFirewallRuleset` then run:
 
 ```powershell
 .\Modules\Import-All.ps1
@@ -579,17 +609,17 @@ with correct parameters
 Publish-SshKey -Domain VM_GUEST_NAME -User VM_ADMIN -System -Key $HOME\.ssh\YOUR_KEY.pub
 ```
 
-Next step is to add following settings into your VSCode settings which is found in:\
-`C:\Users\User\AppData\Roaming\Code\User\settings.json`
+Next step is to add the following settings into your VSCode user settings which is found in:\
+`%UserProfile%\AppData\Roaming\Code\User\settings.json`
 
 ```json
- // Extension: remote - SSH
- "remote.SSH.remotePlatform": {
+  // Extension: remote - SSH
+  "remote.SSH.remotePlatform": {
   "REMOTE_COMPUTER_NAME": "windows"
- },
- // Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
- // This are all workspace recommended extensions excluding remote SSH:
- "remote.SSH.defaultExtensions": [
+  },
+  // Local extensions that actually need to run remotely (will appear dimmed and disabled locally)
+  // This are all workspace recommended extensions excluding remote SSH which should be omitted:
+  "remote.SSH.defaultExtensions": [
   // cSpell:disable
   // AutoScroll
   "pejmannikram.vscode-auto-scroll",
@@ -599,12 +629,10 @@ Next step is to add following settings into your VSCode settings which is found 
   "streetsidesoftware.code-spell-checker",
   // Filter Line
   "everettjf.filter-line",
-  // Fix JSON
-  "oliversturm.fix-json",
   // Hightlight Bad Chars
   "wengerk.highlight-bad-chars",
-  // json
-  "zainchen.json",
+  // Ini for VSCode
+  "DavidWang.ini-for-vscode",
   // Log File Highlighter
   "emilast.logfilehighlighter",
   // Markdown All in One
@@ -615,10 +643,16 @@ Next step is to add following settings into your VSCode settings which is found 
   "ms-vscode.powershell",
   // Rainbow CSV
   "mechatroner.rainbow-csv",
+  // Select Line Status Bar
+  "tomoki1207.selectline-statusbar",
   // Sort JSON objects
   "richie5um2.vscode-sort-json",
+  // Sort Lines
+  "Tyriar.sort-lines",
   // Todo Tree
   "gruntfuggly.todo-tree",
+  // Toggle Quotes
+  "BriteSnow.vscode-toggle-quotes",
   // Trailing Spaces
   "shardulm94.trailing-spaces",
   // XML
@@ -626,15 +660,29 @@ Next step is to add following settings into your VSCode settings which is found 
   // YAML
   "redhat.vscode-yaml"
   // cSpell:enable
- ]
+]
 ```
 
 Now restart VSCode on your host system and under `Remote Explorer` in VSCode you'll find an option
 to open VSCode to remote host, once you connect select `WindowsFirewallRuleset` to be your default
 remote directory for connection.
 
-At this point you can run code on remote host in VSCode from your host either in a new VSCode window
-or in same window.
+At this point you can run code on remote host in VSCode from your host either in a new VSCode
+window or in same window.
+
+However to run scripts or functions which require elevation you'll need to run VSCode as
+Administrator and configure before mentioned steps for your Admin account on host system.
+
+### Debugging firewall
+
+Secondary aspect of debugging is auditing firewall rules and networking issues which may or may not
+be as cool or as easy as debugging code.
+
+First step is to get confortable with all the tools and methods described in
+[MonitoringFirewall.md](docs/MonitoringFirewall.md) which will help to monitor firewall.
+
+How do you proceed from that point on depends on firewall rules you're auditing or the kind of
+networking problems that you're trying to resolve.
 
 ## Commits and pull requests
 
@@ -727,7 +775,6 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [extension remote SSH editing]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh-edit "Visit Marketplace"
 [extension remote SSH explorer]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"
 [extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
-[extension json]: https://marketplace.visualstudio.com/items?itemName=ZainChen.json "Visit Marketplace"
 [extension trailing spaces]: https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces "Visit Marketplace"
 [develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"
@@ -746,3 +793,6 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [badge vscode]: https://img.shields.io/static/v1?label=Made%20for&message=VSCode&color=informational&style=plastic&logo=Visual-Studio-Code
 [badge vscode link]: https://code.visualstudio.com
 [platyps_schema]: https://github.com/PowerShell/platyPS/blob/master/platyPS.schema.md "Visit PlatyPS repository"
+[vscode debugging]: https://code.visualstudio.com/docs/editor/debugging "Visit VSCode documentation"
+[tasks]: https://code.visualstudio.com/docs/editor/tasks "Visit VSCode documentation"
+[variables reference]: https://code.visualstudio.com/docs/editor/variables-reference "Visit VSCode documentation"

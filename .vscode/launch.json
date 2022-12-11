@@ -5,26 +5,1444 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug module",
+			// The reader-friendly name to appear in the Debug launch configuration dropdown
+			"name": "Template configuration",
+			// The type of debugger to use for this launch configuration
 			"type": "PowerShell",
+			// The request type of this launch configuration
 			"request": "launch",
-			"cwd": "${workspaceFolder}\\Modules",
+			// Current working directory for finding dependencies and other files
+			"cwd": "${workspaceFolder}",
+			// When set the PowerShell session is reset each time you debug through a script.
+			// This means that:
+			// Constant variables are reset
+			// Updates to PowerShell modules will be pulled into the session
+			// NOTE: This is controlled globally in settings.json with:
+			// "powershell.debugging.createTemporaryIntegratedConsole"
 			"createTemporaryIntegratedConsole": true,
+			// You can sort, group, and hide configurations and compounds in the Debug
+			// configuration dropdown and in the Debug quick pick.
+			"presentation":{
+				"hidden": true,
+				"group": "Template group",
+				"order": 1
+			}
 		},
+		//
+		// Ruleset.ComputerInfo
+		//
 		{
-			"name": "Debug file",
+			"name": "ComputerInfo\\ConvertFrom-OSBuild",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${file}",
-			"cwd": "${file}"
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\ConvertFrom-OSBuild.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 1
+			}
 		},
-		// TODO: add test cases here
 		{
-			"name": "Test: Resolve-Host",
+			"name": "ComputerInfo\\Get-InterfaceAlias",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Get-InterfaceAlias.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 2
+			}
+		},
+		{
+			"name": "ComputerInfo\\Get-InterfaceBroadcast",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Get-InterfaceBroadcast.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 3
+			}
+		},
+		{
+			"name": "ComputerInfo\\Get-SystemSKU",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Get-SystemSKU.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 4
+			}
+		},
+		{
+			"name": "ComputerInfo\\Resolve-Host",
 			"type": "PowerShell",
 			"request": "launch",
 			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Resolve-Host.ps1",
-			"cwd": "${workspaceFolder}"
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 5
+			}
+		},
+		{
+			"name": "ComputerInfo\\Select-IPInterface",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Select-IPInterface.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 6
+			}
+		},
+		{
+			"name": "ComputerInfo\\Test-Computer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Test-Computer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 7
+			}
+		},
+		{
+			"name": "ComputerInfo\\Test-DnsName",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Test-DnsName.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 8
+			}
+		},
+		{
+			"name": "ComputerInfo\\Test-NetBiosName",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Test-NetBiosName.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 9
+			}
+		},
+		{
+			"name": "ComputerInfo\\Test-UNC",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ComputerInfo\\Test-UNC.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ComputerInfo",
+				"order": 10
+			}
+		},
+		//
+		// Ruleset.Firewall
+		//
+		{
+			"name": "Firewall\\Convert-ArrayToList",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Convert-ArrayToList.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 1
+			}
+		},
+		{
+			"name": "Firewall\\Convert-ListToArray",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Convert-ListToArray.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 2
+			}
+		},
+		{
+			"name": "Firewall\\Convert-ListToMultiLine",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Convert-ListToMultiLine.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 3
+			}
+		},
+		{
+			"name": "Firewall\\Convert-MultiLineToList",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Convert-MultiLineToList.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 4
+			}
+		},
+		{
+			"name": "Firewall\\Convert-ValueToBoolean",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Convert-ValueToBoolean.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 5
+			}
+		},
+		{
+			"name": "Firewall\\ConvertFrom-Protocol",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\ConvertFrom-Protocol.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 6
+			}
+		},
+		{
+			"name": "Firewall\\Export-FirewallRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Export-FirewallRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 7
+			}
+		},
+		{
+			"name": "Firewall\\Export-FirewallSetting",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Export-FirewallSetting.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 8
+			}
+		},
+		{
+			"name": "Firewall\\Export-RegistryRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Export-RegistryRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 9
+			}
+		},
+		{
+			"name": "Firewall\\Find-RulePrincipal",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Find-RulePrincipal.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 10
+			}
+		},
+		{
+			"name": "Firewall\\Find-WeakRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Find-WeakRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 11
+			}
+		},
+		{
+			"name": "Firewall\\Format-RuleOutput",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Format-RuleOutput.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 12
+			}
+		},
+		{
+			"name": "Firewall\\Get-RegistryRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Get-RegistryRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 13
+			}
+		},
+		{
+			"name": "Firewall\\Import-FirewallRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Import-FirewallRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 14
+			}
+		},
+		{
+			"name": "Firewall\\Import-FirewallSetting",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Import-FirewallSetting.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 15
+			}
+		},
+		{
+			"name": "Firewall\\Remove-FirewallRule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Remove-FirewallRule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 16
+			}
+		},
+		{
+			"name": "Firewall\\Restore-IfBlank",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Firewall\\Restore-IfBlank.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Firewall",
+				"order": 17
+			}
+		},
+		//
+		// Ruleset.Initialize
+		//
+		{
+			"name": "Initialize\\Find-DuplicateModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Find-DuplicateModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 1
+			}
+		},
+		{
+			"name": "Initialize\\Find-UpdatableModuleHelp",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Find-UpdatableModuleHelp.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 2
+			}
+		},
+		{
+			"name": "Initialize\\Initialize-Module",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Initialize-Module.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 3
+			}
+		},
+		{
+			"name": "Initialize\\Initialize-Project",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Initialize-Project.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 4
+			}
+		},
+		{
+			"name": "Initialize\\Initialize-Provider",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Initialize-Provider.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 5
+			}
+		},
+		{
+			"name": "Initialize\\Initialize-Service",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Initialize-Service.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 6
+			}
+		},
+		{
+			"name": "Initialize\\Uninstall-DuplicateModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Uninstall-DuplicateModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 7
+			}
+		},
+		{
+			"name": "Initialize\\Update-ModuleHelp",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Initialize\\Update-ModuleHelp.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Initialize",
+				"order": 8
+			}
+		},
+		//
+		// Ruleset.Logging
+		//
+		{
+			"name": "Logging\\Initialize-Log",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Logging\\Initialize-Log.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Logging",
+				"order": 1
+			}
+		},
+		{
+			"name": "Logging\\Test-Error",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Logging\\Test-Error.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Logging",
+				"order": 2
+			}
+		},
+		{
+			"name": "Logging\\Test-Info",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Logging\\Test-Info.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Logging",
+				"order": 3
+			}
+		},
+		{
+			"name": "Logging\\Test-Warning",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Logging\\Test-Warning.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Logging",
+				"order": 4
+			}
+		},
+		{
+			"name": "Logging\\Write-LogFile",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Logging\\Write-LogFile.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Logging",
+				"order": 5
+			}
+		},
+		//
+		// Ruleset.ProgramInfo
+		//
+		{
+			"name": "ProgramInfo\\Confirm-Installation",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Confirm-Installation.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 1
+			}
+		},
+		{
+			"name": "ProgramInfo\\Edit-Table",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Edit-Table.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 2
+			}
+		},
+		{
+			"name": "ProgramInfo\\Format-Path",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Format-Path.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 3
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-AllUserProgram",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-AllUserProgram.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 4
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-AppCapability",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-AppCapability.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 5
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-AppSID",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-AppSID.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 6
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-ExecutablePath",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-ExecutablePath.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 7
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-NetFramework",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-NetFramework.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 8
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-OneDrive",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-OneDrive.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 9
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-SQLManagementStudio",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SQLManagementStudio.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 10
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-SqlServerInstance",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SqlServerInstance.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 11
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-SystemApp",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SystemApp.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 12
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-SystemSoftware",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-SystemSoftware.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 13
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-UserApp",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-UserApp.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 14
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-UserSoftware",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-UserSoftware.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 15
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-WindowsDefender",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-WindowsDefender.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 16
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-WindowsKit",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-WindowsKit.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 17
+			}
+		},
+		{
+			"name": "ProgramInfo\\Get-WindowsSDK",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Get-WindowsSDK.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 18
+			}
+		},
+		{
+			"name": "ProgramInfo\\Initialize-Table",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Initialize-Table.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 19
+			}
+		},
+		{
+			"name": "ProgramInfo\\Search-Installation",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Search-Installation.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 20
+			}
+		},
+		{
+			"name": "ProgramInfo\\Show-Table",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Show-Table.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 21
+			}
+		},
+		{
+			"name": "ProgramInfo\\Test-ExecutableFile",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Test-ExecutableFile.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 22
+			}
+		},
+		{
+			"name": "ProgramInfo\\Test-FileSystemPath",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Test-FileSystemPath.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 23
+			}
+		},
+		{
+			"name": "ProgramInfo\\Test-Service",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Test-Service.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 24
+			}
+		},
+		{
+			"name": "ProgramInfo\\Test-VirusTotal",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Test-VirusTotal.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 25
+			}
+		},
+		{
+			"name": "ProgramInfo\\Update-Table",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.ProgramInfo\\Update-Table.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.ProgramInfo",
+				"order": 26
+			}
+		},
+		//
+		// Ruleset.Remote
+		//
+		{
+			"name": "Remote\\Connect-Computer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Connect-Computer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 1
+			}
+		},
+		{
+			"name": "Remote\\Disable-RemoteRegistry",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Disable-RemoteRegistry.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 2
+			}
+		},
+		{
+			"name": "Remote\\Disable-WinRMServer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Disable-WinRMServer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 3
+			}
+		},
+		{
+			"name": "Remote\\Disconnect-Computer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Disconnect-Computer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 4
+			}
+		},
+		{
+			"name": "Remote\\Enable-RemoteRegistry",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Enable-RemoteRegistry.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 5
+			}
+		},
+		{
+			"name": "Remote\\Enable-WinRMServer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Enable-WinRMServer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 6
+			}
+		},
+		{
+			"name": "Remote\\Export-WinRM",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Export-WinRM.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 7
+			}
+		},
+		{
+			"name": "Remote\\Initialize-WinRM",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Initialize-WinRM.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 8
+			}
+		},
+		{
+			"name": "Remote\\Publish-SshKey",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Publish-SshKey.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 9
+			}
+		},
+		{
+			"name": "Remote\\Register-SslCertificate",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Register-SslCertificate.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 10
+			}
+		},
+		{
+			"name": "Remote\\Reset-WinRM",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Reset-WinRM.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 11
+			}
+		},
+		{
+			"name": "Remote\\Restore-NetProfile",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Restore-NetProfile.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 12
+			}
+		},
+		{
+			"name": "Remote\\Set-WinRMClient",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Set-WinRMClient.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 13
+			}
+		},
+		{
+			"name": "Remote\\Show-WinRMConfig",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Show-WinRMConfig.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 14
+			}
+		},
+		{
+			"name": "Remote\\Test-RemoteRegistry",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Test-RemoteRegistry.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 15
+			}
+		},
+		{
+			"name": "Remote\\Test-WinRM",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Test-WinRM.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 16
+			}
+		},
+		{
+			"name": "Remote\\Unblock-NetProfile",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Unblock-NetProfile.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 17
+			}
+		},
+		{
+			"name": "Remote\\Unregister-SslCertificate",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Remote\\Unregister-SslCertificate.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Remote",
+				"order": 18
+			}
+		},
+		//
+		// Ruleset.Test
+		//
+		{
+			"name": "Test\\Enter-Test",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Enter-Test.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 1
+			}
+		},
+		{
+			"name": "Test\\Reset-TestDrive",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Reset-TestDrive.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 2
+			}
+		},
+		{
+			"name": "Test\\Test-MarkdownLink",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Test-MarkdownLink.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 3
+			}
+		},
+		{
+			"name": "Test\\Test-Output",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Test-Output.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 4
+			}
+		},
+		{
+			"name": "Test\\Test-UnitTest",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Test-UnitTest.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 5
+			}
+		},
+		//
+		// Ruleset.UserInfo
+		//
+		{
+			"name": "UserInfo\\ConvertFrom-SDDL",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\function.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 1
+			}
+		},
+		{
+			"name": "UserInfo\\ConvertFrom-SID",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\function.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 2
+			}
+		},
+		{
+			"name": "UserInfo\\Get-GroupPrincipal",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-GroupPrincipal.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 3
+			}
+		},
+		{
+			"name": "UserInfo\\Get-GroupSID",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-GroupSID.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 4
+			}
+		},
+		{
+			"name": "UserInfo\\Get-PathSDDL",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-PathSDDL.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 5
+			}
+		},
+		{
+			"name": "UserInfo\\Get-PrincipalSID",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-PrincipalSID.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 6
+			}
+		},
+		{
+			"name": "UserInfo\\Get-SDDL",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-SDDL.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 7
+			}
+		},
+		{
+			"name": "UserInfo\\Get-UserGroup",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Get-UserGroup.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 8
+			}
+		},
+		{
+			"name": "UserInfo\\Merge-SDDL",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Merge-SDDL.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 9
+			}
+		},
+		{
+			"name": "UserInfo\\Split-Principal",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Split-Principal.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 10
+			}
+		},
+		{
+			"name": "UserInfo\\Test-Credential",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Test-Credential.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 11
+			}
+		},
+		{
+			"name": "UserInfo\\Test-SDDL",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Test-SDDL.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 12
+			}
+		},
+		{
+			"name": "UserInfo\\Test-UPN",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\Test-UPN.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.UserInfo",
+				"order": 13
+			}
+		},
+		//
+		// Ruleset.Utility
+		//
+		{
+			"name": "Utility\\Approve-Execute",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Approve-Execute.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 1
+			}
+		},
+		{
+			"name": "Utility\\Compare-Path",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Compare-Path.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 2
+			}
+		},
+		{
+			"name": "Utility\\Confirm-FileEncoding",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Confirm-FileEncoding.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 3
+			}
+		},
+		{
+			"name": "Utility\\Convert-EncodingString",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Convert-EncodingString.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 4
+			}
+		},
+		{
+			"name": "Utility\\ConvertFrom-Wildcard",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\ConvertFrom-Wildcard.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 5
+			}
+		},
+		{
+			"name": "Utility\\Format-ComputerName",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Format-ComputerName.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 6
+			}
+		},
+		{
+			"name": "Utility\\Get-FileEncoding",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Get-FileEncoding.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 7
+			}
+		},
+		{
+			"name": "Utility\\Get-TypeName",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Get-TypeName.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 8
+			}
+		},
+		{
+			"name": "Utility\\Invoke-Process",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Invoke-Process.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 9
+			}
+		},
+		{
+			"name": "Utility\\Out-DataTable",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Out-DataTable.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 10
+			}
+		},
+		{
+			"name": "Utility\\Resolve-FileSystemPath",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Resolve-FileSystemPath.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 11
+			}
+		},
+		{
+			"name": "Utility\\Select-EnvironmentVariable",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Select-EnvironmentVariable.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 12
+			}
+		},
+		{
+			"name": "Utility\\Set-NetworkProfile",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Set-NetworkProfile.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 13
+			}
+		},
+		{
+			"name": "Utility\\Set-Permission",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Set-Permission.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 14
+			}
+		},
+		{
+			"name": "Utility\\Set-Privilege",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Set-Privilege.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 15
+			}
+		},
+		{
+			"name": "Utility\\Set-ScreenBuffer",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Set-ScreenBuffer.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 16
+			}
+		},
+		{
+			"name": "Utility\\Set-Shortcut",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Set-Shortcut.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 17
+			}
+		},
+		{
+			"name": "Utility\\Write-ColorMessage",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Write-ColorMessage.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 18
+			}
+		},
+		{
+			"name": "Utility\\Write-ServiceList",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Utility\\Write-ServiceList.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Utility",
+				"order": 19
+			}
+		},
+		//
+		// Scripts
+		//
+		{
+			"name": "Scripts\\Get-DevicePath",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Scripts\\Get-DevicePath.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Scripts\\Utility",
+				"order": 1
+			}
+		},
+		{
+			"name": "Scripts\\Get-ExportedType",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Scripts\\Get-ExportedType.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Scripts\\Utility",
+				"order": 2
+			}
+		},
+		{
+			"name": "Scripts\\Get-NetworkStat",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Scripts\\Get-NetworkStat.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Scripts\\Utility",
+				"order": 3
+			}
+		},
+		{
+			"name": "Scripts\\Get-ParameterAlias",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Scripts\\Get-ParameterAlias.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Scripts\\Utility",
+				"order": 4
+			}
+		},
+		{
+			"name": "Scripts\\Get-PropertyType",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Scripts\\Get-PropertyType.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Scripts\\Utility",
+				"order": 5
+			}
 		}
 	]
 }

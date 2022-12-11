@@ -47,7 +47,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-# HACK: Pester tests are not compatible with pester 5
+# HACK: This pester unit test is not compatible with pester 5
+# NOTE: The module "Ruleset.PolicyFileEditor" works with no issues, there is no
+# need to debug the module because it has been tested on real system and it works as expected.
 Remove-Module Ruleset.PolicyFileEditor -ErrorAction Ignore
 $ScriptRoot = Split-Path -Path (Split-Path -Path $PSCommandPath -Parent) -Parent
 $Psd1Path = Join-Path $ScriptRoot Ruleset.PolicyFileEditor.psd1
@@ -80,12 +82,12 @@ function New-DefaultGpo
 			}
 		}
 
-		$Content = @'
+		$Content = @"
 [General]
 gPCMachineExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]
 Version=65537
 gPCUserExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F73-3407-48AE-BA88-E8213C6761F1}]
-'@
+"@
 
 		$GptIniPath = Join-Path $Path gpt.ini
 		Set-Content -Path $GptIniPath -ErrorAction Stop -Encoding Ascii -Value $Content
@@ -104,7 +106,7 @@ function Get-GptIniVersion
 		[string] $Path
 	)
 
-	foreach ($Result in Select-String -Path $Path -Pattern '^\s*Version\s*=\s*(\d+)\s*$')
+	foreach ($Result in Select-String -Path $Path -Pattern "^\s*Version\s*=\s*(\d+)\s*$")
 	{
 		foreach ($Match in $Result.Matches)
 		{
@@ -116,56 +118,62 @@ function Get-GptIniVersion
 try
 {
 	$Module = Import-Module $Psd1Path -ErrorAction Stop -PassThru -Force
-	$GpoPath = 'TestDrive:\TestGpo'
+	# TODO: This test drive does not exist nor it is created here, suggested solution is to use
+	# $DefaultTestDrive which is a global variable that the module is aware of (but not pester),
+	# it specifies directory location in this repo.
+	# Alternatively use New-PSDrive commandlet to create a new test Directory on system drive.
+	# Reset-TestDrive from Ruleset.Test module is a function which creates the test drive specified
+	# in $DefaultTestDrive
+	$GpoPath = "TestDrive:\TestGpo"
 	$GptIniPath = "$GpoPath\gpt.ini"
 
-	Describe 'KeyValueName parsing' {
+	Describe "KeyValueName parsing" {
 		InModuleScope Ruleset.PolicyFileEditor {
 			$TestCases = @(
 				@{
-					KeyValueName = 'Left\Right'
-					ExpectedKey = 'Left'
-					ExpectedValue = 'Right'
-					Description = 'Simple'
+					KeyValueName = "Left\Right"
+					ExpectedKey = "Left"
+					ExpectedValue = "Right"
+					Description = "Simple"
 				}
 
 				@{
-					KeyValueName = 'Left\\Right'
-					ExpectedKey = 'Left'
-					ExpectedValue = 'Right'
-					Description = 'Multiple consecutive separators'
+					KeyValueName = "Left\\Right"
+					ExpectedKey = "Left"
+					ExpectedValue = "Right"
+					Description = "Multiple consecutive separators"
 				}
 
 				@{
-					KeyValueName = '\Left\Right'
-					ExpectedKey = 'Left'
-					ExpectedValue = 'Right'
-					Description = 'Leading separator'
+					KeyValueName = "\Left\Right"
+					ExpectedKey = "Left"
+					ExpectedValue = "Right"
+					Description = "Leading separator"
 				}
 
 				@{
-					KeyValueName = 'Left\Right\'
-					ExpectedKey = 'Left\Right'
-					ExpectedValue = ''
-					Description = 'Trailing separator'
+					KeyValueName = "Left\Right\"
+					ExpectedKey = "Left\Right"
+					ExpectedValue = ""
+					Description = "Trailing separator"
 				}
 
 				@{
-					KeyValueName = '\\\Left\\\\Right\\\\\'
-					ExpectedKey = 'Left\Right'
-					ExpectedValue = ''
-					Description = 'Ridiculous with trailing separator'
+					KeyValueName = "\\\Left\\\\Right\\\\\"
+					ExpectedKey = "Left\Right"
+					ExpectedValue = ""
+					Description = "Ridiculous with trailing separator"
 				}
 
 				@{
-					KeyValueName = '\\\\\\\\Left\\\\\\\Right'
-					ExpectedKey = 'Left'
-					ExpectedValue = 'Right'
-					Description = 'Ridiculous with no trailing separator'
+					KeyValueName = "\\\\\\\\Left\\\\\\\Right"
+					ExpectedKey = "Left"
+					ExpectedValue = "Right"
+					Description = "Ridiculous with no trailing separator"
 				}
 			)
 
-			It -TestCases $TestCases 'Properly parses KeyValueName with <Description>' {
+			It -TestCases $TestCases "Properly parses KeyValueName with <Description>" {
 				param ($KeyValueName, $ExpectedKey, $ExpectedValue)
 				$Key, $ValueName = Get-KeyValueName $KeyValueName
 
@@ -175,12 +183,12 @@ try
 		}
 	}
 
-	Describe 'Happy Path' {
+	Describe "Happy Path" {
 		BeforeEach {
 			New-DefaultGpo -Path $GpoPath
 		}
 
-		Context 'Incrementing GPT.Ini version' {
+		Context "Incrementing GPT.Ini version" {
 			# User version is the high 16 bits, Machine version is the low 16 bits.
 			# Reference:  http://blogs.technet.com/b/grouppolicy/archive/2007/12/14/understanding-the-gpo-version-number.aspx
 
@@ -190,22 +198,22 @@ try
 
 			$TestCases = @(
 				@{
-					PolicyType = 'Machine'
-					Expected = '65538' # (1 -shl 16) + 2
+					PolicyType = "Machine"
+					Expected = "65538" # (1 -shl 16) + 2
 				}
 
 				@{
-					PolicyType = 'User'
-					Expected = '131073' # (2 -shl 16) + 1
+					PolicyType = "User"
+					Expected = "131073" # (2 -shl 16) + 1
 				}
 
 				@{
-					PolicyType = 'Machine', 'User'
-					Expected = '131074' # (2 -shl 16) + 2
+					PolicyType = "Machine", "User"
+					Expected = "131074" # (2 -shl 16) + 2
 				}
 			)
 
-			It 'Sets the correct value for <PolicyType> updates' -TestCases $TestCases {
+			It "Sets the correct value for <PolicyType> updates" -TestCases $TestCases {
 				param ($PolicyType, $Expected)
 
 				Update-GptIniVersion -Path $GptIniPath -PolicyType $PolicyType
@@ -218,74 +226,74 @@ try
 			}
 		}
 
-		Context 'Automated modification of gpt.ini' {
+		Context "Automated modification of gpt.ini" {
 			# These tests incidentally also cover the happy path functionality of
 			# Set-PolicyFileEntry and Remove-PolicyFileEntry.  We'll cover errors
 			# in a different section.
 
 			$TestCases = @(
 				@{
-					PolicyType = 'Machine'
-					ExpectedVersions = '65538', '65539' # (1 -shl 16) + 2, (1 -shl 16) + 2
+					PolicyType = "Machine"
+					ExpectedVersions = "65538", "65539" # (1 -shl 16) + 2, (1 -shl 16) + 2
 					NoGptIniUpdate = $false
 					Count = 1
 				}
 
 				@{
-					PolicyType = 'User'
-					ExpectedVersions = '131073', '196609' # (2 -shl 16) + 1, (3 -shl 16) + 1
+					PolicyType = "User"
+					ExpectedVersions = "131073", "196609" # (2 -shl 16) + 1, (3 -shl 16) + 1
 					NoGptIniUpdate = $false
 					Count = 1
 				}
 
 				@{
-					PolicyType = 'Machine'
-					ExpectedVersions = '65537', '65537' # (1 -shl 16) + 1, (1 -shl 16) + 1
+					PolicyType = "Machine"
+					ExpectedVersions = "65537", "65537" # (1 -shl 16) + 1, (1 -shl 16) + 1
 					NoGptIniUpdate = $true
 					Count = 1
 				}
 
 				@{
-					PolicyType = 'User'
-					ExpectedVersions = '65537', '65537' # (1 -shl 16) + 1, (1 -shl 16) + 1
+					PolicyType = "User"
+					ExpectedVersions = "65537", "65537" # (1 -shl 16) + 1, (1 -shl 16) + 1
 					NoGptIniUpdate = $true
 					Count = 1
 				}
 
 				@{
-					PolicyType = 'User'
-					ExpectedVersions = '131073', '196609' # (2 -shl 16) + 1, (3 -shl 16) + 1
+					PolicyType = "User"
+					ExpectedVersions = "131073", "196609" # (2 -shl 16) + 1, (3 -shl 16) + 1
 					NoGptIniUpdate = $false
 					Count = 2
 					EntriesToModify = @(
 						New-Object PSObject -Property @{
-							Key = 'Software\Testing'
-							ValueName = 'Value1'
-							Type = 'String'
-							Data = 'Data'
+							Key = "Software\Testing"
+							ValueName = "Value1"
+							Type = "String"
+							Data = "Data"
 						}
 
 						New-Object PSObject -Property @{
-							Key = 'Software\Testing'
-							ValueName = 'Value2'
-							Type = 'MultiString'
-							Data = 'Multi', 'String', 'Data'
+							Key = "Software\Testing"
+							ValueName = "Value2"
+							Type = "MultiString"
+							Data = "Multi", "String", "Data"
 						}
 					)
 				}
 			)
 
-			It 'Behaves properly modifying <Count> entries in a <PolicyType> registry.pol file and NoGptIniUpdate is <NoGptIniUpdate>' -TestCases $TestCases {
+			It "Behaves properly modifying <Count> entries in a <PolicyType> registry.pol file and NoGptIniUpdate is <NoGptIniUpdate>" -TestCases $TestCases {
 				param ($PolicyType, [string[]] $ExpectedVersions, [switch] $NoGptIniUpdate, [object[]] $EntriesToModify)
 
-				if (-not $PSBoundParameters.ContainsKey('EntriesToModify'))
+				if (-not $PSBoundParameters.ContainsKey("EntriesToModify"))
 				{
 					$EntriesToModify = @(
 						New-Object PSObject -Property @{
-							Key = 'Software\Testing'
-							ValueName = 'TestValue'
+							Key = "Software\Testing"
+							ValueName = "TestValue"
 							Data = 1
-							Type = 'DWord'
+							Type = "DWord"
 						}
 					)
 				}
@@ -300,8 +308,7 @@ try
 				# GPO, the version of gpt.ini is not updated.
 
 				# Code is deliberately duplicated (rather then refactored into a loop) so that if we get failures,
-				# the line numbers will tell us whether it was on the first or second execution of the duplicated
-				# parts.
+				# the line numbers will tell us whether it was on the first or second execution of the duplicated parts.
 
 				$ScriptBlock | Should Not Throw
 
@@ -393,93 +400,93 @@ try
 			}
 		}
 
-		Context 'Get/Set parity' {
+		Context "Get/Set parity" {
 			$TestCases = @(
 				@{
-					TestName = 'Creates a DWord value properly'
+					TestName = "Creates a DWord value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::DWord
 					Data = @([uint32] 1)
 				}
 
 				@{
-					TestName = 'Creates a QWord value properly'
+					TestName = "Creates a QWord value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::QWord
 					Data = @([UInt64] 0x100000000L)
 				}
 
 				@{
-					TestName = 'Creates a String value properly'
+					TestName = "Creates a String value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::String
-					Data = @('I am a string')
+					Data = @("I am a string")
 				}
 
 				@{
-					TestName = 'Creates an ExpandString value properly'
+					TestName = "Creates an ExpandString value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::ExpandString
-					Data = @('My temp path is %TEMP%')
+					Data = @("My temp path is %TEMP%")
 				}
 
 				@{
-					TestName = 'Creates a MultiString value properly'
+					TestName = "Creates a MultiString value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::MultiString
-					Data = [string[]]('I', 'am', 'a', 'multi', 'string')
+					Data = [string[]]("I", "am", "a", "multi", "string")
 				}
 
 				@{
-					TestName = 'Creates a Binary value properly'
+					TestName = "Creates a Binary value properly"
 					Type = [Microsoft.Win32.RegistryValueKind]::Binary
 					Data = [byte[]] (1..32)
 				}
 
 				@{
-					TestName = 'Allows hex strings to be assigned to DWord values'
+					TestName = "Allows hex strings to be assigned to DWord values"
 					Type = [Microsoft.Win32.RegistryValueKind]::DWord
-					Data = @('0x12345')
+					Data = @("0x12345")
 					ExpectedData = [uint32] 0x12345
 				}
 
 				@{
-					TestName = 'Allows hex strings to be assigned to QWord values'
+					TestName = "Allows hex strings to be assigned to QWord values"
 					Type = [Microsoft.Win32.RegistryValueKind]::QWord
-					Data = @('0x12345789')
+					Data = @("0x12345789")
 					ExpectedData = [Uint64] 0x123456789L
 				}
 
 				@{
-					TestName = 'Allows hex strings to be assigned to Binary types'
+					TestName = "Allows hex strings to be assigned to Binary types"
 					Type = [Microsoft.Win32.RegistryValueKind]::Binary
-					Data = '0x1', '0xFF', '0x12'
+					Data = "0x1", "0xFF", "0x12"
 					ExpectedData = [byte[]] (0x1, 0xFF, 0x12)
 				}
 
 				@{
-					TestName = 'Allows non-string data to be assigned to String values'
+					TestName = "Allows non-string data to be assigned to String values"
 					Type = [Microsoft.Win32.RegistryValueKind]::String
 					Data = @(12345)
-					ExpectedData = '12345'
+					ExpectedData = "12345"
 				}
 
 				@{
-					TestName = 'Allows non-string data to be assigned to ExpandString values'
+					TestName = "Allows non-string data to be assigned to ExpandString values"
 					Type = [Microsoft.Win32.RegistryValueKind]::ExpandString
 					Data = @(12345)
-					ExpectedData = '12345'
+					ExpectedData = "12345"
 				}
 
 				@{
-					TestName = 'Allows non-string data to be assigned to MultiString values'
+					TestName = "Allows non-string data to be assigned to MultiString values"
 					Type = [Microsoft.Win32.RegistryValueKind]::MultiString
 					Data = 1..5
-					ExpectedData = '1', '2', '3', '4', '5'
+					ExpectedData = "1", "2", "3", "4", "5"
 				}
 			)
 
-			It '<TestName>' -TestCases $TestCases {
+			It "<TestName>" -TestCases $TestCases {
 				param ($TestName, $Type, $Data, $ExpectedData)
 
 				$PolicyPath = Join-Path $GpoPath Machine\registry.pol
 
-				if (-not $PSBoundParameters.ContainsKey('ExpectedData'))
+				if (-not $PSBoundParameters.ContainsKey("ExpectedData"))
 				{
 					$ExpectedData = $Data
 				}
@@ -514,11 +521,11 @@ try
 				}
 			}
 
-			It 'Gets values by Key and PropertyName successfully' {
+			It "Gets values by Key and PropertyName successfully" {
 				$PolicyPath = Join-Path $GpoPath Machine\registry.pol
-				$Key = 'Software\Testing'
-				$ValueName = 'TestValue'
-				$Data = 'I am a string'
+				$Key = "Software\Testing"
+				$ValueName = "TestValue"
+				$Data = "I am a string"
 				$Type = ([Microsoft.Win32.RegistryValueKind]::String)
 
 				$ScriptBlock = {
@@ -541,13 +548,13 @@ try
 			}
 		}
 
-		Context 'Automatic creation of gpt.ini' {
-			It 'Creates a gpt.ini file if one is not found' {
+		Context "Automatic creation of gpt.ini" {
+			It "Creates a gpt.ini file if one is not found" {
 				Remove-Item $GptIniPath
 
 				$Path = Join-Path $GpoPath Machine\registry.pol
 
-				Set-PolicyFileEntry -Path $Path -Key 'Whatever' -ValueName 'Whatever' -Data 'Whatever' -Type String
+				Set-PolicyFileEntry -Path $Path -Key "Whatever" -ValueName "Whatever" -Data "Whatever" -Type String
 
 				$GptIniPath | Should Exist
 				Get-GptIniVersion -Path $GptIniPath | Should -Be 1
@@ -555,7 +562,7 @@ try
 		}
 	}
 
-	Describe 'Not-so-happy Path' {
+	Describe "Not-so-happy Path" {
 		BeforeEach {
 			New-DefaultGpo -Path $GpoPath
 		}
@@ -563,21 +570,21 @@ try
 		$TestCases = @(
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::DWord
-				ExpectedMessage = 'When -Type is set to DWord, -Data must be passed a valid UInt32 value.'
+				ExpectedMessage = "When -Type is set to DWord, -Data must be passed a valid UInt32 value."
 			}
 
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::QWord
-				ExpectedMessage = 'When -Type is set to QWord, -Data must be passed a valid UInt64 value.'
+				ExpectedMessage = "When -Type is set to QWord, -Data must be passed a valid UInt64 value."
 			}
 
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::Binary
-				ExpectedMessage = 'When -Type is set to Binary, -Data must be passed a Byte[] array.'
+				ExpectedMessage = "When -Type is set to Binary, -Data must be passed a Byte[] array."
 			}
 		)
 
-		It 'Gives a reasonable error when non-numeric data is passed to <Type> values' -TestCases $TestCases {
+		It "Gives a reasonable error when non-numeric data is passed to <Type> values" -TestCases $TestCases {
 			# BUG: Unable to suppress
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 				"PSReviewUnusedParameter", "Type", Justification = "False Positive")]
@@ -592,7 +599,7 @@ try
 					-Key Software\Testing `
 					-ValueName TestValue `
 					-Type $Type `
-					-Data 'I am not a number' `
+					-Data "I am not a number" `
 					-ErrorAction Stop
 			}
 

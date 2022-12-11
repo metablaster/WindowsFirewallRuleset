@@ -473,6 +473,9 @@
 	"powershell.analyzeOpenDocumentsOnly": false,
 	"powershell.buttons.showPanelMovementButtons": false,
 	"powershell.buttons.showRunButtons": true,
+	// CAUTION: Setting this to true requires test scripts to implement removing created PS sessions.
+	// TODO: One possibility is to set "ProjectCheck" variable to true in Config\ProjectSettings.ps1
+	// and instruct unit tests to remove old PS sessions with Disconnect-Computer if ProjectCheck is true.
 	"powershell.debugging.createTemporaryIntegratedConsole": false,
 	// "powershell.developer.bundledModulesPath": "set custom modules path",
 	"powershell.developer.editorServicesLogLevel": "Normal",
@@ -528,6 +531,10 @@
 	"powershell.pester.useLegacyCodeLens": false,
 	"powershell.pester.outputVerbosity": "FromPreference",
 	"powershell.pester.debugOutputVerbosity": "Diagnostic",
+	// PowerShell: integrated console version
+	// NOTE: Run in command palette "PowerShell: Show Session Menu" to list available sessions to set here
+	// To configure some other shell use "powershell.powerShellAdditionalExePaths": { "name": "path" }
+	"powershell.powerShellDefaultVersion": "PowerShell (x64)",
 	// Extension: Rainbow CSV
 	"rainbow_csv.csv_lint_detect_trailing_spaces": true,
 	"rainbow_csv.enable_auto_csv_lint": true,

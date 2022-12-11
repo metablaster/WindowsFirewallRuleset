@@ -1,0 +1,29 @@
+{
+	// For the documentation about the tasks.json format see:
+	// https://code.visualstudio.com/docs/editor/tasks
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "PSScriptAnalyzer",
+			"type": "shell",
+			"command": "${workspaceFolder}\\Test\\Invoke-CodeAnalysis.ps1",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"options": {
+				"shell": {
+					"executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+				}
+			},
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"revealProblems": "onProblem",
+				"showReuseMessage": true,
+				"close": false
+			},
+			"problemMatcher": []
+		}
+	]
+}

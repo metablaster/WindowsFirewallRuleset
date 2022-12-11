@@ -225,7 +225,7 @@ function Resolve-Host
 
 				[PSCustomObject] @{
 					Domain = $Computer
-					IPAddress = $IP.IPAddressToString
+					IPAddress = $IP | Select-Object -ExpandProperty IPAddressToString
 					PSTypeName = "Ruleset.HostInfo"
 				}
 			} # foreach $Computer

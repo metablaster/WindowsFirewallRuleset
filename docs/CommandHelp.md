@@ -509,9 +509,27 @@ Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
 
 Some VSCode commands useful to troubleshoot issues (`CTRL + SHIFT + P`)
 
-```none
+```json
+// To reload all extensions and VSCode configuration
 Developer: Reload Window
+
+// To set verbosity of the outpout window
 Developer: Set Log Level...
+
+// To fire up VSCode developer tools
+Developer: Toggle Developer Tools
+
+// To restard integrated PS session
+PowerShell: Restart Current Session
+
+// To change PS edition of the integrated console
+PowerShell: Show Session Menu
+
+// To open user settings file
+Preferences: Open User Settings (JSON)
+
+// To clear VSCode editor history
+Clear Editor History
 ```
 
 [Table of Contents](#table-of-contents)

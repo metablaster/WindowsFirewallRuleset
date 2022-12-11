@@ -30,7 +30,7 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Check repository system requirements
+Check repository environment requirements
 
 .DESCRIPTION
 Initialize-Project is designed for "Windows Firewall Ruleset", it first prints a short watermark,
@@ -69,7 +69,7 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 TODO: We don't use logs in this module
 TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
-TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
+TODO: Strict parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
 Develop from false to true in clean session
 TODO: Changes done to system services should be reverted to original values, new function needed.
 TODO: code.exe --list-extensions and verify extensions installed
