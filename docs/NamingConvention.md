@@ -199,7 +199,7 @@ IOException
 
 ## Variables
 
-To name variables we use descriptive approach and camel case similar to recommendations on how to
+To name variables we use descriptive approach and pascal case similar to recommendations on how to
 name functions and parameters, ex:
 
 `$SearchString` instead of `$str`

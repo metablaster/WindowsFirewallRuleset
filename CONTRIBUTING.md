@@ -19,7 +19,7 @@ firewall for your own needs.
     - [Script design](#script-design)
     - [Rule design](#rule-design)
     - [Module design](#module-design)
-  - [Static analysis](#static-analysis)
+  - [Static code analysis](#static-code-analysis)
   - [Documentation and comments](#documentation-and-comments)
     - [In scripts (code comments)](#in-scripts-code-comments)
     - [In rules (rule description)](#in-rules-rule-description)
@@ -39,47 +39,57 @@ firewall for your own needs.
   - [Making new scripts or modules](#making-new-scripts-or-modules)
   - [Repository directory structure](#repository-directory-structure)
   - [Where to start](#where-to-start)
+  - [This is too much](#this-is-too-much)
 
 ## General guidelines
 
-Here is a list of most relevant things to keep in mind.
+Here is a list of introductory material to help you get started.
 
-It's recommended to read up to date version of this document which is located on "develop" branch
+It's recommended to read up to date version of this document which is located on `develop` branch
 [here][contributing develop]
 
-Following 2 pages below explain general/starting guidelines regarding open source:\
-[How to contribute to open source][contribute to open source]\
-[Open Source Contribution Etiquette][open source etiquette]
+Following two pages below explain general starting guidelines regarding open source
 
-First step is to fork a project:\
-[Forking a repo][Forking a repo]
+- [How to contribute to open source][contribute to open source]
+- [Open Source Contribution Etiquette][open source etiquette]
 
-Next if needed, you might want to set up your SSH keys:\
-[Connecting to GitHub with SSH][github ssh]
+First step is to fork a project
 
-Following optional tutorial may help you setting up git for PowerShell:\
-[PowerShell GPG4Win, SSH, posh-git][tutorial]
+- [Forking a repo][Forking a repo]
 
-Regarding license and Copyright practices adopted by this project see:\
-[Maintaining file-scope copyright notices][filescope copyright]\
-[Requirements under U.S. and E.U. Copyright Law][copyright law]\
-[Copyright Notices][copyright notices]
+Next if needed, you might want to set up your `SSH` keys
 
-Regarding versioning adopted see:\
-[Semantic Versioning 2.0.0][semantic versioning]
+- [Connecting to GitHub with SSH][github ssh]
 
-Few additional references regarding open source worth reading:\
-[Don't "Push" Your Pull Requests][dont push]\
-[Painless Bug Tracking][bug tracking]
+The following optional tutorial may help you setting up git for PowerShell (but it's out of date)
 
-For quick markdown referencesee:\
-[Mastering Markdown][markdown mastering]\
-[Markdown Style Guide][markdown style]\
-[Markdown tables generator][markdown tables]
+- [PowerShell GPG4Win, SSH, posh-git][tutorial]
 
-References for tools used by this project:\
-[PowerShell documentation][powershell docs]\
-[Visual Studio Code][vscode docs]
+Regarding license and Copyright practices adopted by this project see
+
+- [Maintaining file-scope copyright notices][filescope copyright]
+- [Requirements under U.S. and E.U. Copyright Law][copyright law]
+- [Copyright Notices][copyright notices]
+
+Regarding versioning adopted see
+
+- [Semantic Versioning 2.0.0][semantic versioning]
+
+Few additional references regarding open source worth reading
+
+- [Don't "Push" Your Pull Requests][dont push]
+- [Painless Bug Tracking][bug tracking]
+
+For quick markdown referencesee
+
+- [Mastering Markdown][markdown mastering]
+- [Markdown Style Guide][markdown style]
+- [Markdown tables generator][markdown tables]
+
+References for tools used by this project
+
+- [PowerShell documentation][powershell docs]
+- [Visual Studio Code][vscode docs]
 
 [Table of Contents](#table-of-contents)
 
@@ -90,57 +100,76 @@ References for tools used by this project:\
 It is highly recommended to stick with Visual Studio Code, because this repository includes settings
 specific to Visual Studio Code, aka "Workspace", these settings include:
 
-1. Code formatting settings which are automatically enforced, and can also be manually applied
+1. Code formatting settings which are automatically enforced, and can also be manually applied.
 2. List of recommended extensions which are automatically listed for installation once you open\
-repository folder with VSCode
-3. Debugging and code analysis settings which you can use to debug code
-4. Settings for recommended extensions, ex. markdown and script formatting
-5. Spelling settings such as random valid words which would be otherwise detected as misspelled.
-6. Many other minor workspace settings to improve coding experience
+repository folder with VSCode.
+3. Debugging and code analysis settings which you can use to debug code.
+4. Settings for recommended extensions, ex. markdown and script formatting or code editing.
+5. Spelling settings which help to detect misspelled words and correct them as you type.
+6. Many other minor workspace settings to improve coding experience.
 
-To work with Windows PowerShell quickly in any directory see:
-[Windows PowerShell](/docs/WindowsPowerShell.md)
+In addition to `VSCode` and setting up `git` which was already covered in introductory section
+you'll need a good console setup, `Windows PowerShell` is part of operating system but in addition
+you want `PowerShell Core` and `Windows Terminal` installed.
+
+Reason why you need Windows Terminal is because when you run it as Administrator you can create
+additional PS consoles (either Core or Desktop editions) without having to type Administrator
+password and not needing to fire up console from start menu or taskbar and then navigating to
+location each time.
+
+For introduction about `Windows Terminal` see [Windows Terminal](docs/WindowsTerminal.md)\
+For introduction about `Windows PowerShell` see [Windows PowerShell](/docs/WindowsPowerShell.md)
+
+To manage your `GPG` keys it's highly recommended to use `Kleopatra` which is part of `Gpg4win` suite.\
+You can get it from [gpg4win.org][gpg4win]
+
+If you don't want your computer to be testing ground and subject to potential problems you'll also
+want to set up virtual machine, suggested virtual machine is [Hyper-V][hyperv]
 
 ### Recommended workspace extensions
+
+When you open up repository with VSCode the following extensions will be suggested for installation.\
+It's highly recommended to install them to have a good and stressless coding experience.
 
 1. [Auto Scroll][extension scroll]
 
     Automatic scrolling of log files, useful to tail firewall logs.\
-    This extension complements `Log File Highlighter` extension above.
+    This extension complements `Log File Highlighter` extension below.
 
 2. [Bookmarks][extension bookmarks]
 
-    Helps you to bookmark various places in code to easily navigate various choke points.
+    Helps you to bookmark various places in code to easily navigate choke points of interest.
 
 3. [Code Spell Checker][extension spellcheck]
 
-    Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them
+    Helps to spell words correctly, you get a list of misspelled words in VSCode and fix them,
+    you also get suggestions to fix words as you type.
 
 4. [Filter Line][extension filterline]
 
-    Filter log files according to json config, string or regex pattern
+    Filter log files according to json config, string or regex pattern.
 
 5. [Highlight Bad Chars][extension gremlins]
 
     Helps to detect gremlins (bad chars), which cause issues such as unable to save file
-    in UTF-8 format
+    in `UTF-8` format
 
 6. [Ini for VSCode][extension ini]
 
-    Provides support for `INI` files
+    Provides support for `INI` files, ex. document outline in VSCode.
 
 7. [Log File Highlighter][extension logs]
 
     Custom syntax highlighting for log files, useful for firewall logs as an alternative of `mTail`.\
-    This extension complements `Auto Scroll` extension below.
+    This extension complements `Auto Scroll` extension above.
 
 8. [Markdown All in One][extension markdown aio]
 
-    Provides markdown language features
+    Provides markdown language support such as document formatting and generating table of contents.
 
 9. [Markdownlint][extension markdownlint]
 
-    Helps to format and write better markdown, you get a list of problems in VSCode and fix them.
+    Helps to write better markdown, you get a list of problems in VSCode and fix them.
 
 10. [PowerShell][extension powershell]
 
@@ -148,8 +177,8 @@ To work with Windows PowerShell quickly in any directory see:
 
 11. [Rainbow CSV][extension csv]
 
-    Firewall rules can be exported into CSV file, this extension provides syntax highlighting for
-    CSV files
+    Firewall rules can be exported into `CSV` file, this extension provides syntax highlighting for
+    `CSV` files.
 
 12. [Remote SSH][extension remote SSH]
 
@@ -162,44 +191,45 @@ To work with Windows PowerShell quickly in any directory see:
 
 14. [Remote Explorer][extension remote SSH explorer]
 
-    View remote machines for Remote - SSH in action bar
+    View a list of remote machines for `Remote - SSH` in action bar.
 
 15. [Select Line Status Bar][extension select line status bar]
 
-    Show count of selected lines in status bar
+    Shows the count of selected lines in status bar.
 
 16. [Sort JSON objects][extension sort json]
 
-    Sorts the keys in selected JSON objects according to selected criteria
+    Sorts the keys in selected JSON objects or entire file according to desired criteria.
 
 17. [Sort Lines][extension sort lines]
 
-    Let's you sort lines in file according to selected criteria
+    Let's you sort lines in file according to desired criteria.
 
 18. [TODO tree][extension todo-tree]
 
-    Required to easily navigate `TODO`, `HACK` and `NOTE` comments located in source files.
+    Required to easily navigate `TODO`, `HACK`, `NOTE` and similar tagged comments located in source
+    files.
 
 19. [Toggle Quotes][extension quotes]
 
-    Toggle single quotes to double or vice versa
+    Toggle single quotes to double quotes or vice versa.
 
 20. [Trailing Spaces][extension trailing spaces]
 
-    Highlight trailing spaces and delete them in a flash!
+    Highlight trailing spaces and delete them in an instant.
 
 21. [XML][extension xml]
 
-    Useful for xml language support, can also help to detect issues with xml
+    Provides xml language support, can also help to detect issues with xml files.
 
 22. [YAML][extension yaml]
 
-    Useful for xml language support, can also help to detect issues with xml
+    Provides yaml language support, can also help to detect issues with yaml files.
 
 ### Repository settings
 
 Once your environment is set, next step is to visit `Config\ProjectSettings.ps1`
-located in repository root directory, at a minimum you should set following variables to `$true`
+located in repository root directory, at a minimum you should set the following variables to `$true`
 before doing anything else:
 
 1. Develop
@@ -244,25 +274,27 @@ Lines should be kept within 100-120 columns, however it is not always practical,
 rule, workspace settings are configured to show rulers in code editor.
 
 If you use some other code editor it's recommended you configure it according to these rules which
-are found in `.vscode`, `Config` and repository root directory.
+are found in `.vscode` and `Config` directories.
 
 [Table of Contents](#table-of-contents)
 
 ### Development Guidelines
 
-Following link explains the must know style guidelines to write functions and commandlets:\
-[Cmdlet Development Guidelines][develop cmdlets]
+The following link explains the must know style guidelines to write functions and commandlets
 
-Following link describes general rules about PowerShell code style if you like reading,
-however keep in mind, it's not completely in line with this repository best practices:\
-[The PowerShell Style Guide][powershell style]
+- [Cmdlet Development Guidelines][develop cmdlets]
 
-Following links may help with exception and error handling:
+The following link describes general rules about PowerShell code style if you like reading,
+however keep in mind, it's not completely in line with this repository best practices
+
+- [The PowerShell Style Guide][powershell style]
+
+The following links may help with exception and error handling:
 
 - [Everything you wanted to know about exceptions][exceptions everything]
 - [Our Error Handling - GitHub][exceptions handling]
 
-Use risk mitigation features if applicable for functions that you write, see "Remarks" sections on
+Use risk mitigation features if applicable for functions that you write, see `Remarks` sections on
 the links below to understand how to implement `ShouldProcess` and `ShouldContinue`:
 
 - [Cmdlet.ShouldContinue][should continue]
@@ -280,7 +312,7 @@ for more information about type casing run:
 [PSCustomObject].Assembly.GetType("System.Management.Automation.TypeAccelerators")::get.GetEnumerator() | Sort-Object Key
 ```
 
-Use following command to see allowed verbs to name your functions
+Use the following command to see allowed verbs to name your functions
 
 ```powershell
 # PowerShell Core
@@ -290,14 +322,14 @@ Get-Verb | Select-Object Verb, Group, Description | Sort-Object Verb
 Get-Verb | Select-Object Verb, Group | Sort-Object Verb
 ```
 
-For function nouns prefer 1 word or maximum 3 (distinguished by uppercase letters) for example:
+For function nouns prefer one word or maximum three (distinguished by uppercase letters) for example:
 
 - `Invoke-Process`
 - `Get-SqlServer`
 
 Sometimes this is not possible, for example `Get-SqlServer` function may collide with existing
-PowerShell commandlets, in this case it's better to use 3 words rather than naming your function to
-something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too,
+PowerShell commandlets, in this case it's better to use three words rather than naming your function
+to something that doesn't describe it's purpose, ex. `Get-SqlServerInstance` would be fine too,
 although such exceptions should be rare.
 
 Noun word must be singular not plural, regardless if input or output is an array of objects.\
@@ -315,7 +347,7 @@ Code in scripts is ordered into "sections" which depends on script and purpose, 
 way and may be different if needed for what ever reason:
 
 1. License notice
-2. Script info comment (if it's script file)
+2. `PSScriptInfo` comment (if it's script file)
 3. Comment based help
 4. Initialization (ex. imports of modules and scripts)
 5. User input
@@ -329,7 +361,7 @@ way and may be different if needed for what ever reason:
 
 Each firewall rule uses the same order of parameters split into the same number of lines.\
 This is so that when you need to change or search for something or do some regex magic then it's
-easy to see what is where, easy to use advanced search/replace or multicursor tricks.
+easy to see where stuff is and it's easy to use advanced search/replace or multicursor tricks.
 
 Performing regex operations on firewall rules in combination with multicursor feature can be
 done in a matter of minutes, without this strict rule design it would take an entire day and might
@@ -339,7 +371,7 @@ result in bugs or random issues.
 
 ### Module design
 
-Repository contains few custom modules of various purpose, module functionality is grouped by
+Repository contains several custom modules of various purpose, module functionality is grouped by
 relevance on what the module is supposed to expose.
 
 Try to limit dependency on 3rd party modules and module code.\
@@ -351,10 +383,10 @@ easily customized without too much change or learning curve.
 
 3rd party module scripts or functions should be included into existing modules as scripts instead
 of copy pasted into existing code directly, this must be so, to easily see to which file does
-license/Copyright apply.
+license and Copyright apply.
 
 Exception to this rule are complete modules (larger portion of code) which should retain their
-directory domain within repository.
+directory domain and content within repository.
 
 Most important is to keep each function in it's own script, separated into Public/Private folders,
 this is required for reasons:
@@ -373,7 +405,7 @@ For example:
 
 [Table of Contents](#table-of-contents)
 
-## Static analysis
+## Static code analysis
 
 [PSScriptAnalyzer][module psscriptanalyzer] is used to perform basic code quality analysis.
 
@@ -392,25 +424,32 @@ If you get an error such as:\
 `Invoke-ScriptAnalyzer: Object reference not set to an instance of an object.`\
 then try again and keep repeating until OK, or cleanup repository and restart VSCode.
 
-There is also a script `Test\PSScriptAnalyzer.ps1` which you can run to invoke code analysis.
+There is also a script `Test\Invoke-CodeAnalysis.ps1` which you can run to invoke code analysis with
+additional options such as logging results to file.
 
 [Table of Contents](#table-of-contents)
 
 ## Documentation and comments
 
-Documentation and comments reside in 6 places as follows:
+Documentation and comments reside in six places as follows:
 
 ### In scripts (code comments)
 
 Sections of code should be documented as shown in existing scripts.\
-To comment on things that need to be done add `TODO:` + comment,
-similarly for important notes add `NOTE:` + comment.
+To comment on things that need to be done add `TODO:` tag + comment,
+similarly for important notes add `NOTE:` tag + comment.
 
-For things which are hard to resolve or require huge changes add `HACK:` + comment, and
-optionally some links such as github issues that may help to resolve problem in the future.
+For things which are hard to resolve or require huge changes add `HACK:` tag + comment,
+if you're pasting Microsoft's documentation add `MSDN:` tag and optionally a link to source.\
+similarly if you're pasting documentation from non Microsoft site add `DOCS:` tag + copied comment.
+
+Links to github issues should be prefixed with `ISSUE:` tag which help to resolve problems in the future.
+
+These tags are colored in editor and can be navigaged with `todo-tree` extension in action bar,
+for a complete list of tags and their purpose and coloring scheme see `.vscode\settings.json` file.
 
 For any generic code comments you might want to add, use line comments (preferred) and
-block comments only if comment spans 5 or more lines.
+block comments only if comment spans five or more lines.
 
 ### In rules (rule description)
 
@@ -425,10 +464,11 @@ rules you would provide a link to [IANA][iana] with relevant reference document.
 ### In command line prompts (current execution help)
 
 Every script that's being executed either directly or called by other script will not run
-until the user accepts the prompt to run script.\
+until the user accepts the prompt to run the script.\
 Similar prompts may appear at various points in code during execution.
 
-Each of these prompts have `?` which a user can type to get more information about prompt choices.
+Each of these prompts have `?` mark option which a user can type to get more information about
+prompt choices.
 
 Functions `ShouldProcess` and `ShouldContinue` do not support customizing command line help, for
 that reason there is `Approve-Execute` function which allows you to customize prompt help.
@@ -447,35 +487,36 @@ For examples, and comment based syntax see:
 You must avoid following comment based content to avoid errors and unexpected output while
 generating online help (markdown) files:
 
-- `.LINK` entries must contains only one link and nothing else
-- Do not use multiple dashes in comments such as `------`
-- Use spaces instead of tabs and do not indent comments
+- `.LINK` entries must contains only one link and nothing else.
+- Do not use multiple dashes in comments such as `------`.
+- Use spaces instead of tabs and do not indent comments.
 - Code samples in `.EXAMPLE` portion must not be separated by blank lines except for sample output
-- To number out things with `-` keep one line between commend and listed things
-- For anything else keep in mind that any markdown syntax in comments will be formatted in the
-resulting markdown file as markdown not as plain text, which may give unexpected results.
+- To number out things use `-` and keep one line between commend and listed things.
+- For anything else keep in mind that your comment based help will be formatted in the
+resulting markdown file as markdown not as you type it, which may give unexpected results.
 
-See also [PlatyPS.schema][platyps_schema]
+For more information see also [PlatyPS.schema][platyps_schema]
 
 ### In module Help directory (module online documentation)
 
-The `Scripts` directory contains `Update-HelpContent.ps1` which when run will scan comment based
-help and generate online documentation for `Get-Help -Online` and help content for `Update-Help`
-on target module.
+The `Scripts\Utility` directory contains `Update-HelpContent.ps1` which when run will scan comment
+based help and generate online markdown documentation for `Get-Help -Online` and help content for
+`Update-Help` on target module.
 
 Generated module documentation is in markdown format, meaning the 3rd purpose is that project
 users and repository visitors can read module documentation on github site either manually or
 with `Get-Help -Online`
 
 `Update-HelpContent.ps1` script is not perfect and requires additional editing of help files once
-documentation was regenerated, diff tool in VSCode is essential for this.
+documentation is regenerated, diff tool in VSCode is essential to finalize generated files manually.
 
 ### In docs directory (general project documentation)
 
 The `docs` directory in repository root contains random documentation that covers wide range of
-aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.
+aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.\
+`docs` directory is also the root directory for [web site][website] of this repository
 
-Remember, documenting code and features is as important as writing it!
+Remember, documenting code and features is as important as writing code!
 
 [Table of Contents](#table-of-contents)
 
@@ -497,10 +538,13 @@ If test case/concept expands to several functions or if it's completely
 unrelated to functions it should be a separate test.
 
 All tests reside in `Test` directory which contains subdirectories for each module,
-take a look there for examples.
+take a look there for examples.\
+Few pester tests are located in some module directories.
 
-Pester is preferred method to write tests, however some test cases need other ways around, or
-more customized setup, for example sometimes you want to see the representation of errors.
+Pester is preferred method to write tests, however those non pester tests are not just custom tests,
+but they are also used by debugger configuration to debug code for which pester isn't a solution.\
+Also some test cases need other ways around, or more customized setup, for example sometimes you
+want to see the representation of errors or the actual output for which pester also isn't a solution.
 
 There is a module called `Ruleset.Test`, which is customized for this repository, the reason why
 pester isn't used as much is that I just didn't have enough time and will to learn it.
@@ -520,18 +564,19 @@ in ex. integrated terminal in VSCode (assuming PowerShell prompt is at project r
 .\Modules\Import-All.ps1
 ```
 
-This will add all repository `Modules` to current session module path and will import them all at once.
+This will import all repository modules at once.
 
 [Table of Contents](#table-of-contents)
 
 ## Debugging
 
-Debugging `Windows Firewall Ruleset` consists of two parts, debugging code and auditing firewall rules.
+Debugging `Windows Firewall Ruleset` consists of two parts, debugging code and auditing firewall
+rules.
 
 ### Debugging code
 
-Precondition to debug code is to run `VSCode` as Administrator because scripts and module functions
-require elevation.
+Precondition to debug code is to run `VSCode` as Administrator because majority of scripts and
+module functions perform administrative tasks which requires elevation.
 
 There is workspace debugging configuration for each module function and script in repository which
 you can access from `Run and Debug` badge in action bar, at the top is a drop down list listing
@@ -542,9 +587,9 @@ referenced module function or script if desired and click `Start Debugging` butt
 
 The debugging configuration itself is located in `.vscode\launch.json` file.
 
-For more information about how to debug see the following links:
+For more information on how to debug see the following links:
 
-- [Debugging in VSCode][vscode debugging] and
+- [Debugging in VSCode][vscode debugging]
 - [Integrate with External Tools via Tasks][tasks]
 - [Variables Reference][variables reference]
 
@@ -567,12 +612,12 @@ Here are recommendations if you whish to debug code without using debugger:
 1. Use `Write-Debug` and `Write-Verbose` commandlets in your code to see what the code is doing,
 this is much faster and sometimes more useful and informative than stepping trough code.
 
-2. Run PS as Admin and type command by commad which you wish to test by copying code out of editor
-into the console, this is much more practical than stepping trough code because you can handle
+2. Run PS as Admin and copy commands which you wish to test out of code editor into the console,
+this is much more practical than stepping trough code because you can handle
 various scenarios by simply modifying variables and using console history to repeat steps.
 
-3. In `Config\ProjectSettings.ps1` debug and verbose preferences can be set in single place and entire
-repository is affected, you don't even have to restart PS or reimport modules when `$Develop`
+3. In `Config\ProjectSettings.ps1` debug and verbose preferences can be set in single place and
+entire repository is affected, you don't even have to restart PS or reimport modules when `$Develop`
 variable is set because each run of some scripts gives you fresh environment for testing.\
 Some variables are however exception to this and will require restart of PS.
 
@@ -594,7 +639,8 @@ environment setup configured in VM.
 3. Edit `Config\SSH\sshd_config` file and update parameters with correct values as needed.
 4. Copy your edited `Config\SSH\sshd_config` in the guest system into `%ProgramData%\ssh`
 5. Restart `OpenSSH` SSH service to pick up copied configuration and set it to automatic startup
-6. Make sure you install VSCode in virtual machine which will provide server services for `Remote SSH`
+6. Make sure you install VSCode in virtual machine which will provide server services for
+`Remote SSH`
 7. On your host system create a new SSH key that will be used for `Remote-SSH` extension and put it
 into your your `$HOME\.ssh` directory
 8. On your host system edit `Config\SSH\config` file and update parameters with correct values as
@@ -663,7 +709,7 @@ Next step is to add the following settings into your VSCode user settings which 
 ]
 ```
 
-Now restart VSCode on your host system and under `Remote Explorer` in VSCode you'll find an option
+Now restart VSCode on your host system and in `Remote Explorer` in VSCode you'll find an option
 to open VSCode to remote host, once you connect select `WindowsFirewallRuleset` to be your default
 remote directory for connection.
 
@@ -695,8 +741,8 @@ of what issue is supposed to be resolved or which component was improved.
 If you see something unrelated that could be resolved or improved, put `TODO` comment, don't fix it.\
 Then once you commit, open `todo-tree` to review what to do next.
 
-**Avoid making huge changes to existing code** without first attaching valid reasons,
-new code and additions should not problem though.
+**Avoid making huge changes to existing code** without consultation, new code and additions should
+not problem though.
 
 [Table of Contents](#table-of-contents)
 
@@ -710,7 +756,8 @@ should then be regularly maintained up until you are done.\
 And only when done it could be merged with develop branch for new changes.
 
 It is desired to expand this project to manage [nftables][nftables] firewall on linux and other
-systems, but this likely won't happen any time soon.
+systems, but this likely won't happen any time soon unless more people get involved into this
+project.
 
 [Table of Contents](#table-of-contents)
 
@@ -737,6 +784,25 @@ So it's an ongoing effort that by no means gets fulfilled.
 
 It's recommended to take a look into [TODO](/docs/TODO.md) list and also use `todo-tree`
 extension to see more specific or smaller todo's, unless you have specific ideas or recommendations.
+
+[Table of Contents](#table-of-contents)
+
+## This is too much
+
+You might find all there guidelines and rules described here too much to chew and that I could
+understand.
+
+Please run `git log --reverse` and see for yourself how horrible my knowledge of PowerShell was and
+perhaps still is, my background is C++ not PowerShell where guidelines are even more rigorous and
+I'm not system admin, this is in fact my first PowerShell project and all these rules and guidelines
+you see here is what I learned on my own mistakes over time and by reading various guidelines and
+documentation on the internet and still learning new stuff.
+
+You might hate pascal case for ex. and a lot of coders don't like pascal case either and there is
+surely a bunch of thing to disagree with but that's the style used in this repository.
+
+Knowing that I don't expect you follow all of this immediately but I expect you to be pedantic,
+explicit and to seek writing quality code.
 
 [Table of Contents](#table-of-contents)
 
@@ -796,3 +862,6 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 [vscode debugging]: https://code.visualstudio.com/docs/editor/debugging "Visit VSCode documentation"
 [tasks]: https://code.visualstudio.com/docs/editor/tasks "Visit VSCode documentation"
 [variables reference]: https://code.visualstudio.com/docs/editor/variables-reference "Visit VSCode documentation"
+[gpg4win]: https://www.gpg4win.org "Visit gpg4win site"
+[hyperv]: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/about "Visit Microsoft site"
+[website]: https://metablaster.github.io/WindowsFirewallRuleset "Visit repository web site"

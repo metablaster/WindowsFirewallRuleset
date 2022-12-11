@@ -113,6 +113,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Removed `Fix Json` extension from workspace recomendations
   - Added `Toggle Quotes` extension to workspace recommendations
   - Removed `Json` extension from workspace recommendations
+  - Added debugging configuration for all module functions and scripts to be able to use debugger
 
 - Unit test
 
