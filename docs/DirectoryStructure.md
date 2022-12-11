@@ -16,9 +16,10 @@ the meaning is same or similar.
     - [workflows](#workflows)
   - [.vscode](#vscode)
   - [Actions](#actions)
-    - [issue-labeler](#issue-labeler)
     - [PSScriptAnalyzer](#psscriptanalyzer)
+    - [publish\_sitemap](#publish_sitemap)
   - [Config](#config)
+    - [cSpell](#cspell)
     - [HelpContent](#helpcontent)
     - [mTail](#mtail)
     - [procmon](#procmon)
@@ -80,17 +81,21 @@ Contains Visual Studio Code configuration and settings for extensions
 
 Contains actions for github workflows
 
-### issue-labeler
-
-Automatic issue labeling configuration
-
 ### PSScriptAnalyzer
 
 PSScriptAnalyzer action
 
+### publish_sitemap
+
+Contains code to publish generated sitemap of `docs` directory to google
+
 ## Config
 
 Project configuration and configuration for external programs
+
+### cSpell
+
+Contains dictionaries for spell checker extension
 
 ### HelpContent
 

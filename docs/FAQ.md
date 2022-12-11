@@ -402,7 +402,7 @@ physical NIC in Hyper-V and re-share it again.
 [Table of Contents](#table-of-contents)
 
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
-[netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting?view=win10-ps "Visit Microsoft docs"
+[netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
 [reg]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/reg "Visit Microsoft docs"
 [vscode]: https://code.visualstudio.com "Visual Studio Code"

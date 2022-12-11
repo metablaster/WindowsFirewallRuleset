@@ -21,18 +21,18 @@ firewall for your own needs.
     - [Module design](#module-design)
   - [Static code analysis](#static-code-analysis)
   - [Documentation and comments](#documentation-and-comments)
-    - [In scripts (code comments)](#in-scripts-code-comments)
-    - [In rules (rule description)](#in-rules-rule-description)
-    - [In command line prompts (current execution help)](#in-command-line-prompts-current-execution-help)
-    - [In comment based help (module and script main documentation source)](#in-comment-based-help-module-and-script-main-documentation-source)
-    - [In module Help directory (module online documentation)](#in-module-help-directory-module-online-documentation)
-    - [In docs directory (general project documentation)](#in-docs-directory-general-project-documentation)
+    - [In scripts](#in-scripts)
+    - [In firewall rules](#in-firewall-rules)
+    - [In command line prompts](#in-command-line-prompts)
+    - [In comment based help](#in-comment-based-help)
+    - [In module Help directory](#in-module-help-directory)
+    - [In docs directory](#in-docs-directory)
   - [Writing rules](#writing-rules)
   - [Testing code](#testing-code)
   - [Debugging](#debugging)
     - [Debugging code](#debugging-code)
     - [Debugging code without a debugger](#debugging-code-without-a-debugger)
-    - [Debugging with Remote-SSH VSCode extension in virtual machine](#debugging-with-remote-ssh-vscode-extension-in-virtual-machine)
+    - [Debugging with Remote-SSH extension](#debugging-with-remote-ssh-extension)
     - [Debugging firewall](#debugging-firewall)
   - [Commits and pull requests](#commits-and-pull-requests)
   - [Portability and other systems](#portability-and-other-systems)
@@ -232,18 +232,18 @@ Once your environment is set, next step is to visit `Config\ProjectSettings.ps1`
 located in repository root directory, at a minimum you should set the following variables to `$true`
 before doing anything else:
 
-1. Develop
-2. ProjectCheck
-3. ModulesCheck
-4. ServicesCheck
-5. ErrorLogging
-6. WarningLogging
+1. `Develop`
+2. `ProjectCheck`
+3. `ModulesCheck`
+4. `ServicesCheck`
+5. `ErrorLogging`
+6. `WarningLogging`
 
 In addition verify following variables are set to desired user
 
-1. DefaultUser
-2. TestAdmin
-3. TestUser
+1. `DefaultUser`
+2. `TestAdmin`
+3. `TestUser`
 
 Note that some of these may be auto adjusted after setting `Develop` variable to `$true`\
 Then restart PowerShell and run `.\Deploy-Firewall.ps1 -Force` to deploy firewall, or at least run
@@ -433,7 +433,7 @@ additional options such as logging results to file.
 
 Documentation and comments reside in six places as follows:
 
-### In scripts (code comments)
+### In scripts
 
 Sections of code should be documented as shown in existing scripts.\
 To comment on things that need to be done add `TODO:` tag + comment,
@@ -451,7 +451,7 @@ for a complete list of tags and their purpose and coloring scheme see `.vscode\s
 For any generic code comments you might want to add, use line comments (preferred) and
 block comments only if comment spans five or more lines.
 
-### In rules (rule description)
+### In firewall rules
 
 It is important that each firewall rule contains good description of it's purpose,
 when a user clicks on rule in firewall GUI she\he wants to see what this rule is about and
@@ -461,7 +461,7 @@ In general regarding firewall rules, provide documentation and official referenc
 so that it can be easy to verify that these rules don't contain mistakes, for example, for ICMP
 rules you would provide a link to [IANA][iana] with relevant reference document.
 
-### In command line prompts (current execution help)
+### In command line prompts
 
 Every script that's being executed either directly or called by other script will not run
 until the user accepts the prompt to run the script.\
@@ -473,7 +473,7 @@ prompt choices.
 Functions `ShouldProcess` and `ShouldContinue` do not support customizing command line help, for
 that reason there is `Approve-Execute` function which allows you to customize prompt help.
 
-### In comment based help (module and script main documentation source)
+### In comment based help
 
 Functions that are part of a module or solo scripts must have comment based help.\
 Purpose of comment based help is for the end user or developer to learn what the code does or to be
@@ -497,24 +497,23 @@ resulting markdown file as markdown not as you type it, which may give unexpecte
 
 For more information see also [PlatyPS.schema][platyps_schema]
 
-### In module Help directory (module online documentation)
+### In module Help directory
 
 The `Scripts\Utility` directory contains `Update-HelpContent.ps1` which when run will scan comment
 based help and generate online markdown documentation for `Get-Help -Online` and help content for
 `Update-Help` on target module.
 
-Generated module documentation is in markdown format, meaning the 3rd purpose is that project
-users and repository visitors can read module documentation on github site either manually or
-with `Get-Help -Online`
+Purpose of the generated markdown module documentation is that project users and repository visitors
+can read module documentation on github site either manually or with `Get-Help -Online`
 
 `Update-HelpContent.ps1` script is not perfect and requires additional editing of help files once
 documentation is regenerated, diff tool in VSCode is essential to finalize generated files manually.
 
-### In docs directory (general project documentation)
+### In docs directory
 
 The `docs` directory in repository root contains random documentation that covers wide range of
 aspects such as troubleshooting, todo list, FAQ, changelog and general project documentation.\
-`docs` directory is also the root directory for [web site][website] of this repository
+`docs` directory is also the root directory for [web site][repo website] of this repository
 
 Remember, documenting code and features is as important as writing code!
 
@@ -627,7 +626,7 @@ your repo from host to guest system.\
 For remoting tests Hyper-V guest on same subnet and mapped drive proves most useful since you
 neither need additional hardware nor do you affect your host system.
 
-### Debugging with Remote-SSH VSCode extension in virtual machine
+### Debugging with Remote-SSH extension
 
 The most efficient and safe method to debug and test code is to use `Remote-SSH` extension in
 combination with virtual machine, this process consists of the following:
@@ -792,16 +791,16 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 You might find all there guidelines and rules described here too much to chew and that I could
 understand.
 
-Please run `git log --reverse` and see for yourself how horrible my knowledge of PowerShell was and
-perhaps still is, my background is C++ not PowerShell where guidelines are even more rigorous and
-I'm not system admin, this is in fact my first PowerShell project and all these rules and guidelines
-you see here is what I learned on my own mistakes over time and by reading various guidelines and
-documentation on the internet and still learning new stuff.
+Please run `git log --reverse` search for commit hash and see for yourself how horrible my knowledge
+of PowerShell was and perhaps still is, my background is C++ not PowerShell (where guidelines are
+even more rigorous) and I'm not system admin, this is in fact my first PowerShell project and all
+these rules and guidelines you see here is what I learned on my own mistakes over time and by
+reading various guidelines and documentation on the internet and still learning new stuff.
 
 You might hate pascal case for ex. and a lot of coders don't like pascal case either and there is
 surely a bunch of thing to disagree with but that's the style used in this repository.
 
-Knowing that I don't expect you follow all of this immediately but I expect you to be pedantic,
+Knowing this I don't expect you follow all of this immediately but I expect you to be pedantic,
 explicit and to seek writing quality code.
 
 [Table of Contents](#table-of-contents)
@@ -818,7 +817,7 @@ explicit and to seek writing quality code.
 [semantic versioning]: https://semver.org "Semantic Versionsing"
 [dont push]: https://www.igvita.com/2011/12/19/dont-push-your-pull-requests "Don't 'Push' Your Pull Requests"
 [bug tracking]: https://www.joelonsoftware.com/2000/11/08/painless-bug-tracking "Painless Bug Tracking"
-[powershell docs]: https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1 "PowerShell documentation"
+[powershell docs]: https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs "PowerShell documentation"
 [vscode docs]: https://code.visualstudio.com/docs "Visual Studio Code documentation"
 [extension todo-tree]: https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree "Visit Marketplace"
 [extension powershell]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
@@ -842,15 +841,15 @@ explicit and to seek writing quality code.
 [extension remote SSH explorer]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.remote-explorer "Visit Marketplace"
 [extension sort json]: https://marketplace.visualstudio.com/items?itemName=richie5um2.vscode-sort-json "Visit Marketplace"
 [extension trailing spaces]: https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces "Visit Marketplace"
-[develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines?view=powershell-7 "Visit documentation"
+[develop cmdlets]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines "Visit documentation"
 [powershell style]: https://poshcode.gitbook.io/powershell-practice-and-style/introduction/readme "PowerShell code style"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
-[about comment based help]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help?view=powershell-7 "Visit documentation"
-[comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help?view=powershell-7 "Visit documentation"
+[about comment based help]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help "Visit documentation"
+[comment based help examples]: https://docs.microsoft.com/en-us/powershell/scripting/developer/help/examples-of-comment-based-help "Visit documentation"
 [iana]: https://www.iana.org "Internet Assigned Numbers Authority (IANA)"
 [nftables]: https://en.wikipedia.org/wiki/Nftables "Visit nftables wiki"
-[should continue]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldcontinue?view=powershellsdk-7.0.0
-[should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess?view=powershellsdk-7.0.0
+[should continue]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldcontinue
+[should process]: https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.cmdlet.shouldprocess
 [exceptions everything]: https://powershellexplained.com/2017-04-10-Powershell-exceptions-everything-you-ever-wanted-to-know "Visit blog"
 [exceptions handling]: https://github.com/MicrosoftDocs/PowerShell-Docs/issues/1583 "Visit GitHub"
 [markdown mastering]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax "Visit GitHub"
@@ -864,4 +863,4 @@ explicit and to seek writing quality code.
 [variables reference]: https://code.visualstudio.com/docs/editor/variables-reference "Visit VSCode documentation"
 [gpg4win]: https://www.gpg4win.org "Visit gpg4win site"
 [hyperv]: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/about "Visit Microsoft site"
-[website]: https://metablaster.github.io/WindowsFirewallRuleset "Visit repository web site"
+[repo website]: https://metablaster.github.io/WindowsFirewallRuleset "Visit repository web site"

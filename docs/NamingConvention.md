@@ -270,5 +270,5 @@ PSTypeName
 [Table of Contents](#table-of-contents)
 
 [parameters]: https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/standard-cmdlet-parameter-names-and-types "Visit Microsoft docs"
-[UnauthorizedAccessException]: https://docs.microsoft.com/en-us/dotnet/api/system.unauthorizedaccessexception?view=net-5.0 "Visit Microsoft docs"
-[SecurityException]: https://docs.microsoft.com/en-us/dotnet/api/system.security.securityexception?view=net-5.0 "Visit Microsoft docs"
+[UnauthorizedAccessException]: https://docs.microsoft.com/en-us/dotnet/api/system.unauthorizedaccessexception "Visit Microsoft docs"
+[SecurityException]: https://docs.microsoft.com/en-us/dotnet/api/system.security.securityexception "Visit Microsoft docs"

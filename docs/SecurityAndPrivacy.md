@@ -27,6 +27,7 @@ and how to maximize security of a personal computer.
     - [VPN or proxy](#vpn-or-proxy)
     - [DNS encryption](#dns-encryption)
     - [Browser extensions](#browser-extensions)
+  - [How do I regain trust in my computer](#how-do-i-regain-trust-in-my-computer)
   - [Additional research](#additional-research)
 
 ## The difference between security and privacy
@@ -103,7 +104,7 @@ See also [How User Account Control works][uac]
 
 ### Trusted and encrypted web sites
 
-Visit only known trusted web sites, preferably HTTPS, and check links before clicking them.
+Visit only known trusted web sites, preferably `HTTPS`, and check links before clicking them.
 
 Unencrypted web sites are subject to attack and the infomation you supply on such sites can end up
 in wrong hands.\
@@ -117,7 +118,7 @@ interaction between the two is not possible by default.\
 This helps to prevent malware or an attacker gain access to your system or personal information.
 
 How to configure isolated browser session depends on your web browser.\
-For MS Edge Chromium following site explains how to get started:\
+For `MS Edge Chromium` following site explains how to get started:\
 [Microsoft Edge support for Microsoft Defender Application Guard][app guard]
 
 If your browser does not support isolated browser session an alternative is to use virtual machine,
@@ -233,12 +234,12 @@ You can read more about this on the links below:
 As already said good news is that you need none of these expensive software, in this repository in\
 `Scripts\Security` directory you'll find following scripts which automate these things as follows:
 
-1. `Deploy-ATP` is used to deploy attack surface reduction rules on your system
+1. `Deploy-ASR` is used to deploy attack surface reduction rules on your system
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
-3. `Show-ASR` is used to show settings applied by `Deploy-ATP`
-4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic\
-online malware analysis with [Virus total][virus total] so that you don't have to upload each file
-manually.
+3. `Show-ASR` is used to show settings applied by `Deploy-ASR`
+4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic
+online malware analysis with [Virus total][virus total] for any unsigned file that is found,
+so that you don't have to upload each file manually.
 
 It's recommended to take a look into these scripts to see what they do and how to use them before
 actually running them, you might want to adjust some of the settings according to your personal
@@ -255,8 +256,9 @@ When it comes to privacy, briefly, there are two different defense categories:
 - Hide your online activity, is what people usually refer to when talking about "privacy".\
 This relates to data such as hardware ID's, browser fingerprinting, IP address etc.
 
-- Prevent identity theft, refers to your personal information which could be used to identify you.\
-This related to data such as credit card number, home address, phone number etc.
+- Prevent identity theft, refers to your personal information which could be used to identify you
+with the aim to perform things in your name.\
+This relates to data such as credit card number, home address, phone number etc.
 
 [Table of Contents](#table-of-contents)
 
@@ -303,7 +305,7 @@ servers world wide and you're able to choose from a set of countries in the UI.
 ### DNS encryption
 
 When you wish to connect to some server such as `microsoft.com` your computer needs to resolve
-`microsoft.com` into an IP address which the computer understands.\
+`microsoft.com` to an IP address which the computer understands.\
 You computer does this by contacting a DNS server such as google DNS, your computer then stores the
 IP address into local cache so that it doesn't need to contact DNS server again for subsequent
 queries.
@@ -319,7 +321,7 @@ security and privacy, this means servers which don't collect logs and those whic
 
 DNS encryption is supported by some web browsers and even OS's however not all have this functionality.\
 Suggested DNS encryption software is open source [Simple DNSCrypt][dnscrpyt] which is a UI frontend
-for `dnscrypt-proxy` service and ships with Simple DNSCrypt.
+for [dnscrypt-proxy][dnscrypt-proxy] service and it ships with `Simple DNSCrypt`.
 
 [Table of Contents](#table-of-contents)
 
@@ -334,7 +336,7 @@ reviews and those which hang around for long time.
 
 Common recommendation is to minimize amount of extensions in your browser as much as possible,
 because no matter how trusted an extension is you will have to allow it to access some of your data.\
-By minimizing amount of extensions you reduce the risk or installing the wrong one.
+By minimizing the amount of extensions you reduce the risk or installing the wrong one.
 
 Suggested browser extensions are:
 
@@ -344,6 +346,50 @@ Suggested browser extensions are:
 
 [Table of Contents](#table-of-contents)
 
+## How do I regain trust in my computer
+
+The question is how do I regain trust in my computer?
+
+I installed unsigned software recently, I recall visiting potentially bad website, I didn't know
+I can encrypt my DNS, I was using Administrator account to go online etc. etc.
+
+If you ask yourself such or similar questions then you can't trust your computer which means
+trust must be regained.
+
+And the only way to regain trust is to clean reload operating system, making sure not to repeat
+the mistake that led to asking these questions.
+
+Reinstalling the system should be followed by securing it and changing all your passwords with new
+ones, including router password and settings.
+
+There is no alternative to clean reload, scanning your PC for malware is of no help since antivirus
+won't detect FUD malware.
+
+Changing your passwords on an untrusted computer is worse than not changing them at all, since if
+your computer isn't trusted then how do you know your input isn't intercepted? better do nothing.
+
+Switching from Admin account to standard account if you were Admin is beating a dead horse since
+if you were Admin then your system already was vulnerable and it's impossible to be sure nothing
+wrong happened so far.
+
+Clean reload though isn't 100% certainty either, for neither security nor privacy, security wise
+clean reload won't get rid or hardware based malware if there is one, and privacy wise your computer
+ID's are permanent and already stored on servers which you visit.
+
+To also rule out this one would have to purchase a brand new computer and even then it won't be
+100% certainty because you can't know whether hardware manufacturer or perhaps their employee is
+trusted, nor can you know for certain what did people in computer shop do to the hardware.
+
+But going that far makes not much sense, hardware malware is difficult to write and is usually used
+to target corporations not individual users, and preventing share of your PC ID's can't be prevented
+without harming your comfort of computing, so buying a new computer would only create a new identity
+but not solve the problem.
+
+Therefore clean reload is the most sane and economically efficient method and is some 99% certainty.
+
+Of course, to have 100% certainty one would have recycle the computer, bury the remains underground
+and never use computer again.
+
 ## Additional research
 
 Following web sites are good starting point for additional research regarding security and privacy
@@ -351,6 +397,7 @@ Following web sites are good starting point for additional research regarding se
 - [PRISM ⚡ BREAK][prism break]
 - [Technical analysis of client identification mechanisms][client identification]
 - [Safe computing][safe computing]
+- [Data protection and online privacy][eu privacy]
 
 [Table of Contents](#table-of-contents)
 
@@ -379,3 +426,5 @@ Following web sites are good starting point for additional research regarding se
 [uac]: https://learn.microsoft.com/en-us/windows/security/identity-protection/user-account-control/how-user-account-control-works "Visit microsoft site"
 [uac settings]: https://learn.microsoft.com/en-us/mem/intune/user-help/you-need-to-enable-uac-windows "Visit microsoft site"
 [safe computing]: https://www.cisa.gov/uscert/ncas/tips "Visit government site"
+[dnscrypt-proxy]: https://github.com/DNSCrypt/dnscrypt-proxy "Visit github site"
+[eu privacy]: https://europa.eu/youreurope/citizens/consumers/internet-telecoms/data-protection-online-privacy/index_en.htm "Visit EU site"

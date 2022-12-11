@@ -429,16 +429,16 @@ Links listed below are provided for additional parameter description in order of
 
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection)
 
-[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1)
+[https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity](https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity)

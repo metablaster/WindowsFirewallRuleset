@@ -79,7 +79,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - New functionalities
 
     - `Test-SDDL` function to validate SDDL syntax
-    - Added `PolicyFileEditor` new 3r party module to help with GPO management and renamed to
+    - Added `PolicyFileEditor` new 3rd party module to help with GPO management and renamed to
     `Ruleset.PolicyFileEditor`
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
@@ -93,7 +93,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Made possible to deploy rules for groups other than `Users`, this otherwise means it's now
   possible to deploy rules for Administrators which is useful for Windows Server without any
   standard account
-  - `Restart-Network.ps1` script updated, didn't work perfectly due to software regression
+  - `Restart-Network.ps1` script updated, didn't work perfectly due to regression
 
 - Development
 
@@ -104,7 +104,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Publish generated sitemap to google for crawling
 
   - improved spellcheking with custom dictionaries and configuration of spell check extension
-  - Replaced XML tools extension with XML Red Hat
+  - Replaced `XML tools` extension with `XML Red` Hat
   - Added `YAML` extension to workspace recommendations for YAML support
   - Workspace settings and settings for extensions vastly revisited for better coding experience.
   - Resolved almost all issuses reporeted by markdown, xml and yaml linter and PSScriptAnalyzer

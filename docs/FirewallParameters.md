@@ -589,6 +589,6 @@ For more information see [New-NetFirewallRule][netfirewallrule]
 [Table of Contents](#table-of-contents)
 
 [firewall logs]: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc758040(v=ws.10) "Visit Microsoft docs"
-[netfirewallrule]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule?view=winserver2012r2-ps&redirectedfrom=MSDN "Visit Microsoft docs"
+[netfirewallrule]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule "Visit Microsoft docs"
 [netfirewallrule cim]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wfascimprov/msft-netfirewallrule "Visit Microsoft docs"
 [netfirewallrule cim alternative]: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/jj676843(v=vs.85) "Visit Microsoft docs"

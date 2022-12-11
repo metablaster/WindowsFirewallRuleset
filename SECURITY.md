@@ -8,7 +8,7 @@ other suggestions touching the security and privacy.
 
 ## Supported Versions
 
-Following version of `Windows Firewall Ruleset` are eligible for security reporting
+The following version of `Windows Firewall Ruleset` are eligible for security reporting
 
 | Version | Supported |
 | ------- | ----------|
@@ -41,7 +41,7 @@ outdated information or suggestions concerning security or privacy.
 ## Methods to maximize your security and privacy
 
 [SecurityAndPrivacy.md](/docs/SecurityAndPrivacy.md) privdes some suggestions on how to take control
-over your privacy and how to secure personal computer.
+over your privacy and how to secure a personal computer.
 
 It might help you to resolve issues without having to report a problem or ask questions.
 

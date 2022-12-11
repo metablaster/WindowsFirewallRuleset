@@ -55,6 +55,6 @@ in section\
 
     [Open PowerShell window here as Administrator][powershell here as admin]
 
-[about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions?view=powershell-7 "Visit Microsoft docs"
+[about pseditions]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_editions "Visit Microsoft docs"
 [powershell here]: https://www.tenforums.com/tutorials/60175-open-powershell-window-here-context-menu-add-windows-10-a.html "Visit tutorial"
 [powershell here as admin]: https://www.tenforums.com/tutorials/60177-add-open-powershell-window-here-administrator-windows-10-a.html "Visit tutorial"

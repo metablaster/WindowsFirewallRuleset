@@ -683,7 +683,7 @@ and firewall settings
 [vscode]: https://code.visualstudio.com "Visit Visual Studio Code home page"
 [download powershell extension]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell "Visit Marketplace"
 [module psscriptanalyzer]: https://github.com/PowerShell/PSScriptAnalyzer "Visit PSScriptAnalyzer repository"
-[about execution policies]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7 "About Execution Policies"
+[about execution policies]: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies "About Execution Policies"
 [configure security policy settings]: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/how-to-configure-security-policy-settings "Configure Security Policy Settings"
 [releases]: https://github.com/metablaster/WindowsFirewallRuleset/releases "Visit releases page now"
 [powershell]: https://docs.microsoft.com/en-us/powershell/scripting/overview "What is PowerShell anyway?"

@@ -483,7 +483,7 @@ Install-PackageProvider -Name Nuget -Verbose -Scope CurrentUser
 ```
 
 [reference app management]: https://docs.microsoft.com/en-us/windows/application-management/apps-in-windows-10 "Visit Microsoft docs"
-[reference appxpackage]: https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps "Visit Microsoft docs"
+[reference appxpackage]: https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage "Visit Microsoft docs"
 
 [Table of Contents](#table-of-contents)
 
@@ -509,7 +509,7 @@ Get-WinEvent -ListLog * | Where-Object { $_.RecordCount } | ForEach-Object {
 
 Some VSCode commands useful to troubleshoot issues (`CTRL + SHIFT + P`)
 
-```json
+```jsonc
 // To reload all extensions and VSCode configuration
 Developer: Reload Window
 

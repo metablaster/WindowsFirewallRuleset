@@ -58,7 +58,7 @@ changes don't contain mistakes.\
 ex. for ICMP rules you would provide a link to [IANA][iana] with relevant reference document.
 
 To contribute your own already made rules, it is desired that each rule contains good description
-of it's purpose, when a user clicks on rule in firewall GUI he/she wants to see what this rule is
+of it's purpose, when a user clicks on rule in firewall GUI she\he wants to see what this rule is
 about to easily conclude whether to enable/disable rule or allow/block network traffic.\
 If possible, the rule should be specific and not generic, that means specifying protocol,
 IP addresses, ports, system user, interface type and other relevant information.
@@ -105,16 +105,17 @@ Windows Server 2008 see [Legacy Support](/docs/LegacySupport.md)
 Just like any other software on your computer, this firewall will go out of date as well,
 become obsolete, and may no longer function properly.
 
-This repository consists of 2 branches, `master` (stable) and `develop` (possibly unstable).\
-The "develop" branch is where all updates directly go, so it's work in progress,
-unlike "master" branch which is updated from develop once in a while and not before all scripts
-are thoroughly tested on fresh installed systems, which is what makes master brach stable.
+This repository consists of two branches, `master` (stable) and `develop` (possibly unstable).\
+The "develop" branch is where all updates directly go but updates are not actively tested,
+so it's work in progress, unlike "master" branch which is updated from develop once in a while and
+not before all scripts are thoroughly tested on fresh installed systems, which is what makes master
+brach stable.
 
 If you want to experiment with development version to check out new stuff, switch to "develop"
 branch and try it out, however if it produces errors, you can either attempt to fix problems or
 switch back to "master".
 
-There are at least 4 methods to be up to date with this firewall, each with it's own benefits:
+There are at least four methods to be up to date with this firewall, each with it's own benefits:
 
 [Table of Contents](#table-of-contents)
 
@@ -154,7 +155,7 @@ clone or download zip file .
 [![Download Git][badge git]][download git]
 
 This method is similar to GitHub Desktop above but good if you need specific git features.\
-In addition to 2 mentioned requirements for GitHub Desktop you will also need [git][download git]
+In addition to two mentioned requirements for GitHub Desktop you will also need [git][download git]
 and optionally (but recommended) [SSH keys][github ssh]
 
 Follow steps below to check for updates once you installed git and [cloned][clone] your own fork:
@@ -166,7 +167,7 @@ Follow steps below to check for updates once you installed git and [cloned][clon
 ```cd ..``` to go one directory back
 - Type: ```cd WindowsFirewallRuleset``` to move into WindowsFirewallRuleset directory
 
-Following 2 sets of commands are typed only once for initial setup:
+The following two sets of commands are typed only once for initial setup:
 
 1. If you cloned your fork with `SSH` then run following command:
 
@@ -176,7 +177,7 @@ Following 2 sets of commands are typed only once for initial setup:
 
     ```git remote add upstream https://github.com/metablaster/WindowsFirewallRuleset.git```
 
-Next 2 sets of commands are typed each time you want to check for updates:
+Next two sets of commands are typed each time you want to check for updates:
 
 1. To get updates from master branch run:
 

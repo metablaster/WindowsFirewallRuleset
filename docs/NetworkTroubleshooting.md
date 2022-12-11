@@ -495,7 +495,7 @@ To get good support in forums make sure you provide as much details as you can, 
 [adapter eee issues]: https://www.dell.com/support/kbdoc/en-us/000134483/resolving-issues-with-energy-efficient-ethernet-eee-or-green-ethernet?lwp=rt "Visit external site"
 [adapter realtek settings]: https://superuser.com/questions/853500/optimal-setting-for-advanced-parameters-for-realtek-pci-e-gbe-family-network-car "Visit superuser site"
 [hotseat]: https://en.wikipedia.org/wiki/Hotseat_(multiplayer_mode) "wikipedia hotseat"
-[ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute?view=win10-ps "Visit Microsoft site"
+[ref netroute]: https://docs.microsoft.com/en-us/powershell/module/nettcpip/get-netroute "Visit Microsoft site"
 [wikipedia routing table]: https://en.wikipedia.org/wiki/Routing_table "Visit wikipedia"
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
 [recover windows]: https://support.microsoft.com/en-us/help/12415/windows-10-recovery-options "Visit Microsoft site"
