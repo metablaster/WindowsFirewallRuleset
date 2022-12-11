@@ -334,8 +334,8 @@ function Connect-Computer
 
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
-			# TODO: Will create a new blank console window in PS Core, see also Test-WinRM
-			# see https://github.com/PowerShell/PowerShell/issues/16763
+			# Will create a new blank console window in PS Core, see also Test-WinRM
+			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession creates a ghost window" -Debug
 		}
 

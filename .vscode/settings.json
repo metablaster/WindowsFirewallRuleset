@@ -7,22 +7,29 @@
 {
 	// VSCode: File specific settings
 	"[markdown]": {
+		// Word wrapping must be explicity set for markdown
+		// see: https://github.com/microsoft/vscode/issues/72559
+		"editor.wordWrap": "off",
 		// Markdown standard is 2 spaces for indentation
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2,
-		// Markdown All in One extension
+		// Markdown All in One (yzhang.markdown-all-in-one) formats lists, tables and TOC
+		// markdownlint (DavidAnson.vscode-markdownlint) formats only certain violations
+		// Therefore use right click -> Format Document With...
 		"editor.defaultFormatter": "yzhang.markdown-all-in-one"
 	},
 	"[powershell]": {
 		// PowerShell extension
 		"editor.defaultFormatter": "ms-vscode.powershell"
 	},
-	"[PssaTest]": {
-		// Test module for Config\ProjectSettings.psd1 must not be formatted
+	"[unittest]": {
+		// Keep test files as they are
 		"editor.formatOnPaste": false,
 		"editor.formatOnSave": false,
 		"editor.formatOnType": false,
-		"editor.trimAutoWhitespace": false
+		"editor.trimAutoWhitespace": false,
+		// BUG: Not working
+		"files.autoGuessEncoding": false
 	},
 	"[xml]": {
 		// Standard for html and xml is 2
@@ -128,8 +135,8 @@
 		"*.wpaPresets": "xml",
 		"*.wpaProfile": "xml",
 		// Test module for Config\ProjectSettings.psd1 must not be formatted
-		// TODO: Test with "plaintext" after renaming files to *.ps1
-		"*PssaTest.Module*": "PssaTest",
+		"*PssaTest.Module*": "unittest",
+		"*.test": "unittest",
 		"config": "ssh_config",
 		"LICENSE": "plaintext",
 		"sshd_config": "ssh_config"
@@ -159,7 +166,7 @@
 	// VSCode: outline
 	"outline.collapseItems": "alwaysCollapse",
 	// VSCode: workbench
-	// TODO: What is the new option, needed for autogenrated files
+	// TODO: What is a new option, needed for autogenrated files
 	"workbench.action.files.saveWithoutFormatting": [],
 	"workbench.editor.defaultBinaryEditor": "",
 	"workbench.editor.enablePreviewFromCodeNavigation": true,
@@ -172,8 +179,13 @@
 	// Extension: AutoScroll
 	"autoscroll.keepLastLineInCenter": true,
 	// Extension: Bookmarks
+	"bookmarks.keepBookmarksOnLineDelete": false,
+	"bookmarks.label.suggestion": "dontUse",
+	"bookmarks.multicursor.toggleMode": "allLinesAtOnce",
+	"bookmarks.navigateThroughAllFiles": true,
 	"bookmarks.saveBookmarksInProject": true,
 	"bookmarks.sideBar.expanded": true,
+	"bookmarks.wrapNavigation": true,
 	// Extension: Code Spell Checker
 	// CAUTION: Settings for cSpell defined in settings.json are not recognized in cspell.json
 	"cSpell.autoFormatConfigFile": false,
@@ -396,6 +408,7 @@
 	"markdown.extension.list.indentationSize": "inherit",
 	"markdown.extension.math.enabled": true,
 	"markdown.extension.orderedList.autoRenumber": true,
+	// NOTE: This must be "ordered" in order for autoRenumber to work
 	"markdown.extension.orderedList.marker": "ordered",
 	"markdown.extension.preview.autoShowPreviewToSide": false,
 	"markdown.extension.print.absoluteImgPath": true,
@@ -663,8 +676,7 @@
 			"foreground": "#ffffff",
 			"background": "#2ec920", // Custom green
 			"iconColour": "#228B22", // ForestGreen
-			"opacity": 40,
-			"hideFromTree ": true
+			"opacity": 40
 		},
 		// Known bug, need to fix
 		"BUG": {
@@ -803,7 +815,7 @@
 		// 	"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/PSMaml/Maml.xsd",
 		// 	"pattern": "**/*-help.xml"
 		// }
-		// HACK: XTD schema needed,
+		// HACK: XTD schema needed, there is xml schema in Config directory, needed to convert it to XSD
 		// {
 		// 	// https://learn.microsoft.com/en-us/powershell/scripting/developer/help/helpinfo-xml-schema
 		// 	"systemId": "${workspaceFolder}/Config/HelpInfo.xml-Schema.xml",

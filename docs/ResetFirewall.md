@@ -62,7 +62,7 @@ If you're unable to find the file or you don't know defaults, the following tabl
 services which `Windows Firewal Ruleset` might have modified and their system defaults:
 
 | Service                                            | Startup                   | Status  |
-|----------------------------------------------------|---------------------------|---------|
+| -------------------------------------------------- | ------------------------- | ------- |
 | TCP/IP NetBIOS Helper (lmhosts)                    | Manual (Trigger Start)    | Running |
 | Workstation (LanmanWorkstation)                    | Automatic                 | Running |
 | Server (LanmanServer)                              | Automatic (Trigger Start) | Running |

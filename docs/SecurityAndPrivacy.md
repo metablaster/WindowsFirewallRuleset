@@ -142,6 +142,10 @@ Recommended password manager is [Password Safe][pwsafe]
 More about the author of this program:\
 [Schneier on Security - Password Safe][schneier]
 
+The significance of password manager autotype feature is that password doesn't get copied to
+clipboard but instead goes directly from password manager into login form, thus avoiding the risk
+of potential malware stealing your password from the clipboard.
+
 [Table of Contents](#table-of-contents)
 
 ### Email client and service
@@ -366,8 +370,8 @@ It is suggested to have three different emails as follows:
 It's also important that these email accounts aren't registed at same email provider, some providers
 care more about your privacy than others, for your real life use the best one.
 
-You should also take care of in which country are email provider HQ located, for example swiss
-privacy laws are strict and more protective than those in the EU or US, therefore choose a
+You should also take care of in which country are email provider HQ's located, for example swiss
+privacy laws are strict and more protective than those in the EU or the US, therefore choose a
 provider from switzerland as your primary email.\
 For more information see [Data protection in Switzerland][swiss law] and also
 [New Federal Act on Data Protection (nFADP)][swiss new law]
@@ -380,9 +384,9 @@ multiple sites, for example same username, avatar or bio on multiple forums and 
 
 One reason why people do this is because they build up on their reputation and good online conduct.
 
-But regardless of your reasons I believe it's bad for privacy because you run the risk of being
+But regardless of your reasons I it's not good for privacy because you run the risk of being
 stalked and also if your identity is somehow revealed you'll be revealed in all places where you
-use same handle or avatar and then people who are in fact not stalkers may become one, most likely
+use same username or avatar and then people who are in fact not stalkers may become one, most likely
 someone who knows you in real life.
 
 Third privacy mistake is using your real name or family name or a portion of it in username,
@@ -394,6 +398,8 @@ avatars should be unique for each site and you should never use any personally i
 information even if just partial for anything except for what's absolutely required by the law,
 for ex. you can't give fake name to your lawyer or to paypal service.
 
+[Table of Contents](#table-of-contents)
+
 ## How do I regain trust in my computer
 
 The question is how do I regain trust in my computer?
@@ -404,8 +410,8 @@ I could encrypt my DNS, I was using Administrator account to go online etc. etc.
 If you ask yourself such or similar questions then you can't trust your computer which means
 trust must be regained.
 
-And the only way to regain trust is to clean reload operating system, making sure not to repeat
-the mistake that led to asking these questions.
+And the only way to regain trust is to clean reload operating system, and then making sure not to
+repeat the mistake that led to asking these questions.
 
 Reinstalling the system should be followed by securing it and changing all your passwords with new
 ones, including router password and settings.
@@ -430,14 +436,14 @@ trusted, nor can we know for certain what did people in computer shop do to the 
 
 But going that far makes not much sense, hardware malware is difficult to write and is usually used
 to target corporations not individual users, and preventing share of your PC ID's can't be prevented
-without harming your comfort of computing, so buying a new computer would only create a new identity
-but not solve the problem.
+without also harming your comfort of computing, so buying a new computer would only create a new
+identity but not solve the problem.
 
 Therefore clean reload is the most sane and economically efficient method and it gives let's say 99%
 certainty.
 
 But to have 100% certainty one would have to recycle the computer, bury the remains
-underground and never use computer again.
+underground and never use a computer again.
 
 [Table of Contents](#table-of-contents)
 

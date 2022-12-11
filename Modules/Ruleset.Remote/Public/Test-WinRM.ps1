@@ -379,8 +379,8 @@ function Test-WinRM
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
-			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
-			# see https://github.com/PowerShell/PowerShell/issues/16763
+			# Will create a new blank console windows in PS Core, see also Connect-Computer
+			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession creates a ghost window" -Debug
 		}
 
@@ -464,8 +464,8 @@ function Test-WinRM
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
 		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
 		{
-			# TODO: Will create a new blank console windows in PS Core, see also Connect-Computer
-			# see https://github.com/PowerShell/PowerShell/issues/16763
+			# Will create a new blank console windows in PS Core, see also Connect-Computer
+			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession creates a ghost window" -Debug
 		}
 

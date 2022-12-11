@@ -19,6 +19,7 @@ In addition, general questions and answers regarding this firewall.
   - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
   - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
   - [Network icon in taskbar says it's "No Network"](#network-icon-in-taskbar-says-its-no-network)
+  - [PowerShell Core throws a black console window](#powershell-core-throws-a-black-console-window)
 
 ## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
@@ -401,6 +402,13 @@ physical NIC in Hyper-V and re-share it again.
 
 [Table of Contents](#table-of-contents)
 
+## PowerShell Core throws a black console window
+
+When using PowerShell Core a blank black windows is created, this is known issue which has not
+yet been resolved, you can track the issue here: [New-PSSession throws a black window][ps core issue]
+
+[Table of Contents](#table-of-contents)
+
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
@@ -412,3 +420,4 @@ physical NIC in Hyper-V and re-share it again.
 [sigcheck]: https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck "Visit Microsoft docs"
 [alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
 [pscredential]: https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.pscredential "What is PSCredential?"
+[ps core issue]: https://github.com/PowerShell/PowerShell/issues/16763 "Visit GitHub issue"
