@@ -202,7 +202,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - `Test-Computer`
     - `Test-Credential`
-    - `Test-ExecutableFile` will now perform virus total check if digital signature is missing
+    - `Test-ExecutableFile` will now perform VirusTotal check if digital signature is missing
     - `Get-NetFramework`
 
   - Updated module functions
@@ -220,7 +220,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - `Set-ATP.ps1` new script used to configure Microsoft Defender Antivirus
   - `Confirm-Firewall.ps1` new experimental script used to validate firewall configuration
   - `Test-RemoteRegistry` new function to test for functioning remote registry
-  - `Test-VirusTotal` new module function used to perform virus total analysis on executable
+  - `Test-VirusTotal` new module function used to perform VirusTotal analysis on executable
   - `Format-ComputerName` new module function to format computer name to NETBIOS name
 
 - Scripts

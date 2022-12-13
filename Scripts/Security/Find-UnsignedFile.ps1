@@ -37,11 +37,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Scan executables for digital signature and check virus total status
+Scan executables for digital signature and check VirusTotal status
 
 .DESCRIPTION
 Use Find-UnsignedFile.ps1 to scan executable files in specified directory for digital signature.
-If file being scanned lacks digital signature it is optionally sent to virus total for analysis.
+If file being scanned lacks digital signature it is optionally sent to VirusTotal for analysis.
 The result of scan and virus analysis can be optionally saved to JSON file for later inspection.
 
 .PARAMETER Path
@@ -55,7 +55,7 @@ No characters are interpreted as wildcards.
 
 .PARAMETER Driver
 If specified, system drivers are checked for digital signature and
-uploaded to virus total if necessary.
+uploaded to VirusTotal if necessary.
 
 .PARAMETER Filter
 Specify executable program type (file extension) which is to be searched in path specified by -LiteralPath.
@@ -83,13 +83,13 @@ have non-zero detection are reported.
 If specified, the path specified by -LiteralPath is recursed.
 
 .PARAMETER VirusTotal
-If specified, file hash of the files lacking digital signature are sent to virus total for malware check,
-files which were never scanned by virus total are uploaded for analysis.
+If specified, file hash of the files lacking digital signature are sent to VirusTotal for malware check,
+files which were never scanned by VirusTotal are uploaded for analysis.
 Note that individual scan results may not be available for five or more minutes.
 
 .PARAMETER SkipUpload
 If specified, files reported as not previously scanned will not be uploaded to VirusTotal.
-By default files never scanned by virus total are uploaded and web page is opened in
+By default files never scanned by VirusTotal are uploaded and web page is opened in
 default web browser for each un-scanned file for review.
 
 .PARAMETER Append
@@ -97,13 +97,13 @@ If specified, appends scan result to json file.
 By default existing file (if any) is replaced.
 
 .PARAMETER FileSize
-Maximum file size to be sent to virus total expressed in MB.
-Files which exceed this value won't be sent to virus total for malware analysis.
+Maximum file size to be sent to VirusTotal expressed in MB.
+Files which exceed this value won't be sent to VirusTotal for malware analysis.
 The default value is 10 MB.
-Virus total maximum file size is 650 MB.
+VirusTotal maximum file size is 650 MB.
 
 .PARAMETER Timeout
-Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 
@@ -124,13 +124,19 @@ None. Find-UnsignedFile.ps1 does not generate any output
 
 .NOTES
 TODO: More functionality can be implemented by handling more sigcheck switches
-TODO: Json output is not perfect, it includes empty braces for file not scanned by virus total
+TODO: Json output is not perfect, it includes empty braces for file not scanned by VirusTotal
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
 https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
+
+.LINK
+https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service
+
+.LINK
+https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy
 #>
 
 #Requires -Version 5.1
@@ -379,10 +385,10 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			}
 		} # scriptblock
 
-		# Unsigned files not processed by virus total
+		# Unsigned files not processed by VirusTotal
 		[array] $SkippedFiles = @()
 
-		# Unsigned files processed by virus total
+		# Unsigned files processed by VirusTotal
 		[array] $ScannedFiles = @()
 	}
 
@@ -419,15 +425,15 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		{
 			Write-Warning -Message "[$ThisScript] Unsigned file detected $FileName"
 
-			if ($VirusTotal -and $PSCmdlet.ShouldProcess($FilePath, "Upload file to virus total for malware analysis"))
+			if ($VirusTotal -and $PSCmdlet.ShouldProcess($FilePath, "Upload file to VirusTotal for malware analysis"))
 			{
-				# Ensure scanned file does not exceed user specified maximum file size for virus total processing
+				# Ensure scanned file does not exceed user specified maximum file size for VirusTotal processing
 				$FileBytes = (Get-Item -Path $FilePath | Select-Object -ExpandProperty Length)
 				$FileMegaBytes = [System.Math]::Round($FileBytes / (1024 * 1024), 2)
 
 				if ($FileMegaBytes -gt $FileSize)
 				{
-					Write-Warning -Message "[$ThisScript] File size of $FileMegaBytes MB exceeded specified virus total maximum file size of $FileSize MB"
+					Write-Warning -Message "[$ThisScript] File size of $FileMegaBytes MB exceeded specified VirusTotal maximum file size of $FileSize MB"
 
 					if ($Log)
 					{
@@ -442,7 +448,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				}
 
 				# A collection of command-line arguments to use when starting the application
-				# -vt accept virus total license
+				# -vt accept VirusTotal license
 				$Process.StartInfo.Arguments = "-vt -accepteula -nobanner"
 
 				if ($SkipUpload)
@@ -452,7 +458,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				}
 				else
 				{
-					# Open report in web browser and upload files never scanned by virus total
+					# Open report in web browser and upload files never scanned by VirusTotal
 					$Process.StartInfo.Arguments += " -vrs"
 				}
 
@@ -505,7 +511,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 						if ($Detection.Success)
 						{
-							Write-Information -MessageData "INFO: $FileName Virus total status is '$($Detection.Value)'"
+							Write-Information -MessageData "INFO: $FileName VirusTotal status is '$($Detection.Value)'"
 
 							if ($Log)
 							{
@@ -594,13 +600,13 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		if ($SkippedFiles.Count -gt 0)
 		{
 			Write-Debug -Message "[$ThisScript] Adding skipped files to JSON root: $($SkippedFiles | Out-String)"
-			$JsonData.Add("Files skipped from virus total analysis", $SkippedFiles)
+			$JsonData.Add("Files skipped from VirusTotal analysis", $SkippedFiles)
 		}
 
 		if ($ScannedFiles.Count -gt 0)
 		{
 			Write-Debug -Message "[$ThisScript] Adding skipped files to JSON root: $($ScannedFiles | Out-String)"
-			$JsonData.Add("Files analyzed by virus total", $ScannedFiles)
+			$JsonData.Add("Files analyzed by VirusTotal", $ScannedFiles)
 		}
 
 		if (($JsonData | Measure-Object).Count -gt 0)

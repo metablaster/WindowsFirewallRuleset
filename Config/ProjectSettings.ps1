@@ -523,7 +523,7 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 
 	# Specify path to sigcheck64.exe
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
-	# sigcheck64.exe is used to perform online malware analysis via virus total service.
+	# sigcheck64.exe is used to perform online malware analysis via VirusTotal service.
 	# You can get sigcheck64.exe from Microsoft sysinternals site below:
 	# https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
 	Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"

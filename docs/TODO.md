@@ -409,7 +409,7 @@ Todo's in this file are categorized into the following sections:
     - Revisit naming convention for ConvertFrom/ConvertTo it's not clear what is being converted,
     some other functions also have dubious names
     - Change bool parameters to switch where possible
-    - `Test-Executable` function could optionally check for "virus total" hash
+    - `Test-Executable` function could optionally check for "VirusTotal" hash
     - It should be possible to optionally deploy firewall for Administrator, ex. on server computer
     there could be no standard users.
     - For functions which use remoting and call other functions which use remoting there must be

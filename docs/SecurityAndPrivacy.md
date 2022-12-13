@@ -146,12 +146,18 @@ The significance of password manager autotype feature is that password doesn't g
 clipboard but instead goes directly from password manager into login form, thus avoiding the risk
 of potential malware stealing your password from the clipboard.
 
+The benefit is also that you avoid potential keylogger since you won't be using keyboard to type
+passwords.
+
+The benefit is also you don't have have to remember any passwords, so it's easy to have complex and
+unique password for each site.
+
 [Table of Contents](#table-of-contents)
 
 ### Email client and service
 
 Don't let your email client or web interface auto load email content.\
-Configure your mail client to be restrictive, also important not to open attachments and link in
+Configure your mail client to be restrictive, also important not to open attachments or links in
 mail you don't recognize or didn't ask for.
 
 For recommended email service list see [Privacy-Conscious Email Services][prxbx]
@@ -174,6 +180,9 @@ Of course with ruleset from this repository.
 
 ### Web browser
 
+Web browser is probably the most important thing of all described here since most of your online
+activity is by using the browser.
+
 Protect your web browser maximum possible by restrictively adjusting settings, and
 avoid using addons except few which are known to be trusted by online community.
 
@@ -182,7 +191,7 @@ for security, what matters most is to use the one which receives regular updates
 most mainstream web browsers do.
 
 It's also important to configure your web browser properly, one example of browser configuration is
-the following web site:\
+the following web site (but sadly it's out of date):\
 [Securing Your Web Browser][secure browser]
 
 [Table of Contents](#table-of-contents)
@@ -243,7 +252,7 @@ As already said good news is that you need none of these expensive software, in 
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
 3. `Show-ASR` is used to show settings applied by `Deploy-ASR`
 4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic
-online malware analysis with [Virus total][virus total] for any unsigned file that is found,
+online malware analysis with [VirusTotal][virustotal] for any unsigned file that is found,
 so that you don't have to upload each file manually.
 
 It's recommended to take a look into these scripts to see what they do and how to use them before
@@ -355,41 +364,46 @@ Suggested browser extensions are:
 
 There are some privacy mistakes which we all did at least once.
 
-First obvious privacy mistake is having just one email and using it for everything.\
-It is suggested to have three different emails as follows:
+- First obvious privacy mistake is having just one email and using it for everything.\
+  It is suggested to have three different emails as follows:
 
-- One for personal real life use, which you share with institutional entities and your real life
-  friends such as your bank or, your lawyer, your family, your relatives or paypal.
+  - One for personal real life use, which you share with institutional entities and your real life
+    friends such as your bank or, your lawyer, your family, your relatives or paypal.
 
-- Second one for your regular online activity such as forums and web services which you regularly use.
+  - Second one for your regular online activity such as forums and web services which you regularly use.
 
-- And third one which is a "junk" mail which you use to register to unknown sites or services,
-  sites which have poor or aggressive privacy policy or to register for a newsletter until you're
-  sure that the newsletter isn't about spamming you or sharing your email with hostile services.
+  - And third one which is a "junk" mail which you use to register to unknown sites or services,
+    sites which have poor or aggressive privacy policy or to register for a newsletter until you're
+    sure that the newsletter isn't about spamming you or sharing your email with hostile services.
 
-It's also important that these email accounts aren't registed at same email provider, some providers
-care more about your privacy than others, for your real life use the best one.
+  It's also important that these email accounts aren't registed at same email provider, some providers
+  care more about your privacy than others, for your real life use the best one.
 
-You should also take care of, in which country are email provider HQ's located, for example swiss
-privacy laws are strict and more protective than those in the EU or the US, therefore choose a
-provider from switzerland as your primary email.\
-For more information see [Data protection in Switzerland][swiss law] and also
-[New Federal Act on Data Protection (nFADP)][swiss new law]
+  You should also take care of, in which country are email provider HQ's located, for example swiss
+  privacy laws are strict and more protective than those in the EU or the US, therefore choose a
+  provider from switzerland as your primary email.\
+  For more information see [Data protection in Switzerland][swiss law] and also
+  [New Federal Act on Data Protection (nFADP)][swiss new law]
 
-If you have to choose between a provider in the EU and the US, choose the one in EU, for more
-infomation see [Additional Research](#additional-research) section below.
+  If you have to choose between a provider in the EU and the US, choose the one in EU, for more
+  infomation see [Additional Research](#additional-research) section below.
 
-Second common privacy mistake some people do is having same online profile on multiple sites,
-for example same username, avatar or bio on multiple forums and similar sites.
+- Second common privacy mistake some people do is having same online profile on multiple sites,
+  for example same username, avatar or bio on multiple forums and similar sites.
 
-There are several reasons why this is normal, but regardless of your reasons I it's not good for
-privacy because you run the risk of being stalked and also if your identity is somehow revealed
-you'll be revealed in all places where you use same username or avatar and then people who are in
-fact not stalkers may become one, most likely someone who knows you in real life.
+  There are several reasons why this is normal, but regardless of your reasons I it's not good for
+  privacy because you run the risk of being stalked and also if your identity is somehow revealed
+  you'll be revealed in all places where you use same username or avatar and then people who are in
+  fact not stalkers may become one, most likely someone who knows you in real life.
 
-Third privacy mistake is using your real name or family name or a portion of it in username,
-someone from your real life could easily connect the dots between your username and your online
-behavior and then the risk is same as with reuse of avatars and usernames mentioned before.
+- Third privacy mistake is using your real name or family name or a portion of it in username or your
+  real picture for avatar.\
+  Someone from your real life could easily connect the dots between your username and your behavior
+  and then the risk is same as with reuse of avatars and usernames mentioned before.
+
+  Stalking isn't the only issue though, it's about your feelings or having a sense of privacy, a
+  potential stalker might share information about you elsewhere and that's one bad feeling to be
+  aware of.
 
 [Table of Contents](#table-of-contents)
 
@@ -397,27 +411,30 @@ behavior and then the risk is same as with reuse of avatars and usernames mentio
 
 The question is how do I regain trust in my computer?
 
-I installed unsigned software recently, I recall visiting potentially bad website, I didn't know
-I could encrypt my DNS, I was using Administrator account to go online etc. etc.
+I installed unsigned software recently, I recall visiting potentially bad website, I recall my
+antivirus detected something, I was using Administrator account to go online etc. etc.
 
-If you ask yourself such or similar questions then you can't trust your computer which means
+If you ask yourself such or similar questions then you can't trust your computer and this means
 trust must be regained.
 
-And the only way to regain trust is to clean reload operating system, and then making sure not to
+The only way to regain trust is to clean reload operating system, and then making sure not to
 repeat the mistake that led to asking these questions.
 
 Reinstalling the system should be followed by securing it and changing all your passwords with new
-ones, including router password and settings.
+ones, including router password and settings.\
+If your privacy was seriously compromised you should also consider creating a new online identity,
+this means creating new email's and registering new accounts, including changing your phone number
+if it was used for ex. two step verification.
 
 There is no alternative to clean reload, scanning your PC for malware is of no help since antivirus
 won't detect FUD malware.
 
 Changing your passwords on an untrusted computer is worse than not changing them at all, since if
-your computer isn't trusted then how do you know your input isn't intercepted? better do nothing.
+your computer isn't trusted then how do you know your input isn't intercepted?
 
 Switching from Admin account to standard account if you were Admin is [beating a dead horse][dead horse]
-since if you were Admin then your system already was vulnerable and it's impossible to be sure
-nothing wrong happened so far.
+since if you were Admin then your system already was online in elevated mode and is thus impossible
+to be sure nothing bad happened so far.
 
 Clean reload isn't 100% certainty though, for neither security nor privacy, security wise
 clean reload won't get rid or hardware based malware if there is one, and privacy wise your computer
@@ -435,8 +452,8 @@ identity but not solve the problem.
 Therefore clean reload is the most sane and economically efficient method and it gives let's say 99%
 certainty.
 
-But to have 100% certainty one would have to recycle the computer, bury the remains
-underground and never use a computer again.
+To have 100% certainty one would have to recycle the computer, bury the remains underground and
+never use a computer again.
 
 [Table of Contents](#table-of-contents)
 
@@ -447,6 +464,7 @@ The following web sites are good starting point for additional research regardin
 - [PRISM ⚡ BREAK][prism break]
 - [Technical analysis of client identification mechanisms][client identification]
 - [Safe computing][safe computing]
+- [Data protection in Switzerland][swiss law]
 - [EU Data protection and online privacy][eu privacy]
 
 [Table of Contents](#table-of-contents)
@@ -472,7 +490,7 @@ The following web sites are good starting point for additional research regardin
 [client identification]: https://www.chromium.org/Home/chromium-security/client-identification-mechanisms "Visit chromium site"
 [asr]: https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/overview-attack-surface-reduction "Visit microsoft site"
 [defender office]: https://www.microsoft.com/en-us/security/business/siem-and-xdr/microsoft-defender-office-365 "Visit microsoft site"
-[virus total]: https://www.virustotal.com/gui/home/upload "Visit Virus total"
+[virustotal]: https://www.virustotal.com/gui/home/upload "Visit VirusTotal"
 [uac]: https://learn.microsoft.com/en-us/windows/security/identity-protection/user-account-control/how-user-account-control-works "Visit microsoft site"
 [uac settings]: https://learn.microsoft.com/en-us/mem/intune/user-help/you-need-to-enable-uac-windows "Visit microsoft site"
 [safe computing]: https://www.cisa.gov/uscert/ncas/tips "Visit government site"

@@ -237,7 +237,7 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Connection to virus total to upload file for scan" |
+			-Description "Connection to VirusTotal to upload file for scan" |
 		Format-RuleOutput
 	}
 
@@ -252,7 +252,7 @@ This rule serves to allow PSPing64.exe to act as a client." | Format-RuleOutput
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $SysInternalsUsers `
 			-InterfaceType $DefaultInterface `
-			-Description "Connection to virus total to upload file for scan" |
+			-Description "Connection to VirusTotal to upload file for scan" |
 		Format-RuleOutput
 	}
 }

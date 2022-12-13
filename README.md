@@ -10,7 +10,7 @@
   - [About Windows Firewall Ruleset](#about-windows-firewall-ruleset)
     - [Firewall rules](#firewall-rules)
     - [Firewall framework](#firewall-framework)
-  - [Core benefits of this firewall](#core-benefits-of-this-firewall)
+  - [The vision of this firewall](#the-vision-of-this-firewall)
   - [License](#license)
   - [Requirements](#requirements)
     - [Requirements details](#requirements-details)
@@ -37,6 +37,8 @@ A fully automated solution for Windows firewall with PowerShell
 
 `Windows Firewall Ruleset` configures Windows firewall automatically and applies restrictive
 firewall rules specific for target system and software installed on the system.
+
+Status of this project is still alpha, click on "status" badge above to learn more.
 
 This project consists of two major parts, firewall rules and firewall framework as follows:
 
@@ -86,7 +88,7 @@ process and deploy all the necessary rules and settings to your firewall.
 
 [Table of Contents](#table-of-contents)
 
-## Core benefits of this firewall
+## The vision of this firewall
 
 [![Managed in VSCode][badge vscode]][vscode]
 [![PowerShell][badge language]][powershell]
@@ -102,7 +104,7 @@ part of their installation process will have no effect on firewall unless you ex
 exception.
 
 3. Rules based on programs and services will have their specified executable file checked for
-digital signature and will be scanned on virus total if digital signature is missing,
+digital signature and will be scanned on VirusTotal if digital signature is missing,
 for security reasons rule is not created or loaded into firewall if this verification fails.
 (can be forced)
 
@@ -187,11 +189,13 @@ Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 shi
 
 - `sigcheck64.exe` is a digital signature verification tool which you can download from Microsoft site
 and should be placed either into `C:\tools` directory or to `%PATH%` environment variable.\
-`Windows Firewall Ruleset` will use it to perform online malware analysis on virus total for every
+`Windows Firewall Ruleset` will use it to perform online malware analysis on VirusTotal for every
 executable that is not digitally signed before a firewall rule is made for that executable.\
 This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
 Of course this is only a recommendation, if there is no `sigcheck64.exe` in `PATH` no malware analysis
-is made.
+is made.\
+By using this functionality you're agree to [VirusTotal Terms of Service][virustotal terms] and
+[VirusTotal Privacy Policy][virustotal privacy]
 
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
@@ -696,6 +700,8 @@ and firewall settings
 [regression]: https://en.wikipedia.org/wiki/Software_regression "What is software regresssion?"
 [sigcheck]: https://learn.microsoft.com/en-us/sysinternals/downloads/sigcheck "Download sigcheck from Microsoft"
 [multicursor]: https://code.visualstudio.com/Docs/editor/codebasics#_multiple-selections-multicursor: "Visit VSCode documentation"
+[virustotal terms]: https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service "Visit VirusTotal site"
+[virustotal privacy]: https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy "Visit VirusTotal site"
 <!-- unused link or image reference false positive-->
 <!-- markdownlint-disable MD053 -->
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic

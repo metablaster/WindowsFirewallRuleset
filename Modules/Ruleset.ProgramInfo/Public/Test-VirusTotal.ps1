@@ -28,11 +28,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Analyze file trough virus total API
+Analyze file trough VirusTotal API
 
 .DESCRIPTION
 Test-VirusTotal performs malware analysis on file by using sysinternals sigcheck
-program which in turn uses virus total API to perform analysis.
+program which in turn uses VirusTotal API to perform analysis.
 
 .PARAMETER LiteralPath
 Fully qualified path to executable file which is to be tested
@@ -51,10 +51,10 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
-If location to sigcheck executable is not found then no virus total scan and report is done.
+If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 .PARAMETER Timeout
-Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 
@@ -100,7 +100,7 @@ function Test-VirusTotal
 		[int32] $TimeOut = 300
 	)
 
-	if ($PSCmdlet.ShouldProcess($LiteralPath, "Run virus total check"))
+	if ($PSCmdlet.ShouldProcess($LiteralPath, "Run VirusTotal check"))
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
@@ -163,7 +163,7 @@ function Test-VirusTotal
 				else
 				{
 					# Using because ExpandEnvironmentVariables will return NULL if location doesn't exist
-					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$using:SigcheckLocation', virus total scan will not be performed"
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$using:SigcheckLocation', VirusTotal scan will not be performed"
 				}
 			}
 
@@ -192,10 +192,10 @@ function Test-VirusTotal
 				$Process.StartInfo.RedirectStandardError = $true
 
 				# A collection of command-line arguments to use when starting the application
-				# -vt accept virus total license
+				# -vt accept VirusTotal license
 				$Process.StartInfo.Arguments = "-vt -accepteula -nobanner"
 
-				# Open report in web browser and upload files never scanned by virus total
+				# Open report in web browser and upload files never scanned by VirusTotal
 				$Process.StartInfo.Arguments += " -vrs"
 
 				# File which is to be scanned
@@ -205,7 +205,7 @@ function Test-VirusTotal
 				$FileIsMalware = $false
 				if ($Process.Start())
 				{
-					$HeaderStack.Push("Virus total status")
+					$HeaderStack.Push("VirusTotal status")
 
 					while (!$Process.StandardOutput.EndOfStream)
 					{
@@ -230,7 +230,7 @@ function Test-VirusTotal
 
 							if ($Detection.Success)
 							{
-								Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Virus total report for '$Executable' is '$($Detection.Value)'"
+								Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: VirusTotal report for '$Executable' is '$($Detection.Value)'"
 								# TODO: Write-LogFile, output is printed to console
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "VT status is", $Detection.Value
 
