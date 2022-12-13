@@ -37,10 +37,16 @@ Comparison is case sensitive for the matching typename part.
 TypeName and OutputType including equality test is printed to console
 
 .PARAMETER InputObject
-The actual .NET type that some function returns
+.NET object which some function returned
 
 .PARAMETER Command
-Commandlet or function name for which to retrieve OutputType attribute values.
+Commandlet or function name for which to retrieve OutputType attribute
+values for comparison with InputObject
+
+.PARAMETER Force
+If specified, the function doesn't check if either InputObject or OutputType attribute of
+tested command is .NET type.
+This is useful only for PSCustomObject types defined with PSTypeName.
 
 .EXAMPLE
 PS> $Result = Some-Function
@@ -62,19 +68,23 @@ function Test-Output
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-Output.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[AllowNull()]
 		[object[]] $InputObject,
 
 		[Parameter(Mandatory = $true)]
-		[string] $Command
+		[string] $Command,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+
 		if (Get-Variable -Name TestCommand -Scope Script -ErrorAction Ignore)
 		{
 			$TestCommand = $script:TestCommand
@@ -93,10 +103,12 @@ function Test-Output
 	}
 	process
 	{
+		# TODO: Using foreach here for cases where -InputObject is an array but not from pipeline
+		# will not not work in cases when function being tested returns null, see unit test.
 		# NOTE: OutputType variable may contain multiple valid entries
 		# Ignoring errors to reduce spamming console with errors
-		$AllOutputType += Get-TypeName -Command $Command -ErrorAction SilentlyContinue
-		$AllTypeName += Get-TypeName $InputObject -ErrorAction SilentlyContinue
+		$AllOutputType += Get-TypeName -Command $Command -ErrorAction SilentlyContinue -Force:$Force
+		$AllTypeName += Get-TypeName $InputObject -ErrorAction SilentlyContinue -Force:$Force
 	}
 	end
 	{
@@ -143,7 +155,5 @@ function Test-Output
 			Write-Error -Category InvalidResult -TargetObject $TypeName `
 				-Message "Typename and OutputType are not identical"
 		}
-
-		Stop-Test
 	}
 }

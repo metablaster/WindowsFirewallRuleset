@@ -31,26 +31,28 @@ SOFTWARE.
 Remove all items from test drive
 
 .DESCRIPTION
-Test drive is directory where test cases may output their results.
-This function clears test directory leaving empty test drive only.
+Test drive is directory where unit tests may output their temporary data.
+This function clears test directory leaving only test drive root directory.
 If the test drive does not exist new one is created.
 For safety reasons, when non default test drive is specified the function will complete operation
 only if run as standard user, in which case it prompts for confirmation.
 
 .PARAMETER Path
 Test drive location.
-The default is "TestDrive" directory inside well known project test directory.
+The default is "TestDrive" directory inside well known test directory in repository.
 
 .PARAMETER Retry
 Specify the number of times this function will repeat an attempt to clear test drive.
 This is needed in cases such as when contents are in use by another process.
+The default is 2.
 
 .PARAMETER Timeout
-The timeout interval (in milliseconds) between each retry attempt
+The timeout interval (in milliseconds) between each retry attempt.
+The default is 1 second.
 
 .PARAMETER Force
 Skip prompting clearing non default test drive.
-This parameter has no effect if the function is run with non standard user privileges.
+This parameter has no effect if the function is run as Administrator.
 
 .EXAMPLE
 PS> Reset-TestDrive
@@ -104,7 +106,6 @@ function Reset-TestDrive
 			{
 				Write-Error -Category PermissionDenied -TargetObject $Principal `
 					-Message "This operation requires standard user privileges"
-
 				return
 			}
 

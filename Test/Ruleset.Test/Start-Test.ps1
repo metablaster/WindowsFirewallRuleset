@@ -28,15 +28,11 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Ruleset.Test module
+Unit test for Start-Test and Restore-Test
 
 .DESCRIPTION
-Unit test for:
-
-1. Enter-Test
-2. Start-Test
-3. Stop-Test
-4. Exit-Test
+Primarily unit test for Start-Test and Restore-Test but in addition
+Enter-Test and Exit test are used.
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -72,21 +68,42 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Start-Test"
 
-$Result = Start-Test "Test 1" -Expected "Test 1"
+#
+# default test
+#
+Start-Test "default test"
+
+#
+# Test with -Expected
+#
+Start-Test "Test 1" -Expected "No output except this one with 'Start-Test Test 1'"
+
+#
+# Test with -Command
+#
+$Result = Start-Test "Test 2" -Command "New-Command" -Expected "No output except this one with 'New-Command Test 2'"
 $Result
 Test-Output $Result -Command Start-Test
 
-$Result = Stop-Test
-$Result
-Test-Output $Result -Command Stop-Test
+#
+# Test failure test
+#
 
-$Result = New-Section "Sample Section"
-$Result
-Test-Output $Result -Command New-Section
+<#
+.SYNOPSIS
+Generates a sample error
+#>
+function Get-Error
+{
+	[CmdletBinding()]
+	param()
 
-Start-Test "Test 2" -Expected "Test 2"
-Stop-Test
+	Write-Error -Category MetadataError -Message "Sample failure test error success"
+}
 
-$Result = Exit-Test
-$Result
-Test-Output $Result -Command Exit-Test
+Start-Test "Failure test" -Expected "Error converted to information" -Force
+# Not needing -EA SilentlyContinue only because Get-Error is global function
+Get-Error -ErrorVariable TestEV
+Restore-Test
+
+Exit-Test

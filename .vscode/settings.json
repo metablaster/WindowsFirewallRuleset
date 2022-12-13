@@ -28,8 +28,10 @@
 		"editor.formatOnSave": false,
 		"editor.formatOnType": false,
 		"editor.trimAutoWhitespace": false,
-		// BUG: Not working
-		"files.autoGuessEncoding": false
+	},
+	"[ansi]": {
+		// BUG: Working in diffeditor but not in normal editor
+		"files.encoding": "windows1252"
 	},
 	"[xml]": {
 		// Standard for html and xml is 2
@@ -49,7 +51,7 @@
 	"audioCues.lineHasWarning": "off",
 	// VSCode: diffeditor
 	"diffEditor.ignoreTrimWhitespace": false,
-	// BUG: For some reason "inherit" does not work
+	// NOTE: "inherit" does not work for all file formats
 	"diffEditor.wordWrap": "off",
 	// VSCode: editor
 	"editor.acceptSuggestionOnEnter": "off",
@@ -137,6 +139,7 @@
 		// Test module for Config\ProjectSettings.psd1 must not be formatted
 		"*PssaTest.Module*": "unittest",
 		"*.test": "unittest",
+		"*.ansi": "ansi",
 		"config": "ssh_config",
 		"LICENSE": "plaintext",
 		"sshd_config": "ssh_config"
@@ -168,6 +171,9 @@
 	// VSCode: workbench
 	// TODO: What is a new option, needed for autogenrated files
 	"workbench.action.files.saveWithoutFormatting": [],
+	"workbench.colorCustomizations": {
+		"tab.activeBorder": "#ff0000"
+	},
 	"workbench.editor.defaultBinaryEditor": "",
 	"workbench.editor.enablePreviewFromCodeNavigation": true,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
@@ -652,8 +658,7 @@
 			// used to set the colour of the icon in the tree
 			"iconColour": "#ff0000"
 			// used to hide tags from the tree, but still highlight in files
-			// ISSUE: https://github.com/Gruntfuggly/todo-tree/issues/704
-			// "hideFromTree ": false,
+			// "hideFromTree": false,
 			// set to true to show the icon in the editor gutter
 			// "gutterIcon": true,
 			// prevents the tag from being included in the status bar counts
@@ -723,7 +728,7 @@
 			"iconColour": "#2ec920", // Custom green
 			"opacity": 40,
 			"fontStyle": "italic",
-			"hideFromTree ": true
+			"hideFromTree": true
 		},
 		// Unchecked box
 		"[ ]": {
@@ -733,7 +738,7 @@
 			"background": "#ffffff",
 			"iconColour": "#ffffff",
 			"opacity": 90,
-			"hideFromTree ": true
+			"hideFromTree": true
 		},
 		// Checked box
 		"[x]": {
@@ -743,7 +748,7 @@
 			"background": "#2ec920", // Custom green
 			"iconColour": "#2ec920", // Custom green
 			"opacity": 40,
-			"hideFromTree ": true
+			"hideFromTree": true
 		}
 	},
 	"todo-tree.highlights.enabled": true,

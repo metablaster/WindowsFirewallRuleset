@@ -107,6 +107,7 @@ remotely use Connect-WSMan and New-WSManSessionOption
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 TODO: Implement specifying listening addresses and address ranges
+TODO: Implement parameter -SessionConfiguration with default to be built in session configuration
 See also output of: winrm get winrm/config
 
 .LINK

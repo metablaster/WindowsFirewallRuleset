@@ -996,6 +996,17 @@
 			}
 		},
 		{
+			"name": "Test\\Start-Test",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Start-Test.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Test",
+				"order": 5
+			}
+		},
+		{
 			"name": "Test\\Test-MarkdownLink",
 			"type": "PowerShell",
 			"request": "launch",
@@ -1015,17 +1026,6 @@
 			"presentation": {
 				"group": "Ruleset.Test",
 				"order": 4
-			}
-		},
-		{
-			"name": "Test\\Test-UnitTest",
-			"type": "PowerShell",
-			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.Test\\Test-UnitTest.ps1",
-			"cwd": "${workspaceFolder}",
-			"presentation": {
-				"group": "Ruleset.Test",
-				"order": 5
 			}
 		},
 		//

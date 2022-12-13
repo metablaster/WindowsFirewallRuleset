@@ -788,23 +788,28 @@ extension to see more specific or smaller todo's, unless you have specific ideas
 
 ## This is too much
 
-You might find all there guidelines and rules described here too much to chew and that I could
-understand.
+You might find all these guidelines described here too much to chew and that I could understand.
 
 Please run `git log --reverse` search for commit hash and see for yourself how horrible my knowledge
-of PowerShell was and perhaps still is, I'm not system admin and my background is C++ not PowerShell
-(where guidelines are even more rigorous), this is in fact my first PowerShell project and all
-these rules and guidelines described here is what I learned on my own mistakes over time and by
-reading various guidelines and documentation on the internet and still learning new stuff.
+of PowerShell was and perhaps still is, when I started all I knew is how to open the console but
+not a single command was known to me, I'm not system admin and this is my first PowerShell project,
+all these guidelines described here is what I learned on my own mistakes over time and by reading
+various guidelines and documentation online, carefully updating this file with new knowledge and
+still learning new stuff.
 
-You might hate pascal case for ex. and a lot of coders don't like pascal case either and there is
-surely a bunch of thing to disagree with but that's the style used in this repository.
+You might hate pascal case for ex. and a lot of coders don't like it either and there is
+surely a bunch of things to disagree with but that's the style used in this repository.
 
 Knowing this I don't expect you follow all of this immediately but I expect you to be pedantic,
 explicit and to seek writing quality code.
 
+If you're PowerShell begginner like I was you're most welcome as long as you're interested in
+IT security and willing to read the docs online for anything you don't know.\
+Otherwise if you're expert that would be great because there is a lot to do and I could surely learn
+something from you because I don't consider myself to be expert.
+
 Of course suggestions regarding coding style and practices are welcome, I might consider changing
-my mind on some things.
+my mind.
 
 [Table of Contents](#table-of-contents)
 

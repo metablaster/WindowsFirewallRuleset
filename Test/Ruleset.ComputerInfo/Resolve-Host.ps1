@@ -92,6 +92,9 @@ Resolve-Host -Virtual
 Start-Test "localhost NETBIOS name"
 Resolve-Host -Domain ([System.Environment]::MachineName)
 
+Start-Test "localhost NETBIOS name IPv4"
+Resolve-Host -Domain ([System.Environment]::MachineName) -AddressFamily IPv4
+
 Start-Test "localhost"
 Resolve-Host -Domain localhost
 
@@ -102,16 +105,13 @@ Start-Test "IPv4 microsoft.com"
 Resolve-Host -AddressFamily IPv4 -Domain "microsoft.com"
 
 Start-Test "GoogleIP"
-$Result = Resolve-Host -IPAddress $GoogleIP
-$Result
-
-Test-Output $Result -Command Resolve-Host
+Resolve-Host -IPAddress $GoogleIP
 
 Start-Test "microsoft.com FlushDNS"
 $Result = Resolve-Host -FlushDNS -Domain "microsoft.com"
 $Result
 
-Test-Output $Result -Command Resolve-Host
+Test-Output $Result -Command Resolve-Host -Force
 
 Start-Test "GoogleIP FlushDNS"
 Resolve-Host -FlushDNS -IPAddress $GoogleIP

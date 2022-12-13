@@ -92,6 +92,22 @@ function global:Test-Multiple
 	return $null
 }
 
+<#
+.SYNOPSIS
+Test case for custom object
+#>
+function global:Test-CustomObject
+{
+	[OutputType("UnitTest.TestType")]
+	[CmdletBinding()]
+	param ()
+
+	[PSCustomObject] @{
+		Domain = [System.Environment]::MachineName
+		PSTypeName = "UnitTest.TestType"
+	}
+}
+
 Enter-Test "Get-TypeName"
 
 #
@@ -116,11 +132,11 @@ Get-TypeName (Test-NoReturn) -Accelerator
 #
 New-Section "Test command parameter"
 
-Start-Test "-Command" -Expected "int32"
+Start-Test "-Command" -Expected "System.Int32"
 Get-TypeName -Command Test-NoReturn
 
-Start-Test "-Command" -Expected "int32, System.String"
-Get-TypeName -Command Test-Multiple
+Start-Test "-Command" -Expected "int32, string"
+Get-TypeName -Command Test-Multiple -Accelerator
 
 #
 # Test with Get-Process
@@ -131,7 +147,7 @@ Start-Test "-InputObject" -Expected "System.Diagnostics.Process"
 $Result = Get-TypeName (Get-Process)
 $Result
 
-Start-Test "-Command" -Expected "Get-Process"
+Start-Test "-Command" -Expected "Get-Process OutputType attributes"
 Get-TypeName -Command Get-Process
 
 #
@@ -145,11 +161,14 @@ Get-TypeName -Name [switch]
 Start-Test "-Name -Accelerator" -Expected "switch"
 Get-TypeName -Name [System.Management.Automation.SwitchParameter] -Accelerator
 
-Start-Test "-Name" -Expected "FAIL"
-Get-TypeName -Name [string]
+Start-Test "-Name" -Expected "System.String"
+Get-TypeName -Name string
 
-Start-Test "-Name -Accelerator" -Expected "FAIL"
-Get-TypeName -Name [string] -Accelerator
+Start-Test "-Name -Accelerator" -Expected "string"
+Get-TypeName -Name System.String -Accelerator
+
+Start-Test "-Name -Accelerator" -Expected "string"
+Get-TypeName -Name string -Accelerator
 
 #
 # Test default, pipeline
@@ -178,22 +197,41 @@ Write-Warning -Message "[$ThisScript] Test did not run to reduce output"
 # Get-Process | Get-TypeName -Verbose:$false -Debug:$false | Out-Null
 
 #
+# PSCustomObject
+#
+New-Section "Custom object"
+
+Start-Test "-Command" -Expected "UnitTest.TestType"
+Get-TypeName -Command Test-CustomObject -Force
+
+Start-Test "InputObject" -Expected "UnitTest.TestType"
+Test-CustomObject | Get-TypeName -Force
+
+Start-Test "InputObject -Accelerator" -Expected "UnitTest.TestType"
+Get-TypeName (Test-CustomObject) -Accelerator -Force
+
+Start-Test "Name" -Expected "FAIL"
+Get-TypeName -Name "UnitTest.TestType"
+
+#
 # Other common issues
 #
-Start-Test "null" -Expected "null"
-Get-TypeName
+New-Section "Random tests"
 
-Start-Test "false" -Expected "False"
+Start-Test "null" -Expected "void"
+Get-TypeName -Accelerator
+
+Start-Test "false" -Expected "System.Boolean"
 $FalseType = $false
 $FalseType | Get-TypeName
 
 # TODO: These tests fail, Get-TypeName not implementing these
-# Start-Test "Get-Service"
-# $ServiceController = Get-Service
-# Get-TypeName $ServiceController
+Start-Test "ServiceController" -Expected "FAIL"
+$ServiceController = Get-Service -Name Dhcp
+Get-TypeName $ServiceController
 
-# Start-Test "Get-Service"
-# Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
+Start-Test "CimInstance Win32_OperatingSystem" -Expected "FAIL"
+Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
 
 Test-Output $Result -Command Get-TypeName
 

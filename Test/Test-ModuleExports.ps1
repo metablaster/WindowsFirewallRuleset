@@ -28,7 +28,7 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test to test module export
+Unit test to test module exports
 
 .DESCRIPTION
 Unit test to test module export of all modules in repository

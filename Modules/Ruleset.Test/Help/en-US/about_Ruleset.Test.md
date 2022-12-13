@@ -38,16 +38,16 @@ Reset-TestDrive
 Remove all items from test drive
 
 ```powershell
+Restore-Test
+```
+
+Restore disabled error reporting, called only after Start-Test -Force
+
+```powershell
 Start-Test
 ```
 
-Start test case
-
-```powershell
-Stop-Test
-```
-
-Stop test case
+Starts test case which prints formatted header
 
 ```powershell
 Test-MarkdownLink

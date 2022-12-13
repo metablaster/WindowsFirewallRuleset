@@ -31,9 +31,8 @@ SOFTWARE.
 Start test case
 
 .DESCRIPTION
-Start-Test writes output to host to separate test cases.
-Formatted message block is shown in the console.
-This function must be called before single test case starts executing
+Start-Test writes formatted header block the console for separate test cases.
+This function should be called before single test case starts executing.
 
 .PARAMETER Message
 Message to format and print before test case begins.
@@ -44,8 +43,14 @@ Expected output of a test.
 This value is appended to Message.
 
 .PARAMETER Command
-The command which is to be tested.
+The command which is to be tested, it's inserted into message.
 This value overrides default Command parameter specified in Enter-Test.
+
+.PARAMETER Force
+Used to test, test cases expected to fail.
+When specified a global "TestEV" error variable is created and reused by Restore-Test,
+errors generated for test case are silenced and converted to informational message.
+However this works only for global functions, see example below for a workaround.
 
 .EXAMPLE
 PS> Start-Test "some test"
@@ -57,6 +62,15 @@ PS> Start-Test "some test" -Expected "output 123" -Command "Set-Something"
 
 Prints formatted header
 
+.EXAMPLE
+PS> Start-Test "some test" -Force
+PS> Function-WhichFails -ErrorVariable TestEV -EA SilentlyContinue
+PS> Restore-Test
+
+Error is converted to informational message with Restore-Test.
+Here TestEV is a global error variable made with -Force switch, -EA SilentlyContinue must
+be specified only for module functions.
+
 .INPUTS
 None. You cannot pipe objects to Start-Test
 
@@ -64,8 +78,8 @@ None. You cannot pipe objects to Start-Test
 [string]
 
 .NOTES
-TODO: switch for no new line, some tests will produce redundant new lines, ex. Format-Table in pipeline
-TODO: Doesn't work starting tests inside dynamic modules
+TODO: Switch for no new line, some tests will produce redundant new lines, ex. Format-Table on pipeline
+TODO: Doesn't work for starting tests inside dynamic modules
 TODO: Write-Information instead of Write-Output
 #>
 function Start-Test
@@ -82,15 +96,13 @@ function Start-Test
 		[string] $Expected,
 
 		[Parameter()]
-		[string] $Command
+		[string] $Command,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	# TODO: This regex won't cover everything
-	# "Start-Test -Param input"
-	# Let Stop-Test know test case name
-	Set-Variable -Name TestCase -Scope Script -Value ([regex]::Match($Message, "^\w+-\w+(?=\s)"))
 
 	if ($PSCmdlet.ShouldProcess("Start test case", $Message))
 	{
@@ -107,11 +119,15 @@ function Start-Test
 			$OutputString = "Testing: $Message"
 		}
 
+		# To let Restore-Test know test case name, remove "Testing: " portion
+		Set-Variable -Name TestCase -Scope Script -Value ($OutputString.Remove(0, 9))
+
 		if (![string]::IsNullOrEmpty($Expected))
 		{
-			$OutputString += " -> $Expected"
+			$OutputString += " -> Expected: $Expected"
 		}
 
+		# +4 is asterisk and space at each end of a message
 		$Asterisks = ("*" * ($OutputString.Length + 4))
 
 		# NOTE: Write-Host would mess up test case outputs
@@ -120,5 +136,27 @@ function Start-Test
 		Write-Output "* $OutputString *"
 		Write-Output $Asterisks
 		Write-Output ""
+
+		if ($Force)
+		{
+			if (Get-Variable -Name PreviousErrorPreference -Scope Script -ErrorAction Ignore)
+			{
+				# Hard error, any further testing is pointless since errors would be silent
+				Write-Error -Category InvalidOperation -TargetObject $script:PreviousErrorPreference `
+					-Message "You forgot to call Restore-Test on failure test case" -ErrorAction Stop
+			}
+
+			# To let Restore-Test know previous ErrorActionPreference and to convert error to info,
+			# also used by Exit-Test to check Restore-Test was called after Start-Test -Force
+			New-Variable -Name PreviousErrorPreference -Scope Script -Value $global:ErrorActionPreference
+
+			# HACK: Setting global ErrorActionPreference will not affect ErrorActionPreference in modules
+			# A workaround is -EA SilentlyContinue on function that fails
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Global ErrorAction is '$global:ErrorActionPreference'"
+			$global:ErrorActionPreference = "SilentlyContinue"
+
+			# Failure test case which produces errors should use this error variable
+			New-Variable -Name TestEV -Scope Global -Value $null
+		}
 	}
 }

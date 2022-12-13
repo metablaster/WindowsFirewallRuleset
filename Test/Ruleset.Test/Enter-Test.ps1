@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Enter-Test
+Unit test for Enter-Test and Exit-Test
 
 .DESCRIPTION
-Test correctness of Enter-Test function
+Test correctness of Enter-Test and Exit-Test functions
 
 .PARAMETER Force
 If specified, no prompt to run script is shown
@@ -65,30 +65,71 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Start-Test "Exported commands" -Command "Enter-Test"
+#
+# Default test with no parameters
+#
+Start-Test "default" -Command "Enter-Test"
+
+Enter-Test
+Exit-Test
+
+#
+# Test specifying -Command
+#
+Start-Test "-Command" -Command "Enter-Test"
+
+Enter-Test -Command "Some-Command"
+Exit-Test
+
+#
+# Test exporting private module functions with dynamic module
+#
+Start-Test "-Private" -Command "Enter-Test"
+
 $Result = Enter-Test -Private
 $Result
-Write-Information -Tags "Test" -MessageData "INFO: DynamicModule exported commands"
-Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedCommands
+Write-Information -Tags "Test" -MessageData "INFO: DynamicModule exported commands:"
+Get-Module -Name Dynamic.UnitTest | Select-Object -ExpandProperty ExportedCommands | Format-Table
+Exit-Test -Private
 
+#
+# Test specifying -Command and -Private
+#
+Start-Test "-Command -Private" -Command "Enter-Test"
+
+Enter-Test -Command "Some-Command" -Private
+Exit-Test -Private
+
+#
+# Test forgetting specifying -Private
+#
+Start-Test "Forgot -Private" -Command "Enter-Test" -Expected "Error converted to information" -Force
+
+Enter-Test -Private
+Exit-Test -ErrorVariable TestEV -EA SilentlyContinue
+Restore-Test
+# Remove it manually so that subsequent tests don't fail
+Remove-Module -Name Dynamic.UnitTest
+
+#
+# Test forgetting running Exit-Test
+#
+Start-Test "Forgot Exit-Test" -Command "Enter-Test" -Expected "Warning message"
+
+Enter-Test -InformationAction Ignore
+Enter-Test
+# Running Exit-Test will get rid of a warning
 Exit-Test
-Stop-Test
 
-Start-Test "-Private -Pester" -Command "Enter-Test"
-Enter-Test -Private -Pester
-Exit-Test -Pester
-Stop-Test
+#
+# Test running Exit-Test without Enter-Test
+#
+Start-Test "Forgot Enter-Test" -Command "Enter-Test" -Expected "Error converted to information" -Force
 
-Start-Test "-Pester FAIL" -Command "Enter-Test"
-try
-{
-	Enter-Test -Pester
-	Exit-Test -Pester
-	Stop-Test
-}
-catch
-{
-	Write-Information -Tags "Test" -MessageData "INFO: Test case failure success"
-}
+Exit-Test -ErrorVariable TestEV -EA SilentlyContinue
+Restore-Test
 
+#
+# Test output type and attribute
+#
 Test-Output $Result -Command Enter-Test

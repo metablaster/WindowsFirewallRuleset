@@ -57,6 +57,9 @@
 *.ini		text eol=crlf whitespace=trailing-space,space-before-tab,tab-in-indent,tabwidth=4
 *.txt		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
 *.dic		text eol=crlf whitespace=trailing-space,space-before-tab,tab-in-indent,tabwidth=4
+# Test data
+*.test		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
+*.ansi		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
 # Configuration files
 *.wpaPresets	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=2
 *.wpaProfile	text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=2

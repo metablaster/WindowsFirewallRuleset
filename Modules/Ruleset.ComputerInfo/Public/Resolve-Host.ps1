@@ -80,7 +80,7 @@ function Resolve-Host
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Physical", SupportsShouldProcess = $true,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Resolve-Host.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.HostInfo")]
 	param (
 		[Parameter(ParameterSetName = "Host", Mandatory = $true,
 			HelpMessage = "Enter host name which is to be resolved",

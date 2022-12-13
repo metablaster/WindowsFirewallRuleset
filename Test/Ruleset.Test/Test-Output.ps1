@@ -68,10 +68,9 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 # Command should be ignored by Test-Output
 Enter-Test -Command Test-Output
 
-Start-Test "Test-Path"
+Start-Test "-Command Test-Path"
 $NETObject = Test-Path $env:SystemDrive
-$Result = Test-Output $NETObject -Command Test-Path
-$Result
+Test-Output $NETObject -Command Test-Path
 
 Start-Test "Test-Path pipeline"
 Test-Path $env:SystemDrive | Test-Output -Command Test-Path
@@ -80,26 +79,32 @@ $TempError = $null
 
 # TODO: Unsure why error is shown from Get-TypeName if Ignore is specified
 # TODO: Ignore won't work with Windows PowerShell
-Start-Test "Test-Output FAIL"
-$ServiceController = Get-Service
-Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError
+Start-Test "Test-Output" -Expected "FAIL"
+$ServiceController = Get-Service -Name Dhcp
+Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError -Force
 Write-Warning -Message "[$ThisScript] Error ignored: $TempError"
 
 <#
 .DESCRIPTION
 Null function
 #>
-function global:Test-NullFunction {}
+function global:Test-NullFunction
+{
+	[OutputType([void])]
+	param()
+
+	return $null
+}
 
 Start-Test "Test-Output NULL"
-$NullVariable = $null
-Test-Output $NullVariable -Command Test-NullFunction -ErrorAction SilentlyContinue -EV TempError
-Write-Warning -Message "[$ThisScript] Error ignored: $TempError"
-
-Test-Output $Result -Command Test-Output
+Test-Output (Test-NullFunction) -Command Test-NullFunction
 
 Start-Test "Array to pipeline"
 Get-ChildItem | Test-Output -Command Get-ChildItem
+
+Start-Test "Test-Output self-test"
+$Result = Test-Output $NETObject -Command Test-Path -InformationAction Ignore
+Test-Output $Result -Command Test-Output
 
 Update-Log
 Exit-Test

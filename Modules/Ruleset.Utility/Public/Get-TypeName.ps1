@@ -28,18 +28,20 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Get .NET outputs of a commandlet or convert to/from type accelerator
+Get commandlet output typename, OutputType attribute or convert to/from type accelerator
 
 .DESCRIPTION
-Returns .NET output typename of a function or commandlet.
-When piped, object's output typenames are handled per input.
-In both cases input can be translated to/from type accelerator.
-The function fails if output type is not .NET type
+Get-TypeName is a multipurpose type name getter, behavior of the function depends on
+parameter set being used.
+It can get type name of an object, OutputType attribute of a function or it could
+convert type name to accelerator and vice versa (accelerator to full name).
+By default the function works only for .NET types but you can force it handle user
+defined PSCustomObject's
 
 .PARAMETER InputObject
 Target object for which to retrieve output typenames.
 This is the actual output of some commandlet or function when passed to Get-TypeName,
-either via pipeline or directly.
+either via pipeline or trough parameter.
 
 .PARAMETER Command
 Commandlet or function name for which to retrieve OutputType attribute value
@@ -49,12 +51,17 @@ The command name can be specified either as "FUNCTIONNAME" or just FUNCTIONNAME
 Translate full type name to accelerator or accelerator to full typename.
 By default converts acceleartors to full typenames.
 No conversion is done if resultant type already is of desired format.
-The name of a type can be specified either as a "typename" or [typename] syntax
+The name of a type can be specified either as a "typename" or [typename] syntax.
+Type specified must be .NET type.
 
 .PARAMETER Accelerator
 When used converts resultant full typename to accelerator.
 Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name.
 No conversion is done if resultant type already is of desired format.
+
+.PARAMETER Force
+If specified, the function doesn't check if type name is .NET type.
+This is useful only for PSCustomObject types defined with PSTypeName.
 
 .EXAMPLE
 PS> Get-TypeName (Get-Process)
@@ -92,8 +99,8 @@ Sends typename for each input object down the pipeline
 .NOTES
 There may be multiple accelerators for same type, for example:
 Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator
-It's possible to rework function to get the exact type if this is desired see being block
-TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData
+It's possible to rework function to get the exact type if this is desired see begin block
+TODO: Will not work to detect .NET types for formatted output, see Get-FormatData
 TODO: Will not work for non .NET types because we have no use of it, but should be implemented,
 see Get-TypeName unit test
 #>
@@ -113,7 +120,11 @@ function Get-TypeName
 		[string] $Name,
 
 		[Parameter()]
-		[switch] $Accelerator
+		[switch] $Accelerator,
+
+		[Parameter(ParameterSetName = "Object")]
+		[Parameter(ParameterSetName = "Command")]
+		[switch] $Force
 	)
 
 	begin
@@ -133,37 +144,22 @@ function Get-TypeName
 			$Result = $TypeName -as [type]
 			if (!$Result)
 			{
-				if ($PSVersionTable.PSEdition -eq "Core")
-				{
-					if (([version] $PSVersionTable.PSVersion) -ge "7.1")
-					{
-						# NOTE: $Assembly.GetTypes() not compatible
-						Write-Warning -Message "[$InvocationName & CheckType] Operation is not supported on PowerShell Core 7.1+"
-						return
-					}
-				}
-
-				Write-Verbose -Message "[$InvocationName & CheckType] Searching assemblies for type: $TypeName"
+				Write-Verbose -Message "[$InvocationName] Searching assemblies for type: $TypeName"
 				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{
-					$AssemblyTypes = $Assembly.GetTypes() | Where-Object {
+					$Assembly.GetTypes() | Where-Object {
 						($_.Name -eq $TypeName) -or
 						($_.FullName -eq $TypeName) -or
 						($_.FullName -like "*.$TypeName")
-					}
-
-					if ($AssemblyTypes)
-					{
-						$AssemblyTypes | ForEach-Object {
-							Write-Verbose -Message "[$InvocationName & CheckType] Found type $($_.FullName) in assembly: $($Assembly.Location)"
-							$_
-						} | Write-Output
+					} | ForEach-Object {
+						Write-Verbose -Message "[$InvocationName] Found type $($_.FullName) in assembly: $($Assembly.Location)"
+						$_
 					}
 				}
 
 				if (!$Result)
 				{
-					Write-Debug -Message "[$InvocationName & CheckType)] Searching assemblies for .NET type failed"
+					Write-Debug -Message "[$InvocationName)] Searching assemblies for .NET type failed"
 					return
 				}
 			}
@@ -175,71 +171,85 @@ function Get-TypeName
 	{
 		[string] $TypeName = $null
 
-		# NOTE: if ($InputObject) would not handle boolean objects set to false, resulting in Void type
-		if ($null -ne $InputObject)
+		if ($PSCmdlet.ParameterSetName -eq "Object")
 		{
-			# TODO: Could this fail somehow? if yes we need try/catch
-			$TypeName = ($InputObject | Get-Member).TypeName | Select-Object -Unique
-
-			if ($TypeName)
+			if ($null -eq $InputObject)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processed input object: $TypeName"
-
-				if (& $CheckType $TypeName)
-				{
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Input object '$TypeName' is .NET type"
-				}
-				else
-				{
-					Write-Error -Category InvalidType -TargetObject $TypeName `
-						-Message "Input object '$TypeName' is not a .NET type"
-					return
-				}
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Input is null, typename implicitly set to: System.Void"
+				$TypeName = "System.Void"
 			}
 			else
 			{
-				Write-Error -Category InvalidResult -TargetObject $TypeName `
-					-Message "Input object '$InputObject' could not be resolved to type"
-				return
+				$TypeName = $InputObject | Get-Member | Select-Object -ExpandProperty TypeName | Select-Object -Unique
+
+				if ($TypeName)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processed input object: $TypeName"
+
+					if (!$Force)
+					{
+						if (& $CheckType $TypeName)
+						{
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Input object '$TypeName' is .NET type"
+						}
+						else
+						{
+							Write-Error -Category InvalidType -TargetObject $TypeName `
+								-Message "Input object '$TypeName' is not a .NET type"
+							return
+						}
+					}
+				}
+				else
+				{
+					Write-Error -Category InvalidResult -TargetObject $TypeName `
+						-Message "Input object '$InputObject' could not be resolved to type"
+					return
+				}
 			}
 		}
-		elseif ($Command)
+		elseif ($PSCmdlet.ParameterSetName -eq "Command")
 		{
 			# [System.Management.Automation.CmdletInfo]
 			if ($CmdletInfo = Get-Command -Name $Command -ErrorAction Ignore)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing command: $($CmdletInfo.Name)"
-				# NOTE: The value of the OutputType property of a FunctionInfo object is an array of
+				# NOTE: The value of the OutputType property of FunctionInfo object is an array of
 				# [System.Management.Automation.PSTypeName] objects, each of which have Name and Type properties.
-				# NOTE: PSTypeName represents Type, but can be used where a real type might not be available,
+				# PSTypeName represents Type, but can be used where a real type might not be available,
 				# in which case the name of the type can be used.
-				$OutputType = ($CmdletInfo).OutputType
-
-				if ($OutputType)
+				if ($CmdletInfo.OutputType)
 				{
 					[string[]] $TypeName = $null
-					[string[]] $CommandOutputs = $OutputType.Name
+					[string[]] $CommandOutputs = $CmdletInfo.OutputType.Name
 
-					# Exclude non .NET types from OutputType
-					foreach ($Type in $CommandOutputs)
+					if ($Force)
 					{
-						if (& $CheckType $Type)
-						{
-							$TypeName += $Type
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] The command '$Command' produces '$Type' which is .NET type"
-						}
-						else
-						{
-							# Skip non .NET types, continue
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename: '$Type' was excluded, not a .NET type"
-						}
+						$TypeName = $CommandOutputs
 					}
-
-					if (!$TypeName -or ($TypeName.Length -eq 0))
+					else
 					{
-						Write-Error -Category InvalidType -TargetObject $TypeName `
-							-Message "The command '$Command' does not produce any .NET types"
-						return
+						# Exclude non .NET types from OutputType
+						foreach ($Type in $CommandOutputs)
+						{
+							if (& $CheckType $Type)
+							{
+								$TypeName += $Type
+								Write-Debug -Message "[$($MyInvocation.InvocationName)] The command '$Command' produces '$Type' which is .NET type"
+							}
+							else
+							{
+								# Skip non .NET types, continue
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename: '$Type' was excluded, not a .NET type"
+							}
+						}
+
+						if (!$TypeName -or ($TypeName.Length -eq 0))
+						{
+							Write-Error -Category InvalidType -TargetObject $TypeName `
+								-Message "The command '$Command' does not produce any .NET types"
+							return
+						}
 					}
 				}
 				else # No OutputType defined
@@ -247,7 +257,7 @@ function Get-TypeName
 					# NOTE: The value of the OutputType property can be null.
 					# It's a null value when the output is a not a .NET type,
 					# such as a WMI object or a formatted view of an object.
-					# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_outputtypeattribute?view=powershell-7
+					# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_outputtypeattribute
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] The command: '$Command' does not have [OutputType()] attribute defined"
 					return
 				}
@@ -259,7 +269,7 @@ function Get-TypeName
 				return
 			}
 		}
-		elseif ($Name)
+		elseif ($PSCmdlet.ParameterSetName -eq "Name")
 		{
 			$TypeName = $Name.Trim("[", "]")
 
@@ -277,13 +287,11 @@ function Get-TypeName
 		}
 		else
 		{
-			# TODO: Should not be allowed, but otherwise we won't be able to capture null/void type
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Input is null, typename implicitly set to: System.Void"
-			$TypeName = "System.Void"
+			throw "Parameter set not handled"
 		}
 
-		# Let both the -Name and -Accelerator in
-		if ($Accelerator -or $Name)
+		# Let both the -Accelerator and -Name without -Accelerator in
+		if ($Accelerator -or $PSCmdlet.ParameterSetName -eq "Name")
 		{
 			# NOTE: This simplified solution isn't good because default accelerators are CamelCase
 			# And if we omit ToLower() then we get first letter capital
@@ -294,14 +302,14 @@ function Get-TypeName
 			$ShortName = $KeyValue | Select-Object -ExpandProperty Key
 			$FullName = ($KeyValue | Select-Object -ExpandProperty Value).FullName
 
-			# NOTE: Find duplicates to report possible issues
+			# Find duplicates to report possible issues
 			$RefObject = $KeyValue | Select-Object -ExpandProperty Value -Unique
 			$DiffObject = $KeyValue | Select-Object -ExpandProperty Value
 			$Comparison = Compare-Object -ReferenceObject $RefObject -DifferenceObject $DiffObject
 			$Duplicates = ($Comparison | Select-Object -ExpandProperty InputObject).FullName
 
 			# -Name purpose is to convert in both cases
-			if (!$Accelerator -and $Name)
+			if (!$Accelerator -and $PSCmdlet.ParameterSetName -eq "Name")
 			{
 				# For -Name convert from accelerator to full name
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting accelerator to full name for: $TypeName"
@@ -324,7 +332,7 @@ function Get-TypeName
 				# There is nothing else to do for -Name
 				# return $TypeName
 			}
-			elseif ($Command)
+			elseif ($PSCmdlet.ParameterSetName -eq "Command")
 			{
 				# For -Command convert all .NET command OutputTypes from full name to accelerator
 				[string[]] $CommandOutputs = $TypeName
@@ -353,8 +361,7 @@ function Get-TypeName
 			}
 			else
 			{
-				# Convert from full name to accelerator for:
-				# -InputObject, -Name and System.Void
+				# Convert from full name to accelerator for -InputObject, -Name and System.Void
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting typename to accelerator for: $TypeName"
 				if ($TargetValue = [array]::Find($FullName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{

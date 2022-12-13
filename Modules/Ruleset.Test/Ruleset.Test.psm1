@@ -58,8 +58,8 @@ $PublicScripts = @(
 	"Exit-Test"
 	"New-Section"
 	"Reset-TestDrive"
+	"Restore-Test"
 	"Start-Test"
-	"Stop-Test"
 	"Test-MarkdownLink"
 	"Test-Output"
 )

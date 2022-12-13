@@ -79,43 +79,23 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote CimSession"
 	Get-SystemSKU -CimSession $CimServer
 
-	# Start-Test "Remote computer"
-	# Get-SystemSKU -Domain $Domain
+	Start-Test "Remote computer"
+	Get-SystemSKU -Domain $Domain
 }
 else
 {
 	Start-Test "default"
-	Get-SystemSKU
+	Get-SystemSKU -CimSession $CimServer
 
 	Start-Test "-SKU 4"
 	$Result = Get-SystemSKU -SKU 48
 	$Result
 
-	try
-	{
-		Start-Test "34 | Get-SystemSKU"
-		34 | Get-SystemSKU -EA Stop
-	}
-	catch
-	{
-		Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
-	}
-
-	Start-Test 'multiple computers | Get-SystemSKU FAILURE TEST'
+	Start-Test "Pipeline" -Command Get-SystemSKU
 	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
 
 	Start-Test "-Domain multiple computers"
-	Get-SystemSKU -Domain @($([System.Environment]::MachineName), "INVALID_COMPUTER") -ErrorAction SilentlyContinue
-
-	try
-	{
-		Start-Test "-SKU 4 -Domain $([System.Environment]::MachineName)"
-		Get-SystemSKU -SKU 4 -Domain $([System.Environment]::MachineName) -ErrorAction Stop
-	}
-	catch
-	{
-		Write-Information -Tags "Test" -MessageData "INFO: Failure test: $($_.Exception.Message)"
-	}
+	Get-SystemSKU -Domain $([System.Environment]::MachineName)
 
 	Test-Output $Result -Command Get-SystemSKU
 }

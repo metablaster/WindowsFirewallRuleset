@@ -1,11 +1,11 @@
 ---
 external help file: Ruleset.Test-help.xml
 Module Name: Ruleset.Test
-online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Stop-Test.md
+online version: https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Restore-Test.md
 schema: 2.0.0
 ---
 
-# Stop-Test
+# Restore-Test
 
 ## SYNOPSIS
 
@@ -14,12 +14,12 @@ Stop test case
 ## SYNTAX
 
 ```powershell
-Stop-Test [-WhatIf] [-Confirm] [<CommonParameters>]
+Restore-Test [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Stop-Test writes output to console after test case is done
+Restore-Test writes output to console after test case is done
 This function must be called after single test case is done executing
 
 ## EXAMPLES
@@ -27,7 +27,7 @@ This function must be called after single test case is done executing
 ### EXAMPLE 1
 
 ```powershell
-Stop-Test
+Restore-Test
 ```
 
 ## PARAMETERS
@@ -71,11 +71,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Stop-Test
+### None. You cannot pipe objects to Restore-Test
 
 ## OUTPUTS
 
-### None. Stop-Test does not generate any output
+### None. Restore-Test does not generate any output
 
 ## NOTES
 

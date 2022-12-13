@@ -370,33 +370,26 @@ It is suggested to have three different emails as follows:
 It's also important that these email accounts aren't registed at same email provider, some providers
 care more about your privacy than others, for your real life use the best one.
 
-You should also take care of in which country are email provider HQ's located, for example swiss
+You should also take care of, in which country are email provider HQ's located, for example swiss
 privacy laws are strict and more protective than those in the EU or the US, therefore choose a
 provider from switzerland as your primary email.\
 For more information see [Data protection in Switzerland][swiss law] and also
 [New Federal Act on Data Protection (nFADP)][swiss new law]
 
 If you have to choose between a provider in the EU and the US, choose the one in EU, for more
-infomation see `Additional Research` section below.
+infomation see [Additional Research](#additional-research) section below.
 
-Second common privacy mistake some people do (including me) is having same online profile on
-multiple sites, for example same username, avatar or bio on multiple forums and similar sites.
+Second common privacy mistake some people do is having same online profile on multiple sites,
+for example same username, avatar or bio on multiple forums and similar sites.
 
-One reason why people do this is because they build up on their reputation and good online conduct.
-
-But regardless of your reasons I it's not good for privacy because you run the risk of being
-stalked and also if your identity is somehow revealed you'll be revealed in all places where you
-use same username or avatar and then people who are in fact not stalkers may become one, most likely
-someone who knows you in real life.
+There are several reasons why this is normal, but regardless of your reasons I it's not good for
+privacy because you run the risk of being stalked and also if your identity is somehow revealed
+you'll be revealed in all places where you use same username or avatar and then people who are in
+fact not stalkers may become one, most likely someone who knows you in real life.
 
 Third privacy mistake is using your real name or family name or a portion of it in username,
 someone from your real life could easily connect the dots between your username and your online
 behavior and then the risk is same as with reuse of avatars and usernames mentioned before.
-
-To guard your online privacy you should have separate email accounts and your online usernames and
-avatars should be unique for each site and you should never use any personally identifiable
-information even if just partial for anything except for what's absolutely required by the law,
-for ex. you can't give fake name to your lawyer or to paypal service.
 
 [Table of Contents](#table-of-contents)
 

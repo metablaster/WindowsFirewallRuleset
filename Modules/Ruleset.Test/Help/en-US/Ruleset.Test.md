@@ -30,13 +30,13 @@ Print new unit test section
 
 Remove all items from test drive
 
+### [Restore-Test](Restore-Test.md)
+
+Restore disabled error reporting, called only after Start-Test -Force
+
 ### [Start-Test](Start-Test.md)
 
-Start test case
-
-### [Stop-Test](Stop-Test.md)
-
-Stop test case
+Starts test case which prints formatted header
 
 ### [Test-MarkdownLink](Test-MarkdownLink.md)
 
