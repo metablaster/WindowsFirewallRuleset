@@ -96,7 +96,7 @@ function Update-Log
 		$Header = "Script generated "
 	}
 
-	if ($PSCmdlet.ShouldProcess("Log files", "write to log files"))
+	if ($PSCmdlet.ShouldProcess($Path, "write to log files"))
 	{
 		if ($ErrorBuffer)
 		{

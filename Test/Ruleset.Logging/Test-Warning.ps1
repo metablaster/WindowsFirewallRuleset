@@ -155,22 +155,28 @@ function Test-Empty
 Enter-Test
 
 # NOTE: we test generating logs not what is shown in the console
-# disabling this for "RunAllTests"
+# disabling this for "Invoke-AllTests"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $InformationPreference = "SilentlyContinue"
 
+# Clear test logs
+Get-ChildItem -Path "$LogsFolder\Test\*_$(Get-Date -Format "dd.MM.yy").log" | Remove-Item
+
+Start-Test '$PSDefaultParameterValues in script'
+$PSDefaultParameterValues
+
 Start-Test "No warnings"
-Get-ChildItem -Path "C:\" | Out-Null
+Get-ChildItem -Path $env:SystemDrive | Out-Null
+
+Start-Test "Update-Log no warnings"
+Update-Log
 
 Start-Test "Test-Warning"
 Test-Warning
 
-Start-Test "Update-Log first"
+Start-Test "Update-Log second time"
 Update-Log
-
-Start-Test "Test-Warning other actions"
-Test-Warning -InformationAction Ignore -ErrorAction "Continue"
 
 Start-Test "Test-Pipeline"
 Test-Empty | Test-Pipeline
@@ -191,20 +197,32 @@ New-Module -Name Dynamic.TestWarning -ScriptBlock {
 	$InformationPreference = "SilentlyContinue"
 
 	# TODO: Start-Test cant be used here, see todo in Ruleset.Test module
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Dynamic.TestWarning:" -InformationAction "Continue"
-	$PSDefaultParameterValues
+	if ($null -eq $PSDefaultParameterValues)
+	{
+		Write-Information -Tags "Test" -MessageData "[Dynamic.TestWarning] PSDefaultParameterValues is null" -InformationAction "Continue"
+	}
+	else
+	{
+		Write-Information -Tags "Test" -MessageData "[Dynamic.TestWarning] `$PSDefaultParameterValues is '$($PSDefaultParameterValues | Out-String)'" -InformationAction "Continue"
+	}
 
 	<#
 	.SYNOPSIS
-	Test default parameter values and Warning loging inside module function
+	Test default parameter values and error loging inside module function
 	#>
 	function Test-DynamicFunction
 	{
 		[CmdletBinding()]
 		param ()
 
-		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
-		$PSDefaultParameterValues
+		if ($null -eq $PSDefaultParameterValues)
+		{
+			Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] PSDefaultParameterValues in is null" -InformationAction "Continue"
+		}
+		else
+		{
+			Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] `$PSDefaultParameterValues is '$($PSDefaultParameterValues | Out-String)'" -InformationAction "Continue"
+		}
 
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] warning in module"
 	}
@@ -214,6 +232,7 @@ New-Test "Test-DynamicFunction"
 Test-DynamicFunction
 Remove-Module -Name Dynamic.TestWarning
 
-Start-Test "Update-Log second"
+Start-Test "Update-Log last time"
 Update-Log
+
 Exit-Test

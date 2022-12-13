@@ -5,7 +5,6 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-TODO: Update Copyright date and author
 Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -72,7 +71,13 @@ Start-Test "Initialize-Log"
 $Result = Initialize-Log $LogsFolder\Test -LogName TestLog
 $Result
 
+Start-Test "Test-Path -Path '$Result'"
+Test-Path -Path $Result
+
+Start-Test "Header specification"
+Initialize-Log $LogsFolder\Test -LogName TestLog2 -Header "Test header"
+
 Test-Output $Result -Command Initialize-Log
 
 Update-Log
-Exit-Test
+Exit-Test -Private

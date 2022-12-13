@@ -112,6 +112,9 @@ function Test-Nested
 	[CmdletBinding()]
 	param ()
 
+	Start-Test '$PSDefaultParameterValues in Test-Nested'
+	$PSDefaultParameterValues
+
 	Write-Error -Category SyntaxError -Message "[$($MyInvocation.InvocationName)] Nested 1" -ErrorId 5
 	Write-Error -Category SyntaxError -Message "[$($MyInvocation.InvocationName)] Nested 2" -ErrorId 6
 }
@@ -159,32 +162,34 @@ function Test-Empty
 Enter-Test
 
 # NOTE: we test generating logs not what is shown in the console
-# disabling this for "RunAllTests"
+# disabling this for "Invoke-AllTests"
 $ErrorActionPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 $InformationPreference = "SilentlyContinue"
 
-Start-Test "No errors"
-Get-ChildItem -Path "C:\" | Out-Null
+# Clear test logs
+Get-ChildItem -Path "$LogsFolder\Test\*_$(Get-Date -Format "dd.MM.yy").log" | Remove-Item
 
 Start-Test '$PSDefaultParameterValues in script'
 $PSDefaultParameterValues
 
+Start-Test "No errors"
+Get-ChildItem -Path $env:SystemDrive | Out-Null
+
+Start-Test "Update-Log no errors"
+Update-Log
+
 Start-Test "Generate errors"
-$Folder = "C:\CrazyFolder"
-Get-ChildItem -Path $Folder
+Get-ChildItem -Path "$env:SystemDrive\CrazyFolder"
+
+Start-Test "Update-Log second time"
+Update-Log
 
 Start-Test "Test-Error"
 Test-Error
 
-Start-Test "Update-Log first"
-Update-Log
-
-Start-Test "Test-Error other actions"
-Test-Empty -InformationAction Ignore -WarningAction Stop
-
 Start-Test "Test-Pipeline"
-Get-ChildItem -Path $Folder | Test-Pipeline
+Test-Empty | Test-Pipeline
 
 Start-Test "Test-Parent"
 Test-Parent
@@ -202,8 +207,14 @@ New-Module -Name Dynamic.TestError -ScriptBlock {
 	$InformationPreference = "SilentlyContinue"
 
 	# TODO: Start-Test cant be used here, see todo in Ruleset.Test module
-	Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Dynamic.TestError:" -InformationAction "Continue"
-	$PSDefaultParameterValues
+	if ($null -eq $PSDefaultParameterValues)
+	{
+		Write-Information -Tags "Test" -MessageData "[Dynamic.TestError] PSDefaultParameterValues is null" -InformationAction "Continue"
+	}
+	else
+	{
+		Write-Information -Tags "Test" -MessageData "[Dynamic.TestError] `$PSDefaultParameterValues is '$($PSDefaultParameterValues | Out-String)'" -InformationAction "Continue"
+	}
 
 	<#
 	.SYNOPSIS
@@ -214,8 +225,14 @@ New-Module -Name Dynamic.TestError -ScriptBlock {
 		[CmdletBinding()]
 		param ()
 
-		Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] $PSDefaultParameterValues in Test-DynamicFunction:" -InformationAction "Continue"
-		$PSDefaultParameterValues
+		if ($null -eq $PSDefaultParameterValues)
+		{
+			Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] PSDefaultParameterValues in is null" -InformationAction "Continue"
+		}
+		else
+		{
+			Write-Information -Tags "Test" -MessageData "[$($MyInvocation.InvocationName)] `$PSDefaultParameterValues is '$($PSDefaultParameterValues | Out-String)'" -InformationAction "Continue"
+		}
 
 		Write-Error -Category NotSpecified -Message "[$($MyInvocation.InvocationName)] error in module" -ErrorId 10
 	}
@@ -225,6 +242,7 @@ New-Test "Test-DynamicFunction"
 Test-DynamicFunction
 Remove-Module -Name Dynamic.TestError
 
-Start-Test "Update-Log second"
+Start-Test "Update-Log last time"
 Update-Log
+
 Exit-Test

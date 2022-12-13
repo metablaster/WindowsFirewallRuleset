@@ -1,8 +1,8 @@
 
 # Security and privacy
 
-This document provides suggestions and best practices on how to have control over your online privacy\
-and how to maximize security of a personal computer.
+This document provides suggestions and best practices on how to take control over your online
+privacy and how to maximize security of a personal computer.
 
 ## Table of contents
 
@@ -102,6 +102,8 @@ UAC has several protections levels, it's recommended to set it to max, to config
 [Change User Access Control setting][uac settings]
 
 See also [How User Account Control works][uac]
+
+UAC isn't boolet proof though, you should probably be aware of [Privilege escalation][privilege escalation]
 
 ### Trusted and encrypted web sites
 
@@ -284,6 +286,8 @@ communicate over the internet.\
 By having someones IP a potential attacker can determine ones approximate geographical location as
 well as scan their IP for vulnerabilities which can help to gain access to victim's system.
 
+One method how this is done is by using software such as [nmap][nmap]
+
 VPN or proxy is used to hide your real IP from the endpoint to which you connect, such as a web
 server or game server.\
 If somehow you end up on malicious server an attacker behind such a server might scan your IP to see
@@ -295,7 +299,7 @@ location.
 
 However VPN or proxy is not recommended for all scenarios and in some cases it may be dangerous,
 for ex. connecting to your bank is better done directly because VPN or proxy server might as well be
-malicious or there could be a bad employ working at VPN server watching for traffic going over VPN.\
+malicious or there could be a bad employee working at VPN server watching for traffic going over VPN.\
 Another downsite to using VPN or proxy is that your internet connection will be slower.
 
 One example where VPN is perfectly useful however is to avoid censorship, for example some sites
@@ -309,10 +313,16 @@ allowing you to browse the internet anonymously.
 
 It's difficult to suggest VPN since VPN's aren't free and proxy services which you can find online
 aren't to be trusted.\
-Therefore suggested software for VPN or proxy that is free is [Psiphon][psiphon]
+Suggested software for VPN or proxy that is free is [Psiphon][psiphon]
 
 Psiphon is a standalone executable which doesn't require elevation, it's free, their company has
 servers world wide and you're able to choose from a set of countries in the UI.
+
+An alternative to `Psiphon` is [Tor Browser][tor browser] which is open source project, there are
+few pros and cons compared to psiphon, for ex. you might be unable to login to some sites from tor
+network and might be presented with "anti robot" captcha often times.\
+Also you should be aware of exit nodes, in short don't use tor for anything too personal, tor is
+best for anonymous browsing and to browse deep and dark web.
 
 [Table of Contents](#table-of-contents)
 
@@ -396,10 +406,10 @@ There are some privacy mistakes which we all did at least once.
   you'll be revealed in all places where you use same username or avatar and then people who are in
   fact not stalkers may become one, most likely someone who knows you in real life.
 
-- Third privacy mistake is using your real name or family name or a portion of it in username or your
-  real picture for avatar.\
-  Someone from your real life could easily connect the dots between your username and your behavior
-  and then the risk is same as with reuse of avatars and usernames mentioned before.
+- Third privacy mistake is using your real name or family name or a portion of it in username or
+  your real picture for avatar.\
+  Someone from your real life could easily connect the dots between your username and your online
+  behavior and then the risk is same as with reuse of avatars and usernames mentioned before.
 
   Stalking isn't the only issue though, it's about your feelings or having a sense of privacy, a
   potential stalker might share information about you elsewhere and that's one bad feeling to be
@@ -499,3 +509,6 @@ The following web sites are good starting point for additional research regardin
 [dead horse]: https://en.wikipedia.org/wiki/Flogging_a_dead_horse "What means beating a dead horse?"
 [swiss new law]: https://www.kmu.admin.ch/kmu/en/home/facts-and-trends/digitization/data-protection/new-federal-act-on-data-protection-nfadp.html "Visit The Swiss Federal Council"
 [swiss law]: https://www.kmu.admin.ch/kmu/en/home/facts-and-trends/digitization/data-protection.html "Visit The Swiss Federal Council"
+[tor browser]: https://www.torproject.org/download "Visit Tor Project"
+[privilege escalation]: https://en.wikipedia.org/wiki/Privilege_escalation "Visit wikipedia site"
+[nmap]: https://nmap.org "Visit nmap site"

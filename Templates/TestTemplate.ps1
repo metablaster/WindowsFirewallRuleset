@@ -84,7 +84,7 @@ Enter-Test "Test-Function"
 
 # TODO: Keep this check if this test is:
 # 1. Experimental or potentially dangerous
-# 2. It should not be executed by RunAllTests.ps1 by default
+# 2. It should not be executed by Invoke-AllTests.ps1 by default
 # 3. It takes too much time to complete
 [bool] $YesToAll = $false
 [bool] $NoToAll = $false

@@ -20,6 +20,7 @@ In addition, general questions and answers regarding this firewall.
   - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
   - [Network icon in taskbar says it's "No Network"](#network-icon-in-taskbar-says-its-no-network)
   - [PowerShell Core throws a black console window](#powershell-core-throws-a-black-console-window)
+  - [Duplicate log entries](#duplicate-log-entries)
 
 ## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
@@ -409,6 +410,15 @@ yet been resolved, you can track the issue here: [New-PSSession throws a black w
 
 [Table of Contents](#table-of-contents)
 
+## Duplicate log entries
+
+Duplicate log entries appear if a script is dotsourced, it should be called rather than dotsourced.\
+If scripts are run with PS debugger or with `Run -> Run Without Debugging` duplicate log entries will
+appear because script will get dotsourced.\
+See also this issue [Configuration option to debug or run a script without dot sourcing it][debugger suggestion]
+
+[Table of Contents](#table-of-contents)
+
 [name resolution issue]: https://www.infopackets.com/news/10369/how-fix-computer-name-wont-resolve-network-april-update "Visit external site"
 [netfirewallsetting]: https://docs.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallsetting "Visit Microsoft docs"
 [gpupdate]: https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpupdate "Visit Microsoft docs"
@@ -421,3 +431,4 @@ yet been resolved, you can track the issue here: [New-PSSession throws a black w
 [alpha]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha "What is alpha software? - Wikipedia"
 [pscredential]: https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.pscredential "What is PSCredential?"
 [ps core issue]: https://github.com/PowerShell/PowerShell/issues/16763 "Visit GitHub issue"
+[debugger suggestion]: https://github.com/PowerShell/vscode-powershell/issues/4327 "Visit GitHub issue"

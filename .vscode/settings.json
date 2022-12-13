@@ -127,6 +127,7 @@
 	"editor.trimAutoWhitespace": true,
 	"editor.wordWrap": "off",
 	// VSCode: explorer
+	"explorer.autoReveal": "focusNoScroll",
 	"explorer.confirmDelete": false,
 	"explorer.confirmDragAndDrop": false,
 	// VSCode: Workspace files
@@ -450,7 +451,7 @@
 	// Extension: PowerShell
 	// PowerShell: Code folding
 	"powershell.codeFolding.enable": true,
-	"powershell.codeFolding.showLastLine": true,
+	"powershell.codeFolding.showLastLine": false,
 	// PowerShell: Code formatting
 	// PSAlignAssignmentStatement
 	"powershell.codeFormatting.alignPropertyValuePairs": false,

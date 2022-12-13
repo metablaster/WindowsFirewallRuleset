@@ -234,7 +234,7 @@ else
 		# To control confirmation level set to:
 		# None, never prompt
 		# Low, prompt for low, medium and high impact actions
-		# Medium, prompt for medium and hight impact actions
+		# Medium, prompt for medium and high impact actions
 		# High, prompt for high impact actions only
 		$ConfirmPreference = "High"
 	}
@@ -538,26 +538,28 @@ if (!$InModule)
 
 	# NOTE: Not using these parameters inside modules because they will be passed to module functions
 	# by top level advanced function in call stack which will pick up all Write-* streams in module functions
-	# NOTE: For functions outside module for same reason we need to declare PSDefaultParameterValues
-	# as private which will prevent propagating default parameters to functions in child scopes,
-	# In short, advanced functions in child scopes and modules will receive these parameters by parent
-	# function, this is needed to avoid duplicate log entries.
+	# NOTE: For functions outside module we need to declare PSDefaultParameterValues as private
+	# which will hide visibility of PSDefaultParameterValues to functions in child scopes.
+	# Advanced functions in child scopes and modules will receive these parameters by the caller,
+	# this is needed to avoid duplicate log entries.
+	# ISSUE: This hackery won't work for with PS extension because scripts aren't meant to be dotsourced
+	# see: https://github.com/PowerShell/vscode-powershell/issues/4327
 	# TODO: Could this override anything?
 	$private:PSDefaultParameterValues = @{}
 
 	if ($ErrorLogging)
 	{
-		$private:PSDefaultParameterValues["*:ErrorVariable"] = "+ErrorBuffer"
+		$private:PSDefaultParameterValues.Add("*:ErrorVariable", "+ErrorBuffer")
 	}
 
 	if ($WarningLogging)
 	{
-		$private:PSDefaultParameterValues["*:WarningVariable"] = "+WarningBuffer"
+		$private:PSDefaultParameterValues.Add("*:WarningVariable", "+WarningBuffer")
 	}
 
 	if ($InformationLogging)
 	{
-		$private:PSDefaultParameterValues["*:InformationVariable"] = "+InfoBuffer"
+		$private:PSDefaultParameterValues.Add("*:InformationVariable", "+InfoBuffer")
 	}
 }
 #endregion

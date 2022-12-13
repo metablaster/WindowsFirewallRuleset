@@ -69,22 +69,42 @@
 			"path": ".vscode/settings.json",
 			"bookmarks": [
 				{
-					"line": 501,
+					"line": 502,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 553,
+					"line": 554,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 585,
+					"line": 586,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 848,
+					"line": 849,
+					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Config/ProjectSettings.ps1",
+			"bookmarks": [
+				{
+					"line": 191,
+					"column": 1,
+					"label": ""
+				},
+				{
+					"line": 221,
+					"column": 2,
+					"label": ""
+				},
+				{
+					"line": 547,
 					"column": 1,
 					"label": ""
 				}

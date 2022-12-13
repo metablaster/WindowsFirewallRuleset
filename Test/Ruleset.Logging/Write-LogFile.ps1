@@ -78,7 +78,7 @@ Start-Test "Write log 2nd header"
 $HeaderStack.Push("Test case header 2")
 Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3" -Path $LogsFolder\Test
 
-Start-Test "Write log -Raw to other log"
+Start-Test "Write log -Raw"
 $HeaderStack.Push("Raw message")
 Write-LogFile -Tags "Test" -Message "Raw message" -LogName "TestLog3" -Path $LogsFolder\Test -Raw
 $HeaderStack.Pop() | Out-Null
@@ -86,15 +86,15 @@ $HeaderStack.Pop() | Out-Null
 Start-Test "Write log 2nd header after raw"
 Write-LogFile -Tags "Test" -Message "Test header 2" -LogName "TestLog3" -Path $LogsFolder\Test
 
-Start-Test "Write log previous header"
+Start-Test "Write log previous header" -Expected "Test case header 1"
 $HeaderStack.Pop() | Out-Null
 Write-LogFile -Tags "Test" -Message "Test previous header" -LogName "TestLog4" -Path $LogsFolder\Test
 
-Start-Test "Write log initial header"
+Start-Test "Write log initial header" -Expected "Default header"
 $HeaderStack.Pop() | Out-Null
 Write-LogFile -Tags "Test" -Message "Test initial header" -LogName "TestLog5" -Path $LogsFolder\Test
 
-Start-Test "Write log -Raw"
+Start-Test "Write log -Raw" -Expected "(overridden)"
 $HeaderStack.Push("Raw message")
 Write-LogFile -Tags "Test" -Message "Raw message" -LogName "TestLog6" -Path $LogsFolder\Test -Raw
 
@@ -111,7 +111,7 @@ Start-Test "Multiple log records"
 $HeaderStack.Push("Test case multiple messages")
 Write-LogFile -Tags "Test" -Message "message 1", "message 2", "message 3" -LogName "TestLog7" -Path $LogsFolder\Test
 
-Start-Test "Multiple raw log records"
+Start-Test "Multiple raw log messages"
 $HeaderStack.Push("Test case multiple messages")
 Write-LogFile -Tags "Test" -Message "message 1", "message 2", "message 3" -LogName "TestLog7" -Path $LogsFolder\Test -Raw
 $HeaderStack.Pop() | Out-Null

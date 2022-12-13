@@ -141,13 +141,13 @@ Todo's in this file are categorized into the following sections:
 4. Test and debugging
 
     - Use try/catch or something similar in test scripts to avoid writing errors and write
-    information instead, so that `Run-AllTests.ps1` gets clean output, see `Get-SystemSKU` test
+    information instead, so that `Invoke-AllTests.ps1` gets clean output, see `Get-SystemSKU` test
     - Program search test cases should test for either always installed program or certain failure
     - Unit test should have `TestData` which can be used to test pipeline support or to reduce the
     size of unit tests, another benefit is that tests will be easier to update to work on updated data.
     - Some test case outputs will be messed up, ex. some output might be shown prematurely,
     while other won't be shown until 3-4 more test cases run.
-    For an example, see `Get-UserGroup` test or `RunAllTests.ps1`
+    For an example, see `Get-UserGroup` test or `Invoke-AllTests.ps1`
     - A special unit tests should exist to test pipeline of module functions and scripts if applicable.
 
 5. Code style and design
