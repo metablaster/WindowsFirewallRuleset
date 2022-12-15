@@ -806,10 +806,9 @@ explicit and to seek writing quality code.
 If you're PowerShell begginner like I was you're most welcome as long as you're interested in
 IT security and willing to read the docs online for anything you don't know.\
 Otherwise if you're expert that would be great because there is a lot to do and I could surely learn
-something from you because I don't consider myself to be expert.
+something from you.
 
-Of course suggestions regarding coding style and practices are welcome, I might consider changing
-my mind.
+Suggestions regarding coding style and practices are welcome, I might consider changing my mind.
 
 [Table of Contents](#table-of-contents)
 

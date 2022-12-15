@@ -73,7 +73,8 @@ Enter-Test "Get-FileEncoding"
 # Start-Test "932"
 # Get-FileEncoding $PSScriptRoot\Encoding\utf8.txt -Encoding 932
 
-$TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.txt"
+$TestFiles = Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.test"
+$TestFiles += Get-ChildItem -Path "$PSScriptRoot\Encoding\*" -Filter "*.ansi"
 $TestFiles += "$env:SystemRoot\regedit.exe"
 
 foreach ($File in $TestFiles)

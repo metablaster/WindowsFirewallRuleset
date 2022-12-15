@@ -5,7 +5,7 @@ Additional hints and notices that may shade some light to troubleshoot home netw
 
 Before you follow hints here keep in mind there is a known workaround to make home group work with
 this firewall project here:\
-[Discovery and file and printer sharing issue](ProblematicTraffic.md#case-10-discovery-and-file-and-printer-sharing-issue-on-home-networks-workgroup)
+[Discovery and file and printer sharing issue](../ProblematicTraffic.md#case-10-discovery-and-file-and-printer-sharing-issue-on-home-networks-workgroup)
 
 ## NTLM and WINS
 

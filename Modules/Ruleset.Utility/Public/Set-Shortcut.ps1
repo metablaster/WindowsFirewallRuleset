@@ -60,7 +60,7 @@ Alternatively one of the following keywords can be specified:
 "Templates"
 
 .PARAMETER TargetPath
-The full path and filename of the location that the shortcut file will open.
+The full path and filename of a location that the shortcut file will open.
 
 .PARAMETER URL
 URL of the location that the shortcut file will open.
@@ -149,7 +149,7 @@ function Set-Shortcut
 
 		[Parameter(ParameterSetName = "Local")]
 		[ValidatePattern('^[a-z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>.|\r\n]*$')]
-		[System.IO.FileInfo] $WorkingDirectory,
+		[System.IO.DirectoryInfo] $WorkingDirectory,
 
 		[Parameter(ParameterSetName = "Local")]
 		[Alias("ArgumentList")]
@@ -161,10 +161,10 @@ function Set-Shortcut
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($URL) { $Target = $URL.Authority }
+	if ($PSCmdlet.ParameterSetName -eq "Online") { $Target = $URL.Authority }
 	else { $Target = Split-Path -Path $TargetPath -Leaf }
 
-	if ($PSCmdlet.ShouldProcess($Path, "Set shortcut to '$Target'"))
+	if ($PSCmdlet.ShouldProcess($Path.FullName, "Set shortcut to '$Target'"))
 	{
 		$SpecialFolders = @(
 			"AllUsersDesktop"
@@ -225,7 +225,7 @@ function Set-Shortcut
 			$Name += $Extension
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] Shortcut extension implicitly set to *$Extension"
 		}
-		elseif (($URL -and $Name -notmatch "\.url$") -or ($TargetPath -and $Name -notmatch "\.lnk$"))
+		elseif (($URL -and ($Name -notmatch "\.url$")) -or ($TargetPath -and ($Name -notmatch "\.lnk$")))
 		{
 			if ($Name -notmatch "\.\w+$")
 			{
@@ -240,7 +240,7 @@ function Set-Shortcut
 		$FilePath = "$($FilePath.FullName)\$Name"
 
 		# If creating shortcut to file ensure target file exists
-		if ($TargetPath)
+		if ($PSCmdlet.ParameterSetName -eq "Local")
 		{
 			if (!(Test-Path -Path $TargetPath -PathType Leaf))
 			{
@@ -260,7 +260,7 @@ function Set-Shortcut
 		}
 
 		# Set target file or URL
-		if ($URL)
+		if ($PSCmdlet.ParameterSetName -eq "Online")
 		{
 			$Shortcut.TargetPath = $URL.OriginalString
 		}
@@ -270,7 +270,7 @@ function Set-Shortcut
 		}
 
 		# Optionally set shortcut icon
-		if (![string]::IsNullOrEmpty($IconLocation))
+		if ($IconLocation)
 		{
 			$IconLocationName = $IconLocation.FullName
 
@@ -314,7 +314,7 @@ function Set-Shortcut
 
 		# The following properties are valid for file system shortcuts only
 		# NOTE: Internet shortcuts support only two properties: FullName and TargetPath (the URL target).
-		if ($TargetPath)
+		if ($PSCmdlet.ParameterSetName -eq "Local")
 		{
 			# Optionally set shortcut description
 			# NOTE: The name of an URL shortcut is an actual description
@@ -328,7 +328,7 @@ function Set-Shortcut
 			{
 				if (Test-Path -Path $WorkingDirectory -PathType Container)
 				{
-					$Shortcut.WorkingDirectory = $WorkingDirectory
+					$Shortcut.WorkingDirectory = $WorkingDirectory.FullName
 				}
 				else
 				{

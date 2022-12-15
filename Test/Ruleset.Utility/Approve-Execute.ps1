@@ -143,6 +143,9 @@ Start-Test "full"
 Approve-Execute -Unsafe -Accept $TestAccept -Deny $TestDeny -Title $TestTitle -Question $TestQuestion `
 	-YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll) -Context $TestContext -ContextLeaf $TestContextLeaf
 
+#
+# TODO: Combination of parameters which make no sense?
+#
 Start-Test "-Unsafe -Force FAILURE TEST"
 Approve-Execute -Unsafe -Force
 

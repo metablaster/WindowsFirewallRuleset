@@ -151,7 +151,8 @@ function Start-Test
 			New-Variable -Name PreviousErrorPreference -Scope Script -Value $global:ErrorActionPreference
 
 			# HACK: Setting global ErrorActionPreference will not affect ErrorActionPreference in modules
-			# A workaround is -EA SilentlyContinue on function that fails
+			# A workaround is -EA SilentlyContinue on function that fails.
+			# When this is resolved remove -EA SilentlyContinue in unit tests
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Global ErrorAction is '$global:ErrorActionPreference'"
 			$global:ErrorActionPreference = "SilentlyContinue"
 

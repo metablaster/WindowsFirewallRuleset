@@ -113,6 +113,17 @@ if ($Force -or $PSCmdlet.ShouldContinue("Windows folder", "Test elevation"))
 
 	Set-Shortcut -Name "Test.lnk" -Path $Restricted `
 		-TargetPath "$ProjectRoot\Config\System\Firewall.msc" -Confirm:$false
+
+	Remove-Item $Restricted\Test.lnk
+}
+
+if ($Force -or $PSCmdlet.ShouldContinue("All Users Desktop", "Set Firewall icon"))
+{
+	Start-Test "All Users Desktop"
+	Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
+		-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
+		-Description "View and modify GPO firewall" -IconIndex -19 `
+		-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll"
 }
 
 Test-Output $Result -Command Set-Shortcut

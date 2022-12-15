@@ -74,6 +74,9 @@ $Result
 Start-Test "-Log"
 Write-ServiceList "$ProjectRoot\Rules" -Log
 
+Start-Test "Test log file was created"
+Test-Path -Path "$LogsFolder\ServiceList_$(Get-Date -Format "dd.MM.yy")*.log"
+
 Test-Output $Result -Command Write-ServiceList
 
 Update-Log

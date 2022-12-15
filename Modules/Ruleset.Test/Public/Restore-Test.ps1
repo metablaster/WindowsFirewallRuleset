@@ -62,7 +62,7 @@ function Restore-Test
 		return
 	}
 
-	if ($PSCmdlet.ShouldProcess($script:TestCase, "Stop test case"))
+	if ($PSCmdlet.ShouldProcess($script:TestCase, "Restore test case failure reporting"))
 	{
 		if (Get-Variable -Name PreviousErrorPreference -Scope Script -ErrorAction Ignore)
 		{

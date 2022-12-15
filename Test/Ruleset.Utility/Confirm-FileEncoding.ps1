@@ -85,14 +85,14 @@ $Excludes = @(
 )
 
 $TestFiles = @(
-	"ANSI.txt"
-	"ascii.txt"
-	"utf-16LE.txt"
-	"utf-16LE+NonPrintable.txt"
-	"utf8.txt"
-	"utf8BOM.txt"
-	"utf16BE.txt"
-	"utf16LE.txt"
+	"ANSI.ansi"
+	"ASCII.test"
+	"utf-16LE.test"
+	"utf-16LE+NonPrintable.test"
+	"utf8.test"
+	"utf8BOM.test"
+	"utf16BE.test"
+	"utf16LE.test"
 )
 
 if ($PSVersionTable.PSEdition -eq "Core")
@@ -127,12 +127,13 @@ $ProjectFiles | ForEach-Object {
 }
 
 Start-Test "utf8.txt"
-$TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.txt
+$TestFile = Resolve-Path -Path $PSScriptRoot\Encoding\utf8.test
 $Result = Confirm-FileEncoding $TestFile.Path
 $Result
 
-Start-Test "binary file"
-Confirm-FileEncoding "$env:SystemRoot\regedit.exe"
+Start-Test "binary file" -Force
+Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -EA SilentlyContinue
+Restore-Test
 
 Start-Test "binary file -Binary"
 Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -Binary

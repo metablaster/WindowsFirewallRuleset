@@ -28,12 +28,12 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Compare 2 paths for equality or similarity
+Compare two paths for equality or similarity
 
 .DESCRIPTION
-Compare-Path depending on parameters either checks if 2 paths lead to same location
+Compare-Path depending on parameters either checks if two paths lead to same location
 taking into account environment variables, relative path locations and wildcards
-or it checks if 2 paths are similar which depends on wildcards contained in the input
+or it checks if two paths are similar which depends on wildcards contained in the input
 
 .PARAMETER Path
 The path which to compare against the reference path

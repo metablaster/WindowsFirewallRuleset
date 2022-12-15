@@ -137,13 +137,13 @@ ConvertFrom-Wildcard -Wildcard $Wildcard
 #
 New-Section "null or empty"
 
-Start-Test "null"
+Start-Test "null" -Expected "Fail on null"
 ConvertFrom-Wildcard
 
 Start-Test "empty"
-ConvertFrom-Wildcard ""
+ConvertFrom-Wildcard "" -Expected "Fail on empty"
 
-Start-Test "implicitly AsRegex"
+Start-Test "implicitly AsRegex" -Expected "Fail on null or empty"
 ConvertFrom-Wildcard -AsRegex
 
 Update-Log

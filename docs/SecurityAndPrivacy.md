@@ -27,6 +27,7 @@ privacy and how to maximize security of a personal computer.
     - [VPN or proxy](#vpn-or-proxy)
     - [DNS encryption](#dns-encryption)
     - [Browser extensions](#browser-extensions)
+    - [Search engine](#search-engine)
     - [Common privacy mistakes](#common-privacy-mistakes)
   - [How do I regain trust in my computer](#how-do-i-regain-trust-in-my-computer)
   - [Additional research](#additional-research)
@@ -370,6 +371,19 @@ Suggested browser extensions are:
 
 [Table of Contents](#table-of-contents)
 
+### Search engine
+
+Which search engine you use matters for privacy but it also affects speed and quality of search
+results.\
+google search is by far the best for good and fast search results but privacy wise it's subject
+to google privacy policy.
+
+If you're willing to trade speed for privacy consider privacy conscious search engine.
+
+Which one is the best for privacy is subjective but you can start exploring with ex. [Startpage][startpage]
+
+[Table of Contents](#table-of-contents)
+
 ### Common privacy mistakes
 
 There are some privacy mistakes which we all did at least once.
@@ -512,3 +526,4 @@ The following web sites are good starting point for additional research regardin
 [tor browser]: https://www.torproject.org/download "Visit Tor Project"
 [privilege escalation]: https://en.wikipedia.org/wiki/Privilege_escalation "Visit wikipedia site"
 [nmap]: https://nmap.org "Visit nmap site"
+[startpage]: https://www.startpage.com "Visit Startpage search engine"

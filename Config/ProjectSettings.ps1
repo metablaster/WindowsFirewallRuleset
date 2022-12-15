@@ -542,9 +542,8 @@ if (!$InModule)
 	# which will hide visibility of PSDefaultParameterValues to functions in child scopes.
 	# Advanced functions in child scopes and modules will receive these parameters by the caller,
 	# this is needed to avoid duplicate log entries.
-	# ISSUE: This hackery won't work for with PS extension because scripts aren't meant to be dotsourced
+	# ISSUE: This won't work with PS extension because scripts aren't meant to be dotsourced
 	# see: https://github.com/PowerShell/vscode-powershell/issues/4327
-	# TODO: Could this override anything?
 	$private:PSDefaultParameterValues = @{}
 
 	if ($ErrorLogging)
@@ -743,7 +742,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 		# Recommended minimum PowerShell Core
 		# NOTE: 6.1.0 will not work, but 7.0.3 works, verify with PSUseCompatibleCmdlets
-		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 3, 0))
+		New-Variable -Name RequirePSVersion -Scope Global -Option Constant -Value ([version]::new(7, 3, 1))
 	}
 	else
 	{
@@ -805,7 +804,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 38, 1))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 39, 0))
 	}
 
 	if ($Develop)
@@ -822,7 +821,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 73, 1))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 74, 1))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

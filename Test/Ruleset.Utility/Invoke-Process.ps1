@@ -103,10 +103,10 @@ else
 
 	Test-Output $Result -Command Invoke-Process
 
-	Start-Test "Bad path"
+	Start-Test "Bad path" -Expected "Error message"
 	Invoke-Process "C:\Program F*\Powe?Shell\777\pwsh.exe" -Timeout 5000
 
-	Start-Test "Bad file"
+	Start-Test "Bad file" -Expected "Error message"
 	Invoke-Process "C:\Program F*\Powe?Shell\badfile.exe" -Timeout 5000
 }
 
