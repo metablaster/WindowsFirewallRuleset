@@ -29,6 +29,97 @@
 			}
 		},
 		//
+		// Ruleset.Compatibility
+		//
+		{
+			"name": "Compatibility\\Add-WindowsPSModulePath",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Add-WindowsPSModulePath.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 1
+			}
+		},
+		{
+			"name": "Compatibility\\Add-WinFunction",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Add-WinFunction.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 2
+			}
+		},
+		{
+			"name": "Compatibility\\Compare-WinModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Compare-WinModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 3
+			}
+		},
+		{
+			"name": "Compatibility\\Copy-WinModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Copy-WinModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 4
+			}
+		},
+		{
+			"name": "Compatibility\\Get-WinModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Get-WinModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 5
+			}
+		},
+		{
+			"name": "Compatibility\\Import-WinModule",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Import-WinModule.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 6
+			}
+		},
+		{
+			"name": "Compatibility\\Initialize-WinSession",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Initialize-WinSession.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 7
+			}
+		},
+		{
+			"name": "Compatibility\\Invoke-WinCommand",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\Ruleset.Compatibility\\Invoke-WinCommand.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "Ruleset.Compatibility",
+				"order": 8
+			}
+		},
+		//
 		// Ruleset.ComputerInfo
 		//
 		{

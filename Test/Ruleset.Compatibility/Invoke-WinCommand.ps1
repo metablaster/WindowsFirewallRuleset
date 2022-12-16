@@ -83,7 +83,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+	$Result = Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+	$Result
+
+	Test-Output $Result -Command Invoke-WinCommand
 }
 
 Update-Log

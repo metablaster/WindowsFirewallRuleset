@@ -79,6 +79,9 @@ January 2021:
 
 - Added parameter debugging stream
 
+December 2022:
+- Change OutputType to System.Management.Automation.PSCustomObject from PSObject
+
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md
 
@@ -89,7 +92,7 @@ function Compare-WinModule
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Compatibility/Help/en-US/Compare-WinModule.md")]
-	[OutputType([PSObject])]
+	[OutputType([System.Management.Automation.PSCustomObject])]
 	Param (
 		[Parameter(Position = 0)]
 		[SupportsWildcards()]

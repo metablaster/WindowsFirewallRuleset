@@ -83,8 +83,11 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Add-WinFunction myFunction { param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
+	$Result = Add-WinFunction myFunction { param ($n) "Hi $n!"; $PSVersionTable.PSEdition }
+	$Result
+
 	myFunction Bill
+	Test-Output $Result -Command Add-WinFunction
 }
 
 Update-Log

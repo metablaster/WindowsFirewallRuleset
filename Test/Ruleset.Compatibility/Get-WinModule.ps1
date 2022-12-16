@@ -83,7 +83,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Get-WinModule *PNP*
+	$Result = Get-WinModule *PNP*
+	$Result
+
+	Test-Output $Result -Force -Command Get-WinModule
 }
 
 Update-Log

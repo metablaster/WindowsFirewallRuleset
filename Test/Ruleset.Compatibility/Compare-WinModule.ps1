@@ -83,7 +83,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Compare-WinModule A*
+	$Result = Compare-WinModule A*
+	$Result
+
+	Test-Output $Result -Command Compare-WinModule
 }
 
 Update-Log

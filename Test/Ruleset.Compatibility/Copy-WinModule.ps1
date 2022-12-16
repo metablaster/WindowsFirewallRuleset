@@ -83,7 +83,10 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Copy-WinModule Hyper-V -Destination $DefaultTestDrive
+	$Result = Copy-WinModule Hyper-V -Destination $DefaultTestDrive
+	$Result
+
+	Test-Output $Result -Command Copy-WinModule
 }
 
 Update-Log

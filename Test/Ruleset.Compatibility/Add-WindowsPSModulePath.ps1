@@ -84,7 +84,11 @@ if ($Domain -ne [System.Environment]::MachineName)
 else
 {
 	Start-Test "Default test"
-	Add-WindowsPSModulePath
+	$Result = Add-WindowsPSModulePath
+	$Result
+
+	Test-Output $Result -Command Add-WindowsPSModulePath
+
 	Import-Module Hyper-V
 }
 
