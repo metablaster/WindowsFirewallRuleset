@@ -98,8 +98,8 @@ function Test-Output
 			Start-Test "Compare TypeName and OutputType of '$Command'"
 		}
 
-		$AllOutputType = @()
 		$AllTypeName = @()
+		$AllOutputType = @()
 	}
 	process
 	{
@@ -107,53 +107,120 @@ function Test-Output
 		# will not not work in cases when function being tested returns null, see unit test.
 		# NOTE: OutputType variable may contain multiple valid entries
 		# Ignoring errors to reduce spamming console with errors
-		$AllOutputType += Get-TypeName -Command $Command -ErrorAction SilentlyContinue -Force:$Force
 		$AllTypeName += Get-TypeName $InputObject -ErrorAction SilentlyContinue -Force:$Force
+		$AllOutputType += Get-TypeName -Command $Command -ErrorAction SilentlyContinue -Force:$Force
 	}
 	end
 	{
-		$TypeName = $AllTypeName | Select-Object -Unique
-		$OutputType = $AllOutputType | Select-Object -Unique
+		# Multiple TypeName's might be returned as well as multiple OutputType attributes might exist
+		$TypeName = @($AllTypeName | Select-Object -Unique)
+		$OutputType = @($AllOutputType | Select-Object -Unique)
 
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: TypeName:`t`t$TypeName"
+		# For each print output
+		$TypeName | ForEach-Object {
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: TypeName:`t`t$_"
+		}
 		$OutputType | ForEach-Object {
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: OutputType:`t$_"
 		}
 
-		if (!$OutputType)
+		# If there is none write blank entry, this is for completeness, otherwise info message won't be shown
+		if ($TypeName.Count -eq 0)
 		{
-			# This is for completeness, otherwise info message won't be shown, OR only "TypeName:" would be shown
+			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: TypeName:"
+		}
+		if ($OutputType.Count -eq 0)
+		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: OutputType:"
 		}
 
-		if ([string]::IsNullOrEmpty($TypeName))
-		{
-			Write-Error -Category InvalidResult -TargetObject $InputObject -Message "Unable to perform type comparison, missing object TypeName"
+		# Compare typenames and outputtypes
+		$CaseSensitive = Compare-Object -ReferenceObject $TypeName -DifferenceObject $OutputType -IncludeEqual -ExcludeDifferent -CaseSensitive |
+		Where-Object {
+			$_.SideIndicator -eq "=="
 		}
-		elseif ([string]::IsNullOrEmpty($OutputType))
+
+		if ($null -ne $CaseSensitive)
 		{
-			Write-Error -Category InvalidResult -TargetObject $Command -Message "Unable to perform type comparison, missing OutputType attribute"
-		}
-		elseif ($TypeName -eq "System.Void" -and ($OutputType -notlike "*Void"))
-		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Type comparison was not performed because result was likely null"
-		}
-		elseif ($OutputType -ceq $TypeName)
-		{
-			# Output was defined by OutputType
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Typename and OutputType are identical"
-		}
-		elseif ($OutputType -like "$TypeName*" -or ($OutputType | Where-Object { $TypeName -like "$_*" }))
-		{
-			# Either typename is longer and contains one of OutputType's in it's name or
-			# typename is shorter and contained within one of OutputTypes or
-			# both are the same but different casing used.
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename is similar to OutputType but not named exactly the same"
 		}
 		else
 		{
-			Write-Error -Category InvalidResult -TargetObject $TypeName `
-				-Message "Typename and OutputType are not identical"
+			$Equal = Compare-Object -ReferenceObject $TypeName -DifferenceObject $OutputType -IncludeEqual -ExcludeDifferent |
+			Where-Object {
+				$_.SideIndicator -eq "=="
+			}
+
+			if ($null -ne $Equal)
+			{
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename is declared in OutputType but it's not case sensitive"
+			}
+			else
+			{
+				$Reference = Compare-Object -ReferenceObject $TypeName -DifferenceObject $OutputType | Where-Object {
+					$_.SideIndicator -eq "<="
+				} | ForEach-Object {
+					# Output type is accelerator
+					foreach ($Entry in $OutputType)
+					{
+						if ($_.InputObject -like "*$Entry")
+						{
+							$_.InputObject
+							break
+						}
+					}
+				}
+
+				$Difference = Compare-Object -ReferenceObject $TypeName -DifferenceObject $OutputType | Where-Object {
+					$_.SideIndicator -eq "=>"
+				} | ForEach-Object {
+					# TypeName is accelerator
+					foreach ($Entry in $TypeName)
+					{
+						if ($_.InputObject -like "*.$Entry")
+						{
+							$_.InputObject
+							break
+						}
+					}
+				}
+
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Reference is '$Reference'"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Difference is '$Difference'"
+
+				if ($Reference)
+				{
+					$Message = "OutputType is similar to TypeName but not not exact"
+
+					if ($Force)
+					{
+						Write-Error -Category InvalidResult -TargetObject $TypeName -Message $Message
+					}
+					else
+					{
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
+					}
+				}
+				elseif ($Difference)
+				{
+					$Message = "Typename is similar to OutputType but not not exact"
+
+					if ($Force)
+					{
+						Write-Error -Category InvalidResult -TargetObject $OutputType -Message $Message
+					}
+					else
+					{
+						# TypeName is full name and OutputType is accelerator or vice versa
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
+					}
+				}
+				else
+				{
+					Write-Error -Category InvalidResult -TargetObject $TypeName `
+						-Message "Typename and OutputType are not identical"
+				}
+			}
 		}
 	}
 }

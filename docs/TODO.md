@@ -253,6 +253,8 @@ Todo's in this file are categorized into the following sections:
     - Module `Ruleset.Compatibility` is missing multiple tests
     - Some Pester tests are out of date and don't work well with Pester 5.x
     - A function to detect and confirm file line endings
+    - Several unit tests to succeed need local HTTP enabled WinRM server, ex. when using -Domain
+    parameter to contact HTTP enabled WinRM server
 
 5. Code style and design
 

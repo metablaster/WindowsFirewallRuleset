@@ -86,11 +86,13 @@ Start-Test "default"
 Select-IPInterface -Detailed @SessionParams
 
 Start-Test "IPv6 FAILURE TEST"
-Select-IPInterface -AddressFamily IPv6 -ErrorAction SilentlyContinue @SessionParams
+Select-IPInterface -AddressFamily IPv6 @SessionParams
 
 Start-Test "IPv4 -Physical"
 $Result = Select-IPInterface -AddressFamily IPv4 -Physical @SessionParams
 $Result
+
+Test-Output $Result -Command Select-IPInterface
 
 Start-Test "-Physical -Hidden"
 Select-IPInterface -Physical -Hidden @SessionParams
@@ -111,9 +113,13 @@ Start-Test "-Connected -Hidden"
 Select-IPInterface -Connected -Hidden -AddressFamily IPv6 -Detailed @SessionParams
 
 Start-Test "binding"
-Select-IPInterface -AddressFamily IPv4 -Virtual @SessionParams | Select-Object -ExpandProperty IPv4Address
+$Result = Select-IPInterface -AddressFamily IPv4 -Virtual @SessionParams
+$Result
 
-Test-Output $Result -Command Select-IPInterface
+Start-Test "Get-TypeName"
+Get-TypeName -InputObject $Result -Force
+
+Test-Output $Result -Command Select-IPInterface -Force
 
 Update-Log
 Exit-Test

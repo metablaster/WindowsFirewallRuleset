@@ -75,14 +75,66 @@ Test-Output $NETObject -Command Test-Path
 Start-Test "Test-Path pipeline"
 Test-Path $env:SystemDrive | Test-Output -Command Test-Path
 
-$TempError = $null
-
 # TODO: Unsure why error is shown from Get-TypeName if Ignore is specified
 # TODO: Ignore won't work with Windows PowerShell
-Start-Test "Test-Output" -Expected "FAIL"
+Start-Test "Get-Service and Get-Random" -Expected "FAIL" # -Force
 $ServiceController = Get-Service -Name Dhcp
-Test-Output $ServiceController -Command Get-Random -ErrorAction SilentlyContinue -EV TempError -Force
-Write-Warning -Message "[$ThisScript] Error ignored: $TempError"
+Test-Output $ServiceController -Command Get-Random -Force #-ErrorAction SilentlyContinue -Force
+# Restore-Test
+
+<#
+.DESCRIPTION
+Custom object not case sensitive
+#>
+function global:Test-CaseSensitive
+{
+	[OutputType("Custom")]
+	param()
+
+	[PSCustomObject]@{
+		Name = "Name"
+		PSTypeName = "custom"
+	}
+}
+
+Start-Test "Test-Output not case sensitive"
+Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
+
+<#
+.DESCRIPTION
+Custom object partial OutputType
+#>
+function global:Test-CaseSensitive
+{
+	[OutputType("Custom")]
+	param()
+
+	[PSCustomObject]@{
+		Name = "Name"
+		PSTypeName = "Ruleset.Custom"
+	}
+}
+
+Start-Test "Test-Output partial OutputType"
+Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
+
+<#
+.DESCRIPTION
+Custom object partial TypeName
+#>
+function global:Test-CaseSensitive
+{
+	[OutputType("Ruleset.Custom")]
+	param()
+
+	[PSCustomObject]@{
+		Name = "Name"
+		PSTypeName = "Custom"
+	}
+}
+
+Start-Test "Test-Output partial TypeName"
+Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
 
 <#
 .DESCRIPTION

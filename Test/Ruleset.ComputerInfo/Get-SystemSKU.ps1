@@ -91,10 +91,14 @@ else
 	$Result = Get-SystemSKU -SKU 48
 	$Result
 
-	Start-Test "Pipeline" -Command Get-SystemSKU
-	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU
+	#
+	# TODO: For these tests to succeed we need to have HTTP enabled WinRM server
+	#
+	Start-Test "Pipeline" -Command Get-SystemSKU -Force
+	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue
+	Restore-Test
 
-	Start-Test "-Domain multiple computers"
+	Start-Test "-Domain"
 	Get-SystemSKU -Domain $([System.Environment]::MachineName)
 
 	Test-Output $Result -Command Get-SystemSKU

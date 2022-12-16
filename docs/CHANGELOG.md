@@ -76,6 +76,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-TypeName`
     - `Start-Test` added `-Force` switch to silence errors for intentionall failures
     - `Stop-Test` renamed to `Restore-Test` now used to restore unit test error reporting
+    - `Test-Output` Improved to handled functions which might return multiple types
     - `Uninstall-DuplicateModule` used to uninstall outdated modules
     - `Publish-SshKey` Improved for Remote-SSH VSCode extension
     - `Register-SslCertificate` improved to handle multiple certificates with same CN entry

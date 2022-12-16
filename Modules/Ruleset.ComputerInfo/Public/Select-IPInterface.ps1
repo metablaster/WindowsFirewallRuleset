@@ -89,7 +89,7 @@ function Select-IPInterface
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Select-IPInterface.md")]
-	[OutputType("NetIPConfiguration")]
+	[OutputType("NetIPConfiguration", [void])]
 	param (
 		[Parameter()]
 		[Alias("IPVersion")]
