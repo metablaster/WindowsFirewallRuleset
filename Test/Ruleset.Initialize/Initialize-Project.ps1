@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Initialize-Project"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Perform project initialization in develop mode", "Accept potentially dangerous unit test"))
 {
 	if (!($ProjectCheck -and $ModulesCheck -and $ServicesCheck))
 	{
@@ -76,18 +76,43 @@ if ($Force -or $PSCmdlet.ShouldContinue("Modify registry ownership", "Accept pot
 		return
 	}
 
+	# Save original values
+	$PreviousModulesCheck = (Get-Variable -Name ModulesCheck -Scope Global).Value
+	$PreviousServicesCheck = (Get-Variable -Name ServicesCheck -Scope Global).Value
+	$PreviousProjectCheck = (Get-Variable -Name ProjectCheck -Scope Global).Value
+
+	Start-Test "default"
+	Initialize-Project
+
 	Start-Test "-Strict"
+	Initialize-Project -Strict
+
+	Start-Test "ModulesCheck = $false ServicesCheck = $false"
+	Set-Variable -Name ModulesCheck -Scope Global -Force -Value $false
+	Set-Variable -Name ServicesCheck -Scope Global -Force -Value $false
+
 	Initialize-Project
 
-	Start-Test "-SkipModules -SkipServices"
-	Initialize-Project
+	Set-Variable -Name ModulesCheck -Scope Global -Force -Value $PreviousModulesCheck
+	Set-Variable -Name ServicesCheck -Scope Global -Force -Value $PreviousServicesCheck
 
-	Start-Test "-SkipModules"
+	Start-Test "ModulesCheck = $false ServicesCheck = $PreviousServicesCheck"
+	Set-Variable -Name ModulesCheck -Scope Global -Force -Value $false
 	Initialize-Project
+	Set-Variable -Name ModulesCheck -Scope Global -Force -Value $PreviousModulesCheck
 
-	Start-Test "-SkipServices"
+	Start-Test "ModulesCheck = $PreviousModulesCheck ServicesCheck = $false"
+	Set-Variable -Name ServicesCheck -Scope Global -Force -Value $false
 	$Result = Initialize-Project
 	$Result
+	Test-Output $Result -Command Initialize-Project
+	Set-Variable -Name ServicesCheck -Scope Global -Force -Value $PreviousServicesCheck
+
+	Start-Test "ProjectCheck = $false"
+	Set-Variable -Name ProjectCheck -Scope Global -Force -Value $false
+	$Result = Initialize-Project
+	$Result
+	Set-Variable -Name ProjectCheck -Scope Global -Force -Value $PreviousProjectCheck
 
 	Test-Output $Result -Command Initialize-Project
 }

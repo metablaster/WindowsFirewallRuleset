@@ -66,7 +66,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Initialize-Service"
-$DebugPreference = 'Continue'
+$DebugPreference = "Continue"
 
 Start-Test "RemoteRegistry"
 Set-Service "RemoteRegistry" -StartupType Disabled

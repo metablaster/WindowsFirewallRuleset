@@ -251,7 +251,7 @@ function Uninstall-DuplicateModule
 	{
 		$KeptModule = $KeptModule | Select-Object -Unique
 
-		if ((($KeptModule | Measure-Object).Count -gt 1) -gt 0)
+		if (($KeptModule | Measure-Object).Count -gt 0)
 		{
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: From the initial duplicates the following modules remained installed:"
 

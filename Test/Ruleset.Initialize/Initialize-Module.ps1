@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Initialize-Module"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Possible modify installed modules", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Possibly install modules", "Accept potentially dangerous unit test"))
 {
 	if (!($ProjectCheck -and $ModulesCheck))
 	{
@@ -89,7 +89,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Possible modify installed modules", "Ac
 
 	Start-Test "posh-git"
 	Initialize-Module @{ ModuleName = "posh-git"; ModuleVersion = $RequirePoshGitVersion }  `
-		-Repository $Repository -Trusted -AllowPrerelease `
+		-Repository $Repository -Trusted `
 		-InfoMessage "posh-git is recommended for better git experience in PowerShell"
 
 	Start-Test "PSScriptAnalyzer"

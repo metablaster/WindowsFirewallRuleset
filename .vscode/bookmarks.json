@@ -4,7 +4,7 @@
 			"path": "Modules/Ruleset.Initialize/Private/Find-UpdatableModuleHelp.ps1",
 			"bookmarks": [
 				{
-					"line": 200,
+					"line": 204,
 					"column": 6,
 					"label": ""
 				}
@@ -106,6 +106,16 @@
 				{
 					"line": 546,
 					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Utility/Public/Get-TypeName.ps1",
+			"bookmarks": [
+				{
+					"line": 375,
+					"column": 90,
 					"label": ""
 				}
 			]

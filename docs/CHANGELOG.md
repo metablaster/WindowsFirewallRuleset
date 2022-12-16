@@ -64,6 +64,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-ExecutableFile` which falsely flaged executable as unsigned in PS Core
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
+  - Fixed a bug in `Initialize-Service` which reported false failures
   - Made possible to import and remove modules manually outside deployment process.
   - Updated `Ruleset.IP` module according to changes from upstream repository.
 
@@ -72,6 +73,9 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `ConvertFrom-SID`
     - `Test-Computer`
     - `Resolve-Host`
+    - `Get-TypeName`
+    - `Start-Test` added `-Force` switch to silence errors for intentionall failures
+    - `Stop-Test` renamed to `Restore-Test` now used to restore unit test error reporting
     - `Uninstall-DuplicateModule` used to uninstall outdated modules
     - `Publish-SshKey` Improved for Remote-SSH VSCode extension
     - `Register-SslCertificate` improved to handle multiple certificates with same CN entry

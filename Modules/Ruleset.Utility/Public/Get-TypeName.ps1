@@ -147,11 +147,29 @@ function Get-TypeName
 				Write-Verbose -Message "[$InvocationName] Searching assemblies for type: $TypeName"
 				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{
-					$Assembly.GetTypes() | Where-Object {
-						($_.Name -eq $TypeName) -or
-						($_.FullName -eq $TypeName) -or
-						($_.FullName -like "*.$TypeName")
-					} | ForEach-Object {
+					try
+					{
+						$AssemblyTypes = $Assembly.GetTypes() | Where-Object {
+							($_.Name -eq $TypeName) -or
+							($_.FullName -eq $TypeName) -or
+							($_.FullName -like "*.$TypeName")
+						}
+					}
+					catch
+					{
+						# TODO: This might be the case sometimes with PS Core, it fails with $Assembly.GetTypes()
+						# Investigate why there is no exception when running this code manually in the console, in which case it simply returns null
+						if ($_.Exception.Message -match "Operation is not supported on this platform")
+						{
+							Write-Warning -Message "[$InvocationName] $($_.Exception.Message)"
+						}
+						else
+						{
+							Write-Error -ErrorRecord $_
+						}
+					}
+
+					$AssemblyTypes | ForEach-Object {
 						Write-Verbose -Message "[$InvocationName] Found type $($_.FullName) in assembly: $($Assembly.Location)"
 						$_
 					}
@@ -159,7 +177,7 @@ function Get-TypeName
 
 				if (!$Result)
 				{
-					Write-Debug -Message "[$InvocationName)] Searching assemblies for .NET type failed"
+					Write-Debug -Message "[$InvocationName] Searching assemblies for .NET type failed"
 					return
 				}
 			}
@@ -240,7 +258,7 @@ function Get-TypeName
 							else
 							{
 								# Skip non .NET types, continue
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename: '$Type' was excluded, not a .NET type"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename '$Type' was excluded, not a .NET type"
 							}
 						}
 
@@ -258,7 +276,7 @@ function Get-TypeName
 					# It's a null value when the output is a not a .NET type,
 					# such as a WMI object or a formatted view of an object.
 					# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_outputtypeattribute
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] The command: '$Command' does not have [OutputType()] attribute defined"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] The command '$Command' does not have [OutputType()] attribute defined"
 					return
 				}
 			}
@@ -287,7 +305,7 @@ function Get-TypeName
 		}
 		else
 		{
-			throw "Parameter set not handled"
+			throw "Parameter set not handled in $($MyInvocation.InvocationName)"
 		}
 
 		# Let both the -Accelerator and -Name without -Accelerator in

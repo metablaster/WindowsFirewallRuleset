@@ -78,7 +78,7 @@ function Initialize-Project
 {
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Project.md")]
-	[OutputType([void])]
+	[OutputType([string], [void])]
 	param (
 		[Parameter()]
 		[switch] $Strict

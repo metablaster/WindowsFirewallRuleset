@@ -45,7 +45,7 @@ values for comparison with InputObject
 
 .PARAMETER Force
 If specified, the function doesn't check if either InputObject or OutputType attribute of
-tested command is .NET type.
+tested command is a .NET type.
 This is useful only for PSCustomObject types defined with PSTypeName.
 
 .EXAMPLE

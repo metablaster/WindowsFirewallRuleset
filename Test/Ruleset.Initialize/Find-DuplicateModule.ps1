@@ -64,7 +64,7 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test
 
 Start-Test "Find-DuplicateModule"
 $Result = Find-DuplicateModule

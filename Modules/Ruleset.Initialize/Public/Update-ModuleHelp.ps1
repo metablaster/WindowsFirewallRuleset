@@ -28,13 +28,13 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Update PowerShell help files
+Update PowerShell module help files
 
 .DESCRIPTION
 Update-ModuleHelp updates help files for modules installed with PowerShell edition
 which is used to run this function.
 Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules
-for which update is possible without generating errors with update.
+for which update is possible thus not generating errors during update.
 
 .PARAMETER Name
 Updates help for the specified modules.
@@ -83,7 +83,7 @@ function Update-ModuleHelp
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Update-ModuleHelp.md")]
 	[OutputType([void])]
 	param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name", Position = 0)]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name", Position = 0)]
 		[SupportsWildcards()]
 		[Alias("Module")]
 		[string[]] $Name = "*",
@@ -176,7 +176,10 @@ function Update-ModuleHelp
 				# In almost all cases there will be one combined error, ignore that one
 				if ($UpdateError -and (($UpdateError | Measure-Object).Count -gt 1))
 				{
-					$UpdateError
+					foreach ($ErrorRecord in $UpdateError)
+					{
+						Write-Error -ErrorRecord $ErrorRecord
+					}
 				}
 			}
 		}

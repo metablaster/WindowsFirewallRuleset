@@ -233,6 +233,9 @@ Get-TypeName $ServiceController
 Start-Test "CimInstance Win32_OperatingSystem" -Expected "FAIL"
 Get-CimInstance -Class Win32_OperatingSystem | Get-TypeName
 
+Start-Test "[ModuleInfoGrouping] on PS Core"
+Get-Module -ListAvailable -Name "PowerShellGet" | Get-TypeName
+
 Test-Output $Result -Command Get-TypeName
 
 Update-Log

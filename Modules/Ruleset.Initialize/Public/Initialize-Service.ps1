@@ -122,14 +122,14 @@ function Initialize-Service
 	}
 	process
 	{
-		foreach ($InputService in $Name)
+		foreach ($ServiceName in $Name)
 		{
 			# [System.ServiceProcess.ServiceController]
-			$Service = Get-Service -Name $InputService -ErrorAction Ignore
+			$Service = Get-Service -Name $ServiceName -ErrorAction Ignore
 
 			if (!$Service)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$InputService' not found, starting this service was ignored"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Service '$ServiceName' not found, starting this service was ignored"
 				continue
 			}
 
@@ -140,7 +140,7 @@ function Initialize-Service
 			if (($PreviousStatus -ne $Status) -or ($PreviousStartType -ne $StartupType))
 			{
 				[string] $Question = "Configure '$($Service.DisplayName)' service now?"
-				$Accept.HelpMessage = switch ($Service.Name)
+				$Accept.HelpMessage = switch ($ServiceName)
 				{
 					"lmhosts"
 					{
@@ -212,42 +212,42 @@ function Initialize-Service
 					foreach ($Required in $Service.ServicesDependedOn)
 					{
 						# For dependent services show only failures
-						$PreviousStatus = $Required.StartType
-						if ($PreviousStatus -ne [ServiceStartMode]::Automatic)
+						$PreviousDependentStartType = $Required.StartType
+						if ($PreviousDependentStartType -ne [ServiceStartMode]::Automatic)
 						{
 							Set-Service -Name $Required.Name -StartupType Automatic
 
-							if ($Required.StartType -ne [ServiceStartMode]::Automatic)
+							# Needed to get service again to get fresh stats
+							if ((Get-Service -Name $Required.Name | Select-Object -ExpandProperty StartType) -ne [ServiceStartMode]::Automatic)
 							{
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Set dependent service '$($Required.Name)' to 'Automatic' failed"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting dependent service '$($Required.Name)' to 'Automatic' failed"
 							}
 							else
 							{
-								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousStatus -> Automatic"
-								Write-Information -Tags $MyInvocation.InvocationName `
-									-MessageData "INFO: Set dependent service '$($Required.Name)' to Automatic succeeded"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousDependentStartType -> Automatic"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting dependent service '$($Required.Name)' to Automatic succeeded"
 							}
 						}
 
-						$PreviousStatus = $Required.Status
-						if ($PreviousStatus -ne [ServiceControllerStatus]::Running)
+						$PreviousDependentStatus = $Required.Status
+						if ($PreviousDependentStatus -ne [ServiceControllerStatus]::Running)
 						{
 							$Required.Start()
 							$Required.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 
-							if ($Required.Status -ne [ServiceControllerStatus]::Running)
+							# Needed to get service again to get fresh stats
+							if ((Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status) -ne [ServiceControllerStatus]::Running)
 							{
 								Write-Error -Category OperationStopped -TargetObject $Required `
-									-Message "Unable to proceed, dependent services can't be started"
+									-Message "Unable to proceed, failed to start dependent service"
 								Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' failed, please start manually and try again"
 								return $false
 							}
 							else
 							{
 								# Write log for service status change
-								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousStatus -> Running"
-								Write-Information -Tags $MyInvocation.InvocationName `
-									-MessageData "INFO: Start dependent service '$($Required.Name)' succeeded"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousDependentStatus -> Running"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' succeeded"
 							}
 						}
 
@@ -258,26 +258,26 @@ function Initialize-Service
 					# type, otherwise set startup type after requirements are met
 					if ($PreviousStartType -ne $StartupType)
 					{
-						Set-Service -Name $Service.Name -StartupType $StartupType
+						Set-Service -Name $ServiceName -StartupType $StartupType
 
-						if ($Service.StartType -ne $StartupType)
+						# Needed to get service again to get fresh stats
+						if ((Get-Service -Name $ServiceName | Select-Object -ExpandProperty StartType) -ne $StartupType)
 						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Set service '$($Service.Name)' to '$StartupType' failed"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting service '$ServiceName' to '$StartupType' startup failed"
 						}
 						else
 						{
 							# Write log for service status change
-							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $PreviousStartType -> $StartupType"
-							Write-Information -Tags $MyInvocation.InvocationName `
-								-MessageData "INFO: Set '$($Service.Name)' service to $StartupType succeeded"
+							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($ServiceName) $PreviousStartType -> $StartupType"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$StartupType' startup succeeded"
 						}
 					}
 
 					# If fdPHost or FDResPub are already running there is a chance host discovery won't work,
 					# this is a known issue in Windows to which solution is to restart those services
-					if ((($Service.Name -eq "fdPHost") -or ($Service.Name -eq "FDResPub")) -and ($PreviousStatus -eq [ServiceControllerStatus]::Running))
+					if ((($ServiceName -eq "fdPHost") -or ($ServiceName -eq "FDResPub")) -and ($PreviousStatus -eq [ServiceControllerStatus]::Running))
 					{
-						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$($Service.Name)' to rule out known issue resolving remote host"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$ServiceName' to rule out known issue resolving remote host"
 
 						$Service.Stop()
 						$Service.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
@@ -285,7 +285,7 @@ function Initialize-Service
 						$Service.Start()
 						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 					}
-					elseif ($Service.Status -ne $Status)
+					elseif ($PreviousStatus -ne $Status)
 					{
 						# Required services and startup type is checked, start requested service
 						if ($Status -eq "Running")
@@ -300,33 +300,35 @@ function Initialize-Service
 						$Service.WaitForStatus($Status, $ServiceTimeout)
 					}
 
-					# Check if setting up status of the requested service was successful
-					if ($Service.Status -ne $Status)
+					# Check if setting up status of the requested service was successful, needed to get service again to get fresh stats
+					if ((Get-Service -Name $ServiceName | Select-Object -ExpandProperty Status) -ne $Status)
 					{
-						if ($Status -eq "Running")
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting '$($Service.Name)' service failed, please start manually and try again"
-						}
-						else
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Stopping '$($Service.Name)' service failed, please stop manually if desired"
-						}
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
 					}
 					else
 					{
 						# Write log for service status change
-						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($($Service.Name)) $PreviousStatus -> Running"
-						Write-Information -Tags $MyInvocation.InvocationName `
-							-MessageData "INFO: Configuring '$($Service.DisplayName)' service succeeded"
+						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($ServiceName) $PreviousStatus -> Running"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status succeeded"
 					}
 				}
 
-				if ($Service.Status -ne $Status)
+				# Get fresh copy of a service to check
+				$NewService = Get-Service -Name $ServiceName
+
+				if (($NewService.Status -ne $Status) -or ($NewService.StartType -ne $StartupType))
 				{
 					Write-Error -Category OperationStopped -TargetObject $Service `
-						-Message "Unable to proceed, $($Service.Name) service was not set to requested state"
+						-Message "Unable to proceed, '$ServiceName' service was not set to requested state"
 					return $false
 				}
+				else
+				{
+					Write-Information -Tags $MyInvocation.InvocationName `
+						-MessageData "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service succeeded"
+				}
+
+				$NewService.Close()
 			} # if service not running
 
 			$Service.Close()

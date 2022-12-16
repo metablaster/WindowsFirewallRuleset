@@ -66,40 +66,36 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test -Private
 
-Start-Test "Find-UpdatableModuleHelp"
-$Result = Find-UpdatableModuleHelp
+Start-Test "Find-UpdatableModuleHelp -Name 'PowerShellGet'"
+$Result = Find-UpdatableModuleHelp -Name "PowerShellGet"
 $Result
 
-Start-Test "Test-Output"
-$Result | Test-Output -Command Find-UpdatableModuleHelp
+Start-Test "Get-TypeName"
+$Result | Get-TypeName -Force
+
+# NOTE: This will fail because output is ModuleInfoGrouping which consists of PSModuleInfo
+$Result | Test-Output -Force -Command Find-UpdatableModuleHelp
+
+Start-Test "Find-UpdatableModuleHelp"
+Find-UpdatableModuleHelp
 
 Start-Test "'PowerShellGet' | Find-UpdatableModuleHelp"
 "PowerShellGet" | Find-UpdatableModuleHelp
-
-Start-Test "Find-UpdatableModuleHelp -Name 'PowerShellGet'"
-Find-UpdatableModuleHelp -Name "PowerShellGet"
 
 Start-Test 'Find-UpdatableModuleHelp "PowerShellGet" -UICulture ja-JP, en-US'
 Find-UpdatableModuleHelp "PowerShellGet" -UICulture ja-JP, en-US
 
 Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModuleHelp'
-$Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModuleHelp
-$Result
-
-Start-Test "Get-TypeName"
-$Result | Get-TypeName
+@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Find-UpdatableModuleHelp
 
 Start-Test 'Find-UpdatableModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
 Find-UpdatableModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
 
 Start-Test 'Find-UpdatableModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")'
-$Result = Find-UpdatableModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
-$Result
+Find-UpdatableModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
 
 Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModuleHelp'
 @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Find-UpdatableModuleHelp
 
-Test-Output $Result -Command Find-UpdatableModuleHelp
-
 Update-Log
-Exit-Test
+Exit-Test -Private

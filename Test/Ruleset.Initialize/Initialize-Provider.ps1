@@ -67,7 +67,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Initialize-Provider"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Possible modify PackageManagement", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Possible to install package provider", "Accept potentially dangerous unit test"))
 {
 	if (!($ProjectCheck -and $ModulesCheck))
 	{

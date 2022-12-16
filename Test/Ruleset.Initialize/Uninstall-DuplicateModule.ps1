@@ -51,7 +51,6 @@ None.
 
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
-#Requires -PSedition Desktop
 
 [CmdletBinding()]
 param (
@@ -68,9 +67,10 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 if ($Force -or $PSCmdlet.ShouldContinue("Uninstall duplicate modules for testing", "Accept potentially dangerous unit test"))
 {
+	Enter-Test
 	$ModulesToRemove = @("PSReadline", "PowerShellGet", "PackageManagement", "Pester")
 
-	Start-Test "Get-Module"
+	Start-Test "Find-DuplicateModule"
 	Find-DuplicateModule -Name $ModulesToRemove
 
 	Start-Test "Uninstall-DuplicateModule -Name Pester"
@@ -81,7 +81,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Uninstall duplicate modules for testing
 	$Result
 
 	Test-Output $Result -Command Uninstall-DuplicateModule
-}
 
-Update-Log
-Exit-Test
+	Update-Log
+	Exit-Test
+}

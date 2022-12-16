@@ -64,17 +64,13 @@ param (
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private
+Enter-Test
 
 Start-Test "Update-ModuleHelp"
 $Result = Update-ModuleHelp
 $Result
 
-Start-Test "Test-Output"
-$Result | Test-Output -Command Update-ModuleHelp
-
-# Start-Test "'PowerShellGet' | Update-ModuleHelp"
-# "PowerShellGet" | Update-ModuleHelp
+Test-Output $Result -Command Update-ModuleHelp
 
 Start-Test "Update-ModuleHelp -Name 'PowerShellGet'"
 Update-ModuleHelp -Name "PowerShellGet"
@@ -82,9 +78,8 @@ Update-ModuleHelp -Name "PowerShellGet"
 Start-Test 'Update-ModuleHelp "PowerShellGet" -UICulture ja-JP, en-US'
 Update-ModuleHelp "PowerShellGet" -UICulture ja-JP, en-US
 
-# Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp'
-# $Result = @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp
-# $Result
+Start-Test '@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp'
+@{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" } | Update-ModuleHelp
 
 Start-Test 'Update-ModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }'
 Update-ModuleHelp -FullyQualifiedName @{ ModuleName = "WindowsErrorReporting"; ModuleVersion = "1.0" }
@@ -93,13 +88,13 @@ Start-Test 'Update-ModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptA
 $Result = Update-ModuleHelp @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer")
 $Result
 
-# Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp'
-# @("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp
-
-Test-Output $Result -Command Update-ModuleHelp
+Start-Test '@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp'
+@("PowerShellGet", "PackageManagement", "PSScriptAnalyzer") | Update-ModuleHelp
 
 Start-Test "Get-TypeName"
 $Result | Get-TypeName
+
+Test-Output $Result -Command Update-ModuleHelp
 
 Update-Log
 Exit-Test

@@ -9,8 +9,9 @@ Root directory contains general non module and non script tests.
 **NOTE:** Not all tests will run clean and some unit tests do not run by default
 such as tests for experimental or unfinished code.
 
-Detailed testing should start with `Ruleset.Test`, `Ruleset.Logging` and `Ruleset.Utility` before
-doing other tests to confirm basic functionality works, other modules depend on these.
+Detailed testing should start with `Ruleset.Test`, `Ruleset.Logging`, `Ruleset.Initialize` and
+`Ruleset.Utility` before doing other tests to confirm basic functionality works, other modules
+depend on these.
 
 | Script                     | Description                                                           |
 | -------------------------- | --------------------------------------------------------------------- |

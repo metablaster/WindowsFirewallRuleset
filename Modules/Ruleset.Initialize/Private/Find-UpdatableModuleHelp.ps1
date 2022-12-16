@@ -115,17 +115,21 @@ TODO: Not using ValueFromPipeline because an array isn't distinguished from hash
 proper parameter set name
 TODO: Before running this function Update-Help must be run as Administrator once on target system to
 download required helpinfo.xml files
+TODO: Parameter to perform operation only on modules compatible with PSEdition, ex. check on PS Core
+modules.
 #>
 function Find-UpdatableModuleHelp
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Name")]
 	[OutputType([PSModuleInfo])]
 	param (
-		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Name", Position = 0)]
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = "Name", Position = 0)]
 		[SupportsWildcards()]
 		[string[]] $Name = "*",
 
-		[Parameter(ValueFromPipelineByPropertyName = $true, ParameterSetName = "Full", Position = 0,
+		[Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true,
+			ParameterSetName = "Full", Position = 0,
 			HelpMessage = "Specify module to check in the form of ModuleSpecification object")]
 		[Microsoft.PowerShell.Commands.ModuleSpecification[]] $FullyQualifiedName,
 
