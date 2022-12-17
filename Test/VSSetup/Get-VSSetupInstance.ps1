@@ -68,10 +68,8 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test
 
-$NullVariable = $null
-$EmptyVariable = Get-VSSetupInstance -All |
-Select-VSSetupInstance -Require "FailureTest" -Latest |
-Select-Object -ExpandProperty InstallationPath
+Start-Test "VSSetupVersionTable"
+Get-Variable -Name VSSetupVersionTable | Select-Object *
 
 Start-Test "Get-VSSetupInstance"
 Get-VSSetupInstance
@@ -80,12 +78,6 @@ Start-Test "Get-VSSetupInstance path"
 Get-VSSetupInstance |
 Select-VSSetupInstance -Latest |
 Select-Object -ExpandProperty InstallationPath
-
-Start-Test "Confirm-Installation 'NullVariable' $NullVariable"
-Confirm-Installation "MicrosoftOffice" ([ref] $NullVariable)
-
-Start-Test "Confirm-Installation 'EmptyVariable' $EmptyVariable"
-Confirm-Installation "MicrosoftOffice" ([ref] $EmptyVariable)
 
 Update-Log
 Exit-Test

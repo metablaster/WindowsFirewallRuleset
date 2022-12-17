@@ -1478,6 +1478,20 @@
 			}
 		},
 		//
+		// VSSetup
+		//
+		{
+			"name": "VSSetup\\Get-VSSetupInstance",
+			"type": "PowerShell",
+			"request": "launch",
+			"script": "${workspaceFolder}\\Test\\VSSetup\\Get-VSSetupInstance.ps1",
+			"cwd": "${workspaceFolder}",
+			"presentation": {
+				"group": "VSSetup",
+				"order": 1
+			}
+		},
+		//
 		// Scripts
 		//
 		{
