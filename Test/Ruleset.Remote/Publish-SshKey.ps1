@@ -63,19 +63,18 @@ param (
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #Endregion
 
 Enter-Test "Publish-SshKey"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Upload SSH key to remote computer", "Accept potentially dangerous unit test"))
 {
-	# TODO: Test case not implemented
 	Start-Test "Publish-SshKey"
-	# $Result = Publish-SshKey -User ServerAdmin -Domain Server1 -Admin
-	# $Result
+	$Result = Publish-SshKey -User Admin -Domain VM-PRO -Key $env:USERPROFILE\.ssh\Remote-SSH.pub -System
+	$Result
 
-	# Test-Output $Result -Command Publish-SshKey
+	Test-Output $Result -Command Publish-SshKey
 }
 
 Update-Log

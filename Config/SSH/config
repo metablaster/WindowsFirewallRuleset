@@ -64,7 +64,8 @@ Host VM-PRO
 	HostbasedAuthentication no
 
 	# the signature algorithms that will be used for hostbased authentication as a comma-separated list of patterns.
-	HostbasedAcceptedAlgorithms ecdsa-sha2-nistp256
+	# TODO: Reported as "Bad configuration option"
+	# HostbasedAcceptedAlgorithms ecdsa-sha2-nistp256
 
 	# This allows it to detect if a host key changed due to DNS spoofing and will add addresses of
 	# destination hosts to ~/.ssh/known_hosts in the process, regardless of the setting of StrictHostKeyChecking

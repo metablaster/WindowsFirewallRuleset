@@ -47,7 +47,6 @@ The user to log in as, on the remote machine.
 
 .PARAMETER Key
 Specify public SSH key with is to be transferred.
-By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub
 
 .PARAMETER Port
 Specify SSH port on which the remote server is listening.
@@ -95,7 +94,7 @@ function Publish-SshKey
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Publish-SshKey.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("ComputerName", "CN")]
@@ -140,11 +139,15 @@ function Publish-SshKey
 		return
 	}
 
+	# Progress bar messes up with prompt
+	$OriginalProgressPreference = $global:ProgressPreference
+	$global:ProgressPreference = "SilentlyContinue"
 	if (!(Test-NetConnection -ComputerName $Domain -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue))
 	{
 		# PS might fail but SSH connection could work regardless
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to test connection to '$Domain' computer on SSH port $Port"
 	}
+	$global:ProgressPreference = $OriginalProgressPreference
 
 	# if known_hosts file exists ensure entry for remote host is valid to avoid ssh error about
 	# possibility of DNS spoofing, although this will work only if the IP doesn't match
@@ -213,6 +216,7 @@ function Publish-SshKey
 	{
 		$RemoteFileName = Split-Path -Path $FilePath -Leaf
 
+		# TODO: ssh output will wait until end and then print output after our INFO messages
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Setting ownership of '$RemoteFileName' to user '$User'"
 		ssh -p $Port $User@$Domain "cmd.exe /C icacls $FilePath /setowner $User"
 
