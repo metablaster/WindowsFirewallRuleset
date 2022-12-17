@@ -73,6 +73,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Edit-Table" #-Private
+
+if (!(Get-Command -Name Initialize-Table -ErrorAction Ignore) -or
+	!(Get-Command -Name Edit-Table -ErrorAction Ignore) -or
+	!(Get-Variable -Name InstallTable -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 $RemoteParams = @{
 	CimSession = $CimServer
 	Session = $SessionInstance
@@ -86,26 +97,26 @@ if ($Domain -ne [System.Environment]::MachineName)
 Start-Test "Good system path"
 Initialize-Table
 Edit-Table "%SystemRoot%\System32\WindowsPowerShell\v1.0" @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Bad system path"
 Initialize-Table
 Edit-Table "%ProgramFiles(x86)%\Microsoft Help Viewer\v2.3345345" @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Bad user profile path"
 Initialize-Table
 Edit-Table "%HOME%\source\\repos\WindowsFirewallRuleset\" @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Good user profile path"
 Initialize-Table
 $Result = Edit-Table "C:\\Users\$TestUser\\AppData\\Roaming\\" @RemoteParams
 $Result
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Test-Output $Result -Command Edit-Table

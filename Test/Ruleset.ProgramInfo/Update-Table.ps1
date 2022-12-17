@@ -75,6 +75,17 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Update-Table" #-Private
+
+if (!(Get-Command -Name Initialize-Table -ErrorAction Ignore) -or
+	!(Get-Command -Name Update-Table -ErrorAction Ignore) -or
+	!(Get-Variable -Name InstallTable -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 $RemoteParams = @{
 	CimSession = $CimServer
 	Session = $SessionInstance
@@ -88,42 +99,42 @@ if ($Domain -ne [System.Environment]::MachineName)
 Start-Test "Greenshot -UserProfile"
 Initialize-Table
 Update-Table -Search "Greenshot" -UserProfile @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Failure Test"
 Initialize-Table
 Update-Table -Search "Failure" -UserProfile @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
 Update-Table -Search "Visual Studio" -UserProfile @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "-Executable PowerShell.exe"
 Initialize-Table
 Update-Table -Executable "PowerShell.exe" @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "-Search EdgeChromium -Executable msedge.exe"
 Initialize-Table
 Update-Table -Search "EdgeChromium" -Executable "msedge.exe" @RemoteParams
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "OneDrive -UserProfile"
 Initialize-Table
 $Result = Update-Table -Search "OneDrive" -UserProfile @RemoteParams
 $Result
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Format-Table -AutoSize
 
 Start-Test "Install Path"
-Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore |
+Get-Variable -Name InstallTable -ErrorAction Ignore |
 Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocation
 
 Test-Output $Result -Command Update-Table

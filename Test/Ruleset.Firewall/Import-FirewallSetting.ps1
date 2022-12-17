@@ -59,7 +59,7 @@ param (
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #endregion
 
 Enter-Test "Import-FirewallSetting"

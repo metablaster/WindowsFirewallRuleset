@@ -73,8 +73,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Remove firewall rules according to file
 	$Exports = "$ProjectRoot\Exports"
 
 	# TODO: need to test failure cases, see also module todo's for more info
-
-	if ($true)
+	if ($false)
 	{
 		Start-Test "custom test"
 		Remove-FirewallRule -Path $Exports -FileName "InboundGPO.csv" -Confirm:$false

@@ -50,9 +50,11 @@ Output file, default is CSV format
 
 .PARAMETER DisplayName
 Display name of the rules to be processed. Wildcard character * is allowed.
+DisplayName is case sensitive.
 
 .PARAMETER DisplayGroup
 Display group of the rules to be processed. Wildcard character * is allowed.
+DisplayGroup is case sensitive.
 
 .PARAMETER JSON
 Output in JSON instead of CSV format

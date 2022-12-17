@@ -74,4 +74,4 @@ $Result
 Test-Output $Result -Command Convert-ListToArray
 
 Update-Log
-Exit-Test
+Exit-Test -Private

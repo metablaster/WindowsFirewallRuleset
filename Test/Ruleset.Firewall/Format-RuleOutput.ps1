@@ -99,7 +99,9 @@ $Result = New-NetFirewallRule -DisplayName "TargetProgram2" `
 	-Description "TargetProgram2 test rule description" |
 Format-RuleOutput
 
+# This will remove colored message
 $Result
+
 Test-Output $Result -Command Format-RuleOutput
 
 Update-Log

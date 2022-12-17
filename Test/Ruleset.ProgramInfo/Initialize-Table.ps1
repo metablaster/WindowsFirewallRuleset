@@ -67,6 +67,15 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Initialize-Table" #-Private
 
+if (!(Get-Command -Name Initialize-Table -ErrorAction Ignore) -or
+	!(Get-Variable -Name InstallTable -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 Start-Test "default"
 $Result = Initialize-Table
 $Result

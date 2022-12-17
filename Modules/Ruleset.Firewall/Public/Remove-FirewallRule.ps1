@@ -96,7 +96,7 @@ function Remove-FirewallRule
 {
 	[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]
@@ -116,7 +116,7 @@ function Remove-FirewallRule
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 	$MachineName = Format-ComputerName $Domain
 
-	if ($PSCmdlet.ShouldProcess("Remove firewall rules according to file"))
+	if ($PSCmdlet.ShouldProcess("Windows GPO Firewall", "Remove firewall rules according to file '$FileName'"))
 	{
 		$Path = Resolve-FileSystemPath $Path
 		if (!$Path -or !$Path.Exists)

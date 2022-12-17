@@ -98,7 +98,7 @@ function Import-FirewallRule
 {
 	[CmdletBinding(PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

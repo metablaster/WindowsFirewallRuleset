@@ -46,7 +46,7 @@ None. You cannot pipe objects to Import-FirewallRule.ps1
 None. Import-FirewallRule.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Not possible to pass script parameters to debugger
 #>
 
 #Requires -Version 5.1
@@ -77,7 +77,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Import-FirewallRule"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Import firewall rules", "Accept slow and dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Import firewall rules", "Accept slow or dangerous unit test"))
 {
 	$Exports = "$ProjectRoot\Exports"
 
@@ -119,7 +119,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Import firewall rules", "Accept slow an
 			Start-Test "-FileName GroupExport.csv"
 			Import-FirewallRule -Path $Exports -FileName "GroupExport.csv"
 
-			Start-Test "-FileName RegNamedExport1.csv"
+			Start-Test "-FileName NamedExport1.csv"
 			Import-FirewallRule -Path $Exports -FileName "NamedExport1.csv" -Overwrite
 
 			Start-Test "-JSON -FileName NamedExport2.json"

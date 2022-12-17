@@ -74,4 +74,4 @@ Restore-IfBlank "NewValue"
 Test-Output $Result -Command Restore-IfBlank
 
 Update-Log
-Exit-Test
+Exit-Test -Private

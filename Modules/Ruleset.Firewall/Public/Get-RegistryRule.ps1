@@ -48,10 +48,12 @@ Retrive rules from local group policy store (GPO firewall)
 .PARAMETER DisplayName
 Specifies that only matching firewall rules of the indicated display name are retrieved
 Wildcard characters are accepted.
+DisplayName is case sensitive.
 
 .PARAMETER DisplayGroup
 Specifies that only matching firewall rules of the indicated group association are retrieved
 Wildcard characters are accepted.
+DisplayGroup is case sensitive.
 
 .PARAMETER Direction
 Specifies that matching firewall rules of the indicated direction are retrieved
@@ -84,6 +86,7 @@ Not implementing more parameters because only those here are always present in r
 ParameterSetName = "NotAllowingEmptyString" is there because $DisplayName if not specified casts to
 empty string due to [string] declaration, which is the same thing as specifying -DisplayName "",
 we deny both with dummy parameter set name and setting default parameter set name to something else.
+TODO: Parameter to ignore case sensitive DisplayName and DisplayGroup, then also update  Export-RegistryRule
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Get-RegistryRule.md

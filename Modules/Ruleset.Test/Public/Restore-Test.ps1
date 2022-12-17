@@ -75,11 +75,19 @@ function Restore-Test
 			$private:TestEV = (Get-Variable -Name TestEV -Scope Global).Value
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Global TestEV is '$private:TestEV'"
 
-			foreach ($ErrorRecord in $private:TestEV)
+			if ($null -eq $private:TestEV)
 			{
-				# TODO: Info output is not printed after Start-Test header
-				# TODO: Consider colored message with Write-ColorMessage
-				Write-Information -Tags "Test" -MessageData "INFO: $ErrorRecord"
+				# TODO: Parameter validation error will for example not go to error variable
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Error variable is null"
+			}
+			else
+			{
+				foreach ($ErrorRecord in $private:TestEV)
+				{
+					# TODO: Info output is not printed after Start-Test header
+					# TODO: Consider colored message with Write-ColorMessage
+					Write-Information -Tags "Test" -MessageData "INFO: $ErrorRecord"
+				}
 			}
 
 			# Remove variables because Start-Test will renew them

@@ -74,7 +74,7 @@ function Format-RuleOutput
 {
 	[CmdletBinding(DefaultParameterSetName = "None", PositionalBinding = $false,
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Format-RuleOutput.md")]
-	[OutputType([void])]
+	[OutputType([string])]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("InputObject")]

@@ -74,10 +74,11 @@ Start-Test "Convert 41 to IPv6"
 $Result = ConvertFrom-Protocol 41
 $Result
 
-Start-Test "Protocol out of range"
-ConvertFrom-Protocol 300
+Start-Test "Protocol out of range" -Expected "Fail" -Force
+ConvertFrom-Protocol 300 -EV +TestEV -EA SilentlyContinue
+Restore-Test
 
 Test-Output $Result -Command ConvertFrom-Protocol
 
 Update-Log
-Exit-Test
+Exit-Test -Private

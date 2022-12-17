@@ -94,4 +94,4 @@ $Result
 Test-Output $Result -Command Convert-ValueToBoolean
 
 Update-Log
-Exit-Test
+Exit-Test -Private

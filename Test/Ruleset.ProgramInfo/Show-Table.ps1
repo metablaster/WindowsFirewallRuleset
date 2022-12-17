@@ -67,6 +67,18 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Show-Table" #-Private
 
+if (!(Get-Command -Name Initialize-Table -ErrorAction Ignore) -or
+	!(Get-Command -Name Update-Table -ErrorAction Ignore) -or
+	!(Get-Command -Name Edit-Table -ErrorAction Ignore) -or
+	!(Get-Command -Name Show-Table -ErrorAction Ignore) -or
+	!(Get-Variable -Name InstallTable -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
 Update-Table -Search "Visual Studio" -UserProfile

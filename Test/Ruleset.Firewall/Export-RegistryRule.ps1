@@ -106,7 +106,7 @@ else
 		Export-RegistryRule -DisplayGroup "Microsoft - One Drive" -Outbound -Path $Exports -JSON -Append -FileName "RegNamedExport2"
 
 		Start-Test "-DisplayName 'Microsoft.BingWeather' -Outbound"
-		$Result = Export-RegistryRule -DisplayName "Microsoft.BingWeather" -Outbound -Path $Exports -FileName "RegStoreAppExport"
+		$Result = Export-RegistryRule -DisplayName "Microsoft.Bingweather" -Outbound -Path $Exports -FileName "RegStoreAppExport"
 		$Result
 
 		Test-Output $Result -Command Export-RegistryRule

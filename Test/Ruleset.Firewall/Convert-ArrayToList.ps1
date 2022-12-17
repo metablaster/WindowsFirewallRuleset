@@ -78,4 +78,4 @@ Start-Test "pipeline"
 Test-Output $Result -Command Convert-ArrayToList
 
 Update-Log
-Exit-Test
+Exit-Test -Private
