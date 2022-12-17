@@ -93,7 +93,7 @@ None. You cannot pipe objects to Register-SslCertificate
 .NOTES
 This script is called by Enable-WinRMServer and doesn't need to be run on it's own.
 HACK: What happens when exporting a certificate that is already installed? (no error is shown)
-TODO: This function must be simplified and certificate creation should be separate function
+TODO: This function must be simplified and certificate creation should probably be separate function
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Register-SslCertificate.md
@@ -158,7 +158,9 @@ function Register-SslCertificate
 		# Search default file name location
 		if ($ProductType -eq "Server")
 		{
+			# Certificate file with private key
 			$CertFile = "$ExportPath\$Domain.pfx"
+			# Exported certificate file with only public key
 			$ExportFile = "$ExportPath\$Domain.cer"
 		}
 		else
@@ -166,8 +168,6 @@ function Register-SslCertificate
 			$CertFile = "$ExportPath\$Domain.cer"
 			$ExportFile = $CertFile
 		}
-
-		$ExportFileObject = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList $ExportFile
 
 		# Search personal store for certificate first
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching personal store for SSL certificate"
@@ -227,7 +227,7 @@ function Register-SslCertificate
 
 				if (!$Cert)
 				{
-					Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with specified thumbprint not found '$CertThumbprint'"
+					Write-Error -Category InvalidResult -TargetObject $Cert -Message "Certificate with the specified thumbprint not found '$CertThumbprint'"
 				}
 			}
 
@@ -241,15 +241,21 @@ function Register-SslCertificate
 			$DuplicateCert = $false
 			if (Test-Path $CertFile -PathType Leaf -ErrorAction Ignore)
 			{
-				# Ensure that installed certificate is the one of the remote computer by comparing thumbprints
-				if ($ExportFileObject.Thumbprint -ne $Cert.thumbprint)
+				# If there is export file, possibly differnet than one found in certificate store
+				if (Test-Path -Path $ExportFile -ErrorAction Ignore)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Local store already has a certificate with same CN entry as the one to be imported but thumbprints differ"
-					if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate with duplicate CN entry from default repository location to personal store"))
+					# Ensure that installed certificate is the one of the remote computer by comparing thumbprints
+					$ExportFileObject = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList $ExportFile
+
+					if ($ExportFileObject.Thumbprint -ne $Cert.thumbprint)
 					{
-						$DuplicateCert = $true
-						$Cert = & $ImportCertificate
-						$Cert = & $CheckThumbprint
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Local store already has a certificate with same CN entry as the one to be imported but thumbprints differ"
+						if ($PSCmdlet.ShouldProcess("Certificates - local machine", "Import certificate with duplicate CN entry from default repository location to personal store"))
+						{
+							$DuplicateCert = $true
+							$Cert = & $ImportCertificate
+							$Cert = & $CheckThumbprint
+						}
 					}
 				}
 			}
@@ -277,6 +283,8 @@ function Register-SslCertificate
 		{
 			foreach ($CertFound in $Cert)
 			{
+				# If there are multiple certificates with same CN but at least one of them is not in
+				# trusted root then we don't know which one to trust or use
 				if (!(Get-ChildItem -Path Cert:\LocalMachine\Root |
 						Where-Object {
 							($_.thumbprint -eq $CertFound.Thumbprint)
@@ -312,7 +320,7 @@ function Register-SslCertificate
 				# Create new self signed server certificate
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating new SSL certificate"
 
-				# NOTE: Yellow exclamation mark on "Key Usage" means the following:
+				# DOCS: Yellow exclamation mark on "Key Usage" means the following:
 				# The key usage extension defines the purpose (e.g., encipherment,
 				# signature, certificate signing) of the key contained in the certificate.
 				# The usage restriction might be employed when a key that could be used for more than one
@@ -468,7 +476,7 @@ function Register-SslCertificate
 	if (!(Test-Certificate -Cert $Cert -Policy SSL -ErrorAction Ignore -WarningAction Ignore))
 	{
 		# Add public key to trusted root to trust this certificate locally
-		if ($PSCmdlet.ShouldProcess("Add certificate to trusted root store?", "Certificate not trusted"))
+		if ($PSCmdlet.ShouldProcess("Trusted root store - Local Machine", "Add certificate to trusted root store?"))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "Trusting certificate '$Domain.cer' with thumbprint '$($Cert.thumbprint)'"

@@ -127,6 +127,8 @@ New-Variable -Name Workstation -Scope Script -Option Constant -Value (
 	(Get-CimInstance -ClassName Win32_OperatingSystem -EA Stop |
 	Select-Object -ExpandProperty ProductType) -eq 1)
 
+# TODO: This variable must be removed because status of the service may change and
+# we would work on stale service object
 New-Variable -Name WinRM -Scope Script -Option Constant -Value (Get-Service -Name WinRM)
 
 # Adapters modified by module

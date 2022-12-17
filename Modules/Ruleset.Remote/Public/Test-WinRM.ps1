@@ -117,7 +117,13 @@ PS> Test-WinRM HTTP -Quiet -Status $RemoteStatus
 None. You cannot pipe objects to Test-WinRM
 
 .OUTPUTS
-None. Test-WinRM does not generate any output
+[void]
+[System.Xml.XmlElement]
+[System.String]
+[System.URI]
+[System.Management.Automation.Runspaces.PSSession]
+[Microsoft.PowerShell.Commands.Internal.Format.GroupStartData]
+[Microsoft.PowerShell.Commands.Internal.Format.FormatStartData]
 
 .NOTES
 Regarding CertThumbprint problems with Test-WSMan see this issue https://github.com/PowerShell/PowerShell/issues/16752

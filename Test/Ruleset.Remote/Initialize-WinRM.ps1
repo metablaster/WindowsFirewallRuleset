@@ -68,6 +68,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Initialize-WinRM"
 
+if (!(Get-Command -Name Initialize-WinRM -ErrorAction Ignore) -or
+	!(Get-Variable -Name WinRMRules -ErrorAction Ignore) -or
+	!(Get-Variable -Name WinRMCompatibilityRules -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 if ($Force -or $PSCmdlet.ShouldContinue("Initialize WinRM service", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"

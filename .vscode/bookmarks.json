@@ -44,12 +44,12 @@
 			"path": "Modules/Ruleset.Remote/Public/Test-WinRM.ps1",
 			"bookmarks": [
 				{
-					"line": 383,
+					"line": 389,
 					"column": 3,
 					"label": ""
 				},
 				{
-					"line": 468,
+					"line": 474,
 					"column": 3,
 					"label": ""
 				}
@@ -126,6 +126,16 @@
 				{
 					"line": 99,
 					"column": 34,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Ruleset.Remote.psm1",
+			"bookmarks": [
+				{
+					"line": 129,
+					"column": 8,
 					"label": ""
 				}
 			]

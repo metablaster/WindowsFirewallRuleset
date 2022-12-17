@@ -37,6 +37,9 @@ previously done by Register-SslCertificate
 .PARAMETER CertThumbprint
 Certificate thumbprint which is to be uninstalled
 
+.PARAMETER Force
+If specified, no prompt to remove certificate from certificate store is shown
+
 .EXAMPLE
 PS> Unregister-SslCertificate
 
@@ -55,18 +58,32 @@ function Unregister-SslCertificate
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Unregister-SslCertificate.md")]
 	[OutputType([void])]
 	param (
+		[Parameter(Mandatory = $true)]
+		[string] $CertThumbprint,
+
 		[Parameter()]
-		[string] $CertThumbprint
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	if ($PSCmdlet.ShouldProcess("Certificate store", "Uninstall certificate $CertThumbprint"))
 	{
+		$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
+			$_.Thumbprint -eq $CertThumbprint
+		}
+
+		if (!$Cert)
+		{
+			Write-Error -Category ObjectNotFound `
+				-Message "Certificate with the specified thumbprint '$CertThumbprint' was not found"
+			return
+		}
+
 		Get-ChildItem Cert:\LocalMachine\My |
-		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item
+		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item -Force:$Force
 
 		Get-ChildItem Cert:\LocalMachine\Root |
-		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item
+		Where-Object { $_.Thumbprint -eq $CertThumbprint } | Remove-Item -Force:$Force
 	}
 }

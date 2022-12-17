@@ -68,6 +68,16 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Restore-NetProfile"
 
+if (!(Get-Command -Name Restore-NetProfile -ErrorAction Ignore) -or
+	!(Get-Variable -Name VirtualAdapter -ErrorAction Ignore) -or
+	!(Get-Variable -Name AdapterProfile -ErrorAction Ignore))
+{
+	Write-Error -Category NotEnabled -Message "This unit test requires export of privave functions and variables"
+	Update-Log
+	Exit-Test
+	return
+}
+
 if ($Force -or $PSCmdlet.ShouldContinue("Restore network profile to previous value", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"

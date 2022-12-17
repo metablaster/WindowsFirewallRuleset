@@ -75,6 +75,9 @@ Start-Test "-Client -Detailed"
 $Result = Show-WinRMConfig -Client -Detailed
 $Result
 
+Start-Test "Get-TypeName"
+$Result | Get-TypeName -Force
+
 Test-Output $Result -Command Show-WinRMConfig
 
 Update-Log

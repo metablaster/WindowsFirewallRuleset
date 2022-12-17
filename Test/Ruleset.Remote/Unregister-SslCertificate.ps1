@@ -63,15 +63,28 @@ param (
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
-if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
 #Endregion
 
 Enter-Test "Unregister-SslCertificate"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Remove SSL certificate", "Accept potentially dangerous unit test"))
 {
-	Start-Test "-Server"
-	$Result = Unregister-SslCertificate -ProductType Server -PassThru
+	Start-Test "Get Thumbprint"
+	$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
+		$_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
+	}
+
+	if (!$Cert)
+	{
+		Write-Error -Category InvalidData -Message "Unit test update needed to specify certificate Thumbprint of an existing certificate"
+		Update-Log
+		Exit-Test
+		return
+	}
+
+	Start-Test "Unregister"
+	$Result = Unregister-SslCertificate $Cert.Thumbprint
 	$Result
 
 	Test-Output $Result -Command Unregister-SslCertificate

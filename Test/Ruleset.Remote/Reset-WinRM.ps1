@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Reset-WinRM"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Reset WinRM service", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Reset WinRM configuration", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"
 	$Result = Reset-WinRM

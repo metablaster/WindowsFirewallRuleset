@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2021, 2022 metablaster zebal@protonmail.ch
+Copyright (C) 2022 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,28 +28,29 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Unit test for Test-WinRM
+Unit test for Import-WinRM
 
 .DESCRIPTION
-Test correctness of Test-WinRM function
+Test correctness of Import-WinRM function
 
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
 .EXAMPLE
-PS> .\Test-WinRM.ps1
+PS> .\Import-WinRM.ps1
 
 .INPUTS
-None. You cannot pipe objects to Test-WinRM.ps1
+None. You cannot pipe objects to Import-WinRM.ps1
 
 .OUTPUTS
-None. Test-WinRM.ps1 does not generate any output
+None. Import-WinRM.ps1 does not generate any output
 
 .NOTES
 None.
 #>
 
 #Requires -Version 5.1
+# TODO: Too early to conclude whether elevation is required
 #Requires -RunAsAdministrator
 
 [CmdletBinding()]
@@ -66,16 +67,16 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #Endregion
 
-Enter-Test "Test-WinRM"
+Enter-Test "Import-WinRM"
 
-Start-Test "HTTP"
-$Result = Test-WinRM -Protocol HTTP
-$Result
+if ($Force -or $PSCmdlet.ShouldContinue("Export WinRM settings", "Accept potentially dangerous unit test"))
+{
+	Start-Test "Default"
+	$Result = Import-WinRM
+	$Result
 
-Start-Test "Get-TypeName"
-$Result | Get-TypeName -Force
-
-Test-Output $Result -Command Test-WinRM
+	Test-Output $Result -Command Import-WinRM
+}
 
 Update-Log
 Exit-Test

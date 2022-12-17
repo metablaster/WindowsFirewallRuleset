@@ -71,7 +71,7 @@ Enter-Test "Disable-WinRMServer"
 if ($Force -or $PSCmdlet.ShouldContinue("Disable WinRM server configuration", "Accept potentially dangerous unit test"))
 {
 	Start-Test "Default"
-	$Result = Disable-WinRMServer
+	$Result = Disable-WinRMServer -KeepDefault
 	$Result
 
 	Test-Output $Result -Command Disable-WinRMServer
