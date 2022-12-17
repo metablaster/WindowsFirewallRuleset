@@ -58,7 +58,7 @@ function Restore-Test
 	if (!(Get-Variable -Name TestCase -Scope Script -ErrorAction Ignore))
 	{
 		Write-Error -Category InvalidOperation -TargetObject $MyInvocation.InvocationName `
-			-Message "You forgot to call Start-Test -Force before calling Restore-Test"
+			-Message "You forgot to call Start-Test -Force prior to calling Restore-Test"
 		return
 	}
 
@@ -75,9 +75,11 @@ function Restore-Test
 			$private:TestEV = (Get-Variable -Name TestEV -Scope Global).Value
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Global TestEV is '$private:TestEV'"
 
-			if ($null -ne $private:TestEV)
+			foreach ($ErrorRecord in $private:TestEV)
 			{
-				Write-Information -Tags "Test" -MessageData "INFO: $private:TestEV"
+				# TODO: Info output is not printed after Start-Test header
+				# TODO: Consider colored message with Write-ColorMessage
+				Write-Information -Tags "Test" -MessageData "INFO: $ErrorRecord"
 			}
 
 			# Remove variables because Start-Test will renews them
@@ -88,7 +90,7 @@ function Restore-Test
 		else
 		{
 			Write-Error -Category InvalidOperation -TargetObject $script:TestCase `
-				-Message "You forgot to use -Force with Start-Test before calling Restore-Test"
+				-Message "You forgot to use -Force with Start-Test prior to calling Restore-Test"
 		}
 	}
 }

@@ -107,7 +107,7 @@ else
 	$Users | Get-PrincipalSID -Domain $Domain
 
 	Start-Test "Get-TypeName"
-	$AccountSID1 | Get-TypeName
+	$AccountSID1 | Get-TypeName -Force
 
 	#
 	# Test NT AUTHORITY
@@ -126,7 +126,7 @@ else
 	# $AccountSID2
 
 	Start-Test "Get-TypeName"
-	$AccountSID2 | Get-TypeName
+	$AccountSID2 | Get-TypeName -Force
 
 	#
 	# Test APPLICATION PACKAGE AUTHORITY
@@ -144,7 +144,7 @@ else
 	# $AccountSID3 = Get-PrincipalSID -Domain $AppDomain -User $AppUser
 	# $AccountSID3
 
-	Test-Output $AccountSID3 -Command Get-PrincipalSID
+	Test-Output $AccountSID3 -Command Get-PrincipalSID -Force
 }
 
 Update-Log

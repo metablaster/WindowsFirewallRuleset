@@ -103,7 +103,7 @@ function Get-Error
 
 Start-Test "Failure test" -Expected "Error converted to information" -Force
 # Not needing -EA SilentlyContinue only because Get-Error is global function
-Get-Error -ErrorVariable TestEV
+Get-Error -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Exit-Test

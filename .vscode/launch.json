@@ -1126,7 +1126,7 @@
 			"name": "UserInfo\\ConvertFrom-SDDL",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\function.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\ConvertFrom-SDDL.ps1",
 			"cwd": "${workspaceFolder}",
 			"presentation": {
 				"group": "Ruleset.UserInfo",
@@ -1137,7 +1137,7 @@
 			"name": "UserInfo\\ConvertFrom-SID",
 			"type": "PowerShell",
 			"request": "launch",
-			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\function.ps1",
+			"script": "${workspaceFolder}\\Test\\Ruleset.UserInfo\\ConvertFrom-SID.ps1",
 			"cwd": "${workspaceFolder}",
 			"presentation": {
 				"group": "Ruleset.UserInfo",

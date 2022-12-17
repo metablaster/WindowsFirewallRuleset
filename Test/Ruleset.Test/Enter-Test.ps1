@@ -100,34 +100,40 @@ Start-Test "-Command -Private" -Command "Enter-Test"
 Enter-Test -Command "Some-Command" -Private
 Exit-Test -Private
 
-#
-# Test forgetting specifying -Private
-#
-Start-Test "Forgot -Private" -Command "Enter-Test" -Expected "Error converted to information" -Force
+# NOTE: These intentional errors can't be silenced and stop normal functioning of further
+# tests due to script scope variable not set with Start-Test -Force
+# It also doesn't run Restore-Test which hampers other unit tests, need to run manually
+if ($false)
+{
+	#
+	# Test forgetting specifying -Private
+	#
+	Start-Test "Forgot -Private" -Command "Enter-Test" -Expected "Error converted to information"
 
-Enter-Test -Private
-Exit-Test -ErrorVariable TestEV -EA SilentlyContinue
-Restore-Test
-# Remove it manually so that subsequent tests don't fail
-Remove-Module -Name Dynamic.UnitTest
+	Enter-Test -Private
+	Exit-Test -EV +TestEV -EA SilentlyContinue
+	Restore-Test
+	# Remove it manually so that subsequent tests don't fail
+	Remove-Module -Name Dynamic.UnitTest
 
-#
-# Test forgetting running Exit-Test
-#
-Start-Test "Forgot Exit-Test" -Command "Enter-Test" -Expected "Warning message"
+	#
+	# Test forgetting running Exit-Test
+	#
+	Start-Test "Forgot Exit-Test" -Command "Enter-Test" -Expected "Warning message"
 
-Enter-Test -InformationAction Ignore
-Enter-Test
-# Running Exit-Test will get rid of a warning
-Exit-Test
+	Enter-Test -InformationAction Ignore
+	Enter-Test
+	# Running Exit-Test will get rid of a warning
+	Exit-Test
 
-#
-# Test running Exit-Test without Enter-Test
-#
-Start-Test "Forgot Enter-Test" -Command "Enter-Test" -Expected "Error converted to information" -Force
+	#
+	# Test running Exit-Test without Enter-Test
+	#
+	Start-Test "Forgot Enter-Test" -Command "Enter-Test" -Expected "Error converted to information" -Force
 
-Exit-Test -ErrorVariable TestEV -EA SilentlyContinue
-Restore-Test
+	Exit-Test -EV +TestEV -EA SilentlyContinue
+	Restore-Test
+}
 
 #
 # Test output type and attribute

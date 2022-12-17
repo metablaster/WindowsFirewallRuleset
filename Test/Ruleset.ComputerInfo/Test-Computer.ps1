@@ -90,19 +90,19 @@ else
 }
 
 Start-Test "Ping with HTTP" -Expected "Fail" -Force
-Test-Computer $Domain -Retry 2 -Protocol HTTP -ErrorAction SilentlyContinue
+Test-Computer $Domain -Retry 2 -Protocol HTTP -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Start-Test "Ping with TCP" -Expected "Fail" -Force
-Test-Computer $Domain -Port 5985 -Protocol Ping -ErrorAction SilentlyContinue
+Test-Computer $Domain -Port 5985 -Protocol Ping -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Start-Test "-Retry" -Expected "FAIL" -Force
-Test-Computer "FAILURE-COMPUTER" -Retry 2 -ErrorAction SilentlyContinue
+Test-Computer "FAILURE-COMPUTER" -Retry 2 -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Start-Test "TCP test" -Expected "FAIL" -Force
-Test-Computer $Domain -Port 5986 -Protocol TCP -ErrorAction SilentlyContinue
+Test-Computer $Domain -Port 5986 -Protocol TCP -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Start-Test "WinRM -Protocol $RemotingProtocol"

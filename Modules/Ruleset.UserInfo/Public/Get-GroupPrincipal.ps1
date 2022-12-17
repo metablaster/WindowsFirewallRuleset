@@ -74,7 +74,7 @@ function Get-GroupPrincipal
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupPrincipal.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.UserInfo.Principal")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserGroup")]

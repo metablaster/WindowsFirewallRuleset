@@ -75,8 +75,14 @@ Start-Test "-User $User"
 $SDDL = Get-SDDL -User $User
 $SDDL
 
-Start-Test "Default test"
+Start-Test "Boolean test"
 $Result = Test-SDDL $SDDL
+$Result
+
+Test-Output $Result -Command Test-SDDL
+
+Start-Test "PassThru test"
+$Result = Test-SDDL $SDDL -PassThru
 $Result
 
 Test-Output $Result -Command Test-SDDL

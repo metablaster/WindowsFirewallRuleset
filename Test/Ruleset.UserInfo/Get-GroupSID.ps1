@@ -94,7 +94,7 @@ else
 	$GroupsTest = Get-GroupSID $SingleGroup -Domain "."
 	$GroupsTest
 
-	Test-Output $GroupsTest -Command Get-GroupSID
+	Test-Output $GroupsTest -Command Get-GroupSID -Force
 
 	Start-Test "'Users'"
 	$GroupsTest = Get-GroupSID $SingleGroup
@@ -110,7 +110,7 @@ else
 	$GroupsTest = Get-GroupSID $GroupArray
 	$GroupsTest
 
-	Test-Output $GroupsTest -Command Get-GroupSID
+	Test-Output $GroupsTest -Command Get-GroupSID -Force
 
 	Start-Test "GroupArray"
 	$GroupsTest = Get-GroupSID $GroupArray
@@ -132,11 +132,13 @@ else
 	# Test failure
 	#
 
-	Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
+	Start-Test "FAILURE TEST NO CIM: Get-GroupSID @('Users', 'Hyper-V Administrators')" -Force
+	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
-	Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')"
-	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -ErrorAction SilentlyContinue
+	Start-Test "FAILURE TEST CONTACT: Get-GroupSID @('Users', 'Hyper-V Administrators')" -Force
+	Get-GroupSID "Users", 'Hyper-V Administrators' -Domain "CRAZYMACHINE" -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 }
 
 Update-Log

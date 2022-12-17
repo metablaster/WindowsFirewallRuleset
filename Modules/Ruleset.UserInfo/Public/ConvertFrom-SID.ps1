@@ -109,7 +109,7 @@ function ConvertFrom-SID
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/ConvertFrom-SID.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.UserInfo.Principal")]
 	param (
 		[Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
 		[ValidatePattern("^S-1-(\d+-)*\d+$")]

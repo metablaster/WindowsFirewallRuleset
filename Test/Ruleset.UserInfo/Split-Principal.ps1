@@ -91,9 +91,10 @@ Split-Principal "MicrosoftAccount\$TestUser@domain.com"
 Start-Test "'$TestUser@domain.com' -DomainName"
 Split-Principal "$TestUser@domain.com" -DomainName
 
-Start-Test "FAIL"
+Start-Test "FAIL" -Force
 $BadAccount = "\ac", "$TestUser@email"
-Split-Principal $BadAccount
+Split-Principal $BadAccount -EV +TestEV -EA SilentlyContinue
+Restore-Test
 
 Start-Test "User"
 Split-Principal "User"

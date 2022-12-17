@@ -95,7 +95,7 @@ else
 	# TODO: For these tests to succeed we need to have HTTP enabled WinRM server
 	#
 	Start-Test "Pipeline" -Command Get-SystemSKU -Force
-	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -ErrorAction SilentlyContinue
+	@($([System.Environment]::MachineName), "INVALID_COMPUTER") | Get-SystemSKU -EV +TestEV -EA SilentlyContinue
 	Restore-Test
 
 	Start-Test "-Domain"

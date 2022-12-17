@@ -64,7 +64,7 @@ function Get-PrincipalSID
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-PrincipalSID.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType("Ruleset.Userinfo.Principal")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserName")]

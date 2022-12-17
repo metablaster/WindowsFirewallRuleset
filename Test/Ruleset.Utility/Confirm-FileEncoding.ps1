@@ -132,7 +132,7 @@ $Result = Confirm-FileEncoding $TestFile.Path
 $Result
 
 Start-Test "binary file" -Force
-Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -EA SilentlyContinue
+Confirm-FileEncoding "$env:SystemRoot\regedit.exe" -EV +TestEV -EA SilentlyContinue
 Restore-Test
 
 Start-Test "binary file -Binary"

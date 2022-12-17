@@ -175,9 +175,10 @@ Test-UPN "$TestUser@$Domain" -Suffix
 #
 New-Section "null or empty"
 
-Start-Test "null pipeline -Suffix" -Expected "FAIL"
+Start-Test "null pipeline -Suffix" -Expected "FAIL" -Force
 $NullString = @($null, $Domain, $null)
-$NullString | Test-UPN -Suffix
+$NullString | Test-UPN -Suffix -EV +TestEV -EA SilentlyContinue
+Restore-Test
 
 $EmptyString = @("", $TestUser, "")
 Start-Test "empty pipeline -Prefix"
@@ -190,12 +191,14 @@ Test-UPN $TestString -Suffix
 Start-Test "empty"
 Test-UPN $TestString
 
-Start-Test "null -Prefix" -Expected "FAIL"
+Start-Test "null -Prefix" -Expected "FAIL" -Force
 $TestString = $null
-Test-UPN $TestString -Prefix
+Test-UPN $TestString -Prefix -EV +TestEV -EA SilentlyContinue
+Restore-Test
 
-Start-Test "null" -Expected "FAIL"
-Test-UPN $TestString
+Start-Test "null" -Expected "FAIL" -Force
+Test-UPN $TestString -EV +TestEV -EA SilentlyContinue
+Restore-Test
 
 Start-Test "separator only"
 $TestString = "@"

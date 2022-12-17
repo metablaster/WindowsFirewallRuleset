@@ -92,11 +92,11 @@ else
 	Start-Test "localhost"
 	Get-UserGroup -Domain "localhost"
 
-	Start-Test "Failure test"
-	Get-UserGroup -Domain "FAILURETEST" -ErrorAction SilentlyContinue -EV Failure
-	Write-Warning -Message "[$ThisScript] Ignored error: $Failure"
+	Start-Test "Failure test" -Force
+	Get-UserGroup -Domain "FAILURETEST" -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
-	Test-Output $Result -Command Get-UserGroup
+	Test-Output $Result -Command Get-UserGroup -Force
 }
 
 Update-Log

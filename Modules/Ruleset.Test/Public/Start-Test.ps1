@@ -156,7 +156,9 @@ function Start-Test
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Global ErrorAction is '$global:ErrorActionPreference'"
 			$global:ErrorActionPreference = "SilentlyContinue"
 
-			# Failure test case which produces errors should use this error variable
+			# Failure test case which produces errors should use this error variable as -EV +TestEV
+			# HACK: Not working in some cases, see Get-UserGroup and Test-Computer unit test shows blank INFO and
+			# Test-UPN shows no info at all nor any output
 			New-Variable -Name TestEV -Scope Global -Value $null
 		}
 	}

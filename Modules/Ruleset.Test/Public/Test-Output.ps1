@@ -190,7 +190,8 @@ function Test-Output
 
 				if ($Reference)
 				{
-					$Message = "OutputType is similar to TypeName but not not exact"
+					# TypeName is likely an accelerator if .NET type check was performed
+					$Message = "OutputType is likely accelerator of TypeName but not not exactly typed"
 
 					if ($Force)
 					{
@@ -203,7 +204,8 @@ function Test-Output
 				}
 				elseif ($Difference)
 				{
-					$Message = "Typename is similar to OutputType but not not exact"
+					# OutputType is likely an accelerator if .NET type check was performed
+					$Message = "TypeName is likely accelerator of OutputType but not not exactly typed"
 
 					if ($Force)
 					{
@@ -211,7 +213,6 @@ function Test-Output
 					}
 					else
 					{
-						# TypeName is full name and OutputType is accelerator or vice versa
 						Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 					}
 				}

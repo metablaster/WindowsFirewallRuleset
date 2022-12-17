@@ -89,7 +89,7 @@ function Exit-Test
 		elseif ($DynamicModule)
 		{
 			Write-Error -Category InvalidOperation -TargetObject $DynamicModule `
-				-Message "You forgot to specify -Private switch for Exit-Test in '$UnitTest'"
+				-Message "You forgot to specify -Private switch for Exit-Test probably in '$UnitTest' or one of the unit tests before"
 		}
 
 		# NOTE: Write-Host would mess up test case outputs

@@ -112,21 +112,24 @@ foreach ($Account in $NTAccounts)
 	ConvertFrom-SID $Account.SID @SessionParams | Format-Table
 }
 
-Start-Test "Unknown domain"
-ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" @SessionParams -ErrorAction SilentlyContinue | Format-Table
+Start-Test "Unknown domain" -Force
+ConvertFrom-SID "S-1-5-21-0000-0000-1111-1111" @SessionParams -EV +TestEV -EA SilentlyContinue | Format-Table
+Restore-Test
 
-Start-Test "unknown SID"
-ConvertFrom-SID "S-1-5-9999" @SessionParams -ErrorAction SilentlyContinue | Format-Table
+Start-Test "unknown SID" -Force
+ConvertFrom-SID "S-1-5-9999" @SessionParams -EV +TestEV -EA SilentlyContinue | Format-Table
+Restore-Test
 
 Start-Test "App SID for Microsoft.AccountsControl"
 $AppSID = "S-1-15-2-969871995-3242822759-583047763-1618006129-3578262429-3647035748-2471858633"
 $AppResult = ConvertFrom-SID $AppSID @SessionParams
 $AppResult | Format-Table
 
-Start-Test "nonexistent App SID"
+Start-Test "nonexistent App SID" -Force
 $AppSID = "S-1-15-2-2967553933-3217682302-0000000000000000000-2077017737-3805576244-585965800-1797614741"
-$AppResult = ConvertFrom-SID $AppSID @SessionParams -ErrorAction SilentlyContinue
-$AppResult | Format-Table
+$AppResult2 = ConvertFrom-SID $AppSID @SessionParams -EV +TestEV -EA SilentlyContinue
+$AppResult2 | Format-Table
+Restore-Test
 
 Start-Test "APPLICATION PACKAGE AUTHORITY"
 $AppSID = "S-1-15-2-2"
@@ -138,7 +141,7 @@ $AppSID = "S-1-15-3-12345"
 $PackageResult = ConvertFrom-SID @SessionParams $AppSID
 $PackageResult | Format-Table
 
-Test-Output $AppResult -Command ConvertFrom-SID
+Test-Output $AppResult -Command ConvertFrom-SID -Force
 
 Update-Log
 Exit-Test

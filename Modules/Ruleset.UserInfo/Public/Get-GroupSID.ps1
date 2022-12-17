@@ -64,7 +64,7 @@ function Get-GroupSID
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-GroupSID.md")]
-	[OutputType([PSCustomObject])]
+	[OutputType("Ruleset.UserInfo.Group")]
 	param (
 		[Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
 		[Alias("UserGroup")]

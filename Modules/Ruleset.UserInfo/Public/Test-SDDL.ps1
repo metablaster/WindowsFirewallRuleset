@@ -37,6 +37,10 @@ It does not check the existence of a principal which the SDDL represents.
 .PARAMETER SDDL
 SDDL strings which to test
 
+.PARAMETER PassThru
+If specified, the return value is SDDL string if it's valid, otherwise null.
+By default boolean test is performed.
+
 .EXAMPLE
 PS> Test-SDDL D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;;S-1-5-21-2050798540-3232341180-3229034493-1001)
 
@@ -44,6 +48,7 @@ PS> Test-SDDL D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;
 None. You cannot pipe objects to Test-SDDL
 
 .OUTPUTS
+[bool] true if SDDL string is valid, false otherwise
 [string] If SDDL string is valid it's returned, otherwise null
 
 .NOTES
@@ -56,10 +61,13 @@ function Test-SDDL
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-SDDL.md")]
-	[OutputType([bool])]
+	[OutputType([bool], [string], [void])]
 	param (
 		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-		[string[]] $SDDL
+		[string[]] $SDDL,
+
+		[Parameter()]
+		[switch] $PassThru
 	)
 
 	begin
@@ -78,11 +86,12 @@ function Test-SDDL
 				# TODO: See remarks about security:
 				# https://learn.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setsecuritydescriptorsddlform
 				$ACLObject.SetSecurityDescriptorSddlForm($SddlString)
-				Write-Output $SddlString
+				if ($PassThru) { $SddlString } else { $true }
 			}
 			catch
 			{
 				Write-Error -Category InvalidArgument -TargetObject $SddlString -Message "Invalid SDDL syntax '$($SddlString)' $($_.Exception.Message)"
+				if (!$PassThru) { $false }
 			}
 		}
 	}

@@ -170,13 +170,13 @@ else
 	$Result = ConvertFrom-SDDL $ArraySDDL
 	$Result
 
-	Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL -Force
 
 	Start-Test "pipeline"
 	$Result = $ArraySDDL | ConvertFrom-SDDL
 	$Result
 
-	Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL -Force
 
 	Start-Test "Store apps"
 	$Result = ConvertFrom-SDDL $SDDL4
@@ -186,7 +186,7 @@ else
 	$Result = ConvertFrom-SDDL $MergedSDDL
 	$Result
 
-	Test-Output $Result -Command ConvertFrom-SDDL
+	Test-Output $Result -Command ConvertFrom-SDDL -Force
 }
 
 Update-Log

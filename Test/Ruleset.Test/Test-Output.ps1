@@ -75,12 +75,10 @@ Test-Output $NETObject -Command Test-Path
 Start-Test "Test-Path pipeline"
 Test-Path $env:SystemDrive | Test-Output -Command Test-Path
 
-# TODO: Unsure why error is shown from Get-TypeName if Ignore is specified
-# TODO: Ignore won't work with Windows PowerShell
-Start-Test "Get-Service and Get-Random" -Expected "FAIL" # -Force
+Start-Test "Get-Service and Get-Random" -Expected "FAIL" -Force
 $ServiceController = Get-Service -Name Dhcp
-Test-Output $ServiceController -Command Get-Random -Force #-ErrorAction SilentlyContinue -Force
-# Restore-Test
+Test-Output $ServiceController -Command Get-Random -EV +TestEV -EA SilentlyContinue -Force
+Restore-Test
 
 <#
 .DESCRIPTION
@@ -97,14 +95,15 @@ function global:Test-CaseSensitive
 	}
 }
 
-Start-Test "Test-Output not case sensitive"
-Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
+Start-Test "Test-Output not case sensitive" -Force
+Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -EV +TestEV -EA SilentlyContinue -Force
+Restore-Test
 
 <#
 .DESCRIPTION
 Custom object partial OutputType
 #>
-function global:Test-CaseSensitive
+function global:Test-PartialOutputType
 {
 	[OutputType("Custom")]
 	param()
@@ -115,14 +114,15 @@ function global:Test-CaseSensitive
 	}
 }
 
-Start-Test "Test-Output partial OutputType"
-Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
+Start-Test "Test-Output partial OutputType" -Force
+Test-Output (Test-PartialOutputType) -Command Test-PartialOutputType -EV +TestEV -EA SilentlyContinue -Force
+Restore-Test
 
 <#
 .DESCRIPTION
 Custom object partial TypeName
 #>
-function global:Test-CaseSensitive
+function global:Test-PartialTypeName
 {
 	[OutputType("Ruleset.Custom")]
 	param()
@@ -133,8 +133,9 @@ function global:Test-CaseSensitive
 	}
 }
 
-Start-Test "Test-Output partial TypeName"
-Test-Output (Test-CaseSensitive) -Command Test-CaseSensitive -Force
+Start-Test "Test-Output partial TypeName" -Force
+Test-Output (Test-PartialTypeName) -Command Test-PartialTypeName -EV +TestEV -EA SilentlyContinue -Force
+Restore-Test
 
 <#
 .DESCRIPTION

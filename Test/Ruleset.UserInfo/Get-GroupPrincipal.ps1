@@ -99,11 +99,12 @@ else
 	Start-Test "Disabled Users, Administrators"
 	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -Disabled
 
-	Start-Test "Failure test"
-	$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -ErrorAction SilentlyContinue
+	Start-Test "Failure test" -Force
+	$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -EV +TestEV -EA SilentlyContinue
 	$FailedUsers
+	Restore-Test
 
-	Test-Output $UsersTest -Command Get-GroupPrincipal
+	Test-Output $UsersTest -Command Get-GroupPrincipal -Force
 }
 
 Update-Log

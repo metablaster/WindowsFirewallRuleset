@@ -61,7 +61,7 @@ function Get-UserGroup
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Get-UserGroup.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.UserInfo.Group")]
 	param (
 		[Parameter(ParameterSetName = "Domain")]
 		[Alias("ComputerName", "CN")]
@@ -111,7 +111,7 @@ function Get-UserGroup
 					Principal = Join-Path -Path $MachineName -ChildPath $Group.Name
 					SID = $Group.SID
 					LocalAccount = $Group.PrincipalSource -eq "Local"
-					PSTypeName = "Ruleset.UserInfo"
+					PSTypeName = "Ruleset.UserInfo.Group"
 				}
 			}
 		}
