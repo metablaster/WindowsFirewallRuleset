@@ -70,7 +70,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-AppSID"
 
-Start-Test "default" -Command "Get-GroupPrincipal"
+Start-Test "Prerequisites" -Command "Get-GroupPrincipal"
 $GroupAccounts = Get-GroupPrincipal "Users", "Administrators"
 $GroupAccounts
 
@@ -85,16 +85,11 @@ foreach ($Account in $GroupAccounts)
 	}
 }
 
-Start-Test "system apps"
-$Result = Get-SystemApp -User $TestAdmin | ForEach-Object {
-	[PSCustomObject]@{
-		PackageFamilyName = $_.PackageFamilyName
-		SID = Get-AppSID -FamilyName $_.PackageFamilyName
-	} | Format-List
-}
+Start-Test "Sample system app to test output"
+$Result = Get-SystemApp -User $GroupAccounts[0].User | Select-Object -First 1 | Get-AppSID
 $Result
 
-Test-Output ($Result | Select-Object -Property SID) -Command Get-AppSID
+Test-Output $Result -Command Get-AppSID
 
 Update-Log
 Exit-Test

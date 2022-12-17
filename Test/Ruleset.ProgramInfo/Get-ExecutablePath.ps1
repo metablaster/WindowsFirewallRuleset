@@ -88,7 +88,7 @@ else
 	Start-Test "pwsh.exe"
 	$ExecutablePaths | Where-Object -Property Name -EQ "pwsh.exe" | Format-Wide
 
-	Test-Output $ExecutablePaths -Command Get-ExecutablePath
+	Test-Output $ExecutablePaths -Command Get-ExecutablePath -Force
 }
 
 Update-Log

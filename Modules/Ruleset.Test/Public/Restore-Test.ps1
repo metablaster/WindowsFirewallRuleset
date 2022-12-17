@@ -82,7 +82,7 @@ function Restore-Test
 				Write-Information -Tags "Test" -MessageData "INFO: $ErrorRecord"
 			}
 
-			# Remove variables because Start-Test will renews them
+			# Remove variables because Start-Test will renew them
 			Remove-Variable -Name TestEV -Scope Global
 			Remove-Variable -Name PreviousErrorPreference -Scope Script
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Test case '$script:TestCase' done"

@@ -67,7 +67,7 @@ None. You cannot pipe objects to Get-UserApp
 .OUTPUTS
 [Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] store app information object
 [object] if using PowerShell Core which outputs deserialized object
-[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] in PS Core
 
 .NOTES
 TODO: We should probably return custom object to be able to pipe to functions such as Get-AppSID

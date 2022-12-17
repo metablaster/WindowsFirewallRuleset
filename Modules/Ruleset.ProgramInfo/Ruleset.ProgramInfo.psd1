@@ -155,6 +155,11 @@ SOFTWARE.
 		"Test-FileSystemPath"
 		"Test-Service"
 		"Test-VirusTotal"
+		# TODO: The following exports only for unit testing
+		# "Edit-Table"
+		# "Initialize-Table"
+		# "Show-Table"
+		# "Update-Table"
 	)
 
 	# Cmdlets to export from this module, for best performance, do not use wildcards and do not
@@ -167,7 +172,7 @@ SOFTWARE.
 		# TODO: The following exports only for unit testing
 		# This should be resolved in Enter-Test function which picks up private functions but not
 		# script scope variables
-		"InstallTable"
+		# "InstallTable"
 	)
 
 	# Aliases to export from this module, for best performance, do not use wildcards and do not

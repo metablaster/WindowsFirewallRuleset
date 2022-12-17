@@ -95,10 +95,17 @@ function Edit-Table
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	if (!(Get-Variable -Name InstallTable -Scope Script -ErrorAction Ignore))
+	{
+		Write-Error -Category InvalidOperation -TargetObject $MyInvocation.InvocationName `
+			-Message "Initialize-Table was not called prior to Edit-Table"
+		return
+	}
+
 	[hashtable] $CimParams = @{}
 	[hashtable] $SessionParams = @{}
 
-	if ($CimSession)
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
 		if ($Session.ComputerName -ne $CimSession.ComputerName)
 		{

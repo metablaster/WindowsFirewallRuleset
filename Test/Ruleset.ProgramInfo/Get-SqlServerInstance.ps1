@@ -94,7 +94,7 @@ else
 	Start-Test "DTS directory"
 	Get-SqlServerInstance | Select-Object -ExpandProperty SqlPath
 
-	Test-Output $Instances -Command Get-SqlServerInstance
+	Test-Output $Instances -Command Get-SqlServerInstance -Force
 }
 
 Update-Log

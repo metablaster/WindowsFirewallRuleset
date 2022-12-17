@@ -119,6 +119,16 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "Test/Ruleset.ProgramInfo/Get-NetFramework.ps1",
+			"bookmarks": [
+				{
+					"line": 99,
+					"column": 34,
+					"label": ""
+				}
+			]
 		}
 	]
 }

@@ -93,7 +93,7 @@ else
 	Start-Test "| Select *"
 	$SystemPrograms | Sort-Object -Property Name | Select-Object *
 
-	Test-Output $SystemPrograms -Command Get-SystemSoftware
+	Test-Output $SystemPrograms -Command Get-SystemSoftware -Force
 }
 
 Update-Log

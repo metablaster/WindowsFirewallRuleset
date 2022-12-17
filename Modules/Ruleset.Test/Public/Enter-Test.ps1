@@ -58,7 +58,8 @@ None. You cannot pipe objects to Enter-Test
 None. Enter-Test does not generate any output
 
 .NOTES
-None.
+HACK: Using -Private switch will not work as expected if private function depends on
+or calls other module variables or public module functions, see Edit-Table for example
 #>
 function Enter-Test
 {

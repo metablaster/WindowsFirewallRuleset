@@ -107,17 +107,22 @@ else
 	Start-Test "Directory"
 	Test-ExecutableFile $Directory
 
-	Start-Test "Blacklisted extension" -Expected "FAIL"
-	Test-ExecutableFile $BlacklistedExtension.FullName
+	Start-Test "Blacklisted extension" -Expected "FAIL" -Force
+	Test-ExecutableFile $BlacklistedExtension.FullName -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
-	Start-Test "Unknown extension" -Expected "FAIL"
-	Test-ExecutableFile $UnknownExtension.FullName
+	Start-Test "Unknown extension" -Expected "FAIL" -Force
+	Test-ExecutableFile $UnknownExtension.FullName -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
-	Start-Test "No extension" -Expected "FAIL"
-	Test-ExecutableFile $NoExtension.FullName
+	Start-Test "No extension" -Expected "FAIL" -Force
+	Test-ExecutableFile $NoExtension.FullName -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
-	Start-Test "Unsigned file" -Expected "FAIL"
-	Test-ExecutableFile $UnsignedFile.FullName
+	# This will error out regardless due to local setting
+	Start-Test "Unsigned file" -Expected "FAIL" -Force
+	Test-ExecutableFile $UnsignedFile.FullName -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
 	Start-Test "Force unsigned file" -Expected "WARNING"
 	Test-ExecutableFile $UnsignedFile.FullName -Force

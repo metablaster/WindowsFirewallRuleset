@@ -84,7 +84,7 @@ else
 	$Result = Get-WindowsDefender #| Select-Object -ExpandProperty InstallLocation
 	$Result
 
-	Test-Output $Result -Command Get-WindowsDefender
+	Test-Output $Result -Command Get-WindowsDefender -Force
 }
 
 Update-Log

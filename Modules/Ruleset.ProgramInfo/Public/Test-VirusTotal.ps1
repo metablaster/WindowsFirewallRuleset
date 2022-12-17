@@ -126,11 +126,16 @@ function Test-VirusTotal
 		}
 
 		$InvocationName = $MyInvocation.InvocationName
-		Invoke-Command @SessionParams -ArgumentList $InvocationName -ScriptBlock {
-			param ([string] $InvocationName)
+		Invoke-Command @SessionParams -ArgumentList $InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath -ScriptBlock {
+			param (
+				[string] $InvocationName,
+				[string] $SigcheckLocation,
+				[int32] $TimeOut,
+				[string] $LiteralPath
+			)
 
-			$Executable = Split-Path -Path $using:LiteralPath -Leaf
-			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($using:SigcheckLocation)
+			$Executable = Split-Path -Path $LiteralPath -Leaf
+			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
 			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
 
 			if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
@@ -163,7 +168,7 @@ function Test-VirusTotal
 				else
 				{
 					# Using because ExpandEnvironmentVariables will return NULL if location doesn't exist
-					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$using:SigcheckLocation', VirusTotal scan will not be performed"
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$SigcheckLocation', VirusTotal scan will not be performed"
 				}
 			}
 
@@ -199,7 +204,7 @@ function Test-VirusTotal
 				$Process.StartInfo.Arguments += " -vrs"
 
 				# File which is to be scanned
-				$Process.StartInfo.Arguments += " `"$using:LiteralPath`""
+				$Process.StartInfo.Arguments += " `"$LiteralPath`""
 				Write-Debug -Message "[$InvocationName] Sigcheck arguments are $($Process.StartInfo.Arguments)"
 
 				$FileIsMalware = $false
@@ -282,7 +287,7 @@ function Test-VirusTotal
 					# True if the associated process has exited, otherwise false
 					# The amount of time, in milliseconds, to wait for the associated process to exit.
 					# Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
-					$StatusWait = $Process.WaitForExit($using:TimeOut * 1000)
+					$StatusWait = $Process.WaitForExit($TimeOut * 1000)
 
 					if (!$StatusWait)
 					{

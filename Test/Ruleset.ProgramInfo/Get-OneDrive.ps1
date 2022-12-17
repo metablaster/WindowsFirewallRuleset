@@ -111,9 +111,9 @@ else
 
 	Start-Test "Get-TypeName - $($Principals[0].User)"
 	$Result = Get-OneDrive $Principals[0].User
-	$Result
+	$Result | Format-Table
 
-	Test-Output $Result -Command Get-OneDrive
+	Test-Output $Result -Command Get-OneDrive -Force
 }
 
 Update-Log

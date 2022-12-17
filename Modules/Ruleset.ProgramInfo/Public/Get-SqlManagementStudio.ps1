@@ -57,7 +57,7 @@ function Get-SqlManagementStudio
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-SqlManagementStudio.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.ProgramInfo", [void])]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

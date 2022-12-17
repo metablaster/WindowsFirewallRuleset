@@ -88,8 +88,9 @@ else
 	$Result = Test-Service dnscache
 	$Result
 
-	Start-Test "*xbox*" -Command "Get-Service" -Expected "FAIL"
-	Test-Service (Get-Service -Name "*xbox*")
+	Start-Test "*xbox*" -Command "Get-Service" -Expected "FAIL" -Force
+	Test-Service (Get-Service -Name "*xbox*" -EV +TestEV) -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
 	Start-Test "*xbox*"
 	Test-Service "*xbox*"

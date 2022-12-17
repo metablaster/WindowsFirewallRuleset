@@ -40,14 +40,13 @@ Get SID for single store app if the app exists
 PS> Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 
 .INPUTS
-None. You cannot pipe objects to Get-AppSID
+[string] "PackageFamilyName" string
 
 .OUTPUTS
-[string] store app SID (security identifier) if app found
+[string] store app SID (security identifier)
 
 .NOTES
 Big thanks to ljani for this awesome solution, see issue from "related links" section
-TODO: remote computers?
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md
@@ -61,21 +60,30 @@ function Get-AppSID
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AppSID.md")]
 	[OutputType([string])]
 	param (
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
 		[Alias("FamilyName")]
-		[string] $PackageFamilyName
+		[string[]] $PackageFamilyName
 	)
 
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-
-	$Sha256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
-	$Hash = $Sha256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($PackageFamilyName.ToLowerInvariant()))
-
-	$SID = "S-1-15-2"
-	for ($Length = 0; $Length -lt 28; $Length += 4)
+	begin
 	{
-		$SID += "-" + [System.BitConverter]::ToUInt32($Hash, $Length)
-	}
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	Write-Output $SID
+		$Sha256 = [System.Security.Cryptography.HashAlgorithm]::Create("sha256")
+	}
+	process
+	{
+		foreach ($NameEntry in $PackageFamilyName)
+		{
+			$Hash = $Sha256.ComputeHash([System.Text.Encoding]::Unicode.GetBytes($NameEntry.ToLowerInvariant()))
+
+			$SID = "S-1-15-2"
+			for ($Length = 0; $Length -lt 28; $Length += 4)
+			{
+				$SID += "-" + [System.BitConverter]::ToUInt32($Hash, $Length)
+			}
+
+			Write-Output $SID
+		}
+	}
 }

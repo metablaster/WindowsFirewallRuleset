@@ -83,7 +83,7 @@ else
 {
 	Start-Test "default"
 	$NETFramework = Get-NetFramework
-	$NETFramework
+	$NETFramework | Format-Table
 
 	Start-Test "latest"
 	if ($null -ne $NETFramework)
@@ -93,10 +93,14 @@ else
 		Where-Object { $_.InstallLocation } |
 		Select-Object -Last 1 -ExpandProperty InstallLocation
 
-		$NETFrameworkRoot
+		# TODO: It should not be required to specify Format-Table since there is Format.psm1xml?
+		# This applies to most functions in this and other modules
+		# Without using Format-Table Test-Output INFO messages are messed up
+		# Also not all tests currently use Format-*
+		$NETFrameworkRoot | Format-Table
 	}
 
-	Test-Output $NETFramework -Command Get-NetFramework
+	Test-Output $NETFramework -Command Get-NetFramework -Force
 }
 
 Update-Log

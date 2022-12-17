@@ -117,11 +117,25 @@ function Update-Table
 
 	if ($PSCmdlet.ShouldProcess("InstallTable", "Insert data into table"))
 	{
+		if (!(Get-Variable -Name InstallTable -Scope Script -ErrorAction Ignore))
+		{
+			Write-Error -Category InvalidOperation -TargetObject $MyInvocation.InvocationName `
+				-Message "Initialize-Table was not called prior to Update-Table"
+			return
+		}
+
 		[hashtable] $CimParams = @{}
 		[hashtable] $SessionParams = @{}
 
-		if ($CimSession)
+		if ($CimSession -or $Session)
 		{
+			if (!($CimSession -and $Session))
+			{
+				Write-Error -Category InvalidArgument -TargetObject $CimSession `
+					-Message "Both, Session and CimSession are required"
+				return
+			}
+
 			if ($Session.ComputerName -ne $CimSession.ComputerName)
 			{
 				Write-Error -Category InvalidArgument -TargetObject $CimSession `

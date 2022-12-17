@@ -104,7 +104,7 @@ else
 	Start-Test "Format-Wide"
 	$Result | Format-Wide
 
-	Test-Output $Result -Command Get-UserApp
+	Test-Output $Result -Command Get-UserApp -Force
 }
 
 Update-Log

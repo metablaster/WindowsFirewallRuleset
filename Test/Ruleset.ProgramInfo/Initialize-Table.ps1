@@ -65,26 +65,24 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private "Initialize-Table"
+Enter-Test "Initialize-Table" #-Private
 
 Start-Test "default"
 $Result = Initialize-Table
 $Result
 
-if (!(Get-Variable -Name InstallTable -Scope Global -ErrorAction Ignore))
+if (!(Get-Variable -Name InstallTable -ErrorAction Ignore))
 {
 	Write-Error -Category ObjectNotFound -Message "Table not initialized"
-	exit
 }
 
-$InstallTable = (Get-Variable -Name InstallTable -Scope Global).Value
+$InstallTable = (Get-Variable -Name InstallTable).Value
 if ($InstallTable.Rows.Count -ne 0)
 {
 	Write-Error -Category InvalidResult -TargetObject $InstallTable -Message "Table not clear"
-	exit
 }
 
 Test-Output $Result -Command Initialize-Table
 
 Update-Log
-Exit-Test
+Exit-Test #-Private

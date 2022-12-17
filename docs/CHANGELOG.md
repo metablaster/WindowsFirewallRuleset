@@ -80,6 +80,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Uninstall-DuplicateModule` used to uninstall outdated modules
     - `Publish-SshKey` Improved for Remote-SSH VSCode extension
     - `Register-SslCertificate` improved to handle multiple certificates with same CN entry
+    - `Get-AppSID` added pipeline support
 
   - New functionalities
 

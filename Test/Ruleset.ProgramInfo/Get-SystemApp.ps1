@@ -102,7 +102,7 @@ else
 	Start-Test "Format-Wide"
 	$Result | Format-Wide
 
-	Test-Output $Result -Command Get-SystemApp
+	Test-Output $Result -Command Get-SystemApp -Force
 }
 
 Update-Log

@@ -55,7 +55,7 @@ function Get-WindowsDefender
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-WindowsDefender.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.ProgramInfo", [void])]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

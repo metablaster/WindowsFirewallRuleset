@@ -55,7 +55,7 @@ function Get-AllUserProgram
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-AllUserProgram.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.ProgramInfo")]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

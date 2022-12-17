@@ -56,7 +56,7 @@ function Get-NetFramework
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-NetFramework.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.ProgramInfo")]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

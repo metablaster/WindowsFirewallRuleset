@@ -72,13 +72,15 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private "Edit-Table"
-$RemoteParams = @{}
+Enter-Test "Edit-Table" #-Private
+$RemoteParams = @{
+	CimSession = $CimServer
+	Session = $SessionInstance
+}
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$RemoteParams.CimSession = $CimServer
-	$RemoteParams.Session = $SessionInstance
+	$RemoteParams.Domain = $Domain
 }
 
 Start-Test "Good system path"
@@ -109,4 +111,4 @@ Select-Object -ExpandProperty Value | Format-Table -AutoSize
 Test-Output $Result -Command Edit-Table
 
 Update-Log
-Exit-Test
+Exit-Test #-Private

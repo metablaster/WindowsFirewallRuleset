@@ -101,7 +101,7 @@ else
 	}
 
 	# NOTE: Test won't work unless there are programs installed in user profile
-	Test-Output $Result -Command Get-UserSoftware
+	Test-Output $Result -Command Get-UserSoftware -Force
 }
 
 Update-Log

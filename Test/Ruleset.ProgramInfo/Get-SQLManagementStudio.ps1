@@ -88,7 +88,7 @@ else
 	Start-Test "Install path Format-Wide"
 	$Instances | Format-Wide
 
-	Test-Output $Instances -Command Get-SqlManagementStudio
+	Test-Output $Instances -Command Get-SqlManagementStudio -Force
 }
 
 Update-Log

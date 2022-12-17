@@ -56,7 +56,7 @@ function Get-ExecutablePath
 {
 	[CmdletBinding(
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-ExecutablePath.md")]
-	[OutputType([System.Management.Automation.PSCustomObject])]
+	[OutputType("Ruleset.ProgramInfo")]
 	param (
 		[Parameter()]
 		[Alias("ComputerName", "CN")]

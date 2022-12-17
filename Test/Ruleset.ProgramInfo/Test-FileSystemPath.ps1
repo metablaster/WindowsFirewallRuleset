@@ -72,7 +72,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test #"Test-FileSystemPath"
+Enter-Test
 if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "remote Session"

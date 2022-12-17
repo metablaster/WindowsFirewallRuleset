@@ -116,8 +116,9 @@ else
 	Start-Test "'VisualStudio' $TestBadVariable"
 	Confirm-Installation "VisualStudio" ([ref] $TestBadVariable)
 
-	Start-Test "'FailureTest' $TestBadVariable2"
-	Confirm-Installation "FailureTest" ([ref] $TestBadVariable2)
+	Start-Test "'FailureTest' $TestBadVariable2" -Force
+	Confirm-Installation "FailureTest" ([ref] $TestBadVariable2) -EV +TestEV -EA SilentlyContinue
+	Restore-Test
 
 	Test-Output $Result -Command Confirm-Installation
 }

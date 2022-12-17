@@ -60,6 +60,13 @@ function Show-Table
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	if (!(Get-Variable -Name InstallTable -Scope Script -ErrorAction Ignore))
+	{
+		Write-Error -Category InvalidOperation -TargetObject $MyInvocation.InvocationName `
+			-Message "Initialize-Table was not called prior to Show-Table"
+		return
+	}
+
 	if (![string]::IsNullOrEmpty($Caption))
 	{
 		Write-Host $Caption

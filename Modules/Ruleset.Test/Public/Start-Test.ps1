@@ -158,7 +158,7 @@ function Start-Test
 
 			# Failure test case which produces errors should use this error variable as -EV +TestEV
 			# HACK: Not working in some cases, see Get-UserGroup and Test-Computer unit test shows blank INFO and
-			# Test-UPN shows no info at all nor any output
+			# Test-UPN, Test-Service unit test shows no info at all nor any output
 			New-Variable -Name TestEV -Scope Global -Value $null
 		}
 	}

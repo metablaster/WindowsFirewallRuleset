@@ -83,9 +83,9 @@ else
 {
 	Start-Test "default"
 	$Result = Get-AllUserProgram
-	$Result
+	$Result | Format-Table
 
-	Test-Output $Result -Command Get-AllUserProgram
+	Test-Output $Result -Command Get-AllUserProgram -Force
 }
 
 Update-Log

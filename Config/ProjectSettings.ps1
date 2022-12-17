@@ -661,10 +661,11 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 		}
 		else
 		{
+			# TODO: This may select inactive admin account, ex Administrator
 			Set-Variable -Name TestAdmin -Scope Global -Option ReadOnly -Force -Value (
 				Split-Path -Path (Get-LocalGroupMember -Group Administrators | Where-Object {
-						$_.ObjectClass -EQ "User" -and
-					($_.PrincipalSource -eq "Local" -or $_.PrincipalSource -eq "MicrosoftAccount")
+						($_.ObjectClass -EQ "User") -and
+						(($_.PrincipalSource -eq "Local") -or ($_.PrincipalSource -eq "MicrosoftAccount"))
 					} | Select-Object -ExpandProperty Name -Last 1) -Leaf)
 		}
 

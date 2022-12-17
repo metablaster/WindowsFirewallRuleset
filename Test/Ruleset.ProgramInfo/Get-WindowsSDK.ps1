@@ -93,7 +93,7 @@ else
 		Select-Object -Last 1 -ExpandProperty InstallLocation
 	}
 
-	Test-Output $WindowsSDK -Command Get-WindowsSDK
+	Test-Output $WindowsSDK -Command Get-WindowsSDK -Force
 }
 
 Update-Log

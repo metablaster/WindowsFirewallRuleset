@@ -65,7 +65,7 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private "Show-Table"
+Enter-Test "Show-Table" #-Private
 
 Start-Test "Multiple paths - Visual Studio"
 Initialize-Table
@@ -95,10 +95,10 @@ Show-Table
 
 Start-Test "Failure Test"
 Initialize-Table
-Update-Table "Failure" -UserProfile
+Update-Table -Search "Failure" -UserProfile
 Show-Table
 
 Test-Output $Result -Command Show-Table
 
 Update-Log
-Exit-Test
+Exit-Test #-Private

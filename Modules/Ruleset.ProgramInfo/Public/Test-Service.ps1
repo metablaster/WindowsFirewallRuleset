@@ -154,8 +154,8 @@ function Test-Service
 	# Keep track of already checked service signatures
 	[hashtable] $BinaryPathCache = @{}
 
-	$Services = Invoke-Command @SessionParams -ScriptBlock {
-		Get-Service -Name $using:Name -ErrorAction Ignore
+	$Services = Invoke-Command @SessionParams -ArgumentList $Name -ScriptBlock {
+		Get-Service -Name $args[0] -ErrorAction Ignore
 	}
 
 	if (!$Services)
@@ -201,8 +201,8 @@ function Test-Service
 			}
 
 			# [System.Management.Automation.Signature]
-			$Signature = Invoke-Command @SessionParams -ScriptBlock {
-				Get-AuthenticodeSignature -LiteralPath $using:BinaryPath
+			$Signature = Invoke-Command @SessionParams -ArgumentList $BinaryPath -ScriptBlock {
+				Get-AuthenticodeSignature -LiteralPath $args[0]
 			}
 
 			if ($Signature.Status -ne "Valid")

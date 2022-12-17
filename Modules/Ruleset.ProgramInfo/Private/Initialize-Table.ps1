@@ -65,17 +65,8 @@ function Initialize-Table
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 	# Create Table object
-	if ($Develop)
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] resetting global installation table"
-		Set-Variable -Name $Name -Scope Global -Value (New-Object -TypeName System.Data.DataTable $Name)
-	}
-	else
-	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local installation table"
-		Set-Variable -Name $Name -Scope Script -Value (New-Object -TypeName System.Data.DataTable $Name)
-	}
-
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] resetting local installation table"
+	Set-Variable -Name $Name -Scope Script -Value (New-Object -TypeName System.Data.DataTable $Name)
 	Set-Variable -Name RowIndex -Scope Script -Value 0
 
 	# Define Columns

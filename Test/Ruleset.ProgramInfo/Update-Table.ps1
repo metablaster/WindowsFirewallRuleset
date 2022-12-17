@@ -74,13 +74,15 @@ Initialize-Project -Strict
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-Enter-Test -Private "Update-Table"
-$RemoteParams = @{}
+Enter-Test "Update-Table" #-Private
+$RemoteParams = @{
+	CimSession = $CimServer
+	Session = $SessionInstance
+}
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$RemoteParams.CimSession = $CimServer
-	$RemoteParams.Session = $SessionInstance
+	$RemoteParams.Domain = $Domain
 }
 
 Start-Test "Greenshot -UserProfile"
@@ -127,4 +129,4 @@ Select-Object -ExpandProperty Value | Select-Object -ExpandProperty InstallLocat
 Test-Output $Result -Command Update-Table
 
 Update-Log
-Exit-Test
+Exit-Test #-Private

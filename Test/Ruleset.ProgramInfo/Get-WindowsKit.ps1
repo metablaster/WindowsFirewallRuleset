@@ -96,7 +96,7 @@ else
 	Start-Test "default"
 	$WindowsKits | Format-List *
 
-	Test-Output $WindowsKits -Command Get-WindowsKit
+	Test-Output $WindowsKits -Command Get-WindowsKit -Force
 }
 
 Update-Log
