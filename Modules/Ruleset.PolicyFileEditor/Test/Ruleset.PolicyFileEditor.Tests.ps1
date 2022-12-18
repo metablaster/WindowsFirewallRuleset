@@ -47,133 +47,144 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-# HACK: This pester unit test is not compatible with pester 5
-# NOTE: The module "Ruleset.PolicyFileEditor" works with no issues, there is no
-# need to debug the module because it has been tested on real system and it works as expected.
-Remove-Module Ruleset.PolicyFileEditor -ErrorAction Ignore
-$ScriptRoot = Split-Path -Path (Split-Path -Path $PSCommandPath -Parent) -Parent
-$Psd1Path = Join-Path $ScriptRoot Ruleset.PolicyFileEditor.psd1
+# HACK: This pester unit test does not succeed, the module "Ruleset.PolicyFileEditor" works
+# with no issues but it's needed to investigate each function manually and update test cases here.
+$ScriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
 
-$Module = $null
+Describe "Test Ruleset.PolicyFileEditor module" {
 
-function New-DefaultGpo
-{
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
-		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low")]
-	param (
-		[Parameter()]
-		[string] $Path
-	)
-
-	if ($PSCmdlet.ShouldProcess($Path, "Create new default GPO"))
-	{
-		$Paths = @(
-			$Path
-			Join-Path $Path Machine
-			Join-Path $Path User
-		)
-
-		foreach ($PathItem in $Paths)
+	BeforeAll {
+		<#
+		.DESCRIPTION
+		Create test GPO
+		.PARAMETER Path
+		Directory where to create test GPO
+		.EXAMPLE
+		New-DefaultGpo -Path $GpoPath
+		#>
+		function New-DefaultGpo
 		{
-			if (!(Test-Path $PathItem -PathType Container))
-			{
-				New-Item -Path $PathItem -ItemType Directory -ErrorAction Stop
-			}
-		}
+			[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low")]
+			param (
+				[Parameter(Mandatory = $true)]
+				[string] $Path
+			)
 
-		$Content = @"
+			if ($PSCmdlet.ShouldProcess($Path, "Create new default GPO"))
+			{
+				$Paths = @(
+					$Path
+					Join-Path $Path Machine
+					Join-Path $Path User
+				)
+
+				foreach ($PathItem in $Paths)
+				{
+					if (!(Test-Path -Path $PathItem -PathType Container))
+					{
+						New-Item -Path $PathItem -ItemType Directory -ErrorAction Stop
+					}
+				}
+
+				$Content = @"
 [General]
 gPCMachineExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F72-3407-48AE-BA88-E8213C6761F1}]
 Version=65537
 gPCUserExtensionNames=[{35378EAC-683F-11D2-A89A-00C04FBBCFA2}{D02B1F73-3407-48AE-BA88-E8213C6761F1}]
 "@
 
-		$GptIniPath = Join-Path $Path gpt.ini
-		Set-Content -Path $GptIniPath -ErrorAction Stop -Encoding Ascii -Value $Content
+				$GptIniPath = Join-Path -Path $Path -ChildPath gpt.ini
+				Set-Content -Path $GptIniPath -ErrorAction Stop -Encoding Ascii -Value $Content
 
-		Get-ChildItem -Path $Path -Include registry.pol -Force | Remove-Item -Force
-	}
-}
-
-function Get-GptIniVersion
-{
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSProvideCommentHelp", "",
-		Scope = "Function", Justification = "This is 3rd party code which needs to be studied")]
-	[CmdletBinding()]
-	param (
-		[Parameter()]
-		[string] $Path
-	)
-
-	foreach ($Result in Select-String -Path $Path -Pattern "^\s*Version\s*=\s*(\d+)\s*$")
-	{
-		foreach ($Match in $Result.Matches)
-		{
-			$Match.Groups[1].Value
+				Get-ChildItem -Path $Path -Include registry.pol -Force | Remove-Item -Force
+			}
 		}
-	}
-}
 
-try
-{
-	$Module = Import-Module $Psd1Path -ErrorAction Stop -PassThru -Force
-	# TODO: This test drive does not exist nor it is created here, suggested solution is to use
-	# $DefaultTestDrive which is a global variable that the module is aware of (but not pester),
-	# it specifies directory location in this repo.
-	# Alternatively use New-PSDrive commandlet to create a new test Directory on system drive.
-	# Reset-TestDrive from Ruleset.Test module is a function which creates the test drive specified
-	# in $DefaultTestDrive
-	$GpoPath = "TestDrive:\TestGpo"
-	$GptIniPath = "$GpoPath\gpt.ini"
-
-	Describe "KeyValueName parsing" {
-		InModuleScope Ruleset.PolicyFileEditor {
-			$TestCases = @(
-				@{
-					KeyValueName = "Left\Right"
-					ExpectedKey = "Left"
-					ExpectedValue = "Right"
-					Description = "Simple"
-				}
-
-				@{
-					KeyValueName = "Left\\Right"
-					ExpectedKey = "Left"
-					ExpectedValue = "Right"
-					Description = "Multiple consecutive separators"
-				}
-
-				@{
-					KeyValueName = "\Left\Right"
-					ExpectedKey = "Left"
-					ExpectedValue = "Right"
-					Description = "Leading separator"
-				}
-
-				@{
-					KeyValueName = "Left\Right\"
-					ExpectedKey = "Left\Right"
-					ExpectedValue = ""
-					Description = "Trailing separator"
-				}
-
-				@{
-					KeyValueName = "\\\Left\\\\Right\\\\\"
-					ExpectedKey = "Left\Right"
-					ExpectedValue = ""
-					Description = "Ridiculous with trailing separator"
-				}
-
-				@{
-					KeyValueName = "\\\\\\\\Left\\\\\\\Right"
-					ExpectedKey = "Left"
-					ExpectedValue = "Right"
-					Description = "Ridiculous with no trailing separator"
-				}
+		<#
+		.DESCRIPTION
+		Parses version string out of gpt.ini file
+		.PARAMETER Path
+		Full path to gpt.ini file in test GPO
+		.EXAMPLE
+		Get-GptIniVersion -Path $GptIniPath
+		#>
+		function Get-GptIniVersion
+		{
+			[CmdletBinding()]
+			param (
+				[Parameter(Mandatory = $true)]
+				[string] $Path
 			)
 
-			It -TestCases $TestCases "Properly parses KeyValueName with <Description>" {
+			foreach ($Result in Select-String -Path $Path -Pattern "^\s*Version\s*=\s*(\d+)\s*$")
+			{
+				foreach ($Match in $Result.Matches)
+				{
+					$Match.Groups[1].Value
+				}
+			}
+		}
+
+		Import-Module -Name "$ScriptPath\..\Ruleset.PolicyFileEditor.psd1" -Force -ErrorAction Stop
+
+		# TODO: This test drive should be handled with Reset-TestDrive and
+		# $DefaultTestDrive global variable
+		$DefaultTestDrive = "$ScriptPath\..\..\..\Test\TestDrive"
+		$GpoPath = "$DefaultTestDrive\TestGpo"
+		$GptIniPath = "$GpoPath\gpt.ini"
+	}
+
+	AfterAll {
+		Remove-Module -Name Ruleset.PolicyFileEditor
+	}
+
+	Describe "KeyValueName parsing" {
+		$TestCases = @(
+			@{
+				KeyValueName = "Left\Right"
+				ExpectedKey = "Left"
+				ExpectedValue = "Right"
+				Description = "Simple"
+			}
+
+			@{
+				KeyValueName = "Left\\Right"
+				ExpectedKey = "Left"
+				ExpectedValue = "Right"
+				Description = "Multiple consecutive separators"
+			}
+
+			@{
+				KeyValueName = "\Left\Right"
+				ExpectedKey = "Left"
+				ExpectedValue = "Right"
+				Description = "Leading separator"
+			}
+
+			@{
+				KeyValueName = "Left\Right\"
+				ExpectedKey = "Left\Right"
+				ExpectedValue = ""
+				Description = "Trailing separator"
+			}
+
+			@{
+				KeyValueName = "\\\Left\\\\Right\\\\\"
+				ExpectedKey = "Left\Right"
+				ExpectedValue = ""
+				Description = "Ridiculous with trailing separator"
+			}
+
+			@{
+				KeyValueName = "\\\\\\\\Left\\\\\\\Right"
+				ExpectedKey = "Left"
+				ExpectedValue = "Right"
+				Description = "Ridiculous with no trailing separator"
+			}
+		)
+
+		It -TestCases $TestCases "Properly parses KeyValueName with <Description>" {
+			InModuleScope Ruleset.PolicyFileEditor {
 				param ($KeyValueName, $ExpectedKey, $ExpectedValue)
 				$Key, $ValueName = Get-KeyValueName $KeyValueName
 
@@ -192,8 +203,10 @@ try
 			# User version is the high 16 bits, Machine version is the low 16 bits.
 			# Reference:  http://blogs.technet.com/b/grouppolicy/archive/2007/12/14/understanding-the-gpo-version-number.aspx
 
-			# Default value set in our New-DefaultGpo function is 65537, or (1 -shl 16) + 1 ; Machine and User version both set to 1.
-			# Decimal values ard hard-coded here so we can run the tests on PowerShell v2, which didn't have the -shl / -shr operators.
+			# Default value set in our New-DefaultGpo function is 65537, or (1 -shl 16) + 1
+			# Machine and User version both set to 1.
+			# Decimal values ard hard-coded here so we can run the tests on PowerShell v2,
+			# which didn't have the -shl / -shr operators.
 			# This puts the module's internal code which replaces these operators through a test as well.
 
 			$TestCases = @(
@@ -310,7 +323,7 @@ try
 				# Code is deliberately duplicated (rather then refactored into a loop) so that if we get failures,
 				# the line numbers will tell us whether it was on the first or second execution of the duplicated parts.
 
-				$ScriptBlock | Should Not Throw
+				$ScriptBlock | Should -Not -Throw
 
 				$Expected = $ExpectedVersions[0]
 				$Version = @(Get-GptIniVersion -Path $GptIniPath)
@@ -335,7 +348,7 @@ try
 					$Entries[$i].Type | Should -Be $MatchingEntry.Type
 				}
 
-				$ScriptBlock | Should Not Throw
+				$ScriptBlock | Should -Not -Throw
 
 				$Expected = $ExpectedVersions[0]
 				$Version = @(Get-GptIniVersion -Path $GptIniPath)
@@ -367,7 +380,7 @@ try
 					$EntriesToModify | Remove-PolicyFileEntry -Path $PolicyPath -NoGptIniUpdate:$NoGptIniUpdate
 				}
 
-				$ScriptBlock | Should Not Throw
+				$ScriptBlock | Should -Not -Throw
 
 				$Expected = $ExpectedVersions[1]
 				$Version = @(Get-GptIniVersion -Path $GptIniPath)
@@ -384,7 +397,7 @@ try
 				# Duplicate the Remove block for the same reasons; make sure the ini file isn't incremented
 				# when the value is already missing.
 
-				$ScriptBlock | Should Not Throw
+				$ScriptBlock | Should -Not -Throw
 
 				$Expected = $ExpectedVersions[1]
 				$Version = @(Get-GptIniVersion -Path $GptIniPath)
@@ -499,7 +512,7 @@ try
 						-Type $Type
 				}
 
-				$ScriptBlock | Should Not Throw
+				$ScriptBlock | Should -Not -Throw
 
 				$Entries = @(Get-PolicyFileEntry -Path $PolicyPath -All)
 
@@ -517,7 +530,7 @@ try
 				$Count = $Data.Count
 				for ($i = 0; $i -lt $Count; $i++)
 				{
-					$Data[$i] | Should BeExactly $NewData[$i]
+					$Data[$i] | Should -BeExactly $NewData[$i]
 				}
 			}
 
@@ -540,7 +553,7 @@ try
 
 				$Entry = Get-PolicyFileEntry -Path $PolicyPath -Key $Key -ValueName $ValueName
 
-				$Entry | Should Not Be $null
+				$Entry | Should -Not -Be $null
 				$Entry.ValueName | Should -Be $ValueName
 				$Entry.Key | Should -Be $Key
 				$Entry.Type | Should -Be $Type
@@ -556,7 +569,7 @@ try
 
 				Set-PolicyFileEntry -Path $Path -Key "Whatever" -ValueName "Whatever" -Data "Whatever" -Type String
 
-				$GptIniPath | Should Exist
+				$GptIniPath | Should -Exist
 				Get-GptIniVersion -Path $GptIniPath | Should -Be 1
 			}
 		}
@@ -570,17 +583,17 @@ try
 		$TestCases = @(
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::DWord
-				ExpectedMessage = "When -Type is set to DWord, -Data must be passed a valid UInt32 value."
+				ExpectedMessage = "When -Type is set to DWord, -Data must be passed a valid UInt32 value"
 			}
 
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::QWord
-				ExpectedMessage = "When -Type is set to QWord, -Data must be passed a valid UInt64 value."
+				ExpectedMessage = "When -Type is set to QWord, -Data must be passed a valid UInt64 value"
 			}
 
 			@{
 				Type = [Microsoft.Win32.RegistryValueKind]::Binary
-				ExpectedMessage = "When -Type is set to Binary, -Data must be passed a Byte[] array."
+				ExpectedMessage = "When -Type is set to Binary, -Data must be passed a Byte[] array"
 			}
 		)
 
@@ -590,7 +603,6 @@ try
 				"PSReviewUnusedParameter", "Type", Justification = "False Positive")]
 			param (
 				$Type,
-
 				$ExpectedMessage
 			)
 
@@ -603,14 +615,7 @@ try
 					-ErrorAction Stop
 			}
 
-			$ScriptBlock | Should Throw $ExpectedMessage
+			$ScriptBlock | Should -Throw $ExpectedMessage
 		}
-	}
-}
-finally
-{
-	if ($null -ne $Module)
-	{
-		Remove-Module -ModuleInfo $Module -Force
 	}
 }

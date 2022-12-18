@@ -55,15 +55,15 @@ function Convert-PolicyEntryToPsObject
 	[OutputType([PSObject])]
 	param (
 		[Parameter()]
-		[TJX.PolFileEditor.PolEntry] $PolEntry
+		[TJX.PolFileEditor.PolEntry] $PolicyEntry
 	)
 
-	$Type = Convert-PolicyEntryTypeToRegistryValueKind $PolEntry.Type
-	$Data = Get-EntryData -Entry $PolEntry -Type $Type
+	$Type = Convert-PolicyEntryTypeToRegistryValueKind $PolicyEntry.Type
+	$Data = Get-EntryData -Entry $PolicyEntry -Type $Type
 
 	return New-Object PSObject -Property @{
-		Key = $PolEntry.KeyName
-		ValueName = $PolEntry.ValueName
+		Key = $PolicyEntry.KeyName
+		ValueName = $PolicyEntry.ValueName
 		Type = $Type
 		Data = $Data
 	}
