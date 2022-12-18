@@ -47,8 +47,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #>
 
+$ScriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
+
 Describe "ConvertTo-Network" {
 	BeforeAll {
+		Import-Module -Name "$ScriptPath\..\..\Ruleset.IP.psd1" -Force -ErrorAction Stop
+
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
 			"PSUseDeclaredVarsMoreThanAssignment", "Module", Justification = "False Positive")]
 		$Module = @{
@@ -94,6 +98,10 @@ Describe "ConvertTo-Network" {
 		)
 	}
 
+	AfterAll {
+		Remove-Module -Name Ruleset.IP
+	}
+
 	It "Translates the string 0/0 to 0.0.0.0/0 (mask 0.0.0.0)" {
 		$Network = InModuleScope @module { ConvertTo-Network 0/0 }
 
@@ -110,7 +118,7 @@ Describe "ConvertTo-Network" {
 		$Network.MaskLength | Should -Be 27
 	}
 
-	It "Translates a string containing "3.4.5 255.255.0.0" to 3.4.5.0/16 (mask 255.255.0.0)" {
+	It "Translates a string containing '3.4.5 255.255.0.0' to 3.4.5.0/16 (mask 255.255.0.0)" {
 		$Network = InModuleScope @module { ConvertTo-Network "3.4.5 255.255.0.0" }
 
 		$Network.IPAddress | Should -Be "3.4.5.0"
@@ -148,7 +156,6 @@ Describe "ConvertTo-Network" {
 			"PSReviewUnusedParameter", "MaskLength", Justification = "False Positive")]
 		param (
 			$MaskLength,
-
 			$Mask
 		)
 
@@ -172,7 +179,6 @@ Describe "ConvertTo-Network" {
 			"PSReviewUnusedParameter", "Mask", Justification = "False Positive")]
 		param (
 			$MaskLength,
-
 			$Mask
 		)
 

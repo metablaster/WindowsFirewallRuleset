@@ -121,13 +121,13 @@ if (!$Pester)
 Write-Information -Tags "Test" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
-# TODO: Tests from Private folder excluded because out of date
-$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test\Public -Filter *.ps1
-# $PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.PolicyFileEditor\Test -Filter *.ps1
+# TODO: Test in Private folder fails
+$PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test -Recurse -Filter *.Tests.ps1
+# $PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.PolicyFileEditor\Test -Filter *.Tests.ps1
 
 if ($PSVersionTable.PSVersion -ge "6.1")
 {
-	$PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.ps1
+	$PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.Compatibility\Test -Filter *.Tests.ps1
 }
 else
 {
