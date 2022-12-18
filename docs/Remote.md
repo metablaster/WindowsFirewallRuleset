@@ -147,7 +147,7 @@ If you have Hyper-V installed that means some virtual switches will operate on p
 if you're on private network profile, which means you won't be able to configure all possible WinRM
 service options, except only with those commandlets listed above.
 
-Disabling those virtual switches is required in that case, uninstalling Hyper-V is alternative
+Disabling those virtual switches is required in that case, uninstalling Hyper-V is an alternative
 solution if disabling does not work.
 
 Of course any remaining network adapters must operate on private network profile.
@@ -168,7 +168,7 @@ For reference see [RegistryKey][RegistryKey]
 
 The following requirements apply to both endpoints involved (client and server computers):
 
-- `RemoteRegistry` service is `Running` and set to `Automatic` startup on both endpoints
+- `RemoteRegistry` service is set to `Manual (Trigger Start)` startup on both endpoints
 - Enable at a minimum the following **predefined** (not custom) firewall rules:
   - `File and Printer sharing`
   - `Network Discovery`
@@ -193,7 +193,7 @@ specifying `FileSystem` does the trick.
 
 If `New-PSDrive` fails with "The network path was not found" try restarting `fdphost` service on
 both computers or reboot both computers.\
-Alternatively, creating a new remote share and connecting to it instead of default `C$` can help.
+Alternatively, creating a new remote share and authenticating to it instead of default `C$` can help.
 
 [Table of Contents](#table-of-contents)
 
@@ -269,7 +269,7 @@ For additional breakdown of registry key naming convention and exceptions see [N
 
 ## Troubleshooting
 
-The following link lists common troubleshooting with remoting [About Remote Troubleshooting][troubleshooting]
+The following link lists common issues with remoting and how to troubleshoot them [About Remote Troubleshooting][troubleshooting]
 
 The following section lists other not so common problems and how to resolve them.
 
@@ -288,8 +288,8 @@ The following section lists other not so common problems and how to resolve them
 > was not available.
 > This is usually returned by a HTTP server that does not support the WS-Management protocol.
 
-When you specify computername, it is translated to private IP address for which listener must exist.
-Service is not listening translated IP address, to add listener for any IP address run:
+When you specify computername, it is translated to private IP address for which listener must exist.\
+WinRM service is not listening on the translated IP address, to add listener for any IP address run:
 
 ```powershell
 New-Item -Path WSMan:\localhost\Listener -Address * -Transport HTTP -Enabled $true -Force | Out-Null
@@ -335,7 +335,7 @@ which means specifying host name, user name and password.
 
 > `Access is denied`
 
-If credentials are required, this may happend due to invalid username\password.\
+If credentials are required, this may happen due to invalid username\password.\
 It may also happen if the administrative account used to deploy firewall has no password set,
 in which case password must be set because WinRM doesn't support passwordless authentication.\
 Although it should be possible for passwordless logon by configuring GPO on remote computer:\

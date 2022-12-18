@@ -57,12 +57,14 @@ System: Modules installed for all users
 User: Modules installed for current user
 
 .PARAMETER Force
-If specified all duplicate modules of a specific module are removed without further prompt
+If specified all duplicate modules of a specific module are removed without further prompt.
+This parameter also forces recursive actions on module installation directory,
+ex taking ownership and setting file system permissions required for module uninstallation.
 
 .EXAMPLE
-PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
+PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Scope Shipping, System -Force
 
-Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope
+Removes outdated PowerShellGet and PackageManagement modules excluding those installed per user
 
 .EXAMPLE
 PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
@@ -83,6 +85,7 @@ Module which is to be uninstalled must not be in use by:
 2. Some system process
 3. Session in VSCode
 4. Current session prompt must not point to anywhere in target module path
+TODO: Should support ShouldProcess
 #>
 function Uninstall-DuplicateModule
 {
@@ -172,53 +175,57 @@ function Uninstall-DuplicateModule
 					continue
 				}
 
-				if (!$PSCmdlet.ShouldContinue("$ModuleName v$ModuleVersion module", "Duplicate module uninstallation", $true, ([ref] $YesToAll), ([ref] $NoToAll)))
+				# If user doesn't want to remove currently processed module
+				if (!$Force -and !$PSCmdlet.ShouldContinue("$ModuleName v$ModuleVersion module", "Duplicate module uninstallation", $true, ([ref] $YesToAll), ([ref] $NoToAll)))
 				{
 					# Remove current module from candidates for uninstallation
 					$Duplicates = $Duplicates | Where-Object {
 						$_.GUID -ne $TargetModule.GUID
 					}
 
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Operation aborted by user"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Operation to uninstall '$ModuleName v$ModuleVersion' module aborted by user"
 					continue
 				}
 
 				Write-Information -Tags $MyInvocation.InvocationName `
 					-MessageData "INFO: Uninstalling module '$ModuleName $ModuleVersion'"
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Taking ownership of $ModuleName $ModuleVersion"
+				# First we need to remove module if it's being used by this session
+				[PSModuleInfo] $LoadedModule = Get-Module -Name $ModuleName
 
-				if (Set-Permission -Owner "Administrators" -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force)
+				if ($LoadedModule)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Granting permissions to Administrators group for $ModuleName $ModuleVersion"
-
-					if (Set-Permission -User "Administrators" -LiteralPath $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force)
+					# DOCS: -Force, Indicates that this cmdlet removes read-only modules.
+					# By default, Remove-Module removes only read-write modules.
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing $ModuleName $ModuleVersion from current session"
+					try
 					{
+						Remove-Module -Name $ModuleName -Force:$Force -ErrorAction Stop
+					}
+					catch
+					{
+						Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
+							-Message "Module '$ModuleName' could not be removed from current PS session which is required for uninstallation because: $($_.Exception.Message)"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
+						continue
+					}
+				}
+
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Taking ownership of '$ModuleName $ModuleVersion' module"
+
+				# -Force, skips prompting for confirmation to perform recursive action
+				if (Set-Permission -Owner "Administrators" -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force:$Force)
+				{
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Granting permissions to Administrators group on module '$ModuleName $ModuleVersion'"
+
+					if (Set-Permission -User "Administrators" -LiteralPath $ModuleRoot -Reset -Recurse -Grant "FullControl" -Confirm:$false -Force:$Force)
+					{
+						# Remove all folders and files of a target module
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing recursively $ModuleName $ModuleVersion"
 						try
 						{
-							# First we need to remove module if it's being used by this session
-							[PSModuleInfo] $LoadedModule = Get-Module -Name $ModuleName
-
-							if ($LoadedModule)
-							{
-								# -Force, Indicates that this cmdlet removes read-only modules.
-								# By default, Remove-Module removes only read-write modules.
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing $ModuleName $ModuleVersion from current session"
-								try
-								{
-									Remove-Module -Name $ModuleName -Force
-								}
-								catch
-								{
-									Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
-										-Message "Module '$ModuleName' could not be removed from current PS session which is required for uninstallation"
-									continue
-								}
-							}
-
-							# Remove all folders and files of a target module
-							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing recursively $ModuleName $ModuleVersion"
-							Remove-Item -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force
+							# DOCS: -Force, forces the cmdlet to remove items that cannot otherwise be changed, such as hidden or read-only files
+							Remove-Item -LiteralPath $ModuleRoot -Recurse -Confirm:$false -Force:$Force -ErrorAction Stop
 
 							# Remove uninstalled module from duplicates variable
 							$Duplicates = $Duplicates | Where-Object {
@@ -227,8 +234,8 @@ function Uninstall-DuplicateModule
 						}
 						catch
 						{
-							Write-Error -ErrorRecord $_
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Please close down all other PowerShell sessions including VSCode, then try again"
+							Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
+								-Message "Module directory '$ModuleRoot' could not be recursively removed because: $($_.Exception.Message)"
 
 							if ($ModuleRoot -like "$($pwd.Path)*")
 							{

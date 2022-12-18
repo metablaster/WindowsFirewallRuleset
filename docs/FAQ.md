@@ -40,6 +40,9 @@ until I figure out how to make rules based on those allow them all to rule out p
 interfaces.\
 To troubleshoot hidden adapters see [Problematic Traffic](ProblematicTraffic.md)
 
+If steps above do no solve the problem, reload rules which do not work, sometimes system or
+program changes make existing GPO rules ineffective.
+
 Other than this, if problem persists, you'll have to debug the problem, to get started see [MonitoringFirewall.md](MonitoringFirewall.md)
 
 [Table of Contents](#table-of-contents)

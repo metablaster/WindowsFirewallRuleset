@@ -115,7 +115,11 @@ address at field that say:
 
 ## Reset network
 
-Type the following commands into the console to reset network
+**NOTE:** If you're using Hyper-V it's recommended to uninstall Hyper-V prior to network reset which
+will remove virtual adapters.\
+Your existing virtual machines won't be removed, just install Hyper-V back after network reset.
+
+To reset network manually type the following commands into console:
 
 ```powershell
 ipconfig /flushdns
@@ -133,7 +137,7 @@ worked or to see if something new come out.
 Remember, you can't make mistake of rebooting system too much, more reboots is better while
 troubleshooting, even if not needed.
 
-Alternative way to reset network is by using "Settings" app in Windows 10 as follows:
+Alternative method to reset network is by using "Settings" app in Windows 10 as follows:
 
 `Settings > Network & Internet > Status > Network Reset`\
 It's important to let network reset finish without interruption.
