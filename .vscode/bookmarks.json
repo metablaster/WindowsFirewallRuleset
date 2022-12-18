@@ -44,12 +44,12 @@
 			"path": "Modules/Ruleset.Remote/Public/Test-WinRM.ps1",
 			"bookmarks": [
 				{
-					"line": 389,
+					"line": 402,
 					"column": 3,
 					"label": ""
 				},
 				{
-					"line": 474,
+					"line": 487,
 					"column": 3,
 					"label": ""
 				}

@@ -68,7 +68,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit
 
 Enter-Test "Set-NetworkProfile"
 
-if ($Force -or $PSCmdlet.ShouldContinue("Possible network Configuration bug", "Accept potentially dangerous unit test"))
+if ($Force -or $PSCmdlet.ShouldContinue("Possible network configuration bug", "Accept potentially dangerous unit test"))
 {
 	Start-Test "default"
 	$Result = Set-NetworkProfile

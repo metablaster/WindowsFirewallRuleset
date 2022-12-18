@@ -224,25 +224,38 @@ function Test-WinRM
 			-Message "HTTPS for localhost not implemented"
 	}
 
-	$ConfigurationEnabled = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction SilentlyContinue |
-	Select-Object -ExpandProperty Enabled
+	if ($MachineName -eq [System.Environment]::MachineName)
+	{
+		$SessionConfiguration = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction SilentlyContinue
 
-	# If specified session configuration is disabled or missing New-PSSession will not work
-	if ($null -eq $ConfigurationEnabled)
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is missing"
+		# If specified session configuration is disabled or missing New-PSSession will not work
+		if ($null -eq $SessionConfiguration)
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is missing"
+		}
+		elseif (($SessionConfiguration | Select-Object -ExpandProperty Enabled) -eq $false)
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
+		}
+
+		if ($ConfigurationName -ne $LocalFirewallSession)
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+		}
 	}
-	elseif ($ConfigurationEnabled -eq $false)
-	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified session configuration '$ConfigurationName' is disabled"
-	}
-	elseif (($MachineName -eq [System.Environment]::MachineName) -and ($ConfigurationName -ne $LocalFirewallSession))
+	elseif ($ConfigurationName -ne $RemoteFirewallSession)
 	{
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
 	}
-	elseif (($MachineName -ne [System.Environment]::MachineName) -and ($ConfigurationName -ne $RemoteFirewallSession))
+
+	if ($script:Workstation)
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unexpected session configuration $ConfigurationName"
+		# TODO: This is a duplicate check from Enable-WinRMServer to ensure warning out potential issue,
+		# since Test-WinRM might run without Enable-WinRMServer
+		if ((Get-NetConnectionProfile | Select-Object -ExpandProperty NetworkCategory) -ne "Private")
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Network profile should be set to 'Private' on workstation computers"
+		}
 	}
 
 	# Parameters for Test-WSMan

@@ -117,12 +117,13 @@ function Enable-RemoteRegistry
 	{
 		$RegService = Get-Service -Name RemoteRegistry
 
-		if ($RegService.StartType -ne [ServiceStartMode]::Automatic)
+		if ($RegService.StartType -ne [ServiceStartMode]::Manual)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to automatic startup"
-			Set-Service -InputObject $RegService -StartupType Automatic
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting $($RegService.DisplayName) service to manual startup"
+			Set-Service -InputObject $RegService -StartupType Manual
 		}
 
+		# It's not required to run if it's set to trigger start
 		if ($RegService.Status -ne [ServiceControllerStatus]::Running)
 		{
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting $($RegService.DisplayName) service"

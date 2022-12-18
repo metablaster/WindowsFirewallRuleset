@@ -209,7 +209,8 @@ function Enable-WinRMServer
 		} | Unregister-PSSessionConfiguration -NoServiceRestart -Force
 	}
 
-	if ($Workstation)
+	# TODO: Should this check run for loopback setup?
+	if ($script:Workstation)
 	{
 		# For workstations remote registry works on private profile only
 		# TODO: Need to handle interface profile depending on system role (server or workstation)

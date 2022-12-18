@@ -234,7 +234,7 @@ function Uninstall-DuplicateModule
 						}
 						catch
 						{
-							Write-Error -Category ResourceBusy -TargetObject $LoadedModule `
+							Write-Error -Category OperationStopped -TargetObject $ModuleRoot `
 								-Message "Module directory '$ModuleRoot' could not be recursively removed because: $($_.Exception.Message)"
 
 							if ($ModuleRoot -like "$($pwd.Path)*")

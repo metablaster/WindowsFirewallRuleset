@@ -30,11 +30,11 @@ using namespace System.Management.Automation.Host
 
 <#
 .SYNOPSIS
-Set network profile for physical network interfaces
+Set network profile on connected network interfaces
 
 .DESCRIPTION
-Set network profile for each physical/hardware network interfaces
-Recommended is "Public" profile for maximum security, unless "Private" is needed
+Set network profile for each connected network interface.
+Recommended is "Public" profile for maximum security, unless "Private" is needed.
 
 .PARAMETER NetworkCategory
 Specify network category which to apply to all NIC's.
@@ -66,14 +66,14 @@ function Set-NetworkProfile
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($PSCmdlet.ShouldProcess("Configure network profile"))
+	if ($PSCmdlet.ShouldProcess("Each network interface", "Configure network profile"))
 	{
 		# NOTE: This will include external switches bound to physical adapters as well
 		[string[]] $HardwareInterfaces = Get-NetConnectionProfile |
 		Select-Object -ExpandProperty InterfaceAlias
 
 		# Interface could be null
-		# TODO: When could second check be true? (interfaces -eq 0)
+		# TODO: In which case could second check be true? (interfaces -eq 0)
 		if (!$HardwareInterfaces -or ($HardwareInterfaces.Length -eq 0))
 		{
 			# TODO: We should base this on IPv*Connectivity given by Get-NetConnectionProfile
@@ -127,7 +127,7 @@ function Set-NetworkProfile
 
 			Set-NetConnectionProfile -InterfaceAlias $Interface -NetworkCategory $Category
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Network profile set to '$Category' for '$Interface' interface"
+				-MessageData "INFO: Network profile set to '$Category' on '$Interface' interface"
 		}
 	}
 	else

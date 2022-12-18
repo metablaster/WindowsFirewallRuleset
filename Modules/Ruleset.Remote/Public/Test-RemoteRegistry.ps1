@@ -70,17 +70,19 @@ function Test-RemoteRegistry
 
 	if ($PSCmdlet.ShouldProcess($Domain, "Test remote registry service"))
 	{
+		if ($Quiet)
+		{
+			$ErrorActionPreference = "SilentlyContinue"
+			$WarningPreference = "SilentlyContinue"
+		}
+
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking remote registry service"
 		$StartupType = Get-Service -Name RemoteRegistry | Select-Object -ExpandProperty StartType
 
 		# Manual and automatic will trigger service start
 		if ($StartupType -eq "Disabled")
 		{
-			if (!$Quiet)
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry service is disabled"
-			}
-
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Remote registry service is disabled"
 			return $false
 		}
 
