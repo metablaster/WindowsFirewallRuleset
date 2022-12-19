@@ -89,4 +89,4 @@ if ($Force -or $PSCmdlet.ShouldContinue("$([System.Diagnostics.Process]::GetCurr
 }
 
 Update-Log
-Exit-Test
+Exit-Test -Private

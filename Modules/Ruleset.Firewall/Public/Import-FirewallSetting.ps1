@@ -34,9 +34,6 @@ Import firewall settings and profile setup to file
 Import-FirewallSetting imports all firewall settings from file previously exported by
 Export-FirewallSetting
 
-.PARAMETER Domain
-Computer name onto which to import settings, default is local GPO.
-
 .PARAMETER Path
 Path to directory where the exported settings file is located.
 Wildcard characters are supported.
@@ -65,10 +62,6 @@ function Import-FirewallSetting
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md")]
 	[OutputType([void])]
 	param (
-		[Parameter()]
-		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName,
-
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]
 		[System.IO.DirectoryInfo] $Path,

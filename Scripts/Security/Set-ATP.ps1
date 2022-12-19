@@ -48,9 +48,6 @@ Use Set-ATP.ps1 to configure Microsoft Defender Antivirus.
 In addition to Windows Defender ATP settings a several other settings are enabled for
 maximum antivirus security.
 
-.PARAMETER Domain
-Computer name onto which do deploy Windows Defender configuration
-
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -93,23 +90,18 @@ https://gpsearch.azurewebsites.net
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
 param (
-	[Alias("ComputerName", "CN")]
-	[string] $Domain = [System.Environment]::MachineName,
-
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
-$Domain = Format-ComputerName $Domain
-
 # User prompt
-$Accept = "Configure Windows Defender and Advanced Threat Protection on '$Domain' computer"
-$Deny = "Abort operation, ATP and Windows defender will not be modified on '$Domain' computer"
+$Accept = "Configure Windows Defender and Advanced Threat Protection"
+$Deny = "Abort operation, ATP and Windows defender will not be modified"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

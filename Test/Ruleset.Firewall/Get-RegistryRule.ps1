@@ -33,6 +33,9 @@ Unit test for Get-RegistryRule
 .DESCRIPTION
 Test correctness of Get-RegistryRule function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, this unit test runs without prompt to allow execute
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project -Strict
@@ -67,7 +74,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 
 Enter-Test "Get-RegistryRule"
 
-if ($false)
+if ($Domain -ne [System.Environment]::MachineName)
 {
 	$Group = "Test registry rule"
 
@@ -79,10 +86,10 @@ if ($false)
 		-IcmpType 4 -Protocol ICMPv4 -Platform "10.0" |
 	Format-RuleOutput
 
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
 
 	Start-Test "Custom test"
-	Get-RegistryRule -Direction Outbound -DisplayName "Test"
+	Get-RegistryRule -Direction Outbound -DisplayName "Test" -Domain $Domain
 }
 else
 {

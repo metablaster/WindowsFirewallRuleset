@@ -88,6 +88,8 @@ December 2020:
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 
+TODO: Remoting not finished
+
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallRule.md
 
@@ -119,7 +121,7 @@ function Import-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	$Path = Resolve-FileSystemPath $Path
 	if (!$Path -or !$Path.Exists)
@@ -235,7 +237,7 @@ function Import-FirewallRule
 		if ($Overwrite)
 		{
 			$IsRemoved = @()
-			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $MachineName -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
 
 			if ($IsRemoved.Count -gt 0)
 			{
@@ -246,7 +248,7 @@ function Import-FirewallRule
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Replacing existing rule"
 			}
 		}
-		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $MachineName -ErrorAction Ignore))
+		elseif ($null -ne (Get-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction Ignore))
 		{
 			$ImportRule = $false
 		}
@@ -255,7 +257,7 @@ function Import-FirewallRule
 		{
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
-			New-NetFirewallRule -PolicyStore $MachineName @HashProps | Format-RuleOutput -Label Import
+			New-NetFirewallRule -PolicyStore $Domain @HashProps | Format-RuleOutput -Label Import
 		}
 		else
 		{

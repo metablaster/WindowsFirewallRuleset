@@ -38,9 +38,6 @@ All rules are exported by default, you can filter with parameter -Name, -Inbound
 -Enabled, -Disabled, -Allow and -Block.
 If the export file already exists it's content will be replaced by default.
 
-.PARAMETER Domain
-Computer name from which to export rules, default is local GPO.
-
 .PARAMETER Path
 Path into which to save file.
 Wildcard characters are supported.
@@ -119,10 +116,6 @@ function Export-RegistryRule
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md")]
 	[OutputType([void])]
 	param (
-		[Parameter()]
-		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName,
-
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]
 		[System.IO.DirectoryInfo] $Path,

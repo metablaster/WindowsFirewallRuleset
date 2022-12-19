@@ -138,7 +138,7 @@ function Get-RegistryRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if (Test-Computer $Domain)
 	{
@@ -255,7 +255,7 @@ function Get-RegistryRule
 			}
 			else
 			{
-				$PolicyStoreSource = $MachineName
+				$PolicyStoreSource = $Domain
 				$PolicyStoreSourceType = "GroupPolicy"
 			}
 
@@ -354,7 +354,7 @@ function Get-RegistryRule
 					Platform = $null
 					Platform2 = $null
 					RuleVersion = (($RootKey.GetValue($RuleName).ToString() -split '\|')[0]).TrimStart("v") # <BLANK>
-					Domain = $MachineName
+					Domain = $Domain
 					PolicyStoreSource = $PolicyStoreSource
 					PolicyStoreSourceType = $PolicyStoreSourceType
 					Description = $null # Desc

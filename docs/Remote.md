@@ -31,6 +31,15 @@ design used in this repository.
       - [The service is configured to reject remote connection requests for this plugin](#the-service-is-configured-to-reject-remote-connection-requests-for-this-plugin)
       - [Access is denied (CIM)](#access-is-denied-cim)
     - [Troubleshooting remote registry](#troubleshooting-remote-registry)
+  - [Remoting status](#remoting-status)
+    - [Ruleset.Compatibility](#rulesetcompatibility)
+    - [Ruleset.ComputerInfo](#rulesetcomputerinfo)
+    - [Ruleset.Firewall](#rulesetfirewall)
+    - [Ruleset.ProgramInfo](#rulesetprograminfo)
+    - [Ruleset.Remote](#rulesetremote)
+    - [Ruleset.UserInfo](#rulesetuserinfo)
+    - [Ruleset.Utility](#rulesetutility)
+    - [Scripts](#scripts)
 
 ## Commandlets breakdown
 
@@ -467,6 +476,129 @@ Most likely you need to specify credentials
 ### Troubleshooting remote registry
 
 See the following link [Troubleshooting Remote Registry][remote registry]
+
+[Table of Contents](#table-of-contents)
+
+## Remoting status
+
+The following section lists module functions and scripts which support or do not support remoting
+as well as functions which currently lack remoting implementation or are unfinished for remoting.
+
+**NOTE:** The following modules do no expose any remoting functionality at all
+
+- Ruleset.Test
+- Ruleset.Logging
+- Ruleset.Initialize
+- Ruleset.PolicyFileEditor
+- Ruleset.IP
+- VSSetup
+
+### Ruleset.Compatibility
+
+The following functions support remoting but were not tested for remoting
+
+- Add-WinFunction
+- Compare-WinModule
+- Copy-WinModule
+- Get-WinModule
+- Import-WinModule
+- Initialize-WinSession
+- Invoke-WinCommand
+
+The following functions do not implement remoting and it's unclear if it's needed
+
+- Add-WindowsPSModulePath
+
+### Ruleset.ComputerInfo
+
+The following functions support remoting
+
+- Get-SystemSKU
+- Test-Computer
+- Select-IPInterface
+
+The following functions lack remoting implementation
+
+- Get-InterfaceAlias
+- Get-InterfaceBroadcast
+
+All other public functions do not support remoting
+
+### Ruleset.Firewall
+
+The following functions support remoting
+
+- Get-RegistryRule
+
+The following functions do not support remoting
+
+- Format-RuleOutput
+
+All other public functions lack remoting implementation
+
+### Ruleset.ProgramInfo
+
+The following functions do not support remoting
+
+- Format-Path
+
+All other public functions support remoting
+
+### Ruleset.Remote
+
+The following functions support remoting
+
+- Connect-Computer
+- Publish-SshKey
+- Test-RemoteRegistry
+- Test-WinRM
+
+All other functions do not implement remoting and it's unclear if it's needed
+
+### Ruleset.UserInfo
+
+The following functions do not support remoting
+
+- Merge-SDDL
+- Split-Principal
+- Test-SDDL
+- Test-UPN
+
+The following functions lack remoting implementation
+
+- Test-Credential
+
+All other functions support remoting
+
+### Ruleset.Utility
+
+The following functions support remoting
+
+- Invoke-Process
+- Select-EnvironmentVariable
+
+All other functions do not support remoting
+
+### Scripts
+
+The following scripts support remoting
+
+- Get-NetworkStat
+- Deploy-ASR
+- Show-ASR
+- Confirm-Firewall (experimental)
+
+The following scripts lack remoting implementation
+
+- Backup-Firewall
+- Complete-Firewall
+- Deploy-Firewall
+- Grant-Logs
+- Reset-Firewall
+- Restore-Firewall
+- Find-UnsignedFile
+
+All other scripts do not support remoting
 
 [Table of Contents](#table-of-contents)
 

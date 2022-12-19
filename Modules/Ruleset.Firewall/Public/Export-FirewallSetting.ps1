@@ -33,9 +33,6 @@ Export firewall settings and profile setup to file
 .DESCRIPTION
 Export-FirewallSetting exports all firewall settings to file excluding firewall rules
 
-.PARAMETER Domain
-Computer name from which to export settings, default is local GPO.
-
 .PARAMETER Path
 Path into which to save file.
 Wildcard characters are supported.
@@ -64,10 +61,6 @@ function Export-FirewallSetting
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallSetting.md")]
 	[OutputType([void])]
 	param (
-		[Parameter()]
-		[Alias("ComputerName", "CN")]
-		[string] $Domain = [System.Environment]::MachineName,
-
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]
 		[System.IO.DirectoryInfo] $Path,

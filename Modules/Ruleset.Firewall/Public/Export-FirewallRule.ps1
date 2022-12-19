@@ -125,6 +125,7 @@ January 2022:
 1. Implemented appending to json
 
 TODO: Export to excel
+TODO: Remoting not finished
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallRule.md

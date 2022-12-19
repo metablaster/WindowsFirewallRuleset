@@ -46,9 +46,6 @@ Configure Windows privacy
 .DESCRIPTION
 Configures Windows privacy in a restrictive way
 
-.PARAMETER Domain
-Computer name on which to configure privacy options
-
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -81,23 +78,18 @@ https://gpsearch.azurewebsites.net
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
 param (
-	[Alias("ComputerName", "CN")]
-	[string] $Domain = [System.Environment]::MachineName,
-
 	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project -Strict
 
-$Domain = Format-ComputerName $Domain
-
 # User prompt
-$Accept = "Configure Windows privacy options on '$Domain' computer"
-$Deny = "Abort operation, no Windows privacy options will be modified on '$Domain' computer"
+$Accept = "Configure Windows privacy options"
+$Deny = "Abort operation, no Windows privacy options will be modified on"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 

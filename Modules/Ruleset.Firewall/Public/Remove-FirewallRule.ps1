@@ -84,7 +84,9 @@ December 2020:
 January 2022:
 1. Added time measurement code
 2. Added progress bar
+
 TODO: implement removing rules not according to file
+TODO: Remoting not finished
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md
@@ -114,7 +116,7 @@ function Remove-FirewallRule
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	$MachineName = Format-ComputerName $Domain
+	$Domain = Format-ComputerName $Domain
 
 	if ($PSCmdlet.ShouldProcess("Windows GPO Firewall", "Remove firewall rules according to file '$FileName'"))
 	{
@@ -201,7 +203,7 @@ function Remove-FirewallRule
 
 				Write-Progress @ProgressParams
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to Name"
-				$CurrentRule = Get-NetFirewallRule -PolicyStore $MachineName -Name $Rule.Name -ErrorAction SilentlyContinue
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -Name $Rule.Name -ErrorAction SilentlyContinue
 
 				if (!$CurrentRule)
 				{
@@ -216,7 +218,7 @@ function Remove-FirewallRule
 				Write-Progress @ProgressParams
 
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rule according to DisplayName"
-				$CurrentRule = Get-NetFirewallRule -PolicyStore $MachineName -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
+				$CurrentRule = Get-NetFirewallRule -PolicyStore $Domain -DisplayName $Rule.DisplayName -ErrorAction SilentlyContinue
 
 				if (!$CurrentRule)
 				{
@@ -233,7 +235,7 @@ function Remove-FirewallRule
 			}
 
 			Write-ColorMessage "Remove Rule: [$($Rule | Select-Object -ExpandProperty Group)] -> $($Rule | Select-Object -ExpandProperty DisplayName)" Cyan
-			Remove-NetFirewallRule -PolicyStore $MachineName -Name $CurrentRule.Name
+			Remove-NetFirewallRule -PolicyStore $Domain -Name $CurrentRule.Name
 		}
 
 		$StopWatch.Stop()

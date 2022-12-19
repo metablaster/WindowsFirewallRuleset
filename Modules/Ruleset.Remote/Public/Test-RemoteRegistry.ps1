@@ -126,13 +126,11 @@ function Test-RemoteRegistry
 		{
 			Write-Error -Category SecurityError -TargetObject $HKLM -Message $_.Exception.Message
 			Write-Warning -Message "[$($MyInvocation.InvocationName)] $($RemotingCredential.UserName) does not have the requested ACL permissions for $HKLM key"
-			$RemoteKey.Dispose()
 			return $false
 		}
 		catch
 		{
 			Write-Error -ErrorRecord $_
-			$RemoteKey.Dispose()
 			return $false
 		}
 		finally
