@@ -396,7 +396,7 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
-		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			# Will create a new blank console windows in PS Core, see also Connect-Computer
 			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
@@ -481,7 +481,7 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
-		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			# Will create a new blank console windows in PS Core, see also Connect-Computer
 			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763

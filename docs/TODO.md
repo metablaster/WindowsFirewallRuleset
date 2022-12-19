@@ -112,6 +112,10 @@ Todo's in this file are categorized into the following sections:
     - Compatibility module takes long time to load, need to add streams to module
     - Functions which make use of remoting should implement parameter sets for Credential and Session
     to be able to specify either PS session or computername + credential
+    - Verbose and Debug preferences are not inherited into `Invoke-Command` scriptblock, see issue
+    in `Config\ProjectSettings`, a workaround is needed and also needed to test other preference
+    variables, perhaps `Get-CallerPreference` script can help.
+    - Log files generated in remote session should be saved locally
 
 2. Scripts
 
@@ -207,6 +211,8 @@ Todo's in this file are categorized into the following sections:
     result to predefined hashes to ensure scripts were not modified externally, or sign whole module.
     - Each module when imported must work on their own without having to initialize entire repository,
     for this to test import all modules in clean environment and run individual functions.
+    - Log files are messy and not all lines or properties are fully expanded, to fix this likely
+    each individual property needs to be expanded prior to writing file
 
 2. Scripts
 

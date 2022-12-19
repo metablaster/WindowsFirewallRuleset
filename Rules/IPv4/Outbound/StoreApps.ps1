@@ -423,7 +423,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 
 #
 # A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
-# TODO: This is a hackery, a better design or function is needed to detect programs withing apps
+# TODO: This is a hackery, a better design or function is needed to detect programs within apps
 #
 $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
 if ($TerminalApp)
@@ -433,9 +433,8 @@ if ($TerminalApp)
 	Select-Object PSPath | Convert-Path | ForEach-Object {
 		$Program = "$_\TerminalAzBridge.exe"
 
-		# NOTE: Temporarily forcing because it's a genuine program, and quiet because
-		# there are 2 paths one of which is invalid
-		if (Test-ExecutableFile $Program -Force)
+		# NOTE: There are 2 paths one of which is invalid and should be ignored
+		if (Test-ExecutableFile $Program)
 		{
 			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
 			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL

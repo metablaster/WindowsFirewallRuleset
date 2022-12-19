@@ -134,11 +134,14 @@ function Test-VirusTotal
 				[string] $LiteralPath
 			)
 
-			$Executable = Split-Path -Path $LiteralPath -Leaf
+			# The path to executable needs to be expanded for sigcheck.exe,
+			# otherwise it results with "No matching files were found"
+			$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
+			$Executable = Split-Path -Path $ExpandedPath -Leaf
 			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
 			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
 
-			if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
+			if ([System.Environment]::Is64BitOperatingSystem)
 			{
 				$SigcheckExecutable = "sigcheck64.exe"
 			}
@@ -149,7 +152,7 @@ function Test-VirusTotal
 
 			# Check if path to sigcheck executable is valid
 			$SigCheckFile = $null
-			if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable")
+			if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
 			{
 				$SigCheckFile = "$SigcheckDir\$SigcheckExecutable"
 			}
@@ -174,7 +177,7 @@ function Test-VirusTotal
 
 			if (![string]::IsNullOrEmpty($SigCheckFile))
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Using sigcheck file: $SigCheckFile"
+				Write-Verbose -Message "[$InvocationName] Using sigcheck file: $SigCheckFile"
 
 				# Create sigcheck process object
 				$Process = New-Object System.Diagnostics.Process
@@ -204,7 +207,7 @@ function Test-VirusTotal
 				$Process.StartInfo.Arguments += " -vrs"
 
 				# File which is to be scanned
-				$Process.StartInfo.Arguments += " `"$LiteralPath`""
+				$Process.StartInfo.Arguments += " `"$ExpandedPath`""
 				Write-Debug -Message "[$InvocationName] Sigcheck arguments are $($Process.StartInfo.Arguments)"
 
 				$FileIsMalware = $false
@@ -256,11 +259,21 @@ function Test-VirusTotal
 										-Message "Failed to match total count of infections for '$Executable'"
 								}
 							}
+							else
+							{
+								Write-Error -Category ParserError -TargetObject $Detection `
+									-Message "Failed to match VirusTotal status for '$Executable'"
+							}
 
 							if ($Link.Success)
 							{
 								Write-Verbose -Message "[$InvocationName] $Executable VT Link is $($Link.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "VT link", $Link.Value
+							}
+							else
+							{
+								Write-Error -Category ParserError -TargetObject $Detection `
+									-Message "Failed to match VirusTotal link for '$Executable'"
 							}
 
 							if ($Publisher.Success)
@@ -268,11 +281,21 @@ function Test-VirusTotal
 								Write-Verbose -Message "[$InvocationName] $Executable Publisher is $($Publisher.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Publisher", $Publisher.Value
 							}
+							else
+							{
+								Write-Error -Category ParserError -TargetObject $Detection `
+									-Message "Failed to match VirusTotal publisher for '$Executable'"
+							}
 
 							if ($Description.Success)
 							{
 								Write-Verbose -Message "[$InvocationName] $Executable Description is $($Description.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Description", $Description.Value
+							}
+							else
+							{
+								Write-Error -Category ParserError -TargetObject $Detection `
+									-Message "Failed to match VirusTotal description for '$Executable'"
 							}
 						}
 					}

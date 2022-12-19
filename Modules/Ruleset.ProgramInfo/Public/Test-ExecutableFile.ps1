@@ -71,7 +71,7 @@ If specified, no information, warning or error message is shown, only true or fa
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
-This parameter has no effect VirusTotal check, if the file is reported as malware the return value is False.
+This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.
 
 .EXAMPLE
 PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
@@ -256,10 +256,10 @@ function Test-ExecutableFile
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for: $ExpandedPath" -ErrorAction "Continue"
 
-				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
-					-MessageData "INFO: To load rules for unsigned executables run '$Caller' with -Trusted switch"
-
 				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
+
+				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
+					-MessageData "INFO: If you trust this executable run '$Caller' with -Trusted switch"
 				return $false
 			}
 		}

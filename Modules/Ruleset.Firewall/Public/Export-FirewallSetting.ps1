@@ -187,4 +187,6 @@ function Export-FirewallSetting
 
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing JSON file"
 	$JsonData | ConvertTo-Json -Depth 3 | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall settings to '$FileName' done"
 }

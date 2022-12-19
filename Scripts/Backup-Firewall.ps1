@@ -46,9 +46,6 @@ Export all firewall rules and settings
 .DESCRIPTION
 Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory
 
-.PARAMETER Domain
-Target computer from which to backup firewall, default is local GPO.
-
 .PARAMETER Path
 Path into which to save file.
 Wildcard characters are supported.
@@ -84,10 +81,6 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 [OutputType([void])]
 param (
 	[Parameter()]
-	[Alias("ComputerName", "CN", "PolicyStore")]
-	[string] $Domain = [System.Environment]::MachineName,
-
-	[Parameter()]
 	[SupportsWildcards()]
 	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
 
@@ -117,8 +110,8 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Export all rules and settings from GPO
-Export-RegistryRule -Path $Path -FileName "FirewallRules.csv" -Domain $Domain
-Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Domain $Domain
+Export-RegistryRule -Path $Path -FileName "FirewallRules.csv"
+Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json"
 
 $StopWatch.Stop()
 

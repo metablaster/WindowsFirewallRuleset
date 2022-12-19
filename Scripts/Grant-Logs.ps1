@@ -94,7 +94,7 @@ using namespace System.Security
 #Requires -Version 5.1
 #Requires -RunAsAdministrator
 
-[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true)]
+[CmdletBinding(PositionalBinding = $false, SupportsShouldProcess = $true, ConfirmImpact = "High")]
 [OutputType([void])]
 param (
 	[Parameter(Mandatory = $true, Position = 0)]
@@ -118,7 +118,7 @@ $Domain = Format-ComputerName $Domain
 # User prompt
 $Accept = "Grant permission to read firewall log files until system reboot"
 $Deny = "Abort operation, no permission change is done on firewall logs"
-if (!(Approve-Execute -Accept $Accept -Unsafe -Deny $Deny -Force:$Force)) { exit }
+if (!(Approve-Execute -Accept $Accept -Unsafe:(!$Develop) -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
@@ -157,19 +157,14 @@ foreach ($File in $OldLogFiles)
 $UserControl = [AccessControl.FileSystemRights]::ReadData
 $FullControl = [AccessControl.FileSystemRights]::FullControl
 
-if ($PSBoundParameters.ContainsKey("Confirm"))
-{
-	# NOTE: Not specifying -Force to Set-Permission because it's required only to perform recursive action
-	$PSDefaultParameterValues["Set-Permission:Confirm"] = $PSBoundParameters["Confirm"]
-}
-
-# Grant "FullControl" to firewall service for logs folder
+# Grant "FullControl" to firewall service for logs folder,
+# if Develop is true system must be granted permissions without prompting to allow it
 Write-Information -Tags $ThisScript -MessageData "INFO: Granting full control to firewall service for log directory"
 
-Set-Permission $TargetFolder -Owner "System" | Out-Null
-Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected | Out-Null
-Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected | Out-Null
+Set-Permission $TargetFolder -Owner "System" -Confirm:$false | Out-Null
+Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected -Confirm:$false | Out-Null
 
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
@@ -182,17 +177,17 @@ foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain)
 	}
 }
 
-if ($StandardUser)
+if ($StandardUser -and $PSCmdlet.ShouldProcess($TargetFolder, "Grant permissions to user '$User' to read firewall logs"))
 {
 	# Grant "Read & Execute" to user for firewall logs
-	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for log directory"
-	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl)
+	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for firewall logs"
+	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl -Confirm:$false)
 	{
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
 			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
-			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl | Out-Null
+			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl -Confirm:$false | Out-Null
 		}
 	}
 }

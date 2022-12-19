@@ -86,7 +86,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
-	$_ | Format-RuleOutput -Modify
+	$_ | Format-RuleOutput -Label Modify
 	[hashtable] $Params = @{
 		InputObject = $_
 		Enabled = "True"

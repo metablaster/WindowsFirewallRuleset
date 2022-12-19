@@ -332,7 +332,7 @@ function Connect-Computer
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Creating PS session to computer '$Domain'"
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
-		if ($Develop -and ($PSVersionTable.PSEdition -eq "Core"))
+		if ($PSVersionTable.PSEdition -eq "Core")
 		{
 			# Will create a new blank console window in PS Core, see also Test-WinRM
 			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763

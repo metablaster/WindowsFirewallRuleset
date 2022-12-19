@@ -49,8 +49,8 @@ Export file file containing firewall rules
 .PARAMETER JSON
 Input from JSON instead of CSV format
 
-.PARAMETER Overwrite
-Overwrite existing rules with same name as rules being imported
+.PARAMETER Force
+If specified, overwrites existing rules with same name as rules being imported
 
 .EXAMPLE
 PS> Import-FirewallRule
@@ -117,7 +117,7 @@ function Import-FirewallRule
 		[switch] $JSON,
 
 		[Parameter()]
-		[switch] $Overwrite
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
@@ -179,6 +179,7 @@ function Import-FirewallRule
 	{
 		# TODO: -SecondsRemaining needs to be updated after precise speed test
 		$ProgressParams = @{
+			# HACK: Progress says "..according to file 'FirewallRules.cs." instead of '..according to FirewallRules.csv'
 			Activity = "Importing firewall rules according to file '$Filename'"
 			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
 			CurrentOperation = "$($Rule.Direction)\$($Rule.DisplayName)"
@@ -234,7 +235,7 @@ function Import-FirewallRule
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if rule exists"
 
 		$ImportRule = $true
-		if ($Overwrite)
+		if ($Force)
 		{
 			$IsRemoved = @()
 			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
@@ -261,7 +262,7 @@ function Import-FirewallRule
 		}
 		else
 		{
-			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing rule '$($Rule.Displayname)' from '$FileName' skipped, use -Overwrite to force"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Importing rule '$($Rule.Displayname)' skipped, use -Force to overwrite existing rule"
 		}
 	} # foreach rule
 

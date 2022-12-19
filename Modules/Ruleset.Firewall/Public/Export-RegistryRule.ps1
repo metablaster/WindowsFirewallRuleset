@@ -175,7 +175,7 @@ function Export-RegistryRule
 
 	# Read firewall rules
 	[array] $FirewallRules = @()
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Exporting rules from registry"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules from registry..."
 
 	$FirewallRules += Get-RegistryRule -GroupPolicy -DisplayName $DisplayName -DisplayGroup $DisplayGroup |
 	Where-Object {
@@ -314,5 +314,5 @@ function Export-RegistryRule
 		}
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules into '$FileName' done"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules to '$FileName' done"
 }

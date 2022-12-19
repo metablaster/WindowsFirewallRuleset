@@ -47,9 +47,6 @@ Restore previously saved firewall rules and configuration
 Restore-Firewall script imports all firewall rules and configuration that were previously exported
 with Backup-Firewall.ps1
 
-.PARAMETER Domain
-Target computer onto which to restore firewall, default is local GPO.
-
 .PARAMETER Path
 Path to directory where the exported settings file is located.
 Wildcard characters are supported.
@@ -70,7 +67,10 @@ None. You cannot pipe objects to Restore-Firewall.ps1
 None. Restore-Firewall.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: It needs to be tested exporting with PS Core and importing with Windows PS or vice versa,
+there could be problem due to file encoding.
+TODO: Import is as slow as Deploy-Firewall, we can make it ultra fast by importing or replacing
+rules directly in registry.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -82,10 +82,6 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 [CmdletBinding()]
 [OutputType([void])]
 param (
-	[Parameter()]
-	[Alias("ComputerName", "CN", "PolicyStore")]
-	[string] $Domain = [System.Environment]::MachineName,
-
 	[Parameter()]
 	[SupportsWildcards()]
 	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
@@ -121,7 +117,7 @@ if (!(Test-Path -Path $FilePath -PathType Leaf))
 	return
 }
 
-$FilePath = "$Path\FirewallRules.csv"
+$FilePath = "$Path\FirewallSettings.json"
 if (!(Test-Path -Path $FilePath -PathType Leaf))
 {
 	Write-Error -Category ObjectNotFound -TargetObject $FilePath `
@@ -133,8 +129,8 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Import all firewall rules to GPO
-Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -Domain $Domain
-Import-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Domain $Domain
+Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -Force:$Force
+Import-FirewallSetting -Path $Path -FileName "FirewallSettings.json"
 
 $StopWatch.Stop()
 
