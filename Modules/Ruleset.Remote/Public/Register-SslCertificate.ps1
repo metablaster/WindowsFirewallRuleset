@@ -443,7 +443,7 @@ function Register-SslCertificate
 		}
 		else
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "No certificate was found in default repository location"
+			Write-Error -Category ObjectNotFound -TargetObject $CertFile -Message "No certificate file named '$ExportFile' was found in default repository location"
 		}
 	} # if ([string]::IsNullOrEmpty($CertFile))
 	elseif (Test-Path -Path $CertFile -PathType Leaf -ErrorAction Ignore)

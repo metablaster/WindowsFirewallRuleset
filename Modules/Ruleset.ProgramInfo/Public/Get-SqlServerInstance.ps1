@@ -179,7 +179,7 @@ function Get-SqlServerInstance
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-		# TODO: begin scope for all registry functions
+		# TODO: begin block for all registry functions if applicable
 		$RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 
 		if ([System.Environment]::Is64BitOperatingSystem)
@@ -204,18 +204,17 @@ function Get-SqlServerInstance
 			[PSCustomObject[]] $AllInstances = @()
 
 			# TODO: handling FQDN in all other cases is needed
-			$Computer = $Computer -replace '(.*?)\..+', '$1'
-			$MachineName = Format-ComputerName $Computer
+			$MachineName = Format-ComputerName ($Computer -replace "(.*?)\..+", '$1')
 
-			if (!(Test-Computer $Computer))
+			if (!(Test-Computer $MachineName))
 			{
 				continue
 			}
 
 			try
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Computer"
-				$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Computer, $RegistryView)
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $MachineName"
+				$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $MachineName, $RegistryView)
 			}
 			catch
 			{
@@ -306,36 +305,35 @@ function Get-SqlServerInstance
 						if ($InstanceReg.GetSubKeyNames() -contains "Cluster")
 						{
 							$IsCluster = $true
+							$ClusterReg = $null
 
-							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster sub key: Cluster"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster sub key: HKLM:\$KeyPath\Cluster"
 							$InstanceRegCluster = $InstanceReg.OpenSubKey("Cluster")
 
 							if ($InstanceRegCluster)
 							{
 								$ClusterName = $InstanceRegCluster.GetValue("ClusterName")
+
+								try
+								{
+									$KeyPath = "$HKLMRootKey\$InstanceValue\Cluster\Nodes"
+									Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening InstanceRegCluster nodes key: HKLM:\$KeyPath"
+									$ClusterReg = $InstanceRegCluster.OpenSubKey("Nodes", $RegistryPermission, $RegistryRights)
+
+									if (!$ClusterReg)
+									{
+										throw [System.Data.ObjectNotFoundException]::new(
+											"The following registry key does not exist: HKLM:\$KeyPath")
+									}
+								}
+								catch
+								{
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceRegCluster key: HKLM:\$KeyPath"
+								}
 							}
 							else
 							{
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceRegCluster sub key: Cluster"
-							}
-
-							try
-							{
-								$KeyPath = "$HKLMRootKey\$InstanceValue\Cluster\Nodes"
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening ClusterReg key: HKLM:\$KeyPath"
-								# TODO: this could probably be $InstanceReg.OpenSubKey("Cluster\Nodes") ?
-								Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: Verify this is good!" -Debug
-								$ClusterReg = $RemoteKey.OpenSubKey("Cluster\Nodes", $RegistryPermission, $RegistryRights)
-
-								if (!$ClusterReg)
-								{
-									throw [System.Data.ObjectNotFoundException]::new(
-										"The following registry key does not exist: HKLM:\$KeyPath")
-								}
-							}
-							catch
-							{
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open ClusterReg key: HKLM:\$KeyPath"
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open InstanceRegCluster sub key: HKLM:\$KeyPath\Cluster"
 							}
 
 							if ($ClusterReg)
@@ -400,11 +398,12 @@ function Get-SqlServerInstance
 								} | Select-Object -First 1
 
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key: $ServiceKey"
+								# TODO: We should check for existence of sub key and value
 								$Service = $ServicesReg.OpenSubKey($ServiceKey).GetValue("ImagePath")
 
 								if ($Service)
 								{
-									$File = $Service -replace '^.*(\w:\\.*\\sqlservr.exe).*', '$1'
+									$File = $Service -replace "^.*(\w:\\.*\\sqlservr.exe).*", '$1'
 									$Version = (Get-Item ("\\$MachineName\$($File -replace ":", "$")")).VersionInfo.ProductVersion
 								}
 								else
@@ -430,8 +429,6 @@ function Get-SqlServerInstance
 						{
 							$KeyPath = "$HKLMRootKey\$Major$Minor"
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: HKLM:\$KeyPath"
-							# TODO: this should probably be $ClusterReg.OpenSubKey("$Major$Minor") ?
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] TODO: Verify this is good!" -Debug
 							$VersionKey = $RemoteKey.OpenSubKey($KeyPath, $RegistryPermission, $RegistryRights)
 
 							if (!$VersionKey)
@@ -445,8 +442,13 @@ function Get-SqlServerInstance
 							Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open VersionKey sub key: HKLM:\$KeyPath"
 						}
 
+						# It is possible this doesn't exist but we use it in output so it must be declared
+						$SQLPath = $null
+
 						if ($VersionKey)
 						{
+							# Data Transformation Services (DTS) is a Microsoft database tool with a set of objects and utilities to
+							# allow the automation of extract, transform and load operations to or from a database.
 							if ($VersionKey.GetSubKeyNames() -contains "DTS")
 							{
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening DTSKey sub key: DTS\Setup"
@@ -549,7 +551,8 @@ function Get-SqlServerInstance
 							Where-Object {
 								# We need to format here because Instance path is formatted, while the path from CIM query isn't
 								# TODO: can be improved by formatting when all is done, ie. at the end before returning.
-								(Format-Path $_.PathName) -like "$($Instance.InstallLocation)*" -or $_.PathName -like "`"$($Instance.InstallLocation)*"
+								((Format-Path $_.PathName) -like "$($Instance.InstallLocation)*") -or
+								($_.PathName -like "`"$($Instance.InstallLocation)*")
 							} | Select-Object -First 1
 
 							Write-Debug -Message "[$($MyInvocation.InvocationName)] Matching service info:`n$($MatchingService | Format-List -Property * | Out-String)"
@@ -622,7 +625,7 @@ function Get-SqlServerInstance
 				catch
 				{
 					Write-Error -Category $_.CategoryInfo.Category -TargetObject $_.TargetObject `
-						-Message "Could not retrieve CIM info for computer $Computer, $($_.Exception.Message)"
+						-Message "Could not retrieve CIM info for computer $MachineName, $($_.Exception.Message)"
 					Write-Output $AllInstances
 					continue
 				}

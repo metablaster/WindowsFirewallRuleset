@@ -541,6 +541,7 @@ All other public functions lack remoting implementation
 The following functions do not support remoting
 
 - Format-Path
+- Get-AppSID
 
 All other public functions support remoting
 
@@ -567,6 +568,10 @@ The following functions do not support remoting
 The following functions lack remoting implementation
 
 - Test-Credential
+
+The following functions partially work
+
+- ConvertFrom-SDDL
 
 All other functions support remoting
 

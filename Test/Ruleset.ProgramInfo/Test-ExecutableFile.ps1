@@ -80,12 +80,18 @@ $UnknownExtension = New-Item -ItemType File -Path $DefaultTestDrive\badfile.asd 
 $NoExtension = New-Item -ItemType File -Path $DefaultTestDrive\fileonly -Force
 $UnsignedFile = New-Item -ItemType File -Path $DefaultTestDrive\unsigned.exe -Force
 $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
-$RemoteEicar = "C:\dev\WindowsFirewallRuleset\Test\TestDrive\eicar.exe"
+# NOTE: eicar is a test virus which you should create in test drive
+# to get signature visit: https://en.wikipedia.org/wiki/EICAR_test_file
+# TestDrive should be added to AV exclusion list
+$RemoteEicar = "C:\dev\GitHub\WindowsFirewallRuleset\Test\TestDrive\eicar.exe"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "Remote valid executable -Domain"
-	Test-ExecutableFile $ValidFile -Domain $Domain -Credential $RemotingCredential
+	if ($false)
+	{
+		Start-Test "Remote valid executable -Domain"
+		Test-ExecutableFile $ValidFile -Domain $Domain -Credential $RemotingCredential
+	}
 
 	Start-Test "Remote valid executable -Session"
 	Test-ExecutableFile $ValidFile -Session $SessionInstance

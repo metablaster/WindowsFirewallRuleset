@@ -95,7 +95,6 @@ function ConvertFrom-SDDL
 	begin
 	{
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-		$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 
 		[hashtable] $SessionParams = @{}
 		if ($PSCmdlet.ParameterSetName -eq "Session")
@@ -183,6 +182,8 @@ function ConvertFrom-SDDL
 							# Set the security descriptor from the specified SDDL
 							if (($PSCmdlet.ParameterSetName -eq "Domain") -and ($Domain -eq [System.Environment]::MachineName))
 							{
+								$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
+
 								# HACK: If the SID is non existent on computer then ACLObject.Access will be completely useless,
 								# SetSecurityDescriptorSddlForm only tests SDDL syntax, it does not verify if SID exists.
 								# A solution around this might be Test-SDDL function which would call ConvertFrom-SID
@@ -192,7 +193,8 @@ function ConvertFrom-SDDL
 								$ACLObject.SetSecurityDescriptorSddlForm($DACL)
 
 								# [System.Security.Principal.NTAccount]
-								$Principal = $ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+								$Principal = $ACLObject | Select-Object -ExpandProperty Access |
+								Select-Object -ExpandProperty IdentityReference |
 								Select-Object -ExpandProperty Value
 							}
 							elseif (Test-Computer $Domain)
@@ -202,7 +204,9 @@ function ConvertFrom-SDDL
 									$ACLObject = New-Object -TypeName System.Security.AccessControl.DirectorySecurity
 
 									$ACLObject.SetSecurityDescriptorSddlForm($using:DACL)
-									$ACLObject.Access | Select-Object -ExpandProperty IdentityReference |
+
+									$ACLObject | Select-Object -ExpandProperty Access |
+									Select-Object -ExpandProperty IdentityReference |
 									Select-Object -ExpandProperty Value
 								}
 							}
@@ -211,15 +215,24 @@ function ConvertFrom-SDDL
 								# Test-Computer failed
 								return
 							}
+
+							if ($null -eq $Principal)
+							{
+								# HACK: "Access" property of $ACLObject may be null in PS Core even if used locally.
+								# This was a case in virtual machine, a workaround is to use ConvertFrom-SID or
+								# Invoke-WinCommand from compatibility module since in Windows PowerShell worked
+								throw "Resolving DACL entry $DACL to principal failed"
+							}
 						}
 						catch
 						{
-							Write-Error -Category InvalidArgument -TargetObject $DACL -Message "Invalid SDDL: '$($DACL)' $($_.Exception.Message)"
+							Write-Error -Category InvalidResult -TargetObject $DACL -Message $_.Exception.Message
 							continue
 						}
 
-						# If SID is unknown Principal property will be populated with SID instead of DOMAIN\User
+						# If SID is unknown Principal, property will be populated with SID instead of DOMAIN\User
 						$Match = [regex]::Match($Principal, "^S-1-(\d+-)*\d+$")
+
 						if ($Match.Success)
 						{
 							Write-Warning -Message "[$($MyInvocation.InvocationName)] The principal of the SDDL is unknown '$SddlEntry'"

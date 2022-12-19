@@ -70,6 +70,7 @@ function Initialize-Connection
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Verifying connection status to '$PolicyStore'"
 			if (($SessionInstance.State -ne "Opened") -or (!$CimServer.TestConnection()))
 			{
+				# TODO: We should remove broken sessions and renew them
 				Write-Error -Category ConnectionError -TargetObject $PolicyStore `
 					-Message "Connection to $PolicyStore is broken, please restart PowerShell and try again"
 			}
@@ -130,14 +131,14 @@ function Initialize-Connection
 		if (($PolicyStore -notin $LocalStore) -or ($RemotingAuthentication -in $AuthRequiresCredentials))
 		{
 			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
-				Get-Credential -Message "Credentials are required to access '$PolicyStore'"
+				Get-Credential -Message "Credentials are required to access '$PolicyStore' computer"
 			)
 
 			if (!$RemotingCredential)
 			{
 				# Will happen if credential request was dismissed using ESC key or by pressing Cancel.
 				Write-Error -Category InvalidOperation -TargetObject $PolicyStore `
-					-Message "Credentials are required for remote session on '$PolicyStore'"
+					-Message "Credentials are required for remote session to '$PolicyStore' computer"
 			}
 			# Will happen when no password is specified
 			elseif ($RemotingCredential.Password.Length -eq 0)

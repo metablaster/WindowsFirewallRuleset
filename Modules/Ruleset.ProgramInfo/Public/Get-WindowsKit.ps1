@@ -31,7 +31,7 @@ SOFTWARE.
 Get installed Windows Kits
 
 .DESCRIPTION
-Get installation information about installed Windows Kit's
+Get installation information about installed Windows Kits
 
 .PARAMETER Domain
 Computer name for which to list installed installed windows kits

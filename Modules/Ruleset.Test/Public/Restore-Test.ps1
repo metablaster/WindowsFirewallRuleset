@@ -78,7 +78,7 @@ function Restore-Test
 			if ($null -eq $private:TestEV)
 			{
 				# TODO: Parameter validation error will for example not go to error variable
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Error variable is null"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] ErrorVariable TestEV is null"
 			}
 			else
 			{

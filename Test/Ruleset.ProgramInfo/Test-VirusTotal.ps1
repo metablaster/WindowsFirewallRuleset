@@ -81,8 +81,11 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote Session"
 	Test-VirusTotal -LiteralPath $File -SigcheckLocation $SigcheckLocation -Session $SessionInstance
 
-	Start-Test "Remote Domain"
-	Test-VirusTotal -LiteralPath $File -SigcheckLocation $SigcheckLocation -Domain $Domain -Credential $RemotingCredential
+	if ($false)
+	{
+		Start-Test "Remote Domain"
+		Test-VirusTotal -LiteralPath $File -SigcheckLocation $SigcheckLocation -Domain $Domain -Credential $RemotingCredential
+	}
 }
 else
 {

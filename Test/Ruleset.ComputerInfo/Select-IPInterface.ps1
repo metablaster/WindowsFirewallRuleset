@@ -92,7 +92,7 @@ Start-Test "IPv4 -Physical"
 $Result = Select-IPInterface -AddressFamily IPv4 -Physical @SessionParams
 $Result
 
-Test-Output $Result -Command Select-IPInterface
+Test-Output $Result -Command Select-IPInterface -Force
 
 Start-Test "-Physical -Hidden"
 Select-IPInterface -Physical -Hidden @SessionParams

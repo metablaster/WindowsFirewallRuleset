@@ -238,7 +238,6 @@ param (
 begin
 {
 	Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 
 	[hashtable] $CimParams = @{}
 	[hashtable] $SessionParams = @{}
@@ -251,27 +250,34 @@ begin
 	}
 	else
 	{
-		$CimParams.ComputerName = $Domain
-		$SessionParams.ComputerName = $Domain
+		$Domain = Format-ComputerName $Domain
 
-		if ($Credential)
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
 		{
-			$SessionParams.Credential = $Credential
+			$CimParams.ComputerName = $Domain
+			$SessionParams.ComputerName = $Domain
+
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
 		}
 	}
+
+	# NOTE: This must be after $Domain variable is modified, see hack in ProjectSettings.
+	. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 
 	# Define properties
 	$Properties = "Domain", "Protocol", "LocalAddress", "LocalPort", "RemoteAddress", "RemotePort", "State", "ProcessName", "PID"
 
 	# Store hostnames in array for quick lookup
 	$DnsCache = @{}
-
-	$MachineName = Format-ComputerName $Domain
 }
 process
 {
 	# Handle remote systems
-	if ($MachineName -eq [System.Environment]::MachineName)
+	if ($Domain -eq [System.Environment]::MachineName)
 	{
 		# Collect processes
 		if ($IncludeProcessName)
@@ -306,7 +312,7 @@ process
 		[string] $cmd = "cmd /c c:\windows\system32\netstat.exe -ano >> $TempLocation"
 
 		# Define remote file path - computername, drive, folder path
-		$RemoteTempFile = "\\{0}\{1}`${2}" -f $MachineName, (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
+		$RemoteTempFile = "\\{0}\{1}`${2}" -f $Domain, (Split-Path $TempLocation -Qualifier).TrimEnd(":"), (Split-Path $TempLocation -NoQualifier)
 
 		try
 		{
@@ -495,7 +501,7 @@ process
 
 				if (($RemoteAddress -eq "127.0.0.1") -or ($RemoteAddress -eq "0.0.0.0"))
 				{
-					$RemoteAddress = $MachineName
+					$RemoteAddress = $Domain
 				}
 				elseif ($RemoteAddress -match "\w")
 				{
@@ -525,7 +531,7 @@ process
 
 				if (($LocalAddress -eq "127.0.0.1") -or ($LocalAddress -eq "0.0.0.0"))
 				{
-					$LocalAddress = $MachineName
+					$LocalAddress = $Domain
 				}
 				elseif ($LocalAddress -match "\w")
 				{
@@ -553,7 +559,7 @@ process
 
 			# Write the object
 			[PSCustomObject]@{
-				Domain = $MachineName
+				Domain = $Domain
 				PID = $ProcessID
 				ProcessName = $ItemProcessName
 				Protocol = $ItemProtocol

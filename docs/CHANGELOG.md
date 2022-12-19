@@ -65,6 +65,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-WinRM` which didn't pass credentials for HTTPS and mishandled CertThumbprint
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
   - Fixed a bug in `Initialize-Service` which reported false failures
+  - Fixed an error in `Get-SqlServerInstance` produced due to `Set-StrictMode`
   - Made possible to import and remove modules manually outside deployment process.
   - Updated `Ruleset.IP` module according to changes from upstream repository.
 

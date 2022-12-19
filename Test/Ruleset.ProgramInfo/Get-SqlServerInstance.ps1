@@ -78,6 +78,9 @@ if ($Domain -ne [System.Environment]::MachineName)
 {
 	Start-Test "Remote default"
 	Get-SqlServerInstance -Domain $Domain
+
+	Start-Test "Remote with -CIM"
+	Get-SqlServerInstance -Domain $Domain -CIM
 }
 else
 {
