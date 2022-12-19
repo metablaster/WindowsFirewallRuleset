@@ -21,6 +21,7 @@ In addition, general questions and answers regarding this firewall.
   - [Network icon in taskbar says it's "No Network"](#network-icon-in-taskbar-says-its-no-network)
   - [PowerShell Core throws a black console window](#powershell-core-throws-a-black-console-window)
   - [Duplicate log entries](#duplicate-log-entries)
+  - [For your security, some setting are controlled by Group Policy](#for-your-security-some-setting-are-controlled-by-group-policy)
 
 ## Firewall rule doesn't work, program "some-program.exe" fails to connect to internet
 
@@ -293,12 +294,13 @@ In `Settings -> Network & Internet -> Status -> Properties` there should be opti
 or public profile for your adapter, but what if these options are gone and how to get them back?
 
 These profile settings go missing when some privileged process has modified network profile such
-as 3rd party firewalls or by sharing your physical NIC with virtual machine virtual switch.\
+as 3rd party firewalls or by sharing your physical NIC with virtual switch from virtual machine.\
 If you have configured external switch in your Hyper-V there is nothing you can do to except to
 stop sharing your hardware NIC with virtual switch.
 
 Here in this repository this will also happen when you run `Set-NetworkProfile.ps1` which runs only
-on demand, however you won't notice this problem until system is rebooted.
+on demand, however you won't notice this problem until system is rebooted.\
+It may also happen if you run `Set-NetConnectionProfile` as Administrator in PowerShell.
 
 **NOTE:** In previous versions of Firewall Ruleset since v0.11.0, `Set-NetworkProfile` runs by
 default, however this is no longer the case in most recent versions.
@@ -309,16 +311,12 @@ actually bring these options back, so here are my favorites that should fix it i
 1. First open up Control Panel firewall and see if there is a message that says:\
 `For your security, some setting are controlled by Group Policy`
 
-   - If you do see this message, next step is to open up GPO firewall and quickly export your firewall
-   rules and settings because once the problem is resolved importing them back will be easy and quick.
-   - Next step is to reset GPO firewall to defaults by using `Scripts\Reset-Firewall.ps1`,
-   but don't do anything to firewall in Control Panel.
-   - When done reboot system and see if this message has gone and also whether profile options are back.
-   - If the message is still there, you can try to recall any security policies you did in GPO, it
-   doesn't have to be related to firewall, ex. anti virus, network options or anything similar can
-   be the cause for this message.
+    - If you see this message, next step is to open up GPO firewall and export your firewall
+    rules and settings because once the problem is resolved importing them back will be easy and quick.
+    - When done refer to [For your security, some setting are controlled by Group Policy](#for-your-security-some-setting-are-controlled-by-group-policy)
+    section below and then come back here.
 
-2. If you can't get rid of a message and profile options are not back even after reboot, next step
+2. If you can't get rid of the message and profile options are not back even after reboot, next step
 is to verify the following location in GPO:\
 `Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
 
@@ -333,7 +331,8 @@ network settings as follows:
    it's own and profile options should re-appear.
 
 - Finally you may want to import your exported firewall policy, this will not bring problem back.
-- Next time make sure not to run `Set-NetworkProfile` if there is no valid reason.
+- Next time make sure not to run `Set-NetworkProfile` or `Set-NetConnectionProfile` if there is no
+valid reason.
 
 ## The maximum number of concurrent operations for this user has been exceeded
 
@@ -419,6 +418,24 @@ Duplicate log entries appear if a script is dotsourced, it should be called rath
 If scripts are run with PS debugger or with `Run -> Run Without Debugging` duplicate log entries will
 appear because script will get dotsourced.\
 See also this issue [Configuration option to debug or run a script without dot sourcing it][debugger suggestion]
+
+[Table of Contents](#table-of-contents)
+
+## For your security, some setting are controlled by Group Policy
+
+This message is present in control panel firewall when at least one option in GPO firewall is
+modified or when at least one rule exists in GPO firewall.\
+To get rid of this message GPO firewall needs to be cleared to system defaults.
+
+- First step is to reset GPO firewall to defaults by using `Scripts\Reset-Firewall.ps1`,
+  but don't do anything to firewall in Control Panel.
+- When done reboot system and see if this message has gone and also whether profile options are back.
+- If the message is still there, you can try to recall any security policies you did in GPO, it
+  doesn't have to be related to firewall, ex. anti virus, network options or anything similar can
+  be the cause for this message.
+- If nothing helps, in GPO firewall right click on node:
+  `Windows Defender Firewall with Advanced Security - Local Group Policy Object` and select
+  `Clear Policy`
 
 [Table of Contents](#table-of-contents)
 

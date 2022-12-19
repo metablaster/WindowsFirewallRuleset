@@ -70,7 +70,9 @@ None. Restore-Firewall.ps1 does not generate any output
 TODO: It needs to be tested exporting with PS Core and importing with Windows PS or vice versa,
 there could be problem due to file encoding.
 TODO: Import is as slow as Deploy-Firewall, we can make it ultra fast by importing or replacing
-rules directly in registry.
+rules directly in registry, but care needs to be taken of rule and group GUID names.
+HACK: Imported rules cause connectivity issues, rules do not work, this is likely due to rule name
+or rule group name which is a GUID, perhaps it should be regenerated in Import-FirewallRule
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

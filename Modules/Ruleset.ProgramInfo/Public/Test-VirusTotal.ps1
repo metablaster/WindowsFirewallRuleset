@@ -226,6 +226,7 @@ function Test-VirusTotal
 						{
 							Write-Debug -Message "[$InvocationName] Processing $SigCheckFile output: $StreamLine"
 
+							# NOTE: Only one of these can be success per line, therefore do not error for failure
 							$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")
 							$VTLink = [regex]::Match($StreamLine, "(?<VTlink>VT link:\s+)(?<link>.*)")
 							$RawPublisher = [regex]::Match($StreamLine, "(?<VTdetection>Description:\s+)(?<publisher>.*)")
@@ -259,43 +260,20 @@ function Test-VirusTotal
 										-Message "Failed to match total count of infections for '$Executable'"
 								}
 							}
-							else
-							{
-								Write-Error -Category ParserError -TargetObject $Detection `
-									-Message "Failed to match VirusTotal status for '$Executable'"
-							}
-
-							if ($Link.Success)
+							elseif ($Link.Success)
 							{
 								Write-Verbose -Message "[$InvocationName] $Executable VT Link is $($Link.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "VT link", $Link.Value
 							}
-							else
-							{
-								Write-Error -Category ParserError -TargetObject $Detection `
-									-Message "Failed to match VirusTotal link for '$Executable'"
-							}
-
-							if ($Publisher.Success)
+							elseif ($Publisher.Success)
 							{
 								Write-Verbose -Message "[$InvocationName] $Executable Publisher is $($Publisher.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Publisher", $Publisher.Value
 							}
-							else
-							{
-								Write-Error -Category ParserError -TargetObject $Detection `
-									-Message "Failed to match VirusTotal publisher for '$Executable'"
-							}
-
-							if ($Description.Success)
+							elseif ($Description.Success)
 							{
 								Write-Verbose -Message "[$InvocationName] $Executable Description is $($Description.Value)"
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "Description", $Description.Value
-							}
-							else
-							{
-								Write-Error -Category ParserError -TargetObject $Detection `
-									-Message "Failed to match VirusTotal description for '$Executable'"
 							}
 						}
 					}

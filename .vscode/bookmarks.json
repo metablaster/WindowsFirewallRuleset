@@ -149,6 +149,16 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "Scripts/Restore-Firewall.ps1",
+			"bookmarks": [
+				{
+					"line": 73,
+					"column": 6,
+					"label": ""
+				}
+			]
 		}
 	]
 }

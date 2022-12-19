@@ -605,6 +605,7 @@ if ($Develop)
 }
 
 # Set desktop shortcut to custom management console
+# TODO: This will not remove shortcut from previous version
 Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
