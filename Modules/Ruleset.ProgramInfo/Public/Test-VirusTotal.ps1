@@ -143,7 +143,8 @@ function Test-VirusTotal
 
 			if ([System.Environment]::Is64BitOperatingSystem)
 			{
-				$SigcheckExecutable = "sigcheck64.exe"
+				# Consider both, sigcheck.exe and sigcheck64.exe
+				$SigcheckExecutable = "sigcheck*.exe"
 			}
 			else
 			{
@@ -154,7 +155,9 @@ function Test-VirusTotal
 			$SigCheckFile = $null
 			if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
 			{
-				$SigCheckFile = "$SigcheckDir\$SigcheckExecutable"
+				# Full path to single executable
+				$Command = Get-Command -Name "$SigcheckDir\$SigcheckExecutable" -CommandType Application -ErrorAction Ignore
+				$SigCheckFile = $Command.Source | Select-Object -First 1
 			}
 			else
 			{
@@ -163,15 +166,14 @@ function Test-VirusTotal
 				$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore
 
 				# Can be, not found or there are multiple matches
-				if (($Command | Measure-Object).Count -eq 1)
+				if (($Command | Measure-Object).Count -ne 0)
 				{
-					$SigCheckFile = $Command.Name
-					Write-Debug -Message "[$InvocationName] $SigcheckExecutable found in PATH"
+					$SigCheckFile = $Command.Name | Select-Object -First 1
+					Write-Debug -Message "[$InvocationName] $SigCheckFile found in PATH"
 				}
 				else
 				{
-					# Using because ExpandEnvironmentVariables will return NULL if location doesn't exist
-					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in the specified path '$SigcheckLocation', VirusTotal scan will not be performed"
+					Write-Warning -Message "[$InvocationName] $($SigcheckExecutable -replace "\*", "64") was not found in '$SigcheckLocation' or in PATH, VirusTotal scan will not be performed"
 				}
 			}
 

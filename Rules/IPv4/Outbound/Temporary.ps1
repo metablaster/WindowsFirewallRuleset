@@ -106,7 +106,7 @@ Format-RuleOutput
 $InstallerAccounts = $UsersGroupSDDL
 Merge-SDDL ([ref] $InstallerAccounts) -From $AdminGroupSDDL -Unique
 
-# NOTE: to make use of this rule, it should be updated here and the script re-run
+# NOTE: to make use of this rule, it should be updated here and the script rerun
 New-NetFirewallRule -DisplayName "Installer" `
 	-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 	-Service Any -Program Any -Group $Group `
@@ -118,7 +118,7 @@ New-NetFirewallRule -DisplayName "Installer" `
 	-Description "Enable only to let some installer update or communicate to internet such as
 office update, and disable ASAP.
 required for ie. downloaded Click-to-Run which does not have persistent location.
-Add installer path in script and re-run Temporary.ps1" |
+Add installer path in script and rerun Temporary.ps1" |
 Format-RuleOutput
 
 New-NetFirewallRule -DisplayName "Services" `

@@ -155,6 +155,7 @@ The following table lists operating systems on which `Windows Firewall Ruleset` 
 | Windows 10          | Education     | 20H2 - 22H2 | x64          |
 | Windows 11          | Pro Education | 21H2        | x64          |
 | Windows 11          | Pro           | 22H2        | x64          |
+| Windows 11          | Enterprise    | 22H2        | x64          |
 | Windows Server 2019 | Essentials    | 1809        | x64          |
 | Windows Server 2019 | Standard      | 1809        | x64          |
 | Windows Server 2019 | Datacenter    | 1809        | x64          |
@@ -187,16 +188,16 @@ A list of other untested but supported systems and features is in [The future](#
 instead of PowerShell Core.\
 Windows 10 ships with min .NET 4.6 (which includes .NET 4.5), and Windows 11 ships with min .NET 4.8
 
-- `sigcheck64.exe` is a digital signature verification tool which you can download from Microsoft site
-and should be placed either into `C:\tools` directory or to `%PATH%` environment variable.\
-`Windows Firewall Ruleset` will use it to perform online malware analysis on VirusTotal for every
-executable that is not digitally signed before a firewall rule is made for that executable.\
+- `sigcheck64.exe` (or 32 bit `sigcheck.exe`) is a digital signature verification tool which you can
+download from Microsoft site and should be placed either into `C:\tools` directory or to `%PATH%`
+environment variable.\
+`Windows Firewall Ruleset` will use it to perform hash based online malware analysis on VirusTotal
+for every executable that is not digitally signed before a firewall rule is made for that executable.\
 This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
 Of course this is only a recommendation, if there is no `sigcheck64.exe` in `PATH` no malware analysis
 is made.\
 By using this functionality you're agree to [VirusTotal Terms of Service][virustotal terms] and
 [VirusTotal Privacy Policy][virustotal privacy]
-
 
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
@@ -430,7 +431,7 @@ it will take some 15 minutes of your attention.
     For more information why this is necessary see [FAQ](FAQ.md)
 
 14. If you encounter errors, you can either ignore errors or update script that produced the error
-then re-run that specific script once again later.
+then rerun that specific script once again later.
 
 15. When done you might want to adjust some of the rules in Local Group Policy,
 not all rules are enabled by default or you might want to toggle default Allow/Block behavior.\

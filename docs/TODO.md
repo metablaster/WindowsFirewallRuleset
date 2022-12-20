@@ -220,7 +220,7 @@ Todo's in this file are categorized into the following sections:
 2. Scripts
 
     - "Access is denied" randomly while loading rules, need some check around this, ex. catching the
-    error and ask to re-run the script.
+    error and ask to rerun the script.
     - Make possible to apply or enable only rules relevant for current firewall profile
     - See if adding `#Requires -Modules` to scripts will help to remove module inclusions and to auto
     load variables

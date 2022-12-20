@@ -200,12 +200,12 @@ function Connect-Computer
 	{
 		if (!$Credential)
 		{
-			$Credential = Get-Credential -Message "Credentials are required to access '$Domain'"
+			$Credential = Get-Credential -Message "Administrator credentials are required to access '$Domain' computer"
 
 			if (!$Credential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
-				Write-Error -Category InvalidOperation -TargetObject $Domain -Message "Credentials are required for remote session on '$Domain'"
+				Write-Error -Category InvalidOperation -TargetObject $Domain -Message "Administrator credentials are required for remote session to '$Domain' computer"
 			}
 			elseif ($Credential.Password.Length -eq 0)
 			{

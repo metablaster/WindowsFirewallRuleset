@@ -105,7 +105,7 @@ None. Export-RegistryRule does not generate any output
 .NOTES
 TODO: Export to excel
 Excel is not friendly to CSV files
-TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.
+TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning again worked.
 TODO: We should probably handle duplicate rule name entires, ex. replace or error,
 because if file with duplicates is imported it will cause removal of duplicate rules.
 

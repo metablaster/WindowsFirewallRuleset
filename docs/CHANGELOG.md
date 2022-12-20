@@ -66,11 +66,12 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Set-Permission` which couldn't adjust permissions on registry keys
   - Fixed a bug in `Initialize-Service` which reported false failures
   - Fixed a bug in `Test-VirusTotal` which failed to scan executables with environment variable
+  - Fixed a bug in `Test-VirusTotal` which failed to find `sigcheck.exe` in certain cases
   - Fixed a bug in `Import-FirewallRule` which caused imported rules to not work
   - Fixed an error in `Get-SqlServerInstance` produced due to `Set-StrictMode`
   - Fixed an error in `Test-Computer` which passed invalid parameter to commandlet
-  - Made possible to import and remove modules manually outside deployment process.
-  - Updated `Ruleset.IP` module according to changes from upstream repository.
+  - Made possible to import and remove modules manually outside deployment process
+  - Updated `Ruleset.IP` module according to changes from upstream repository
 
   - Improved or updated module functions
 
@@ -94,7 +95,6 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Set-Privacy` new script to adjust Windows privacy in a restrictive way
     - `Find-DuplicateModule` function to detect duplicate (outdated) modules on system
     - `Connect-IPInterface` experimental script to troubleshoot obtaining IP from DHCP
-    - Requirement for remote registry service now applies only for remoting
     - `Write-ColorMessage` function to write colored messsages as a replacement for `Write-Host`
 
 - Scripts

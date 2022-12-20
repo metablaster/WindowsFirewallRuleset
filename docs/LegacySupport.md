@@ -67,7 +67,7 @@ Also ie. rules for programs and services that don't exist on system will be most
 but redundant.
 
 What this means, is, just edit the GPO later to refine your imports if you go that route,
-or alternatively revisit your edits and re-run individual scripts again.
+or alternatively revisit your edits and rerun individual scripts again.
 
 ## OS software
 

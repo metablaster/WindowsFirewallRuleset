@@ -204,7 +204,7 @@ if ($Remoting)
 # | Server (LanmanServer)                              | Automatic (Trigger Start) | Running |
 # | Windows Remote Management (WinRM)                  | Manual                    | Stopped |
 # | OpenSSH Authentication Agent (ssh-agent)           | Disabled                  | Stopped |
-# | Remote Registry (RemoteRegistry)                   | Manual                    | Stopped |
+# | Remote Registry (RemoteRegistry)                   | Disabled                  | Stopped |
 # | Function Discovery Provider host (fdPHost)         | Manual                    | Running |
 # | Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
@@ -225,7 +225,7 @@ if ($Service)
 	Set-Service -Name LanmanWorkstation -StartupType Automatic
 	Set-Service -Name LanmanServer -StartupType Automatic
 	Set-Service -Name WinRM -StartupType Manual
-	Set-Service -Name RemoteRegistry -StartupType Manual
+	Set-Service -Name RemoteRegistry -StartupType Disabled
 	Set-Service -Name fdPHost -StartupType Manual
 	Set-Service -Name FDResPub -StartupType Manual
 

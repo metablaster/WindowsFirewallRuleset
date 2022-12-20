@@ -154,7 +154,7 @@ function Update-ModuleHelp
 				# HACK: UpdatableModules may be null, failed on Enterprise edition with 0 found helpinfo files.
 				# Even after updating modules and manually running Update-Help which btw. succeeded!
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not all modules contain HelpInfo files required to update help"
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please re-run 'Update-ModuleHelp' once again later"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Please rerun 'Update-ModuleHelp' once again later"
 
 				# Otherwise the cause may be because Update-Help was never run which is required to
 				# download helpinfo.xml files

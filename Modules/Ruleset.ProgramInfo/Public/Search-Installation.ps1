@@ -715,7 +715,7 @@ function Search-Installation
 				-MessageData "INFO: If you installed $Application elsewhere you can input valid path now"
 
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Alternatively adjust path in $Script and re-run the script later"
+				-MessageData "INFO: Alternatively adjust path in $Script and rerun the script later"
 
 			# TODO: If path is specified with quotes it's not found, but Format-Path in Edit-Table should handle this
 			$Accept = "Provide full path to '$Application' installation directory without quotes"

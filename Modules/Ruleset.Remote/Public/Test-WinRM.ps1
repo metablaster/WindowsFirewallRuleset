@@ -305,13 +305,13 @@ function Test-WinRM
 		# Encountered an internal error in the SSL library"
 		if (($PSCmdlet.ParameterSetName -ne "Cert") -and !$Credential)
 		{
-			$Credential = Get-Credential -Message "Credentials are required to access '$MachineName'"
+			$Credential = Get-Credential -Message "Administrator credentials are required to access '$MachineName' computer"
 
 			if (!$Credential)
 			{
 				# Will happen if credential request was dismissed using ESC key.
 				Write-Error -Category InvalidOperation -TargetObject $MachineName `
-					-Message "Credentials are required to access '$MachineName'"
+					-Message "Administrator credentials are required for remote session to '$MachineName' computer"
 			}
 			elseif ($Credential.Password.Length -eq 0)
 			{

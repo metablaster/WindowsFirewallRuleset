@@ -131,14 +131,14 @@ function Initialize-Connection
 		if (($PolicyStore -notin $LocalStore) -or ($RemotingAuthentication -in $AuthRequiresCredentials))
 		{
 			Set-Variable -Name RemotingCredential -Scope Global -Force -Value (
-				Get-Credential -Message "Credentials are required to access '$PolicyStore' computer"
+				Get-Credential -Message "Administrator credentials are required to access '$PolicyStore' computer"
 			)
 
 			if (!$RemotingCredential)
 			{
 				# Will happen if credential request was dismissed using ESC key or by pressing Cancel.
 				Write-Error -Category InvalidOperation -TargetObject $PolicyStore `
-					-Message "Credentials are required for remote session to '$PolicyStore' computer"
+					-Message "Administrator credentials are required for remote session to '$PolicyStore' computer"
 				return
 			}
 			# Will happen when no password is specified

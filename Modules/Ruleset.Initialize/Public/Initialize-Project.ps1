@@ -188,6 +188,15 @@ function Initialize-Project
 				"WinRM" # Windows Remote Management (WS-Management)
 			)
 
+			# RemoteRegistry is required by both client and server for OpenRemoteBaseKey to work
+			# It may be also required for localhost deployment
+			$ManualServices = "RemoteRegistry"
+
+			if (!(Initialize-Service $ManualServices -Status Stopped -StartupType "Manual"))
+			{
+				return
+			}
+
 			if ($Develop)
 			{
 				$AutomaticServices += @(
@@ -203,17 +212,6 @@ function Initialize-Project
 			if (!(Initialize-Service $AutomaticServices))
 			{
 				return
-			}
-
-			if ($PolicyStore -ne [System.Environment]::MachineName)
-			{
-				# RemoteRegistry required by both client and server for OpenRemoteBaseKey to work
-				$ManualServices = "RemoteRegistry"
-
-				if (!(Initialize-Service $ManualServices -Status Stopped -StartupType "Manual"))
-				{
-					return
-				}
 			}
 		}
 

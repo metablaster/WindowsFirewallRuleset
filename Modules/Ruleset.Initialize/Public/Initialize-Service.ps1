@@ -176,7 +176,7 @@ function Initialize-Service
 					}
 					"RemoteRegistry"
 					{
-						"Required to drill registry on remote computers"
+						"Required to drill registry both locally an remotely"
 						break
 					}
 					"ssh-agent"

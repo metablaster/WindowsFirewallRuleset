@@ -146,7 +146,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 	if (!$Credential)
 	{
 		# Will happen if credential request was dismissed using ESC key.
-		Write-Error -Category InvalidOperation -Message "Credentials are required to access '$Domain'"
+		Write-Error -Category InvalidOperation -Message "Credentials are required to set up git"
 	}
 	elseif ($Credential.Password.Length -eq 0)
 	{

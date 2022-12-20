@@ -87,7 +87,7 @@ Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName)
 Initialize-Project
 
 # User prompt
-$Accept = "Set global firewall behavior, adjust firewall settings and set up firewall and network profile"
+$Accept = "Configure and enable GPO firewall and global firewall behavior"
 $Deny = "Skip operation, no change will be done to firewall or network profile"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion

@@ -164,7 +164,7 @@ So here is an overview to help you see what they do hopefully answering all of y
 
 1. Group policy firewall and all of it's settings are modifed and/or overridden completely.
 
-    - If you make modifications to GPO firewall, re-running scripts again may override your modifications.
+    - If you make modifications to GPO firewall, rerunning scripts again may override your modifications.
 
 2. Some global firewall settings are modified as explained here [Set-NetFirewallSetting][netfirewallsetting]
 

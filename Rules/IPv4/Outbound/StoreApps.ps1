@@ -75,7 +75,7 @@ TODO: rules for *some* apps which have not been updated by user will not work,
 example solitaire app; need to either update them or detect this case.
 
 NOTE: updating apps will not work unless also "Extension users" are updated in
-WindowsServices.ps1, meaning re-run the script.
+WindowsServices.ps1, meaning rerun the script.
 
 TODO: Rule display names don't have all consistent casing (ex. microsoft vs Microsoft)
 We can learn app display name from manifest

@@ -204,7 +204,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 			Write-Warning -Message "[$ThisScript] Executable '$NVDisplayExe' was not found, rules for '$NVDisplayExe' won't have any effect"
 
 			Write-Information -Tags $ThisScript -MessageData "INFO: Searched path was: %SystemRoot%\System32\DriverStore\FileRepository"
-			Write-Information -Tags $ThisScript -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and re-run the script"
+			Write-Information -Tags $ThisScript -MessageData "INFO: To fix this problem find '$NVDisplayExe' and adjust the path in $((Get-Item $PSCommandPath).Name) and rerun the script"
 		}
 		else
 		{

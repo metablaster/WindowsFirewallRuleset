@@ -69,7 +69,7 @@ None. Invoke-CodeAnalysis.ps1 does not generate any output
 .NOTES
 Get-Command not found error and object not set to an instance,
 launch PS extension by opening PS file, launch another terminal twice if needed
-and re-run in each terminal until success.
+and rerun in each terminal until success.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
