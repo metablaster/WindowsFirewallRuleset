@@ -116,6 +116,9 @@ Todo's in this file are categorized into the following sections:
     in `Config\ProjectSettings`, a workaround is needed and also needed to test other preference
     variables, perhaps `Get-CallerPreference` script can help.
     - Log files generated in remote session should be saved locally
+    - We allow specifying `.` and `localhost` for `$Domain` however it get's translated into NETBIOS
+    name in several places?, `.` and `localhost` should be used to avoid going trough network stack.
+    `Write-*` streams and `$PolicyStore` should probably be updated and tested for this change as well.
 
 2. Scripts
 

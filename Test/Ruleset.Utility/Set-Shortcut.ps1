@@ -123,7 +123,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("All Users Desktop", "Set Firewall icon"
 	Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
 		-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 		-Description "View and modify GPO firewall" -IconIndex -19 `
-		-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll"
+		-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll"
 }
 
 Test-Output $Result -Command Set-Shortcut

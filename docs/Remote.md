@@ -482,16 +482,20 @@ See the following link [Troubleshooting Remote Registry][remote registry]
 ## Remoting status
 
 The following section lists module functions and scripts which support or do not support remoting
-as well as functions which currently lack remoting implementation or are unfinished for remoting.
+by design, as well as functions which currently lack remoting implementation or are unfinished for
+remoting.
 
-**NOTE:** The following modules do no expose any remoting functionality at all
+The following modules do no expose any remoting functionality at all by design
 
 - Ruleset.Test
 - Ruleset.Logging
 - Ruleset.Initialize
-- Ruleset.PolicyFileEditor
 - Ruleset.IP
 - VSSetup
+
+The following modules lack remoting functionality
+
+- Ruleset.PolicyFileEditor
 
 ### Ruleset.Compatibility
 
@@ -522,15 +526,15 @@ The following functions lack remoting implementation
 - Get-InterfaceAlias
 - Get-InterfaceBroadcast
 
-All other public functions do not support remoting
+All other public functions do not support remoting by design
 
 ### Ruleset.Firewall
 
 The following functions support remoting
 
-- Get-RegistryRule
+- Get-RegistryRule (not tested)
 
-The following functions do not support remoting
+The following functions do not support remoting by design
 
 - Format-RuleOutput
 
@@ -538,10 +542,16 @@ All other public functions lack remoting implementation
 
 ### Ruleset.ProgramInfo
 
-The following functions do not support remoting
+The following functions do not support remoting by design
 
 - Format-Path
 - Get-AppSID
+
+The following functions support remoting with PowerShell Core only
+
+- Get-AppCapability
+- Get-SystemApp
+- Get-UserApp
 
 All other public functions support remoting
 
@@ -554,11 +564,11 @@ The following functions support remoting
 - Test-RemoteRegistry
 - Test-WinRM
 
-All other functions do not implement remoting and it's unclear if it's needed
+All other functions do not implement remoting and it's unclear if remoting is needed
 
 ### Ruleset.UserInfo
 
-The following functions do not support remoting
+The following functions do not support remoting by design
 
 - Merge-SDDL
 - Split-Principal
@@ -569,7 +579,7 @@ The following functions lack remoting implementation
 
 - Test-Credential
 
-The following functions partially work
+The following functions support remoting but may fail
 
 - ConvertFrom-SDDL
 
@@ -582,15 +592,15 @@ The following functions support remoting
 - Invoke-Process
 - Select-EnvironmentVariable
 
-All other functions do not support remoting
+All other functions do not support remoting by design
 
 ### Scripts
 
 The following scripts support remoting
 
 - Get-NetworkStat
-- Deploy-ASR
-- Show-ASR
+- Deploy-ASR (Windows PS only)
+- Show-ASR (Windows PS only)
 - Confirm-Firewall (experimental)
 
 The following scripts lack remoting implementation
@@ -603,7 +613,7 @@ The following scripts lack remoting implementation
 - Restore-Firewall
 - Find-UnsignedFile
 
-All other scripts do not support remoting
+All other scripts do not support remoting by design
 
 [Table of Contents](#table-of-contents)
 

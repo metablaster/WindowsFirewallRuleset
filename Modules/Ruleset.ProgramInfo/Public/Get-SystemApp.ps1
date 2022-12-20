@@ -136,8 +136,8 @@ function Get-SystemApp
 		# TODO: Get-PSSession will not work for multiple computers because we have only one session currently
 		$Apps = Invoke-Command @SessionParams -ScriptBlock {
 			# HACK: This will fail in Windows PowerShell with "The system cannot find the file specified"
-			# see also: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
-			# https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote/
+			# ISSUE: https://github.com/MicrosoftDocs/windows-powershell-docs/issues/344
+			# See also: https://www.reddit.com/r/sysadmin/comments/lrm3nj/will_getappxpackage_allusers_work_in_remote
 			Get-AppxPackage -Name $using:Name -User $using:User -PackageTypeFilter Main
 		}
 

@@ -607,14 +607,14 @@ if ($Develop)
 #Remove shortcut from previous versions
 $PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
 Get-ChildItem -Path $PublicDesktop -File | Where-Object {
-	$_.Name -match "Firewall\s?((\d+|\.){2,3})?\.lnk"
+	$_.Name -match "^Firewall\s?((\d+|\.){2,3})?\.lnk$"
 } | Remove-Item
 
 # Set new desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
-	-IconLocation "$Env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
+	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
 
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
