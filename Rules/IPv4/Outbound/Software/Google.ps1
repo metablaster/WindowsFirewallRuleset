@@ -83,7 +83,7 @@ param (
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\DirectionSetup.ps1
 
-Initialize-Project -Strict
+Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables

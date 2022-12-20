@@ -241,9 +241,9 @@ function Initialize-Service
 							# Needed to get service again to get fresh stats
 							if ((Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status) -ne [ServiceControllerStatus]::Running)
 							{
+								Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' failed, please start manually and try again"
 								Write-Error -Category OperationStopped -TargetObject $Required `
 									-Message "Unable to proceed, failed to start dependent service"
-								Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' failed, please start manually and try again"
 								return $false
 							}
 							else

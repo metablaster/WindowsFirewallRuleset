@@ -85,7 +85,7 @@ if ($Force -or $PSCmdlet.ShouldContinue("Perform project initialization in devel
 	Initialize-Project
 
 	Start-Test "-Strict"
-	Initialize-Project -Strict
+	Initialize-Project
 
 	Start-Test "ModulesCheck = $false ServicesCheck = $false"
 	Set-Variable -Name ModulesCheck -Scope Global -Force -Value $false

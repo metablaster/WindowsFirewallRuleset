@@ -47,6 +47,7 @@ but the duplicate you are trying to remove is used (locked) instead of first one
 
 .PARAMETER Name
 One or more module names which to uninstall if duplicates are found.
+If not specified all duplicates are processed.
 Wildcard characters are supported.
 
 .PARAMETER Scope
@@ -57,9 +58,10 @@ System: Modules installed for all users
 User: Modules installed for current user
 
 .PARAMETER Force
-If specified all duplicate modules of a specific module are removed without further prompt.
+If specified, all duplicate modules specified by -Name are removed without further prompt.
 This parameter also forces recursive actions on module installation directory,
 ex taking ownership and setting file system permissions required for module uninstallation.
+It also forces removing read only modules.
 
 .EXAMPLE
 PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Scope Shipping, System -Force
@@ -198,6 +200,7 @@ function Uninstall-DuplicateModule
 					# DOCS: -Force, Indicates that this cmdlet removes read-only modules.
 					# By default, Remove-Module removes only read-write modules.
 					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Removing $ModuleName $ModuleVersion from current session"
+
 					try
 					{
 						Remove-Module -Name $ModuleName -Force:$Force -ErrorAction Stop

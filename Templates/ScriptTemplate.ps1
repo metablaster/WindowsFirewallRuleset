@@ -89,7 +89,7 @@ param (
 # TODO: Adjust path to project settings
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
+Initialize-Project
 
 # User prompt
 # TODO: Update command line help messages

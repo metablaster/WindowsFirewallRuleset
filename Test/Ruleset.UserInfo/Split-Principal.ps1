@@ -61,7 +61,7 @@ param (
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\ContextSetup.ps1
 
-Initialize-Project -Strict
+Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion

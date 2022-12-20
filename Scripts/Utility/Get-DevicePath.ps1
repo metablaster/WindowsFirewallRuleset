@@ -59,7 +59,7 @@ param (
 #region Initialization
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
+Initialize-Project
 #endregion
 
 # Build System Assembly in order to call Kernel32:QueryDosDevice.

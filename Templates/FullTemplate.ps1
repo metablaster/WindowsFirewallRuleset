@@ -157,7 +157,7 @@ param (
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 . $PSScriptRoot\ContextSetup.ps1
-Initialize-Project -Strict
+Initialize-Project
 
 # User prompt
 # TODO: Update command line help messages

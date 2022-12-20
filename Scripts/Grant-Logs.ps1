@@ -112,7 +112,7 @@ param (
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
+Initialize-Project
 $Domain = Format-ComputerName $Domain
 
 # User prompt

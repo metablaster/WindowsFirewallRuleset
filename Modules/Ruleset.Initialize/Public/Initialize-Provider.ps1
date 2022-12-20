@@ -288,7 +288,8 @@ function Initialize-Provider
 					# PowerShell needs to restart
 					Set-Variable -Name Restart -Scope Script -Value $true
 
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] $ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
+					Write-Error -Category InvalidResult -TargetObject $ProviderName `
+						-Message "$ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
 					return $false
 				}
 

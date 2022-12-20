@@ -38,9 +38,6 @@ tests for OS, PowerShell version and edition, Administrator mode, .NET Framework
 required system services are started and recommended modules installed.
 If not the function may exit and stop executing scripts.
 
-.PARAMETER Strict
-If specified, exit is called on failure instead of return
-
 .EXAMPLE
 PS> Initialize-Project
 
@@ -48,7 +45,7 @@ Performs default requirements and recommendations checks managed by global setti
 Error or warning message is shown if check failed, environment info otherwise.
 
 .EXAMPLE
-PS> Initialize-Project -Strict
+PS> Initialize-Project
 
 Performs default requirements and recommendations checks managed by global settings.
 Error or warning message is shown if check failed and all subsequent operations are halted.
@@ -69,9 +66,7 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 TODO: We don't use logs in this module
 TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
-TODO: Strict parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
-Develop from false to true in clean session
-TODO: Changes done to system services should be reverted to original values, new function needed.
+TODO: Changes done to system services should be reverted to original values, new function needed
 TODO: code.exe --list-extensions and verify extensions installed
 #>
 function Initialize-Project
@@ -79,15 +74,11 @@ function Initialize-Project
 	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "Low",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Project.md")]
 	[OutputType([string], [void])]
-	param (
-		[Parameter()]
-		[switch] $Strict
-	)
+	param ()
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	# TODO: Strict parameter might be redundant
-	# We need "Stop" since this function when run on it's own won't work
+	# We need "Stop" since this function when run on it's own may close the console if exit is used
 	$ErrorActionPreference = "Stop"
 
 	if ($PSCmdlet.ShouldProcess("System", "Check minimum requirements"))
@@ -116,8 +107,6 @@ function Initialize-Project
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSPlatform `
 				-Message "$OSPlatform platform is not supported, required platform is Win32NT"
-
-			if ($Strict) { exit }
 			return
 		}
 
@@ -129,8 +118,6 @@ function Initialize-Project
 			[string] $OSMajorMinorBuild = "$($TargetOSVersion.Major).$($TargetOSVersion.Minor).$($TargetOSVersion.Build)"
 			Write-Error -Category NotImplemented -TargetObject $TargetOSVersion `
 				-Message "Minimum supported operating system is 'Windows v$RequireWindowsVersion' but 'Windows v$OSMajorMinorBuild present"
-
-			if ($Strict) { exit }
 			return
 		}
 
@@ -142,8 +129,6 @@ function Initialize-Project
 		{
 			Write-Error -Category PermissionDenied -TargetObject $Principal `
 				-Message "Elevation required, please open PowerShell as Administrator and try again"
-
-			if ($Strict) { exit }
 			return
 		}
 
@@ -157,8 +142,6 @@ function Initialize-Project
 		{
 			Write-Error -Category OperationStopped -TargetObject $OSEdition `
 				-Message "Windows $OSEdition doesn't have Local Group Policy required by this project"
-
-			if ($Strict) { exit }
 			return
 		}
 
@@ -184,8 +167,6 @@ function Initialize-Project
 		{
 			Write-Error -Category OperationStopped -TargetObject $TargetPSVersion `
 				-Message "Required PowerShell $PowerShellEdition is v$RequirePSVersion but v$TargetPSVersion present"
-
-			if ($Strict) { exit }
 			return
 		}
 
@@ -221,7 +202,6 @@ function Initialize-Project
 
 			if (!(Initialize-Service $AutomaticServices))
 			{
-				if ($Strict) { exit }
 				return
 			}
 
@@ -232,7 +212,6 @@ function Initialize-Project
 
 				if (!(Initialize-Service $ManualServices -Status Stopped -StartupType "Manual"))
 				{
-					if ($Strict) { exit }
 					return
 				}
 			}
@@ -257,8 +236,6 @@ function Initialize-Project
 				{
 					Write-Error -Category ObjectNotFound -TargetObject $TargetNETVersion `
 						-Message "Unable to determine installed .NET version, required .NET Framework is .NET v$RequireNETVersion"
-
-					if ($Strict) { exit }
 					return
 				}
 
@@ -268,8 +245,6 @@ function Initialize-Project
 						-Message "Minimum required .NET Framework is .NET v$RequireNETVersion but v$TargetNETVersion present"
 					Write-Information -Tags $MyInvocation.InvocationName `
 						-MessageData "INFO: Please visit https://dotnet.microsoft.com/download/dotnet-framework to download and install"
-
-					if ($Strict) { exit }
 					return
 				}
 			}
@@ -350,7 +325,6 @@ function Initialize-Project
 			if (!(Initialize-Provider -Required @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
 						-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"))
 			{
-				if ($Strict) { exit }
 				return
 			}
 
@@ -365,14 +339,12 @@ function Initialize-Project
 			if (!(Initialize-Module -Required @{ ModuleName = "PowerShellGet"; ModuleVersion = $RequirePowerShellGetVersion } `
 						-InfoMessage "PowerShellGet >= v$RequirePowerShellGetVersion is required otherwise updating other modules might fail"))
 			{
-				if ($Strict) { exit }
 				return
 			}
 
 			# PackageManagement is required otherwise updating modules might fail, will be installed by PowerShellGet
 			if (!(Initialize-Module -Required @{ ModuleName = "PackageManagement"; ModuleVersion = $RequirePackageManagementVersion } ))
 			{
-				if ($Strict) { exit }
 				return
 			}
 
@@ -381,6 +353,7 @@ function Initialize-Project
 				# NOTE: at this point PowerShell should be restarted to avoid errors
 				# installing pester fails with signature, posh-git fails with -AllowPrerelease parameter
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Please restart PowerShell for changes to take effect and run last command again"
+				Read-Host "Press enter to exit"
 				exit
 			}
 
@@ -390,9 +363,8 @@ function Initialize-Project
 
 			# PSScriptAnalyzer is required for code formattings and analysis
 			if (!(Initialize-Module -Required @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = $RequireAnalyzerVersion } `
-						-InfoMessage "PSScriptAnalyzer >= v$RequireAnalyzerVersion is required otherwise code will start missing while editing" ))
+						-InfoMessage "PSScriptAnalyzer >= v$RequireAnalyzerVersion is required otherwise the code might disappear while editing" ))
 			{
-				if ($Strict) { exit }
 				return
 			}
 

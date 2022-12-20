@@ -66,7 +66,7 @@ param (
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\ContextSetup.ps1
 
-Initialize-Project -Strict
+Initialize-Project
 if (!(Approve-Execute -Accept "Load test rule into firewall" -Deny $Deny -Force:$Force)) { exit }
 
 # Setup local variables

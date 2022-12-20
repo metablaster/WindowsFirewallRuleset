@@ -355,6 +355,6 @@ if ($Force -or $PSCmdlet.ShouldContinue("Set up git, gpg keys, SSH keys and chec
 			return
 		}
 
-		Initialize-Project -Strict
+		Initialize-Project
 	}
 }

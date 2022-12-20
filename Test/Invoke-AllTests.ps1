@@ -76,7 +76,7 @@ param (
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\ContextSetup.ps1
-Initialize-Project -Strict
+Initialize-Project
 
 # User prompt
 New-Variable -Name Accept -Scope Local -Option ReadOnly -Force -Value "Run all unit tests one by one"

@@ -94,7 +94,7 @@ param (
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
+Initialize-Project
 
 # User prompt
 $Accept = "Accpet exporting firewall rules and settings to file"

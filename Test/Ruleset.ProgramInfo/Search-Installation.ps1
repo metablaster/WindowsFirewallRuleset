@@ -78,7 +78,7 @@ if ((Get-Variable -Name Develop -Scope Global).Value -eq $false)
 }
 
 
-Initialize-Project -Strict
+Initialize-Project
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
