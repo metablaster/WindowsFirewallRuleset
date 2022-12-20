@@ -144,7 +144,7 @@ function Export-FirewallSetting
 	$FirewallProfile.Add("Public", $PublicProfile)
 	$FirewallProfile.Add("Domain", $DomainProfile)
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall global settings..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting global firewall settings..."
 	$Setting = Get-NetFirewallSetting -PolicyStore $PolicyStore
 	[hashtable] $FirewallSetting = @{
 		Name = $Setting.Name

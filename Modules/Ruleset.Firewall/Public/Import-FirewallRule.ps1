@@ -179,8 +179,8 @@ function Import-FirewallRule
 	{
 		# TODO: -SecondsRemaining needs to be updated after precise speed test
 		$ProgressParams = @{
-			# HACK: Progress says "..according to file 'FirewallRules.cs." instead of '..according to FirewallRules.csv'
-			Activity = "Importing firewall rules according to file '$Filename'"
+			# HACK: Progress in PS Core says "..according from file 'FirewallRules.cs." instead of '..according from FirewallRules.csv'
+			Activity = "Importing firewall rules according from file '$Filename'"
 			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
 			CurrentOperation = "$($Rule.Direction)\$($Rule.DisplayName)"
 			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
@@ -198,7 +198,7 @@ function Import-FirewallRule
 			Name = $Rule.Name
 			Displayname = $Rule.Displayname
 			Group = $Rule.Group
-			# NOTE: DisplayGroup is not used
+			# NOTE: DisplayGroup is not a valid parameter
 			# DisplayGroup = $Rule.DisplayGroup
 			Action = $Rule.Action
 			Enabled = $Rule.Enabled
@@ -237,10 +237,11 @@ function Import-FirewallRule
 		$ImportRule = $true
 		if ($Force)
 		{
-			$IsRemoved = @()
-			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable IsRemoved
+			$RemoveError = @()
+			Remove-NetFirewallRule -Name $Rule.Name -PolicyStore $Domain -ErrorAction SilentlyContinue -ErrorVariable RemoveError
 
-			if ($IsRemoved.Count -gt 0)
+			# Remove-NetFirewallRule will error if no such rule in store
+			if ($RemoveError.Count -gt 0)
 			{
 				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Not replacing rule"
 			}
@@ -256,6 +257,20 @@ function Import-FirewallRule
 
 		if ($ImportRule)
 		{
+			if ($HashProps.Package -eq "Any")
+			{
+				# BUG: If Package is set to "Any" imported rules cause connectivity issues, rules do not work,
+				# this is as odd as it can be, it's needed to investigate why this behavior happens because in
+				# the future other properties may cause similar issues.
+				$HashProps.Remove("Package")
+
+				if ($HashProps.Owner -ne "Any")
+				{
+					# If package is Any then Owner should not be set
+					Write-Error -Category InvalidData -TargetObject $HashProps -Message "Unexpected rule property"
+				}
+			}
+
 			# Create new firewall rule, parameters are assigned with splatting
 			# NOTE: If the script is not run as Administrator, the error says "Cannot create a file when that file already exists"
 			New-NetFirewallRule -PolicyStore $Domain @HashProps | Format-RuleOutput -Label Import

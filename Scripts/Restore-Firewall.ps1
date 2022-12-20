@@ -71,8 +71,6 @@ TODO: It needs to be tested exporting with PS Core and importing with Windows PS
 there could be problem due to file encoding.
 TODO: Import is as slow as Deploy-Firewall, we can make it ultra fast by importing or replacing
 rules directly in registry, but care needs to be taken of rule and group GUID names.
-HACK: Imported rules cause connectivity issues, rules do not work, this is likely due to rule name
-or rule group name which is a GUID, perhaps it should be regenerated in Import-FirewallRule
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -86,7 +84,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 param (
 	[Parameter()]
 	[SupportsWildcards()]
-	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
+	[System.IO.DirectoryInfo] $Path,
 
 	[Parameter()]
 	[switch] $Force
@@ -103,11 +101,19 @@ $Deny = "Abort operation, no firewall rules or settings will be imported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-$Path = Resolve-FileSystemPath $Path
 if (!$Path)
 {
-	# Errors if any, reported by Resolve-FileSystemPath
-	return
+	# We can't use it as default parameter prior to Config\ProjectSettings
+	$Path = "$ProjectRoot\Exports"
+}
+else
+{
+	$Path = Resolve-FileSystemPath $Path
+	if (!$Path)
+	{
+		# Errors if any, reported by Resolve-FileSystemPath
+		return
+	}
 }
 
 # TODO: file existence checks such as this one, there should be utility function for this

@@ -128,7 +128,7 @@ function Import-FirewallSetting
 	}
 
 	$Data = $Settings.FirewallSetting
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall global settings..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing global firewall settings..."
 
 	if ($Data.MaxSAIdleTimeSeconds -eq "NotConfigured")
 	{
