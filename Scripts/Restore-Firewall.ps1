@@ -46,13 +46,17 @@ Restore previously saved firewall rules and configuration
 .DESCRIPTION
 Restore-Firewall script imports all firewall rules and configuration that were previously exported
 with Backup-Firewall.ps1
+It is recommended to reset firewall prior to restore which will make import process much faster.
 
 .PARAMETER Path
 Path to directory where the exported settings file is located.
+By default this is Exports directory in repository.
 Wildcard characters are supported.
 
 .PARAMETER Force
-If specified, no prompt for confirmation is shown to perform actions
+If specified, no prompt for confirmation is shown to perform actions.
+Force should be also specified to replace existing firewall rules that are
+duplicate of the ones to be imported.
 
 .EXAMPLE
 PS> Restore-Firewall
@@ -97,7 +101,7 @@ Initialize-Project -Strict
 
 # User prompt
 $Accept = "Accpet importing firewall rules and settings from file"
-$Deny = "Abort operation, no firewall rules or settings will be imported"
+$Deny = "Abort operation, no firewall rules and settings will be imported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
@@ -145,7 +149,7 @@ $StopWatch.Stop()
 $TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
 $TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to import firewall was: $TotalHours hours, $TotalMinutes minutes and $TotalSeconds seconds"
 
 if ($UpdateGPO)
 {

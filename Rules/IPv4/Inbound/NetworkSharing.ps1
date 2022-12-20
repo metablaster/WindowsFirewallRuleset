@@ -49,6 +49,7 @@ None. NetworkSharing.ps1 does not generate any output
 .NOTES
 HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
 Same applies to "Network Discovery" predefined rules
+See exported rules, possible cause is rule name and rule display name.
 
 NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
 NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part

@@ -604,8 +604,13 @@ if ($Develop)
 	& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
 }
 
-# Set desktop shortcut to custom management console
-# TODO: This will not remove shortcut from previous version
+#Remove shortcut from previous versions
+$PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
+Get-ChildItem -Path $PublicDesktop -File | Where-Object {
+	$_.Name -match "Firewall\s?((\d+|\.){2,3})?\.lnk"
+} | Remove-Item
+
+# Set new desktop shortcut to custom management console
 Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `

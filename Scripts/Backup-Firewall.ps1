@@ -44,14 +44,17 @@ SOFTWARE.
 Export all firewall rules and settings
 
 .DESCRIPTION
-Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory
+Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Exports" directory.
+The result is FirewallRules.csv and FirewallSettings.json files.
 
 .PARAMETER Path
 Path into which to save file.
+By default this is Exports directory in repository.
 Wildcard characters are supported.
 
 .PARAMETER Force
-If specified, no prompt for confirmation is shown to perform actions
+If specified, no prompt for confirmation is shown to perform actions.
+It also does not prompt to replace existing export files.
 
 .EXAMPLE
 PS> Backup-Firewall
@@ -82,7 +85,7 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 param (
 	[Parameter()]
 	[SupportsWildcards()]
-	[System.IO.DirectoryInfo] $Path = "$ProjectRoot\Exports",
+	[System.IO.DirectoryInfo] $Path,
 
 	[Parameter()]
 	[switch] $Force
@@ -95,30 +98,39 @@ Initialize-Project -Strict
 
 # User prompt
 $Accept = "Accpet exporting firewall rules and settings to file"
-$Deny = "Abort operation, no firewall rules or settings will be exported"
+$Deny = "Abort operation, no firewall rules and settings will be exported"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
-$Path = Resolve-FileSystemPath $Path -Create
 if (!$Path)
 {
-	# Errors if any, reported by Resolve-FileSystemPath
-	return
+	# We can't use it as default parameter prior to Config\ProjectSettings
+	$Path = "$ProjectRoot\Exports"
+}
+else
+{
+	$Path = Resolve-FileSystemPath $Path -Create
+	if (!$Path)
+	{
+		# Errors if any, reported by Resolve-FileSystemPath
+		return
+	}
 }
 
+# TODO: Don't show timer if export was aborted
 $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Export all rules and settings from GPO
-Export-RegistryRule -Path $Path -FileName "FirewallRules.csv"
-Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json"
+Export-RegistryRule -Path $Path -FileName "FirewallRules.csv" -Force:$Force
+Export-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Force:$Force
 
 $StopWatch.Stop()
 
 $TotalHours = $StopWatch.Elapsed | Select-Object -ExpandProperty Hours
 $TotalMinutes = $StopWatch.Elapsed | Select-Object -ExpandProperty Minutes
 $TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
-Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export firewall was: $TotalHours hours and $TotalMinutes minutes and $TotalSeconds seconds"
+Write-Information -Tags $ThisScript -MessageData "INFO: Time needed to export firewall was: $TotalHours hours, $TotalMinutes minutes and $TotalSeconds seconds"
 
 Disconnect-Computer -Domain $PolicyStore
 Update-Log

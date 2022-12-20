@@ -68,6 +68,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Fixed a bug in `Test-VirusTotal` which failed to scan executables with environment variable
   - Fixed a bug in `Import-FirewallRule` which caused imported rules to not work
   - Fixed an error in `Get-SqlServerInstance` produced due to `Set-StrictMode`
+  - Fixed an error in `Test-Computer` which passed invalid parameter to commandlet
   - Made possible to import and remove modules manually outside deployment process.
   - Updated `Ruleset.IP` module according to changes from upstream repository.
 

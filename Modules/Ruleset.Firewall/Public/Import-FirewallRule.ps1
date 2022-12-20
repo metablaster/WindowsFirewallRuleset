@@ -171,7 +171,7 @@ function Import-FirewallRule
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Iterating rules"
 
-	# Counter for progress
+	# Counter for progress and report
 	[int32] $RuleCount = 0
 
 	# iterate rules
@@ -179,8 +179,8 @@ function Import-FirewallRule
 	{
 		# TODO: -SecondsRemaining needs to be updated after precise speed test
 		$ProgressParams = @{
-			# HACK: Progress in PS Core says "..according from file 'FirewallRules.cs." instead of '..according from FirewallRules.csv'
-			Activity = "Importing firewall rules according from file '$Filename'"
+			# HACK: Progress in PS Core says "..from file 'FirewallRules.cs." instead of '..from FirewallRules.csv'
+			Activity = "Importing firewall rules from file '$Filename'"
 			PercentComplete = (++$RuleCount / $FirewallRules.Length * 100)
 			CurrentOperation = "$($Rule.Direction)\$($Rule.DisplayName)"
 			SecondsRemaining = (($FirewallRules.Length - $RuleCount + 1) / 10 * 60)
@@ -281,5 +281,7 @@ function Import-FirewallRule
 		}
 	} # foreach rule
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Importing firewall rules from '$FileName' done"
+	# This is needed to get rid of a ghost progress bar
+	Write-Progress -Activity "Importing firewall rules from file '$Filename'" -Completed
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $RuleCount firewall rules were imported from '$FileName'"
 }

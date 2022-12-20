@@ -78,6 +78,9 @@ Export blocking rules
 Append exported rules to existing file.
 By default file of same name is replaced with new content
 
+.PARAMETER Force
+If specified does not prompt to replace existing file.
+
 .EXAMPLE
 PS> Export-RegistryRule
 
@@ -103,6 +106,8 @@ None. Export-RegistryRule does not generate any output
 TODO: Export to excel
 Excel is not friendly to CSV files
 TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.
+TODO: We should probably handle duplicate rule name entires, ex. replace or error,
+because if file with duplicates is imported it will cause removal of duplicate rules.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-RegistryRule.md
@@ -151,11 +156,60 @@ function Export-RegistryRule
 		[switch] $Block,
 
 		[Parameter()]
-		[switch] $Append
+		[switch] $Append,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	$Path = Resolve-FileSystemPath $Path -Create
+	if (!$Path)
+	{
+		# Errors if any, reported by Resolve-FileSystemPath
+		return
+	}
+
+	# NOTE: Split-Path -Extension is not available in Windows PowerShell
+	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+
+	if ($JSON)
+	{
+		# Output rules in JSON format
+		if (!$FileExtension -or ($FileExtension -ne ".json"))
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension .json to input file"
+			$FileName += ".json"
+		}
+	}
+	else
+	{
+		# Output rules in CSV format
+		if (!$FileExtension -or ($FileExtension -ne ".csv"))
+		{
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension .csv to input file"
+			$FileName += ".csv"
+		}
+	}
+
+	$DestinationFile = "$Path\$FileName"
+	$FileExists = Test-Path -Path $DestinationFile -PathType Leaf
+
+	if ($FileExists)
+	{
+		if (!$Append -and !($Force -or $PSCmdlet.ShouldContinue($DestinationFile, "Replace existing export file?")))
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Exporting firewall rules to '$FileName' was aborted"
+			return
+		}
+	}
+	elseif ($Append)
+	{
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Exporting to new file because the specified file '$DestinationFile' does not exist"
+	}
+
+	#region ExportRules
 	# Filter rules?
 	# NOTE: because there are 3 possibilities for each of the below switches we use -like operator
 	# Filter by direction
@@ -243,76 +297,38 @@ function Export-RegistryRule
 			# OverrideBlockRules = $SecurityFilter.OverrideBlockRules
 		}
 	}
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to file"
-
-	$Path = Resolve-FileSystemPath $Path -Create
-	if (!$Path)
-	{
-		# Errors if any, reported by Resolve-FileSystemPath
-		return
-	}
-
-	# NOTE: Split-Path -Extension is not available in Windows PowerShell
-	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+	#endregion
 
 	if ($JSON)
 	{
-		# Output rules in JSON format
-		if (!$FileExtension -or ($FileExtension -ne ".json"))
+		if ($Append -and $FileExists)
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
-			$FileName += ".json"
-		}
-
-		if ($Append)
-		{
-			if (Test-Path -PathType Leaf -Path "$Path\$FileName")
-			{
-				$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path "$Path\$FileName" -Raw)
-				@($JsonFile; $FirewallRuleSet) | ConvertTo-Json |
-				Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
-			}
-			else
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending rule to file because no existing file"
-			}
+			$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path $DestinationFile -Raw)
+			@($JsonFile; $FirewallRuleSet) | ConvertTo-Json |
+			Set-Content -Path $DestinationFile -Encoding $DefaultEncoding
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in JSON file"
-			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to '$FileName'"
+			$FirewallRuleSet | ConvertTo-Json | Set-Content -Path $DestinationFile -Encoding $DefaultEncoding
 		}
 	}
 	else
 	{
-		# Output rules in CSV format
-		if (!$FileExtension -or ($FileExtension -ne ".csv"))
-		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
-			$FileName += ".csv"
-		}
+		$CsvData = $FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";"
 
-		if ($Append)
+		if ($Append -and $FileExists)
 		{
-			if (Test-Path -PathType Leaf -Path "$Path\$FileName")
-			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to CSV file"
-				$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-				Select-Object -Skip 1 | Add-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
-			}
-			else
-			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Not appending rule to file because no existing file"
-			}
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Appending to existing CSV file"
+			$CsvData | Select-Object -Skip 1 |
+			Add-Content -Path $DestinationFile -Encoding $DefaultEncoding
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Replacing content in CSV file"
-			$FirewallRuleSet | ConvertTo-Csv -NoTypeInformation -Delimiter ";" |
-			Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing rules to '$FileName'"
+			$CsvData | Set-Content -Path $DestinationFile -Encoding $DefaultEncoding
 		}
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall rules to '$FileName' done"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($FirewallRules.Length) firewall rules were exported to '$FileName'"
 }

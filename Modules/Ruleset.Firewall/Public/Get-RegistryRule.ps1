@@ -751,6 +751,9 @@ function Get-RegistryRule
 				# Create output object using the properties defined in the hashtable
 				New-Object -TypeName PSCustomObject -Property $HashProps
 			} # foreach registry rule
+
+			# This is needed to get rid of a ghost progress bar
+			Write-Progress -Activity "Getting rules from registry" -Completed
 		}
 	}
 }

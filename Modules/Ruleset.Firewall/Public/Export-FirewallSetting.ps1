@@ -40,6 +40,9 @@ Wildcard characters are supported.
 .PARAMETER FileName
 Output file name, json format
 
+.PARAMETER Force
+If specified does not prompt to replace existing file.
+
 .EXAMPLE
 PS> Export-FirewallSetting
 
@@ -66,11 +69,44 @@ function Export-FirewallSetting
 		[System.IO.DirectoryInfo] $Path,
 
 		[Parameter()]
-		[string] $FileName = "FirewallSettings.json"
+		[string] $FileName = "FirewallSettings.json",
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	$Path = Resolve-FileSystemPath $Path -Create
+	if (!$Path)
+	{
+		# Errors if any, reported by Resolve-FileSystemPath
+		return
+	}
+
+	# NOTE: Split-Path -Extension is not available in Windows PowerShell
+	$FileExtension = [System.IO.Path]::GetExtension($FileName)
+
+	# Output rules in JSON format
+	if (!$FileExtension -or ($FileExtension -ne ".json"))
+	{
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension .json to input file"
+		$FileName += ".json"
+	}
+
+	$DestinationFile = "$Path\$FileName"
+	$FileExists = Test-Path -Path $DestinationFile -PathType Leaf
+
+	if ($FileExists)
+	{
+		if (!($Force -or $PSCmdlet.ShouldContinue($DestinationFile, "Replace existing export file?")))
+		{
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Exporting firewall settings to '$FileName' was aborted"
+			return
+		}
+	}
+
+	#region ExportSettings
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall profile..."
 
 	$Setting = Get-NetFirewallProfile -PolicyStore $PolicyStore -Name Private
@@ -163,30 +199,14 @@ function Export-FirewallSetting
 		KeyEncoding = $Setting.KeyEncoding
 		EnablePacketQueuing = $Setting.EnablePacketQueuing
 	}
+	#endregion
 
 	$JsonData = @{}
 	$JsonData.Add("FirewallProfile", $FirewallProfile)
 	$JsonData.Add("FirewallSetting", $FirewallSetting)
 
-	$Path = Resolve-FileSystemPath $Path -Create
-	if (!$Path)
-	{
-		# Errors if any, reported by Resolve-FileSystemPath
-		return
-	}
-
-	# NOTE: Split-Path -Extension is not available in Windows PowerShell
-	$FileExtension = [System.IO.Path]::GetExtension($FileName)
-
-	# Output rules in JSON format
-	if (!$FileExtension -or ($FileExtension -ne ".json"))
-	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Adding extension to input file"
-		$FileName += ".json"
-	}
-
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing JSON file"
-	$JsonData | ConvertTo-Json -Depth 3 | Set-Content -Path "$Path\$FileName" -Encoding $DefaultEncoding
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Writing settings to '$FileName'"
+	$JsonData | ConvertTo-Json -Depth 3 | Set-Content -Path $DestinationFile -Encoding $DefaultEncoding
 
 	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall settings to '$FileName' done"
 }

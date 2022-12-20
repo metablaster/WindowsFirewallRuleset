@@ -116,7 +116,7 @@ Initialize-Project -Strict
 $Domain = Format-ComputerName $Domain
 
 # User prompt
-$Accept = "Grant permission to read firewall log files until system reboot"
+$Accept = "Grant permission to read firewall logs until system reboot"
 $Deny = "Abort operation, no permission change is done on firewall logs"
 if (!(Approve-Execute -Accept $Accept -Unsafe:(!$Develop) -Deny $Deny -Force:$Force)) { exit }
 #endregion
@@ -127,7 +127,7 @@ if (!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
 {
 	# Continue only if firewall logs go to location inside repository
 	Write-Warning -Message "[$ThisScript] Not granting permissions for $FirewallLogsFolder"
-	exit
+	return
 }
 
 # NOTE: FirewallLogsFolder may contain environment variable

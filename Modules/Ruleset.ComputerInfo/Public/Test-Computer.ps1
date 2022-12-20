@@ -186,7 +186,6 @@ function Test-Computer
 					}
 
 					$WSManParams["UseSsl"] = $true
-					$WSManParams["Protocol"] = "HTTPS"
 
 					if (!$Port)
 					{
@@ -206,7 +205,6 @@ function Test-Computer
 					}
 
 					$WSManParams["UseSsl"] = $false
-					$WSManParams["Protocol"] = "HTTP"
 
 					if (!$Port)
 					{
