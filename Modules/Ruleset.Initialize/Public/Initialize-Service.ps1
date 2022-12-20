@@ -112,7 +112,7 @@ function Initialize-Service
 		$Accept = [ChoiceDescription]::new("&Yes")
 		$Deny = [ChoiceDescription]::new("&No")
 		$Deny.HelpMessage = "Skip operation"
-		[string] $Title = "Required system service not set to required state"
+		[string] $Title = "System service not set to required state"
 
 		# Timeout to start a service
 		$ServiceTimeout = "00:00:30"
@@ -212,7 +212,10 @@ function Initialize-Service
 					foreach ($Required in $Service.ServicesDependedOn)
 					{
 						# For dependent services show only failures
+						# TODO: PreviousDependentStartType was seen as null in logs,
+						# We use ['previous' -> 'change'] format for status change to detect this in logs
 						$PreviousDependentStartType = $Required.StartType
+
 						if ($PreviousDependentStartType -ne [ServiceStartMode]::Automatic)
 						{
 							Set-Service -Name $Required.Name -StartupType Automatic
@@ -224,7 +227,7 @@ function Initialize-Service
 							}
 							else
 							{
-								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousDependentStartType -> Automatic"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName) ($($Required.Name))' ['$PreviousDependentStartType' -> 'Automatic']"
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting dependent service '$($Required.Name)' to Automatic succeeded"
 							}
 						}
@@ -246,7 +249,7 @@ function Initialize-Service
 							else
 							{
 								# Write log for service status change
-								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName)' ($($Required.Name)) $PreviousDependentStatus -> Running"
+								Write-LogFile -LogName "Services" -Message "'$($Required.DisplayName) ($($Required.Name))' ['$PreviousDependentStatus' -> 'Running']"
 								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' succeeded"
 							}
 						}
@@ -268,7 +271,7 @@ function Initialize-Service
 						else
 						{
 							# Write log for service status change
-							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($ServiceName) $PreviousStartType -> $StartupType"
+							Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName) ($ServiceName)' ['$PreviousStartType' -> '$StartupType']"
 							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$StartupType' startup succeeded"
 						}
 					}
@@ -308,7 +311,7 @@ function Initialize-Service
 					else
 					{
 						# Write log for service status change
-						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName)' ($ServiceName) $PreviousStatus -> Running"
+						Write-LogFile -LogName "Services" -Message "'$($Service.DisplayName) ($ServiceName)' ['$PreviousStatus' -> 'Running']"
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status succeeded"
 					}
 				}

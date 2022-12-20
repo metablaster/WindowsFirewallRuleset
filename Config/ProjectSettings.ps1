@@ -581,6 +581,7 @@ if (!(Get-Variable -Name CheckReadOnlyVariables -Scope Global -ErrorAction Ignor
 	New-Variable -Name ProjectCheck -Scope Global -Option ReadOnly -Value $true
 
 	# Set to false to avoid checking if modules are up to date
+	# Enabling this make sense only for development or code navigation
 	New-Variable -Name ModulesCheck -Scope Global -Option ReadOnly -Value $Develop
 
 	# Set to false to avoid checking if required system services are started
@@ -697,6 +698,20 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 
 	# Check if constants already initialized, used for module reloading, do not modify!
 	New-Variable -Name CheckConstantVariables -Scope Global -Option Constant -Value $null
+
+	# There is a bug in Windows PowerShell which doesn't recognize -ErrorAction Ignore properly
+	# for advanced functions (not commandlets), to get around this bug we conditionally define
+	# Ignore and use it everywhere where Windows PS errors about this.
+	# This issue has been resolved for PS Core but Windows PowerShell is stuck since it isn't updated.
+	# ISSUE: https://github.com/PowerShell/PowerShell/issues/4348
+	if ($PSVersionTable.PSEdition -eq "Core")
+	{
+		New-Variable -Name PSCompatibleIgnore -Scope Global -Option Constant -Value "Ignore"
+	}
+	else
+	{
+		New-Variable -Name PSCompatibleIgnore -Scope Global -Option Constant -Value "SilentlyContinue"
+	}
 
 	# Default remote registry permissions are:
 	# MSDN: Security checks are not performed when accessing subkeys or values

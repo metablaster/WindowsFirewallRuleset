@@ -314,7 +314,8 @@ allowing you to browse the internet anonymously.
 
 It's difficult to suggest VPN since VPN's aren't free and proxy services which you can find online
 aren't to be trusted.\
-Suggested software for VPN or proxy that is free is [Psiphon][psiphon]
+Suggested software for VPN or proxy that is free and open source is [Psiphon][psiphon],
+github repo is here [Psiphon-Inc/psiphon-windows][psiphon repo]
 
 Psiphon is a standalone executable which doesn't require elevation, it's free, their company has
 servers world wide and you're able to choose from a set of countries in the UI.
@@ -504,7 +505,7 @@ The following web sites are good starting point for additional research regardin
 [defender]: https://www.microsoft.com/en-us/windows/comprehensive-security "Visit microsoft site"
 [firewall]: https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-firewall/windows-firewall-with-advanced-security "Visit microsoft site"
 [gpg4win]: https://www.gpg4win.org "Visit gpg4win.org site"
-[psiphon]: https://www.psiphon.onl/windows "Visit psiphon.onl site"
+[psiphon]: https://psiphon.ca/en/download.html "Visit psiphon download site"
 [dnscrpyt]: https://simplednscrypt.org "Visit simple DNS crypt homepage"
 [ublock]: https://github.com/gorhill/uBlock "Visit uBlock github page"
 [cad]: https://github.com/Cookie-AutoDelete/Cookie-AutoDelete "Visit CAD github page"
@@ -527,3 +528,4 @@ The following web sites are good starting point for additional research regardin
 [privilege escalation]: https://en.wikipedia.org/wiki/Privilege_escalation "Visit wikipedia site"
 [nmap]: https://nmap.org "Visit nmap site"
 [startpage]: https://www.startpage.com "Visit Startpage search engine"
+[psiphon repo]: https://github.com/Psiphon-Inc/psiphon-windows "Visit GitHub page"

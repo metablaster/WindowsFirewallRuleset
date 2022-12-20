@@ -323,7 +323,7 @@ release under "assets" download zip file.\
 These steps here assume you have downloaded a zip file from "assets" section under "Releases".
 
 2. Extract downloaded archive somewhere, these steps assume you've extracted the zip file
-(project root directory) into `C:\` root drive directly.
+(repository root directory) into `C:\` root drive directly.
 
 3. For first time user it's recommended to use Windows PowerShell, see [How to open Windows PowerShell](/docs/WindowsPowerShell.md)\
 If you would like to use PowerShell Core instead keep in mind that there is an issue with
@@ -397,7 +397,7 @@ It is recommended to close down all other programs before running master script 
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 
-    To deploy firewall automatically without any prompt run:
+    To deploy firewall automatically  with as few prompts as possible run:
 
     ```powershell
     .\Scripts\Deploy-Firewall.ps1 -Force

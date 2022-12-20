@@ -99,11 +99,10 @@ param (
 #region Initialization
 . $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-Initialize-Project -Strict
 
 # User prompt
-$Accept = "All GPO firewall rules will be removed and settings restored to system defaults"
-$Deny = "Abort operation, no change will be done to firewall"
+$Accept = "All GPO firewall rules will be removed and modified settings restored to system defaults"
+$Deny = "Abort operation, no change will be done to firewall or system"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
@@ -217,6 +216,8 @@ if ($Remoting)
 
 if ($Service)
 {
+	Write-Information -Tags $ThisScript -MessageData "INFO: Resetting modified windows services to system defaults"
+
 	Set-Service -Name nsi -StartupType Automatic
 	Set-Service -Name SamSs -StartupType Automatic
 

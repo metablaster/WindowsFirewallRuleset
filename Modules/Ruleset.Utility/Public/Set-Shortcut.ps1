@@ -116,7 +116,7 @@ function Set-Shortcut
 		[string] $Name,
 
 		[Parameter(Mandatory = $true)]
-		[System.IO.DirectoryInfo] $Path,
+		[string] $Path,
 
 		[Parameter(Mandatory = $true, ParameterSetName = "Local")]
 		[Alias("Source")]
@@ -164,7 +164,7 @@ function Set-Shortcut
 	if ($PSCmdlet.ParameterSetName -eq "Online") { $Target = $URL.Authority }
 	else { $Target = Split-Path -Path $TargetPath -Leaf }
 
-	if ($PSCmdlet.ShouldProcess($Path.FullName, "Set shortcut to '$Target'"))
+	if ($PSCmdlet.ShouldProcess($Path, "Set shortcut to '$Target'"))
 	{
 		$SpecialFolders = @(
 			"AllUsersDesktop"
@@ -182,7 +182,8 @@ function Set-Shortcut
 			"SendTo"
 			"StartMenu"
 			"Startup"
-			"Templates")
+			"Templates"
+		)
 
 		$InformationPreference = "Continue"
 		[System.IO.FileInfo] $FilePath = $null

@@ -341,5 +341,5 @@ function Reset-WinRM
 		Set-Service -Name WinRM -StartupType Manual
 	}
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM reset completed successfully!"
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: WinRM reset completed successfully"
 }

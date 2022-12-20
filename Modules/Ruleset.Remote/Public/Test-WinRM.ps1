@@ -226,7 +226,7 @@ function Test-WinRM
 
 	if ($MachineName -eq [System.Environment]::MachineName)
 	{
-		$SessionConfiguration = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction SilentlyContinue
+		$SessionConfiguration = Get-PSSessionConfiguration -Force -Name $ConfigurationName -ErrorAction $PSCompatibleIgnore
 
 		# If specified session configuration is disabled or missing New-PSSession will not work
 		if ($null -eq $SessionConfiguration)
@@ -287,6 +287,14 @@ function Test-WinRM
 		SessionOption = $SessionOption
 		# MSDN: If you specify only the configuration name, the following schema URI is prepended: http://schemas.microsoft.com/PowerShell
 		ConfigurationName = $ConfigurationName
+	}
+
+	if ($Quiet)
+	{
+		# Ignore to prevent generating logs for quiet test
+		$WSManParams.ErrorAction = "Ignore"
+		$CimParams.ErrorAction = "Ignore"
+		$PSSessionParams.ErrorAction = "Ignore"
 	}
 
 	if (($MachineName -ne [System.Environment]::MachineName) -or ($RemotingAuthentication -in $AuthRequiresCredentials))
@@ -410,7 +418,7 @@ function Test-WinRM
 			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
 		}
 
-		Get-PSSession -Name TestSession -ErrorAction Ignore | Remove-PSSession
+		Get-PSSession -Name $PSSessionParams["Name"] -ErrorAction Ignore | Remove-PSSession
 
 		$StatusHTTPS = ($null -ne $WSManResult) -and ($null -ne $CimResult) -and ($null -ne $PSSessionResult)
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
@@ -495,7 +503,7 @@ function Test-WinRM
 			$PSSessionResult | Select-Object Name, ComputerName, State, Availability | Format-List
 		}
 
-		Get-PSSession -Name TestSession -ErrorAction Ignore | Remove-PSSession
+		Get-PSSession -Name $PSSessionParams["Name"] -ErrorAction Ignore | Remove-PSSession
 
 		if ($PSBoundParameters.ContainsKey("Status") -and ($Protocol -ne "Default"))
 		{
