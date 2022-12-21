@@ -14,7 +14,7 @@ Validate SDDL string
 ## SYNTAX
 
 ```powershell
-Test-SDDL [-SDDL] <String[]> [<CommonParameters>]
+Test-SDDL [-SDDL] <String[]> [-PassThru] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,6 +48,23 @@ Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
+### -PassThru
+
+If specified, the return value is SDDL string if it's valid, otherwise null.
+By default boolean test is performed.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -57,6 +74,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to Test-SDDL
 
 ## OUTPUTS
+
+### [bool] true if SDDL string is valid, false otherwise
 
 ### [string] If SDDL string is valid it's returned, otherwise null
 

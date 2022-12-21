@@ -14,15 +14,14 @@ Start test case
 ## SYNTAX
 
 ```powershell
-Start-Test [-Message] <String> [-Expected <String>] [-Command <String>] [-WhatIf] [-Confirm]
+Start-Test [-Message] <String> [-Expected <String>] [-Command <String>] [-Force] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Start-Test writes output to host to separate test cases.
-Formatted message block is shown in the console.
-This function must be called before single test case starts executing
+Start-Test writes formatted header block the console for separate test cases.
+This function should be called before single test case starts executing.
 
 ## EXAMPLES
 
@@ -41,6 +40,18 @@ Start-Test "some test" -Expected "output 123" -Command "Set-Something"
 ```
 
 Prints formatted header
+
+### EXAMPLE 3
+
+```powershell
+Start-Test "some test" -Force
+PS> Function-WhichFails -ErrorVariable TestEV -EA SilentlyContinue
+PS> Restore-Test
+```
+
+Error is converted to informational message with Restore-Test.
+Here TestEV is a global error variable made with -Force switch, -EA SilentlyContinue must
+be specified only for module functions.
 
 ## PARAMETERS
 
@@ -80,7 +91,7 @@ Accept wildcard characters: False
 
 ### -Command
 
-The command which is to be tested.
+The command which is to be tested, it's inserted into message.
 This value overrides default Command parameter specified in Enter-Test.
 
 ```yaml
@@ -91,6 +102,25 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+Used to test, test cases expected to fail.
+When specified a global "TestEV" error variable is created and reused by Restore-Test,
+errors generated for test case are silenced and converted to informational message.
+However this works only for global functions, see example below for a workaround.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -142,9 +172,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: switch for no new line, some tests will produce redundant new lines, ex.
-Format-Table in pipeline
-TODO: Doesn't work starting tests inside dynamic modules
+TODO: Switch for no new line, some tests will produce redundant new lines, ex.
+Format-Table on pipeline
+TODO: Doesn't work for starting tests inside dynamic modules
 TODO: Write-Information instead of Write-Output
 
 ## RELATED LINKS

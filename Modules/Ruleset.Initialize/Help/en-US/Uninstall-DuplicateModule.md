@@ -41,10 +41,10 @@ but the duplicate you are trying to remove is used (locked) instead of first one
 ### EXAMPLE 1
 
 ```powershell
-Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System
+Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Scope Shipping, System -Force
 ```
 
-Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope
+Removes outdated PowerShellGet and PackageManagement modules excluding those installed per user
 
 ### EXAMPLE 2
 
@@ -60,6 +60,7 @@ First get module you know should be removed and pass it to pipeline
 ### -Name
 
 One or more module names which to uninstall if duplicates are found.
+If not specified all duplicates are processed.
 Wildcard characters are supported.
 
 ```yaml
@@ -96,7 +97,10 @@ Accept wildcard characters: False
 
 ### -Force
 
-If specified all duplicate modules of a specific module are removed without further prompt
+If specified, all duplicate modules specified by -Name are removed without further prompt.
+This parameter also forces recursive actions on module installation directory,
+ex taking ownership and setting file system permissions required for module uninstallation.
+It also forces removing read only modules.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -135,5 +139,6 @@ Some system process
 Session in VSCode
 4.
 Current session prompt must not point to anywhere in target module path
+TODO: Should support ShouldProcess
 
 ## RELATED LINKS

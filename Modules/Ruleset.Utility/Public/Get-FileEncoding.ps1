@@ -77,10 +77,10 @@ TODO: utf8 file reported as ascii in Windows PowerShell
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0
+https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding
 #>
 function Get-FileEncoding
 {

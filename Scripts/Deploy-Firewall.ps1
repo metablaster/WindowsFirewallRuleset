@@ -604,6 +604,10 @@ if ($Develop)
 	& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
 }
 
+Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
+Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+Disconnect-Computer -Domain $PolicyStore
+
 #Remove shortcut from previous versions
 $PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
 Get-ChildItem -Path $PublicDesktop -File | Where-Object {
@@ -615,10 +619,6 @@ Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin
 	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
 	-Description "View and modify GPO firewall" -IconIndex -19 `
 	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
-
-Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
-Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-Disconnect-Computer -Domain $PolicyStore
 
 # Show execution status
 if ($ErrorStatus)

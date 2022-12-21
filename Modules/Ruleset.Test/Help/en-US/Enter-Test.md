@@ -14,7 +14,7 @@ Initialize unit test
 ## SYNTAX
 
 ```powershell
-Enter-Test [[-Command] <String>] [-Private] [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
+Enter-Test [[-Command] <String>] [-Private] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,8 +46,9 @@ Enter-Test -Private
 
 ### -Command
 
-Optionally specify the command which is to be tested by default.
-This value is used by Start-Test function by default unless specified in Start-Test.
+Optionally specify the command which is to be tested.
+This value is used by Start-Test function by default which is shown in formatted output unless
+overridden with Start-Test.
 
 ```yaml
 Type: System.String
@@ -63,24 +64,7 @@ Accept wildcard characters: False
 
 ### -Private
 
-If specified, temporarily exports private module functions into global scope
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Pester
-
-Should be specified to enter pester tests for private functions,
-this parameter implies -Private switch.
+Should be specified to test private module functions
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -141,6 +125,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-None.
+HACK: Using -Private switch will not work as expected if private function depends on
+or calls other module variables or public module functions, see Edit-Table for example
 
 ## RELATED LINKS

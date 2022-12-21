@@ -20,7 +20,7 @@ Customized user prompt to continue
 
 ### [Compare-Path](Compare-Path.md)
 
-Compare 2 paths for equality or similarity
+Compare two paths for equality or similarity
 
 ### [Confirm-FileEncoding](Confirm-FileEncoding.md)
 
@@ -40,7 +40,7 @@ Gets the encoding of a file
 
 ### [Get-TypeName](Get-TypeName.md)
 
-Get .NET outputs of a commandlet or convert to/from type accelerator
+Get commandlet output typename, OutputType attribute or convert to/from type accelerator
 
 ### [Invoke-Process](Invoke-Process.md)
 
@@ -60,7 +60,7 @@ Select a group of system environment variables
 
 ### [Set-NetworkProfile](Set-NetworkProfile.md)
 
-Set network profile for physical network interfaces
+Set network profile on connected network interfaces
 
 ### [Set-Permission](Set-Permission.md)
 

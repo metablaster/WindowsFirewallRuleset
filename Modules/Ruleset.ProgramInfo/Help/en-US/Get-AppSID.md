@@ -14,7 +14,7 @@ Get store app SID
 ## SYNTAX
 
 ```powershell
-Get-AppSID [-PackageFamilyName] <String> [<CommonParameters>]
+Get-AppSID [-PackageFamilyName] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,14 +36,14 @@ Get-AppSID "Microsoft.MicrosoftEdge_8wekyb3d8bbwe"
 "PackageFamilyName" string
 
 ```yaml
-Type: System.String
+Type: System.String[]
 Parameter Sets: (All)
 Aliases: FamilyName
 
 Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -53,16 +53,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-AppSID
+### [string] "PackageFamilyName" string
 
 ## OUTPUTS
 
-### [string] store app SID (security identifier) if app found
+### [string] store app SID (security identifier)
 
 ## NOTES
 
 Big thanks to ljani for this awesome solution, see issue from "related links" section
-TODO: remote computers?
 
 ## RELATED LINKS
 

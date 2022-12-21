@@ -415,11 +415,11 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>$Entries = @(
-    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+    New-Object PSObject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
+    New-Object PSObject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
 )
 PS&gt; $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-    -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'</dev:code>
+    -Key "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"</dev:code>
         <dev:remarks>
           <maml:para>Example of using pipeline input to remove multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be removed, and will be left alone if the file already did not contain any of those values.</maml:para>
           <maml:para>The Key property could have also been specified via the pipeline objects instead of on the command line, but since both values shared the same Key, this example shows that you can pass the value in either way.</maml:para>
@@ -680,15 +680,15 @@ PS&gt; $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPol
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data "Hello, World!" -Type String</dev:code>
         <dev:remarks>
-          <maml:para>Assigns a value of 'Hello, World!' to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO. Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini</maml:para>
+          <maml:para>Assigns a value of "Hello, World!" to the String value Software\Policies\Something\SomeValue in the local computer Machine GPO. Updates the Machine version counter in $env:systemroot\system32\GroupPolicy\gpt.ini</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-        -Key Software\Policies\Something -ValueName SomeValue -Data 'Hello, World!' -Type String -NoGptIniUpdate</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data "Hello, World!" -Type String -NoGptIniUpdate</dev:code>
         <dev:remarks>
           <maml:para>Same as example 1, except this one does not update gpt.ini right away. This can be useful if you want to set multiple values in the policy file and only trigger a single Group Policy refresh.</maml:para>
         </dev:remarks>
@@ -696,7 +696,7 @@ PS&gt; $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPol
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Set-PolicyFileEntry -Path $env:systemroot\system32\GroupPolicy\Machine\registry.pol `
-        -Key Software\Policies\Something -ValueName SomeValue -Data '0x12345' -Type DWord</dev:code>
+        -Key Software\Policies\Something -ValueName SomeValue -Data "0x12345" -Type DWord</dev:code>
         <dev:remarks>
           <maml:para>Example demonstrating that strings with valid numeric data (including hexadecimal strings beginning with 0x) can be assigned to the numeric types DWord, QWord and Binary.</maml:para>
         </dev:remarks>
@@ -704,11 +704,11 @@ PS&gt; $Entries | Remove-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPol
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
         <dev:code>$entries = @(
-    New-Object psobject -Property @{ ValueName = 'MaxXResolution'; Data = 1680 }
-    New-Object psobject -Property @{ ValueName = 'MaxYResolution'; Data = 1050 }
+    New-Object PSObject -Property @{ ValueName = "MaxXResolution"; Data = 1680 }
+    New-Object PSObject -Property @{ ValueName = "MaxYResolution"; Data = 1050 }
 )
 PS&gt; $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy\Machine\registry.pol `
-        -Key 'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Type DWord</dev:code>
+        -Key "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Type DWord</dev:code>
         <dev:remarks>
           <maml:para>Example of using pipeline input to set multiple values at once. The advantage to this approach is that the .pol file on disk (and the GPT.ini file) will be updated if any of the specified settings had to be modified, and will be left alone if the file already contained all of the correct values.</maml:para>
           <maml:para>The Key and Type properties could have also been specified via the pipeline objects instead of on the command line, but since both values shared the same Key and Type, this example shows that you can pass the values in either way.</maml:para>
@@ -752,7 +752,7 @@ PS&gt; $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>PolicyType</maml:name>
           <maml:description>
-            <maml:para>Can be set to either 'Machine', 'User', or both. This affects how the value of the Version number in the ini file is changed.</maml:para>
+            <maml:para>Can be set to either "Machine", "User", or both. This affects how the value of the Version number in the ini file is changed.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -801,7 +801,7 @@ PS&gt; $entries | Set-PolicyFileEntry -Path $env:SystemRoot\system32\GroupPolicy
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>PolicyType</maml:name>
         <maml:description>
-          <maml:para>Can be set to either 'Machine', 'User', or both. This affects how the value of the Version number in the ini file is changed.</maml:para>
+          <maml:para>Can be set to either "Machine", "User", or both. This affects how the value of the Version number in the ini file is changed.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>

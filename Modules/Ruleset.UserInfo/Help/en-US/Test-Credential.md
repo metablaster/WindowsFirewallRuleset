@@ -33,7 +33,7 @@ True
 
 Prompts for the password for user "user" and validates it against the current
 logon domain (which may be the local machine).
-'True' ($True) as the output
+'True' ($true) as the output
 indicates successful validation.
 
 ### EXAMPLE 2

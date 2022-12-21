@@ -125,7 +125,7 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
-If location to sigcheck executable is not found then no virus total scan and report is done.
+If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 ```yaml
 Type: System.IO.DirectoryInfo
@@ -141,7 +141,7 @@ Accept wildcard characters: False
 
 ### -TimeOut
 
-Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 

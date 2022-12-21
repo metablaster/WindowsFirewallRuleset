@@ -157,25 +157,25 @@ Links listed below are provided for additional parameter description in order of
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1
+https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity
 #>
 function Set-Permission
 {
@@ -317,8 +317,8 @@ function Set-Permission
 			}
 		}
 
-		# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.commonobjectsecurity.getaccessrules?view=dotnet-plat-ext-3.1
-		# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.commonobjectsecurity.removeaccessrule?view=dotnet-plat-ext-3.1
+		# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.commonobjectsecurity.getaccessrules
+		# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.commonobjectsecurity.removeaccessrule
 		# Get only explicit rules for NTAccount's
 		$Acl.GetAccessRules($IncludeExplicit, $IncludeInherited, [Principal.NTAccount]) | ForEach-Object {
 			if (!$Acl.RemoveAccessRule($_))
@@ -442,12 +442,12 @@ function Set-Permission
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Specified path is leaf: '$(Split-Path -Path $LiteralPath -Leaf)'"
 				if ($RegistryRights)
 				{
-					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule?view=dotnet-plat-ext-3.1
+					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryaccessrule
 					$Permission = New-Object AccessControl.RegistryAccessRule($NTAccount, $RegistryRights, $Type)
 				}
 				else
 				{
-					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemaccessrule?view=dotnet-plat-ext-3.1
+					# https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemaccessrule
 					$Permission = New-Object AccessControl.FileSystemAccessRule($NTAccount, $Rights, $Type)
 				}
 			}

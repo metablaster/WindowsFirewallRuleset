@@ -100,4 +100,4 @@ Check if system service exists and is trusted
 
 ### [Test-VirusTotal](Test-VirusTotal.md)
 
-Analyze file trough virus total API
+Analyze file trough VirusTotal API

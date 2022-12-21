@@ -230,7 +230,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 This script is called by Enable-WinRMServer and doesn't need to be run on it's own.
 HACK: What happens when exporting a certificate that is already installed?
 (no error is shown)
-TODO: This function must be simplified and certificate creation should be separate function
+TODO: This function must be simplified and certificate creation should probably be separate function
 
 ## RELATED LINKS
 

@@ -19,7 +19,7 @@ Get-WindowsKit [[-Domain] <String>] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Get installation information about installed Windows Kit's
+Get installation information about installed Windows Kits
 
 ## EXAMPLES
 

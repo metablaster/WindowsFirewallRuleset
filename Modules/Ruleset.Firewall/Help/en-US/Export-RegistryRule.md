@@ -14,8 +14,8 @@ Exports firewall rules to a CSV or JSON file from registry
 ## SYNTAX
 
 ```powershell
-Export-RegistryRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>]
- [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
+Export-RegistryRule -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>] [-DisplayGroup <String>]
+ [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append] [-Force]
  [<CommonParameters>]
 ```
 
@@ -56,22 +56,6 @@ Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 ## PARAMETERS
 
-### -Domain
-
-Computer name from which to export rules, default is local GPO.
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases: ComputerName, CN
-
-Required: False
-Position: Named
-Default value: [System.Environment]::MachineName
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Path
 
 Path into which to save file.
@@ -109,6 +93,7 @@ Accept wildcard characters: False
 
 Display name of the rules to be processed.
 Wildcard character * is allowed.
+DisplayName is case sensitive.
 
 ```yaml
 Type: System.String
@@ -126,6 +111,7 @@ Accept wildcard characters: False
 
 Display group of the rules to be processed.
 Wildcard character * is allowed.
+DisplayGroup is case sensitive.
 
 ```yaml
 Type: System.String
@@ -268,6 +254,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Force
+
+If specified does not prompt to replace existing file.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -284,7 +286,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 TODO: Export to excel
 Excel is not friendly to CSV files
-TODO: In one case no export file was made (with Backup-Firewall.ps1), re-running again worked.
+TODO: In one case no export file was made (with Backup-Firewall.ps1), rerunning again worked.
+TODO: We should probably handle duplicate rule name entires, ex.
+replace or error,
+because if file with duplicates is imported it will cause removal of duplicate rules.
 
 ## RELATED LINKS
 

@@ -120,6 +120,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [Microsoft.WSMan.Management.WSManConfigLeafElement]
 
+### [Microsoft.PowerShell.Commands.Internal.Format.GroupStartData]
+
+### [Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData]
+
 ## NOTES
 
 See also output of: winrm get winrm/config

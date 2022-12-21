@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Update PowerShell help files
+Update PowerShell module help files
 
 ## SYNTAX
 
@@ -31,7 +31,7 @@ Update-ModuleHelp [[-FullyQualifiedName] <ModuleSpecification[]>] [-UICulture <C
 Update-ModuleHelp updates help files for modules installed with PowerShell edition
 which is used to run this function.
 Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules
-for which update is possible without generating errors with update.
+for which update is possible thus not generating errors during update.
 
 ## EXAMPLES
 
@@ -63,7 +63,7 @@ Aliases: Module
 Required: False
 Position: 1
 Default value: *
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: True
 ```
 

@@ -361,11 +361,11 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       <command:verb>Compare</command:verb>
       <command:noun>Path</command:noun>
       <maml:description>
-        <maml:para>Compare 2 paths for equality or similarity</maml:para>
+        <maml:para>Compare two paths for equality or similarity</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Compare-Path depending on parameters either checks if 2 paths lead to same location taking into account environment variables, relative path locations and wildcards or it checks if 2 paths are similar which depends on wildcards contained in the input</maml:para>
+      <maml:para>Compare-Path depending on parameters either checks if two paths lead to same location taking into account environment variables, relative path locations and wildcards or it checks if two paths are similar which depends on wildcards contained in the input</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -559,9 +559,9 @@ False</dev:code>
             <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
             <maml:para>The acceptable values for this parameter are as follows:</maml:para>
             <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
-            <maml:para>Following values are valid for Core edition only:</maml:para>
+            <maml:para>The following values are valid for Core edition only:</maml:para>
             <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
-            <maml:para>Following values are valid For Desktop edition only:</maml:para>
+            <maml:para>The following values are valid For Desktop edition only:</maml:para>
             <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
@@ -625,9 +625,9 @@ False</dev:code>
             <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
             <maml:para>The acceptable values for this parameter are as follows:</maml:para>
             <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
-            <maml:para>Following values are valid for Core edition only:</maml:para>
+            <maml:para>The following values are valid for Core edition only:</maml:para>
             <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
-            <maml:para>Following values are valid For Desktop edition only:</maml:para>
+            <maml:para>The following values are valid For Desktop edition only:</maml:para>
             <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
@@ -703,9 +703,9 @@ False</dev:code>
           <maml:para>Expected encoding, for PS Core the default is "utf8NoBOM" or "ascii", for PS Desktop the default is "utf8" or "ascii"</maml:para>
           <maml:para>The acceptable values for this parameter are as follows:</maml:para>
           <maml:para>ascii: Encoding for the ASCII (7-bit) character set. bigendianunicode: UTF-16 format using the big-endian byte order. bigendianutf32: UTF-32 format using the big-endian byte order. oem: The default encoding for MS-DOS and console programs. unicode: UTF-16 format using the little-endian byte order. utf7: UTF-7 format. utf8: UTF-8 format. utf32: UTF-32 format.</maml:para>
-          <maml:para>Following values are valid for Core edition only:</maml:para>
+          <maml:para>The following values are valid for Core edition only:</maml:para>
           <maml:para>utf8BOM: UTF-8 format with Byte Order Mark (BOM) utf8NoBOM: UTF-8 format without Byte Order Mark (BOM)</maml:para>
-          <maml:para>Following values are valid For Desktop edition only:</maml:para>
+          <maml:para>The following values are valid For Desktop edition only:</maml:para>
           <maml:para>byte: A sequence of bytes. default: Encoding that corresponds to the system's active code page (usually ANSI). string: Same as Unicode. unknown: Same as Unicode.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
@@ -1327,11 +1327,11 @@ binary</dev:code>
       <command:verb>Get</command:verb>
       <command:noun>TypeName</command:noun>
       <maml:description>
-        <maml:para>Get .NET outputs of a commandlet or convert to/from type accelerator</maml:para>
+        <maml:para>Get commandlet output typename, OutputType attribute or convert to/from type accelerator</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Returns .NET output typename of a function or commandlet. When piped, object's output typenames are handled per input. In both cases input can be translated to/from type accelerator. The function fails if output type is not .NET type</maml:para>
+      <maml:para>Get-TypeName is a multipurpose type name getter, behavior of the function depends on parameter set being used. It can get type name of an object, OutputType attribute of a function or it could convert type name to accelerator and vice versa (accelerator to full name). By default the function works only for .NET types but you can force it handle user defined PSCustomObject's</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1339,7 +1339,7 @@ binary</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
           <maml:name>InputObject</maml:name>
           <maml:description>
-            <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
+            <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or trough parameter.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
           <dev:type>
@@ -1352,6 +1352,17 @@ binary</dev:code>
           <maml:name>Accelerator</maml:name>
           <maml:description>
             <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, the function doesn't check if type name is .NET type. This is useful only for PSCustomObject types defined with PSTypeName.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -1385,13 +1396,24 @@ binary</dev:code>
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, the function doesn't check if type name is .NET type. This is useful only for PSCustomObject types defined with PSTypeName.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-TypeName</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
+            <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax. Type specified must be .NET type.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1417,7 +1439,7 @@ binary</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none">
         <maml:name>InputObject</maml:name>
         <maml:description>
-          <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or directly.</maml:para>
+          <maml:para>Target object for which to retrieve output typenames. This is the actual output of some commandlet or function when passed to Get-TypeName, either via pipeline or trough parameter.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Object[]</command:parameterValue>
         <dev:type>
@@ -1441,7 +1463,7 @@ binary</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
-          <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax</maml:para>
+          <maml:para>Translate full type name to accelerator or accelerator to full typename. By default converts acceleartors to full typenames. No conversion is done if resultant type already is of desired format. The name of a type can be specified either as a "typename" or [typename] syntax. Type specified must be .NET type.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1454,6 +1476,18 @@ binary</dev:code>
         <maml:name>Accelerator</maml:name>
         <maml:description>
           <maml:para>When used converts resultant full typename to accelerator. Otherwise If specified, with "Name" parameter, converts resultant accelerator to full name. No conversion is done if resultant type already is of desired format.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, the function doesn't check if type name is .NET type. This is useful only for PSCustomObject types defined with PSTypeName.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1485,7 +1519,7 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>There may be multiple accelerators for same type, for example: Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator It's possible to rework function to get the exact type if this is desired see being block TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData TODO: Will not work for non .NET types because we have no use of it, but should be implemented, see Get-TypeName unit test</maml:para>
+        <maml:para>There may be multiple accelerators for same type, for example: Get-TypeName -Name [System.Management.Automation.PSObject] -Accelerator It's possible to rework function to get the exact type if this is desired see begin block TODO: Will not work to detect .NET types for formatted output, see Get-FormatData TODO: Will not work for non .NET types because we have no use of it, but should be implemented, see Get-TypeName unit test</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2849,11 +2883,11 @@ binary</dev:code>
       <command:verb>Set</command:verb>
       <command:noun>NetworkProfile</command:noun>
       <maml:description>
-        <maml:para>Set network profile for physical network interfaces</maml:para>
+        <maml:para>Set network profile on connected network interfaces</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Set network profile for each physical/hardware network interfaces Recommended is "Public" profile for maximum security, unless "Private" is needed</maml:para>
+      <maml:para>Set network profile for each connected network interface. Recommended is "Public" profile for maximum security, unless "Private" is needed.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3886,9 +3920,9 @@ binary</dev:code>
           <maml:description>
             <maml:para>New screen buffer height</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
           <dev:type>
-            <maml:name>System.UInt16</maml:name>
+            <maml:name>System.UInt32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>3000</dev:defaultValue>
@@ -3923,9 +3957,9 @@ binary</dev:code>
         <maml:description>
           <maml:para>New screen buffer height</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.UInt16</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.UInt32</command:parameterValue>
         <dev:type>
-          <maml:name>System.UInt16</maml:name>
+          <maml:name>System.UInt32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>3000</dev:defaultValue>
@@ -3991,8 +4025,12 @@ binary</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshostrawuserinterface</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshostrawuserinterface</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4028,9 +4066,9 @@ binary</dev:code>
           <maml:description>
             <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -4038,7 +4076,7 @@ binary</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Source">
           <maml:name>TargetPath</maml:name>
           <maml:description>
-            <maml:para>The full path and filename of the location that the shortcut file will open.</maml:para>
+            <maml:para>The full path and filename of a location that the shortcut file will open.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
           <dev:type>
@@ -4112,9 +4150,9 @@ binary</dev:code>
           <maml:description>
             <maml:para>Sets the path of the shortcut's working directory</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
-            <maml:name>System.IO.FileInfo</maml:name>
+            <maml:name>System.IO.DirectoryInfo</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -4184,9 +4222,9 @@ binary</dev:code>
           <maml:description>
             <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.IO.DirectoryInfo</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -4281,9 +4319,9 @@ binary</dev:code>
         <maml:description>
           <maml:para>The full path (excluding file name) to location of the shortcut file you want to create. Alternatively one of the following keywords can be specified: "AllUsersDesktop" "AllUsersStartMenu" "AllUsersPrograms" "AllUsersStartup" "Desktop" "Favorites" "Fonts" "MyDocuments" "NetHood" "PrintHood" "Programs" "Recent" "SendTo" "StartMenu" "Startup" "Templates"</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.IO.DirectoryInfo</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -4291,7 +4329,7 @@ binary</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Source">
         <maml:name>TargetPath</maml:name>
         <maml:description>
-          <maml:para>The full path and filename of the location that the shortcut file will open.</maml:para>
+          <maml:para>The full path and filename of a location that the shortcut file will open.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
         <dev:type>
@@ -4377,9 +4415,9 @@ binary</dev:code>
         <maml:description>
           <maml:para>Sets the path of the shortcut's working directory</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.IO.FileInfo</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
-          <maml:name>System.IO.FileInfo</maml:name>
+          <maml:name>System.IO.DirectoryInfo</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

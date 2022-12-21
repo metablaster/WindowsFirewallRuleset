@@ -76,7 +76,7 @@ TODO: Accept UPN and NETBIOS computer names
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0
+https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku
 
 .LINK
 https://docs.microsoft.com/en-us/surface/surface-system-sku-reference

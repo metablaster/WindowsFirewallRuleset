@@ -14,7 +14,7 @@ Export firewall settings and profile setup to file
 ## SYNTAX
 
 ```powershell
-Export-FirewallSetting [[-Domain] <String>] [-Path] <DirectoryInfo> [[-FileName] <String>] [<CommonParameters>]
+Export-FirewallSetting [-Path] <DirectoryInfo> [[-FileName] <String>] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,22 +31,6 @@ Export-FirewallSetting
 
 ## PARAMETERS
 
-### -Domain
-
-Computer name from which to export settings, default is local GPO.
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases: ComputerName, CN
-
-Required: False
-Position: 1
-Default value: [System.Environment]::MachineName
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Path
 
 Path into which to save file.
@@ -58,7 +42,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: True
@@ -74,8 +58,24 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 2
 Default value: FirewallSettings.json
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified does not prompt to replace existing file.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

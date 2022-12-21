@@ -287,7 +287,7 @@ Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
 
-Following modifications by metablaster August 2020:
+The Following modifications by metablaster August 2020:
 1.
 Applied formatting and code style according to project rules
 2.
@@ -320,6 +320,7 @@ January 2022:
 Implemented appending to json
 
 TODO: Export to excel
+TODO: Remoting not finished
 
 ## RELATED LINKS
 

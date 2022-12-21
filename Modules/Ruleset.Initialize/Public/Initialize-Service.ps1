@@ -259,6 +259,8 @@ function Initialize-Service
 
 					# If decision is no, or if service is running there is no need to modify startup
 					# type, otherwise set startup type after requirements are met
+					# TODO: If service is running but desired state is Stopped then we should not stop
+					# the service as that makes no sense, ex. RemoteRegistry service.
 					if ($PreviousStartType -ne $StartupType)
 					{
 						Set-Service -Name $ServiceName -StartupType $StartupType

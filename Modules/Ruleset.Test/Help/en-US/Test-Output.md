@@ -14,7 +14,7 @@ Verify TypeName and OutputType are referring to same type
 ## SYNTAX
 
 ```powershell
-Test-Output [-InputObject] <Object[]> -Command <String> [<CommonParameters>]
+Test-Output [-InputObject] <Object[]> -Command <String> [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,25 +41,10 @@ Some-Function | Test-Output -Command Some-Function
 
 ## PARAMETERS
 
-### -InputObject
-
-The actual .NET type that some function returns
-
-```yaml
-Type: System.Object[]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -Command
 
-Commandlet or function name for which to retrieve OutputType attribute values.
+Commandlet or function name for which to retrieve OutputType attribute
+values for comparison with InputObject
 
 ```yaml
 Type: System.String
@@ -73,20 +58,54 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Force
+
+If specified, the function doesn't check if either InputObject or OutputType attribute of
+tested command is a .NET type.
+This is useful only for PSCustomObject types defined with PSTypeName.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+
+.NET object which some function returned
+
+```yaml
+Type: System.Object[]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [object[]]
+### System.Object[]
 
 ## OUTPUTS
 
-### None. Test-Output does not generate any output
+### System.String
 
 ## NOTES
 
-TODO: InputObject should be returned if pipeline is used
-
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-Output.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test/Help/en-US/Test-Output.md)

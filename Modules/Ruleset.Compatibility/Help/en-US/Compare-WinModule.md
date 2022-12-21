@@ -125,7 +125,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Following modifications by metablaster November 2020:
+The Following modifications by metablaster November 2020:
 
 - Added comment based help based on original comments
 - Code formatting according to the rest of project design
@@ -134,6 +134,10 @@ Following modifications by metablaster November 2020:
 January 2021:
 
 - Added parameter debugging stream
+
+December 2022:
+
+- Change OutputType to System.Management.Automation.PSCustomObject from PSObject
 
 ## RELATED LINKS
 

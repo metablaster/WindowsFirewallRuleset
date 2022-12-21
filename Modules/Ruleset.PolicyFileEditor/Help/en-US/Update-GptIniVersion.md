@@ -67,7 +67,7 @@ Accept wildcard characters: False
 
 ### -PolicyType
 
-Can be set to either 'Machine', 'User', or both.
+Can be set to either "Machine", "User", or both.
 This affects how the value of the Version number in the ini file is changed.
 
 ```yaml

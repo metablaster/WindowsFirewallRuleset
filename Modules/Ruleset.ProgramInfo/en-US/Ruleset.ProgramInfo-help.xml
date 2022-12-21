@@ -1069,14 +1069,14 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-AppSID</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FamilyName">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="FamilyName">
           <maml:name>PackageFamilyName</maml:name>
           <maml:description>
             <maml:para>"PackageFamilyName" string</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
-            <maml:name>System.String</maml:name>
+            <maml:name>System.String[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -1084,14 +1084,14 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="FamilyName">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="FamilyName">
         <maml:name>PackageFamilyName</maml:name>
         <maml:description>
           <maml:para>"PackageFamilyName" string</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
-          <maml:name>System.String</maml:name>
+          <maml:name>System.String[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1100,7 +1100,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>None. You cannot pipe objects to Get-AppSID</maml:name>
+          <maml:name>[string] "PackageFamilyName" string</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1110,7 +1110,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>[string] store app SID (security identifier) if app found</maml:name>
+          <maml:name>[string] store app SID (security identifier)</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -1119,7 +1119,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Big thanks to ljani for this awesome solution, see issue from "related links" section TODO: remote computers?</maml:para>
+        <maml:para>Big thanks to ljani for this awesome solution, see issue from "related links" section</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1706,7 +1706,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:para></maml:para>
         <maml:para>v1.0 Boe Prox -  07 Sept 2013:</maml:para>
         <maml:para>- Initial Version</maml:para>
-        <maml:para>Following modifications by metablaster based on both originals 15 Feb 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster based on both originals 15 Feb 2020:</maml:para>
         <maml:para>- change syntax, casing, code style and function name</maml:para>
         <maml:para>- resolve warnings, replacing aliases with full names</maml:para>
         <maml:para>- change how function returns</maml:para>
@@ -2297,7 +2297,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </command:returnValue>
       <command:returnValue>
         <dev:type>
-          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]</maml:name>
+          <maml:name>[Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] in PS Core</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2639,7 +2639,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Get installation information about installed Windows Kit's</maml:para>
+      <maml:para>Get installation information about installed Windows Kits</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3251,7 +3251,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists. File extension is then verified to confirm it is whitelisted, ex. such as an *.exe The executable is then verified to ensure it's digitaly signed and that signature is valid. If digital signature is missing or not valid, the file is optionally scanned on virus total to confirm it's not malware. If the file can't be found or verified, an error is genrated possibly with informational message, to explain if there is any problem with the path or file name syntax, otherwise information is present to the user to explain how to resolve the problem including a stack trace to script that is producing this issue.</maml:para>
+      <maml:para>Test-ExecutableFile verifies the path to executable file is valid and that executable itself exists. File extension is then verified to confirm it is whitelisted, ex. such as an *.exe The executable is then verified to ensure it's digitaly signed and that signature is valid. If digital signature is missing or not valid, the file is optionally scanned on VirusTotal to confirm it's not malware. If the file can't be found or verified, an error is genrated possibly with informational message, to explain if there is any problem with the path or file name syntax, otherwise information is present to the user to explain how to resolve the problem including a stack trace to script that is producing this issue.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -3295,7 +3295,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -3307,7 +3307,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -3330,7 +3330,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3368,7 +3368,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -3380,7 +3380,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -3403,7 +3403,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3465,7 +3465,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SigcheckLocation</maml:name>
         <maml:description>
-          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -3477,7 +3477,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeOut</maml:name>
         <maml:description>
-          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -3501,7 +3501,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:description>
-          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect virus total check, if the file is reported as malware the return value is False.</maml:para>
+          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -3972,7 +3972,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -3984,7 +3984,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -4045,7 +4045,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -4057,7 +4057,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -4142,7 +4142,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SigcheckLocation</maml:name>
         <maml:description>
-          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -4154,7 +4154,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeOut</maml:name>
         <maml:description>
-          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>
@@ -4249,11 +4249,11 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:verb>Test</command:verb>
       <command:noun>VirusTotal</command:noun>
       <maml:description>
-        <maml:para>Analyze file trough virus total API</maml:para>
+        <maml:para>Analyze file trough VirusTotal API</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test-VirusTotal performs malware analysis on file by using sysinternals sigcheck program which in turn uses virus total API to perform analysis.</maml:para>
+      <maml:para>Test-VirusTotal performs malware analysis on file by using sysinternals sigcheck program which in turn uses VirusTotal API to perform analysis.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -4297,7 +4297,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -4309,7 +4309,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -4370,7 +4370,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
-            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+            <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -4382,7 +4382,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>TimeOut</maml:name>
           <maml:description>
-            <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+            <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
           <dev:type>
@@ -4467,7 +4467,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SigcheckLocation</maml:name>
         <maml:description>
-          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no virus total scan and report is done.</maml:para>
+          <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -4479,7 +4479,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TimeOut</maml:name>
         <maml:description>
-          <maml:para>Specify maximum wait time expressed in seconds for virus total to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
+          <maml:para>Specify maximum wait time expressed in seconds for VirusTotal to scan individual file. Value 0 means an immediate return, and a value of -1 specifies an infinite wait. The default wait time is 300 (5 minutes).</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Int32</command:parameterValue>
         <dev:type>

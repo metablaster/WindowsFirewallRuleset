@@ -147,7 +147,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [object] if using PowerShell Core which outputs deserialized object
 
-### [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage]
+### [Deserialized.Microsoft.Windows.Appx.PackageManager.Commands.AppxPackage] in PS Core
 
 ## NOTES
 

@@ -94,10 +94,10 @@ Intended purpose of this function is to use regex to parse parameters marked as 
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/ConvertFrom-Wildcard.md
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards?view=powershell-7.1
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards
 
 .LINK
-https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions?view=net-5.0
+https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions
 #>
 function ConvertFrom-Wildcard
 {

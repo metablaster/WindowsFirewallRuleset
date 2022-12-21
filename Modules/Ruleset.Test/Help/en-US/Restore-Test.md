@@ -79,8 +79,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-This function is not used for now.
-TODO: Start-Test should set error action preference to SilentlyContinue for failure tests,
-then this function could restore it.
+None.
 
 ## RELATED LINKS

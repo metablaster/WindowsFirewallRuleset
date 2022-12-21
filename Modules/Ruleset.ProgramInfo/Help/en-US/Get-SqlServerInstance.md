@@ -160,7 +160,7 @@ v1.0 Boe Prox -  07 Sept 2013:
 
 - Initial Version
 
-Following modifications by metablaster based on both originals 15 Feb 2020:
+The Following modifications by metablaster based on both originals 15 Feb 2020:
 
 - change syntax, casing, code style and function name
 - resolve warnings, replacing aliases with full names

@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Set network profile for physical network interfaces
+Set network profile on connected network interfaces
 
 ## SYNTAX
 
@@ -19,8 +19,8 @@ Set-NetworkProfile [[-NetworkCategory] <String>] [-WhatIf] [-Confirm] [<CommonPa
 
 ## DESCRIPTION
 
-Set network profile for each physical/hardware network interfaces
-Recommended is "Public" profile for maximum security, unless "Private" is needed
+Set network profile for each connected network interface.
+Recommended is "Public" profile for maximum security, unless "Private" is needed.
 
 ## EXAMPLES
 

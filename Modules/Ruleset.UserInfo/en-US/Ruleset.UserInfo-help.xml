@@ -1993,7 +1993,7 @@ PS&gt; Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
         <dev:code>Test-Credential -Credential user
 True</dev:code>
         <dev:remarks>
-          <maml:para>Prompts for the password for user "user" and validates it against the current logon domain (which may be the local machine). 'True' ($True) as the output indicates successful validation.</maml:para>
+          <maml:para>Prompts for the password for user "user" and validates it against the current logon domain (which may be the local machine). 'True' ($true) as the output indicates successful validation.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -2056,6 +2056,17 @@ True</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PassThru</maml:name>
+          <maml:description>
+            <maml:para>If specified, the return value is SDDL string if it's valid, otherwise null. By default boolean test is performed.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -2071,6 +2082,18 @@ True</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PassThru</maml:name>
+        <maml:description>
+          <maml:para>If specified, the return value is SDDL string if it's valid, otherwise null. By default boolean test is performed.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -2083,6 +2106,14 @@ True</dev:code>
       </command:inputType>
     </command:inputTypes>
     <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[bool] true if SDDL string is valid, false otherwise</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
       <command:returnValue>
         <dev:type>
           <maml:name>[string] If SDDL string is valid it's returned, otherwise null</maml:name>

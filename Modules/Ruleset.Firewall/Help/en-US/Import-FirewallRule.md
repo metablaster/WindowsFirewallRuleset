@@ -14,7 +14,7 @@ Imports firewall rules from a CSV or JSON file
 ## SYNTAX
 
 ```powershell
-Import-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-Overwrite]
+Import-FirewallRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-JSON] [-Force]
  [<CommonParameters>]
 ```
 
@@ -110,9 +110,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Overwrite
+### -Force
 
-Overwrite existing rules with same name as rules being imported
+If specified, overwrites existing rules with same name as rules being imported
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -144,7 +144,7 @@ Author: Markus Scholtes
 Version: 1.02
 Build date: 2020/02/15
 
-Following modifications by metablaster August 2020:
+The Following modifications by metablaster August 2020:
 1.
 Applied formatting and code style according to project rules
 2.
@@ -168,6 +168,8 @@ December 2020:
 Rename parameters according to standard name convention
 2.
 Support resolving path wildcard pattern
+
+TODO: Remoting not finished
 
 ## RELATED LINKS
 

@@ -82,6 +82,7 @@ January 2021:
 - Added parameter debugging stream
 
 February 2022:
+
 Added check to confirm session configuration is present and enabled
 Added logic to convert local computer name to localhost
 

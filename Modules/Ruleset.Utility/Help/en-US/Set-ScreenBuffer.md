@@ -14,7 +14,7 @@ Set vertical screen buffer to recommended value
 ## SYNTAX
 
 ```powershell
-Set-ScreenBuffer [[-Height] <UInt16>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-ScreenBuffer [[-Height] <UInt32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Set-ScreenBuffer
 New screen buffer height
 
 ```yaml
-Type: System.UInt16
+Type: System.UInt32
 Parameter Sets: (All)
 Aliases:
 
@@ -99,3 +99,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 TODO: A parameter to restore previous value may be useful
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-ScreenBuffer.md)
+
+[https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshostrawuserinterface](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.host.pshostrawuserinterface)

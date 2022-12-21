@@ -20,8 +20,8 @@ Reset-TestDrive [[-Path] <DirectoryInfo>] [[-Retry] <Int32>] [[-Timeout] <Int32>
 
 ## DESCRIPTION
 
-Test drive is directory where test cases may output their results.
-This function clears test directory leaving empty test drive only.
+Test drive is directory where unit tests may output their temporary data.
+This function clears test directory leaving only test drive root directory.
 If the test drive does not exist new one is created.
 For safety reasons, when non default test drive is specified the function will complete operation
 only if run as standard user, in which case it prompts for confirmation.
@@ -51,7 +51,7 @@ Reset-TestDrive "C:\PathTo\TestDrive" -Retry 5 -Timeout 20000 -Force
 ### -Path
 
 Test drive location.
-The default is "TestDrive" directory inside well known project test directory.
+The default is "TestDrive" directory inside well known test directory in repository.
 
 ```yaml
 Type: System.IO.DirectoryInfo
@@ -69,6 +69,7 @@ Accept wildcard characters: False
 
 Specify the number of times this function will repeat an attempt to clear test drive.
 This is needed in cases such as when contents are in use by another process.
+The default is 2.
 
 ```yaml
 Type: System.Int32
@@ -84,7 +85,8 @@ Accept wildcard characters: False
 
 ### -Timeout
 
-The timeout interval (in milliseconds) between each retry attempt
+The timeout interval (in milliseconds) between each retry attempt.
+The default is 1 second.
 
 ```yaml
 Type: System.Int32
@@ -101,7 +103,7 @@ Accept wildcard characters: False
 ### -Force
 
 Skip prompting clearing non default test drive.
-This parameter has no effect if the function is run with non standard user privileges.
+This parameter has no effect if the function is run as Administrator.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

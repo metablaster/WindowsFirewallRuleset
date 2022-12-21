@@ -28,7 +28,7 @@ Update or install specified modules
 
 ### [Initialize-Project](Initialize-Project.md)
 
-Check repository system requirements
+Check repository environment requirements
 
 ### [Initialize-Provider](Initialize-Provider.md)
 
@@ -44,4 +44,4 @@ Uninstall duplicate modules
 
 ### [Update-ModuleHelp](Update-ModuleHelp.md)
 
-Update PowerShell help files
+Update PowerShell module help files

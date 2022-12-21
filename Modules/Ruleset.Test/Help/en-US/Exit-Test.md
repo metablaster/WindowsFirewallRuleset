@@ -14,7 +14,7 @@ Un-initialize and exit unit test
 ## SYNTAX
 
 ```powershell
-Exit-Test [-Pester] [-WhatIf] [-Confirm] [<CommonParameters>]
+Exit-Test [-Private] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,14 +34,14 @@ Exit-Test
 ### EXAMPLE 2
 
 ```powershell
-Exit-Test -Pester
+Exit-Test -Private
 ```
 
 ## PARAMETERS
 
-### -Pester
+### -Private
 
-Should be specified to exit private function pester test
+Should be specified to exit test that was entered with Enter-Test -Private
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -102,6 +102,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Write-Information instead of Write-Output
+TODO: Write-Information instead of Write-Output, but problem is that is may be logged
 
 ## RELATED LINKS

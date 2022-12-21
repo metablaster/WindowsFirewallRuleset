@@ -98,7 +98,7 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Find-DuplicateModule</dev:code>
         <dev:remarks>
-          <maml:para>ModuleType Version    Name                  ExportedCommands Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     3.4.0      Pester                {Describe, Context, It, Should...} Script     5.3.3      Pester                {Invoke-Pester, Describe, Context, It...} Script     1.0.0.1    PowerShellGet         {Install-Module, Find-Module, Save-Module, Update-Module...} Script     2.2.5      PowerShellGet         {Find-Command, Find-DSCResource, Find-Module, Find-RoleCapability...} Script     2.0.0      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...} Script     2.2.6      PSReadline            {Get-PSReadLineKeyHandler, Set-PSReadLineKeyHandler, Remove-PSReadLineKeyHandler, Get-PSReadLineOption...}</maml:para>
+          <maml:para>ModuleType Version    Name                  ExportedCommands Binary     1.0.0.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     1.4.8.1    PackageManagement     {Find-Package, Get-Package, Get-PackageProvider, Get-PackageSource...} Script     3.4.0      Pester                {Describe, Context, It, Should...} Script     5.3.3      Pester                {Invoke-Pester, Describe, Context, It...} Script     1.0.0.1    PowerShellGet         {Install-Module, Find-Module, Save-Module, Update-Module...} Script     2.2.5      PowerShellGet         {Find-Command, Find-DSCResource, Find-Module, Find-RoleCapability...} Script     2.0.0      PSReadline            {Get-PSReadLineKeyHandler, Get-PSReadLineOption...} Script     2.2.6      PSReadline            {Get-PSReadLineKeyHandler, Get-PSReadLineOption...}</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -462,7 +462,7 @@
       <command:verb>Initialize</command:verb>
       <command:noun>Project</command:noun>
       <maml:description>
-        <maml:para>Check repository system requirements</maml:para>
+        <maml:para>Check repository environment requirements</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -471,17 +471,6 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Initialize-Project</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Strict</maml:name>
-          <maml:description>
-            <maml:para>If specified, exit is called on failure instead of return</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
           <maml:description>
@@ -507,18 +496,6 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Strict</maml:name>
-        <maml:description>
-          <maml:para>If specified, exit is called on failure instead of return</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
         <maml:description>
@@ -567,7 +544,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>TODO: We don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change Develop from false to true in clean session TODO: Changes done to system services should be reverted to original values, new function needed. TODO: code.exe --list-extensions and verify extensions installed</maml:para>
+        <maml:para>TODO: We don't use logs in this module TODO: checking remote systems not implemented TODO: Any modules in standard user paths will override system wide modules TODO: Changes done to system services should be reverted to original values, new function needed TODO: code.exe --list-extensions and verify extensions installed</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -580,7 +557,7 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-Project -Strict</dev:code>
+        <dev:code>Initialize-Project</dev:code>
         <dev:remarks>
           <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed and all subsequent operations are halted. If successful environment info is shown.</maml:para>
         </dev:remarks>
@@ -895,7 +872,7 @@ $true if WinRM service was started $false otherwise</dev:code>
         <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="Module">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>One or more module names which to uninstall if duplicates are found. Wildcard characters are supported.</maml:para>
+            <maml:para>One or more module names which to uninstall if duplicates are found. If not specified all duplicates are processed. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
           <dev:type>
@@ -919,7 +896,7 @@ $true if WinRM service was started $false otherwise</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified all duplicate modules of a specific module are removed without further prompt</maml:para>
+            <maml:para>If specified, all duplicate modules specified by -Name are removed without further prompt. This parameter also forces recursive actions on module installation directory, ex taking ownership and setting file system permissions required for module uninstallation. It also forces removing read only modules.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -933,7 +910,7 @@ $true if WinRM service was started $false otherwise</dev:code>
       <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByValue)" position="1" aliases="Module">
         <maml:name>Name</maml:name>
         <maml:description>
-          <maml:para>One or more module names which to uninstall if duplicates are found. Wildcard characters are supported.</maml:para>
+          <maml:para>One or more module names which to uninstall if duplicates are found. If not specified all duplicates are processed. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
         <dev:type>
@@ -957,7 +934,7 @@ $true if WinRM service was started $false otherwise</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:description>
-          <maml:para>If specified all duplicate modules of a specific module are removed without further prompt</maml:para>
+          <maml:para>If specified, all duplicate modules specified by -Name are removed without further prompt. This parameter also forces recursive actions on module installation directory, ex taking ownership and setting file system permissions required for module uninstallation. It also forces removing read only modules.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -997,15 +974,15 @@ $true if WinRM service was started $false otherwise</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Module which is to be uninstalled must not be in use by: 1. Other PowerShell session 2. Some system process 3. Session in VSCode 4. Current session prompt must not point to anywhere in target module path</maml:para>
+        <maml:para>Module which is to be uninstalled must not be in use by: 1. Other PowerShell session 2. Some system process 3. Session in VSCode 4. Current session prompt must not point to anywhere in target module path TODO: Should support ShouldProcess</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Location Shipping, System</dev:code>
+        <dev:code>Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Scope Shipping, System -Force</dev:code>
         <dev:remarks>
-          <maml:para>Removes outdated PowerShellGet and PackageManagement modules excluding those installed in user scope</maml:para>
+          <maml:para>Removes outdated PowerShellGet and PackageManagement modules excluding those installed per user</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -1030,16 +1007,16 @@ Uninstall-DuplicateModule</dev:code>
       <command:verb>Update</command:verb>
       <command:noun>ModuleHelp</command:noun>
       <maml:description>
-        <maml:para>Update PowerShell help files</maml:para>
+        <maml:para>Update PowerShell module help files</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Update-ModuleHelp updates help files for modules installed with PowerShell edition which is used to run this function. Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules for which update is possible without generating errors with update.</maml:para>
+      <maml:para>Update-ModuleHelp updates help files for modules installed with PowerShell edition which is used to run this function. Unlike conventional Update-Help commandlet Update-ModuleHelp updates only those modules for which update is possible thus not generating errors during update.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Update-ModuleHelp</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName)" position="1" aliases="Module">
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Module">
           <maml:name>Name</maml:name>
           <maml:description>
             <maml:para>Updates help for the specified modules. Enter one or more module names or name patterns in a comma-separated list. Wildcard characters are supported.</maml:para>
@@ -1140,7 +1117,7 @@ Uninstall-DuplicateModule</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName)" position="1" aliases="Module">
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="True (ByPropertyName, ByValue)" position="1" aliases="Module">
         <maml:name>Name</maml:name>
         <maml:description>
           <maml:para>Updates help for the specified modules. Enter one or more module names or name patterns in a comma-separated list. Wildcard characters are supported.</maml:para>

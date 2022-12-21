@@ -16,15 +16,15 @@ Set desktop or online shortcut
 ### Local
 
 ```powershell
-Set-Shortcut [-Name] <String> -Path <DirectoryInfo> -TargetPath <FileInfo> [-IconLocation <FileInfo>]
+Set-Shortcut [-Name] <String> -Path <String> -TargetPath <FileInfo> [-IconLocation <FileInfo>]
  [-IconIndex <Int32>] [-Description <String>] [-Hotkey <String>] [-WindowStyle <String>]
- [-WorkingDirectory <FileInfo>] [-Arguments <String>] [-Admin] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WorkingDirectory <DirectoryInfo>] [-Arguments <String>] [-Admin] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Online
 
 ```powershell
-Set-Shortcut [-Name] <String> -Path <DirectoryInfo> -URL <Uri> [-IconLocation <FileInfo>] [-IconIndex <Int32>]
+Set-Shortcut [-Name] <String> -Path <String> -URL <Uri> [-IconLocation <FileInfo>] [-IconIndex <Int32>]
  [-Hotkey <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -89,7 +89,7 @@ Alternatively one of the following keywords can be specified:
 "Templates"
 
 ```yaml
-Type: System.IO.DirectoryInfo
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -102,7 +102,7 @@ Accept wildcard characters: False
 
 ### -TargetPath
 
-The full path and filename of the location that the shortcut file will open.
+The full path and filename of a location that the shortcut file will open.
 
 ```yaml
 Type: System.IO.FileInfo
@@ -218,7 +218,7 @@ Accept wildcard characters: False
 Sets the path of the shortcut's working directory
 
 ```yaml
-Type: System.IO.FileInfo
+Type: System.IO.DirectoryInfo
 Parameter Sets: Local
 Aliases:
 

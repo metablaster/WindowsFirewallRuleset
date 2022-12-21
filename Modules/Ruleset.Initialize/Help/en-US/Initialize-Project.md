@@ -9,12 +9,12 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Check repository system requirements
+Check repository environment requirements
 
 ## SYNTAX
 
 ```powershell
-Initialize-Project [-Strict] [-WhatIf] [-Confirm] [<CommonParameters>]
+Initialize-Project [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Error or warning message is shown if check failed, environment info otherwise.
 ### EXAMPLE 2
 
 ```powershell
-Initialize-Project -Strict
+Initialize-Project
 ```
 
 Performs default requirements and recommendations checks managed by global settings.
@@ -46,22 +46,6 @@ Error or warning message is shown if check failed and all subsequent operations 
 If successful environment info is shown.
 
 ## PARAMETERS
-
-### -Strict
-
-If specified, exit is called on failure instead of return
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -WhatIf
 
@@ -118,9 +102,7 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 TODO: We don't use logs in this module
 TODO: checking remote systems not implemented
 TODO: Any modules in standard user paths will override system wide modules
-TODO: Abort parameter no longer makes sense, -EA Stop would be better, to reproduce problem change
-Develop from false to true in clean session
-TODO: Changes done to system services should be reverted to original values, new function needed.
+TODO: Changes done to system services should be reverted to original values, new function needed
 TODO: code.exe --list-extensions and verify extensions installed
 
 ## RELATED LINKS

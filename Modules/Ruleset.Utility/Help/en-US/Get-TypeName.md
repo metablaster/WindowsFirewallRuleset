@@ -9,20 +9,20 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Get .NET outputs of a commandlet or convert to/from type accelerator
+Get commandlet output typename, OutputType attribute or convert to/from type accelerator
 
 ## SYNTAX
 
 ### Object
 
 ```powershell
-Get-TypeName [[-InputObject] <Object[]>] [-Accelerator] [<CommonParameters>]
+Get-TypeName [[-InputObject] <Object[]>] [-Accelerator] [-Force] [<CommonParameters>]
 ```
 
 ### Command
 
 ```powershell
-Get-TypeName -Command <String> [-Accelerator] [<CommonParameters>]
+Get-TypeName -Command <String> [-Accelerator] [-Force] [<CommonParameters>]
 ```
 
 ### Name
@@ -33,10 +33,12 @@ Get-TypeName -Name <String> [-Accelerator] [<CommonParameters>]
 
 ## DESCRIPTION
 
-Returns .NET output typename of a function or commandlet.
-When piped, object's output typenames are handled per input.
-In both cases input can be translated to/from type accelerator.
-The function fails if output type is not .NET type
+Get-TypeName is a multipurpose type name getter, behavior of the function depends on
+parameter set being used.
+It can get type name of an object, OutputType attribute of a function or it could
+convert type name to accelerator and vice versa (accelerator to full name).
+By default the function works only for .NET types but you can force it handle user
+defined PSCustomObject's
 
 ## EXAMPLES
 
@@ -88,7 +90,7 @@ Sends typename for each input object down the pipeline
 
 Target object for which to retrieve output typenames.
 This is the actual output of some commandlet or function when passed to Get-TypeName,
-either via pipeline or directly.
+either via pipeline or trough parameter.
 
 ```yaml
 Type: System.Object[]
@@ -124,7 +126,8 @@ Accept wildcard characters: False
 Translate full type name to accelerator or accelerator to full typename.
 By default converts acceleartors to full typenames.
 No conversion is done if resultant type already is of desired format.
-The name of a type can be specified either as a "typename" or \[typename\] syntax
+The name of a type can be specified either as a "typename" or \[typename\] syntax.
+Type specified must be .NET type.
 
 ```yaml
 Type: System.String
@@ -156,6 +159,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Force
+
+If specified, the function doesn't check if type name is .NET type.
+This is useful only for PSCustomObject types defined with PSTypeName.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: Object, Command
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -172,8 +192,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 There may be multiple accelerators for same type, for example:
 Get-TypeName -Name \[System.Management.Automation.PSObject\] -Accelerator
-It's possible to rework function to get the exact type if this is desired see being block
-TODO: Will not work to detect .NET types for formatted or custom data, see Get-FormatData
+It's possible to rework function to get the exact type if this is desired see begin block
+TODO: Will not work to detect .NET types for formatted output, see Get-FormatData
 TODO: Will not work for non .NET types because we have no use of it, but should be implemented,
 see Get-TypeName unit test
 

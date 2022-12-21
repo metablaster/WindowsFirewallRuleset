@@ -14,7 +14,7 @@ Unregister SSL certificate for CIM and PowerShell remoting
 ## SYNTAX
 
 ```powershell
-Unregister-SslCertificate [[-CertThumbprint] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Unregister-SslCertificate [-CertThumbprint] <String> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,9 +41,25 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified, no prompt to remove certificate from certificate store is shown
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

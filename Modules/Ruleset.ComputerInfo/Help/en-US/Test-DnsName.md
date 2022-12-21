@@ -114,7 +114,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-TODO: Following are syntax rules which need to be implemented:
+TODO: The following are syntax rules which need to be implemented:
 DNS names can contain only alphabetical characters (A-Z), numeric characters (0-9),
 the minus sign (-), and the period (.)
 Period characters are allowed only when they are used to delimit the components of domain style names.

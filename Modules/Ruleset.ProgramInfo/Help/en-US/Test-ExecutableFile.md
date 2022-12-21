@@ -33,7 +33,7 @@ Test-ExecutableFile verifies the path to executable file is valid and that execu
 File extension is then verified to confirm it is whitelisted, ex.
 such as an *.exe
 The executable is then verified to ensure it's digitaly signed and that signature is valid.
-If digital signature is missing or not valid, the file is optionally scanned on virus total to
+If digital signature is missing or not valid, the file is optionally scanned on VirusTotal to
 confirm it's not malware.
 If the file can't be found or verified, an error is genrated possibly with informational message,
 to explain if there is any problem with the path or file name syntax, otherwise information is
@@ -156,7 +156,7 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
-If location to sigcheck executable is not found then no virus total scan and report is done.
+If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 ```yaml
 Type: System.IO.DirectoryInfo
@@ -172,7 +172,7 @@ Accept wildcard characters: False
 
 ### -TimeOut
 
-Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 
@@ -208,7 +208,7 @@ Accept wildcard characters: False
 
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
-This parameter has no effect virus total check, if the file is reported as malware the return value is False.
+This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

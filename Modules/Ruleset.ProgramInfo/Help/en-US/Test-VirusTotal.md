@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Analyze file trough virus total API
+Analyze file trough VirusTotal API
 
 ## SYNTAX
 
@@ -30,7 +30,7 @@ Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] -SigcheckLocation <
 ## DESCRIPTION
 
 Test-VirusTotal performs malware analysis on file by using sysinternals sigcheck
-program which in turn uses virus total API to perform analysis.
+program which in turn uses VirusTotal API to perform analysis.
 
 ## EXAMPLES
 
@@ -112,7 +112,7 @@ Specify path to sigcheck executable program.
 Do not specify sigcheck file, only path to where sigcheck is located.
 By default working directory and PATH is searched for sigcheck64.exe.
 On 32 bit operating system sigcheck.exe is searched instead.
-If location to sigcheck executable is not found then no virus total scan and report is done.
+If location to sigcheck executable is not found then no VirusTotal scan and report is done.
 
 ```yaml
 Type: System.String
@@ -128,7 +128,7 @@ Accept wildcard characters: False
 
 ### -TimeOut
 
-Specify maximum wait time expressed in seconds for virus total to scan individual file.
+Specify maximum wait time expressed in seconds for VirusTotal to scan individual file.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 

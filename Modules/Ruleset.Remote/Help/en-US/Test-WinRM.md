@@ -318,7 +318,19 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. Test-WinRM does not generate any output
+### [void]
+
+### [System.Xml.XmlElement]
+
+### [System.String]
+
+### [System.URI]
+
+### [System.Management.Automation.Runspaces.PSSession]
+
+### [Microsoft.PowerShell.Commands.Internal.Format.GroupStartData]
+
+### [Microsoft.PowerShell.Commands.Internal.Format.FormatStartData]
 
 ## NOTES
 

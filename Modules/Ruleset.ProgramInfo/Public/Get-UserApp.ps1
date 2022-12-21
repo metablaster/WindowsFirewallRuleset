@@ -78,7 +78,7 @@ TODO: Format.ps1xml not applied in Windows PowerShell
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps
+https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage
 #>
 function Get-UserApp
 {

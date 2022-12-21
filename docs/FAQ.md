@@ -283,8 +283,8 @@ modifying settings/rules)
 To minimize the chance of this error from appearing close down all management consoles and all
 software that is not essential to deploy firewall and try again.
 
-The "access is denied" error may also happen with remoting, see [Remote.md](Remote.md) to
-resolve issues with remoting.
+The "Access is denied" error may also be reported by WinRM or CIM, see [Remote.md](Remote.md) to
+resolve these kinds of "Access is denied".
 
 [Table of Contents](#table-of-contents)
 

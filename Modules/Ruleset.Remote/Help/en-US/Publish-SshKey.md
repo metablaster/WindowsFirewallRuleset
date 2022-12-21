@@ -77,7 +77,6 @@ Accept wildcard characters: False
 ### -Key
 
 Specify public SSH key with is to be transferred.
-By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub
 
 ```yaml
 Type: System.String

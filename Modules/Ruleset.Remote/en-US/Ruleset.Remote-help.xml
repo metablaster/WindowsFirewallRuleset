@@ -11,7 +11,7 @@
     </command:details>
     <maml:description>
       <maml:para>Connect local machine to local (loopback) or remote computer onto which to deploy firewall.</maml:para>
-      <maml:para>Following global variables are set and objects created: RemoteCim (CimSession), CIM session object RemoteSession (PSSession), PS session object which represent remote session RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) CimServer (variable), to be used by CIM commandlets to access "RemoteCim" object for -CimSession parameter SessionInstance (variable), to be used by Invoke-Command to access "RemoteSession" object for -Session parameter</maml:para>
+      <maml:para>The following global variables are set and objects created: RemoteCim (CimSession), CIM session object RemoteSession (PSSession), PS session object which represent remote session RemoteRegistry (PSDrive), administrative share C$ to remote computer (needed for authentication) CimServer (variable), to be used by CIM commandlets to access "RemoteCim" object for -CimSession parameter SessionInstance (variable), to be used by Invoke-Command to access "RemoteSession" object for -Session parameter</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1220,7 +1220,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges See also output of: winrm get winrm/config</maml:para>
+        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges TODO: Implement parameter -SessionConfiguration with default to be built in session configuration See also output of: winrm get winrm/config</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1441,7 +1441,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Key</maml:name>
           <maml:description>
-            <maml:para>Specify public SSH key with is to be transferred. By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub</maml:para>
+            <maml:para>Specify public SSH key with is to be transferred.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -1536,7 +1536,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Key</maml:name>
         <maml:description>
-          <maml:para>Specify public SSH key with is to be transferred. By default this is: $HOME\.ssh\id_ecdsa-remote-ssh.pub</maml:para>
+          <maml:para>Specify public SSH key with is to be transferred.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -1961,7 +1961,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This script is called by Enable-WinRMServer and doesn't need to be run on it's own. HACK: What happens when exporting a certificate that is already installed? (no error is shown) TODO: This function must be simplified and certificate creation should be separate function</maml:para>
+        <maml:para>This script is called by Enable-WinRMServer and doesn't need to be run on it's own. HACK: What happens when exporting a certificate that is already installed? (no error is shown) TODO: This function must be simplified and certificate creation should probably be separate function</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2583,6 +2583,22 @@
       <command:returnValue>
         <dev:type>
           <maml:name>[Microsoft.WSMan.Management.WSManConfigLeafElement]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Microsoft.PowerShell.Commands.Internal.Format.GroupStartData]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Microsoft.PowerShell.Commands.Internal.Format.FormatEntryData]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -3294,7 +3310,55 @@
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. Test-WinRM does not generate any output</maml:name>
+          <maml:name>[void]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.Xml.XmlElement]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.String]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.URI]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[System.Management.Automation.Runspaces.PSSession]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Microsoft.PowerShell.Commands.Internal.Format.GroupStartData]</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>[Microsoft.PowerShell.Commands.Internal.Format.FormatStartData]</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -3357,7 +3421,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Unregister-SslCertificate</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>CertThumbprint</maml:name>
           <maml:description>
             <maml:para>Certificate thumbprint which is to be uninstalled</maml:para>
@@ -3368,6 +3432,17 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, no prompt to remove certificate from certificate store is shown</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
@@ -3394,7 +3469,7 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>CertThumbprint</maml:name>
         <maml:description>
           <maml:para>Certificate thumbprint which is to be uninstalled</maml:para>
@@ -3405,6 +3480,18 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, no prompt to remove certificate from certificate store is shown</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>

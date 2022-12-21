@@ -87,7 +87,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
@@ -287,7 +287,7 @@ PS&gt; Get-Module -ListAvailable</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Replace double quotes with single quotes</maml:para>
@@ -457,13 +457,14 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
+        <maml:para>December 2022: - Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -655,7 +656,7 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
@@ -851,13 +852,14 @@ PS&gt; myFunction Bill</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
+        <maml:para>December 2022: - Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1166,7 +1168,7 @@ PS&gt; myFunction Bill</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>TODO: Implement -Scope Parameter</maml:para>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
@@ -1347,7 +1349,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
@@ -1547,7 +1549,7 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>OutputType can't be declared because output may be anything</maml:para>
-        <maml:para>Following modifications by metablaster November 2020:</maml:para>
+        <maml:para>The Following modifications by metablaster November 2020:</maml:para>
         <maml:para>- Added comment based help based on original comments</maml:para>
         <maml:para>- Code formatting according to the rest of project design</maml:para>
         <maml:para>- Added HelpURI link to project location</maml:para>
