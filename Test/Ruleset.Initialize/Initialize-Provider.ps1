@@ -77,8 +77,12 @@ if ($Force -or $PSCmdlet.ShouldContinue("Possible to install package provider", 
 	}
 
 	Start-Test "NuGet"
-	$Result = Initialize-Provider @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
+	$Result = Initialize-Provider -ProviderName "NuGet" -RequiredVersion $RequireNuGetVersion `
 		-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"
+	$Result
+
+	Start-Test "Chocolatey"
+	Initialize-Provider -ProviderName "Chocolatey" -RequiredVersion "0.0.79" -InfoMessage "Test installing Chocolatey"
 
 	$Result
 	Test-Output $Result -Command Initialize-Provider

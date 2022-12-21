@@ -320,7 +320,7 @@ function Initialize-Project
 
 			# NOTE: Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
 			# NOTE: Updating PackageManagement and PowerShellGet requires restarting PowerShell to switch to the latest version.
-			if (!(Initialize-Provider -Required @{ ModuleName = "NuGet"; ModuleVersion = $RequireNuGetVersion } `
+			if (!(Initialize-Provider -Required -ProviderName "NuGet" -RequiredVersion $RequireNuGetVersion `
 						-InfoMessage "Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider"))
 			{
 				return

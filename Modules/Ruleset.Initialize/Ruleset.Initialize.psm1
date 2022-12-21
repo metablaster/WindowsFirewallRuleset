@@ -34,6 +34,14 @@ param (
 
 . $PSScriptRoot\..\..\Config\ProjectSettings.ps1 -InModule -ListPreference:$ListPreference
 
+if ($ModulesCheck)
+{
+	# MSDN: As of April 2020, the PowerShell Gallery no longer supports Transport Layer Security (TLS) versions 1.0 and 1.1.
+	# If you are not using TLS 1.2 or higher, you will receive an error when trying to access the PowerShell Gallery.
+	# Use the following command to ensure you are using TLS 1.2:
+	[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+}
+
 if ($ListPreference)
 {
 	# NOTE: Preferences defined in caller scope are not inherited, only those defined in
@@ -92,3 +100,13 @@ foreach ($Script in $PublicScripts)
 }
 
 Export-ModuleMember -Function $PublicScripts
+
+#
+# Module variables
+#
+
+# Let other parts of a module know status about Nuget
+Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Value $false
+
+# Let other parts of a module know status about PowerShellGet
+Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Value $false

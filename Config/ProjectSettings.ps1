@@ -808,6 +808,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
 
 		# Required minimum PowerShellGet version prior to installing other modules, do not decrement!
+		# https://www.powershellgallery.com/packages/PowerShellGet
 		New-Variable -Name RequirePowerShellGetVersion -Scope Global -Option Constant -Value ([version]::new(2, 2, 5))
 
 		# Recommended minimum platyPS version used to generate online help files for modules, do not decrement!

@@ -574,10 +574,3 @@ function Initialize-Module
 	Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
 	return $true
 }
-
-#
-# Module variables
-#
-
-# Let other parts of a module know status about PowerShellGet
-Set-Variable -Name HasPowerShellGet -Scope Script -Option ReadOnly -Force -Value $false
