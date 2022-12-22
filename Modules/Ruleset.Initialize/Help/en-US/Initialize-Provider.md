@@ -13,39 +13,109 @@ Update or install specified package providers
 
 ## SYNTAX
 
+### None (Default)
+
 ```powershell
-Initialize-Provider [-FullyQualifiedName] <Hashtable> [-InfoMessage <String>] [-Required] [<CommonParameters>]
+Initialize-Provider -ProviderName <String> -RequiredVersion <Version> [-InfoMessage <String>] [-Required]
+ [-Scope <String>] [-Force] [<CommonParameters>]
+```
+
+### UseProvider
+
+```powershell
+Initialize-Provider -ProviderName <String> -RequiredVersion <Version> -UseProvider <String> [-Source <Uri>]
+ [-InfoMessage <String>] [-Required] [-Scope <String>] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Test if recommended and up to date packages are installed, if not user is
-prompted to install or update them.
-Outdated or missing packages can cause strange issues, this function ensures latest packages are
-installed and in correct order, taking into account failures that can happen while
-installing or updating packages
+Initialize-Provider tests if specified package provider is installed and is up to date,
+if not user is prompted to install or update it.
+Outdated or missing package providers can cause strange issues, this function ensures that
+specified package provider is installed, taking into account failures which can happen while
+installing or updating package providers.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 ```powershell
-Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Required
+Initialize-Provider -ProviderName NuGet -RequiredVersion 2.8.5 -Required
+```
+
+### EXAMPLE 2
+
+```powershell
+Initialize-Provider -ProviderName NuGet -RequiredVersion 2.8.5 -Required `
+-UseProvider NuGet -Location https://www.nuget.org/api/v2
 ```
 
 ## PARAMETERS
 
-### -FullyQualifiedName
+### -ProviderName
 
-Hash table ProviderName, Version representing minimum required module
+Specifies a package provider name which to install or update.
 
 ```yaml
-Type: System.Collections.Hashtable
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RequiredVersion
+
+Specifies the exact version of the package provider which to install or update.
+
+```yaml
+Type: System.Version
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseProvider
+
+Existing provider to use to install or update provider specified by -ProviderName parameter.
+This parameter is used only if Find-PackageProvider fails, in which case Find-Package is used.
+This provider is used to register package source specified by -Location if it isn't already
+registered.
+Acceptable values are: Bootstrap, NuGet or PowerShellGet.
+The default value is PowerShellGet.
+
+```yaml
+Type: System.String
+Parameter Sets: UseProvider
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Source
+
+Specifies a web location of a package management source.
+
+```yaml
+Type: System.Uri
+Parameter Sets: UseProvider
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -69,8 +139,46 @@ Accept wildcard characters: False
 
 ### -Required
 
-Controls whether the provider initialization must succeed, if initialization fails execution stops,
-otherwise only warning is generated
+Controls whether the provider initialization must succeed, if initialization fails execution stops
+and false is returned, otherwise a warning is generated and true is returned.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Scope
+
+Specifies the installation scope of the provider.
+The acceptable values for this parameter are:
+
+AllUsers: $env:ProgramFiles\PackageManagement\ProviderAssemblies.
+CurrentUser: $env:LOCALAPPDATA\PackageManagement\ProviderAssemblies.
+
+The default value is AllUsers.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: AllUsers
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+{{ Fill Force Description }}
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -103,8 +211,19 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
-There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName
-which is supplied in parameter FullyQualifiedName
-Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider
+TODO: -Force parameter not implemented because for most commandlets used in this function this
+implies -ForceBootstrap which is not desired, few commandlets could make use of -Force
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Provider.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Provider.md)
+
+[https://learn.microsoft.com/en-us/powershell/module/packagemanagement](https://learn.microsoft.com/en-us/powershell/module/packagemanagement)
+
+[https://learn.microsoft.com/en-us/powershell/scripting/gallery/how-to/getting-support/bootstrapping-nuget](https://learn.microsoft.com/en-us/powershell/scripting/gallery/how-to/getting-support/bootstrapping-nuget)
+
+[https://learn.microsoft.com/en-us/powershell/scripting/gallery/installing-psget](https://learn.microsoft.com/en-us/powershell/scripting/gallery/installing-psget)
+
+[https://github.com/OneGet/oneget/issues/472](https://github.com/OneGet/oneget/issues/472)
+
+[https://github.com/OneGet/oneget/issues/360](https://github.com/OneGet/oneget/issues/360)
