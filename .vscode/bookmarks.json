@@ -15,7 +15,7 @@
 			"bookmarks": [
 				{
 					"line": 172,
-					"column": 4,
+					"column": 14,
 					"label": ""
 				}
 			]
@@ -94,12 +94,12 @@
 			"path": "Config/ProjectSettings.ps1",
 			"bookmarks": [
 				{
-					"line": 191,
+					"line": 193,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 222,
+					"line": 223,
 					"column": 2,
 					"label": ""
 				},
@@ -131,21 +131,21 @@
 			]
 		},
 		{
-			"path": "Modules/Ruleset.Remote/Ruleset.Remote.psm1",
+			"path": "Modules/Ruleset.Remote/Public/Set-WinRMClient.ps1",
 			"bookmarks": [
 				{
-					"line": 129,
-					"column": 8,
+					"line": 99,
+					"column": 0,
 					"label": ""
 				}
 			]
 		},
 		{
-			"path": "Modules/Ruleset.Initialize/Public/Initialize-Project.ps1",
+			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
 			"bookmarks": [
 				{
-					"line": 414,
-					"column": 29,
+					"line": 132,
+					"column": 2,
 					"label": ""
 				}
 			]
@@ -166,16 +166,6 @@
 				{
 					"line": 261,
 					"column": 5,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
-			"bookmarks": [
-				{
-					"line": 132,
-					"column": 0,
 					"label": ""
 				}
 			]

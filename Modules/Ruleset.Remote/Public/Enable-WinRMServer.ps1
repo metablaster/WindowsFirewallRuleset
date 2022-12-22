@@ -575,6 +575,7 @@ function Enable-WinRMServer
 	{
 		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting WS-Management (WinRM) service"
 
+		$WinRM = Get-Service -Name WinRM
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
 		$WinRM.Start()

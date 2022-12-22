@@ -97,6 +97,7 @@ function Initialize-WinRM
 
 	if ($PSCmdlet.ShouldProcess("Windows services", "Enable and start WS-Management (WinRM) service"))
 	{
+		$WinRM = Get-Service -Name WinRM
 		# NOTE: Handled by Initialize-Service, but in other functions within module service may be left in unknown state
 		if ($WinRM.StartType -ne [ServiceStartMode]::Automatic)
 		{

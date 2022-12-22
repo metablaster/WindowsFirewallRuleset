@@ -103,6 +103,7 @@ function Show-WinRMConfig
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
+	$WinRM = Get-Service -Name WinRM
 	Write-Information -Tags $MyInvocation.InvocationName `
 		-MessageData "INFO: WinRM service status=$($WinRM.Status) startup=$($WinRM.StartType)"
 

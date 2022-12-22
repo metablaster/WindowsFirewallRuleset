@@ -323,6 +323,8 @@ function Disable-WinRMServer
 			-Direction Inbound -PolicyStore PersistentStore -ErrorAction Ignore
 	}
 
+	$WinRM = Get-Service -Name WinRM
+
 	if ($All)
 	{
 		if ($PSCmdlet.ShouldProcess("WS-Management (WinRM) service", "Stop and disable service"))

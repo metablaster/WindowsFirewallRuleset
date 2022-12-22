@@ -336,6 +336,7 @@ function Reset-WinRM
 	{
 		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Stopping WinRM service"
 
+		$WinRM = Get-Service -Name WinRM
 		$WinRM.Stop()
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
 		Set-Service -Name WinRM -StartupType Manual

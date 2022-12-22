@@ -212,7 +212,7 @@ function Test-WinRM
 	}
 
 	# WinRM service must be running at this point
-	if ($WinRM.Status -ne [ServiceControllerStatus]::Running)
+	if ((Get-Service -Name WinRM).Status -ne [ServiceControllerStatus]::Running)
 	{
 		Write-Error -Category NotImplemented -TargetObject $Protocol `
 			-Message "WinRM service is not running, please run Set-WinRMClient for configuration"
