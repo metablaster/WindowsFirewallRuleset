@@ -85,4 +85,4 @@ None.
 
 ## RELATED LINKS
 
-[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test-SDDL/Help/en-US/Test-SDDL.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Test-SDDL/Help/en-US/Test-SDDL.md)
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-SDDL.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-SDDL.md)

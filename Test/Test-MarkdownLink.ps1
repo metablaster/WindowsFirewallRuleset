@@ -46,7 +46,7 @@ None. You cannot pipe objects to Test-MarkdownLink.ps1
 None. Test-MarkdownLink.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Test may result is false positives
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md

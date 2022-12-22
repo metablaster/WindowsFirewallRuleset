@@ -303,12 +303,12 @@ $Module = Import-Module -Name Ruleset.ProgramInfo -PassThru
 
 if ($Develop)
 {
-	$Module | Get-Export Functions -Count 22
+	$Module | Get-Export Functions -Count 26
 	$Module | Get-Export Variables -Count 1
 }
 else
 {
-	$Module | Get-Export Functions -Count 26
+	$Module | Get-Export Functions -Count 22
 	$Module | Get-Export Variables -Count 0
 }
 

@@ -197,8 +197,8 @@ foreach ($Manifest in $Manifests)
 	}
 
 	# Verify either release or prerelease notes are specified
-	if (!(($null -ne $PrivateData["ReleaseNotes"]) -and [string]::IsNullOrEmpty($PrivateData.ReleaseNotes) -xor
-		(($null -ne $PrivateData["Prerelease"]) -and [string]::IsNullOrEmpty($PrivateData.Prerelease))))
+	if ((($null -ne $PrivateData["ReleaseNotes"]) -and [string]::IsNullOrEmpty($PrivateData.ReleaseNotes)) -xor
+		(($null -ne $PrivateData["Prerelease"]) -and [string]::IsNullOrEmpty($PrivateData.Prerelease)))
 	{
 		Write-Error -Category InvalidResult -TargetObject $HelpInfo `
 			-Message "'$($Module.Name)' module does not specify either release of prerelease notes"
@@ -256,7 +256,12 @@ foreach ($Manifest in $Manifests)
 		if ($ModuleFile -notin $ListedFiles)
 		{
 			Write-Error -Category InvalidData -TargetObject $ModuleFile `
-				-Message "Module file not listed in '$Manifest' manifest"
+				-Message "Module file '$ModuleFile' not listed in '$Manifest' manifest"
+		}
+		# Perform case sensitive comparison
+		elseif ($ModuleFile -cnotin $ListedFiles)
+		{
+			Write-Warning -Message "[$ThisScript] Module file '$ModuleFile' was listed in '$Manifest' manifest but file path is not case sensitive"
 		}
 	}
 
@@ -267,6 +272,10 @@ foreach ($Manifest in $Manifests)
 		{
 			Write-Error -Category InvalidData -TargetObject $ModuleFile `
 				-Message "Module manifest lists a file '$ListedFile' which does not exist in $($Module.Name) directory"
+		}
+		elseif ($ListedFile -cnotin $ModuleFiles)
+		{
+			Write-Warning -Message "[$ThisScript] Module manifest lists a file '$ListedFile' from $($Module.Name) directory but specification is not case sensitive"
 		}
 	}
 }
