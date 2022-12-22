@@ -54,7 +54,7 @@
 # Other code files
 *.js		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
 *.cs		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
-*.sh		text eol=crlf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
+*.sh		text eol=lf whitespace=trailing-space,space-before-tab,indent-with-non-tab,tabwidth=4
 # Text files
 *.md		text eol=crlf whitespace=trailing-space,space-before-tab,tab-in-indent,tabwidth=2
 *.ini		text eol=crlf whitespace=trailing-space,space-before-tab,tab-in-indent,tabwidth=4
