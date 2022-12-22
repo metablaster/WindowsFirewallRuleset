@@ -159,16 +159,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Modules/Ruleset.Initialize/Public/Initialize-Service.ps1",
-			"bookmarks": [
-				{
-					"line": 261,
-					"column": 5,
-					"label": ""
-				}
-			]
 		}
 	]
 }

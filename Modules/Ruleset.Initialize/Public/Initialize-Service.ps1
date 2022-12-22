@@ -72,8 +72,7 @@ It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
 TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 [System.ServiceProcess.ServiceController[]]
-TODO: RemoteRegistry starts on demand and stops on it's own when not used, no need to start it,
-only manual trigger start is needed
+TODO: Some services are logged as change from ex. from Manual to Manual, but that's not change.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md
@@ -212,8 +211,6 @@ function Initialize-Service
 					foreach ($Required in $Service.ServicesDependedOn)
 					{
 						# For dependent services show only failures
-						# TODO: PreviousDependentStartType was seen as null in logs,
-						# We use ['previous' -> 'change'] format for status change to detect this in logs
 						$PreviousDependentStartType = $Required.StartType
 
 						if ($PreviousDependentStartType -ne [ServiceStartMode]::Automatic)
@@ -235,7 +232,16 @@ function Initialize-Service
 						$PreviousDependentStatus = $Required.Status
 						if ($PreviousDependentStatus -ne [ServiceControllerStatus]::Running)
 						{
-							$Required.Start()
+							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
+								($PreviousStatus -eq [ServiceControllerStatus]::PausePending))
+							{
+								$Service.Continue()
+							}
+							else
+							{
+								$Service.Start()
+							}
+
 							$Required.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 
 							# Needed to get service again to get fresh stats
@@ -259,8 +265,6 @@ function Initialize-Service
 
 					# If decision is no, or if service is running there is no need to modify startup
 					# type, otherwise set startup type after requirements are met
-					# TODO: If service is running but desired state is Stopped then we should not stop
-					# the service as that makes no sense, ex. RemoteRegistry service.
 					if ($PreviousStartType -ne $StartupType)
 					{
 						Set-Service -Name $ServiceName -StartupType $StartupType
@@ -295,20 +299,42 @@ function Initialize-Service
 						# Required services and startup type is checked, start requested service
 						if ($Status -eq "Running")
 						{
-							$Service.Start()
-						}
-						else
-						{
-							$Service.Stop()
-						}
+							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
+								($PreviousStatus -eq [ServiceControllerStatus]::PausePending))
+							{
+								$Service.Continue()
+							}
+							else
+							{
+								$Service.Start()
+							}
 
-						$Service.WaitForStatus($Status, $ServiceTimeout)
+							$Service.WaitForStatus($Status, $ServiceTimeout)
+						}
+						# If service is running but desired state is Stopped then we should not stop
+						# the service as that makes no sense, ex. RemoteRegistry service.
+						elseif ($PreviousStatus -ne [ServiceControllerStatus]::Running)
+						{
+							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
+								($PreviousStatus -eq [ServiceControllerStatus]::PausePending))
+							{
+								$Service.Continue()
+								$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+							}
+
+							$Service.Stop()
+							$Service.WaitForStatus($Status, $ServiceTimeout)
+						}
 					}
 
 					# Check if setting up status of the requested service was successful, needed to get service again to get fresh stats
 					if ((Get-Service -Name $ServiceName | Select-Object -ExpandProperty Status) -ne $Status)
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
+						# Skip warning if service is running, ex. RemoteRegistry service.
+						if ($PreviousStatus -ne [ServiceControllerStatus]::Running)
+						{
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
+						}
 					}
 					else
 					{
@@ -318,10 +344,12 @@ function Initialize-Service
 					}
 				}
 
-				# Get fresh copy of a service to check
+				# Get a fresh copy of a service to check
 				$NewService = Get-Service -Name $ServiceName
 
-				if (($NewService.Status -ne $Status) -or ($NewService.StartType -ne $StartupType))
+				if (($NewService.StartType -ne $StartupType) -or
+					# Skip error if service is running, ex. RemoteRegistry service.
+					(($NewService.Status -ne $Status) -and ($PreviousStatus -ne [ServiceControllerStatus]::Running)))
 				{
 					Write-Error -Category OperationStopped -TargetObject $Service `
 						-Message "Unable to proceed, '$ServiceName' service was not set to requested state"

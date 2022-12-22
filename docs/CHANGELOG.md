@@ -29,6 +29,14 @@ Here is a list of changes for each of the releases.
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront
 
+- Modules
+
+  - Improved or updated module functions
+
+    - `Initialize-Service` now handles paused services
+
+  - Fixed a bug with `Initialize-Service` which asked to configure service that is already configured
+
 ## v0.14.0 (current release)
 
 - Rules
