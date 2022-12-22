@@ -120,7 +120,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - improved spellcheking with custom dictionaries and configuration of spell check extension
   - Workspace settings and settings for extensions vastly revisited for better coding experience.
   - Resolved almost all issuses reporeted by markdown, xml and yaml linter and PSScriptAnalyzer
-  - Replaced `XML tools` extension with `XML Red` Hat
+  - Replaced `XML tools` extension with `XML Red Hat`
   - Added `YAML` extension to workspace recommendations for YAML support
   - Added `Sort Lines` extension to workspace recommendations
   - Added `Select Line Status Bar` extension to workspace recommendations
