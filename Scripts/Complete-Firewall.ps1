@@ -162,8 +162,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None `
 
 # Set default firewall profile for network adapter
-# HACK: Not used because setting in "Network & Internet" will be missing
-# Set-NetworkProfile
+Set-NetworkProfile
 
 if ($UpdateGPO)
 {

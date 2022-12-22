@@ -232,7 +232,6 @@ them as follows:
     - `Scripts\Set-Privacy.ps1`
     - `...\Ruleset.Utility\Set-Privilege.ps1`
     - `...\Ruleset.Utility\Set-Permission.ps1`
-    - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
     - `...\Ruleset.Initialize\Initialize-Module.ps1`
     - `...\Ruleset.Initialize\Initialize-Provider.ps1`
     - `...\Ruleset.Initialize\Uninstall-DuplicateModule.ps1`
@@ -292,23 +291,16 @@ resolve these kinds of "Access is denied".
 In `Settings -> Network & Internet -> Status -> Properties` there should be options to set private
 or public profile for your adapter, but what if these options are gone and how to get them back?
 
-These profile settings go missing when some privileged process has modified network profile such
-as 3rd party firewalls or by sharing your physical NIC with virtual switch from virtual machine.\
+These profile settings go missing when sharing your physical NIC with virtual switch with virtual
+machine.\
 If you have configured external switch in your Hyper-V there is nothing you can do to except to
 stop sharing your hardware NIC with virtual switch.
-
-Here in this repository this will also happen when you run `Set-NetworkProfile.ps1` which runs only
-on demand, however you won't notice this problem until system is rebooted.\
-It may also happen if you run `Set-NetConnectionProfile` as Administrator in PowerShell.
-
-**NOTE:** In previous versions of Firewall Ruleset since v0.11.0, `Set-NetworkProfile` runs by
-default, however this is no longer the case in most recent versions.
 
 There are many options to troubleshoot this problem, most of which are just a workaround but don't
 actually bring these options back, so here are my favorites that should fix it instead:
 
 1. First open up Control Panel firewall and see if there is a message that says:\
-`For your security, some setting are controlled by Group Policy`
+   `For your security, some setting are controlled by Group Policy`
 
     - If you see this message, next step is to open up GPO firewall and export your firewall
     rules and settings because once the problem is resolved importing them back will be easy and quick.
@@ -316,22 +308,18 @@ actually bring these options back, so here are my favorites that should fix it i
     section below and then come back here.
 
 2. If you can't get rid of the message and profile options are not back even after reboot, next step
-is to verify the following location in GPO:\
-`Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
+   is to verify the following location in GPO:\
+   `Computer Configuration\Windows Settings\Security Settings\Network List Manager Policies`
 
-    - Here make sure everything is set to `Not Configured`, and if you change something reboot
+    Here make sure everything is set to `Not Configured`, and if you change something reboot
     system to verify.
 
 3. If profile options are still not back there is only one option left which is resetting
-network settings as follows:
+   network settings as follows:
 
    - `Settings -> Network & Internet -> Network Reset`
    - Make sure not to reboot until required time has passed, usually 5 minutes, let it reboot on
    it's own and profile options should re-appear.
-
-- Finally you may want to import your exported firewall policy, this will not bring problem back.
-- Next time make sure not to run `Set-NetworkProfile` or `Set-NetConnectionProfile` if there is no
-valid reason.
 
 ## The maximum number of concurrent operations for this user has been exceeded
 

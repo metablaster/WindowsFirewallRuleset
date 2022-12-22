@@ -90,6 +90,8 @@ TODO: Implement generating SSH and GPG keys
 TODO: Implement copying requested keys to clipboard
 TODO: Implement creating a backup of keys
 TODO: Implement GpgKey parameter
+TODO: Script to install (Add-WindowsCapability) and configure SSH server for
+Remote-SSH extension
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

@@ -77,7 +77,6 @@ function Restore-NetProfile
 			{
 				if ($PSCmdlet.ShouldProcess($Adapter.Key, "Restore network profile"))
 				{
-					# TODO: This will remove options from settings app
 					Set-NetConnectionProfile -InterfaceAlias $Adapter.Key -NetworkCategory $Adapter.Value
 				}
 			}

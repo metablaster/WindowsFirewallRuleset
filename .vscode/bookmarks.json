@@ -15,7 +15,7 @@
 			"bookmarks": [
 				{
 					"line": 172,
-					"column": 14,
+					"column": 4,
 					"label": ""
 				}
 			]
@@ -94,17 +94,17 @@
 			"path": "Config/ProjectSettings.ps1",
 			"bookmarks": [
 				{
-					"line": 193,
+					"line": 191,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 223,
+					"line": 222,
 					"column": 2,
 					"label": ""
 				},
 				{
-					"line": 548,
+					"line": 546,
 					"column": 1,
 					"label": ""
 				}
@@ -115,7 +115,7 @@
 			"bookmarks": [
 				{
 					"line": 375,
-					"column": 90,
+					"column": 6,
 					"label": ""
 				}
 			]
@@ -141,40 +141,10 @@
 			]
 		},
 		{
-			"path": "Modules/Ruleset.Remote/Public/Set-WinRMClient.ps1",
+			"path": "Modules/Ruleset.Initialize/Public/Initialize-Project.ps1",
 			"bookmarks": [
 				{
-					"line": 99,
-					"column": 0,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
-			"bookmarks": [
-				{
-					"line": 132,
-					"column": 2,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Remote/Private/Unblock-NetProfile.ps1",
-			"bookmarks": [
-				{
-					"line": 84,
-					"column": 29,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Remote/Private/Restore-NetProfile.ps1",
-			"bookmarks": [
-				{
-					"line": 80,
+					"line": 414,
 					"column": 29,
 					"label": ""
 				}
@@ -196,6 +166,16 @@
 				{
 					"line": 261,
 					"column": 5,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
+			"bookmarks": [
+				{
+					"line": 132,
+					"column": 0,
 					"label": ""
 				}
 			]

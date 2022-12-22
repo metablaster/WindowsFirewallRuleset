@@ -847,7 +847,7 @@
 	"xml.format.splitAttributes": false,
 	"xml.format.splitAttributesIndentSize": 2,
 	"xml.format.xsiSchemaLocationSplit": "onPair",
-	"xml.logs.client": true,
+	"xml.logs.client": false,
 	"xml.preferences.quoteStyle": "double",
 	"xml.preferences.showSchemaDocumentationType": "all",
 	// NOTE: Configure telemetry if you wish in user settings

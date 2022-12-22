@@ -373,6 +373,7 @@ function Get-TypeName
 					{
 						# Not an error, the type is still valid .NET type
 						$TypeName += $Type
+						# TODO: Replace all colons before variable with '$Variable'
 						Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for: $Type"
 					}
 				}
