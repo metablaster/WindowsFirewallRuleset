@@ -99,7 +99,7 @@ $RegistryHive = [Microsoft.Win32.RegistryHive]::LocalMachine
 
 try
 {
-	Write-Verbose -Message "[$ThisScript] Accessing registry on computer: $Domain"
+	Write-Verbose -Message "[$ThisScript] Accessing registry on computer '$Domain'"
 	$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 
 	try

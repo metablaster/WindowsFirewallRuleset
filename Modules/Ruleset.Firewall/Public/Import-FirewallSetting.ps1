@@ -75,7 +75,7 @@ function Import-FirewallSetting
 	$Path = Resolve-FileSystemPath $Path
 	if (!$Path -or !$Path.Exists)
 	{
-		Write-Error -Category ResourceUnavailable -Message "The path was not found: $Path"
+		Write-Error -Category ResourceUnavailable -Message "The specified path '$Path' was not found"
 		return
 	}
 

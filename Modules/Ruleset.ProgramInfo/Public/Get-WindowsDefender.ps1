@@ -73,17 +73,17 @@ function Get-WindowsDefender
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			# MSDN: In order for a key to be opened remotely, both the server and client machines
 			# must be running the remote registry service, and have remote administration enabled.
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $LocalRights)
 
 			if (!$RootKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: $HKLM"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist '$HKLM'"
 				$RemoteKey.Dispose()
 				return
 			}
@@ -108,7 +108,7 @@ function Get-WindowsDefender
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKeyLeaf"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$RootKeyLeaf'"
 
 			[PSCustomObject]@{
 				Domain = $Domain

@@ -73,15 +73,15 @@ function Get-AllUserProgram
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 
 			if (!$RootKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: $HKLM"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist '$HKLM'"
 				$RemoteKey.Dispose()
 				return
 			}

@@ -67,7 +67,7 @@ function Confirm-AdminTemplateCseGuidsArePresent
 
 	if ($Line -notmatch "\s*(gPC(?:Machine|User)ExtensionNames)\s*=\s*(.*)$")
 	{
-		throw "Malformed gpt.ini line: $Line"
+		throw "Malformed gpt.ini line '$Line'"
 	}
 
 	$ValueName = $Matches[1]

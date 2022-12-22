@@ -180,7 +180,7 @@ function Test-VirusTotal
 
 			if (![string]::IsNullOrEmpty($SigCheckFile))
 			{
-				Write-Verbose -Message "[$InvocationName] Using sigcheck file: $SigCheckFile"
+				Write-Verbose -Message "[$InvocationName] Using sigcheck file '$SigCheckFile'"
 
 				# Create sigcheck process object
 				$Process = New-Object System.Diagnostics.Process
@@ -227,7 +227,7 @@ function Test-VirusTotal
 
 						if (![string]::IsNullOrEmpty($StreamLine))
 						{
-							Write-Debug -Message "[$InvocationName] Processing $SigCheckFile output: $StreamLine"
+							Write-Debug -Message "[$InvocationName] Processing $SigCheckFile output '$StreamLine'"
 
 							# NOTE: Only one of these can be success per line, therefore do not error for failure
 							$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")

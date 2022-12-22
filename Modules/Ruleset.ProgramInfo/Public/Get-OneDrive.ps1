@@ -135,7 +135,7 @@ function Get-OneDrive
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 		}
 		catch
@@ -197,7 +197,7 @@ function Get-OneDrive
 
 			if (!$RootKey)
 			{
-				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKU")
+				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist '$HKU'")
 			}
 		}
 		catch
@@ -226,7 +226,7 @@ function Get-OneDrive
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $RootKey"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$RootKey'"
 
 			# NOTE: remove executable file name
 			$InstallLocation = Split-Path -Path $OneDrivePath -Parent

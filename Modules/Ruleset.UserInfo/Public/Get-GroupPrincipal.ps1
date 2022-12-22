@@ -245,7 +245,7 @@ function Get-GroupPrincipal
 
 						if ($UserName)
 						{
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account: $Account"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing account '$Account'"
 
 							# NOTE: $Account.SID may be empty
 							$Principal = Get-PrincipalSID -User $Account.Name -CimSession $CimSession
@@ -263,7 +263,7 @@ function Get-GroupPrincipal
 						}
 						else
 						{
-							Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring account: $Account"
+							Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring account '$Account'"
 						}
 					}
 				}

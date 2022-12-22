@@ -144,7 +144,7 @@ function Get-TypeName
 			$Result = $TypeName -as [type]
 			if (!$Result)
 			{
-				Write-Verbose -Message "[$InvocationName] Searching assemblies for type: $TypeName"
+				Write-Verbose -Message "[$InvocationName] Searching assemblies for type '$TypeName'"
 				$Result = foreach ($Assembly in [System.AppDomain]::CurrentDomain.GetAssemblies())
 				{
 					try
@@ -202,7 +202,7 @@ function Get-TypeName
 
 				if ($TypeName)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processed input object: $TypeName"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processed input object '$TypeName'"
 
 					if (!$Force)
 					{
@@ -330,7 +330,7 @@ function Get-TypeName
 			if (!$Accelerator -and $PSCmdlet.ParameterSetName -eq "Name")
 			{
 				# For -Name convert from accelerator to full name
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting accelerator to full name for: $TypeName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting accelerator to full name for '$TypeName'"
 
 				if ($TargetValue = [array]::Find($ShortName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{
@@ -338,13 +338,13 @@ function Get-TypeName
 
 					if ($Duplicates -contains $TypeName)
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for resulting type: $TypeName"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for '$TypeName' type"
 					}
 				}
 				else
 				{
 					# Not an error, the type is still valid .NET type
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename not recognized as accelerator: $TypeName"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Typename '$TypeName' not recognized as accelerator"
 				}
 
 				# There is nothing else to do for -Name
@@ -359,47 +359,46 @@ function Get-TypeName
 				# foreach will run more than once only for -Command -Accelerator
 				foreach ($Type in $CommandOutputs)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting typename to accelerator for: $Type"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting typename to accelerator for '$Type'"
 					if ($TargetValue = [array]::Find($FullName, [System.Predicate[string]] { $Type -like $args[0] }))
 					{
 						$TypeName += $ShortName[$([array]::IndexOf($FullName, $TargetValue))]
 
 						if ($Duplicates -contains $TargetValue)
 						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type: $TargetValue"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type '$TargetValue'"
 						}
 					}
 					else
 					{
 						# Not an error, the type is still valid .NET type
 						$TypeName += $Type
-						# TODO: Replace all colons before variable with '$Variable'
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for: $Type"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for '$Type'"
 					}
 				}
 			}
 			else
 			{
 				# Convert from full name to accelerator for -InputObject, -Name and System.Void
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting typename to accelerator for: $TypeName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Converting typename to accelerator for '$TypeName'"
 				if ($TargetValue = [array]::Find($FullName, [System.Predicate[string]] { $TypeName -like $args[0] }))
 				{
 					$TypeName = $ShortName[$([array]::IndexOf($FullName, $TargetValue))]
 
 					if ($Duplicates -contains $TargetValue)
 					{
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type: $TargetValue"
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Multiple accelerators exist for type '$TargetValue'"
 					}
 				}
 				else
 				{
 					# Not an error, the type is still valid .NET type
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for: $TypeName"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] No accelerator found for '$TypeName'"
 				}
 			}
 		} # accelerator
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Success with the result of: $TypeName"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Success with the result of '$TypeName'"
 		Write-Output $TypeName
 	} # process
 }

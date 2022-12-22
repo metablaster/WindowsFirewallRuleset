@@ -87,7 +87,7 @@ function Resolve-FileSystemPath
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path: $Path"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving path '$Path'"
 
 	# Qualifier ex. "C:\" "D:", "\" or "\\"
 	# Unqualified: Anything except qualifier
@@ -117,7 +117,7 @@ function Resolve-FileSystemPath
 			}
 			elseif ($TestPath -match '[<>:"|]')
 			{
-				Write-Error -Category SyntaxError -TargetObject $TestPath -Message "Specified path contains invalid characters: $Path"
+				Write-Error -Category SyntaxError -TargetObject $TestPath -Message "Specified path contains invalid characters '$Path'"
 				return
 			}
 		}
@@ -152,7 +152,7 @@ function Resolve-FileSystemPath
 		while (![string]::IsNullOrEmpty($ParentPath))
 		{
 			$TestPath = $ParentPath
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving parent directory: $ParentPath"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Resolving parent directory '$ParentPath'"
 
 			$PSTarget = Resolve-Path -Path $ParentPath -ErrorAction Ignore
 			$ItemCount = ($PSTarget | Measure-Object).Count
@@ -165,7 +165,7 @@ function Resolve-FileSystemPath
 					return
 				}
 
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Parent directory was resolved to: $PSTarget"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Parent directory was resolved to '$PSTarget'"
 				$ResolvedItem = "$($PSTarget.Path)\$MissingPart"
 				break
 			}
@@ -184,7 +184,7 @@ function Resolve-FileSystemPath
 	# NOTE: Will be second check for multipath result
 	if ($ItemCount -eq 1)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The path was resolved to: $ResolvedItem"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] The path was resolved to '$ResolvedItem'"
 
 		if ($File)
 		{
@@ -199,7 +199,7 @@ function Resolve-FileSystemPath
 		{
 			try
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating item: $TargetInfo"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating item '$TargetInfo'"
 				# NOTE: FileInfo::Create returns [System.IO.FileStream] object
 				$TargetInfo.Create() | Out-Null
 			}
@@ -214,9 +214,9 @@ function Resolve-FileSystemPath
 	}
 	elseif ($ItemCount -gt 1)
 	{
-		Write-Error -Category InvalidResult -TargetObject $TestPath -Message "The path resolves to multiple ($ItemCount) locations: $TestPath"
+		Write-Error -Category InvalidResult -TargetObject $TestPath -Message "The path resolves to multiple ($ItemCount) locations '$TestPath'"
 		return
 	}
 
-	Write-Error -Category ParserError -TargetObject $TestPath -Message "Unable to resolve path: $TestPath"
+	Write-Error -Category ParserError -TargetObject $TestPath -Message "Unable to resolve path '$TestPath'"
 }

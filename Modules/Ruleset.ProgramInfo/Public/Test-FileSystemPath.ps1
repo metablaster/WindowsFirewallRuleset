@@ -199,7 +199,7 @@ function Test-FileSystemPath
 		[System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path: $ExpandedPath"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking path '$ExpandedPath'"
 
 	[string] $Status = ""
 

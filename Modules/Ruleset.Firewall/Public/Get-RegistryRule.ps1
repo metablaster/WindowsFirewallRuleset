@@ -154,7 +154,7 @@ function Get-RegistryRule
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 		}
 		catch
@@ -238,7 +238,7 @@ function Get-RegistryRule
 
 				if (!$RootKey)
 				{
-					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKLMRootKey")
+					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist '$HKLMRootKey'")
 				}
 			}
 			catch

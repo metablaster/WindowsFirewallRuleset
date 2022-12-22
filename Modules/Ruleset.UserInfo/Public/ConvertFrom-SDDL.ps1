@@ -121,7 +121,7 @@ function ConvertFrom-SDDL
 	{
 		foreach ($SddlEntry in $SDDL)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SDDL: $SddlEntry"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SDDL '$SddlEntry'"
 
 			# Case sensitive regex pattern to math exactly one DACL entry within SDDL string
 			$RegMatch = [regex]::Matches($SddlEntry, "(D:\w*(\((\w*;\w*){4};((S(-\d+){2,12})|[A-Z]*)\))+){1}")
@@ -129,7 +129,7 @@ function ConvertFrom-SDDL
 			if ($RegMatch.Count -ne 1)
 			{
 				Write-Error -Category InvalidArgument -TargetObject $SddlEntry `
-					-Message "SDDL string to be valid must contain exactly one DACL entry: $SddlEntry"
+					-Message "SDDL string to be valid must contain exactly one DACL entry '$SddlEntry'"
 				continue
 			}
 
@@ -159,7 +159,7 @@ function ConvertFrom-SDDL
 			for ($Index = 1; $Index -lt $SddlSplit.Length; ++$Index)
 			{
 				$ACE = $SddlSplit[$Index]
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ACE: $ACE"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing ACE '$ACE'"
 
 				$AceSplit = $ACE.Split(";")
 

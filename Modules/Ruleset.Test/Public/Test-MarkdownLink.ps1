@@ -316,7 +316,7 @@ function Test-MarkdownLink
 		if (!$Markdown.Exists)
 		{
 			Write-Error -Category ObjectNotFound -TargetObject $Markdown `
-				-Message "Markdown file could not be found because it doesn't exist: $FullName"
+				-Message "Markdown file '$FullName' could not be found because it doesn't exist"
 			continue
 		}
 

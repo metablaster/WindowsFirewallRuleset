@@ -190,8 +190,8 @@ begin
 
 	$ParentScopeName = (Get-PSCallStack)[1].Command
 
-	Write-Debug -Message "[$ThisScript] Parrent Scope: $ParentScopeName"
-	Write-Debug -Message "[$ThisScript] Caller Scope: $((Get-PSCallStack)[2].Command)"
+	Write-Debug -Message "[$ThisScript] Parrent Scope is '$ParentScopeName'"
+	Write-Debug -Message "[$ThisScript] Caller Scope is '$((Get-PSCallStack)[2].Command)'"
 
 	[hashtable] $FilterHash = @{}
 }

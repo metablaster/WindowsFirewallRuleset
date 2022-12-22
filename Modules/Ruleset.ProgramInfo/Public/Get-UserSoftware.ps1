@@ -132,7 +132,7 @@ function Get-UserSoftware
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 		}
 		catch
@@ -193,7 +193,7 @@ function Get-UserSoftware
 
 			if (!$RootKey)
 			{
-				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKU")
+				throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist '$HKU'")
 			}
 		}
 		catch
@@ -216,12 +216,12 @@ function Get-UserSoftware
 
 		foreach ($HKUSubKey in $RootKey.GetSubKeyNames())
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKUSubKey"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key '$HKUSubKey'"
 			$SubKey = $RootKey.OpenSubkey($HKUSubKey)
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKUSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key '$HKUSubKey'"
 				continue
 			}
 
@@ -237,7 +237,7 @@ function Get-UserSoftware
 				continue
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKUSubKey"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKUSubKey'"
 
 			# TODO: move all instances to directly format (first call above)
 			# NOTE: Avoid spamming

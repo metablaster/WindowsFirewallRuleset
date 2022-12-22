@@ -179,7 +179,7 @@ function Test-ExecutableFile
 		[System.Environment]::ExpandEnvironmentVariables($LiteralPath)
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path: $ExpandedPath"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking file path '$ExpandedPath'"
 	$Executable = Split-Path -Path $ExpandedPath -Leaf
 
 	# Index 0 is this function
@@ -190,7 +190,7 @@ function Test-ExecutableFile
 		if ($ExpandedPath -match "(\\\.\.\\)+")
 		{
 			# TODO: While valid for fiewall, we want to resolve/format in Format-Path and Resolve-FileSystemPath
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified file path contains parent directory notation: $ExpandedPath"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Specified file path contains parent directory notation '$ExpandedPath'"
 		}
 
 		# NOTE: Split-Path -Extension is not available in Windows PowerShell
@@ -199,7 +199,7 @@ function Test-ExecutableFile
 		if ([string]::IsNullOrEmpty($Extension))
 		{
 			Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-				-Message "File extension is missing for specified file: $ExpandedPath"
+				-Message "File extension is missing for specified file '$ExpandedPath'"
 
 			return $false
 		}
@@ -215,12 +215,12 @@ function Test-ExecutableFile
 			{
 				# TODO: Learn extension description
 				Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-					-Message "Specified file is not recognized as an executable file: $ExpandedPath"
+					-Message "Specified file is not recognized as an executable file '$ExpandedPath'"
 			}
 			else
 			{
 				Write-Error -Category InvalidArgument -TargetObject $LiteralPath `
-					-Message "File extension '$Extension' is blacklisted executable file: $ExpandedPath"
+					-Message "File extension '$Extension' is blacklisted executable file '$ExpandedPath'"
 
 				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Blocked file '$Executable' is $ExtensionInfo"
 			}
@@ -242,7 +242,7 @@ function Test-ExecutableFile
 			# TODO: Errors and warnings are not logged, probably due to script level preferences
 			if ($Force)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for: $ExpandedPath" -WarningAction "Continue"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for '$ExpandedPath'" -WarningAction "Continue"
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
@@ -254,7 +254,7 @@ function Test-ExecutableFile
 			else
 			{
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
-					-Message "Digital signature verification failed for: $ExpandedPath" -ErrorAction "Continue"
+					-Message "Digital signature verification failed for '$ExpandedPath'" -ErrorAction "Continue"
 
 				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
 

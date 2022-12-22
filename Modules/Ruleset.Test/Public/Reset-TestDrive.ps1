@@ -111,7 +111,7 @@ function Reset-TestDrive
 
 			if ($Force)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Recursive delete of test drive: $Path"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Recursive delete of test drive '$Path'"
 			}
 			elseif (!$PSCmdlet.ShouldContinue($Path, "Recursive delete of non default test drive"))
 			{

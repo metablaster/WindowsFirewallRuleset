@@ -211,7 +211,7 @@ function Get-FileEncoding
 			break
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Length: $EncodingLength, Encoding: $LocalEncoding"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Length is '$EncodingLength', Encoding is '$LocalEncoding'"
 	}
 
 	if (!$Result)

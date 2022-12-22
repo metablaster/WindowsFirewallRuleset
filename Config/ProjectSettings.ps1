@@ -952,10 +952,10 @@ if ($ListPreference)
 			}
 
 			Set-Variable -Name IsValidParent -Scope Local -Value "Scope test"
-			Write-Debug -Message "[Show-Preference] InformationPreference before Get-CallerPreference: $InformationPreference"
+			Write-Debug -Message "[Show-Preference] InformationPreference before Get-CallerPreference is '$InformationPreference'"
 
 			& Get-CallerPreference.ps1 -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference: $InformationPreference"
+			Write-Debug -Message "[Show-Preference] InformationPreference after Get-CallerPreference is '$InformationPreference'"
 
 			$Variables = Get-ChildItem -Path Variable:\*Preference
 			$Variables += Get-ChildItem -Path Variable:\PSSessionApplicationName
@@ -1052,7 +1052,7 @@ if ($ListPreference)
 	if (!$InModule)
 	{
 		# NOTE: Scripts which dot source this one are same scope thus Show-Preference pulls both
-		Write-Debug -Message "[$SettingsScript] InformationPreference: $InformationPreference"
+		Write-Debug -Message "[$SettingsScript] InformationPreference is '$InformationPreference'"
 		Show-Preference # -All
 		Remove-Module -Name Dynamic.Preference
 	}

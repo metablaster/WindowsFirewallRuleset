@@ -137,7 +137,7 @@ function Test-UNC
 			{
 				# The "\\.\" prefix will access the Win32 device namespace instead of the Win32 file namespace.
 				Write-Error -Category SyntaxError -TargetObject $UNC -ErrorAction $WriteError `
-					-Message "The specified UNC path bellongs to Win32 device namespace: $UNC"
+					-Message "The specified UNC path bellongs to Win32 device namespace '$UNC'"
 
 				return $false
 			}

@@ -196,7 +196,7 @@ function Set-Shortcut
 
 			if ([string]::IsNullOrEmpty($FilePath))
 			{
-				Write-Error -Category InvalidResult -TargetObject $Path -Message "Failed to resolve special folder: $Path"
+				Write-Error -Category InvalidResult -TargetObject $Path -Message "Failed to resolve special folder '$Path'"
 				return
 			}
 		}
@@ -206,7 +206,7 @@ function Set-Shortcut
 		}
 		else
 		{
-			Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The specified path was not found: $Path"
+			Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The specified path was not found '$Path'"
 			return
 		}
 
@@ -245,7 +245,7 @@ function Set-Shortcut
 		{
 			if (!(Test-Path -Path $TargetPath -PathType Leaf))
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $TargetPath -Message "Target file not found: $TargetPath"
+				Write-Error -Category ObjectNotFound -TargetObject $TargetPath -Message "Target file not found '$TargetPath'"
 				return
 			}
 		}
@@ -295,7 +295,7 @@ function Set-Shortcut
 			}
 			else
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to locate icon file: $IconLocationName"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to locate icon file '$IconLocationName'"
 			}
 		}
 

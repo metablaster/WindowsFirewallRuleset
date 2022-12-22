@@ -170,7 +170,7 @@ function ConvertFrom-SID
 		# loop through provided SIDs
 		foreach ($InputSID in $SID)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SID: $InputSID"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing SID '$InputSID'"
 
 			# Assume it's well known SID
 			[string] $SidType = "Unknown"

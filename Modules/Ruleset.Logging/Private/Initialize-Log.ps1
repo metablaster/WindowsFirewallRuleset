@@ -92,7 +92,7 @@ function Initialize-Log
 	$Directory = Resolve-FileSystemPath $Path
 	if (!$Directory)
 	{
-		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path: $Path"
+		Write-Error -Category InvalidResult -TargetObject $Path -Message "Unable to resolve path '$Path'"
 		return $null
 	}
 
@@ -103,7 +103,7 @@ function Initialize-Log
 	# Create Logs directory if it doesn't exist
 	if (!$Directory.Exists)
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory: $Directory"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating log directory '$Directory'"
 		$Directory.Create()
 	}
 
@@ -120,13 +120,13 @@ function Initialize-Log
 				Write-Debug -Message "[$($MyInvocation.InvocationName)] Header parameter is valid for new log files only, ignored..."
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is: $Directory"
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name: $FileName"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Logs directory is '$Directory'"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Log file name is '$FileName'"
 			return $LogFile
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new log file: $FileName"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Creating new log file '$FileName'"
 	New-Item -ItemType File -Path $LogFile -ErrorAction Stop | Out-Null
 	Set-Content -Path $LogFile -Value "`n#`n# Windows Firewall Ruleset $ProjectVersion"
 

@@ -186,7 +186,7 @@ function Update-Table
 
 		if (![string]::IsNullOrEmpty($Executable))
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for: $Executable"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Searching executable names for '$Executable'"
 
 			# TODO: executable paths search is too weak, need to handle more properties here
 			$InstallLocation = $ExecutablePaths |
@@ -316,7 +316,7 @@ function Update-Table
 					foreach ($Program in $UserPrograms)
 					{
 						# NOTE: Avoid spamming
-						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program: $Program"
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing program '$Program'"
 
 						$InstallLocation = $Program | Select-Object -ExpandProperty InstallLocation
 

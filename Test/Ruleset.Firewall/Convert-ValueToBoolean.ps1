@@ -77,14 +77,14 @@ Start-Test "3"
 Convert-ValueToBoolean "3" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
-	Write-Warning -Message "[$ThisScript] Error ignored by unit test: $CoversionError"
+	Write-Warning -Message "[$ThisScript] Error ignored by unit test '$CoversionError'"
 }
 
 Start-Test "UNKNOWN"
 Convert-ValueToBoolean "UNKNOWN" -EA SilentlyContinue -EV CoversionError
 if ($CoversionError)
 {
-	Write-Warning -Message "[$ThisScript] Error ignored by unit test: $CoversionError"
+	Write-Warning -Message "[$ThisScript] Error ignored by unit test '$CoversionError'"
 }
 
 Start-Test "True"

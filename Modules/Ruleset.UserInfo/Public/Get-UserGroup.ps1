@@ -100,7 +100,7 @@ function Get-UserGroup
 
 			if ([string]::IsNullOrEmpty($LocalGroups))
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $MachineName"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer '$MachineName'"
 			}
 
 			foreach ($Group in $LocalGroups)
@@ -125,7 +125,7 @@ function Get-UserGroup
 
 			if ([string]::IsNullOrEmpty($RemoteGroups))
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer: $MachineName"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] There are no user groups on computer '$MachineName'"
 			}
 
 			foreach ($Group in $RemoteGroups)

@@ -232,8 +232,8 @@ function Initialize-Service
 						$PreviousDependentStatus = $Required.Status
 						if ($PreviousDependentStatus -ne [ServiceControllerStatus]::Running)
 						{
-							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
-								($PreviousStatus -eq [ServiceControllerStatus]::PausePending))
+							if (($PreviousDependentStatus -eq [ServiceControllerStatus]::Paused) -or
+								($PreviousDependentStatus -eq [ServiceControllerStatus]::PausePending))
 							{
 								$Service.Continue()
 							}

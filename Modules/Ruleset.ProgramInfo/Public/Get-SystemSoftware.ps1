@@ -88,7 +88,7 @@ function Get-SystemSoftware
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 		}
 		catch
@@ -106,7 +106,7 @@ function Get-SystemSoftware
 
 				if (!$RootKey)
 				{
-					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKLMRootKey")
+					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist '$HKLMRootKey'")
 				}
 			}
 			catch
@@ -118,12 +118,12 @@ function Get-SystemSoftware
 			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
 				# NOTE: Avoid spamming
-				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				# Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key '$HKLMSubKey'"
 				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				if (!$SubKey)
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key: $HKLMSubKey"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub Key '$HKLMSubKey'"
 					continue
 				}
 
@@ -154,12 +154,12 @@ function Get-SystemSoftware
 						$InstallLocation -like "*.exe*")
 					{
 						# NOTE: Avoid spamming
-						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
+						# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key '$HKLMSubKey'"
 						continue
 					}
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKLMSubKey'"
 
 				# Get more key entries as needed
 				[PSCustomObject]@{

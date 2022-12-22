@@ -105,8 +105,8 @@ function Compare-Path
 		$RefPath = $RefPath.Replace("/", "\")
 		$RefPath = $RefPath.Replace("\\", "\").TrimEnd("\")
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath: $ComparePath"
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath: $RefPath"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath is '$ComparePath'"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath is '$RefPath'"
 
 		if ($CaseSensitive)
 		{
@@ -134,8 +134,8 @@ function Compare-Path
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath: $ComparePath"
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath: $RefPath"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] TargetPath is '$ComparePath'"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] ReferencePath is '$RefPath'"
 
 	if ($CaseSensitive)
 	{

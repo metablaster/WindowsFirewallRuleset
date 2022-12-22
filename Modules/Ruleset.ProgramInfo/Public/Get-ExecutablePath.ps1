@@ -88,7 +88,7 @@ function Get-ExecutablePath
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain, $RegistryView)
 		}
 		catch
@@ -101,23 +101,23 @@ function Get-ExecutablePath
 		{
 			try
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLMRootKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLMRootKey"
 				$RootKey = $RemoteKey.OpenSubkey($HKLMRootKey, $RegistryPermission, $RegistryRights)
 
 				if (!$RootKey)
 				{
-					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist: $HKLMRootKey")
+					throw [System.Data.ObjectNotFoundException]::new("The following registry key does not exist '$HKLMRootKey'")
 				}
 			}
 			catch
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:$HKLMRootKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry root key: HKLM:\$HKLMRootKey"
 				continue
 			}
 
 			foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key '$HKLMSubKey'"
 				$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 				# Default key can be empty
@@ -155,11 +155,11 @@ function Get-ExecutablePath
 				if ([string]::IsNullOrEmpty($InstallLocation))
 				{
 					# NOTE: Avoid spamming
-					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key: $HKLMSubKey"
+					# Write-Debug -Message "[$($MyInvocation.InvocationName)] Ignoring useless key '$HKLMSubKey'"
 					continue
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKLMSubKey'"
 
 				# Getting more key entries not possible in this leaf key
 				# NOTE: Some key names are named as alternative executable name

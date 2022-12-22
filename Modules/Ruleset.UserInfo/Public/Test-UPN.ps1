@@ -228,7 +228,7 @@ function Test-UPN
 
 			if ($User)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating user name: $User"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating user name '$User'"
 
 				# Validate the user name portion of a User Principal Name
 				if ($User -match "^(\.|-)|(\.|-)$")
@@ -253,7 +253,7 @@ function Test-UPN
 
 			if ($Domain)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating domain name: $Domain"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Validating domain name '$Domain'"
 
 				# Validate the domain name portion of a User Principal Name
 				if ($DomainRegex.Matches($Domain).Count -ne 1)

@@ -205,7 +205,7 @@ function Approve-Execute
 			else
 			{
 				Write-Error -Category ParserError -TargetObject $Regex -Message "Unable to set up context"
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] LeafBase: $LeafBase"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] LeafBase is '$LeafBase'"
 			}
 		}
 		elseif ([string]::IsNullOrEmpty($ContextLeaf))
@@ -232,7 +232,7 @@ function Approve-Execute
 
 	if (![string]::IsNullOrEmpty($Context))
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Context set to: $Context"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Context set to '$Context'"
 		Set-Variable -Name PreviousContext -Scope Script -Value $Context
 	}
 

@@ -82,7 +82,7 @@ function Split-Principal
 	{
 		foreach ($Account in $Principal)
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for principal: $Account"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting user name for principal '$Account'"
 
 			if ($Account.Contains("\"))
 			{

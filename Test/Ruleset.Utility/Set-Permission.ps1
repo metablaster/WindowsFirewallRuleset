@@ -135,7 +135,7 @@ if ($FileSystem)
 	# Create root test folder
 	if (!(Test-Path -PathType Container -Path $TestDrive))
 	{
-		Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $TestDrive"
+		Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory '$TestDrive'"
 		New-Item -ItemType Container -Path $TestDrive | Out-Null
 	}
 
@@ -145,7 +145,7 @@ if ($FileSystem)
 	{
 		if (!(Test-Path -PathType Container -Path $TestDrive\$Folder))
 		{
-			Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory: $Folder"
+			Write-Information -Tags "Test" -MessageData "INFO: Creating new test directory '$Folder'"
 			New-Item -ItemType Container -Path $TestDrive\$Folder | Out-Null
 			New-Item -ItemType Container -Path $TestDrive\$Folder\$Folder | Out-Null
 			New-Item -ItemType File -Path $TestDrive\$Folder\$($TestFiles[$FileIndex]) | Out-Null
@@ -159,7 +159,7 @@ if ($FileSystem)
 	{
 		if (!(Test-Path -PathType Leaf -Path $TestDrive\$File))
 		{
-			Write-Information -Tags "Test" -MessageData "INFO: Creating new test file: $File"
+			Write-Information -Tags "Test" -MessageData "INFO: Creating new test file '$File'"
 			New-Item -ItemType File -Path $TestDrive\$File | Out-Null
 		}
 	}

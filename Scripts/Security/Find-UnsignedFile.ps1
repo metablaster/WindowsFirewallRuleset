@@ -503,7 +503,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 					if (![string]::IsNullOrEmpty($StreamLine))
 					{
-						Write-Debug -Message "[$ThisScript] Processing $SigCheckFile output: $StreamLine"
+						Write-Debug -Message "[$ThisScript] Processing $SigCheckFile output '$StreamLine'"
 
 						$VTDetection = [regex]::Match($StreamLine, "(?<VTdetection>VT detection:\s+)(?<status>.*)")
 						$VTLink = [regex]::Match($StreamLine, "(?<VTlink>VT link:\s+)(?<link>.*)")

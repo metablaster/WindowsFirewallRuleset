@@ -230,7 +230,7 @@ foreach ($ModuleItem in $Module)
 	# TODO: This is not handling "Module name:" in yaml header
 	$ModuleName = (Get-Item $ModuleInfo.Path).BaseName
 
-	Write-Debug -Message "[$ThisScript] Processing module: $ModuleName"
+	Write-Debug -Message "[$ThisScript] Processing module '$ModuleName'"
 
 	# Root directory of current module
 	[string] $ModuleRoot = $ModuleInfo.ModuleBase
@@ -259,7 +259,7 @@ specific subfolders
 
 	foreach ($CultureName in $UICulture)
 	{
-		Write-Debug -Message "[$ThisScript] Processing culture: $CultureName"
+		Write-Debug -Message "[$ThisScript] Processing culture '$CultureName'"
 
 		# Root directory of external help files for current module and culture
 		[string] $ExternalHelp = "$ModuleRoot\$CultureName"

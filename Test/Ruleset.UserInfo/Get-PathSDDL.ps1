@@ -116,7 +116,7 @@ function Test-SDDL
 		{
 			try
 			{
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Testing SDDL: $SddlString"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Testing SDDL '$SddlString'"
 
 				# Set the security descriptor from the specified SDDL
 				$ACLObject.SetSecurityDescriptorSddlForm($SddlString)

@@ -111,16 +111,6 @@
 			]
 		},
 		{
-			"path": "Modules/Ruleset.Utility/Public/Get-TypeName.ps1",
-			"bookmarks": [
-				{
-					"line": 375,
-					"column": 6,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Test/Ruleset.ProgramInfo/Get-NetFramework.ps1",
 			"bookmarks": [
 				{

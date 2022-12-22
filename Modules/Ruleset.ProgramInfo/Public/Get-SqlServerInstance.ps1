@@ -213,7 +213,7 @@ function Get-SqlServerInstance
 
 			try
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $MachineName"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$MachineName'"
 				$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $MachineName, $RegistryView)
 			}
 			catch
@@ -397,7 +397,7 @@ function Get-SqlServerInstance
 									$_ -match $Instance
 								} | Select-Object -First 1
 
-								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key: $ServiceKey"
+								Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening Service sub key '$ServiceKey'"
 								# TODO: We should check for existence of sub key and value
 								$Service = $ServicesReg.OpenSubKey($ServiceKey).GetValue("ImagePath")
 
@@ -408,7 +408,7 @@ function Get-SqlServerInstance
 								}
 								else
 								{
-									Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open Service sub key: $ServiceKey"
+									Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open Service sub key '$ServiceKey'"
 								}
 							}
 						}

@@ -103,7 +103,7 @@ function Update-Log
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Error message"
 
 			$Preference = $PSCmdlet.GetVariableValue("ErrorActionPreference")
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is: $Preference"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller ErrorActionPreference is '$Preference'"
 
 			if ($Preference -ne "SilentlyContinue")
 			{
@@ -117,7 +117,7 @@ function Update-Log
 
 				if ($LogFile)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file: $LogFile"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending error to log file '$LogFile'"
 					$ErrorBuffer | ForEach-Object {
 						$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
 					}
@@ -133,7 +133,7 @@ function Update-Log
 			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Processing Warning message"
 
 			$Preference = $PSCmdlet.GetVariableValue("WarningPreference")
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is: $Preference"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller WarningPreference is '$Preference'"
 
 			if ($Preference -ne "SilentlyContinue")
 			{
@@ -147,7 +147,7 @@ function Update-Log
 
 				if ($LogFile)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file: $LogFile"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending warnings to log file '$LogFile'"
 
 					# NOTE: we have to add the WARNING label, it's not included in the message by design
 					# NOTE: Consistent encoding needed for cases where Core and Desktop editions
@@ -173,7 +173,7 @@ function Update-Log
 
 				if ($LogFile)
 				{
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file: $LogFile"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Appending information to log file '$LogFile'"
 					$InfoBuffer | ForEach-Object {
 						$_ | Select-Object * | Out-File -Append -FilePath $LogFile -Encoding $DefaultEncoding
 					}

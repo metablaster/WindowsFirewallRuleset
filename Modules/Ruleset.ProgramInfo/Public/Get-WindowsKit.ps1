@@ -82,16 +82,16 @@ function Get-WindowsKit
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			# OpenRemoteBaseKey either throws or returns the requested key
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 
 			if (!$RootKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: $HKLM"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist '$HKLM'"
 				$RemoteKey.Dispose()
 				return
 			}

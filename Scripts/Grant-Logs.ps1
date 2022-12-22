@@ -186,7 +186,7 @@ if ($StandardUser -and $PSCmdlet.ShouldProcess($TargetFolder, "Grant permissions
 		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
 		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
 		{
-			Write-Verbose -Message "[$ThisScript] Processing: $LogFile"
+			Write-Verbose -Message "[$ThisScript] Processing '$LogFile'"
 			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl -Confirm:$false | Out-Null
 		}
 	}

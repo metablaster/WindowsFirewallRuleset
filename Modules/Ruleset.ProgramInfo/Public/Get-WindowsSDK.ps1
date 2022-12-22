@@ -82,15 +82,15 @@ function Get-WindowsSDK
 
 		try
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer: $Domain"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Accessing registry on computer '$Domain'"
 			$RemoteKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RegistryHive, $Domain)
 
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:$HKLM"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening root key: HKLM:\$HKLM"
 			$RootKey = $RemoteKey.OpenSubkey($HKLM, $RegistryPermission, $RegistryRights)
 
 			if (!$RootKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist: $HKLM"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] The following registry key does not exist '$HKLM'"
 				$RemoteKey.Dispose()
 				return
 			}
@@ -108,12 +108,12 @@ function Get-WindowsSDK
 
 		foreach ($HKLMSubKey in $RootKey.GetSubKeyNames())
 		{
-			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key: $HKLMSubKey"
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Opening sub key '$HKLMSubKey'"
 			$SubKey = $RootKey.OpenSubkey($HKLMSubKey)
 
 			if (!$SubKey)
 			{
-				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key: $HKLMSubKey"
+				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to open registry sub key '$HKLMSubKey'"
 				continue
 			}
 
@@ -125,7 +125,7 @@ function Get-WindowsSDK
 				continue
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key: $HKLMSubKey"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKLMSubKey'"
 			$InstallLocation = Format-Path $InstallLocation
 
 			[PSCustomObject]@{

@@ -253,11 +253,11 @@ function Set-Permission
 	if ($Owner)
 	{
 		$User = $Owner
-		$Message = "Grant ownership$RecurseMessage to principal: $User"
+		$Message = "Grant ownership$RecurseMessage to principal '$User'"
 	}
 	elseif ($User)
 	{
-		$Message = "Grant permissions$RecurseMessage to principal: $User"
+		$Message = "Grant permissions$RecurseMessage to principal '$User'"
 	}
 	else
 	{
@@ -375,7 +375,7 @@ function Set-Permission
 			}
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object: $LiteralPath"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Reset was done on object '$LiteralPath'"
 	}
 
 	if ($User)
@@ -426,7 +426,7 @@ function Set-Permission
 			}
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object: $LiteralPath"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting ownership was done on object '$LiteralPath'"
 	}
 	elseif ($User)
 	{
@@ -498,7 +498,7 @@ function Set-Permission
 			}
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object: $LiteralPath"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Granting permissions was done on object '$LiteralPath'"
 	}
 
 	if ($Recurse)
@@ -578,7 +578,7 @@ function Set-Permission
 				}
 				catch
 				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Recursive action failed on object: $LiteralPath"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Recursive action failed on object '$LiteralPath'"
 					Write-Error -ErrorRecord $_
 					return $false
 				}
@@ -603,12 +603,12 @@ function Set-Permission
 				Set-Permission -LiteralPath $_.FullName @PSBoundParameters | Out-Null
 			}
 
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object: $LiteralPath"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] Recursive action is done on object '$LiteralPath'"
 			return $true
 		}
 		else
 		{
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] There are no subobjects to recurse for: $LiteralPath"
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] There are no subobjects to recurse for '$LiteralPath'"
 			return $false
 		}
 	} # Recurse

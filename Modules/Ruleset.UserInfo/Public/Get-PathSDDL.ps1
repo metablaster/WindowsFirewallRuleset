@@ -165,12 +165,12 @@ function Get-PathSDDL
 
 	if ($ItemCount -eq 0)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path could not be resolved: $Path"
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path '$Path' could not be resolved"
 		return
 	}
 	elseif ($ItemCount -gt 1)
 	{
-		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path resolves to multiple $($ItemCount) paths: $Path"
+		Write-Error -Category ObjectNotFound -TargetObject $Path -Message "The path '$Path' resolves to multiple $($ItemCount) paths"
 		return
 	}
 
@@ -189,11 +189,11 @@ function Get-PathSDDL
 
 	if (!$ACL)
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing SDDL entry: $TargetPath"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path '$TargetPath' is missing SDDL entry"
 		return
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL of a path: $TargetPath"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Getting SDDL of a path '$TargetPath'"
 
 	if ($Merge)
 	{
@@ -223,7 +223,7 @@ function Get-PathSDDL
 				# For each ACE, combine DACL flags with ACE
 				$DACL = $RegMatch.Captures.Value + "($($SDDLSplit[$Index]))"
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] $($ACL.Sddl) resolved to: $DACL"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] $($ACL.Sddl) resolved to '$DACL'"
 				Write-Output $DACL
 			}
 
@@ -240,7 +240,7 @@ function Get-PathSDDL
 
 	if ([string]::IsNullOrEmpty($DACL))
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path is missing DACL entry: $TargetPath"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] The path '$TargetPath' is missing DACL entry"
 		return
 	}
 

@@ -234,7 +234,7 @@ function Get-SystemSKU
 					$CimParams.ComputerName = $MachineName
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer: $MachineName"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing computer '$MachineName'"
 
 				if (Test-Computer $MachineName)
 				{
