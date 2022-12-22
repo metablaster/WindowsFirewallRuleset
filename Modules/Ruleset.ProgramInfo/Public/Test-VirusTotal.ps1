@@ -152,12 +152,13 @@ function Test-VirusTotal
 			}
 
 			# Check if path to sigcheck executable is valid
+			# TODO: Prefer x64 bit executable on x64 system
 			$SigCheckFile = $null
 			if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
 			{
-				# Full path to single executable
-				$Command = Get-Command -Name "$SigcheckDir\$SigcheckExecutable" -CommandType Application -ErrorAction Ignore
-				$SigCheckFile = $Command.Source | Select-Object -First 1
+				# Get full path to single executable
+				$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" | Get-Command -CommandType Application
+				$SigCheckFile = $Command.Source | Select-Object -Last 1
 			}
 			else
 			{
@@ -168,7 +169,7 @@ function Test-VirusTotal
 				# Can be, not found or there are multiple matches
 				if (($Command | Measure-Object).Count -ne 0)
 				{
-					$SigCheckFile = $Command.Name | Select-Object -First 1
+					$SigCheckFile = $Command.Name | Select-Object -Last 1
 					Write-Debug -Message "[$InvocationName] $SigCheckFile found in PATH"
 				}
 				else

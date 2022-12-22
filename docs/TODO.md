@@ -11,7 +11,7 @@ for important todo's to make is easier to tell where to look at while resolving 
 
 Todo's in this file are categorized into the following sections:
 
-1. **Ongoing**              Never ending or continuous work
+1. **Recurring**            Never ending or repeating work
 2. **High priority**        Should be resolved ASAP
 3. **Medium priority**      Important or worth considering
 4. **Low priority**         Not important
@@ -21,13 +21,13 @@ Todo's in this file are categorized into the following sections:
 
 - [List of tasks that needs to be done](#list-of-tasks-that-needs-to-be-done)
   - [Table of Contents](#table-of-contents)
-  - [Ongoing](#ongoing)
+  - [Recurring](#recurring)
   - [High priority](#high-priority)
   - [Medium priority](#medium-priority)
   - [Low priority](#low-priority)
   - [Done](#done)
 
-## Ongoing
+## Recurring
 
 1. Modules
 
@@ -53,11 +53,11 @@ Todo's in this file are categorized into the following sections:
     - ProjectSettings.ps1 restore variables: TestUser, TestAdmin, DefaultUser, TestDomain
     - ProjectSettings.ps1 verify auto updated variables: ProjectCheck, ModulesCheck, ServicesCheck
     - Increment project version in all places mentioning version:
-    (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo)
+      (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo)
     - Run PScriptAnalyzer and resolve issues.
     - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
-    - Test machine should have 2 standard, 2 administrator and 2 MS accounts (one standard one Admin),
-    and 1 disabled account for each of these 3 groups for best test results.
+    - Test machine should have 2 standard, 2 administrator and 2 MS accounts,
+      and 1 disabled account for each of these 3 groups for best test results.
     - Verify there aren't any hardcoded paths such as `C:\dev\GitHub` pointing to your root directory
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Run master script on all target OS editions

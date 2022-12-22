@@ -83,7 +83,7 @@ $UNCPath = "\\COMPUTERNAME\Directory\file.exe"
 # NOTE: eicar is a test virus which you should create in test drive
 # to get signature visit: https://en.wikipedia.org/wiki/EICAR_test_file
 # TestDrive should be added to AV exclusion list
-$RemoteEicar = "C:\dev\GitHub\WindowsFirewallRuleset\Test\TestDrive\eicar.exe"
+$RemoteEicar = "$ProjectRoot\Test\TestDrive\eicar.exe"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {

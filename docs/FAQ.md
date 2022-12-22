@@ -18,7 +18,7 @@ In addition, general questions and answers regarding this firewall.
   - [I'm missing network profile settings in Settings App](#im-missing-network-profile-settings-in-settings-app)
   - [The maximum number of concurrent operations for this user has been exceeded](#the-maximum-number-of-concurrent-operations-for-this-user-has-been-exceeded)
   - [Why do I need to specify my Microsoft account credentials](#why-do-i-need-to-specify-my-microsoft-account-credentials)
-  - [Network icon in taskbar says it's "No Network"](#network-icon-in-taskbar-says-its-no-network)
+  - [Network icon in taskbar says "No Network"](#network-icon-in-taskbar-says-no-network)
   - [PowerShell Core throws a black console window](#powershell-core-throws-a-black-console-window)
   - [Duplicate log entries](#duplicate-log-entries)
   - [For your security, some setting are controlled by Group Policy](#for-your-security-some-setting-are-controlled-by-group-policy)
@@ -223,20 +223,19 @@ them as follows:
     - You run experimental or dangerous tests from `Test` directory (default action for these tests
     is `No`)
 
-8. Here is a list of scripts that may behave unexpectedly because these are either experimental,
-   not intended for end user or hard to get right, therefore you might want to review them first
-   to learn their purpose:
+8. Here is a list of scripts that may behave unexpectedly or do things which are potentially not
+   desired because these are either experimental, not intended for end user or hard to get right,
+   therefore you might want to review them first to learn their purpose:
 
     - `Scripts\Grant-Logs.ps1`
-    - `Scripts\Reset-Firewall.ps1`
-    - `...\Set-Permission.ps1`
-    - `...\Initialize-Module.ps1`
-    - `...\Initialize-Provider.ps1`
-    - `...\Uninstall-DuplicateModule.ps1`
-    - `...\Ruleset.Firewall\Remove-FirewallRule.ps1`
-    - `...\Ruleset.Firewall\Export-FirewallRule.ps1`
-    - `...\Ruleset.Firewall\Import-FirewallRule.ps1`
+    - `Scripts\Set-ATP.ps1`
+    - `Scripts\Set-Privacy.ps1`
+    - `...\Ruleset.Utility\Set-Privilege.ps1`
+    - `...\Ruleset.Utility\Set-Permission.ps1`
     - `...\Ruleset.Utility\Set-NetworkProfile.ps1`
+    - `...\Ruleset.Initialize\Initialize-Module.ps1`
+    - `...\Ruleset.Initialize\Initialize-Provider.ps1`
+    - `...\Ruleset.Initialize\Uninstall-DuplicateModule.ps1`
     - `...\Ruleset.Remote\*.ps1`
 
     By default none of these scripts (except scripts in `Ruleset.Remote`) run on their own,
@@ -346,7 +345,7 @@ There are few solutions:
 single PS Core console.
 
 2. You can increase the limit in `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`, here search for
-`MaxShellsPerUser` and increase the value to 10, 20 or more, default is 5.
+`MaxShellsPerUser` and increase the value to 10, 20 or more, the default value is 5.
 
 3. If nothing works the easiest workaround is either reboot system or use Windows PowerShell for
 the time being.
@@ -375,7 +374,7 @@ close down PowerShell the credential object is destroyed.
 
 Windows hello is neither supported nor necessary by PowerShell remoting or WinRM.
 
-## Network icon in taskbar says it's "No Network"
+## Network icon in taskbar says "No Network"
 
 You might stumble upon the following icon in your taskbar:
 
@@ -396,7 +395,7 @@ ipconfig /renew
 And then disable and re-enable your network adapter.
 
 - If you use custom DNS software such as dnscrypt-proxy which modifies DNS entry of a NIC you'll
-need to add alternate DNS server to the NIC.
+need to add alternate DNS server that is not using DNS encryption to the NIC.
 
 - If you're sharing your NIC with virtual switch in VM (ex. Hyper-V), you might need to release
 physical NIC in Hyper-V and re-share it again.

@@ -38,8 +38,7 @@ A fully automated solution for Windows firewall with PowerShell
 `Windows Firewall Ruleset` configures Windows firewall automatically and applies restrictive
 firewall rules specific for target system and software installed on the system.
 
-Status of this project is still alpha, click on "status" badge above to learn more.
-
+Status of this project is still alpha, click on "status" badge above to learn more.\
 This project consists of two major parts, firewall rules and firewall framework as follows:
 
 ### Firewall rules
@@ -75,6 +74,7 @@ such as:
   - IP subnet math
   - Remote or local system users
   - Network configuration
+  - GPO configuration
   - Firewall management
   - Quick analysis of packet trace and audit logs
   - Various troubleshooting, firewall, system and network utility functions
@@ -124,7 +124,7 @@ executables, services etc. all of which is learned automatically from target sys
 7. Updating, filtering or searching rules and attributes such as ports, addresses and similar is
 much easier since these rules are in scripts, you can use editor tools such as [regex](Regex.md),
 [multicursor][multicursor] or `CTRL + F` to perform bulk operations on your rules, doing this in
-any firewall UI is not always possible due to user interface limitations.
+any firewall UI is not possible due to user interface limitations.
 
 8. A good portion of code is dedicated to provide automated solution to build and define firewall
 specialized for target system and users, minimizing the need to do something manually thus saving
@@ -164,7 +164,7 @@ The following table lists operating systems on which `Windows Firewall Ruleset` 
 
 ***
 
-1. Windows PowerShell 5.1 or PowerShell Core 7.3 [Download PowerShell Core][download core]
+1. Windows PowerShell 5.1 or PowerShell Core 7.3.x [Download PowerShell Core][download core]
 2. .NET Framework 4.5 (Windows PowerShell only) [Download Net Framework][download .net]
 3. `sigcheck64.exe` (Highly recommended) [Download sigcheck][sigcheck]
 4. Git (Optional) [Download Git][download git]
@@ -269,7 +269,7 @@ visit `Scripts\Complete-Firewall.ps1` and take a look at `Set-NetFirewallSetting
 Note that `Scripts\Complete-Firewall.ps1` is automatically called by `Scripts\Deploy-Firewall.ps1`
 
 - Some scripts require you (network adapter) to be connected to network, for example to determine
-IPv4 broadcast address. (Otherwise errors may be generated without completing the task)
+IPv4 broadcast address. (Otherwise errors may be generated)
 
 [Table of Contents](#table-of-contents)
 
@@ -302,9 +302,9 @@ reasons.\
 If you're Administrator and are not willing to create standard account on your computer you'll have
 to modify `DefaultGroup` variable in `Config\ProjectSettings.ps1` and specify `Administrators`.
 
-See [SecurityAndPrivacy.md](SecurityAndPrivacy.md#standard-user-account) for more
-information why using Administrator account is not recommended for security reasons.\
-Your administrative account used to deploy firewall must have a password set.
+  See [SecurityAndPrivacy.md](SecurityAndPrivacy.md#standard-user-account) for more
+  information why using Administrator account is not recommended for security reasons.\
+  Your administrative account used to deploy firewall must have a password set.
 
 - Software or Windows updates may rename executables or their locations, also user accounts may be
 renamed by Administrator, therefore it's important to reload specific rules from time to time as
@@ -313,7 +313,7 @@ This behavior is called [Software regression][regression]
 
 - Before deploying firewall it is recommended to update system and user programs on target computer
 including Windows store apps, especially if system is fresh installed because updating later may
-require to re-load some rules.
+require to reload some rules.
 
 [Table of Contents](#table-of-contents)
 
@@ -345,8 +345,7 @@ this is where you extracted your downloaded zip file
     cd \
     ```
 
-6. cd into downloaded folder, of course update command below if your extracted folder is called
-something else:
+6. cd into downloaded folder:
 
     ```powershell
     cd WindowsFirewallRuleset*
@@ -359,7 +358,7 @@ something else:
     Get-ExecutionPolicy
     ```
 
-    Remember what is the output of the above command, note that PowerShell Core defaults to
+    Remember the output of the above command, note that PowerShell Core defaults to
     `RemoteSigned` while Windows PowerShell defaults to `Restricted` on non server editions.
 
 8. Set execution policy to unrestricted to be able to unblock project files,
@@ -420,10 +419,10 @@ It is recommended to close down all other programs before running master script 
 13. Follow prompt output, (ex. hit enter to accept default action),
 it will take some 15 minutes of your attention.
 
-    **NOTE:** If you're using Microsoft account to log in to your computer you will be asked for
-    credentials, which needs to be your Microsoft email and password used to log into computer
-    regardless if you're using Windows hello or not, specifying PIN ie. will not work and other
-    Windows hello authentication methods are not supported.
+    **NOTE:** If Administrator account is using Microsoft account to log in to computer you will be
+    asked for credentials, which needs to be Microsoft email and password regardless if you're
+    using Windows hello or not, specifying PIN ie. will not work and other Windows hello
+    authentication methods are not supported.
 
     If invalid credentials are supplied you'll get an error saying `Access is denied`.\
     If this happens you'll need to restart PowerShell console and try again.
@@ -447,7 +446,7 @@ If you're unable to connect to internet after deploying these rules you have sev
     - Take a look into `docs` directory for more troubleshooting options and documentation
 
 17. As a prerequisite to deploy firewall, some system services have been started and set to
-automatic start, inside `Logs` directory you'll find `Services_DATE.log` to help you restore these
+automatic start, inside `Logs` directory you'll find `Services_<DATE>.log` to help you restore these
 services to default if desired.\
 For example `Windows Remote Management` service should not run if not needed
 (the default is "Manual" startup)
@@ -544,8 +543,8 @@ At the moment there are three options to delete firewall rules:
 `Modules\Ruleset.Firewall\Public\Remove-FirewallRule.ps1`\
 however you first need to export firewall to file before using it.
 
-3. To revert to your old firewall state (the one in control panel), you'll need to delete all off
-the rules from GPO, and set all properties to `Not configured` after right click on node:\
+3. To revert to your old firewall state (the one in control panel), you'll need to delete all
+rules from GPO, and set all properties to `Not configured` after right click on node:\
 `Windows Defender Firewall with Advanced Security - Local Group Policy Object`
 
 Deleting all rules or revetting to previous state can also be done with `Scripts\Reset-Firewall.ps1`\
@@ -565,7 +564,7 @@ If you want to customize your export see `Export-RegistryRule` function located 
 module, which let's you customize your export in almost any way you want.
 
 If you want to import rules, importing by using GPO is same as for export, and to import with
-PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previous export file.
+PowerShell just run `Scripts\Restore-Firewall.ps1` which will pick up your previous export files.
 
 To customize your export\import please take a look into `Modules\Ruleset.Firewall\Public`,
 which is where you'll find description on how to use export\import module functions.
@@ -633,7 +632,7 @@ cd C:\Path\to\WindowsFirewallRuleset\Scripts
 Deploy-Firewall -Domain "RemoteComputerName"
 ```
 
-Both set of commands above need to be run in same edition of PowerShell, ex. if server was
+Both sets of commands above need to be run in same edition of PowerShell, ex. if server was
 configured in PowerShell Core then client computer also needs PowerShell core for deployment.\
 If either the server or management computer is a workstation (ex. not Windows server or part of domain)
 then it's network profile must be set to private profile.
@@ -675,10 +674,12 @@ and firewall settings
     - Because, malware, hackers and even trusted software can attempt to bypass firewall at any time
 
 4. Full functionality for the following not yet tested editions of Windows 10.0
-   - Windows 10 Pro for Workstations
-   - Windows 10 IoT Core Blast
-   - Windows 10 IoT Enterprise
-   - Windows 10 S
+   - Windows 10 & 11 Pro for Workstations
+   - Windows 10 & 11 IoT Core Blast
+   - Windows 10 & 11 IoT Enterprise
+   - Windows 10 & 11 S
+
+5. Full functionality for x86 systems
 
 [Table of Contents](#table-of-contents)
 

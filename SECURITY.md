@@ -12,9 +12,8 @@ The following version of `Windows Firewall Ruleset` are eligible for security re
 
 | Version | Supported |
 | ------- | ----------|
-| 0.13.0  | &check;   |
-| 0.13.1  | &check;   |
 | 0.14.0  | &check;   |
+| 0.15.0  | &check;   |
 
 ## The difference between privacy and security
 
@@ -35,6 +34,7 @@ In regard to `Windows Firewall Ruleset`, an example of privacy issue would be a 
 portion of source code which leaks yours or someones else's personal information.\
 An example of security issue would be a firewall rule or portion of source code which let's an
 attacker compromise yours or someones else's system.\
+Security issue may also refer to system misconfiguration or loss of data.\
 A security or privacy issue may also be related to documentation in this repository such as
 outdated information or suggestions concerning security or privacy.
 

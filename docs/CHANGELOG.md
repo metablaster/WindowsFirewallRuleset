@@ -86,6 +86,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Publish-SshKey` Improved for Remote-SSH VSCode extension
     - `Register-SslCertificate` improved to handle multiple certificates with same CN entry
     - `Get-AppSID` added pipeline support
+    - `Initialize-Provider`
 
   - New functionalities
 
@@ -99,7 +100,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 - Scripts
 
-  - Made possible to specify `localhost` and `.` for deployment
+  - Made possible to specify `localhost` and `.` for deployment (experimental)
   - Made possible to deploy rules for groups other than `Users`, this otherwise means it's now
   possible to deploy rules for Administrators which is useful for Windows Server without any
   standard account
@@ -114,14 +115,14 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - Publish generated sitemap to google for crawling
 
   - improved spellcheking with custom dictionaries and configuration of spell check extension
-  - Replaced `XML tools` extension with `XML Red` Hat
-  - Added `YAML` extension to workspace recommendations for YAML support
   - Workspace settings and settings for extensions vastly revisited for better coding experience.
   - Resolved almost all issuses reporeted by markdown, xml and yaml linter and PSScriptAnalyzer
+  - Replaced `XML tools` extension with `XML Red` Hat
+  - Added `YAML` extension to workspace recommendations for YAML support
   - Added `Sort Lines` extension to workspace recommendations
   - Added `Select Line Status Bar` extension to workspace recommendations
-  - Removed `Fix Json` extension from workspace recomendations
   - Added `Toggle Quotes` extension to workspace recommendations
+  - Removed `Fix Json` extension from workspace recomendations
   - Removed `Json` extension from workspace recommendations
   - Added debugging configuration for all module functions and scripts to be able to use debugger
 

@@ -204,7 +204,7 @@ SOFTWARE.
 	# Updatable Help uses the HelpInfoURI key in the module manifest to find the Help information
 	# (HelpInfo XML) file that contains the location of the updated help files for the module.
 	# TODO: update link
-	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/develop/Templates/Manifest.Module/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_HelpInfo.xml"
+	# HelpInfoURI = "https://raw.githubusercontent.com/metablaster/WindowsFirewallRuleset/master/Templates/Manifest.Module/Manifest.Module_66e38822-834d-4a90-b9c6-9e600a472a0a_HelpInfo.xml"
 
 	# Default prefix for commands exported from this module.
 	# Override the default prefix using Import-Module -Prefix.

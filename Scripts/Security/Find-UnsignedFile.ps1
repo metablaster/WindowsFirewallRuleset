@@ -54,12 +54,12 @@ The value of LiteralPath is used exactly as it's typed.
 No characters are interpreted as wildcards.
 
 .PARAMETER Driver
-If specified, system drivers are checked for digital signature and
-uploaded to VirusTotal if necessary.
+If specified, system drivers are checked for digital signature and uploaded to VirusTotal if necessary.
 
 .PARAMETER Filter
 Specify executable program type (file extension) which is to be searched in path specified by -LiteralPath.
 The default is *.exe
+If -Driver parameter is used -Filter is ignored and set to *.sys
 
 .PARAMETER SigcheckLocation
 Specify path to sigcheck executable program.
@@ -72,7 +72,7 @@ If specified, the result of scan is saved to JSON file.
 
 .PARAMETER LogName
 Filename into which to save the result of scan, JSON format.
-By default, scan results are saved into ScanResult.json inside working directory.
+By default, scan results are saved into ScanResult.json in Logs directory.
 
 .PARAMETER All
 If specified, all unsigned files are reported.
@@ -111,7 +111,7 @@ The default wait time is 300 (5 minutes).
 PS> Find-UnsignedFile C:\Windows\system32 -Log -VirusTotal
 
 .EXAMPLE
-PS> Find-UnsignedFile C:\Windows\system32 -Type com
+PS> Find-UnsignedFile C:\Windows\system32 -Filter "*.com"
 
 .EXAMPLE
 PS> Find-UnsignedFile C:\Windows\ -VirusTotal -Log -Recurse -SkipUpload
@@ -165,7 +165,7 @@ param (
 	[switch] $Log,
 
 	[Parameter()]
-	[string] $LogName = "$PSScriptRoot\..\..\Exports\ScanStatus.json",
+	[string] $LogName = "$PSScriptRoot\..\..\Logs\ScanStatus.json",
 
 	[Parameter()]
 	[switch] $All,
@@ -233,7 +233,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	}
 	else
 	{
-		Write-Information -MessageData "INFO: Scanning $ExpandedPath for executable files with '$Filter' extension"
+		Write-Information -MessageData "INFO: Scanning '$ExpandedPath' for executable files with '$Filter' extension"
 
 		if (!$Filter.StartsWith("*.")) { $Filter = "*.$Filter" }
 		$Files = Get-ChildItem -Path $ExpandedPath -Filter $Filter -Recurse:$Recurse
@@ -243,11 +243,11 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 	if ($TotalFiles -gt 0)
 	{
-		Write-Information -MessageData "INFO: Checking $TotalFiles '$Filter' files in $ExpandedPath"
+		Write-Information -MessageData "INFO: Checking $TotalFiles '$Filter' files in '$ExpandedPath'"
 	}
 	else
 	{
-		Write-Warning -Message "[$ThisScript] No executable files with '$Filter' extension have been found in $ExpandedPath"
+		Write-Warning -Message "[$ThisScript] No executable files with '$Filter' extension have been found in '$ExpandedPath'"
 		return
 	}
 
@@ -262,9 +262,10 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation.FullName)
 		$SigcheckDir = Resolve-Path -Path $SigcheckDir
 
-		if ((Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture) -eq "64-bit")
+		if ([System.Environment]::Is64BitOperatingSystem)
 		{
-			$SigcheckExecutable = "sigcheck64.exe"
+			# Consider both, sigcheck.exe and sigcheck64.exe
+			$SigcheckExecutable = "sigcheck*.exe"
 		}
 		else
 		{
@@ -272,29 +273,34 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 		}
 
 		# Check if path to sigcheck executable is valid
-		if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable")
+		# TODO: Prefer x64 bit executable on x64 system
+		$SigCheckFile = $null
+		if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
 		{
-			$SigCheckFile = "$SigcheckDir\$SigcheckExecutable"
+			# Get full path to single executable
+			$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" | Get-Command -CommandType Application
+			$SigCheckFile = $Command.Source | Select-Object -Last 1
 		}
 		else
 		{
 			# Check if sigcheck is in path
+			Write-Debug -Message "[$ThisScript] Checking if sigcheck is in path"
 			$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore
 
 			# Can be, not found or there are multiple matches
-			if (($Command | Measure-Object).Count -eq 1)
+			if (($Command | Measure-Object).Count -ne 0)
 			{
-				$SigCheckFile = $Command.Name
+				$SigCheckFile = $Command.Name | Select-Object -Last 1
+				Write-Debug -Message "[$ThisScript] $SigCheckFile found in PATH"
 			}
 			else
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $SigcheckExecutable `
-					-Message "$SigcheckExecutable was not found in specified path '$SigcheckDir'"
+				Write-Warning -Message "[$ThisScript] $($SigcheckExecutable -replace "\*", "64") was not found in '$SigcheckLocation' or in PATH, VirusTotal scan will not be performed"
 				return
 			}
 		}
 
-		Write-Verbose -Message "[$ThisScript] Using sigcheck file: $SigCheckFile"
+		Write-Verbose -Message "[$ThisScript] Using sigcheck file '$SigCheckFile'"
 
 		# Create sigcheck process object
 		$Process = New-Object System.Diagnostics.Process
@@ -341,7 +347,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				[switch] $Append
 			)
 
-			Write-Debug -Message "[$InvocationName & WriteFile] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+			Write-Debug -Message "[$InvocationName] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
 			$ParentPath = Split-Path -Path $FilePath -Parent
 			$ParrentPath = (Resolve-Path -Path $ParentPath).Path
@@ -360,7 +366,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			# Verify extension is *.json, if not add it
 			if (!$FileExtension -or ($FileExtension -ne ".json"))
 			{
-				Write-Debug -Message "[$InvocationName & WriteFile] Adding extension to file"
+				Write-Debug -Message "[$InvocationName] Adding extension to file"
 				$FileName += ".json"
 			}
 
@@ -368,19 +374,19 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			{
 				if (Test-Path -PathType Leaf -Path $FileName)
 				{
-					Write-Debug -Message "[$InvocationName & WriteFile] Appending JSON data to file"
+					Write-Debug -Message "[$InvocationName] Appending JSON data to file"
 					$JsonFile = ConvertFrom-Json -InputObject (Get-Content -Path $FileName -Raw)
 					@($JsonFile; $FileData) | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 				}
 				else
 				{
-					Write-Debug -Message "[$InvocationName & WriteFile] Not appending to JSON file because no existing file"
+					Write-Debug -Message "[$InvocationName] Not appending to JSON file because no existing file"
 					$FileData | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 				}
 			}
 			else
 			{
-				Write-Debug -Message "[$InvocationName & WriteFile] Replacing contents in JSON file"
+				Write-Debug -Message "[$InvocationName] Replacing contents in JSON file"
 				$FileData | ConvertTo-Json | Set-Content -Path $FileName -Encoding utf8
 			}
 		} # scriptblock
@@ -423,7 +429,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 		if ($Signature.Status -ne "Valid")
 		{
-			Write-Warning -Message "[$ThisScript] Unsigned file detected $FileName"
+			Write-Warning -Message "[$ThisScript] Unsigned file detected '$FileName'"
 
 			if ($VirusTotal -and $PSCmdlet.ShouldProcess($FilePath, "Upload file to VirusTotal for malware analysis"))
 			{
@@ -625,5 +631,5 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	$TotalSeconds = $StopWatch.Elapsed | Select-Object -ExpandProperty Seconds
 
 	Write-Information -MessageData "INFO: Time elapsed: $TotalHours hours, $TotalMinutes minutes and $TotalSeconds seconds"
-	Write-Information -MessageData "INFO: All operations completed successfully!"
+	Write-Information -MessageData "INFO: All operations completed successfully"
 }
