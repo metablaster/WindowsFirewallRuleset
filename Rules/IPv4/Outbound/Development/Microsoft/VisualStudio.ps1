@@ -332,12 +332,12 @@ These are not optional and are designed to be running side-by-side with devenv.e
 
 	# NOTE: subdirectory name consists of version number so let's get that:
 	# NOTE: Get-ChildItem doesn't recognize environment variables
-	$MSVCVersion = Get-ChildItem -Directory -Name -Path "$($Instance.InstallationPath)\VC\Tools\MSVC"
+	$MSVCVersion = Get-ChildItem -Directory -Name -Path "$($Instance.InstallationPath)\VC\Tools\MSVC" -ErrorAction Ignore
 
 	# There should be only one directory, but just in case let's select highest version
 	$MSVCVersion = $MSVCVersion | Select-Object -Last 1
 
-	$Program = "$VSRoot\VC\Tools\MSVC\$script:MSVCVersion\bin\Hostx86\x64\vctip.exe"
+	$Program = "$VSRoot\VC\Tools\MSVC\$MSVCVersion\bin\Hostx86\x64\vctip.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "$($DisplayName) VCTIP telemetry" `

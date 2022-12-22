@@ -139,6 +139,66 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Public/Set-WinRMClient.ps1",
+			"bookmarks": [
+				{
+					"line": 99,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
+			"bookmarks": [
+				{
+					"line": 132,
+					"column": 2,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Private/Unblock-NetProfile.ps1",
+			"bookmarks": [
+				{
+					"line": 84,
+					"column": 29,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Private/Restore-NetProfile.ps1",
+			"bookmarks": [
+				{
+					"line": 80,
+					"column": 29,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Remote/Public/Enable-WinRMServer.ps1",
+			"bookmarks": [
+				{
+					"line": 111,
+					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.Initialize/Public/Initialize-Service.ps1",
+			"bookmarks": [
+				{
+					"line": 261,
+					"column": 5,
+					"label": ""
+				}
+			]
 		}
 	]
 }

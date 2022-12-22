@@ -81,6 +81,7 @@ function Unblock-NetProfile
 					# 0 = public
 					# 1 = private
 					# 2 = domain
+					# TODO: This will remove options from settings app
 					Set-NetConnectionProfile -InterfaceAlias $Adapter.InterfaceAlias -NetworkCategory Private
 					$script:AdapterProfile.Add($Adapter.InterfaceAlias, $Adapter.NetworkCategory)
 				}

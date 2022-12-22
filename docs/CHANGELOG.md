@@ -7,7 +7,7 @@ Here is a list of changes for each of the releases.
 
 - [Changelog](#changelog)
   - [Table of Contents](#table-of-contents)
-  - [v0.15.0 (develop branch)](#v0150-develop-branch)
+  - [v0.14.1 (develop branch)](#v0141-develop-branch)
   - [v0.14.0 (current release)](#v0140-current-release)
   - [v0.13.1](#v0131)
   - [v0.13.0](#v0130)
@@ -24,7 +24,7 @@ Here is a list of changes for each of the releases.
   - [v0.3.0](#v030)
   - [v0.2](#v02)
 
-## v0.15.0 (develop branch)
+## v0.14.1 (develop branch)
 
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront

@@ -109,6 +109,9 @@ TODO: Implement -NoServiceRestart parameter if applicable so that only configura
 TODO: Implement specifying listening addresses and address ranges
 TODO: Implement parameter -SessionConfiguration with default to be built in session configuration
 See also output of: winrm get winrm/config
+TODO: Somewhere it errors with "WinRM firewall exception will not work since one of the network connection types on this machine is set to Public.
+Change the network connection type to either Domain or Private and try again."
+It seems to reproduce after Reset-Firewall -Remoting -Service, also in Set-WinRMClient
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Remote/Help/en-US/Enable-WinRMServer.md
