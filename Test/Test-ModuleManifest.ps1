@@ -273,6 +273,7 @@ foreach ($Manifest in $Manifests)
 			Write-Error -Category InvalidData -TargetObject $ModuleFile `
 				-Message "Module manifest lists a file '$ListedFile' which does not exist in $($Module.Name) directory"
 		}
+		# Perform case sensitive comparison
 		elseif ($ListedFile -cnotin $ModuleFiles)
 		{
 			Write-Warning -Message "[$ThisScript] Module manifest lists a file '$ListedFile' from $($Module.Name) directory but specification is not case sensitive"
