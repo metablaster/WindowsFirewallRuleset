@@ -156,7 +156,7 @@ function Initialize-Provider
 	$Deny = [ChoiceDescription]::new("&No")
 
 	#region CheckExisting
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if provider $ProviderName is installed and which version"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if provider '$ProviderName' is installed and which version"
 
 	# Highest version present on system if any
 	[version] $InstalledVersion = Get-PackageProvider -Name $ProviderName -ListAvailable -ErrorAction SilentlyContinue |
@@ -173,22 +173,22 @@ function Initialize-Provider
 			}
 
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Provider $ProviderName v$($InstalledVersion.ToString()) meets >= v$($RequiredVersion.ToString())"
+				-MessageData "INFO: Provider '$ProviderName' v$($InstalledVersion.ToString()) meets >= v$($RequiredVersion.ToString())"
 			return $true
 		}
 
 		# Out of date
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Found outdated provider $ProviderName v$($InstalledVersion.ToString())"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Found outdated provider '$ProviderName' v$($InstalledVersion.ToString())"
 	}
 	else
 	{
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName not installed"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Provider '$ProviderName' not installed"
 	}
 	#endregion
 
 	#region FindProvider
 	# Check if provider could be downloaded
-	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if $ProviderName v$RequiredVersion provider is available for download"
+	Write-Debug -Message "[$($MyInvocation.InvocationName)] Checking if '$ProviderName' v$($RequiredVersion.ToString()) provider is available for download"
 
 	# NOTE: Find-PackageProvider searches PowerShellGet (registered with PowerShellGet, that is Register-PSRepository)
 	# MSDN: These are package providers available for installation with the Install-PackageProvider cmdlet.
@@ -197,6 +197,7 @@ function Initialize-Provider
 	# TODO: We should use Register-PSRepository for manually specified repository here, for which a parameter needs to be implemented.
 	# NOTE: If Nuget is not installed Windows PowerShell will ask to install it here and if accepted
 	# $AllProviders will be initialized to downloaded and installed provider
+	# TODO: Bootstraping should be handled manually
 	[Microsoft.PackageManagement.Packaging.SoftwareIdentity[]] $AllProviders = Find-PackageProvider -Name $ProviderName `
 		-RequiredVersion $RequiredVersion -IncludeDependencies -ErrorAction SilentlyContinue
 
@@ -204,10 +205,10 @@ function Initialize-Provider
 	$UseInstallPackageProvider = $true
 
 	#region Find-Package
-	if ($AllProviders.Length -eq 0)
+	if (($AllProviders | Measure-Object).Count -eq 0)
 	{
 		# If Find-PackageProvider failed an alternative solution is to use Find-Package
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider $ProviderName for download failed, trying alternative solution"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Finding provider '$ProviderName' for download failed, trying alternative solution"
 
 		# For Find-Package to work properly we need to ensure at least one package source exists
 		# In addition we prompt user to optionally mark package sources as trusted.
@@ -226,7 +227,6 @@ function Initialize-Provider
 			IncludeDependencies = $true
 			RequiredVersion = $RequiredVersion
 			ErrorAction = "SilentlyContinue"
-			Force = $Force
 		}
 
 		if ($Source)
@@ -234,32 +234,32 @@ function Initialize-Provider
 			if ($PackageSources -and ($Source -notin $PackageSources.Source))
 			{
 				# Register package source specified by Location
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Specified package source $Source is not registered"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Specified package source '$Source' is not registered"
 
 				# Setup choices
-				$Accept.HelpMessage = "Register $Source package source so that is can be used to search for providers"
-				$Deny.HelpMessage = "Skip operation, $Source package source will not be registered nor used"
+				$Accept.HelpMessage = "Register '$Source' package source so that is can be used to search for providers"
+				$Deny.HelpMessage = "Skip operation, '$Source' package source will not be registered nor used"
 				$Choices = @()
 				$Choices += $Accept
 				$Choices += $Deny
 
-				$Title = "Package source $Source is not registered"
-				$Question = "Register $Source package source now?"
+				$Title = "Package source '$Source' is not registered"
+				$Question = "Register '$Source' package source now?"
 				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 				if ($Decision -eq $Default)
 				{
-					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Registering package source $Source"
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Registering package source '$Source'"
 					Register-PackageSource -Name $Source -Location $Source -ProviderName $UseProvider
 
 					# [Microsoft.PackageManagement.Packaging.PackageSource]
 					$PackageSources = Get-PackageSource -Name $Source
-					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Package source $Source was registered with $UseProvider provider"
+					Write-Verbose -Message "[$($MyInvocation.InvocationName)] Package source '$Source' was registered with '$UseProvider' provider"
 				}
 				else
 				{
 					$PackageSources = $null
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Package source $Source was not registered and won't be used"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Package source '$Source' was not registered and won't be used"
 				}
 			}
 			else # Location already registered
@@ -302,7 +302,7 @@ function Initialize-Provider
 			}
 		}
 
-		if ($PackageSources.Length -ne 0)
+		if (($PackageSources | Measure-Object).Count -ne 0)
 		{
 			# Check trust status of all package sources
 			foreach ($SourceItem in $PackageSources)
@@ -310,28 +310,28 @@ function Initialize-Provider
 				if ($SourceItem.IsTrusted -ne "Trusted")
 				{
 					# Setup choices
-					$Accept.HelpMessage = "Setting $($SourceItem.Name) to trusted won't ask you for confirmation to use it"
-					$Deny.HelpMessage = "Leaving $($SourceItem.Name) as untrusted will ask you for confirmation to use it"
+					$Accept.HelpMessage = "Setting '$($SourceItem.Name)' to trusted won't ask you for confirmation to use it"
+					$Deny.HelpMessage = "Leaving '$($SourceItem.Name)' as untrusted will ask you for confirmation to use it"
 					$Choices = @()
 					$Choices += $Accept
 					$Choices += $Deny
 
-					$Title = "Package source $($SourceItem.Name) is not trusted"
-					$Question = "Set $($SourceItem.Name) as trusted now?"
+					$Title = "Package source '$($SourceItem.Name)' is not trusted"
+					$Question = "Set '$($SourceItem.Name)' as trusted now?"
 					$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 					if ($Decision -eq $Default)
 					{
-						Set-PackageSource -Name $SourceItem.Name -Trusted
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $($SourceItem.Name) set to trusted"
+						Set-PackageSource -Name $SourceItem.Name -Trusted | Out-Null
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source '$($SourceItem.Name)' set to trusted"
 					}
 					else
 					{
-						Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $($SourceItem.Name) not set to trusted"
+						Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source '$($SourceItem.Name)' not set to trusted"
 					}
 				}
 
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source $($SourceItem.Name) already set to trusted"
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Package source '$($SourceItem.Name)' already set to trusted"
 
 				# Construct list for display on single line
 				$SourcesList += "$($SourceItem.Name), "
@@ -341,11 +341,11 @@ function Initialize-Provider
 
 			if ($UseProvider -or $Source)
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using $UseProvider provider with the following package sources: $SourcesList"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Searching '$UseProvider' provider with the following package sources: $SourcesList"
 			}
 			else
 			{
-				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Using all available package sources: $SourcesList"
+				Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Searching the following package sources: $SourcesList"
 			}
 
 			# BUG: For some reason -AllowPrereleaseVersions may return no stable version
@@ -365,21 +365,21 @@ function Initialize-Provider
 	}
 	#endregion
 
-	if ($AllProviders.Length -ne 0)
+	if (($AllProviders | Measure-Object).Count -ne 0)
 	{
 		# If there are multiple finds, selecting latest version
 		# [Microsoft.PackageManagement.Packaging.SoftwareIdentity]
 		$FoundProvider = $AllProviders | Sort-Object -Property Version | Select-Object -Last 1
 
-		if ($AllProviders.Length -gt 1)
+		if (($AllProviders | Measure-Object).Count -gt 1)
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Found multiple $($FoundProvider.Name) providers, selecting latest version $($FoundProvider.Version)"
+				-MessageData "INFO: Found multiple '$($FoundProvider.Name)' providers, selecting latest version $($FoundProvider.Version)"
 		}
 		else
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Provider $($FoundProvider.Name) $($FoundProvider.Version) is selected for download"
+				-MessageData "INFO: Provider '$($FoundProvider.Name)' v$($FoundProvider.Version) is selected for download"
 		}
 
 		# TODO: If PowerShell asks to install NuGet during "Find-PackageProvider" and if that fails
@@ -392,39 +392,39 @@ function Initialize-Provider
 		# It may also be the case if a user denied registering a package source.
 		if ($FoundPackageSource.ProviderName -notin (Get-PackageSource).ProviderName)
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using $($FoundPackageSource.ProviderName) provider to install package, package source not registered"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Not using '$($FoundPackageSource.ProviderName)' provider to install package, package source not registered"
 
 			# TODO: This scenario needs testing, it currently works for NuGet in Windows PowerShell
 			return $null -ne (Get-PackageProvider -Name $ProviderName)
 		}
 
 		# Check package source is trusted
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source $($FoundPackageSource.ProviderName) is trusted"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if package source '$($FoundPackageSource.ProviderName)' is trusted"
 
 		# This will be the case with package sources used by Find-PackageProvider
 		# TODO: We handled package sources for Find-Package but not for Find-PackageProvider
 		if (!$FoundPackageSource.IsTrusted)
 		{
 			# Setup choices
-			$Accept.HelpMessage = "Setting $($FoundPackageSource.Location) to trusted won't ask you for confirmation to use it"
-			$Deny.HelpMessage = "Leaving $($FoundPackageSource.Location) as untrusted will ask you for confirmation to use it"
+			$Accept.HelpMessage = "Setting '$($FoundPackageSource.Location)' to trusted won't ask you for confirmation to use it"
+			$Deny.HelpMessage = "Leaving '$($FoundPackageSource.Location)' as untrusted will ask you for confirmation to use it"
 			$Choices = @()
 			$Choices += $Accept
 			$Choices += $Deny
 
-			$Title = "Package source $($FoundPackageSource.ProviderName) is not trusted"
-			$Question = "Set $($FoundPackageSource.ProviderName) as trusted now?"
+			$Title = "Package source '$($FoundPackageSource.ProviderName)' is not trusted"
+			$Question = "Set '$($FoundPackageSource.ProviderName)' as trusted now?"
 			$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
 
 			if ($Decision -eq $Default)
 			{
-				Set-PackageSource -Name $FoundPackageSource.ProviderName -Trusted
-				Write-Debug -Message "[$($MyInvocation.InvocationName)] Package provider $($FoundPackageSource.ProviderName) set to trusted"
+				Set-PackageSource -Name $FoundPackageSource.ProviderName -Trusted | Out-Null
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Package provider '$($FoundPackageSource.ProviderName)' set to trusted"
 			}
 		}
 
 		Write-Information -Tags $MyInvocation.InvocationName `
-			-MessageData "INFO: Using $($FoundPackageSource.ProviderName) provider with the following package sources: $($FoundPackageSource.Location)"
+			-MessageData "INFO: Using '$($FoundPackageSource.ProviderName)' provider with the following package source: $($FoundPackageSource.Location)"
 	}
 	else
 	{
@@ -432,13 +432,13 @@ function Initialize-Provider
 		{
 			# ISSUE: https://github.com/OneGet/oneget/issues/472
 			# ISSUE: https://github.com/OneGet/oneget/issues/360
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName was not found probably because of a known issue present in PowerShell Core"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider '$ProviderName' was not found probably because of a known issue present in PowerShell Core"
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: see https://github.com/OneGet/oneget/issues/472"
 
 			return !$Required
 		}
 
-		$Message = "$ProviderName provider version >= v$RequiredVersion was not found"
+		$Message = "'$ProviderName' provider version >= v$($RequiredVersion.ToString()) was not found"
 		if ($Required)
 		{
 			# Registering repository failed or no valid repository exists
@@ -458,25 +458,25 @@ function Initialize-Provider
 		$Accept.HelpMessage = $InfoMessage
 	}
 
-	$Title = "Recommended"
+	$DesiredStatus = "Recommended"
 	if ($Required)
 	{
-		$Title = "Required"
+		$DesiredStatus = "Required"
 	}
 
 	if ($InstalledVersion)
 	{
-		$Deny.HelpMessage = "Abort operation, provider $ProviderName will not be updated"
-		$Title += " package provider is out of date"
-		$Question = "Update $ProviderName provider now?"
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider $ProviderName v$($InstalledVersion.ToString()) is out of date, required version is v$($RequiredVersion.ToString())"
+		$Deny.HelpMessage = "Abort operation, provider '$ProviderName' will not be updated"
+		$Title = "$DesiredStatus package provider is out of date"
+		$Question = "Update '$ProviderName' provider now?"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Provider '$ProviderName' v$($InstalledVersion.ToString()) is out of date, $($DesiredStatus.ToLower()) version is $($RequiredVersion.ToString())"
 	}
 	else
 	{
-		$Deny.HelpMessage = "Abort operation, provider $ProviderName will not be installed"
-		$Title += " package provider is not installed"
-		$Question = "Install $ProviderName provider now?"
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] $ProviderName provider version v$($RequiredVersion.ToString()) is required but not installed"
+		$Deny.HelpMessage = "Abort operation, provider '$ProviderName' will not be installed"
+		$Title = "$DesiredStatus package provider is not installed"
+		$Question = "Install '$ProviderName' provider now?"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] '$ProviderName' provider v$($RequiredVersion.ToString()) is $($DesiredStatus.ToLower()) but not installed"
 	}
 
 	$Choices = @()
@@ -487,27 +487,31 @@ function Initialize-Provider
 	if ($Decision -eq $Default)
 	{
 		Write-Information -Tags $MyInvocation.InvocationName `
-			-MessageData "INFO: Installing provider $($FoundProvider.Name) v$($FoundProvider.Version)"
+			-MessageData "INFO: Installing provider '$($FoundProvider.Name)' v$($FoundProvider.Version)"
 
 		# TODO: Use InputObject?
 		if ($UseInstallPackageProvider)
 		{
 			# -Source is the name of a registered repository
 			Install-PackageProvider -Name $FoundProvider.Name -Source $FoundPackageSource.Name -Scope:$Scope
+			$InstalledPackage = Get-PackageProvider -ListAvailable -Name $FoundProvider.Name |
+			Where-Object {
+				$_.Version -eq $RequiredVersion
+			}
 		}
 		else
 		{
 			# -Source is the name of a registered package source
-			Install-Package -Name $FoundProvider.Name -Source $FoundPackageSource.Name -Scope:$Scope
+			Install-Package -Name $FoundProvider.Name -Source $FoundPackageSource.Name -Scope:$Scope | Out-Null
+			$InstalledPackage = Get-Package -Name $FoundProvider.Name -RequiredVersion $RequiredVersion
 		}
 
-		[version] $NewVersion = Get-PackageProvider -ListAvailable -Name $FoundProvider.Name |
-		Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
+		[version] $NewVersion = $InstalledPackage | Select-Object -ExpandProperty Version
 
 		if ($NewVersion -and ($NewVersion -gt $InstalledVersion))
 		{
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: $ProviderName provider v$NewVersion was installed"
+				-MessageData "INFO: '$ProviderName' provider v$($NewVersion.ToString()) was installed"
 
 			if ($ProviderName -eq "NuGet")
 			{
@@ -518,25 +522,43 @@ function Initialize-Provider
 				Set-Variable -Name HasNuGet -Scope Script -Option ReadOnly -Force -Value $true
 			}
 
-			# Force, don't ask for confirmation
-			Import-PackageProvider -Name $ProviderName -RequiredVersion $NewVersion -Force
-
-			# If not imported into current session restart is required
-			if ($NewVersion -notin (Get-PackageProvider -Name $ProviderName).Version)
+			if ($UseInstallPackageProvider)
 			{
-				# PowerShell needs to restart
-				Set-Variable -Name Restart -Scope Script -Value $true
+				# Force, don't ask for confirmation
+				Import-PackageProvider -Name $ProviderName -RequiredVersion $NewVersion -Force
+				$ImportedPackage = Get-PackageProvider -Name $ProviderName | Where-Object {
+					$_.Version -eq $RequiredVersion
+				}
+			}
+			else
+			{
+				$ImportedPackage = Get-Package -Name $ProviderName -RequiredVersion $RequiredVersion
+			}
 
-				Write-Error -Category InvalidResult -TargetObject $ProviderName `
-					-Message "$ProviderName provider v$NewVersion could not be imported, please restart PowerShell and try again"
+			if (!$ImportedPackage)
+			{
+				# If not imported into current session restart is required
+				Set-Variable -Name Restart -Scope Script -Value $true
+				$Message = "'$ProviderName' provider v$($NewVersion.ToString()) could not be imported or used, please restart PowerShell and try again"
+
+				if ($Required)
+				{
+					Write-Error -Category InvalidResult -TargetObject $ProviderName -Message $Message
+				}
+				else
+				{
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] $Message"
+				}
+
 				return $false
 			}
+
 
 			return $true
 		}
 		else
 		{
-			$Message = "Provider $ProviderName v$RequiredVersion was not installed/updated"
+			$Message = "Provider '$ProviderName' v$($RequiredVersion.ToString()) was not installed/updated"
 			if ($Required)
 			{
 				# Installation/update failed
@@ -554,11 +576,11 @@ function Initialize-Provider
 		if ($Required)
 		{
 			Write-Error -Category OperationStopped -TargetObject $ProviderName `
-				-Message "Installing provider $ProviderName aborted by user"
+				-Message "Installing provider '$ProviderName' aborted by user"
 		}
 		else
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Installing provider $ProviderName aborted by user"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Installing provider '$ProviderName' aborted by user"
 		}
 
 		return !$Required

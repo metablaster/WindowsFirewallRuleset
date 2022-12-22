@@ -580,19 +580,55 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Test if recommended and up to date packages are installed, if not user is prompted to install or update them. Outdated or missing packages can cause strange issues, this function ensures latest packages are installed and in correct order, taking into account failures that can happen while installing or updating packages</maml:para>
+      <maml:para>Initialize-Provider tests if specified package provider is installed and is up to date, if not user is prompted to install or update it. Outdated or missing package providers can cause strange issues, this function ensures that specified package provider is installed, taking into account failures which can happen while installing or updating package providers.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Initialize-Provider</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>FullyQualifiedName</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ProviderName</maml:name>
           <maml:description>
-            <maml:para>Hash table ProviderName, Version representing minimum required module</maml:para>
+            <maml:para>Specifies a package provider name which to install or update.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.Collections.Hashtable</maml:name>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RequiredVersion</maml:name>
+          <maml:description>
+            <maml:para>Specifies the exact version of the package provider which to install or update.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Version</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Version</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UseProvider</maml:name>
+          <maml:description>
+            <maml:para>Existing provider to use to install or update provider specified by -ProviderName parameter. This parameter is used only if Find-PackageProvider fails, in which case Find-Package is used. This provider is used to register package source specified by -Location if it isn't already registered. Acceptable values are: Bootstrap, NuGet or PowerShellGet. The default value is PowerShellGet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Source</maml:name>
+          <maml:description>
+            <maml:para>Specifies a web location of a package management source.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Uri</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -612,7 +648,32 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Required</maml:name>
           <maml:description>
-            <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
+            <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops and false is returned, otherwise a warning is generated and true is returned.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Scope</maml:name>
+          <maml:description>
+            <maml:para>Specifies the installation scope of the provider. The acceptable values for this parameter are:</maml:para>
+            <maml:para>AllUsers: $env:ProgramFiles\PackageManagement\ProviderAssemblies. CurrentUser: $env:LOCALAPPDATA\PackageManagement\ProviderAssemblies.</maml:para>
+            <maml:para>The default value is AllUsers.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>AllUsers</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Force Description }}</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -623,14 +684,50 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-        <maml:name>FullyQualifiedName</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ProviderName</maml:name>
         <maml:description>
-          <maml:para>Hash table ProviderName, Version representing minimum required module</maml:para>
+          <maml:para>Specifies a package provider name which to install or update.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.Collections.Hashtable</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.Collections.Hashtable</maml:name>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RequiredVersion</maml:name>
+        <maml:description>
+          <maml:para>Specifies the exact version of the package provider which to install or update.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Version</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Version</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UseProvider</maml:name>
+        <maml:description>
+          <maml:para>Existing provider to use to install or update provider specified by -ProviderName parameter. This parameter is used only if Find-PackageProvider fails, in which case Find-Package is used. This provider is used to register package source specified by -Location if it isn't already registered. Acceptable values are: Bootstrap, NuGet or PowerShellGet. The default value is PowerShellGet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Source</maml:name>
+        <maml:description>
+          <maml:para>Specifies a web location of a package management source.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Uri</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Uri</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -650,7 +747,33 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Required</maml:name>
         <maml:description>
-          <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops, otherwise only warning is generated</maml:para>
+          <maml:para>Controls whether the provider initialization must succeed, if initialization fails execution stops and false is returned, otherwise a warning is generated and true is returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Scope</maml:name>
+        <maml:description>
+          <maml:para>Specifies the installation scope of the provider. The acceptable values for this parameter are:</maml:para>
+          <maml:para>AllUsers: $env:ProgramFiles\PackageManagement\ProviderAssemblies. CurrentUser: $env:LOCALAPPDATA\PackageManagement\ProviderAssemblies.</maml:para>
+          <maml:para>The default value is AllUsers.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>AllUsers</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill Force Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -683,13 +806,21 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>There is no "Repository" parameter here like in Initialize-Module, instead it's called ProviderName which is supplied in parameter FullyQualifiedName Before updating PowerShellGet or PackageManagement, you should always install the latest Nuget provider</maml:para>
+        <maml:para>TODO: -Force parameter not implemented because for most commandlets used in this function this implies -ForceBootstrap which is not desired, few commandlets could make use of -Force</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-Provider @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Required</dev:code>
+        <dev:code>Initialize-Provider -ProviderName NuGet -RequiredVersion 2.8.5 -Required</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Initialize-Provider -ProviderName NuGet -RequiredVersion 2.8.5 -Required `
+-UseProvider NuGet -Location https://www.nuget.org/api/v2</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -697,8 +828,28 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Provider.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Provider.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/powershell/module/packagemanagement</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/powershell/module/packagemanagement</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/powershell/scripting/gallery/how-to/getting-support/bootstrapping-nuget</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/powershell/scripting/gallery/how-to/getting-support/bootstrapping-nuget</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/powershell/scripting/gallery/installing-psget</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/powershell/scripting/gallery/installing-psget</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/OneGet/oneget/issues/472</maml:linkText>
+        <maml:uri>https://github.com/OneGet/oneget/issues/472</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://github.com/OneGet/oneget/issues/360</maml:linkText>
+        <maml:uri>https://github.com/OneGet/oneget/issues/360</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
