@@ -56,7 +56,6 @@ NOTE: This might get fixed with consistent outputs, formats and better pipelines
 TODO: Test should be run in order of module or function (or both) inter dependency
 TODO: We should handle to skip "dangerous" tests
 
-
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Test/README.md
 #>
@@ -121,7 +120,7 @@ if (!$Pester)
 Write-Information -Tags "Test" -MessageData "INFO: Starting pester tests"
 
 # Recursively get list of pester tests
-# TODO: Test in Private folder fails
+# TODO: Use Invoke-Pester
 $PesterTests = Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.IP\Test -Recurse -Filter *.Tests.ps1
 # $PesterTests += Get-ChildItem -Path $ProjectRoot\Modules\Ruleset.PolicyFileEditor\Test -Filter *.Tests.ps1
 

@@ -37,6 +37,14 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Fixed a bug with `Initialize-Service` which asked to configure service that is already configured
 
+- Scripts
+
+  - Updated `Grant-Logs` script to better detect log file location change
+
+- Unit test
+
+  - Fixed pester test `ConvertTo-Network.Tests.ps1`
+
 ## v0.14.0 (current release)
 
 - Rules

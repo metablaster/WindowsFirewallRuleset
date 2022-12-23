@@ -47,7 +47,6 @@ Conclude firewall deployment
 Conclude firewall deployment by setting private, domain and public firewall profile,
 default network adapter profile and global firewall behavior settings.
 Also update target GPO for changes to take effect.
-Optionally granting permissions to write and analyze firewall logs for debugging purposes.
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions

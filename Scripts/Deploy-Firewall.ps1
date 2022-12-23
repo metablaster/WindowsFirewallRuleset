@@ -594,21 +594,22 @@ if (Approve-Execute @ExecuteParams)
 
 Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall rules is complete"
 
-# Set up global firewall setting, network and firewall profile and apply GPO changes
-& "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
-
 # TODO: This is a temporary measure because currently we change log file location only while debugging
+# NOTE: It safest to be called before Log location is changed to detect location change and prompt for restart
 if ($Develop)
 {
 	# Verify permissions to write firewall logs if needed
 	& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
 }
 
+# Set up global firewall setting, network and firewall profile and apply GPO changes
+& "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
+
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
 Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
 Disconnect-Computer -Domain $PolicyStore
 
-#Remove shortcut from previous versions
+# Remove shortcut from previous versions
 $PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
 Get-ChildItem -Path $PublicDesktop -File | Where-Object {
 	$_.Name -match "^Firewall\s?((\d+|\.){2,3})?\.lnk$"

@@ -84,7 +84,7 @@ Before running this script, for first time setup the following must be done:
 3. Turning off/on Windows firewall for desired network profile in order for
 Windows firewall to start logging into new location.
 
-TODO: Need to verify if gpupdate is needed for first time setup and if so update Complete-Firewall.ps1
+TODO: Need to verify if gpupdate is needed for first time setup and if this can help to avoid reboot
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -123,33 +123,20 @@ if (!(Approve-Execute -Accept $Accept -Unsafe:(!$Develop) -Deny $Deny -Force:$Fo
 
 Write-Verbose -Message "[$ThisScript] Verifying firewall log file location"
 
-if (!(Compare-Path -Loose $FirewallLogsFolder -ReferencePath "$ProjectRoot\*"))
+if (!(Compare-Path -Path $FirewallLogsFolder -ReferencePath "$ProjectRoot\*" -Loose))
 {
 	# Continue only if firewall logs go to location inside repository
-	Write-Warning -Message "[$ThisScript] Not granting permissions for $FirewallLogsFolder"
+	Write-Warning -Message "[$ThisScript] Not settings permissions on $FirewallLogsFolder"
 	return
 }
 
 # NOTE: FirewallLogsFolder may contain environment variable
-$TargetFolder = [System.Environment]::ExpandEnvironmentVariables($FirewallLogsFolder)
+$DestinationFolder = [System.Environment]::ExpandEnvironmentVariables($FirewallLogsFolder)
 
-if (!(Test-Path -Path $TargetFolder -PathType Container))
+if (!(Test-Path -Path $DestinationFolder -PathType Container))
 {
 	# Create directory for firewall logs if it doesn't exist
-	New-Item -Path $TargetFolder -ItemType Container | Out-Null
-}
-
-# Change in logs location will require system reboot
-Write-Information -Tags $ThisScript -MessageData "INFO: Verifying if there is change in log location"
-# TODO: Get-NetFirewallProfile: "An unexpected network error occurred",
-# happens proably if network is down or adapter not configured?
-$OldLogFiles = Get-NetFirewallProfile -PolicyStore $PolicyStore -All |
-Select-Object -ExpandProperty LogFileName | Split-Path
-
-[string[]] $OldLocation = @()
-foreach ($File in $OldLogFiles)
-{
-	$OldLocation += [System.Environment]::ExpandEnvironmentVariables($File)
+	New-Item -Path $DestinationFolder -ItemType Container | Out-Null
 }
 
 # Setup control rights
@@ -159,46 +146,77 @@ $FullControl = [AccessControl.FileSystemRights]::FullControl
 
 # Grant "FullControl" to firewall service for logs folder,
 # if Develop is true system must be granted permissions without prompting to allow it
-Write-Information -Tags $ThisScript -MessageData "INFO: Granting full control to firewall service for log directory"
+Write-Information -Tags $ThisScript -MessageData "INFO: Granting full control to firewall service for log directory '$DestinationFolder'"
 
-Set-Permission $TargetFolder -Owner "System" -Confirm:$false | Out-Null
-Set-Permission $TargetFolder -User "System" -Rights $FullControl -Protected -Confirm:$false | Out-Null
-Set-Permission $TargetFolder -User "Administrators" -Rights $FullControl -Protected -Confirm:$false | Out-Null
-Set-Permission $TargetFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+Set-Permission $DestinationFolder -Owner "System" -Confirm:$false | Out-Null
+Set-Permission $DestinationFolder -User "System" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+Set-Permission $DestinationFolder -User "Administrators" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+Set-Permission $DestinationFolder -User "mpssvc" -Domain "NT SERVICE" -Rights $FullControl -Protected -Confirm:$false | Out-Null
+
+# Change in logs location will require system reboot
+Write-Information -Tags $ThisScript -MessageData "INFO: Verifying if there was change in log location..."
+
+try
+{
+	# TODO: Get-NetFirewallProfile: "An unexpected network error occurred",
+	# happens proably if network is down or adapter not configured?
+	$PreviousLocation = Get-NetFirewallProfile -PolicyStore $PolicyStore -All -ErrorAction Stop |
+	Select-Object -ExpandProperty LogFileName | Split-Path
+}
+catch
+{
+	Write-Error -ErrorRecord $_
+	return
+}
+
+# If there is at least one change in logs location reboot is required
+foreach ($Location in $PreviousLocation)
+{
+	if (!(Compare-Path -Path $Location -ReferencePath $DestinationFolder))
+	{
+		Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
+		return
+	}
+}
+
+Write-Verbose -Message "[$ThisScript] Verifying if all log files are present"
+
+# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
+$PresentLogFiles = Get-ChildItem -Path $DestinationFolder\* -Filter *.log -Exclude *.filterline.log
+
+# If log file location is changed, log files won't be instantly generated until system reboot
+# We can force firewal service to generate log files by toggling the setting on which packets
+# to log, however it's not guaranteed all 3 log files will be generated, which depends on
+# currently used firewal profile by configured NIC, so the safest methods is system reboot.
+if (($PresentLogFiles | Measure-Object).Count -lt 3)
+{
+	Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
+	Write-Information -Tags $ThisScript -MessageData "INFO: $ThisScript script should rerun on each reboot or firewall setting change to grant read permissions to '$User' user"
+	return
+}
 
 $StandardUser = $true
 foreach ($Admin in $(Get-GroupPrincipal -Group "Administrators" -Domain $Domain))
 {
-	if ($Admin.User -eq $User)
+	if ($User -eq $Admin.User)
 	{
-		Write-Warning -Message "[$ThisScript] User '$User' belongs to Administrators group, no need to grant permission"
+		Write-Warning -Message "[$ThisScript] User '$User' belongs to Administrators group, no need to grant permissions"
 		$StandardUser = $false
 		break
 	}
 }
 
-if ($StandardUser -and $PSCmdlet.ShouldProcess($TargetFolder, "Grant permissions to user '$User' to read firewall logs"))
+if ($StandardUser -and $PSCmdlet.ShouldProcess($DestinationFolder, "Grant permissions to user '$User' to read firewall logs"))
 {
 	# Grant "Read & Execute" to user for firewall logs
 	Write-Information -Tags $ThisScript -MessageData "INFO: Granting limited permissions to user '$User' for firewall logs"
-	if (Set-Permission $TargetFolder -User $User -Domain $Domain -Rights $UserControl -Confirm:$false)
+	if (Set-Permission $DestinationFolder -User $User -Domain $Domain -Rights $UserControl -Confirm:$false)
 	{
-		# NOTE: For -Exclude we need -Path DIRECTORY\* to get file names instead of file contents
-		foreach ($LogFile in $(Get-ChildItem -Path $TargetFolder\* -Filter *.log -Exclude *.filterline.log))
+		foreach ($LogFile in $PresentLogFiles)
 		{
 			Write-Verbose -Message "[$ThisScript] Processing '$LogFile'"
 			Set-Permission $LogFile.FullName -User $User -Domain $Domain -Rights $UserControl -Confirm:$false | Out-Null
 		}
-	}
-}
-
-# If there is at least one change in logs location reboot is required
-foreach ($Location in $OldLocation)
-{
-	if (!(Compare-Path -Path $Location -ReferencePath $TargetFolder))
-	{
-		Write-Warning -Message "[$ThisScript] System reboot is required for firewall logging path changes"
-		break
 	}
 }
 
