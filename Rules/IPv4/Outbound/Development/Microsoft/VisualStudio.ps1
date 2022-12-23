@@ -156,18 +156,28 @@ foreach ($Instance in $VSInstances)
 			-Description "CMake bundled with Visual Studio" | Format-RuleOutput
 	}
 
-	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\mingw32\bin\git-remote-https.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	# $VSRoot has environment variables
+	$mingwDirectory = Get-ChildItem -Path "$($Instance.InstallationPath)\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git" -Directory |
+	Where-Object {
+		# This might be mingw32 or mingw64
+		$_.Name -like "mingw*"
+	} | Select-Object -ExpandProperty Name
+
+	foreach ($mingw in $mingwDirectory)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) git HTTPS" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "git bundled with Visual Studio over HTTPS." | Format-RuleOutput
+		$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\$mingw\bin\git-remote-https.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) git HTTPS" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "git bundled with Visual Studio over HTTPS." | Format-RuleOutput
+		}
 	}
 
 	$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\usr\bin\ssh.exe"
@@ -229,28 +239,98 @@ foreach ($Instance in $VSInstances)
 these delays with the user's consent." | Format-RuleOutput
 	}
 
-	# TODO: same comment in 4 rules
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
+	if (Test-Path -Path "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86")
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "ServiceHub services provide identity (sign-in for VS),
+		# TODO: same comment in 4 rules
+		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "ServiceHub services provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-RuleOutput
+			Format-RuleOutput
+		}
+
+		# NOTE: System account is needed for port 9354
+		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub SettingsHost" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443, 9354 `
+				-LocalUser $ExtensionAccounts `
+				-InterfaceType $DefaultInterface `
+				-Description "ServiceHub programs provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+			Format-RuleOutput
+		}
+
+		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "ServiceHub services provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+			Format-RuleOutput
+		}
+
+		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub Roslyn Code Analysis" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Managed language service (Roslyn)." | Format-RuleOutput
+		}
+
+		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub VSDetouredHost" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "ServiceHub services provide identity (sign-in for VS),
+	and support for internal services (like extension management, compiler support, etc).
+	These are not optional and are designed to be running side-by-side with devenv.exe." |
+			Format-RuleOutput
+		}
 	}
 
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub Controller" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -264,28 +344,10 @@ These are not optional and are designed to be running side-by-side with devenv.e
 		Format-RuleOutput
 	}
 
-	# NOTE: System account is needed for port 9354
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.netfx.x86\ServiceHub.IdentityHost.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443, 9354 `
-			-LocalUser $ExtensionAccounts `
-			-InterfaceType $DefaultInterface `
-			-Description "ServiceHub programs provide identity (sign-in for VS),
-and support for internal services (like extension management, compiler support, etc).
-These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-RuleOutput
-	}
-
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -299,24 +361,27 @@ These are not optional and are designed to be running side-by-side with devenv.e
 		Format-RuleOutput
 	}
 
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.RoslynCodeAnalysisService32.exe"
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.Dotnet.x64\ServiceHub.IdentityHost.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Block -Direction $Direction -Protocol TCP `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Managed language service (Roslyn)." | Format-RuleOutput
+			-Description "ServiceHub services provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
 	}
 
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.VSDetouredHost.exe"
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.AnyCPU\ServiceHub.VSDetouredHost.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub" `
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub VSDetouredHost" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -337,6 +402,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 	# There should be only one directory, but just in case let's select highest version
 	$MSVCVersion = $MSVCVersion | Select-Object -Last 1
 
+	# TODO: If MSVC isn't installed this translates to null: ...\MSVC\\bin\...
 	$Program = "$VSRoot\VC\Tools\MSVC\$MSVCVersion\bin\Hostx86\x64\vctip.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
@@ -365,7 +431,7 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 	$Program = "$VSInstallerRoot\feedback.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "VS Installer - feedback" `
+		New-NetFirewallRule -DisplayName "VS Installer - Feedback" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -376,18 +442,37 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 			-Description "Installer feedback" | Format-RuleOutput
 	}
 
-	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
+	if (Test-Path -Path "$([System.Environment]::ExpandEnvironmentVariables($VSInstallerRoot))\resources\app\ServiceHub\Hosts")
 	{
-		New-NetFirewallRule -DisplayName "VS Installer - ServiceHub" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Run when updating or using add features to VS in installer." | Format-RuleOutput
+		$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "VS Installer - ServiceHub Installer Service x64" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 80, 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Run when updating or using add features to VS in installer." | Format-RuleOutput
+		}
+
+		$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "VS Installer - ServiceHub Installer Service x86" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $Group `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "Run when Installing update or using add features to VS, also for sign in,
+in report problem window." | Format-RuleOutput
+		}
 	}
 
 	# NOTE: tested: $ExtensionAccounts, Administrator account was needed
@@ -395,7 +480,7 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "VS Installer - ServiceHub" `
+		New-NetFirewallRule -DisplayName "VS Installer - ServiceHub Background Download" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -405,21 +490,6 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 			-InterfaceType $DefaultInterface `
 			-Description "Used when 'Automatically download updates' in VS2019?
 Tools->Options->Environment->Product Updates->Automatically download updates." | Format-RuleOutput
-	}
-
-	$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.x86.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "VS Installer - ServiceHub" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Run when Installing update or using add features to VS, also for sign in,
-in report problem window." | Format-RuleOutput
 	}
 
 	$Program = "$VSInstallerRoot\setup.exe"

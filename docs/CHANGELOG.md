@@ -29,6 +29,10 @@ Here is a list of changes for each of the releases.
 To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 **NOTE:** Changes for unreleased version may change or be announced upfront
 
+- Rules
+
+  - Update rules for Visual Studio
+
 - Modules
 
   - Improved or updated module functions

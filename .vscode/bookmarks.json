@@ -101,16 +101,6 @@
 			]
 		},
 		{
-			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
-			"bookmarks": [
-				{
-					"line": 132,
-					"column": 2,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Modules/Ruleset.Remote/Public/Enable-WinRMServer.ps1",
 			"bookmarks": [
 				{
