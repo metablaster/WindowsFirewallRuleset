@@ -39,3 +39,19 @@ set or verify these services are set to "Automatic" startup:\
 
 Predefined "Remote Desktop" rules for inbound traffic.\
 For blocking outbound firewall custom rules are needed to allow traffic.
+
+## Custom SSL certificate
+
+- A certificate with private key located in `Personal Store`
+- Right-click the certificate, select All Tasks, and then select Manage Private Keys
+- In the Permissions dialog box, click Add, type `NETWORK SERVICE`, click OK,
+  select Read under the Allow check box, and then click OK
+- Export certificate including private key
+- Import exported certificate into `Remote Desktop` store
+- Double click certificate -> Detail -> Thumbprint -> copy value
+- Replace `THUMBPRINT` portion in the code below with copied value
+
+```powershell
+$RdpTCP = Get-CimInstance -Class Win32_TSGeneralSetting -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'"
+Set-CimInstance -InputObject $RdpTCP -Property @{ SSLCertificateSHA1Hash = "THUMBPRINT" }
+```
