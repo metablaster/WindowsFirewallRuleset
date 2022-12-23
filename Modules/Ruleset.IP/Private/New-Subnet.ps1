@@ -147,7 +147,7 @@ function New-Subnet
 			MaskLength = $MaskLength
 			HostAddresses = $HostAddresses
 			PSTypeName = "Ruleset.IP.Subnet"
-		} | Add-Member ToString -MemberType ScriptMethod -Force -PassThru -Value {
+		} | Add-Member -MemberType ScriptMethod -Name ToString -Force -PassThru -Value {
 			return $this.Cidr
 		}
 	}

@@ -190,8 +190,8 @@ function Find-UpdatableModuleHelp
 
 						if ($UICulture -contains $CultureName)
 						{
-							Add-Member -Type NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
-							Add-Member -Type NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
+							Add-Member -MemberType NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
+							Add-Member -MemberType NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
 						}
 					}
 				}
@@ -202,8 +202,8 @@ function Find-UpdatableModuleHelp
 					# Select all cultures
 					foreach ($NodeInfo in $Nodes)
 					{
-						Add-Member -Type NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
-						Add-Member -Type NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
+						Add-Member -MemberType NoteProperty -InputObject $TargetModule -Name Culture -Value $NodeInfo.Node.UICultureName
+						Add-Member -MemberType NoteProperty -InputObject $TargetModule -Name CultureVersion -Value $NodeInfo.Node.UICultureVersion -PassThru
 					}
 				}
 			}

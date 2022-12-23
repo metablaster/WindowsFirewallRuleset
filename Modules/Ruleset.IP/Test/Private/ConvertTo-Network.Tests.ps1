@@ -49,6 +49,46 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 $ScriptPath = Split-Path $MyInvocation.MyCommand.Path -Parent
 
+BeforeDiscovery {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+		"PSUseDeclaredVarsMoreThanAssignment", "MaskTable", Justification = "False Positive")]
+	$MaskTable = @(
+		@{ MaskLength = 0; Mask = "0.0.0.0" }
+		@{ MaskLength = 1; Mask = "128.0.0.0" }
+		@{ MaskLength = 2; Mask = "192.0.0.0" }
+		@{ MaskLength = 3; Mask = "224.0.0.0" }
+		@{ MaskLength = 4; Mask = "240.0.0.0" }
+		@{ MaskLength = 5; Mask = "248.0.0.0" }
+		@{ MaskLength = 6; Mask = "252.0.0.0" }
+		@{ MaskLength = 7; Mask = "254.0.0.0" }
+		@{ MaskLength = 8; Mask = "255.0.0.0" }
+		@{ MaskLength = 9; Mask = "255.128.0.0" }
+		@{ MaskLength = 10; Mask = "255.192.0.0" }
+		@{ MaskLength = 11; Mask = "255.224.0.0" }
+		@{ MaskLength = 12; Mask = "255.240.0.0" }
+		@{ MaskLength = 13; Mask = "255.248.0.0" }
+		@{ MaskLength = 14; Mask = "255.252.0.0" }
+		@{ MaskLength = 15; Mask = "255.254.0.0" }
+		@{ MaskLength = 16; Mask = "255.255.0.0" }
+		@{ MaskLength = 17; Mask = "255.255.128.0" }
+		@{ MaskLength = 18; Mask = "255.255.192.0" }
+		@{ MaskLength = 19; Mask = "255.255.224.0" }
+		@{ MaskLength = 20; Mask = "255.255.240.0" }
+		@{ MaskLength = 21; Mask = "255.255.248.0" }
+		@{ MaskLength = 22; Mask = "255.255.252.0" }
+		@{ MaskLength = 23; Mask = "255.255.254.0" }
+		@{ MaskLength = 24; Mask = "255.255.255.0" }
+		@{ MaskLength = 25; Mask = "255.255.255.128" }
+		@{ MaskLength = 26; Mask = "255.255.255.192" }
+		@{ MaskLength = 27; Mask = "255.255.255.224" }
+		@{ MaskLength = 28; Mask = "255.255.255.240" }
+		@{ MaskLength = 29; Mask = "255.255.255.248" }
+		@{ MaskLength = 30; Mask = "255.255.255.252" }
+		@{ MaskLength = 31; Mask = "255.255.255.254" }
+		@{ MaskLength = 32; Mask = "255.255.255.255" }
+	)
+}
+
 Describe "ConvertTo-Network" {
 	BeforeAll {
 		Import-Module -Name "$ScriptPath\..\..\Ruleset.IP.psd1" -Force -ErrorAction Stop
@@ -58,44 +98,6 @@ Describe "ConvertTo-Network" {
 		$Module = @{
 			ModuleName = "Ruleset.IP"
 		}
-
-		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-			"PSUseDeclaredVarsMoreThanAssignment", "MaskTable", Justification = "False Positive")]
-		$MaskTable = @(
-			@{ MaskLength = 0; Mask = "0.0.0.0" }
-			@{ MaskLength = 1; Mask = "128.0.0.0" }
-			@{ MaskLength = 2; Mask = "192.0.0.0" }
-			@{ MaskLength = 3; Mask = "224.0.0.0" }
-			@{ MaskLength = 4; Mask = "240.0.0.0" }
-			@{ MaskLength = 5; Mask = "248.0.0.0" }
-			@{ MaskLength = 6; Mask = "252.0.0.0" }
-			@{ MaskLength = 7; Mask = "254.0.0.0" }
-			@{ MaskLength = 8; Mask = "255.0.0.0" }
-			@{ MaskLength = 9; Mask = "255.128.0.0" }
-			@{ MaskLength = 10; Mask = "255.192.0.0" }
-			@{ MaskLength = 11; Mask = "255.224.0.0" }
-			@{ MaskLength = 12; Mask = "255.240.0.0" }
-			@{ MaskLength = 13; Mask = "255.248.0.0" }
-			@{ MaskLength = 14; Mask = "255.252.0.0" }
-			@{ MaskLength = 15; Mask = "255.254.0.0" }
-			@{ MaskLength = 16; Mask = "255.255.0.0" }
-			@{ MaskLength = 17; Mask = "255.255.128.0" }
-			@{ MaskLength = 18; Mask = "255.255.192.0" }
-			@{ MaskLength = 19; Mask = "255.255.224.0" }
-			@{ MaskLength = 20; Mask = "255.255.240.0" }
-			@{ MaskLength = 21; Mask = "255.255.248.0" }
-			@{ MaskLength = 22; Mask = "255.255.252.0" }
-			@{ MaskLength = 23; Mask = "255.255.254.0" }
-			@{ MaskLength = 24; Mask = "255.255.255.0" }
-			@{ MaskLength = 25; Mask = "255.255.255.128" }
-			@{ MaskLength = 26; Mask = "255.255.255.192" }
-			@{ MaskLength = 27; Mask = "255.255.255.224" }
-			@{ MaskLength = 28; Mask = "255.255.255.240" }
-			@{ MaskLength = 29; Mask = "255.255.255.248" }
-			@{ MaskLength = 30; Mask = "255.255.255.252" }
-			@{ MaskLength = 31; Mask = "255.255.255.254" }
-			@{ MaskLength = 32; Mask = "255.255.255.255" }
-		)
 	}
 
 	AfterAll {
@@ -151,18 +153,11 @@ Describe "ConvertTo-Network" {
 	}
 
 	It "Converts CIDR formatted subnets from <MaskLength> to <Mask>" -TestCases $MaskTable {
-		# BUG: Unable to suppress
-		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-			"PSReviewUnusedParameter", "MaskLength", Justification = "False Positive")]
-		param (
-			$MaskLength,
-			$Mask
-		)
-
 		$ErrorRecord = $null
+
 		try
 		{
-			$Network = InModuleScope @module { ConvertTo-Network "10.0.0.0/$MaskLength" }
+			$Network = InModuleScope @module -Parameters $_ { ConvertTo-Network "10.0.0.0/$MaskLength" }
 		}
 		catch
 		{
@@ -174,18 +169,11 @@ Describe "ConvertTo-Network" {
 	}
 
 	It "Converts dotted-decimal formatted subnets from <Mask> to <MaskLength>" -TestCases $MaskTable {
-		# BUG: Unable to suppress
-		[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-			"PSReviewUnusedParameter", "Mask", Justification = "False Positive")]
-		param (
-			$MaskLength,
-			$Mask
-		)
-
 		$ErrorRecord = $null
+
 		try
 		{
-			$Network = InModuleScope @module { ConvertTo-Network 10.0.0.0 $Mask }
+			$Network = InModuleScope @module -Parameters $_ { ConvertTo-Network 10.0.0.0 $Mask }
 		}
 		catch
 		{

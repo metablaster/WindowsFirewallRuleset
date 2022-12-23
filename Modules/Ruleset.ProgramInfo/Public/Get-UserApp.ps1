@@ -174,7 +174,7 @@ function Get-UserApp
 		if (Test-Path -PathType Container -Path $RemotePath)
 		{
 			# There is no Domain property, so add one, PSComputerName property is of no use here
-			Add-Member -InputObject $App -PassThru -Type NoteProperty -Name Domain -Value $Domain
+			Add-Member -MemberType NoteProperty -InputObject $App -Name Domain -Value $Domain -PassThru
 		}
 		else
 		{

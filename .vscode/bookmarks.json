@@ -1,36 +1,6 @@
 {
 	"files": [
 		{
-			"path": "Modules/Ruleset.Initialize/Private/Find-UpdatableModuleHelp.ps1",
-			"bookmarks": [
-				{
-					"line": 204,
-					"column": 6,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.ProgramInfo/Public/Get-SystemApp.ps1",
-			"bookmarks": [
-				{
-					"line": 172,
-					"column": 14,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Compatibility/Public/Initialize-WinSession.ps1",
-			"bookmarks": [
-				{
-					"line": 220,
-					"column": 2,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Modules/Ruleset.Remote/Public/Connect-Computer.ps1",
 			"bookmarks": [
 				{

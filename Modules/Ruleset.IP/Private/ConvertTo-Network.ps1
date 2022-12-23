@@ -128,7 +128,7 @@ function ConvertTo-Network
 	}
 
 	# Override ToString
-	$Network | Add-Member ToString -MemberType ScriptMethod -Force -Value {
+	$Network | Add-Member -MemberType ScriptMethod -Name ToString -Force -Value {
 		"{0}/{1}" -f $this.IPAddress, $this.MaskLength
 	}
 
