@@ -145,6 +145,7 @@ function Enable-WinRMServer
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "Thumbprint")]
+		[ValidatePattern("^[0-9a-f]{40}$")]
 		[string] $CertThumbprint,
 
 		[Parameter()]

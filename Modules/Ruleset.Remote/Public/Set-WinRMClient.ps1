@@ -128,6 +128,7 @@ function Set-WinRMClient
 		[string] $CertFile,
 
 		[Parameter(ParameterSetName = "CertThumbprint")]
+		[ValidatePattern("^[0-9a-f]{40}$")]
 		[string] $CertThumbprint,
 
 		[Parameter()]

@@ -124,6 +124,7 @@ function Connect-Computer
 		[int32] $Port,
 
 		[Parameter(ParameterSetName = "Thumbprint")]
+		[ValidatePattern("^[0-9a-f]{40}$")]
 		[string] $CertThumbprint,
 
 		[ValidateSet("None", "Basic", "CredSSP", "Default", "Digest", "Kerberos", "Negotiate", "Certificate")]

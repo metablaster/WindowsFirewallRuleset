@@ -155,10 +155,18 @@ WinAPI solution for local-account validation inspired by:
 https://stackoverflow.com/a/15644447/45375
 
 Modifications by metablaster:
-February 2022:
-Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
-Adapted code and comment formating and variable casing to be in line with the rest of code in repository
-Added OutputType attribute and additional links
+
+- February 2022:
+
+  - Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
+  - Adapted code and comment formating and variable casing to be in line with the rest of code in repository
+  - Added OutputType attribute and additional links
+  - Renamed function from Test-WindowsCredential to Test-Credential
+  - Removed code for script invocation
+
+- December 2022:
+
+  - Made boolean logic more explicit
 
 ## RELATED LINKS
 

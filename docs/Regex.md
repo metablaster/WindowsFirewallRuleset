@@ -51,6 +51,7 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
     - [IPv6 validation](#ipv6-validation)
     - [IPv4 validation](#ipv4-validation)
     - [Match comment block in script](#match-comment-block-in-script)
+    - [SHA1 thumbprint validation](#sha1-thumbprint-validation)
 
 ## Filterline
 
@@ -431,7 +432,7 @@ The first character of the name must not be numeric.
 A variable name may include any of the following characters:
 
 ```none
-A-Z,a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
+A-Z, a-z, 0-9, # $ ' ( ) * + , - . ? @ [ ] _ ` { } ~
 ```
 
 [Table of Contents](#table-of-contents)
@@ -483,6 +484,22 @@ ScriptInfo comment:
 
 ```regex
 \<#PSScriptInfo[\s\S]+?(?=#\>)
+```
+
+### SHA1 thumbprint validation
+
+28be82b2378753a06b6e097714c0fa754248fa48
+
+Parameter validation:
+
+```regex
+^[0-9a-f]{40}$
+```
+
+Match in string:
+
+```regex
+\b[0-9a-f]{40}\b
 ```
 
 [Table of Contents](#table-of-contents)

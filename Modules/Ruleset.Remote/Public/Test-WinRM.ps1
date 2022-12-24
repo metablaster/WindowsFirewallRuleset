@@ -162,6 +162,7 @@ function Test-WinRM
 		[string] $Authentication = $RemotingAuthentication,
 
 		[Parameter(ParameterSetName = "Cert")]
+		[ValidatePattern("^[0-9a-f]{40}$")]
 		[string] $CertThumbprint,
 
 		[Parameter()]

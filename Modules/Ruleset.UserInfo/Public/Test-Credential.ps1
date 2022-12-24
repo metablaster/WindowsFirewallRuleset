@@ -1,5 +1,32 @@
 
 <#
+MIT License
+
+This file is part of "Windows Firewall Ruleset" project
+Homepage: https://github.com/metablaster/WindowsFirewallRuleset
+
+Author: Michael Klement mklement0@gmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+#>
+
+<#
 .SYNOPSIS
 Validates Windows user credentials.
 
@@ -90,10 +117,18 @@ WinAPI solution for local-account validation inspired by:
 https://stackoverflow.com/a/15644447/45375
 
 Modifications by metablaster:
-February 2022:
-Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
-Adapted code and comment formating and variable casing to be in line with the rest of code in repository
-Added OutputType attribute and additional links
+
+- February 2022:
+
+  - Added SuppressMessageAttribute to suppress PSUseCompatibleType warning
+  - Adapted code and comment formating and variable casing to be in line with the rest of code in repository
+  - Added OutputType attribute and additional links
+  - Renamed function from Test-WindowsCredential to Test-Credential
+  - Removed code for script invocation
+
+- December 2022:
+
+  - Made boolean logic more explicit
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.UserInfo/Help/en-US/Test-Credential.md
@@ -132,7 +167,7 @@ function Test-Credential
 		[System.DirectoryServices.AccountManagement.ContextType]::Machine,
 		# AD DS
 		[System.DirectoryServices.AccountManagement.ContextType]::Domain
-	)[$LoggedOnToDomain -and -not $Local]
+	)[$LoggedOnToDomain -and !$Local]
 
 	# Extract the domain-name portion, if any, from the username.
 	# Recognizes formats NTLM (domain\username) and UPN (username@dns.domain)
@@ -148,19 +183,19 @@ function Test-Credential
 	# If a domain name was specified, validate it.
 	if ($SpecifiedDomain)
 	{
-		if ($Local -and $SpecifiedDomain -ne $env:COMPUTERNAME)
+		if ($Local -and ($SpecifiedDomain -ne $env:COMPUTERNAME))
 		{
 			throw "You've requested validation of machine-local credentials with -Local, so your username must not have a domain component that differs from the local machine name"
 		}
-		elseif (-not $IsUpn -and $SpecifiedDomain -ne $LogonDomain)
+		elseif (!$IsUpn -and ($SpecifiedDomain -ne $LogonDomain))
 		{
 			throw "Specified NETBIOS domain prefix ($SpecifiedDomain) does not match the logon domain ($LogonDomain)"
 		}
-		elseif ($IsUpn -and -not $LoggedOnToDomain)
+		elseif ($IsUpn -and !$LoggedOnToDomain)
 		{
 			throw "You've specified a UPN, but you're not logged on to a domain: $($Credential.UserName)"
 		}
-		elseif ($IsUpn -and $SpecifiedDomain -ne $env:USERDNSDOMAIN)
+		elseif ($IsUpn -and ($SpecifiedDomain -ne $env:USERDNSDOMAIN))
 		{
 			Write-Warning -Message @"
 You've specified a UPN, but its domain-name part ($SpecifiedDomain) does not match the logon DNS domain name ($env:USERDNSDOMAIN).
@@ -177,7 +212,7 @@ or omit the domain part altogether ($UserName).
 				ContextType = $ContextType
 			} | Out-String))
 
-	if ($Local -or -not $LoggedOnToDomain)
+	if ($Local -or !$LoggedOnToDomain)
 	{
 		# LOCAL account
 		# !! System.DirectoryServices.AccountManagement.PrincipalContext with non-domain-joined machines with context 'Machine' doesn't work
@@ -221,7 +256,7 @@ namespace net.same2u.util
         }
     }
 }
-'@)::Validate($UserName, $Credential.GetNetworkCredential().password)
+'@)::Validate($UserName, $Credential.GetNetworkCredential().Password)
 	}
 	else
 	{
