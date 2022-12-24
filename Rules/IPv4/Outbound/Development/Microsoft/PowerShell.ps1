@@ -265,6 +265,24 @@ if ((Confirm-Installation "Powershell86" ([ref] $PowerShell86Root)) -or $ForceLo
 	}
 }
 
+$Program = "%SystemRoot%\System32\wsmprovhost.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	# NOTE: wsmprovhost.exe needs internet access in cases such as when you run Invoke-WebRequest
+	# within Invoke-Command scriptblock, which uses wsmprovhost.exe to go online.
+	New-NetFirewallRule -DisplayName "PowerShell WinRM" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $AdminGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "Host process for WinRM plug-ins. Process wsmprovhost hosts the active remote
+session on the target. When a remote PowerShell session starts, svchost.exe executes wsmprovhost.exe" |
+	Format-RuleOutput
+}
+
 if ($UpdateGPO)
 {
 	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"

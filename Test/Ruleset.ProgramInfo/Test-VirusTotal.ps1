@@ -81,6 +81,12 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote Session"
 	Test-VirusTotal -LiteralPath $File -SigcheckLocation $SigcheckLocation -Session $SessionInstance
 
+	if ($true)
+	{
+		Start-Test "Remote Session download sigcheck"
+		Test-VirusTotal -LiteralPath $File -SigcheckLocation $DefaultTestDrive -Session $SessionInstance
+	}
+
 	if ($false)
 	{
 		Start-Test "Remote Domain"
@@ -92,6 +98,11 @@ else
 	Start-Test "Default test"
 	$Result = Test-VirusTotal -LiteralPath $File -SigcheckLocation $SigcheckLocation
 	$Result
+
+	Start-Test "test downloading sigcheck"
+	Remove-Item "$SigcheckLocation\sigcheck.exe" -ErrorAction Ignore
+	Remove-Item "$SigcheckLocation\sigcheck64.exe" -ErrorAction Ignore
+	Test-VirusTotal -LiteralPath $File
 
 	Test-Output $Result -Command Test-VirusTotal
 }

@@ -38,12 +38,14 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Improved or updated module functions
 
     - `Initialize-Service` now handles paused services
+    - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
 
-  - Fixed a bug with `Initialize-Service` which asked to configure service that is already configured
+  - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
 
 - Scripts
 
   - Updated `Grant-Logs` script to better detect log file location change
+  - `Find-UnsignedFile` now offers to download sigcheck if it doesn't exist on computer
 
 - Unit test
 

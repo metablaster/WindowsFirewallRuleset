@@ -62,7 +62,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
 . $PSScriptRoot\..\ContextSetup.ps1
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Unsafe -Force:$Force)) { exit }
@@ -75,17 +75,25 @@ Enter-Test "Find-UnsignedFile"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Run this unit test?", "Find unsigned files and perform VirusTotal scan", $true, [ref] $YesToAll, [ref] $NoToAll))
 {
-	if (!(Test-Path -Path "C:\tools"))
+	$TestPath1 = "C:\tools"
+	# Known to have one unsigned file
+	$TestPath2 = "${env:ProgramFiles(x86)}\GnuPG\bin"
+	$SigcheckLocation = "C:\tools"
+
+	if (!(Test-Path -Path $TestPath1) -or !(Test-Path -Path ))
 	{
-		Write-Warning -Message "[$ThisScript] C:\tools assumed for unit test bug path doesn't exist"
+		Write-Warning -Message "[$ThisScript] '$TestPath1' and '$TestPath2' assumed for unit test but not all paths exist"
 		return
 	}
 
-	Start-Test "Default test"
-	Find-UnsignedFile -Path "C:\tools" -SigcheckLocation "C:\tools" -Log -VirusTotal
+	Start-Test "Reset test drive"
+	Reset-TestDrive
 
-	Start-Test "%ProgramFiles%"
-	$Result = Find-UnsignedFile -Path "%ProgramFiles%" -SigcheckLocation "C:\tools" -Log -VirusTotal -Recurse -Append
+	Start-Test "$TestPath1 and test download sigcheck"
+	Find-UnsignedFile -Path $TestPath1 -Log -VirusTotal -SigcheckLocation $DefaultTestDrive
+
+	Start-Test $TestPath2
+	$Result = Find-UnsignedFile -Path $TestPath2 -Log -VirusTotal -Append -Recurse -SigcheckLocation $SigcheckLocation
 	$Result
 
 	Test-Output $Result -Command Find-UnsignedFile

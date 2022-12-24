@@ -82,7 +82,7 @@ Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Remote Windows"
-$Accept = "Outbound rules for remote Windows will be loaded, required for services such as remote desktop or remote registry"
+$Accept = "Outbound rules for Windows remoting will be loaded, required for programs such as remote desktop"
 $Deny = "Skip operation, outbound rules for remote Windows will not be loaded into firewall"
 
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
@@ -130,23 +130,6 @@ properties control panel item." |
 Allows users to connect interactively to a remote computer.
 To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System
 properties control panel item." |
-	Format-RuleOutput
-}
-
-$Program = "%SystemRoot%\System32\wsmprovhost.exe"
-if ((Test-ExecutableFile $Program) -or $ForceLoad)
-{
-	# TODO: Unknown why wsmprovhost.exe needs internet access to MS servers
-	New-NetFirewallRule -DisplayName "PowerShell remoting" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile Private, Domain `
-		-Service Any -Program $Program -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol TCP `
-		-LocalAddress Any -RemoteAddress Internet4 `
-		-LocalPort Any -RemotePort 443 `
-		-LocalUser $AdminGroupSDDL `
-		-InterfaceType $DefaultInterface `
-		-Description "Host process for WinRM plug-ins. Process wsmprovhost hosts the active remote
-session on the target. When a remote PowerShell session starts, svchost.exe executes wsmprovhost.exe" |
 	Format-RuleOutput
 }
 

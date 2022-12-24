@@ -194,10 +194,10 @@ environment variable.\
 `Windows Firewall Ruleset` will use it to perform hash based online malware analysis on VirusTotal
 for every executable that is not digitally signed before a firewall rule is made for that executable.\
 This ensures integrity of firewall because it excludes the risk of malware having a firewall rule.\
-Of course this is only a recommendation, if there is no `sigcheck64.exe` in `PATH` no malware analysis
-is made.\
-By using this functionality you're agree to [VirusTotal Terms of Service][virustotal terms] and
-[VirusTotal Privacy Policy][virustotal privacy]
+This is only a recommendation, if there is no `sigcheck64.exe` in `PATH` you're offered to download
+it and if you refuse no malware analysis is made.\
+By using this functionality you're agree to [VirusTotal Terms of Service][virustotal terms],
+[VirusTotal Privacy Policy][virustotal privacy] and [Sysinternals Software License Terms][sysinternals terms]
 
 - You might want to have git to check out for updates,
 to easily switch between branches or to contribute code.
@@ -711,3 +711,4 @@ and firewall settings
 <!-- markdownlint-disable MD053 -->
 [badge license]: https://img.shields.io/static/v1?label=License&message=MIT&color=success&style=plastic
 <!-- markdownlint-enable MD053 -->
+[sysinternals terms]: https://learn.microsoft.com/en-us/sysinternals/license-terms "Visit Microsoft site"

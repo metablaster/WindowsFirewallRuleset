@@ -71,7 +71,8 @@ If specified, no information, warning or error message is shown, only true or fa
 .PARAMETER Force
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
-This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.
+This parameter has no effect on VirusTotal check, if the file is reported as malware the return
+value is $false unless SkipVirusTotalCheck global variable is set.
 
 .EXAMPLE
 PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
@@ -246,7 +247,7 @@ function Test-ExecutableFile
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
-				if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
+				if (!$SkipVirusTotalCheck -and (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams))
 				{
 					return $false
 				}
@@ -256,7 +257,10 @@ function Test-ExecutableFile
 				Write-Error -Category SecurityError -TargetObject $LiteralPath `
 					-Message "Digital signature verification failed for '$ExpandedPath'" -ErrorAction "Continue"
 
-				Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
+				if (!$SkipVirusTotalCheck)
+				{
+					Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
+				}
 
 				Write-Information -Tags $MyInvocation.InvocationName -InformationAction "Continue" `
 					-MessageData "INFO: If you trust this executable run '$Caller' with -Trusted switch"

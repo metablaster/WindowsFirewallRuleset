@@ -523,9 +523,12 @@ if ($Develop -or !(Get-Variable -Name CheckRemovableVariables -Scope Global -Err
 	# Set to true to disable digital signature verification of executables involved in rules
 	Set-Variable -Name SkipSignatureCheck -Scope Global -Value $false
 
-	# Specify path to sigcheck64.exe
+	# Set to true to disable VirusTotal check of executables without valid digital signature
+	Set-Variable -Name SkipVirusTotalCheck -Scope Global -Value $false
+
+	# Specify path to sigcheck64.exe if your instance of sigcheck executable isn't in PATH
 	# If digital signature check of a program for which firewall rule is being loaded fails, then
-	# sigcheck64.exe is used to perform online malware analysis via VirusTotal service.
+	# sigcheck64.exe is used to perform hash based online malware analysis via VirusTotal service.
 	# You can get sigcheck64.exe from Microsoft sysinternals site below:
 	# https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
 	Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"

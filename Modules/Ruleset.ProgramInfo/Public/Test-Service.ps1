@@ -212,7 +212,7 @@ function Test-Service
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Digital signature verification failed for service '$($Service.Name)'"
 					$BinaryPathCache.Add($BinaryPath, $true)
 
-					if (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
+					if (!$SkipVirusTotalCheck -and (Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams))
 					{
 						Write-Output $false
 						continue
@@ -225,7 +225,11 @@ function Test-Service
 				{
 					Write-Error -Category SecurityError -TargetObject $BinaryPath `
 						-Message "Digital signature verification failed for service '$($Service.Name)'"
-					Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
+
+					if (!$SkipVirusTotalCheck)
+					{
+						Test-VirusTotal -LiteralPath $BinaryPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams | Out-Null
+					}
 				}
 			}
 			else

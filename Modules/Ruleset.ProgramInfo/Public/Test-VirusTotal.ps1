@@ -58,6 +58,9 @@ Specify maximum wait time expressed in seconds for VirusTotal to scan individual
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
 The default wait time is 300 (5 minutes).
 
+.PARAMETER Force
+If specified, sigcheck is downloaded if it's not found and is used without user prompt
+
 .EXAMPLE
 PS> Test-VirusTotal -LiteralPath "C:\Windows\notepad.exe" -SigcheckLocation "C:\tools"
 
@@ -72,12 +75,21 @@ None.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md
+
+.LINK
+https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck
+
+.LINK
+https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service
+
+.LINK
+https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy
 #>
 function Test-VirusTotal
 {
 	[CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = "Domain", SupportsShouldProcess = $true, ConfirmImpact = "Medium",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md")]
-	[OutputType([bool])]
+	[OutputType([bool], [void])]
 	param (
 		[Parameter(Mandatory = $true)]
 		[string] $LiteralPath,
@@ -92,12 +104,15 @@ function Test-VirusTotal
 		[Parameter(ParameterSetName = "Session")]
 		[System.Management.Automation.Runspaces.PSSession] $Session,
 
-		[Parameter(Mandatory = $true)]
+		[Parameter()]
 		[string] $SigcheckLocation,
 
 		[Parameter()]
 		[ValidateRange(1, 650)]
-		[int32] $TimeOut = 300
+		[int32] $TimeOut = 300,
+
+		[Parameter()]
+		[switch] $Force
 	)
 
 	if ($PSCmdlet.ShouldProcess($LiteralPath, "Run VirusTotal check"))
@@ -125,21 +140,19 @@ function Test-VirusTotal
 			}
 		}
 
-		$InvocationName = $MyInvocation.InvocationName
-		Invoke-Command @SessionParams -ArgumentList $InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath -ScriptBlock {
+		# TODO: Use $PSBoundParameters
+		Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath, $PolicyStore, $Domain, $Force -ScriptBlock {
+			[CmdletBinding()]
 			param (
 				[string] $InvocationName,
 				[string] $SigcheckLocation,
 				[int32] $TimeOut,
-				[string] $LiteralPath
+				[string] $LiteralPath,
+				[string] $PolicyStore,
+				[string] $Domain,
+				# TODO: [switch] doesn't work "A positional parameter cannot be found that accepts argument 'False'"
+				[bool] $Force
 			)
-
-			# The path to executable needs to be expanded for sigcheck.exe,
-			# otherwise it results with "No matching files were found"
-			$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
-			$Executable = Split-Path -Path $ExpandedPath -Leaf
-			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
-			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
 
 			if ([System.Environment]::Is64BitOperatingSystem)
 			{
@@ -151,20 +164,45 @@ function Test-VirusTotal
 				$SigcheckExecutable = "sigcheck.exe"
 			}
 
-			# Check if path to sigcheck executable is valid
+			# if SigcheckLocation is null ExpandEnvironmentVariables won't be null but ""
+			$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
+
+			# Otherwise Resolve-Path will error
+			if (![string]::IsNullOrEmpty($SigcheckDir))
+			{
+				$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
+			}
+
 			# TODO: Prefer x64 bit executable on x64 system
 			$SigCheckFile = $null
-			if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
+
+			# Check if path to sigcheck executable is valid
+			# NOTE: sigcheck64a.exe is not a valid application for this OS platform
+			if (![string]::IsNullOrEmpty($SigcheckDir) -and (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -Exclude "*a.exe" -PathType Leaf))
 			{
 				# Get full path to single executable
-				$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" | Get-Command -CommandType Application
+				$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" |
+				Get-Command -CommandType Application | Where-Object {
+					$_.Name -notmatch "a.exe$"
+				}
+
 				$SigCheckFile = $Command.Source | Select-Object -Last 1
+				Write-Debug -Message "[$InvocationName] $SigCheckFile found in '$SigcheckDir'"
 			}
 			else
 			{
-				# Check if sigcheck is in path
-				Write-Debug -Message "[$InvocationName] Checking if sigcheck is in path"
-				$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore
+				# If variable was set to null in ProjectSettings.ps1 by user restore it to default
+				if ([string]::IsNullOrEmpty($SigcheckPath))
+				{
+					Set-Variable -Name SigcheckPath -Scope Global -Value "C:\tools"
+				}
+
+				# Check if sigcheck is in PATH
+				Write-Debug -Message "[$InvocationName] Checking if sigcheck is in PATH"
+				$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore |
+				Where-Object {
+					$_.Name -notmatch "a.exe$"
+				}
 
 				# Can be, not found or there are multiple matches
 				if (($Command | Measure-Object).Count -ne 0)
@@ -172,15 +210,88 @@ function Test-VirusTotal
 					$SigCheckFile = $Command.Name | Select-Object -Last 1
 					Write-Debug -Message "[$InvocationName] $SigCheckFile found in PATH"
 				}
+				# Offer to user to download it
+				elseif ($Force -or $PSCmdlet.ShouldContinue("Download $SigcheckExecutable from sysinternals.com to '$SigcheckPath' directory", "$SigcheckExecutable executable was not found on '$Domain' computer"))
+				{
+					$TempFolder = [System.Environment]::ExpandEnvironmentVariables("%LocalAppData%\temp")
+
+					if ([System.Environment]::Is64BitOperatingSystem)
+					{
+						$SigCheckFile = "$SigcheckPath\Sigcheck64.exe"
+						$SigcheckExecutable = $SigcheckExecutable -replace "\*", "64"
+					}
+					else
+					{
+						$SigCheckFile = "$SigcheckPath\Sigcheck.exe"
+					}
+
+					try
+					{
+						$PreviousProgressPreference = $ProgressPreference
+
+						# This rule is disabled by default, however it's needed here to make
+						# Invoke-WebRequest work within Invoke-Command scriptblock
+						$wsmprovhostRule = Get-NetFirewallRule -DisplayName "PowerShell WinRM" -PolicyStore $PolicyStore -ErrorAction Ignore |
+						Where-Object {
+							$_.Direction -eq "Outbound"
+						} | Enable-NetFirewallRule -PassThru
+
+						if ($wsmprovhostRule)
+						{
+							# Rule may not be instantly effective
+							Start-Sleep -Seconds 1
+						}
+
+						Write-Information -Tags $InvocationName -MessageData "INFO: Downloading Sigcheck.zip to '$TempFolder'"
+
+						# Get rid of flushy download progress
+						$ProgressPreference = "SilentlyContinue"
+						# This will override Sigcheck.zip if it exists
+						Invoke-WebRequest -Uri "https://download.sysinternals.com/files/Sigcheck.zip" -OutFile "$TempFolder\Sigcheck.zip" -ErrorAction Stop
+
+						Write-Information -Tags $InvocationName -MessageData "INFO: Expanding Sigcheck.zip to '$SigcheckPath'"
+						# -Force to override existing files such as Eula.txt, -DestinationPath is created
+						Expand-Archive -Path "$TempFolder\Sigcheck.zip" -DestinationPath $SigcheckPath -Force -ErrorAction Stop
+						# Ignore removing zip, if it's used by AV to scan it then this may fail
+						Remove-Item -Path "$TempFolder\Sigcheck.zip" -ErrorAction Ignore
+
+						if (!(Test-Path -Path $SigCheckFile -PathType Leaf))
+						{
+							throw "Downloading and expanding Sigcheck.zip succeeded but $SigcheckExecutable not found"
+						}
+					}
+					catch
+					{
+						$SigCheckFile = $null
+						Write-Warning -Message "[$InvocationName] Failed to download sigcheck because '$($_.Exception.Message)'"
+					}
+					finally
+					{
+						$ProgressPreference = $PreviousProgressPreference
+						if ($wsmprovhostRule)
+						{
+							# This rule should not be enabled since it allows internet access
+							Disable-NetFirewallRule -InputObject $wsmprovhostRule
+						}
+					}
+				}
 				else
 				{
-					Write-Warning -Message "[$InvocationName] $($SigcheckExecutable -replace "\*", "64") was not found in '$SigcheckLocation' or in PATH, VirusTotal scan will not be performed"
+					$SigCheckFile = $null
+					# This is to stop prompting to download sigcheck
+					Set-Variable -Name SkipVirusTotalCheck -Scope Global -Value $true
+					Write-Warning -Message "[$InvocationName] $SigcheckExecutable was not found in '$SigcheckPath' or in PATH, VirusTotal scan will not be performed"
 				}
 			}
 
 			if (![string]::IsNullOrEmpty($SigCheckFile))
 			{
 				Write-Verbose -Message "[$InvocationName] Using sigcheck file '$SigCheckFile'"
+
+				# The path to executable needs to be expanded for sigcheck.exe,
+				# otherwise it results with "No matching files were found"
+				$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($LiteralPath)
+				$Executable = Split-Path -Path $ExpandedPath -Leaf
 
 				# Create sigcheck process object
 				$Process = New-Object System.Diagnostics.Process
@@ -242,7 +353,7 @@ function Test-VirusTotal
 
 							if ($Detection.Success)
 							{
-								Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: VirusTotal report for '$Executable' is '$($Detection.Value)'"
+								Write-Information -Tags $InvocationName -MessageData "INFO: VirusTotal report for '$Executable' is '$($Detection.Value)'"
 								# TODO: Write-LogFile, output is printed to console
 								# Write-LogFile -LogName "VirusTotal" -Tags "VirusTotal" -Message "VT status is", $Detection.Value
 
@@ -251,8 +362,8 @@ function Test-VirusTotal
 								{
 									if ([int32] $TotalDetections.Value -gt 0)
 									{
-										Write-Warning -Message "[$InvocationName] '$Executable' is infected with malware"
 										$FileIsMalware = $true
+										Write-Warning -Message "[$InvocationName] '$Executable' is infected with malware"
 									}
 								}
 								# May happen if ie there is no firewall rule for sigcheck.exe, we ignore

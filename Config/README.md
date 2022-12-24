@@ -1,7 +1,7 @@
 
 # Config directory
 
-Contains configuration files for by this repository and external programs.
+Contains configuration files for use by this repository and external programs.
 
 Most of these settings are specialized for firewall management, which helps to reduce
 the need to set these things over and over again.

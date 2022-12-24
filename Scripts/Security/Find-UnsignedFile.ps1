@@ -259,9 +259,6 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 	if ($VirusTotal)
 	{
-		$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation.FullName)
-		$SigcheckDir = Resolve-Path -Path $SigcheckDir
-
 		if ([System.Environment]::Is64BitOperatingSystem)
 		{
 			# Consider both, sigcheck.exe and sigcheck64.exe
@@ -272,20 +269,42 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 			$SigcheckExecutable = "sigcheck.exe"
 		}
 
-		# Check if path to sigcheck executable is valid
+		# if SigcheckLocation is null ExpandEnvironmentVariables won't be null but ""
+		$SigcheckDir = [System.Environment]::ExpandEnvironmentVariables($SigcheckLocation)
+
+		# If parameter was set to null by user set it to PSScriptRoot
+		if ([string]::IsNullOrEmpty($SigcheckDir))
+		{
+			$SigcheckDir = $PSScriptRoot
+		}
+		else # Otherwise Resolve-Path will error
+		{
+			$SigcheckDir = Resolve-Path -Path $SigcheckDir -ErrorAction SilentlyContinue
+		}
+
 		# TODO: Prefer x64 bit executable on x64 system
 		$SigCheckFile = $null
+
+		# NOTE: sigcheck64a.exe is not a valid application for this OS platform
 		if (Test-Path -Path "$SigcheckDir\$SigcheckExecutable" -PathType Leaf)
 		{
 			# Get full path to single executable
-			$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" | Get-Command -CommandType Application
+			$Command = Resolve-Path -Path "$SigcheckDir\$SigcheckExecutable" |
+			Get-Command -CommandType Application | Where-Object {
+				$_.Name -notmatch "a.exe$"
+			}
+
 			$SigCheckFile = $Command.Source | Select-Object -Last 1
+			Write-Debug -Message "[$ThisScript] $SigCheckFile found in '$SigcheckDir'"
 		}
 		else
 		{
-			# Check if sigcheck is in path
-			Write-Debug -Message "[$ThisScript] Checking if sigcheck is in path"
-			$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore
+			# Check if sigcheck is in PATH
+			Write-Debug -Message "[$ThisScript] Checking if sigcheck is in PATH"
+			$Command = Get-Command -Name $SigcheckExecutable -CommandType Application -ErrorAction Ignore |
+			Where-Object {
+				$_.Name -notmatch "a.exe$"
+			}
 
 			# Can be, not found or there are multiple matches
 			if (($Command | Measure-Object).Count -ne 0)
@@ -293,9 +312,55 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				$SigCheckFile = $Command.Name | Select-Object -Last 1
 				Write-Debug -Message "[$ThisScript] $SigCheckFile found in PATH"
 			}
+			# Offer to user to download it
+			elseif ($Force -or $PSCmdlet.ShouldContinue("Download $SigcheckExecutable from sysinternals.com to '$SigcheckDir' directory", "$SigcheckExecutable executable was not found"))
+			{
+				$TempFolder = [System.Environment]::ExpandEnvironmentVariables("%LocalAppData%\temp")
+
+				if ([System.Environment]::Is64BitOperatingSystem)
+				{
+					$SigCheckFile = "$SigcheckDir\Sigcheck64.exe"
+					$SigcheckExecutable = $SigcheckExecutable -replace "\*", "64"
+				}
+				else
+				{
+					$SigCheckFile = "$SigcheckDir\Sigcheck.exe"
+				}
+
+				try
+				{
+					Write-Information -Tags $ThisScript -MessageData "INFO: Downloading Sigcheck.zip to '$TempFolder'"
+
+					# Get rid of flushy download progress
+					$PreviousProgressPreference = $ProgressPreference
+					$ProgressPreference = "SilentlyContinue"
+					# This will override Sigcheck.zip if it exists
+					Invoke-WebRequest -Uri "https://download.sysinternals.com/files/Sigcheck.zip" -OutFile "$TempFolder\Sigcheck.zip" -ErrorAction Stop
+
+					Write-Information -Tags $ThisScript -MessageData "INFO: Expanding Sigcheck.zip to '$SigcheckDir'"
+					# -Force to override existing files such as Eula.txt, -DestinationPath is created
+					Expand-Archive -Path "$TempFolder\Sigcheck.zip" -DestinationPath $SigcheckDir -Force -ErrorAction Stop
+					# Ignore removing zip, if it's used by AV to scan it then this may fail
+					Remove-Item -Path "$TempFolder\Sigcheck.zip" -ErrorAction Ignore
+
+					if (!(Test-Path -Path $SigCheckFile -PathType Leaf))
+					{
+						throw "Downloading and expanding Sigcheck.zip succeeded but $SigcheckExecutable not found"
+					}
+				}
+				catch
+				{
+					Write-Warning -Message "[$ThisScript] Failed to download sigcheck because '$($_.Exception.Message)'"
+					return
+				}
+				finally
+				{
+					$ProgressPreference = $PreviousProgressPreference
+				}
+			}
 			else
 			{
-				Write-Warning -Message "[$ThisScript] $($SigcheckExecutable -replace "\*", "64") was not found in '$SigcheckLocation' or in PATH, VirusTotal scan will not be performed"
+				Write-Warning -Message "[$ThisScript] $SigcheckExecutable was not found in '$SigcheckDir' or in PATH, VirusTotal scan will not be performed"
 				return
 			}
 		}
@@ -327,7 +392,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 	{
 		# JSON root file data
 		[hashtable] $JsonData = @{}
-		$InvocationName = $MyInvocation.InvocationName
+		$InvocationName = $ThisScript
 
 		# Script block used to write scan results into JSON file
 		[ScriptBlock] $WriteFile = {
@@ -369,6 +434,9 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 				Write-Debug -Message "[$InvocationName] Adding extension to file"
 				$FileName += ".json"
 			}
+
+			# The default depth is 2, which is not enough
+			$PSDefaultParameterValues["ConvertTo-Json:Depth"] = 3
 
 			if ($Append)
 			{
