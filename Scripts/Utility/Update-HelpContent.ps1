@@ -44,8 +44,8 @@ SOFTWARE.
 Generate or update help files for all modules in repository
 
 .DESCRIPTION
-Update-HelpContent.ps1 Updates existing or generates new help files for all modules
-that are part of "Windows Firewall Ruleset" repository.
+Update-HelpContent.ps1 Updates existing or generates new help files for all modules which are
+part of "Windows Firewall Ruleset" repository.
 These Help files are used for online help (Get-Help -Online) and updatable help (Update-Help)
 
 .PARAMETER Module
@@ -96,7 +96,7 @@ TODO: the "Module Name:" entry in help files (and maybe even "external help file
 if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute
-TODO: Get rid of blinking progress bar and make your own
+TODO: Get rid of blinking progress bar or make your own
 TODO: When run in fresh session for first time it does nothing
 
 .LINK

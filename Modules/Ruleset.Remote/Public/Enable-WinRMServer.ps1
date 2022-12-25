@@ -245,7 +245,6 @@ function Enable-WinRMServer
 			# TODO: Use Set-WSManQuickConfig since recreating default session configurations is not absolutely needed
 			# TODO: Since it creates HTTP listener we should probably remove all listeners before creating our own
 			Enable-PSRemoting -Force | Out-Null
-			Set-StrictMode -Version Latest
 		}
 		catch [System.OperationCanceledException]
 		{
@@ -254,6 +253,10 @@ function Enable-WinRMServer
 		catch
 		{
 			Write-Error -ErrorRecord $_
+		}
+		finally
+		{
+			Set-StrictMode -Version Latest
 		}
 	}
 
@@ -379,7 +382,7 @@ function Enable-WinRMServer
 		# sections of code there, also easier to maintain because of less code duplication
 		Disable-WinRMServer -KeepDefault:$KeepDefault
 
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM loopback server completed successfully!"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Enabling WinRM loopback server completed successfully"
 		return
 	}
 

@@ -112,6 +112,7 @@ None. This function does not produce pipeline output.
 The Following modifications by metablaster, November 2020:
 
 Removed max* variables for Core edition as per: https://github.com/PowerShell/PowerShell/issues/2221
+
 - MaximumAliasCount
 - MaximumDriveCount
 - MaximumErrorCount
@@ -119,20 +120,23 @@ Removed max* variables for Core edition as per: https://github.com/PowerShell/Po
 - MaximumVariableCount
 
 Added new variables:
-InformationPreference
-Transcript
 
-Added links and notes to (this) comment based help
-Added Write-* streams
-Added license and Copyright notice to (this) comment based help
-Added script invocation logic by removing function
-Changed the name and casing of local variables
-Changed PowerShell version requirement
-Replaced single quotes with double quotes
-Reordered preference variables
-Added OutputType and PositionalBinding attribute
-Fixed issue when the script was dot sourced
-Added optional parent scope validation
+- InformationPreference
+- Transcript
+
+Other changes:
+
+- Added links and notes to (this) comment based help
+- Added Write-* streams
+- Added license and Copyright notice to (this) comment based help
+- Added script invocation logic by removing function
+- Changed the name and casing of local variables
+- Changed PowerShell version requirement
+- Replaced single quotes with double quotes
+- Reordered preference variables
+- Added OutputType and PositionalBinding attribute
+- Fixed issue when the script was dot sourced
+- Added optional parent scope validation
 
 TODO: This script needs unit test to simplify or improve
 

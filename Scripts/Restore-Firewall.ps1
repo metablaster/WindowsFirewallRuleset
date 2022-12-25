@@ -44,7 +44,7 @@ SOFTWARE.
 Restore previously saved firewall rules and configuration
 
 .DESCRIPTION
-Restore-Firewall script imports all firewall rules and configuration that were previously exported
+Restore-Firewall script imports all firewall rules and configuration which was previously exported
 with Backup-Firewall.ps1
 It is recommended to reset firewall prior to restore which will make import process much faster.
 
@@ -59,7 +59,7 @@ Force should be also specified to replace existing firewall rules that are
 duplicate of the ones to be imported.
 
 .EXAMPLE
-PS> Restore-Firewall
+PS> Restore-Firewall -Force
 
 .EXAMPLE
 PS> Restore-Firewall -Domain Server01 -Path "C:\MyExports"

@@ -41,6 +41,9 @@ New screen buffer height
 .EXAMPLE
 PS> Set-ScreenBuffer
 
+.EXAMPLE
+PS> Set-ScreenBuffer 1000
+
 .INPUTS
 None. You cannot pipe objects to Set-ScreenBuffer
 

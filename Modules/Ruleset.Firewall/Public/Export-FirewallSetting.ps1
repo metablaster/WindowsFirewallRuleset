@@ -46,6 +46,9 @@ If specified does not prompt to replace existing file.
 .EXAMPLE
 PS> Export-FirewallSetting
 
+.EXAMPLE
+PS> Export-FirewallSetting -Path "C:\DirectoryName\filename.json" -Force
+
 .INPUTS
 None. You cannot pipe objects to Export-FirewallSetting
 

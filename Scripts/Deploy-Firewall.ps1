@@ -46,8 +46,8 @@ Deploy firewall rules and configuration to local or remote computer.
 .DESCRIPTION
 Deploy-Firewall.ps1 is a master script to deploy rules and configuration to local and/or multiple
 remote computers.
-In addition to deployment of rules, target GPO firewall is configured, desktop shortcut to
-management console is set and optionally custom firewall log location is set.
+In addition to deployment of rules and setting, target GPO firewall is configured, desktop shortcut
+to management console is set and optionally custom firewall log location is set.
 
 .PARAMETER Domain
 Specify computer name onto which to deploy firewall.
@@ -64,7 +64,7 @@ default program path does not exist or if it's of an invalid syntax needed for f
 .PARAMETER Force
 If specified, firewall deployment is automated and no prompt to choose
 rulesets to load is shown.
-By default the user is present with a series of questions to fine tune deployment.
+By default a user is present with a series of questions to fine tune deployment.
 To avoid all prompts completely combine this switch with -Confirm:$false
 
 .EXAMPLE
@@ -75,6 +75,9 @@ PS> Deploy-Firewall -Interactive
 
 .EXAMPLE
 PS> Deploy-Firewall -Domain Server01 -Quiet
+
+.EXAMPLE
+PS> Deploy-Firewall -Force -Confirm:$false
 
 .INPUTS
 None. You cannot pipe objects to Deploy-Firewall.ps1
@@ -117,7 +120,7 @@ Initialize-Project
 
 # User prompt
 $ExecuteParams = @{
-	Accept = "Deploy firewall to '$PolicyStore' computer"
+	Accept = "Deploy firewall to '$Domain' computer"
 	Deny = "Abort firewall deployment operation"
 	Force = $Force
 }
@@ -636,7 +639,7 @@ if ($ErrorStatus)
 }
 else
 {
-	Write-Information -Tags $ThisScript -MessageData "INFO: All operations completed successfully!"
+	Write-Information -Tags $ThisScript -MessageData "INFO: All operations completed successfully"
 }
 
 Write-Information -MessageData "" -InformationVariable ThrowAway

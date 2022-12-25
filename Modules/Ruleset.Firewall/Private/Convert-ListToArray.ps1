@@ -36,14 +36,14 @@ Convert comma separated list to string array
 Used by Import-FirewallRule to unpack a string of IP addresses back into string array
 
 .PARAMETER Value
-List of comma separated string values, previously packed with Convert-ArrayToList
+List of comma separated string values, previously packed with Convert-ListToArray
 
 .PARAMETER DefaultValue
 Value to set if a list is empty.
 This way calling code can be generic since it doesn't need to handle default values
 
 .EXAMPLE
-PS> Convert-ArrayToList "192.168.1.1,192.168.2.1,172.24.33.100"
+PS> Convert-ListToArray "192.168.1.1,192.168.2.1,172.24.33.100"
 
 "192.168.1.1", "192.168.2.1", "172.24.33.100"
 
@@ -55,16 +55,25 @@ None. You cannot pipe objects to Convert-ListToArray
 
 .NOTES
 TODO: DefaultValue can't be string, try string[]
+
 The Following modifications by metablaster:
+
 August 2020:
+
 - Make Convert-ListToArray Advanced function
 - Change code style to be same as the rest of a project code
+
 September 2020:
+
 - Show warning for unexpected input
 - Added Write-* stream
+
 December 2020:
+
 - Renamed parameter to standard name
+
 January 2022:
+
 - Disabled PositionalBinding and set default binding parameter
 #>
 function Convert-ListToArray

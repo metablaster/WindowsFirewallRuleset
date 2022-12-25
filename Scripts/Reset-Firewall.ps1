@@ -63,7 +63,7 @@ If specified, no prompt for confirmation is shown to perform actions
 PS> Reset-Firewall
 
 .EXAMPLE
-PS> Reset-Firewall -Remoting -Force
+PS> Reset-Firewall -Remoting -Service -Force
 
 .INPUTS
 None. You cannot pipe objects to Reset-Firewall.ps1
@@ -75,7 +75,7 @@ None. Reset-Firewall.ps1 does not generate any output
 TODO: OutputType attribute
 TODO: Implement resetting only public, private or domain profile, ShouldProcess
 TODO: Remote registry reset is not implemented by Reset-WinRM
-TODO: Even after full reset, control panel firewall says "For your security some settings are controlled by Group Policy"
+HACK: Even after full reset, control panel firewall says "For your security some settings are controlled by Group Policy"
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

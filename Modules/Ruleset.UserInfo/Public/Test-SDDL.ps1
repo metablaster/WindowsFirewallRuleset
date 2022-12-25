@@ -42,7 +42,7 @@ If specified, the return value is SDDL string if it's valid, otherwise null.
 By default boolean test is performed.
 
 .EXAMPLE
-PS> Test-SDDL D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;;S-1-5-21-2050798540-3232341180-3229034493-1001)
+PS> Test-SDDL "D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;;S-1-5-21-2050798540-3232341180-3229034493-1001)"
 
 .INPUTS
 None. You cannot pipe objects to Test-SDDL

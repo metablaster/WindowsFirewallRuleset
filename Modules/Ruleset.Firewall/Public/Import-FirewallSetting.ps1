@@ -44,6 +44,9 @@ Input file
 .EXAMPLE
 PS> Import-FirewallSetting
 
+.EXAMPLE
+PS> Import-FirewallSetting -Path "C:\DirectoryName" -FileName Settings
+
 .INPUTS
 None. You cannot pipe objects to Import-FirewallSetting
 

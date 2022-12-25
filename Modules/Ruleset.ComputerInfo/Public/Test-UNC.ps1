@@ -52,15 +52,15 @@ PS> Test-UNC \\SERVER
 False
 
 .EXAMPLE
-PS> Test-UNC \\DESKTOP-PC\ShareName$
+PS> Test-UNC \\DESKTOP-PC\ShareName$ -Strict
 True
 
 .EXAMPLE
-PS> Test-UNC \\SERVER-01\Share\Directory DIR\file.exe
+PS> Test-UNC "\\SERVER-01\Share\Directory DIR\file.exe"
 True
 
 .EXAMPLE
-PS> Test-UNC \SERVER-01\Share\Directory DIR
+PS> Test-UNC "\SERVER-01\Share\Directory DIR"
 False
 
 .INPUTS

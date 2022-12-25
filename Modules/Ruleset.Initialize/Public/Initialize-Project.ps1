@@ -41,16 +41,6 @@ If not the function may exit and stop executing scripts.
 .EXAMPLE
 PS> Initialize-Project
 
-Performs default requirements and recommendations checks managed by global settings.
-Error or warning message is shown if check failed, environment info otherwise.
-
-.EXAMPLE
-PS> Initialize-Project
-
-Performs default requirements and recommendations checks managed by global settings.
-Error or warning message is shown if check failed and all subsequent operations are halted.
-If successful environment info is shown.
-
 .INPUTS
 None. You cannot pipe objects to Initialize-Project
 

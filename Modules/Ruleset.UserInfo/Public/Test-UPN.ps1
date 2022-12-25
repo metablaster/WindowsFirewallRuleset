@@ -54,10 +54,6 @@ PS> Test-UPN Administrator@machine.lan
 True or False
 
 .EXAMPLE
-PS> Get-GroupPrincipal -Group "Users" | Test-UPN
-True or False
-
-.EXAMPLE
 PS> Test-UPN "Use!r" -Prefix
 False
 

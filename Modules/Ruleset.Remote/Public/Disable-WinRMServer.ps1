@@ -345,5 +345,5 @@ function Disable-WinRMServer
 		$WinRM.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WinRM server completed successfully!"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Disabling WinRM server completed successfully"
 }

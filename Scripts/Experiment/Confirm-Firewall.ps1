@@ -51,6 +51,9 @@ Verification is performed by scanning registry and any discrepancies are reporte
 .PARAMETER Domain
 Computer name on which firewall configuration is to be tested
 
+.PARAMETER Force
+If specified, no prompt for confirmation is shown to perform actions.
+
 .EXAMPLE
 PS> Confirm-Firewall
 

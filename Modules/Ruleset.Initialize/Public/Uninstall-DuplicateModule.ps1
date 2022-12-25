@@ -69,7 +69,7 @@ PS> Uninstall-DuplicateModule -Name PowerShellGet, PackageManagement -Scope Ship
 Removes outdated PowerShellGet and PackageManagement modules excluding those installed per user
 
 .EXAMPLE
-PS> Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
+PS> Get-Module -FullyQualifiedName @{ ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
 Uninstall-DuplicateModule
 
 First get module you know should be removed and pass it to pipeline

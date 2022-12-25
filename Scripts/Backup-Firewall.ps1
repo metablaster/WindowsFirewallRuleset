@@ -48,22 +48,19 @@ Backup-Firewall.ps1 script exports all GPO firewall rules and settings to "Expor
 The result is FirewallRules.csv and FirewallSettings.json files.
 
 .PARAMETER Path
-Path into which to save file.
+Path into which to save files.
 By default this is Exports directory in repository.
 Wildcard characters are supported.
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions.
-It also does not prompt to replace existing export files.
+It also does not prompt to overwrite existing export files.
 
 .EXAMPLE
-PS> Backup-Firewall
+PS> Backup-Firewall.ps1
 
 .EXAMPLE
-PS> Backup-Firewall -Domain Server01
-
-.EXAMPLE
-PS> Backup-Firewall -Path "C:\MyFolder" -Force
+PS> Backup-Firewall.ps1 -Path "C:\MyFolder" -Force
 
 .INPUTS
 None. You cannot pipe objects to Backup-Firewall.ps1

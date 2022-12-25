@@ -60,10 +60,9 @@ Using standard (aka. non Administrative) Windows account for almost all use help
 system because potential malware won't be able to compromise system without you allowing such action
 by supplying your administrative credentials.
 
-Administrative account is needed as well but it should be used for administration only,
-if possible offline.
+Administrative account is needed as well but it should be used for administration only.
 
-The following site explains how to create local (standard) account:\
+The following site explains how to create standard user account:\
 [Create a local user or administrator account in Windows][local account]
 
 [Table of Contents](#table-of-contents)
@@ -87,7 +86,7 @@ To enforce digital signature requirement for all software on your system follow 
 6. Expand node: `Security options`
 7. On the right find option `User Account Control: Only elevate executable files that are signed and validated`
 8. Double click it to open it
-9. Click on enabled checkbox and apply, hit OK
+9. Click on enabled checkbox and apply, click OK
 
 Now if you attempt to install unsigned software an error will appear like in the image below:
 
@@ -102,9 +101,13 @@ Administrator.\
 UAC has several protections levels, it's recommended to set it to max, to configure UAC see:\
 [Change User Access Control setting][uac settings]
 
-See also [How User Account Control works][uac]
+See also:
 
-UAC isn't boolet proof though, you should probably be aware of [Privilege escalation][privilege escalation]
+- [How User Account Control works][uac]
+- [User Account Control blog][uac blog]
+- [User Account Control (UAC) - quick update][uac blog update]
+
+UAC probably isn't bulletproof though, you should be aware of [Privilege escalation][privilege escalation]
 
 ### Trusted and encrypted web sites
 
@@ -189,8 +192,8 @@ activity is by using the browser.
 Protect your web browser maximum possible by restrictively adjusting settings, and
 avoid using addons except few which are known to be trusted by online community.
 
-Suggested web browsers are subjective and it depends a lot on how much speed is one willing to trade
-for security, what matters most is to use the one which receives regular updates,
+Suggested web browsers are subjective and it depends a lot on how much privacy is one willing to
+trade for speed, what matters most is to use the one which receives regular updates,
 most mainstream web browsers do.
 
 It's also important to configure your web browser properly, one example of browser configuration is
@@ -529,3 +532,5 @@ The following web sites are good starting point for additional research regardin
 [nmap]: https://nmap.org "Visit nmap site"
 [startpage]: https://www.startpage.com "Visit Startpage search engine"
 [psiphon repo]: https://github.com/Psiphon-Inc/psiphon-windows "Visit GitHub page"
+[uac blog]: https://learn.microsoft.com/en-us/archive/blogs/e7/user-account-control "Visit Microsoft archive"
+[uac blog update]: https://learn.microsoft.com/en-us/archive/blogs/e7/user-account-control-uac-quick-update "Visit Microsoft archive"

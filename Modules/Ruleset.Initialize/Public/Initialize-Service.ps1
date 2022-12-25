@@ -52,11 +52,18 @@ The default Automatic startup type.
 .EXAMPLE
 PS> Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
 
-Returns True if all requested services are started successfully False otherwise
+Returns $true if all requested services were started successfully and set to
+Automatic startup $false otherwise
 
 .EXAMPLE
 PS> Initialize-Service "WinRM"
-$true if WinRM service was started $false otherwise
+
+$true if WinRM service was started and set to automatic startup $false otherwise
+
+.EXAMPLE
+PS> Initialize-Service RemoteRegistry -Status Stopped -StartupType Manual
+
+$true if RemoteRegistry was set to either stopped or started and set to Manual startup type
 
 .INPUTS
 [string[]] One or more service short names to check
@@ -81,6 +88,9 @@ https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrol
 
 .LINK
 https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype
 #>
 function Initialize-Service
 {
@@ -220,7 +230,7 @@ function Initialize-Service
 						# For dependent services show only failures
 						$PreviousDependentStartType = $Required.StartType
 						# [System.ServiceProcess.ServiceType]
-						$ServiceType = Get-Service -Name $Required | Select-Object -ExpandProperty ServiceType
+						$ServiceType = Get-Service -Name $Required.Name | Select-Object -ExpandProperty ServiceType
 
 						if (($PreviousDependentStartType -eq [ServiceStartMode]::Boot) -or
 							($PreviousDependentStartType -eq [ServiceStartMode]::System))
@@ -229,10 +239,10 @@ function Initialize-Service
 							Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because startup type is '$PreviousDependentStartType'"
 							continue
 						}
-						elseif ($ServiceType -notin @("Win32OwnProcess", "Win32ShareProcess"))
+						elseif (!(($ServiceType -band [ServiceType]::Win32OwnProcess) -or ($ServiceType -band [ServiceType]::Win32ShareProcess)))
 						{
 							# Neither clever nor required to modify these services
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting dependent service '$($Required.Name)' skipped because service type is '$ServiceType'"
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because service type is '$ServiceType'"
 							continue
 						}
 
@@ -300,7 +310,7 @@ function Initialize-Service
 						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because startup type is '$PreviousStartType'"
 						continue
 					}
-					elseif ($ServiceType -notin @("Win32OwnProcess", "Win32ShareProcess"))
+					elseif (!(($ServiceType -band [ServiceType]::Win32OwnProcess) -or ($ServiceType -band [ServiceType]::Win32ShareProcess)))
 					{
 						# Neither clever nor required to modify these services
 						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because service type is '$ServiceType'"
@@ -402,7 +412,7 @@ function Initialize-Service
 			}
 			else
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service was skipped" -Verbose
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service was skipped, service already configured"
 			}
 
 			$Service.Close()

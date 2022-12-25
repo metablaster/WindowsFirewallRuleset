@@ -39,6 +39,13 @@ Computer name which to format
 .EXAMPLE
 PS> Format-ComputerName localhost
 
+NETBIOSNAME
+
+.EXAMPLE
+PS> Format-ComputerName server01
+
+SERVER01
+
 .INPUTS
 [string]
 

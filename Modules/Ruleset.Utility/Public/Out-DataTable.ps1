@@ -47,7 +47,7 @@ Creates a DataTable from the properties of Get-PSDrive
 .EXAMPLE
 PS> Get-Process | Select-Object Name, CPU | Out-DataTable
 
-Get a list of processes and their CPU and create a datatable
+Get a list of processes and CPU load and create a datatable
 
 .INPUTS
 [PSObject[]] Any object can be piped to Out-DataTable

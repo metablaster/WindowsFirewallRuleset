@@ -77,29 +77,19 @@ value is $false unless SkipVirusTotalCheck global variable is set.
 .EXAMPLE
 PS> Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
 
-ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe
+ERROR: Digital signature verification failed for 'C:\Windows\UnsignedFile.exe'
+INFO: If you trust this executable run 'CallerScript.ps1' with -Trusted switch
 
 .EXAMPLE
-PS> Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\chrome.exe"
+PS> Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\file.paf"
 
-WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded
-INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe
-INFO: To fix this problem find 'chrome.exe' and update installation directory in Test-ExecutableFile.ps1 script
-
-.EXAMPLE
-PS> Test-ExecutableFile "\\COMPUTERNAME\Directory\file.exe"
-
-ERROR: Specified file path is missing a file system qualifier: \\COMPUTERNAME\Directory\file.exe
+ERROR: File extension 'PAF' is blacklisted executable file 'C:\Users\USERNAME\AppData\Application\file.paf'
+INFO: Blocked file 'file.paf' is Portable Application Installer File
 
 .EXAMPLE
-PS> Test-ExecutableFile ".\..\file.exe"
+PS> Test-ExecutableFile ".\directory\..\file.exe"
 
-ERROR: Specified file path is relative: .\..\file.exe
-
-.EXAMPLE
-PS> Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
-
-ERROR: Specified file path contains invalid characters: C:\Bad\<Path>\Loca'tion
+WARNING: Specified file path contains parent directory notation '$ExpandedPath'
 
 .INPUTS
 None. You cannot pipe objects to Test-ExecutableFile

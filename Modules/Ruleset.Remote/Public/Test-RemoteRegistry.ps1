@@ -42,6 +42,9 @@ If specified, no warning is shown, only true or false is returned
 .EXAMPLE
 PS> Test-RemoteRegistry -Domain Server01
 
+.EXAMPLE
+PS> Test-RemoteRegistry -Domain Server01 -Quiet
+
 .INPUTS
 None. You cannot pipe objects to Test-RemoteRegistry
 

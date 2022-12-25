@@ -97,11 +97,12 @@ None. You cannot pipe objects to Get-ExportedType.ps1
 
 .NOTES
 Modifications by metablaster January 2021:
-Added Parameter and SupportsWildcards attributes to parameters
-Updated formatting and casing according to the rest of project
-Convert to script by removing function
-Rename from Get-Type to Get-ExportedType
-Added links and notes to comment based help
+
+- Added Parameter and SupportsWildcards attributes to parameters
+- Updated formatting and casing according to the rest of project
+- Convert to script by removing function
+- Rename from Get-Type to Get-ExportedType
+- Added links and notes to comment based help
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

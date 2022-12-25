@@ -51,7 +51,7 @@ The default is Cyan.
 PS> Net-NewFirewallRule ... | Format-RuleOutput
 
 .EXAMPLE
-PS> Net-NewFirewallRule ... | Format-RuleOutput
+PS> Net-NewFirewallRule ... | Format-RuleOutput -ForegroundColor Red -Label Modify
 
 .INPUTS
 [Microsoft.Management.Infrastructure.CimInstance[]]

@@ -86,12 +86,13 @@ PS> $Array | Where-Object { $_.Property2 -isnot [System.DateTime] }
 
 .NOTES
 Modifications by metablaster January 2021:
-Added #Requires statement, Parameter and OutputType attributes
-Updated formatting, casing and naming according to the rest of project
-Convert to script by removing function
-Added links, inputs, outputs and notes to comment based help
-Replaced PSObject entries with PSCustomObject
-Added SuppressMessageAttribute for false positive
+
+- Added #Requires statement, Parameter and OutputType attributes
+- Updated formatting, casing and naming according to the rest of project
+- Convert to script by removing function
+- Added links, inputs, outputs and notes to comment based help
+- Replaced PSObject entries with PSCustomObject
+- Added SuppressMessageAttribute for false positive
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md

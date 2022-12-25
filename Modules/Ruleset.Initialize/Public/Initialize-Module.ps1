@@ -64,14 +64,14 @@ Controls whether module initialization must succeed, if initialization fails exe
 otherwise only warning is generated
 
 .EXAMPLE
-PS> Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
+PS> Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }
 
 Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository
 specified by default is not registered user is prompted to do that too.
 
 .EXAMPLE
-PS> Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
-> "PSGallery" -URL "https://www.powershellgallery.com/api/v2"
+PS> Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } `
+-Repository "PSGallery" -URL "https://www.powershellgallery.com/api/v2"
 
 Checks if PackageManagement is up to date, if not user is prompted to update, and if repository
 is not registered user is prompted to do that too.

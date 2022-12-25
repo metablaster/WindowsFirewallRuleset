@@ -75,13 +75,13 @@ If specified, only hidden interfaces are included
 If specified, only interfaces connected to network are returned
 
 .EXAMPLE
-PS> Get-InterfaceAlias "IPv4"
+PS> Get-InterfaceAlias -AddressFamily IPv4
 
 .EXAMPLE
-PS> Get-InterfaceAlias "IPv4" -Physical
+PS> Get-InterfaceAlias -AddressFamily IPv4 -Physical
 
 .EXAMPLE
-PS> Get-InterfaceAlias "IPv6" -WildcardOption "IgnoreCase"
+PS> Get-InterfaceAlias -AddressFamily IPv6 -WildcardOption "IgnoreCase"
 
 .INPUTS
 None. You cannot pipe objects to Get-InterfaceAlias

@@ -65,7 +65,7 @@ Wildcard characters are supported.
 The default value is "*"
 
 .PARAMETER Domain
-Run this script against specified computer.
+Run this script against the specified computer.
 The default value is local computer.
 \\$Domain\C$\netstat.txt is created on that system and the results are returned here
 
@@ -124,7 +124,7 @@ If specified, displays result where both the localaddress and the remoteaddress 
 PS> Get-NetworkStat | Format-Table
 
 .EXAMPLE
-PS> Get-NetworkStat iexplore -Domain Server01 -ShowHostName | Format-Table
+PS> Get-NetworkStat iexplore -Domain Server01 -IncludeHostName | Format-Table
 
 .EXAMPLE
 PS> Get-NetworkStat -ProcessName md* -Protocol TCP
@@ -139,7 +139,7 @@ PS> Get-NetworkStat -State LISTENING -Protocol TCP
 PS> Get-NetworkStat -Domain Computer1, Computer2
 
 .EXAMPLE
-PS> 'Computer1', 'Computer2' | Get-NetworkStat
+PS> "Computer1", "Computer2" | Get-NetworkStat
 
 .INPUTS
 [string[]]
@@ -154,20 +154,22 @@ Cookie Monster's Blog: http://ramblingcookiemonster.github.io/
 
 Modifications by metablaster:
 January 2021:
-Added #Requires statement, missing Parameter and SupportsWildcards attributes
-Replaced Invoke-WmiMethod with Invoke-CimMethod
-Updated formatting, casing and naming according to the rest of project
-Converted to script by removing function
-Updated comment based help
-Fixed getting process list from remote computer with Invoke-Command instead of Get-Process
-Changed default for AddressFamily from * to Any
+
+- Added #Requires statement, missing Parameter and SupportsWildcards attributes
+- Replaced Invoke-WmiMethod with Invoke-CimMethod
+- Updated formatting, casing and naming according to the rest of project
+- Converted to script by removing function
+- Updated comment based help
+- Fixed getting process list from remote computer with Invoke-Command instead of Get-Process
+- Changed default for AddressFamily from * to Any
 
 February 2022:
-Addresses are resolved to host name by using Resolve-Host function from repository
-Invoke-Command and Invoke-CimMethod use -Credential and -CimSession to establish connection
-Bugfix where filtering by local and remote address would produce errors
-Verbose messages modified to be more precise in description
-Bugfix where Invoke-Command to get processes would return wrong process ID, needed to wait for process
+
+- Addresses are resolved to host name by using Resolve-Host function from repository
+- Invoke-Command and Invoke-CimMethod use -Credential and -CimSession to establish connection
+- Bugfix where filtering by local and remote address would produce errors
+- Verbose messages modified to be more precise in description
+- Bugfix where Invoke-Command to get processes would return wrong process ID, needed to wait for process
 
 TODO: Need to handle multiple computers
 

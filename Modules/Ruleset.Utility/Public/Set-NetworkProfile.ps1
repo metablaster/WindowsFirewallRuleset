@@ -43,6 +43,9 @@ If not specified, you're prompted for each NIC individually
 .EXAMPLE
 PS> Set-NetworkProfile
 
+.EXAMPLE
+PS> Set-NetworkProfile Public
+
 .INPUTS
 None. You cannot pipe objects to Set-NetworkProfile
 

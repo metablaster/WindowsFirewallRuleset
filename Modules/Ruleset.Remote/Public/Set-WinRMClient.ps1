@@ -354,5 +354,5 @@ function Set-WinRMClient
 		}
 	}
 
-	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM client configuration completed successfully!"
+	Write-Verbose -Message "[$($MyInvocation.InvocationName)] WinRM client configuration completed successfully"
 }

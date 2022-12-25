@@ -48,10 +48,10 @@ Gets firewall auditing logs from event viewer and saves result to log file for r
 debugging purposes.
 
 .PARAMETER Direction
-Get entries only for specified direction
+Get entries only for the specified direction
 
 .PARAMETER Protocol
-Get entries only for specified protocol, this can be either protocol number or
+Get entries only for the specified protocol, this can be either protocol number or
 predefined protocol keyword
 https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers
 
@@ -62,8 +62,8 @@ Get maximum this amount of newest entries
 Get entries within last hours specified
 
 .PARAMETER EventID
-Get entries for this ID only
-The default is "The Windows Filtering Platform has blocked a packet"
+Get entries for this event ID only
+The default is 5152 "The Windows Filtering Platform has blocked a packet"
 
 Event ID 5146: The Windows Filtering Platform has blocked a packet
 Event ID 5147: A more restrictive Windows Filtering Platform filter has blocked a packet
@@ -82,18 +82,22 @@ Event ID 5159: The Windows Filtering Platform has blocked a bind to a local port
 
 .EXAMPLE
 PS> Debug-FilteringPlatform -Last 48
+
 Log last 48 packet drop entries for all directions, all protocols within 24 hours
 
 .EXAMPLE
 PS> Debug-FilteringPlatform -Hours 48 -Direction Inbound -Protocol 6
+
 Log last 50 packet drop entries for inbound direction, UDP within 24 hours
 
 .EXAMPLE
 PS> Debug-FilteringPlatform -Last 14 -Protocol ICMP -Hours 2
+
 Log last 14 packet drop entries for all directions, ICMP within last 2 hours
 
 .EXAMPLE
 PS> Debug-FilteringPlatform -Hours 48 -Direction Outbound -Protocol TCP -EventID 5159
+
 Log last 50 blocking bind to local port entries for outbound direction, TCP protocol within 48 hours
 
 .INPUTS
@@ -109,10 +113,10 @@ None.
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent?view=powershell-7.1
+https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent
 
 .LINK
-https://docs.microsoft.com/en-us/powershell/scripting/samples/Creating-Get-WinEvent-queries-with-FilterHashtable?view=powershell-7.1
+https://docs.microsoft.com/en-us/powershell/scripting/samples/Creating-Get-WinEvent-queries-with-FilterHashtable
 
 .LINK
 https://docs.microsoft.com/en-us/windows/win32/wes/windows-event-log-reference

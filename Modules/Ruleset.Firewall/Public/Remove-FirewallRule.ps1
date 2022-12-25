@@ -53,12 +53,12 @@ Input file in JSON instead of CSV format
 .EXAMPLE
 PS> Remove-FirewallRule
 
-Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
+Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory
 
 .EXAMPLE
 Remove-FirewallRule WmiRules.json -JSON
 
-Removes all firewall rules according to the list in the JSON file WmiRules.json.
+Removes all firewall rules according to the list in the JSON file WmiRules.json
 
 .INPUTS
 None. You cannot pipe objects to Remove-FirewallRule

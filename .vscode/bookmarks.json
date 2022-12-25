@@ -4,7 +4,7 @@
 			"path": "Modules/Ruleset.Remote/Public/Connect-Computer.ps1",
 			"bookmarks": [
 				{
-					"line": 339,
+					"line": 351,
 					"column": 3,
 					"label": ""
 				}
@@ -106,6 +106,16 @@
 				{
 					"line": 111,
 					"column": 0,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.ProgramInfo/Public/Test-FileSystemPath.ps1",
+			"bookmarks": [
+				{
+					"line": 244,
+					"column": 1,
 					"label": ""
 				}
 			]

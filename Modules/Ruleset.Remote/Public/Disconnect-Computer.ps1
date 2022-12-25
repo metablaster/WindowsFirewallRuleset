@@ -41,6 +41,9 @@ Computer name which to disconnect
 .EXAMPLE
 PS> Disconnect-Computer
 
+.EXAMPLE
+PS> Disconnect-Computer Server01
+
 .INPUTS
 None. You cannot pipe objects to Disconnect-Computer
 

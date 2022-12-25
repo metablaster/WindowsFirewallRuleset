@@ -75,6 +75,7 @@ Version: 1.02
 Build date: 2020/02/15
 
 The Following modifications by metablaster August 2020:
+
 1. Applied formatting and code style according to project rules
 2. Added parameter to target specific policy store
 3. Separated functions into their own scope
@@ -84,7 +85,9 @@ The Following modifications by metablaster August 2020:
 7. Changed minor flow and logic of execution
 8. Make output formatted and colored
 9. Added progress bar
+
 December 2020:
+
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
 

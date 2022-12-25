@@ -41,9 +41,9 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
 
   - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
-  - Fixed a bug with `Initialize-Service` which configured serices which should not be configured\
+  - Fixed a bug with `Initialize-Service` which configured services which should not be configured\
   **NOTE:** If using Windows Firewall Ruleset version up to and including v0.14.0 run the following
-  code to restore these system managed services:
+  code to restore these system managed services to system defaults:
 
     ```powershell
     sc.exe config AFD start= system

@@ -49,16 +49,16 @@ nor users can access them.
 This script grants permissions to non administrative account to read firewall log files.
 It also grants firewall service to write logs to project specified location.
 
-However the Microsoft Protection Service will automatically reset permissions on firewall logs
-on system reboot, network reconnect or firewall settings change, for security reasons, in which
-case this script needs to be run again.
+However, for security reasons the Microsoft Protection Service will automatically reset permissions
+so that only firewall service will have access on firewall logs, which happens on system reboot,
+network reconnect or firewall settings change, in which case this script needs to be run again.
 
 .PARAMETER User
-Standard (non administrative) user account for which to grant logs permission
+Standard (non administrative) user account for which to grant read permissions on log files
 
 .PARAMETER Domain
-Principal domain for which to grant permission.
-By default specified principal gets permission from local machine
+Principal domain for which to grant permissions.
+By default specified principal from local machine gets permissions
 
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
@@ -69,6 +69,9 @@ PS> Grant-Logs USERNAME
 .EXAMPLE
 PS> Grant-Logs USERNAME -Domain COMPUTERNAME
 
+.EXAMPLE
+PS> Grant-Logs "NETWORK SERVICE" -Domain "NT AUTHORITY"
+
 .INPUTS
 None. You cannot pipe objects to Grant-Logs.ps1
 
@@ -77,12 +80,15 @@ None. Grant-Logs.ps1 does not generate any output
 
 .NOTES
 Running this script makes sense only for custom firewall log location inside repository.
-The benefit is to have special syntax coloring and filtering functionality with VSCode.
+The benefit is to have special syntax coloring and filtering functionality in VSCode.
 Before running this script, for first time setup the following must be done:
+
 1. Modify FirewallLogsFolder in Config\ProjectSettings to desired location
 2. Run Scripts\Complete-Firewall to apply the change from point one
-3. Turning off/on Windows firewall for desired network profile in order for
-Windows firewall to start logging into new location.
+3. Turning off/on Windows firewall for desired network profile in order for Windows firewall to
+start logging into new location.
+
+Point 3 however is not a guarantee that all logs will be generated, system reboot is required.
 
 TODO: Need to verify if gpupdate is needed for first time setup and if this can help to avoid reboot
 

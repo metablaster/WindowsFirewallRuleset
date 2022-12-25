@@ -41,7 +41,7 @@ Unblock project files that were downloaded from the Internet
 
 .DESCRIPTION
 Unblock project files that were downloaded from the Internet, this is needed to
-unblock project that were downloaded from GitHub to prevent spamming YES/NO questions.
+unblock project that was downloaded from GitHub to prevent spamming YES/NO questions.
 
 .EXAMPLE
 PS> Unblock-Project

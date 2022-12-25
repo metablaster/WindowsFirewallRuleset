@@ -98,13 +98,13 @@ PS> Get-ParameterAlias -Command Test-DscConfiguration
 PS> Get-ParameterAlias -Command "Start*", "Stop-Process" -ShowCommon
 
 .EXAMPLE
-PS> Get-Command Enable-NetAdapter* | Get-ParameterAlias -Type Function
+PS> Get-Command Enable-NetAdapter* | Get-ParameterAlias -CommandType Function
 
 .EXAMPLE
-PS> Get-parameterAlias -Parameter "Computer*" -Count 4
+PS> Get-parameterAlias -ParameterName "Computer*" -Count 4
 
 .EXAMPLE
-PS> Get-parameterAlias -Parameter "Computer*" -Unique
+PS> Get-parameterAlias -ParameterName "Computer*" -Unique
 
 .INPUTS
 [string[]]
@@ -119,6 +119,7 @@ The intended purpose of this function is to help name your parameters and their 
 For example if you want your function parameters to bind on pipeline by property name for
 any 3rd party function that conforms to community development guidelines.
 The end result is of course greater reusability of your code.
+
 TODO: Some parameter aliases are not retrieved and it's not clear if this is a bug ex:
 -Detailed and -Seconds
 TODO: Need to revisit which parameters can be bound from pipeline from other functions and

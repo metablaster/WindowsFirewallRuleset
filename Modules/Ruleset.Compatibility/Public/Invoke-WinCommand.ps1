@@ -58,7 +58,11 @@ The credential to use when connecting to the compatibility session.
 Arguments to pass to the scriptblock
 
 .EXAMPLE
-PS> Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+PS> Invoke-WinCommand {
+	param ($name)
+	"Hello $name, how are you?"
+	$PSVersionTable.PSVersion
+} Jeffrey
 
 Hello Jeffrey, how are you?
 Major  Minor  Build  Revision PSComputerName
