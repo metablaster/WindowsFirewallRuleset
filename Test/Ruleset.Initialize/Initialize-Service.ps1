@@ -68,18 +68,32 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Initialize-Service"
 $DebugPreference = "Continue"
 
-Start-Test "RemoteRegistry"
-Set-Service "RemoteRegistry" -StartupType Disabled
-Stop-Service -Name "RemoteRegistry"
+Start-Test "Initialize RemoteRegistry"
+Set-Service -Name RemoteRegistry -StartupType Disabled
+Stop-Service -Name RemoteRegistry
 $Result = Initialize-Service "RemoteRegistry" -Status Stopped -StartupType Manual
-
 $Result
+
 Test-Output $Result -Command Initialize-Service
 
+Start-Test "RemoteRegistry already running"
+Start-Service -Name RemoteRegistry
+Initialize-Service "RemoteRegistry" -Status Stopped -StartupType Manual
+
 Start-Test "pipeline"
-$Services = @("lmhosts", "LanmanWorkstation", "LanmanServer")
+$Services = @("lmhosts", "LanmanServer")
 Stop-Service -Name $Services
 $Services | Set-Service -StartupType Disabled
+
+Start-Service -Name "LanmanWorkstation"
+Suspend-Service -Name "LanmanWorkstation"
+$Services += "LanmanWorkstation"
+
+$Services | Initialize-Service
+
+Start-Test "restart fpd"
+$Services = @("FDResPub", "fdPHost")
+Start-Service -Name $Services
 $Services | Initialize-Service
 
 Update-Log

@@ -70,9 +70,8 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
-TODO: Optionally set services to automatic startup, most of services are needed only to run code.
-[System.ServiceProcess.ServiceController[]]
-TODO: Some services are logged as change from ex. from Manual to Manual, but that's not change.
+TODO: Some services are logged as change from ex. from Manual to Manual, but that's not change,
+this will happen ie. if restarting service.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Initialize/Help/en-US/Initialize-Service.md
@@ -136,7 +135,18 @@ function Initialize-Service
 			$PreviousStatus = $Service.Status
 			$PreviousStartType = $Service.StartType
 
-			if (($PreviousStatus -ne $Status) -or ($PreviousStartType -ne $StartupType))
+			#
+			# Boolean logic for possible service scenarios
+			#
+
+			# Either status or startup type is not in desired state
+			$ConfigureService = ($PreviousStatus -ne $Status) -or ($PreviousStartType -ne $StartupType)
+			# Startup type is OK and Service is running but desired state is stopped (stopping a service makes no sense unless it's paused)
+			$SkipConfiguration = ($PreviousStartType -eq $StartupType) -and ($PreviousStatus -eq [ServiceControllerStatus]::Running)
+			# If fdPHost or FDResPub are already running restart them to rule out known issues with host discovery
+			$RestartFdp = (($ServiceName -eq "fdPHost") -or ($ServiceName -eq "FDResPub")) -and ($PreviousStatus -eq [ServiceControllerStatus]::Running)
+
+			if ((!$SkipConfiguration -and $ConfigureService) -or $RestartFdp)
 			{
 				[string] $Question = "Configure '$($Service.DisplayName)' service now?"
 				$Accept.HelpMessage = switch ($ServiceName)
@@ -198,20 +208,33 @@ function Initialize-Service
 				$Choices += $Accept
 				$Choices += $Deny
 
-				$Decision = $Host.UI.PromptForChoice($Title, $Question, $Choices, $Default)
-
-				if ($Decision -ne $Default)
+				if ($Host.UI.PromptForChoice($Title, $Question, $Choices, $Default) -ne $Default)
 				{
 					Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting service has been canceled by the user"
 				}
 				else
 				{
 					# Configure dependent services first
-					# TODO: This will also return non service objects, such as drivers which cant be configured
 					foreach ($Required in $Service.ServicesDependedOn)
 					{
 						# For dependent services show only failures
 						$PreviousDependentStartType = $Required.StartType
+						# [System.ServiceProcess.ServiceType]
+						$ServiceType = Get-Service -Name $Required | Select-Object -ExpandProperty ServiceType
+
+						if (($PreviousDependentStartType -eq [ServiceStartMode]::Boot) -or
+							($PreviousDependentStartType -eq [ServiceStartMode]::System))
+						{
+							# These startup types must not be modified
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because startup type is '$PreviousDependentStartType'"
+							continue
+						}
+						elseif ($ServiceType -notin @("Win32OwnProcess", "Win32ShareProcess"))
+						{
+							# Neither clever nor required to modify these services
+							Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting dependent service '$($Required.Name)' skipped because service type is '$ServiceType'"
+							continue
+						}
 
 						if ($PreviousDependentStartType -ne [ServiceStartMode]::Automatic)
 						{
@@ -248,8 +271,11 @@ function Initialize-Service
 							if ((Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status) -ne [ServiceControllerStatus]::Running)
 							{
 								Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' failed, please start manually and try again"
+								$Service.Close()
+
 								Write-Error -Category OperationStopped -TargetObject $Required `
 									-Message "Unable to proceed, failed to start dependent service"
+
 								return $false
 							}
 							else
@@ -263,8 +289,24 @@ function Initialize-Service
 						$Required.Close()
 					} # Required Services
 
-					# If decision is no, or if service is running there is no need to modify startup
-					# type, otherwise set startup type after requirements are met
+					# [System.ServiceProcess.ServiceType]
+					$ServiceType = $Service | Select-Object -ExpandProperty ServiceType
+
+					# Required services and startup type is checked, start requested service
+					if (($PreviousStartType -eq [ServiceStartMode]::Boot) -or
+						($PreviousStartType -eq [ServiceStartMode]::System))
+					{
+						# These startup types must not be modified
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because startup type is '$PreviousStartType'"
+						continue
+					}
+					elseif ($ServiceType -notin @("Win32OwnProcess", "Win32ShareProcess"))
+					{
+						# Neither clever nor required to modify these services
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because service type is '$ServiceType'"
+						continue
+					}
+
 					if ($PreviousStartType -ne $StartupType)
 					{
 						Set-Service -Name $ServiceName -StartupType $StartupType
@@ -284,9 +326,9 @@ function Initialize-Service
 
 					# If fdPHost or FDResPub are already running there is a chance host discovery won't work,
 					# this is a known issue in Windows to which solution is to restart those services
-					if ((($ServiceName -eq "fdPHost") -or ($ServiceName -eq "FDResPub")) -and ($PreviousStatus -eq [ServiceControllerStatus]::Running))
+					if ($RestartFdp)
 					{
-						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$ServiceName' to rule out known issue resolving remote host"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$ServiceName' to rule out known issue resolving host"
 
 						$Service.Stop()
 						$Service.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
@@ -296,7 +338,6 @@ function Initialize-Service
 					}
 					elseif ($PreviousStatus -ne $Status)
 					{
-						# Required services and startup type is checked, start requested service
 						if ($Status -eq "Running")
 						{
 							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
@@ -311,9 +352,7 @@ function Initialize-Service
 
 							$Service.WaitForStatus($Status, $ServiceTimeout)
 						}
-						# If service is running but desired state is Stopped then we should not stop
-						# the service as that makes no sense, ex. RemoteRegistry service.
-						elseif ($PreviousStatus -ne [ServiceControllerStatus]::Running)
+						else
 						{
 							if (($PreviousStatus -eq [ServiceControllerStatus]::Paused) -or
 								($PreviousStatus -eq [ServiceControllerStatus]::PausePending))
@@ -330,11 +369,7 @@ function Initialize-Service
 					# Check if setting up status of the requested service was successful, needed to get service again to get fresh stats
 					if ((Get-Service -Name $ServiceName | Select-Object -ExpandProperty Status) -ne $Status)
 					{
-						# Skip warning if service is running, ex. RemoteRegistry service.
-						if ($PreviousStatus -ne [ServiceControllerStatus]::Running)
-						{
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
-						}
+						Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
 					}
 					else
 					{
@@ -347,12 +382,14 @@ function Initialize-Service
 				# Get a fresh copy of a service to check
 				$NewService = Get-Service -Name $ServiceName
 
-				if (($NewService.StartType -ne $StartupType) -or
-					# Skip error if service is running, ex. RemoteRegistry service.
-					(($NewService.Status -ne $Status) -and ($PreviousStatus -ne [ServiceControllerStatus]::Running)))
+				if ($NewService.StartType -ne $StartupType)
 				{
+					$Service.Close()
+					$NewService.Close()
+
 					Write-Error -Category OperationStopped -TargetObject $Service `
 						-Message "Unable to proceed, '$ServiceName' service was not set to requested state"
+
 					return $false
 				}
 				else
@@ -362,7 +399,11 @@ function Initialize-Service
 				}
 
 				$NewService.Close()
-			} # if service not running
+			}
+			else
+			{
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service was skipped" -Verbose
+			}
 
 			$Service.Close()
 		} # foreach InputService

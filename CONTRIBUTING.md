@@ -339,12 +339,11 @@ For more information about naming see [Naming Convention](/docs/NamingConvention
 
 ### Script design
 
-All of the scripts should use the same code style and order of code, without writing a long list
-of preferred code style it should be enough to take a look at the existing scripts and figure it
-out right away.
+All scripts use the same code style, it's recommended to take a look at the existing scripts and
+figure out.
 
-Code in scripts is ordered into "sections" which depends on script and purpose, in the following
-way and may be different if needed for what ever reason:
+Code and comments in scripts are put into "sections" which depends on script and purpose,
+in the following way and may be different if applicable:
 
 1. License notice
 2. `PSScriptInfo` comment (if it's script file)
@@ -464,7 +463,7 @@ rules you would provide a link to [IANA][iana] with relevant reference document.
 ### In command line prompts
 
 Every script that's being executed either directly or called by other script will not run
-until the user accepts the prompt to run the script.\
+until a user accepts the prompt to run the script.\
 Similar prompts may appear at various points in code during execution.
 
 Each of these prompts have `?` mark option which a user can type to get more information about
@@ -491,7 +490,7 @@ generating online help (markdown) files:
 - Do not use multiple dashes in comments such as `------`.
 - Use spaces instead of tabs and do not indent comments.
 - Code samples in `.EXAMPLE` portion must not be separated by blank lines except for sample output
-- To number out things use `-` and keep one line between commend and listed things.
+- To number out things use `-` and keep one line between comment and listed things.
 - For anything else keep in mind that your comment based help will be formatted in the
 resulting markdown file as markdown not as you type it, which may give unexpected results.
 
@@ -581,7 +580,7 @@ There is workspace debugging configuration for each module function and script i
 you can access from `Run and Debug` badge in action bar, at the top is a drop down list listing
 module functions and scripts sorted alphabetically.
 
-These configurations actually run unit tests from `Test` directory, you can set break points in
+These configurations actually run unit tests from `Test` directory, you can set breakpoints in
 referenced module function or script if desired and click `Start Debugging` button.
 
 The debugging configuration itself is located in `.vscode\launch.json` file.
@@ -737,7 +736,7 @@ to be able to do `git revert` easily if needed.
 Do not wait too much to push changes which only contributes to less clear intentions in terms
 of what issue is supposed to be resolved or which component was improved.
 
-If you see something unrelated that could be resolved or improved, put `TODO` comment, don't fix it.\
+If you spot something unrelated that could be resolved or improved, put `TODO` comment, don't fix it.\
 Then once you commit, open `todo-tree` to review what to do next.
 
 **Avoid making huge changes to existing code** without consultation, new code and additions should

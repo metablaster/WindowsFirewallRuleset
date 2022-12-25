@@ -197,6 +197,7 @@ if ($Remoting)
 }
 
 # Reset affected services to system defaults
+
 # | Service                                            | Startup                   | Status  |
 # |----------------------------------------------------|---------------------------|---------|
 # | TCP/IP NetBIOS Helper (lmhosts)                    | Manual (Trigger Start)    | Running |
@@ -208,11 +209,30 @@ if ($Remoting)
 # | Function Discovery Provider host (fdPHost)         | Manual                    | Running |
 # | Function Discovery Resource Publication (FDResPub) | Manual (Trigger Start)    | Running |
 
-# Services listed above depend on the following services which are also affected
-# | Service                                            | Startup                   | Status  |
-# |----------------------------------------------------|---------------------------|---------|
-# | Network Store Interface Service (nsi)              | Automatic                 | Running |
-# | Security Accounts Manager (SamSs)                  | Automatic                 | Running |
+# Services listed above depend on the following services with the following defaults which but are NOT affected
+
+# DisplayName                           Name     StartType  Status  ServiceType
+# -----------                           ----     ---------  ------  -----------
+# Ancillary Function Driver for Winsock Afd         System Running  KernelDriver
+# HTTP Service                          http        Manual Running  KernelDriver
+# Server SMB 2.xxx Driver               Srv2        Manual Running  FileSystemDriver
+# SMB 2.0 MiniRedirector                MRxSmb20    Manual Running  FileSystemDriver
+# Browser                               Bowser      Manual Running  FileSystemDriver
+
+# sc.exe config AFD start= system
+# sc.exe config http start= demand
+# sc.exe config Srv2 start= demand
+# sc.exe config MRxSmb20 start= demand
+# sc.exe config Bowser start= demand
+
+# Services listed above (first table) depend on the following services with the following defaults
+
+# DisplayName                           Name     StartType  Status  ServiceType
+# -----------                           ----     ---------  ------  -----------
+# Remote Procedure Call (RPC)           RpcSs    Automatic Running  Win32ShareProcess
+# Security Accounts Manager             SamSS    Automatic Running  Win32ShareProcess
+# Network Store Interface Service       NSI      Automatic Running  Win32OwnProcess, Win32ShareProcess
+# Remote Procedure Call (RPC)           RPCSS    Automatic Running  Win32ShareProcess
 
 if ($Service)
 {

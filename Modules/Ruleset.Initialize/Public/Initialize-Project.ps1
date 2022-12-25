@@ -172,6 +172,7 @@ function Initialize-Project
 
 		if ($ServicesCheck)
 		{
+			# TODO: Optionally set services to automatic startup, most of services are needed only to run code.
 			Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Checking system services"
 
 			# These services are minimum required
@@ -180,7 +181,7 @@ function Initialize-Project
 				"LanmanWorkstation" # Workstation
 				"LanmanServer" # Server
 				"fdPHost" # Function Discovery Provider host
-				"FDResPub" # Function Discovery Resource Publication
+				"FDResPub" # Function Discovery Resource Publication (depends on fdPHost)
 				# WinRM required for:
 				# 1. Remote firewall administration, see Enable-PSRemoting cmdlet, or when localhost is specified instad of NETBIOS name
 				# 2. For PowerShell Core 7.1+ this service is required for compatibility module
