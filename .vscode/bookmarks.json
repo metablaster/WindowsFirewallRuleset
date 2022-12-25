@@ -109,16 +109,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Modules/Ruleset.ProgramInfo/Public/Test-FileSystemPath.ps1",
-			"bookmarks": [
-				{
-					"line": 244,
-					"column": 1,
-					"label": ""
-				}
-			]
 		}
 	]
 }

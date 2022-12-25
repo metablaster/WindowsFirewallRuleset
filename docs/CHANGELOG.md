@@ -53,6 +53,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     sc.exe config Bowser start= demand
     ```
 
+  - Fixed a bug in `Test-FileSystemPath` which ignored and didn't report certain path errors
+
 - Scripts
 
   - Updated `Grant-Logs` script to better detect log file location change

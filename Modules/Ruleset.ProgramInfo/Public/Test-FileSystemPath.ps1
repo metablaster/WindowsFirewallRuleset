@@ -336,4 +336,9 @@ function Test-FileSystemPath
 			return $false
 		} # Invoke-Command
 	} # if ([string]::IsNullOrEmpty($Status))
+	else
+	{
+		& $WriteConditional $Status
+		return $false
+	}
 }
