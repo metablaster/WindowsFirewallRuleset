@@ -70,7 +70,8 @@ SOFTWARE.
 
 	# Whether to run this session configuration as the machine's (virtual) administrator account
 	# cannot be used with the GroupManagedServiceAccount
-	RunAsVirtualAccount = $true
+	# NOTE: Not used because of Test-VirusTotal which uses firewall rule which depends on real Admin
+	RunAsVirtualAccount = $false
 
 	# Groups associated with machine's (virtual) administrator account
 	# If omitted, the virtual account belongs to Domain Admins on domain controllers and
@@ -80,12 +81,16 @@ SOFTWARE.
 
 	# Creates a "User" PSDrive in the session for use with Copy-Item when File System provider is not visible.
 	# TODO: Test if could be used for remote registry authentication instead of using New-PSDrive manually
+	# NOTE: Directory is created when used for first time, ex. something is copied to directory.
+	# PowerShell Core:
+	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN\$env:USERNAME
+	# Windows PowerShell:
 	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
 	MountUserDrive = $true
 
 	# Optional maximum size in bytes of user drive created with MountUserDrive parameter.
 	# Default maximum size for User drive is 50MB.
-	UserDriveMaximumSize = 104857600 # 100MB
+	UserDriveMaximumSize = 50000000
 
 	# Group managed service account name under which the configuration will run.
 	# The machine where this session configuration is registered must have permission to request

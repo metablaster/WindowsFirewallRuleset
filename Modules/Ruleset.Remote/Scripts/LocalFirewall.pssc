@@ -76,12 +76,14 @@ SOFTWARE.
 	# If omitted, the virtual account belongs to Domain Admins on domain controllers and
 	# Administrators on all other computers.
 	# ex: RunAsVirtualAccountGroups = "Remote Desktop Users", "Remote Management Users"
-	# RunAsVirtualAccountGroups = "Administrators"
+	RunAsVirtualAccountGroups = "Administrators"
 
 	# Creates a "User" PSDrive in the session for use with Copy-Item when File System provider is not visible.
-	# TODO: Test if could be used for remote registry authentication instead of using New-PSDrive manually
-	# $env:SYSTEMROOT\System32\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
-	# https://github.com/MicrosoftDocs/PowerShell-Docs/issues/8583
+	# NOTE: Directory is created when used for first time, ex. something is copied to directory.
+	# PowerShell Core:
+	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN\$env:USERNAME
+	# Windows PowerShell:
+	# $env:LOCALAPPDATA\Microsoft\Windows\PowerShell\DriveRoots\$env:USERDOMAIN_$env:USERNAME
 	MountUserDrive = $false
 
 	# Optional maximum size in bytes of user drive created with MountUserDrive parameter.

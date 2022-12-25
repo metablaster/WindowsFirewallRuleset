@@ -190,6 +190,15 @@ function Initialize-Connection
 			# If Set-WinRMClient is run during loopback testing then it doesn't need to run during remote testing
 			$WinRMClientSet = $false
 
+			$WinRMClientParams = @{
+				Confirm = $false
+			}
+
+			if (![string]::IsNullOrEmpty($SslThumbprint))
+			{
+				$WinRMClientParams.CertThumbprint = $SslThumbprint
+			}
+
 			if ($PSVersionTable.PSEdition -eq "Core")
 			{
 				# TODO: Loopback WinRM is required for Ruleset.Compatibility module for testing and local session?
@@ -207,11 +216,11 @@ function Initialize-Connection
 					# this is also needed to be able to Test-WinRM on loopback
 					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -CertThumbprint $SslThumbprint -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore @WinRMClientParams
 					}
 
 					# Enable loopback only HTTP
@@ -241,11 +250,11 @@ function Initialize-Connection
 					# Configure this machine for remote session over SSL
 					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore
 					}
 					else
 					{
-						Set-WinRMClient -Domain $PolicyStore -CertThumbprint $SslThumbprint -Confirm:$false
+						Set-WinRMClient -Domain $PolicyStore @WinRMClientParams
 					}
 				}
 
@@ -283,7 +292,7 @@ function Initialize-Connection
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol HTTP -Confirm:$false
+				Set-WinRMClient -Protocol HTTP
 				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 				Test-WinRM -Protocol HTTP @TestParams -ErrorAction Stop
 			}

@@ -104,8 +104,6 @@ SOFTWARE.
 		"System.Data.Entity"
 		# Required by Get-AppCapability
 		"Microsoft.Windows.Appx.PackageManager.Commands"
-		# Required by Invoke-WebRequest within Invoke-Command, used in Test-VirusTotal
-		"System.Net.Quic"
 	)
 
 	# Script files (.ps1) that are run in the caller's environment prior to importing this module.

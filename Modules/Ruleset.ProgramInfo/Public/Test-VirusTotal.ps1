@@ -140,15 +140,14 @@ function Test-VirusTotal
 			}
 		}
 
-		# TODO: Use $PSBoundParameters
-		Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath, $PolicyStore, $Domain, $Force -ScriptBlock {
+		# TODO: Use $PSBoundParameters?
+		Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $SigcheckLocation, $TimeOut, $LiteralPath, $Domain, $Force -ScriptBlock {
 			[CmdletBinding()]
 			param (
 				[string] $InvocationName,
 				[string] $SigcheckLocation,
 				[int32] $TimeOut,
 				[string] $LiteralPath,
-				[string] $PolicyStore,
 				[string] $Domain,
 				# TODO: [switch] doesn't work "A positional parameter cannot be found that accepts argument 'False'"
 				[bool] $Force
@@ -213,7 +212,15 @@ function Test-VirusTotal
 				# Offer to user to download it
 				elseif ($Force -or $PSCmdlet.ShouldContinue("Download $SigcheckExecutable from sysinternals.com to '$SigcheckPath' directory", "$SigcheckExecutable executable was not found on '$Domain' computer"))
 				{
-					$TempFolder = [System.Environment]::ExpandEnvironmentVariables("%LocalAppData%\temp")
+					if (Test-Path -Path User:\)
+					{
+						# Drive created by session configuration
+						$TempFolder = "User:\"
+					}
+					else
+					{
+						$TempFolder = [System.Environment]::ExpandEnvironmentVariables("%LocalAppData%\temp")
+					}
 
 					if ([System.Environment]::Is64BitOperatingSystem)
 					{
@@ -228,18 +235,30 @@ function Test-VirusTotal
 					try
 					{
 						$PreviousProgressPreference = $ProgressPreference
+						if ($PSVersionTable.PSEdition -eq "Core")
+						{
+							# Required by Invoke-WebRequest within Invoke-Command,
+							# .NET 7, therefore not working nor needed in Desktop edition
+							Add-Type -AssemblyName "System.Net.Quic"
+						}
 
 						# This rule is disabled by default, however it's needed here to make
 						# Invoke-WebRequest work within Invoke-Command scriptblock
-						$wsmprovhostRule = Get-NetFirewallRule -DisplayName "PowerShell WinRM" -PolicyStore $PolicyStore -ErrorAction Ignore |
+						$wsmprovhostRule = Get-NetFirewallRule -DisplayName "PowerShell WinRM" -PolicyStore $Domain -ErrorAction Ignore |
 						Where-Object {
 							$_.Direction -eq "Outbound"
 						} | Enable-NetFirewallRule -PassThru
 
 						if ($wsmprovhostRule)
 						{
+							Write-Debug "[$InvocationName] Sleeping 2 seconds on '$Domain' computer"
+
 							# Rule may not be instantly effective
-							Start-Sleep -Seconds 1
+							Start-Sleep -Seconds 2
+						}
+						else
+						{
+							Write-Debug "[$InvocationName] wsmprovhostRule not found on '$Domain' computer"
 						}
 
 						Write-Information -Tags $InvocationName -MessageData "INFO: Downloading Sigcheck.zip to '$TempFolder'"
