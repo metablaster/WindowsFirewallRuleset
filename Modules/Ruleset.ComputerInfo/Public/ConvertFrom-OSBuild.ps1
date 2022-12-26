@@ -93,7 +93,7 @@ function ConvertFrom-OSBuild
 }
 
 <#
-Windows 10
+MSDN: Windows 10
 
 Version	Servicing option				Availability OS build	Latest revision date	End of service
 22H2	General Availability Channel    2022-10-18	19045.2251	2022-11-08				2024-05-14

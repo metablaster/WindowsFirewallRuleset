@@ -31,7 +31,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
 - Rules
 
-  - Update rules for Visual Studio
+  - Updated rules for Visual Studio
+  - Made rules for store apps respect `DefaultGroup` global variable
 
 - Modules
 

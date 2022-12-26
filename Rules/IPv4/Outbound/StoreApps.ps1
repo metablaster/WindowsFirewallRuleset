@@ -134,39 +134,43 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #
 # Block Administrators by default
 #
-$Users = Get-GroupPrincipal "Users" -CimSession $CimServer
-$Administrators = Get-GroupPrincipal "Administrators" -CimSession $CimServer
-
-foreach ($Principal in $Administrators)
+if ("Administrators" -notin $DefaultGroup)
 {
-	foreach ($Entry in $Users)
-	{
-		if ($Entry.User -eq $Principal.User)
-		{
-			Write-Warning -Message "[$ThisScript] $($Principal.User) is both Administrator and standard user, this will result in surplus rules for store apps"
-		}
-	}
+	$Administrators = Get-GroupPrincipal "Administrators" -CimSession $CimServer
 
-	# TODO: Somehow Admin will be able to create MS accounts when this rule is disabled,
-	# expected behavior is that default outbound should block (wwahost.exe)
-	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
-		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol Any `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any `
-		-InterfaceType $DefaultInterface `
-		-Owner $Principal.SID -Package * `
-		-Description "$($Principal.User) is administrative account,
+	foreach ($Principal in $Administrators)
+	{
+		foreach ($Entry in $Users)
+		{
+			if ($Entry.User -eq $Principal.User)
+			{
+				Write-Warning -Message "[$ThisScript] $($Principal.User) is both Administrator and standard user, this will result in surplus rules for store apps"
+			}
+		}
+
+		# TODO: Somehow Admin will be able to create MS accounts when this rule is disabled,
+		# expected behavior is that default outbound should block (wwahost.exe)
+		New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+			-Service Any -Program Any -Group $Group `
+			-Enabled True -Action Block -Direction $Direction -Protocol Any `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any `
+			-InterfaceType $DefaultInterface `
+			-Owner $Principal.SID -Package * `
+			-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |
-	Format-RuleOutput
+		Format-RuleOutput
+	}
 }
 
 #
 # Create rules for all network apps for each standard user
 #
+$Users = Get-GroupPrincipal $DefaultGroup -CimSession $CimServer
+
 foreach ($Principal in $Users)
 {
 	#

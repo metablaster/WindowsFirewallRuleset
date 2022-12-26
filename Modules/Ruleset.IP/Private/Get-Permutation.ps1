@@ -85,7 +85,6 @@ January 2021:
 - Added OutputType attribute
 - Update comment based help
 - Added parameter debugging stream
-
 #>
 function Get-Permutation
 {

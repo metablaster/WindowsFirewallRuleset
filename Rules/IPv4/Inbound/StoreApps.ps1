@@ -82,29 +82,33 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 # Block Administrators by default
 #
 
-$Principals = Get-GroupPrincipal "Administrators" -CimSession $CimServer
-foreach ($Principal in $Principals)
+if ("Administrators" -notin $DefaultGroup)
 {
-	New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
-		-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
-		-Service Any -Program Any -Group $Group `
-		-Enabled True -Action Block -Direction $Direction -Protocol Any `
-		-LocalAddress Any -RemoteAddress Any `
-		-LocalPort Any -RemotePort Any `
-		-LocalUser Any -EdgeTraversalPolicy Block `
-		-InterfaceType $DefaultInterface `
-		-Owner (Get-PrincipalSID $Principal.User).SID -Package * `
-		-Description "$($Principal.User) is administrative account,
+	$Principals = Get-GroupPrincipal "Administrators" -CimSession $CimServer
+
+	foreach ($Principal in $Principals)
+	{
+		New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile Any `
+			-Service Any -Program Any -Group $Group `
+			-Enabled True -Action Block -Direction $Direction -Protocol Any `
+			-LocalAddress Any -RemoteAddress Any `
+			-LocalPort Any -RemotePort Any `
+			-LocalUser Any -EdgeTraversalPolicy Block `
+			-InterfaceType $DefaultInterface `
+			-Owner (Get-PrincipalSID $Principal.User).SID -Package * `
+			-Description "$($Principal.User) is administrative account,
 block $($Principal.User) from network activity for all store apps.
 Administrators should have limited or no connectivity at all for maximum security." |
-	Format-RuleOutput
+		Format-RuleOutput
+	}
 }
 
 #
 # Create rules for all network apps for each standard user
 #
+$Principals = Get-GroupPrincipal $DefaultGroup -CimSession $CimServer
 
-$Principals = Get-GroupPrincipal "Users" -CimSession $CimServer
 foreach ($Principal in $Principals)
 {
 	#

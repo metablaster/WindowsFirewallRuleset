@@ -107,6 +107,7 @@ Version: 1.02
 Build date: 2020/02/15
 
 The Following modifications by metablaster August 2020:
+
 1. Applied formatting and code style according to project rules
 2. Added switch to optionally append instead of replacing output file
 3. Separated functions into their own scope
@@ -118,10 +119,14 @@ The Following modifications by metablaster August 2020:
 9. Changed minor flow and logic of execution
 10. Make output formatted and colored
 11. Added progress bar
+
 December 2020:
+
 1. Rename parameters according to standard name convention
 2. Support resolving path wildcard pattern
+
 January 2022:
+
 1. Implemented appending to json
 
 TODO: Export to excel

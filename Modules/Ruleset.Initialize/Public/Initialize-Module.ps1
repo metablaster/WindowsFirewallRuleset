@@ -149,12 +149,12 @@ function Initialize-Module
 	Write-Verbose -Message "[$($MyInvocation.InvocationName)] Checking if module $ModuleName is installed and which version"
 
 	# Highest version present on system if any
-	[version] $TargetVersion = Get-Module -Name $ModuleName -ListAvailable |
+	[version] $HighestVersion = Get-Module -Name $ModuleName -ListAvailable |
 	Sort-Object -Property Version | Select-Object -Last 1 -ExpandProperty Version
 
-	if ($TargetVersion)
+	if ($HighestVersion)
 	{
-		if ($TargetVersion -ge $RequireVersion)
+		if ($HighestVersion -ge $RequireVersion)
 		{
 			if ($ModuleName -eq "PowerShellGet")
 			{
@@ -165,11 +165,11 @@ function Initialize-Module
 			# Up to date
 			# TODO: for AllowPrerelease we should check for prerelease, example required posh-git 0.7.3 if met, no prerelease will be installed
 			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Module $ModuleName v$TargetVersion meets >= v$RequireVersion"
+				-MessageData "INFO: Module $ModuleName v$HighestVersion meets >= v$RequireVersion"
 			return $true
 		}
 
-		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $ModuleName v$TargetVersion found"
+		Write-Debug -Message "[$($MyInvocation.InvocationName)] Module $ModuleName v$HighestVersion found"
 	}
 	else
 	{
@@ -187,7 +187,7 @@ function Initialize-Module
 		}
 		else
 		{
-			if ($TargetVersion)
+			if ($HighestVersion)
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] $ModuleName requires git in PATH but git.exe not present, aborting update..."
 			}
@@ -434,9 +434,9 @@ function Initialize-Module
 		$Title = "Required"
 	}
 
-	if ($TargetVersion)
+	if ($HighestVersion)
 	{
-		Write-Warning -Message "[$($MyInvocation.InvocationName)] Current module $ModuleName v$($TargetVersion.ToString()) is out of date, recommended version is v$RequireVersion"
+		Write-Warning -Message "[$($MyInvocation.InvocationName)] Current module $ModuleName v$($HighestVersion.ToString()) is out of date, recommended version is v$RequireVersion"
 
 		$Title += " module out of date"
 		$Question = "Update $ModuleName module now?"

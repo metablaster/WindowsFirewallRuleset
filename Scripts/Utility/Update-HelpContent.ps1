@@ -98,6 +98,7 @@ TODO: Log header is not inserted into logs
 TODO: OutputType attribute
 TODO: Get rid of blinking progress bar or make your own
 TODO: When run in fresh session for first time it does nothing
+TODO: Log files are generated in Logs root instead of Logs\UpdateHelp
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
