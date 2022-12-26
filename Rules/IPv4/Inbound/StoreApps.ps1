@@ -33,6 +33,9 @@ Inbound firewall rules for store apps
 .DESCRIPTION
 Inbound firewall rules for store apps
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -46,7 +49,7 @@ None. You cannot pipe objects to StoreApps.ps1
 None. StoreApps.ps1 does not generate any output
 
 .NOTES
-None.
+TODO: Test-ExecutableFile
 #>
 
 #Requires -Version 5.1
@@ -55,14 +58,18 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -70,7 +77,6 @@ $Group = "Store Apps"
 $SystemGroup = "Store Apps - System"
 $Accept = "Inbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, inbound rules for store apps will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -84,7 +90,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $SystemGroup -Direction 
 
 if ("Administrators" -notin $DefaultGroup)
 {
-	$Principals = Get-GroupPrincipal "Administrators" -CimSession $CimServer
+	$Principals = Get-GroupPrincipal "Administrators"
 
 	foreach ($Principal in $Principals)
 	{
@@ -107,7 +113,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 #
 # Create rules for all network apps for each standard user
 #
-$Principals = Get-GroupPrincipal $DefaultGroup -CimSession $CimServer
+$Principals = Get-GroupPrincipal $DefaultGroup
 
 foreach ($Principal in $Principals)
 {
@@ -115,8 +121,8 @@ foreach ($Principal in $Principals)
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
+	Get-UserApp -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -180,8 +186,8 @@ foreach ($Principal in $Principals)
 	# Create rules for system apps
 	#
 
-	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
+	Get-SystemApp -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -244,8 +250,8 @@ foreach ($Principal in $Principals)
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

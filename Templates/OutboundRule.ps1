@@ -83,7 +83,7 @@ param (
 
 #region Initialization
 # TODO: Adjust path to project settings
-. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\DirectionSetup.ps1
 Initialize-Project
 

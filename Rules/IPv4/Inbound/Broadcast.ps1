@@ -33,6 +33,9 @@ Inbound broadcast traffic rules
 .DESCRIPTION
 Inbound firewall rules for broadcast traffic
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -58,14 +61,18 @@ TODO: currently handling only UDP, also broadcast falls into multicast space
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -73,7 +80,6 @@ $LocalProfile = "Private, Domain"
 $Group = "Broadcast"
 $Accept = "Inbound broadcast rules will be loaded, recommended for proper local network functioning"
 $Deny = "Skip operation, inbound broadcast rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -127,8 +133,8 @@ Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

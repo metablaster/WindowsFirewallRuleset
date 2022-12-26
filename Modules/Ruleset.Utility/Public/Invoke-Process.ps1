@@ -198,7 +198,8 @@ function Invoke-Process
 			$Raw,
 			[PSCredential] $RunAsCredential,
 			$ArgumentList,
-			$Async
+			$Async,
+			$Domain
 		)
 
 		$CommandName = Split-Path -Path $Path -Leaf
@@ -470,7 +471,7 @@ function Invoke-Process
 			if ($Timeout -ge 0)
 			{
 				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish..."
+					-MessageData "INFO: Waiting up to $($Timeout / 1000) seconds for process '$CommandName' to finish on '$Domain' computer..."
 
 				if ($Async)
 				{
@@ -492,7 +493,7 @@ function Invoke-Process
 			{
 				$StatusWait = $true
 				Write-Information -Tags $MyInvocation.InvocationName `
-					-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish..."
+					-MessageData "INFO: Waiting infinitely for process '$CommandName' to finish on '$Domain' computer..."
 
 				if ($Async)
 				{
@@ -568,58 +569,55 @@ function Invoke-Process
 				}
 			}
 		}
+		elseif ($Raw)
+		{
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw synchronous read"
+
+			# Reads all characters from the current position to the end of the stream (returns [string])
+			$StandardOutput = $Process.StandardOutput.ReadToEnd()
+			if (![string]::IsNullOrEmpty($StandardOutput))
+			{
+				Write-Output $StandardOutput
+			}
+
+			$StandardError = $Process.StandardError.ReadToEnd()
+			if (![string]::IsNullOrEmpty($StandardError))
+			{
+				Write-Output $StandardError
+			}
+		}
 		else
 		{
-			if ($Raw)
+			Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting synchronous read"
+
+			# true if the current stream position is at the end of the stream
+			while (!$Process.StandardOutput.EndOfStream)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting raw synchronous read"
+				# Reads a line of characters from the current stream and returns the data as [string]
+				# Methods such as Read, ReadLine, and ReadToEnd perform synchronous read operations
+				# on the output stream of the process
+				$StreamLine = $Process.StandardOutput.ReadLine()
 
-				# Reads all characters from the current position to the end of the stream (returns [string])
-				$StandardOutput = $Process.StandardOutput.ReadToEnd()
-				if (![string]::IsNullOrEmpty($StandardOutput))
+				if (![string]::IsNullOrEmpty($StreamLine))
 				{
-					Write-Output $StandardOutput
+					Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
 				}
 
-				$StandardError = $Process.StandardError.ReadToEnd()
-				if (![string]::IsNullOrEmpty($StandardError))
-				{
-					Write-Output $StandardError
-				}
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+				Start-Sleep -Milliseconds 300
 			}
-			else
+
+			while (!$Process.StandardError.EndOfStream)
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Starting synchronous read"
+				$StreamLine = $Process.StandardError.ReadLine()
 
-				# true if the current stream position is at the end of the stream
-				while (!$Process.StandardOutput.EndOfStream)
+				if (![string]::IsNullOrEmpty($StreamLine))
 				{
-					# Reads a line of characters from the current stream and returns the data as [string]
-					# Methods such as Read, ReadLine, and ReadToEnd perform synchronous read operations
-					# on the output stream of the process
-					$StreamLine = $Process.StandardOutput.ReadLine()
-
-					if (![string]::IsNullOrEmpty($StreamLine))
-					{
-						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $StreamLine"
-					}
-
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
-					Start-Sleep -Milliseconds 300
+					Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
 				}
 
-				while (!$Process.StandardError.EndOfStream)
-				{
-					$StreamLine = $Process.StandardError.ReadLine()
-
-					if (![string]::IsNullOrEmpty($StreamLine))
-					{
-						Write-Error -Category FromStdErr -TargetObject $Process -Message $StreamLine
-					}
-
-					Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
-					Start-Sleep -Milliseconds 300
-				}
+				Write-Debug -Message "[$($MyInvocation.InvocationName)] Sleeping..."
+				Start-Sleep -Milliseconds 300
 			}
 		}
 
@@ -632,7 +630,7 @@ function Invoke-Process
 	}
 
 	Invoke-Command @SessionParams -ArgumentList $Path, $NoNewWindow, $WorkingDirectory,
-	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async -ScriptBlock $Code
+	$LoadUserProfile, $Timeout, $Raw, $RunAsCredential, $ArgumentList, $Async, $Domain -ScriptBlock $Code
 	return
 
 	# Inactive code
@@ -643,7 +641,7 @@ function Invoke-Process
 	}
 	else
 	{
-		# TODO: Invoking scriptblock, if there is an error entire scriptblock will be print to console in red
+		# TODO: Invoking scriptblock, if there is an error entire scriptblock will be print to console in red in Windows PS
 		& $Code $Path $NoNewWindow $WorkingDirectory $LoadUserProfile $Timeout $Raw $RunAsCredential $ArgumentList $Async
 	}
 }

@@ -33,6 +33,9 @@ Outbound firewall rules for store apps
 .DESCRIPTION
 Outbound rules for store apps
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -91,6 +94,10 @@ NOTE: If OneNote app fails to install, start "Print Spooler" service and try aga
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Trusted,
 
 	[Parameter()]
@@ -101,10 +108,10 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -115,13 +122,10 @@ $SystemGroup = "Store Apps - System"
 $AppSubGroup = "$Group - SubPrograms"
 $Accept = "Outbound rules for store apps will be loaded, required for Windows store apps network access"
 $Deny = "Skip operation, outbound rules for store apps will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -136,7 +140,7 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $ServicesGroup -Directio
 #
 if ("Administrators" -notin $DefaultGroup)
 {
-	$Administrators = Get-GroupPrincipal "Administrators" -CimSession $CimServer
+	$Administrators = Get-GroupPrincipal "Administrators"
 
 	foreach ($Principal in $Administrators)
 	{
@@ -169,7 +173,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 #
 # Create rules for all network apps for each standard user
 #
-$Users = Get-GroupPrincipal $DefaultGroup -CimSession $CimServer
+$Users = Get-GroupPrincipal $DefaultGroup
 
 foreach ($Principal in $Users)
 {
@@ -177,8 +181,8 @@ foreach ($Principal in $Users)
 	# Create rules for apps installed by user
 	#
 
-	Get-UserApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking -Session $SessionInstance
+	Get-UserApp -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -276,8 +280,8 @@ foreach ($Principal in $Users)
 	# Create rules for system apps
 	#
 
-	Get-SystemApp -User $Principal.User -Session $SessionInstance | ForEach-Object -Process {
-		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Session $SessionInstance -Networking
+	Get-SystemApp -User $Principal.User | ForEach-Object -Process {
+		$NetworkCapabilities = $_ | Get-AppCapability -User $Principal.User -Networking
 
 		if (!$NetworkCapabilities)
 		{
@@ -433,8 +437,12 @@ $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Sess
 if ($TerminalApp)
 {
 	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
-	Get-ChildItem -Path "$ParentPath\Microsoft.WindowsTerminal*" |
-	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+	Invoke-Command -Session $SessionInstance -ArgumentList $ParentPath -ScriptBlock {
+		param ($ParentPath)
+
+		Get-ChildItem -Path "$ParentPath\Microsoft.WindowsTerminal*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
 		$Program = "$_\TerminalAzBridge.exe"
 
 		# NOTE: There are 2 paths one of which is invalid and should be ignored
@@ -459,8 +467,8 @@ if ($TerminalApp)
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

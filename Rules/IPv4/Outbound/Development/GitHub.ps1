@@ -33,6 +33,9 @@ Outbound firewall rules for GitHub
 .DESCRIPTION
 Outbound firewall rules for git and GitHub Desktop
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -80,27 +83,22 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\..\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Development - GitHub"
 $Accept = "Outbound rules for 'Git' and 'GitHub Desktop' are recommended if these programs are installed"
 $Deny = "Skip operation, these rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Confirm-Installation:Quiet" = $Quiet
-	"Confirm-Installation:Interactive" = $Interactive
-	"Confirm-Installation:Session" = $SessionInstance
-	"Confirm-Installation:CimSession" = $CimServer
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -191,15 +189,19 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 # Test if installation exists on system
 if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 {
-	$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GitHubRoot)
+	$VersionFolders = Invoke-Command -Session $SessionInstance -ArgumentList $GitHubRoot -ScriptBlock {
+		param ($GitHubRoot)
 
-	if ($ForceLoad -and !(Test-Path -Path $ExpandedPath -PathType Container))
-	{
-		$VersionFolders = $null
-	}
-	else
-	{
-		$VersionFolders = Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
+		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GitHubRoot)
+
+		if ($ForceLoad -and !(Test-Path -Path $ExpandedPath -PathType Container))
+		{
+			$null
+		}
+		else
+		{
+			Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
+		}
 	}
 
 	$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
@@ -269,8 +271,8 @@ if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

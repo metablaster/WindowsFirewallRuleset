@@ -33,6 +33,9 @@ Outbound firewall rules for VSCode
 .DESCRIPTION
 Outbound firewall rules for Visual Studio Code
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -66,6 +69,9 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Trusted,
 
@@ -80,10 +86,10 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\..\..\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -91,17 +97,12 @@ $Group = "Development - Microsoft VSCode"
 $ExtensionsGroup = "$Group extensions"
 $Accept = "Outbound rules for Microsoft VSCode will be loaded, recommended if Microsoft VSCode is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft VSCode will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Confirm-Installation:Quiet" = $Quiet
-	"Confirm-Installation:Interactive" = $Interactive
-	"Confirm-Installation:Session" = $SessionInstance
-	"Confirm-Installation:CimSession" = $CimServer
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 #
@@ -136,11 +137,16 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 	}
 
 	# VSCode extensions which require internet access
-	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup -CimSession $CimServer))
+	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup))
 	{
 		$User = $Principal.User
-		$ExtensionDirectory = Get-ChildItem -Path "C:\Users\$User\.vscode\extensions\redhat.vscode-xml-*" |
-		Select-Object -ExpandProperty Name
+		$ExtensionDirectory = Invoke-Command -Session $SessionInstance -ArgumentList $User -ScriptBlock {
+			param ($User)
+
+			Get-ChildItem -Path "C:\Users\$User\.vscode\extensions\redhat.vscode-xml-*" |
+			Select-Object -ExpandProperty Name
+		}
+
 		$Program = "%SystemDrive%\Users\$User\.vscode\extensions\$ExtensionDirectory\server\lemminx-win32.exe"
 
 		# NOTE: Test-Path because it's very likely extension isn't installed by every user
@@ -162,8 +168,8 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

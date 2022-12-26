@@ -37,6 +37,9 @@ The following predefined groups are included:
 2. Cast to device functionality
 3. Connected devices platform
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -67,6 +70,10 @@ NOTE: There are no predefined outbound rules for connections to "DIAL protocol s
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Trusted,
 
 	[Parameter()]
@@ -77,23 +84,20 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Additional Networking"
 $Accept = "Outbound rules for additional networking will be loaded, recommended for specific scenarios"
 $Deny = "Skip operation, outbound additional networking rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -295,8 +299,8 @@ Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

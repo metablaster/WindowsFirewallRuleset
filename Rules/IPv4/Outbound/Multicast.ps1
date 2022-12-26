@@ -33,6 +33,9 @@ Outbound firewall rules for IPv4 multicast
 .DESCRIPTION
 Outbound firewall rules for IPv4 multicast address Space
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -77,14 +80,18 @@ https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -98,7 +105,6 @@ $MulticastUsers = Get-SDDL -Domain "NT AUTHORITY" -User "NETWORK SERVICE", "LOCA
 Merge-SDDL ([ref] $MulticastUsers) -From $UsersGroupSDDL
 $Accept = "Outbound rules for IPv4 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, outbound IPv4 multicast rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -285,8 +291,8 @@ Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

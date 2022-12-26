@@ -33,6 +33,9 @@ Inbound firewall rules for IPv6 multicast traffic
 .DESCRIPTION
 Inbound firewall rules for IPv6 multicast traffic
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -101,14 +104,18 @@ https://www.iana.org/assignments/ipv6-multicast-addresses/ipv6-multicast-address
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -127,7 +134,6 @@ $LocalInterface = "Any"
 # $LocalInterface = "Wired, Wireless"
 $Accept = "Inbound rules for IPv6 multicast will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, inbound IPv6 multicast rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -740,8 +746,8 @@ Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

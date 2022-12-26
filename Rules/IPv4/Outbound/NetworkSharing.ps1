@@ -34,6 +34,9 @@ Outbound firewall rules for File and Printer sharing predefined rules
 Outbound rules for File and Printer sharing predefined rules
 Rules which apply to network sharing on LAN
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -64,14 +67,18 @@ TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -79,7 +86,6 @@ $Group = "@FirewallAPI.dll,-28502"
 $DisplayGroup = "File and Printer Sharing"
 $Accept = "Outbound rules for network sharing will be loaded, required to share resources in local networks"
 $Deny = "Skip operation, outbound network sharing rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $DisplayGroup -Force:$Force)) { exit }
 #endregion
 
@@ -190,8 +196,8 @@ Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

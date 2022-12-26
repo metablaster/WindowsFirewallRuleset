@@ -112,7 +112,7 @@ function Get-SDDL
 		$ConnectParams.Domain = $Domain
 	}
 
-	# Glossary:
+	# MSDN: Glossary:
 	# SDDL: Security Descriptor Definition Language
 	# ACE: Access Control Entry (Describes what access rights a security principal has to the secured object)
 	# SID: Security IDentifier (Identifies a user or group)
@@ -121,24 +121,24 @@ function Get-SDDL
 	# ACL: Access Control List (Base name for DACL and SACL, DACL and SACL are ACL's)
 
 	# https://docs.microsoft.com/en-us/windows/win32/secauthz/ace-strings
-	# SDDL uses ACE strings in the DACL and SACL, each ACE is enclosed in parentheses.
+	# MSDN: SDDL uses ACE strings in the DACL and SACL, each ACE is enclosed in parentheses.
 	# The fields of each ACE are separated by semicolons.
 	# ace_type;ace_flags;rights;object_guid;inherit_object_guid;account_sid;(resource_attribute)
 
 	# https://docs.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-definition-language
-	# The four main components of SDDL are:
+	# MSDN: The four main components of SDDL are:
 	# owner SID 			(O:sid)			A SID string that identifies the object's owner
 	# primary group SID 	(G:sid)			A SID string that identifies the object's primary group.
 	# DACL flags 			(D:flags) (ACE 1)..(ACE n)
 	# SACL flags 			(S:flags) (ACE 1)..(ACE n)
 
-	<# 	The DACL flags can be a concatenation of zero or more of the following strings:
+	<# MSDN: The DACL flags can be a concatenation of zero or more of the following strings:
 	"P"					SE_DACL_PROTECTED flag is set.
 	"AR"				SE_DACL_AUTO_INHERIT_REQ flag is set.
 	"AI"				SE_DACL_AUTO_INHERITED flag is set.
 	"NO_ACCESS_CONTROL"	ACL is null.
 
-	The SACL flags string uses the same control bit strings as the dacl_flags string.
+	MSDN: The SACL flags string uses the same control bit strings as the dacl_flags string.
 	DACL and SACL flags control bits that relate to automatic inheritance of ACE
 	ACE: A string that describes an ACE in the security descriptor's DACL or SACL
 	#>
@@ -153,15 +153,15 @@ function Get-SDDL
 		{
 			# https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/access-mask
 			# https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-addaccessallowedace
-			# To simplify specifying all access rights that correspond to a general notion such as reading or writing,
+			# MSDN: To simplify specifying all access rights that correspond to a general notion such as reading or writing,
 			# the system provides generic access rights.
 			# The system maps a generic access right to the appropriate set of specific access rights for the object.
 			# The meaning of each generic access right is specific to that type of object.
 
-			# ace_type
+			# MSDN: ace_type
 			# "A"	ACCESS_ALLOWED_ACE_TYPE		The access is granted to a specified security identifier (SID)
 
-			# rights (Generic access rights)
+			# MSDN: rights (Generic access rights)
 			# "GA"	GENERIC_ALL			The caller can perform all normal operations on the object.
 			# "GR"	GENERIC_READ		The caller can perform normal read operations on the object.
 			# "GW"	GENERIC_WRITE		The caller can perform normal write operations on the object.

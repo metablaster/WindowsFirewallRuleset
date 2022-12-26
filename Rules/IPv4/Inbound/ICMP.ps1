@@ -33,6 +33,9 @@ Inbound ICMPv4 rules
 .DESCRIPTION
 Inbound firewall rules for ICMPv4 traffic
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -86,14 +89,18 @@ ex. $APIPA = "169.254.1.0-169.254.254.255"
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -103,7 +110,6 @@ $RemoteAddrWAN = "Any"
 $RemoteAddrLAN = "LocalSubnet4"
 $Accept = "Inbound rules for ICMPv4 will be loaded, recommended for proper network functioning"
 $Deny = "Skip operation, inbound ICMPv4 rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -550,8 +556,8 @@ Code 0 may be received from a gateway or a host." | Format-RuleOutput
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

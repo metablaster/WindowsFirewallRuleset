@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
+. $PSScriptRoot\..\DefaultParameters.ps1
+
 #
 # Variables related to IPv6
 #

@@ -34,6 +34,9 @@ Temporary outbound rules
 Temporary rules are enabled on demand only to let some program do it's internet work, or
 to troubleshoot firewall without shuting it down completely.
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -56,21 +59,24 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Temporary - IPv4"
 $Accept = "Temporary outbound IPv4 rules will be loaded, recommended to temporarily enable specific IPv4 traffic"
 $Deny = "Skip operation, temporary outbound IPv4 rules will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 #endregion
 
@@ -284,6 +290,6 @@ if ($Develop)
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
+	Invoke-Process gpupdate.exe
 	Update-Log
 }

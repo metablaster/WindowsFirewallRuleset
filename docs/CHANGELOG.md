@@ -60,6 +60,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated `Grant-Logs` script to better detect log file location change
   - `Find-UnsignedFile` now offers to download sigcheck if it doesn't exist on computer
+  - Made possible to deploy rules remotely (experimental)
 
 - Unit test
 

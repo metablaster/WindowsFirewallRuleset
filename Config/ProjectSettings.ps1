@@ -648,6 +648,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 			# TODO: Needs testing info messages for this value
 			# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
 			# TODO: This should be used for -LocalUser rule parameter too
+			# TODO: This must be all users from default group because some rules use it
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
 				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup[0] | Where-Object {
 						($_.ObjectClass -EQ "User") -and

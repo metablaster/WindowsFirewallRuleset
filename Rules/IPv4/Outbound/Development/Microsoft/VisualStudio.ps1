@@ -33,6 +33,9 @@ Outbound firewall rules for VisualStudio
 .DESCRIPTION
 Outbound firewall rules for Visual Studio IDE
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -66,6 +69,9 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Trusted,
 
@@ -80,10 +86,10 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
+Initialize-Project
 . $PSScriptRoot\..\..\DirectionSetup.ps1
 
-Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
@@ -95,17 +101,12 @@ $ExtensionAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 Merge-SDDL ([ref] $ExtensionAccounts) -From $UsersGroupSDDL
 $Accept = "Outbound rules for Microsoft Visual Studio will be loaded, recommended if Microsoft Visual Studio is installed to let it access to network"
 $Deny = "Skip operation, outbound rules for Microsoft Visual Studio will not be loaded into firewall"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Confirm-Installation:Quiet" = $Quiet
-	"Confirm-Installation:Interactive" = $Interactive
-	"Confirm-Installation:Session" = $SessionInstance
-	"Confirm-Installation:CimSession" = $CimServer
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -127,7 +128,9 @@ $VSInstallerRoot = "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer"
 
 # TODO: This is temporary hack, overriding the switch case in ProgramInfo module
 # When updated the import module VSSetup should be removed in this file
-$VSInstances = Get-VSSetupInstance -Prerelease
+$VSInstances = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	Get-VSSetupInstance -Prerelease
+}
 
 # Test if installation exists on system
 # if ((Confirm-Installation "VisualStudio" ([ref] $VSRoot)) -or $ForceLoad)
@@ -157,11 +160,15 @@ foreach ($Instance in $VSInstances)
 	}
 
 	# $VSRoot has environment variables
-	$mingwDirectory = Get-ChildItem -Path "$($Instance.InstallationPath)\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git" -Directory |
-	Where-Object {
-		# This might be mingw32 or mingw64
-		$_.Name -like "mingw*"
-	} | Select-Object -ExpandProperty Name
+	$mingwDirectory = Invoke-Command -Session $SessionInstance -ArgumentList $Instance.InstallationPath -ScriptBlock {
+		param ($InstallationPath)
+
+		Get-ChildItem -Path "$InstallationPath\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git" -Directory |
+		Where-Object {
+			# This might be mingw32 or mingw64
+			$_.Name -like "mingw*"
+		} | Select-Object -ExpandProperty Name
+	}
 
 	foreach ($mingw in $mingwDirectory)
 	{
@@ -397,7 +404,11 @@ These are not optional and are designed to be running side-by-side with devenv.e
 
 	# NOTE: subdirectory name consists of version number so let's get that:
 	# NOTE: Get-ChildItem doesn't recognize environment variables
-	$MSVCVersion = Get-ChildItem -Directory -Name -Path "$($Instance.InstallationPath)\VC\Tools\MSVC" -ErrorAction Ignore
+	$MSVCVersion = Invoke-Command -Session $SessionInstance -ArgumentList $Instance.InstallationPath -ScriptBlock {
+		param ($InstallationPath)
+
+		Get-ChildItem -Directory -Name -Path "$InstallationPath\VC\Tools\MSVC" -ErrorAction Ignore
+	}
 
 	# There should be only one directory, but just in case let's select highest version
 	$MSVCVersion = $MSVCVersion | Select-Object -Last 1
@@ -581,8 +592,8 @@ Tools->Options->Environment->Product Updates->Automatically download updates." |
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log
