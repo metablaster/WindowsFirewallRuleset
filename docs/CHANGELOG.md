@@ -33,6 +33,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated rules for Visual Studio
   - Made rules for store apps respect `DefaultGroup` global variable
+  - Updated rules for network discovery and network sharing so that only those are enabled for which
+  network profile is currently active.
 
 - Modules
 
@@ -43,8 +45,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
   - Fixed a bug with `Initialize-Service` which configured services which should not be configured\
-  **NOTE:** If using Windows Firewall Ruleset version up to and including v0.14.0 run the following
-  code to restore these system managed services to system defaults:
+  **NOTE:** If you used Windows Firewall Ruleset version up to and including v0.14.0 run the
+  following code to restore these system managed services to system defaults:
 
     ```powershell
     sc.exe config AFD start= system
@@ -61,7 +63,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated `Grant-Logs` script to better detect log file location change
   - `Find-UnsignedFile` now offers to download sigcheck if it doesn't exist on computer
-  - Made possible to deploy rules remotely (experimental)
+  - Made possible to deploy rules remotely to single computer (experimental)
 
 - Unit test
 

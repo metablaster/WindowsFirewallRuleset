@@ -622,15 +622,23 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 
 		# Default network interface card to use if not locally specified
 		# TODO: We can learn this value programatically, but problem is the same as with specifying local IP
-		Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value "Wired, Wireless"
+		Set-Variable -Name DefaultInterface -Scope Global -Option ReadOnly -Force -Value @(
+			# Accepted values: Any, Wired, Wireless, RemoteAccess
+			"Wired"
+			"Wireless"
+		)
 
-		# Default network profile to use if not locally specified.
+		# Default network profile to use for rules if not locally specified.
 		# NOTE: Do not modify except to to debug rules or unless absolutely needed!
-		Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value "Private, Public"
+		Set-Variable -Name DefaultProfile -Scope Global -Option ReadOnly -Force -Value @(
+			# Accepted values: Any, Domain, Private, Public, NotApplicable
+			"Private"
+			"Public"
+		)
 
-		# To force loading rules regardless of presence of a program set to true
+		# To force loading rules regardless of presence of an executable or service set to true
 		# The purpose of this is to test loading rules that would otherwise be skipped
-		Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
+		Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
@@ -742,7 +750,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		[Microsoft.Win32.RegistryView]::Registry64)
 
 	# Project version, does not apply to non migrated 3rd party modules which follow their own version increment, do not modify!
-	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 14, 1))
+	New-Variable -Name ProjectVersion -Scope Global -Option Constant -Value ([version]::new(0, 15, 0))
 
 	# Required minimum operating system version (v1809)
 	# TODO: v1809 needs to be replaced with minimum v1903, downgraded here because of Server 2019

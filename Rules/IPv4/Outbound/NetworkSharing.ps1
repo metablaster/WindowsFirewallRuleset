@@ -53,12 +53,14 @@ None. NetworkSharing.ps1 does not generate any output
 HACK: Due to some magic with predefines rules these rules here don't work for home network setup (WORKGROUP)
 Same applies to "Network Discovery" predefined rules.
 See exported rules, possible cause is rule name and rule display name.
+Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
 
-NOTE: Current workaround for home networks is to apply predefined "File and Printer sharing" rules into GPO.
 NOTE: NETBIOS Name and datagram, LLMNR and ICMP rules required for network sharing which are part
 of predefined rules are duplicate of Network Discovery equivalent rules
 
-TODO: Intranet4 and Intranet4 removed IPv4 restriction to troubleshoot homegroup
+TODO: Intranet4 and Intranet4, removed IPv4 restriction to troubleshoot homegroup
+HACK: Changing network profile in UI will not enable required rules as it is the case with CP fireall
+A possible solution is have a function which sets firewall profile and togles rules as needed.
 #>
 
 #Requires -Version 5.1
@@ -94,19 +96,29 @@ Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direc
 
 Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direction -NewPolicyStore $PolicyStore
 
+# Enable\disable rules depending on network profiles currently used on target computer
+$CurrentProfile = Invoke-Command -Session $SessionInstance -ScriptBlock {
+	@(Get-NetConnectionProfile | Select-Object -ExpandProperty NetworkCategory)
+}
+
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
 	$_ | Format-RuleOutput -Label Modify
 	[hashtable] $Params = @{
 		InputObject = $_
-		Enabled = "True"
+		Enabled = "False"
 		LocalUser = "Any"
 		# NOTE: Requires allowing loopback and multicast elsewhere
 		InterfaceType = $DefaultInterface
 	}
 
-	if ($_.Profile -eq "Domain")
+	# If profile defined in rule matches currently used profiles used enable rule
+	foreach ($RuleProfile in $_.Profile.ToString().Split(", "))
 	{
-		$Params["Enabled"] = "False"
+		if ($RuleProfile -in $CurrentProfile)
+		{
+			$Params["Enabled"] = "True"
+			break
+		}
 	}
 
 	if ((Get-NetFirewallApplicationFilter -AssociatedNetFirewallRule $_).Program -eq "System")
@@ -116,6 +128,14 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 
 	Set-NetFirewallRule @Params
 }
+
+if ($UpdateGPO)
+{
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
+}
+
+Update-Log
 
 # NOTE: The following rules are no longer relevant
 return

@@ -87,6 +87,8 @@ None. Deploy-Firewall.ps1 does not generate any output
 
 .NOTES
 TODO: Rule deployment should probably be separated into new script
+TODO: Setting a network profile should probably be handled before rules are deployed
+so that correct rules for network discovery and sharing are enabled.
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README.md
@@ -191,9 +193,15 @@ $Destination = "$ProjectRoot\Rules\IPv4\Inbound"
 [bool] $AllCurrent = $YesToAll
 [bool] $NoCurrent = $false
 
+# Parameters which apply to a subset of rules scripts, that support them
 $ScriptParams = @{
 	Quiet = $Quiet
 	Interactive = $Interactive
+}
+# Parameters which apply to all rule scripts
+$AllScriptParams = @{
+	Domain = $Domain
+	Force = $AllCurrent
 }
 
 $ExecuteParams["Accept"] = "Continue prompting which inbound IPv4 rules to deploy"
@@ -221,18 +229,19 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
-		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
-		& "$Destination\ICMP.ps1" -Force:$AllCurrent
-		& "$Destination\Multicast.ps1" -Force:$AllCurrent
-		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
-		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
-		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\StoreApps.ps1" -Force:$AllCurrent
-		& "$Destination\Temporary.ps1" -Force:$AllCurrent
-		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
-		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\AdditionalNetworking.ps1" -Quiet:$Quiet @AllScriptParams
+		& "$Destination\Broadcast.ps1" @AllScriptParams
+		& "$Destination\CoreNetworking.ps1" @AllScriptParams
+		& "$Destination\ICMP.ps1" @AllScriptParams
+		& "$Destination\Multicast.ps1" @AllScriptParams
+		& "$Destination\NetworkDiscovery.ps1" @AllScriptParams
+		& "$Destination\NetworkSharing.ps1" @AllScriptParams
+		& "$Destination\RemoteWindows.ps1" -Quiet:$Quiet @AllScriptParams
+		& "$Destination\StoreApps.ps1" @AllScriptParams
+		& "$Destination\Temporary.ps1" @AllScriptParams
+		& "$Destination\WindowsServices.ps1" @AllScriptParams
+		& "$Destination\WirelessNetworking.ps1" -Quiet:$Quiet @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -247,7 +256,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Development\EpicGames.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -263,7 +273,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		# & "$Destination\Games\ScriptName.ps1" -Force:$AllCurrent
+		# $AllScriptParams["Force"] = $AllCurrent
+		# & "$Destination\Games\ScriptName.ps1" @AllScriptParams
 		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "[$ThisScript] No inbound rules for games exist"
@@ -280,7 +291,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SshServer.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Server\SshServer.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 
 		Write-Warning -Message "[$ThisScript] No inbound rules for server platforms or software exist"
@@ -298,11 +310,12 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party software
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Software\FileZilla.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\InternetBrowser.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Steam.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\TeamViewer.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\uTorrent.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -317,8 +330,9 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft software
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\SysInternals.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
@@ -356,19 +370,20 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\AdditionalNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Broadcast.ps1" -Force:$AllCurrent
-		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
-		& "$Destination\ICMP.ps1" -Force:$AllCurrent
-		& "$Destination\Multicast.ps1" -Force:$AllCurrent
-		& "$Destination\NetworkDiscovery.ps1" -Force:$AllCurrent
-		& "$Destination\NetworkSharing.ps1" -Force:$AllCurrent
-		& "$Destination\RemoteWindows.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\StoreApps.ps1" -Force:$AllCurrent -Quiet:$Quiet
-		& "$Destination\Temporary.ps1" -Force:$AllCurrent
-		& "$Destination\WindowsServices.ps1" -Force:$AllCurrent
-		& "$Destination\WindowsSystem.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\WirelessNetworking.ps1" -Force:$AllCurrent -Quiet:$Quiet
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\AdditionalNetworking.ps1" -Quiet:$Quiet @AllScriptParams
+		& "$Destination\Broadcast.ps1" @AllScriptParams
+		& "$Destination\CoreNetworking.ps1" @AllScriptParams
+		& "$Destination\ICMP.ps1" @AllScriptParams
+		& "$Destination\Multicast.ps1" @AllScriptParams
+		& "$Destination\NetworkDiscovery.ps1" @AllScriptParams
+		& "$Destination\NetworkSharing.ps1" @AllScriptParams
+		& "$Destination\RemoteWindows.ps1" -Quiet:$Quiet @AllScriptParams
+		& "$Destination\StoreApps.ps1" -Quiet:$Quiet @AllScriptParams
+		& "$Destination\Temporary.ps1" @AllScriptParams
+		& "$Destination\WindowsServices.ps1" @AllScriptParams
+		& "$Destination\WindowsSystem.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\WirelessNetworking.ps1" -Quiet:$Quiet @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -383,13 +398,14 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party development software
-		& "$Destination\Development\Chocolatey.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\CMake.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\EpicGames.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\GitHub.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Incredibuild.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\MSYS2.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\RealWorld.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Development\Chocolatey.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\CMake.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\EpicGames.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\GitHub.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Incredibuild.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\MSYS2.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\RealWorld.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -404,15 +420,16 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft development software
-		& "$Destination\Development\Microsoft\dotnet.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\HelpViewer.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\NuGet.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\PowerShell.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\vcpkg.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\VisualStudio.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\VSCode.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\WebPlatform.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Development\Microsoft\WindowsSDK.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Development\Microsoft\dotnet.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\HelpViewer.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\NuGet.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\PowerShell.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\vcpkg.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\VisualStudio.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\VSCode.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\WebPlatform.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Development\Microsoft\WindowsSDK.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -427,16 +444,17 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for games
-		& "$Destination\Games\ArenaChess.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\CounterStrikeGO.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\DemiseOfNations.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\EVEOnline.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\LeagueOfLegends.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\OpenTTD.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\PathOfExile.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\PinballArcade.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\PokerStars.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Games\WarThunder.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Games\ArenaChess.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\CounterStrikeGO.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\DemiseOfNations.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\EVEOnline.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\LeagueOfLegends.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\OpenTTD.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\PathOfExile.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\PinballArcade.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\PokerStars.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Games\WarThunder.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -451,7 +469,8 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for servers
-		& "$Destination\Server\SQLServer.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Server\SQLServer.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -466,30 +485,31 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for 3rd party programs
-		& "$Destination\Software\Adobe.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\CPUID.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\DnsCrypt.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\FileZilla.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Google.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\GPG.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Greenshot.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Intel.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\InternetBrowser.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Java.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\MetaTrader.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\MSI.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Nvidia.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\OBSStudio.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\OpenSpace.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\OpenSSH.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\PasswordSafe.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Psiphon.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\qBittorrent.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\RivaTuner.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Steam.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\TeamViewer.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Thunderbird.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\uTorrent.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Software\Adobe.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\CPUID.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\DnsCrypt.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\FileZilla.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Google.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\GPG.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Greenshot.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Intel.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\InternetBrowser.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Java.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\MetaTrader.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\MSI.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Nvidia.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\OBSStudio.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\OpenSpace.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\OpenSSH.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\PasswordSafe.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Psiphon.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\qBittorrent.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\RivaTuner.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Steam.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\TeamViewer.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Thunderbird.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\uTorrent.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 
@@ -504,11 +524,12 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Rules for Microsoft programs
-		& "$Destination\Software\Microsoft\BingWallpaper.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Microsoft\EdgeChromium.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Microsoft\OneDrive.ps1" -Force:$AllCurrent @ScriptParams
-		& "$Destination\Software\Microsoft\SysInternals.ps1" -Force:$AllCurrent @ScriptParams
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\Software\Microsoft\BingWallpaper.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\EdgeChromium.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\MicrosoftOffice.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\OneDrive.ps1" @ScriptParams @AllScriptParams
+		& "$Destination\Software\Microsoft\SysInternals.ps1" @ScriptParams @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
@@ -546,10 +567,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
-		& "$Destination\ICMP.ps1" -Force:$AllCurrent
-		& "$Destination\Multicast.ps1" -Force:$AllCurrent
-		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\CoreNetworking.ps1" @AllScriptParams
+		& "$Destination\ICMP.ps1" @AllScriptParams
+		& "$Destination\Multicast.ps1" @AllScriptParams
+		& "$Destination\Temporary.ps1" @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
@@ -587,10 +609,11 @@ if (Approve-Execute @ExecuteParams)
 	if (Approve-Execute @ExecuteParams)
 	{
 		# Core rules
-		& "$Destination\CoreNetworking.ps1" -Force:$AllCurrent
-		& "$Destination\ICMP.ps1" -Force:$AllCurrent
-		& "$Destination\Multicast.ps1" -Force:$AllCurrent
-		& "$Destination\Temporary.ps1" -Force:$AllCurrent
+		$AllScriptParams["Force"] = $AllCurrent
+		& "$Destination\CoreNetworking.ps1" @AllScriptParams
+		& "$Destination\ICMP.ps1" @AllScriptParams
+		& "$Destination\Multicast.ps1" @AllScriptParams
+		& "$Destination\Temporary.ps1" @AllScriptParams
 		$AllCurrent = $YesToAll
 	}
 }
