@@ -45,7 +45,7 @@ SOFTWARE.
 
 	# Version number of this module.
 	# NOTE: Last checked out official version was 1.0.0
-	ModuleVersion = "0.14.1"
+	ModuleVersion = "0.15.0"
 
 	# Supported PSEditions
 	CompatiblePSEditions = @(

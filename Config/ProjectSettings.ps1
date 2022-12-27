@@ -601,6 +601,9 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 {
 	Write-Debug -Message "[$SettingsScript] Setting up read only variables - user only"
 
+	# Check if removable variables already initialized, do not modify!
+	Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
+
 	# Specify one or more user groups for which rules are being created by default
 	# NOTE: By design, for security reasons rules are created for all users in "Users" group while
 	# for Administrators group only those rules which necessary require Administrators online access.
@@ -614,9 +617,6 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 
 	if ($PSCmdlet.ParameterSetName -eq "Script")
 	{
-		# Check if removable variables already initialized, do not modify!
-		Set-Variable -Name CheckReadOnlyVariables2 -Scope Global -Option ReadOnly -Force -Value $null
-
 		# Windows 10, Windows Server 2019 and above
 		Set-Variable -Name Platform -Scope Global -Option ReadOnly -Force -Value "10.0+"
 
@@ -648,7 +648,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 			# TODO: Needs testing info messages for this value
 			# TODO: We are only assuming about accounts here as a workaround due to often need to modify variable
 			# TODO: This should be used for -LocalUser rule parameter too
-			# TODO: This must be all users from default group because some rules use it
+			# TODO: This should also be all users from default group because some rules use it
 			Set-Variable -Name DefaultUser -Scope Global -Option ReadOnly -Force -Value (
 				Split-Path -Path (Get-LocalGroupMember -Group $DefaultGroup[0] | Where-Object {
 						($_.ObjectClass -EQ "User") -and

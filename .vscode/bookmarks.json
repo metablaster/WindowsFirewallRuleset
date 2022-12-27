@@ -119,7 +119,7 @@
 			"path": "Rules/IPv4/Outbound/Software/Nvidia.ps1",
 			"bookmarks": [
 				{
-					"line": 200,
+					"line": 194,
 					"column": 2,
 					"label": ""
 				}
@@ -129,12 +129,7 @@
 			"path": "Rules/IPv4/Outbound/Software/Microsoft/OneDrive.ps1",
 			"bookmarks": [
 				{
-					"line": 179,
-					"column": 1,
-					"label": ""
-				},
-				{
-					"line": 180,
+					"line": 172,
 					"column": 1,
 					"label": ""
 				}
@@ -144,8 +139,8 @@
 			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
 			"bookmarks": [
 				{
-					"line": 134,
-					"column": 2,
+					"line": 130,
+					"column": 0,
 					"label": ""
 				},
 				{
@@ -154,7 +149,7 @@
 					"label": ""
 				},
 				{
-					"line": 410,
+					"line": 406,
 					"column": 1,
 					"label": ""
 				}
@@ -174,7 +169,7 @@
 			"path": "Rules/IPv4/Outbound/StoreApps.ps1",
 			"bookmarks": [
 				{
-					"line": 442,
+					"line": 440,
 					"column": 1,
 					"label": ""
 				}
@@ -184,7 +179,7 @@
 			"path": "Rules/IPv4/Outbound/Development/GitHub.ps1",
 			"bookmarks": [
 				{
-					"line": 195,
+					"line": 191,
 					"column": 1,
 					"label": ""
 				}

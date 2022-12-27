@@ -35,6 +35,9 @@ Outbound firewall rules template
 Detailed descritpion of this outbound rule group and involved programs and services including
 their networking requirements.
 
+.PARAMETER Domain
+Computer name onto which to deploy rules
+
 .PARAMETER Trusted
 If specified, rules will be loaded for executables with missing or invalid digital signature.
 By default an error is generated and rule isn't loaded.
@@ -68,6 +71,9 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Trusted,
 
@@ -82,10 +88,10 @@ param (
 )
 
 #region Initialization
-# TODO: Adjust path to project settings
+# TODO: Adjust paths to ProjectSettings and DirectionSetup
 . $PSScriptRoot\..\..\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
-. $PSScriptRoot\DirectionSetup.ps1
 Initialize-Project
+. $PSScriptRoot\DirectionSetup.ps1
 
 # Setup local variables
 $Group = "Template - TargetProgram"
@@ -94,17 +100,12 @@ $PrincipalSID = (Get-PrincipalSID $DefaultUser).SID
 # TODO: Update command line help messages
 $Accept = "Template accept help message"
 $Deny = "Skip operation, template deny help message"
-
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
-$PSDefaultParameterValues = @{
-	"Confirm-Installation:Quiet" = $Quiet
-	"Confirm-Installation:Interactive" = $Interactive
-	"Confirm-Installation:Session" = $SessionInstance
-	"Confirm-Installation:CimSession" = $CimServer
-	"Test-ExecutableFile:Quiet" = $Quiet
-	"Test-ExecutableFile:Force" = $Trusted -or $SkipSignatureCheck
-	"Test-ExecutableFile:Session" = $SessionInstance
-}
+
+$PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
+$PSDefaultParameterValues["Confirm-Installation:Interactive"] = $Interactive
+$PSDefaultParameterValues["Test-ExecutableFile:Quiet"] = $Quiet
+$PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSignatureCheck
 #endregion
 
 # First remove all existing rules matching group
@@ -187,8 +188,8 @@ if ((Confirm-Installation "TargetProgram" ([ref] $TargetProgramRoot)) -or $Force
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log
