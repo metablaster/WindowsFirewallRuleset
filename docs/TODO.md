@@ -56,8 +56,8 @@ Todo's in this file are categorized into the following sections:
       (*.psd1, ProjectSettings, CHANGELOG, scripts, New-PSScriptInfo)
     - Run PScriptAnalyzer and resolve issues.
     - Confirm `Deploy-Firewall.ps1` master script calls all rule scripts
-    - Test machine should have 2 standard, 2 administrator and 2 MS accounts,
-      and 1 disabled account for each of these 3 groups for best test results.
+    - Test machine should have 2 standard, 2 administrator and 2 MS accounts of which 1 disabled
+      account, all of which, with different username from host system for best test results.
     - Verify there aren't any hardcoded paths such as `C:\dev\GitHub` pointing to your root directory
     - Run all tests in both release and develop mode, both Desktop and Core editions
     - Run master script on all target OS editions

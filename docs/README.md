@@ -371,8 +371,8 @@ this is where you extracted your downloaded zip file
     You may be prompted to accept execution policy change, if so type `Y` and press enter to accept.\
     For more information see [About Execution Policies][about execution policies]
 
-9. At this point you should "unblock" all project files first by executing a script called\
-`Scripts\Unblock-Project.ps1`, btw. project files were blocked by Windows to prevent users from
+9. At this point you should "unblock" all repository files first by executing a script called\
+`Scripts\Unblock-Project.ps1`, btw. repository files were blocked by Windows to prevent users from
 running untrusted script code downloaded from internet:
 
     ```powershell
@@ -382,7 +382,7 @@ running untrusted script code downloaded from internet:
     If asked, make sure your answer is `R` that is `[R] Run once` as many times as needed to unblock
     project. (approx. up to 8 times)
 
-10. Once project files are unblocked change execution policy to `RemoteSigned`:
+10. Once repository files are unblocked change execution policy to `RemoteSigned`:
 
     ```powershell
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
@@ -394,7 +394,8 @@ running untrusted script code downloaded from internet:
 Most paths are auto-searched and variables are updated transparently, otherwise you get warning and
 description on how to fix the problem.\
 If needed, you can find these installation variables in individual scripts inside `Rules` directory.\
-It is recommended to close down all other programs before running master script in the next step.
+It is recommended to close down all `MMC` management consoles such as `gpedit.msc` or `secpol.msc`
+before running master script in the next step.
 
 12. Back to PowerShell console and run one of the two `Deploy-Firewall` commands below:
 

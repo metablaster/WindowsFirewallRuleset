@@ -225,7 +225,7 @@ function Test-ExecutableFile
 			Get-AuthenticodeSignature -LiteralPath $ExpandedPath
 		}
 
-		if ($Signature.Status.Value -ne "Valid")
+		if ($Signature.Status -ne [System.Management.Automation.SignatureStatus]::Valid)
 		{
 			# HACK: We ignore -Quiet switch for signature mismatch because of Deploy-Firewall -Quiet
 			# making signature mismatch silent is not desired for bulk deployment however a better

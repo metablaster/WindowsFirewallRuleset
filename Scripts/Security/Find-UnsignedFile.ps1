@@ -495,7 +495,7 @@ if ($PSCmdlet.ShouldProcess($ExpandedPath, "Bulk digital signature check for '$F
 
 		$Signature = Get-AuthenticodeSignature -LiteralPath $FilePath
 
-		if ($Signature.Status -ne "Valid")
+		if ($Signature.Status -ne [System.Management.Automation.SignatureStatus]::Valid)
 		{
 			Write-Warning -Message "[$ThisScript] Unsigned file detected '$FileName'"
 

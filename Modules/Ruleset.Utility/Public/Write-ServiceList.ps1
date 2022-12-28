@@ -110,7 +110,7 @@ function Write-ServiceList
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Get rid of duplicate matches and known bad values"
 	$Services = $Services | Select-Object -Unique | Where-Object {
-		$_ -ne '$Service' -and $_ -ne "Any" -and $_ -ne '"*"'
+		($_ -ne '$Service') -and ($_ -ne "Any") -and ($_ -ne '"*"')
 	} | Sort-Object
 
 	if (!$Services)

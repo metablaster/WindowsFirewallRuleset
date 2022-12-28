@@ -63,6 +63,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     sc.exe config Bowser start= demand
     ```
 
+  - Fixed a bug with `Test-Service` and `Find-UnsignedFile` which reported false positives for
+    digital signature test.
   - Fixed an issue with `Test-FileSystemPath` which ignored and didn't report certain path errors
   - Fixed an issue with logging of rule scripts, which didn't log script generated errors and warnings
 
@@ -70,7 +72,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated `Grant-Logs` script to better detect log file location change
   - `Find-UnsignedFile` now offers to download sigcheck if it doesn't exist on computer
-  - Made possible to deploy firewall remotely to single computer (experimental)
+  - You can now deploy, reset, backup and restore firewall on single remote computer (experimental)
 
 - Unit test
 

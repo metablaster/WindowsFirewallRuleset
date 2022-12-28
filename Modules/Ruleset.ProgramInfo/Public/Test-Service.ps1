@@ -205,7 +205,7 @@ function Test-Service
 				Get-AuthenticodeSignature -LiteralPath $args[0]
 			}
 
-			if ($Signature.Status -ne "Valid")
+			if ($Signature.Status -ne [System.Management.Automation.SignatureStatus]::Valid)
 			{
 				if ($Force)
 				{
