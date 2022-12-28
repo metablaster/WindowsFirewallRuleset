@@ -101,6 +101,12 @@ None. You cannot pipe objects to Test-ExecutableFile
 TODO: We should attempt to fix the path if invalid here, ex. Get-Command (-Repair parameter)
 TODO: We should return true or false and conditionally load rule
 TODO: Verify file is executable file (and path formatted?)
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature
 #>
 function Test-ExecutableFile
 {

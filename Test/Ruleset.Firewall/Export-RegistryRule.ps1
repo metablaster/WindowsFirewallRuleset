@@ -33,6 +33,9 @@ Unit test for Export-RegistryRule
 .DESCRIPTION
 Test correctness of Export-RegistryRule function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -54,11 +57,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project
@@ -69,47 +76,55 @@ Enter-Test "Export-RegistryRule"
 
 $Exports = "$ProjectRoot\Exports"
 
-# TODO: need to test failure cases, see also module todo's for more info
-if ($false)
+if ($Domain -ne [System.Environment]::MachineName)
 {
-	Start-Test "-Outbound -Disabled -Allow"
-	Export-RegistryRule -Outbound -Disabled -Allow -Path $Exports -FileName "RegOutboundExport"
-
-	# Start-Test "-Inbound -Enabled -Block -JSON"
-	# Export-RegistryRule -Inbound -Enabled -Block -Path $Exports -JSON -FileName "RegInboundExport"
+	Start-Test "Remote reg export -Outbound -Disabled -Allow"
+	Export-RegistryRule -Outbound -Disabled -Allow -Path $Exports -FileName "RemoteRegOutboundExport" -Domain $Domain
 }
 else
 {
+	# TODO: need to test failure cases, see also module todo's for more info
 	if ($false)
 	{
-		Start-Test "Persistent store"
-		Export-RegistryRule -DisplayGroup "" -Outbound -Path $Exports -FileName "RegNoGroupExport"
+		Start-Test "-Outbound -Disabled -Allow"
+		Export-RegistryRule -Outbound -Disabled -Allow -Path $Exports -FileName "RegOutboundExport"
+
+		# Start-Test "-Inbound -Enabled -Block -JSON"
+		# Export-RegistryRule -Inbound -Enabled -Block -Path $Exports -JSON -FileName "RegInboundExport"
 	}
 	else
 	{
-		Start-Test "-DisplayGroup '' -Outbound"
-		Export-RegistryRule -DisplayGroup "" -Outbound -Path $Exports -FileName "RegGroupExport"
+		if ($false)
+		{
+			Start-Test "Persistent store"
+			Export-RegistryRule -DisplayGroup "" -Outbound -Path $Exports -FileName "RegNoGroupExport"
+		}
+		else
+		{
+			Start-Test "-DisplayGroup '' -Outbound"
+			Export-RegistryRule -DisplayGroup "" -Outbound -Path $Exports -FileName "RegGroupExport"
 
-		Start-Test "-DisplayGroup 'Broadcast' -Outbound"
-		Export-RegistryRule -DisplayGroup "Broadcast" -Outbound -Path $Exports -FileName "RegGroupExport"
+			Start-Test "-DisplayGroup 'Broadcast' -Outbound"
+			Export-RegistryRule -DisplayGroup "Broadcast" -Outbound -Path $Exports -FileName "RegGroupExport"
 
-		Start-Test "-DisplayName 'Domain Name System'"
-		Export-RegistryRule -DisplayName "Domain Name System" -Path $Exports -FileName "RegNamedExport1"
+			Start-Test "-DisplayName 'Domain Name System'"
+			Export-RegistryRule -DisplayName "Domain Name System" -Path $Exports -FileName "RegNamedExport1"
 
-		Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -Append"
-		Export-RegistryRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -Append -FileName "RegNamedExport1"
+			Start-Test "-DisplayGroup 'Microsoft - Edge Chromium' -Outbound -Append"
+			Export-RegistryRule -DisplayGroup "Microsoft - Edge Chromium" -Outbound -Path $Exports -Append -FileName "RegNamedExport1"
 
-		Start-Test "-DisplayName 'Internet Group Management Protocol' -JSON"
-		Export-RegistryRule -DisplayName "Internet Group Management Protocol" -Path $Exports -JSON -FileName "RegNamedExport2"
+			Start-Test "-DisplayName 'Internet Group Management Protocol' -JSON"
+			Export-RegistryRule -DisplayName "Internet Group Management Protocol" -Path $Exports -JSON -FileName "RegNamedExport2"
 
-		Start-Test "-DisplayGroup 'Microsoft - One Drive' -Outbound -JSON -Append"
-		Export-RegistryRule -DisplayGroup "Microsoft - One Drive" -Outbound -Path $Exports -JSON -Append -FileName "RegNamedExport2"
+			Start-Test "-DisplayGroup 'Microsoft - One Drive' -Outbound -JSON -Append"
+			Export-RegistryRule -DisplayGroup "Microsoft - One Drive" -Outbound -Path $Exports -JSON -Append -FileName "RegNamedExport2"
 
-		Start-Test "-DisplayName 'Microsoft.BingWeather' -Outbound"
-		$Result = Export-RegistryRule -DisplayName "Microsoft.Bingweather" -Outbound -Path $Exports -FileName "RegStoreAppExport"
-		$Result
+			Start-Test "-DisplayName 'Microsoft.BingWeather' -Outbound"
+			$Result = Export-RegistryRule -DisplayName "Microsoft.Bingweather" -Outbound -Path $Exports -FileName "RegStoreAppExport"
+			$Result
 
-		Test-Output $Result -Command Export-RegistryRule
+			Test-Output $Result -Command Export-RegistryRule
+		}
 	}
 }
 

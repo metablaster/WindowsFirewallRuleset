@@ -166,7 +166,7 @@ if ($PSBoundParameters.ContainsKey("Confirm"))
 # TODO: It will ask again in same session, seems like set size is not set or Set-ScreenBuffer doesn't work
 Set-ScreenBuffer 3000 @SetScreenBufferParams
 
-# Check all rules which apply to windows services
+# Check all rules which apply to windows services and test digital signature of involved services
 Write-ServiceList $ProjectRoot\Rules -Log | ForEach-Object {
 	Test-Service $_ -Session $SessionInstance | Out-Null
 }

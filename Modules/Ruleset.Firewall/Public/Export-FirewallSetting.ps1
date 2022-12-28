@@ -33,6 +33,9 @@ Export firewall settings and profile setup to file
 .DESCRIPTION
 Export-FirewallSetting exports all firewall settings to file excluding firewall rules
 
+.PARAMETER Domain
+Computer name from which firewall settings are to be exported
+
 .PARAMETER Path
 Path into which to save file.
 Wildcard characters are supported.
@@ -67,6 +70,10 @@ function Export-FirewallSetting
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Export-FirewallSetting.md")]
 	[OutputType([void])]
 	param (
+		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]
 		[System.IO.DirectoryInfo] $Path,
@@ -110,9 +117,9 @@ function Export-FirewallSetting
 	}
 
 	#region ExportSettings
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall profile..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting firewall profile from '$Domain' computer..."
 
-	$Setting = Get-NetFirewallProfile -PolicyStore $PolicyStore -Name Private
+	$Setting = Get-NetFirewallProfile -PolicyStore $Domain -Name Private
 	[hashtable] $PrivateProfile = @{
 		Name = $Setting.Name
 		Enabled = $Setting.Enabled
@@ -134,7 +141,7 @@ function Export-FirewallSetting
 		DisabledInterfaceAliases = $Setting.DisabledInterfaceAliases
 	}
 
-	$Setting = Get-NetFirewallProfile -PolicyStore $PolicyStore -Name Public
+	$Setting = Get-NetFirewallProfile -PolicyStore $Domain -Name Public
 	[hashtable] $PublicProfile = @{
 		Name = $Setting.Name
 		Enabled = $Setting.Enabled
@@ -156,7 +163,7 @@ function Export-FirewallSetting
 		DisabledInterfaceAliases = $Setting.DisabledInterfaceAliases
 	}
 
-	$Setting = Get-NetFirewallProfile -PolicyStore $PolicyStore -Name Domain
+	$Setting = Get-NetFirewallProfile -PolicyStore $Domain -Name Domain
 	[hashtable] $DomainProfile = @{
 		Name = $Setting.Name
 		Enabled = $Setting.Enabled
@@ -183,8 +190,8 @@ function Export-FirewallSetting
 	$FirewallProfile.Add("Public", $PublicProfile)
 	$FirewallProfile.Add("Domain", $DomainProfile)
 
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting global firewall settings..."
-	$Setting = Get-NetFirewallSetting -PolicyStore $PolicyStore
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Exporting global firewall settings from '$Domain' computer..."
+	$Setting = Get-NetFirewallSetting -PolicyStore $Domain
 	[hashtable] $FirewallSetting = @{
 		Name = $Setting.Name
 		Exemptions = $Setting.Exemptions

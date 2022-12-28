@@ -33,6 +33,9 @@ Unit test for Export-FirewallSetting
 .DESCRIPTION
 Test correctness of Export-FirewallSetting function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -51,11 +54,15 @@ None. Export-FirewallSetting.ps1 does not generate any output
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project
@@ -65,11 +72,19 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 Enter-Test "Export-FirewallSetting"
 $Exports = "$ProjectRoot\Exports"
 
-Start-Test "default test"
-$Result = Export-FirewallSetting -Path $Exports
-$Result
+if ($Domain -ne [System.Environment]::MachineName)
+{
+	Start-Test "default remote test"
+	Export-FirewallSetting -Path $Exports -Domain $Domain
+}
+else
+{
+	Start-Test "default test"
+	$Result = Export-FirewallSetting -Path $Exports
+	$Result
 
-Test-Output $Result -Command Export-FirewallSetting
+	Test-Output $Result -Command Export-FirewallSetting
+}
 
 Update-Log
 Exit-Test

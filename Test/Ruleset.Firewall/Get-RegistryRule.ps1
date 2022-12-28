@@ -76,20 +76,27 @@ Enter-Test "Get-RegistryRule"
 
 if ($Domain -ne [System.Environment]::MachineName)
 {
-	$Group = "Test registry rule"
+	if ($true)
+	{
+		$Group = "Test registry rule"
 
-	Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction Ignore
-	Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
+		Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Outbound -ErrorAction Ignore
+		Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction Inbound -ErrorAction Ignore
 
-	New-NetFirewallRule -DisplayName "Test" -Direction Outbound `
-		-PolicyStore $PolicyStore -Group $Group -Enabled False `
-		-IcmpType 4 -Protocol ICMPv4 -Platform "10.0" |
-	Format-RuleOutput
+		New-NetFirewallRule -DisplayName "Test" -Direction Outbound `
+			-PolicyStore $PolicyStore -Group $Group -Enabled False `
+			-IcmpType 4 -Protocol ICMPv4 -Platform "10.0" |
+		Format-RuleOutput
 
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+		Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
 
-	Start-Test "Custom test"
-	Get-RegistryRule -Direction Outbound -DisplayName "Test" -Domain $Domain
+		Start-Test "Custom test"
+		Get-RegistryRule -Direction Outbound -DisplayName "Test" -Domain $Domain
+	}
+	else
+	{
+		Get-RegistryRule -Direction Outbound -Domain $Domain
+	}
 }
 else
 {

@@ -532,7 +532,9 @@ All other public functions do not support remoting by design
 
 The following functions support remoting
 
-- Get-RegistryRule (not tested)
+- Get-RegistryRule
+- Export-RegistryRule
+- Export-FirewallSetting
 
 The following functions do not support remoting by design
 
@@ -609,12 +611,12 @@ The following scripts support remoting
 - Confirm-Firewall (experimental)
 - Complete-Firewall
 - Deploy-Firewall
+- Backup-Firewall
+- Reset-Firewall
 
 The following scripts lack remoting implementation
 
-- Backup-Firewall
 - Grant-Logs
-- Reset-Firewall
 - Restore-Firewall
 - Find-UnsignedFile
 

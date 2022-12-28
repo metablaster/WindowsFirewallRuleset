@@ -137,6 +137,9 @@ https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service
 
 .LINK
 https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature
 #>
 
 #Requires -Version 5.1

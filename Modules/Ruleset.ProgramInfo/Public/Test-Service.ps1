@@ -84,6 +84,12 @@ PS> Test-Service SomeService -Quiet -Force
 .NOTES
 TODO: Implement accept ServiceController object, should be called InputObject, a good design needed,
 however it doesn't make much sense since the function is to test existence of a service too.
+
+.LINK
+https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md
+
+.LINK
+https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature
 #>
 function Test-Service
 {
