@@ -80,6 +80,9 @@ if ($Domain -ne [System.Environment]::MachineName)
 	Start-Test "Remote CimSession"
 	Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer
 
+	Start-Test "Remote -Unique"
+	Get-GroupPrincipal "Users", "Administrators" -CimSession $CimServer -Unique
+
 	# Start-Test "Remote Domain"
 	# Get-GroupPrincipal "Users", "Administrators" -Domain $TestDomain
 }
@@ -93,15 +96,13 @@ else
 	Get-GroupPrincipal "Administrators" -Disabled
 
 	Start-Test "Users, Administrators"
-	$CIMTest = Get-GroupPrincipal "Users", "Administrators" -Domain "localhost"
-	$CIMTest
+	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost"
 
 	Start-Test "Disabled Users, Administrators"
 	Get-GroupPrincipal "Users", "Administrators" -Domain "localhost" -Disabled
 
 	Start-Test "Failure test" -Force
-	$FailedUsers = Get-GroupPrincipal "Nonexistent Users" -EV +TestEV -EA SilentlyContinue
-	$FailedUsers
+	Get-GroupPrincipal "Nonexistent Users" -EV +TestEV -EA SilentlyContinue
 	Restore-Test
 
 	Test-Output $UsersTest -Command Get-GroupPrincipal -Force

@@ -113,7 +113,7 @@ Administrators should have limited or no connectivity at all for maximum securit
 #
 # Create rules for all network apps for each standard user
 #
-$Principals = Get-GroupPrincipal $DefaultGroup
+$Principals = Get-GroupPrincipal $DefaultGroup -Unique
 
 foreach ($Principal in $Principals)
 {

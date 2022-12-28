@@ -137,7 +137,7 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 	}
 
 	# VSCode extensions which require internet access
-	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup))
+	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup -Unique))
 	{
 		$User = $Principal.User
 		$ExtensionDirectory = Invoke-Command -Session $SessionInstance -ScriptBlock {

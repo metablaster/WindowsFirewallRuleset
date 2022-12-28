@@ -79,7 +79,12 @@
 					"label": ""
 				},
 				{
-					"line": 659,
+					"line": 613,
+					"column": 1,
+					"label": ""
+				},
+				{
+					"line": 660,
 					"column": 3,
 					"label": ""
 				}
@@ -181,16 +186,6 @@
 				{
 					"line": 194,
 					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.UserInfo/Public/Get-GroupPrincipal.ps1",
-			"bookmarks": [
-				{
-					"line": 71,
-					"column": 4,
 					"label": ""
 				}
 			]

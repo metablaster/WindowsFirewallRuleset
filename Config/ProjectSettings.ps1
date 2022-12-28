@@ -610,6 +610,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 	# If there are no standard users you should set this to "Administrators" or some other group
 	# which represents non administrative users on target computer.
 	# The default value is "Users"
+	# TODO: A good portion of code handles only first group mentioned
 	Set-Variable -Name DefaultGroup -Scope Global -Option ReadOnly -Force -Value @(
 		# Add or remove groups as needed
 		"Users"

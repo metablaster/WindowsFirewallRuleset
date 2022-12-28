@@ -376,7 +376,7 @@ function ConvertFrom-SID
 								# Find to which store app this SID belongs
 								$Groups = Get-UserGroup @CimParams | Select-Object -ExpandProperty Group
 								# NOTE: ignore warnings to reduce spam
-								$Users = Get-GroupPrincipal @CimParams -Group $Groups -WA SilentlyContinue |
+								$Users = Get-GroupPrincipal @CimParams -Group $Groups -Unique -WA SilentlyContinue |
 								Select-Object -ExpandProperty User
 
 								foreach ($User in $Users)

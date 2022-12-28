@@ -42,6 +42,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
     - `Initialize-Service` now handles paused services
     - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
+    - `Get-GroupPrincipal` added `-Unique` switch to get unique principals
 
   - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
   - Fixed a bug with `Initialize-Service` which configured services which should not be configured\
