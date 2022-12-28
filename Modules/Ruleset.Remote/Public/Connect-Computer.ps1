@@ -349,7 +349,7 @@ function Connect-Computer
 		{
 			# Will create a new blank console window in PS Core, see also Test-WinRM
 			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession creates a ghost window, minimize it but do not close it" -Debug
+			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession might create a ghost window, minimize it but do not close it" -Debug
 		}
 
 		Set-Variable -Name SessionInstance -Scope Global -Option ReadOnly -Force -Value (New-PSSession @PSSessionParams)

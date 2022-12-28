@@ -591,6 +591,11 @@ The following functions support remoting
 
 - Invoke-Process
 - Select-EnvironmentVariable
+- Set-NetworkProfile
+
+The following functions lack remoting implementation
+
+- Set-Shortcut
 
 All other functions do not support remoting by design
 

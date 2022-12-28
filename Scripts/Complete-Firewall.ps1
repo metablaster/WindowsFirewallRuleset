@@ -168,7 +168,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None `
 
 # Set network profile for adapters of choice
-Set-NetworkProfile
+Set-NetworkProfile -Session $SessionInstance
 
 if ($UpdateGPO)
 {

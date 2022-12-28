@@ -119,16 +119,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "Scripts/Complete-Firewall.ps1",
-			"bookmarks": [
-				{
-					"line": 170,
-					"column": 18,
-					"label": ""
-				}
-			]
 		}
 	]
 }

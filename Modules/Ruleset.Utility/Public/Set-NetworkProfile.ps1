@@ -40,6 +40,15 @@ Recommended is "Public" profile for maximum security, unless "Private" is needed
 Specify network category which to apply to all NIC's.
 If not specified, you're prompted for each NIC individually
 
+.PARAMETER Domain
+Computer name on which to set network profile
+
+.PARAMETER Credential
+Specify Credential used for authentication to Domain.
+
+.PARAMETER Session
+Specifies the PS session to use
+
 .EXAMPLE
 PS> Set-NetworkProfile
 
@@ -63,23 +72,57 @@ function Set-NetworkProfile
 	param (
 		[Parameter()]
 		[ValidateSet("Public", "Domain", "Private")]
-		[string] $NetworkCategory
+		[string] $NetworkCategory,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
+		[Parameter(ParameterSetName = "Domain")]
+		[PSCredential] $Credential,
+
+		[Parameter(ParameterSetName = "Session")]
+		[System.Management.Automation.Runspaces.PSSession] $Session
 	)
 
 	Write-Debug -Message "[$($MyInvocation.InvocationName)] Caller = $((Get-PSCallStack)[1].Command) ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 
-	if ($PSCmdlet.ShouldProcess("Each network interface", "Configure network profile"))
+	[hashtable] $SessionParams = @{}
+	if ($PSCmdlet.ParameterSetName -eq "Session")
 	{
-		# NOTE: This will include external switches bound to physical adapters as well
-		[string[]] $HardwareInterfaces = Get-NetConnectionProfile |
-		Select-Object -ExpandProperty InterfaceAlias
+		$Domain = $Session.ComputerName
+		$SessionParams.Session = $Session
+	}
+	else
+	{
+		$Domain = Format-ComputerName $Domain
+
+		# Avoiding NETBIOS ComputerName for localhost means no need for WinRM to listen on HTTP
+		if ($Domain -ne [System.Environment]::MachineName)
+		{
+			$SessionParams.ComputerName = $Domain
+			if ($Credential)
+			{
+				$SessionParams.Credential = $Credential
+			}
+		}
+	}
+
+	if ($PSCmdlet.ShouldProcess("Each network interface on '$Domain' computer", "Configure network profile"))
+	{
+		[string[]] $HardwareInterfaces = Invoke-Command @SessionParams -ScriptBlock {
+
+			# NOTE: This will include external switches bound to physical adapters as well
+			Get-NetConnectionProfile |
+			Select-Object -ExpandProperty InterfaceAlias
+		}
 
 		# Interface could be null
 		# TODO: In which case could second check be true? (interfaces -eq 0)
 		if (!$HardwareInterfaces -or ($HardwareInterfaces.Length -eq 0))
 		{
 			# TODO: We should base this on IPv*Connectivity given by Get-NetConnectionProfile
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to set network profile, machine not connected to network"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to set network profile, '$Domain' computer not connected to network"
 			return
 		}
 
@@ -127,13 +170,22 @@ function Set-NetworkProfile
 				}
 			}
 
-			Set-NetConnectionProfile -InterfaceAlias $Interface -NetworkCategory $Category
-			Write-Information -Tags $MyInvocation.InvocationName `
-				-MessageData "INFO: Network profile set to '$Category' on '$Interface' interface"
+			Invoke-Command @SessionParams -ArgumentList $MyInvocation.InvocationName, $Category, $Interface, $Domain -ScriptBlock {
+				param (
+					$InvocationName,
+					$Category,
+					$Interface,
+					$Domain
+				)
+
+				Set-NetConnectionProfile -InterfaceAlias $Interface -NetworkCategory $Category
+				Write-Information -Tags $InvocationName `
+					-MessageData "INFO: Network profile set to '$Category' for '$Interface' interface on '$Domain' computer"
+			}
 		}
 	}
 	else
 	{
-		Write-Verbose -Message "[$($MyInvocation.InvocationName)] User refused setting network profile"
+		Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting network profile skipped by user"
 	}
 }

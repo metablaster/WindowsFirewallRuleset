@@ -33,6 +33,9 @@ Unit test for Set-NetworkProfile
 .DESCRIPTION
 Test correctness of Set-NetworkProfile function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project
@@ -70,8 +77,16 @@ Enter-Test "Set-NetworkProfile"
 
 if ($Force -or $PSCmdlet.ShouldContinue("Possible network configuration bug", "Accept potentially dangerous unit test"))
 {
-	Start-Test "default"
-	$Result = Set-NetworkProfile
+	if ($Domain -ne [System.Environment]::MachineName)
+	{
+		Start-Test "default remote"
+		$Result = Set-NetworkProfile -Session $SessionInstance
+	}
+	else
+	{
+		Start-Test "default"
+		$Result = Set-NetworkProfile
+	}
 
 	Test-Output $Result -Command Set-NetworkProfile
 }

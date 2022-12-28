@@ -272,17 +272,24 @@ them as follows:
 
 ## Why do I get "Access is denied" errors
 
-You might see this error while loading firewall rules.
+There are several possible causes as follows:
 
-In almost all cases this happens when you use one of the management consoles such as `gpedit.msc` or
-`secpol.msc`, especially if you do something with them (ex. refreshing group policy, viewing or
-modifying settings/rules)
+- If your Administrator account is using Microsoft account to log into computer you need to specify
+  microsoft email and password.\
+  If you're using PIN and if you recently changed your Microsoft email password this may cause your
+  credentials to not work for which the solution is to remove your PIN and then setting PIN again.
 
-To minimize the chance of this error from appearing close down all management consoles and all
-software that is not essential to deploy firewall and try again.
+- You might also see this error while loading firewall rules.
 
-The "Access is denied" error may also be reported by WinRM or CIM, see [Remote.md](Remote.md) to
-resolve these kinds of "Access is denied".
+  In almost all cases this happens when you use one of the management consoles such as `gpedit.msc`
+  or `secpol.msc`, especially if you do something with them (ex. refreshing group policy, viewing or
+  modifying settings/rules)
+
+  To minimize the chance of this error from appearing close down all management consoles and all
+  software that is not essential to deploy firewall and try again.
+
+- The "Access is denied" error may also be reported by WinRM or CIM, see [Remote.md](Remote.md) to
+  resolve these kinds of "Access is denied".
 
 [Table of Contents](#table-of-contents)
 
@@ -348,7 +355,10 @@ regardless if you're using Windows hello or not, specifying PIN ie. will not wor
 hello authentication methods are not supported.
 
 If invalid credentials are supplied you'll get an error saying `Access is denied`.\
-If this happens you'll need to restart PowerShell console and try again.
+If this happens you'll need to restart PowerShell console and try again.\
+
+If you're using PIN and if you recently changed your Microsoft email password this may cause your
+credentials to not work for which the solution is to remove your PIN and then setting PIN again.
 
 The reason why this is necessary is because this firewall uses PowerShell remoting and WinRM service
 to deploy rules, by default PS Remoting will use your NTLM username\password, however this method

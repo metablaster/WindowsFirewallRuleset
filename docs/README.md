@@ -176,7 +176,7 @@ The following table lists operating systems on which `Windows Firewall Ruleset` 
 
 ### Requirements details
 
-- All Windows 10.0 systems (Major 10, Minor 0) and above are supported,
+- All Windows 10.0 systems (Major 10, Minor 0) and above except `Home` editions are supported,
 but only those editions listed in the table above have been tested.\
 The "Version" column lists tested releases, however only latest OS builds continue to be tested.\
 A list of other untested but supported systems and features is in [The future](#the-future)
@@ -427,7 +427,7 @@ it will take some 15 minutes of your attention.
     If invalid credentials are supplied you'll get an error saying `Access is denied`.\
     If this happens you'll need to restart PowerShell console and try again.
 
-    For more information why this is necessary see [FAQ](FAQ.md)
+    For more information why this is necessary see [FAQ](FAQ.md#why-do-i-need-to-specify-my-microsoft-account-credentials)
 
 14. If you encounter errors, you can either ignore errors or update script that produced the error
 then rerun that specific script once again later.
