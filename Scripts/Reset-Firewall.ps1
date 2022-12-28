@@ -49,6 +49,10 @@ default values.
 Resets Windows Remote Management service configuration to system defaults.
 Disables PS remoting and restores leftover changes.
 
+.PARAMETER Domain
+Specify computer name on which to reset firewall.
+The default value is this machine (localhost)
+
 .PARAMETER Remoting
 If specified resets and disables Windows remote management service, disables PowerShell remoting and
 disables remote registry in addition to firewall reset
@@ -86,6 +90,10 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 
 [CmdletBinding()]
 param (
+	[Parameter(Position = 0)]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Remoting,
 
@@ -97,12 +105,13 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
+Initialize-Project
 
 # User prompt
-$Accept = "All GPO firewall rules will be removed and modified settings restored to system defaults"
-$Deny = "Abort operation, no change will be done to firewall or system"
+$Accept = "All GPO firewall rules will be removed and modified settings restored to system defaults on '$Domain' computer"
+$Deny = "Abort operation, no change will be done to firewall or system on '$Domain' computer"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
@@ -112,7 +121,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags $ThisScript -MessageData "INFO: Resetting domain firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting domain firewall profile on '$Domain' computer..."
 
 # NOTE: LogMaxSizeKilobytes: The default setting when managing a computer is 4096.
 # When managing a GPO, the default setting is NotConfigured.
@@ -127,7 +136,7 @@ Set-NetFirewallProfile -Name Domain -PolicyStore $PolicyStore -Enabled NotConfig
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Resetting private firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting private firewall profile on '$Domain' computer..."
 
 Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -138,7 +147,7 @@ Set-NetFirewallProfile -Name Private -PolicyStore $PolicyStore -Enabled NotConfi
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Resetting public firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting public firewall profile on '$Domain' computer..."
 
 Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfigured `
 	-DefaultInboundAction NotConfigured -DefaultOutboundAction NotConfigured `
@@ -149,7 +158,7 @@ Set-NetFirewallProfile -Name Public -PolicyStore $PolicyStore -Enabled NotConfig
 	-LogMaxSizeKilobytes 4096 -AllowUserApps NotConfigured -AllowUserPorts NotConfigured `
 	-LogFileName NotConfigured
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Resetting global firewall settings..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Resetting global firewall settings on '$Domain' computer..."
 
 # NOTE: MaxSAIdleTimeSeconds: The default value when managing a local computer is 300 seconds (5 minutes).
 # When managing a GPO, the default value is NotConfigured.
@@ -171,7 +180,7 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore -EnablePacketQueuing NotConfigu
 
 # TODO: we need to check if there are rules present to avoid errors about "no object found"
 # Needed also to log actual rule removal errors
-Write-Information -Tags $ThisScript -MessageData "INFO: Removing outbound rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing outbound rules on '$Domain' computer..."
 $OutboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Outbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($OutboundCount -gt 0)
@@ -179,7 +188,7 @@ if ($OutboundCount -gt 0)
 	Remove-NetFirewallRule -Direction Outbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Removing inbound rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing inbound rules on '$Domain' computer..."
 $InboundCount = (Get-NetFirewallRule -PolicyStore $PolicyStore -Direction Inbound -ErrorAction Ignore | Measure-Object).Count
 
 if ($InboundCount -gt 0)
@@ -187,13 +196,20 @@ if ($InboundCount -gt 0)
 	Remove-NetFirewallRule -Direction Inbound -PolicyStore $PolicyStore
 }
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Removing IPSec rules..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Removing IPSec rules on '$Domain' computer..."
 Remove-NetIPsecRule -All -PolicyStore $PolicyStore
 
 # Reset WinRM and PS remoting configuration
 if ($Remoting)
 {
-	Reset-WinRM -Confirm:$false
+	if ($Domain -ne [System.Environment]::MachineName)
+	{
+		Write-Warning -Message "[$ThisScript] Resetting WinRM remotely not possible"
+	}
+	else
+	{
+		Reset-WinRM -Confirm:$false
+	}
 }
 
 # Reset affected services to system defaults
@@ -236,55 +252,62 @@ if ($Remoting)
 
 if ($Service)
 {
-	Write-Information -Tags $ThisScript -MessageData "INFO: Resetting modified windows services to system defaults"
-
-	Set-Service -Name nsi -StartupType Automatic
-	Set-Service -Name SamSs -StartupType Automatic
-
-	Set-Service -Name lmhosts -StartupType Manual
-	Set-Service -Name LanmanWorkstation -StartupType Automatic
-	Set-Service -Name LanmanServer -StartupType Automatic
-	Set-Service -Name WinRM -StartupType Manual
-	Set-Service -Name RemoteRegistry -StartupType Disabled
-	Set-Service -Name fdPHost -StartupType Manual
-	Set-Service -Name FDResPub -StartupType Manual
-
-	Start-Service -Name nsi
-	Start-Service -Name SamSs
-
-	Start-Service -Name lmhosts
-	Start-Service -Name LanmanWorkstation
-	Start-Service -Name LanmanServer
-	Start-Service -Name fdPHost
-	Start-Service -Name FDResPub
-
-	Stop-Service -Name WinRM
-	Stop-Service -Name RemoteRegistry
-
-	# Disabling the following services might not be desired so ask for confirmation
-	if ($Develop)
+	if ($Domain -ne [System.Environment]::MachineName)
 	{
-		Set-Service -Name ssh-agent -StartupType Disabled -Confirm
-		Stop-Service -Name ssh-agent -Confirm
+		Write-Warning -Message "[$ThisScript] Resetting services remotely not implemented"
+	}
+	else
+	{
+		Write-Information -Tags $ThisScript -MessageData "INFO: Resetting modified windows services to system defaults"
 
-		if (Get-Service -Name sshd -ErrorAction Ignore)
+		Set-Service -Name nsi -StartupType Automatic
+		Set-Service -Name SamSs -StartupType Automatic
+
+		Set-Service -Name lmhosts -StartupType Manual
+		Set-Service -Name LanmanWorkstation -StartupType Automatic
+		Set-Service -Name LanmanServer -StartupType Automatic
+		Set-Service -Name WinRM -StartupType Manual
+		Set-Service -Name RemoteRegistry -StartupType Disabled
+		Set-Service -Name fdPHost -StartupType Manual
+		Set-Service -Name FDResPub -StartupType Manual
+
+		Start-Service -Name nsi
+		Start-Service -Name SamSs
+
+		Start-Service -Name lmhosts
+		Start-Service -Name LanmanWorkstation
+		Start-Service -Name LanmanServer
+		Start-Service -Name fdPHost
+		Start-Service -Name FDResPub
+
+		Stop-Service -Name WinRM
+		Stop-Service -Name RemoteRegistry
+
+		# Disabling the following services might not be desired so ask for confirmation
+		if ($Develop)
 		{
-			Set-Service -Name sshd -StartupType Manual -Confirm
+			Set-Service -Name ssh-agent -StartupType Disabled -Confirm
 			Stop-Service -Name ssh-agent -Confirm
+
+			if (Get-Service -Name sshd -ErrorAction Ignore)
+			{
+				Set-Service -Name sshd -StartupType Manual -Confirm
+				Stop-Service -Name ssh-agent -Confirm
+			}
 		}
 	}
 }
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+	Disconnect-Computer -Domain $Domain
 }
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset is done!"
-Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please reboot system"
+Write-Information -Tags $ThisScript -MessageData "INFO: Firewall reset on '$Domain' computer is done!"
+Write-Information -Tags $ThisScript -MessageData "INFO: If internet connectivity problem remains, please restart '$Domain' computer"
 
-if ($Remoting -or $Service)
+if (($Remoting -or $Service) -and ($Domain -eq [System.Environment]::MachineName))
 {
 	# TODO: We should avoid asking to restart console, due to Reset-WinRM running Deploy-Firewall again won't work
 	Write-Warning -Message "[$ThisScript] To continue running firewall scripts please restart PowerShell console"

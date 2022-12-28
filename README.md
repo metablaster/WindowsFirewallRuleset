@@ -575,7 +575,7 @@ function instead which is as fast as it can be.
 
 ## Remote firewall deployment
 
-This section and functionality is currently under construction and incomplete
+This section and functionality is currently experimental and not fully complete
 
 ![Under construction](/docs/Screenshots/UnderConstruction.gif)
 
@@ -585,13 +585,14 @@ one is called management computer (client) and all others are called managed com
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
 configured on multiple server computers simultaneously.
 
-At the moment the following rudimentary remoting capabilities are implemented:
+At the moment the following remoting capabilities are implemented:
 
 1. Automatic creation of PS and CIM sessions
 2. Drilling registry remotely
 3. Configuring WinRM service
 4. Establishing encrypted session to remote host
 5. Gethering information about remote computers
+6. Deploying firewall to single remote computer on same subnet that is not part of domain
 
 For implementation details see `Modules\Ruleset.Remote` module
 

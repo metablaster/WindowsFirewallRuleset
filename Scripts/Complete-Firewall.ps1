@@ -93,8 +93,8 @@ Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName)
 Initialize-Project
 
 # User prompt
-$Accept = "Configure and enable GPO firewall and global firewall behavior"
-$Deny = "Skip operation, no change will be done to firewall or network profile"
+$Accept = "Configure and enable GPO firewall and global firewall behavior on '$Domain' computer"
+$Deny = "Skip operation, no change will be done to firewall or network profile on '$Domain' computer"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 #endregion
 
@@ -111,7 +111,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -Force:$Force)) { exit }
 $LogSize = 1024
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags $ThisScript -MessageData "INFO: Setting up public firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up public firewall profile on '$Domain' computer..."
 
 Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -124,7 +124,7 @@ Set-NetFirewallProfile -Profile Public -PolicyStore $PolicyStore `
 )
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags $ThisScript -MessageData "INFO: Setting up private firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up private firewall profile on '$Domain' computer..."
 
 Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -137,7 +137,7 @@ Set-NetFirewallProfile -Profile Private -PolicyStore $PolicyStore `
 )
 
 # Setting up profile seem to be slow, tell user what is going on
-Write-Information -Tags $ThisScript -MessageData "INFO: Setting up domain firewall profile..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up domain firewall profile on '$Domain' computer..."
 
 Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	-Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -AllowInboundRules True `
@@ -149,7 +149,7 @@ Set-NetFirewallProfile -Profile Domain -PolicyStore $PolicyStore `
 	# Exclude interfaces for domain profile here
 )
 
-Write-Information -Tags $ThisScript -MessageData "INFO: Setting up global firewall settings..."
+Write-Information -Tags $ThisScript -MessageData "INFO: Setting up global firewall settings on '$Domain' computer..."
 
 # Modify the global firewall settings of the target computer.
 # Configures properties that apply to the firewall and IPsec settings,

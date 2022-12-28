@@ -44,6 +44,12 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
     - `Get-GroupPrincipal` added `-Unique` switch to get unique principals
 
+  - Implemented remoting for the following functions and scripts
+
+    - `Set-NetworkProfile`
+    - `Deploy-Firewall.ps1`
+    - `Complete-Firewall.ps1`
+
   - Fixed a bug with `Initialize-Service` which asked to configure service that was already configured
   - Fixed a bug with `Initialize-Service` which configured services which should not be configured\
   **NOTE:** If you used Windows Firewall Ruleset version up to and including v0.14.0 run the
@@ -64,7 +70,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
 
   - Updated `Grant-Logs` script to better detect log file location change
   - `Find-UnsignedFile` now offers to download sigcheck if it doesn't exist on computer
-  - Made possible to deploy rules remotely to single computer (experimental)
+  - Made possible to deploy firewall remotely to single computer (experimental)
 
 - Unit test
 
