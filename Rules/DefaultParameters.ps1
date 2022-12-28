@@ -41,3 +41,10 @@ $PSDefaultParameterValues["Get-GroupPrincipal:CimSession"] = $CimServer
 $PSDefaultParameterValues["Get-AppCapability:Session"] = $SessionInstance
 $PSDefaultParameterValues["Get-UserApp:Session"] = $SessionInstance
 $PSDefaultParameterValues["Get-SystemApp:Session"] = $SessionInstance
+
+# NOTE: The following commands in rule scripts require session parameter or remoting
+# Invoke-Command
+# Get-ChildItem
+# [System.Environment]::ExpandEnvironmentVariables
+# Get-VSSetupInstance
+# Get-InterfaceBroadcast

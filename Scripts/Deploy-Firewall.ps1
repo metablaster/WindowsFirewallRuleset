@@ -622,30 +622,35 @@ Write-Information -Tags $ThisScript -MessageData "INFO: Deployment of firewall r
 
 # TODO: This is a temporary measure because currently we change log file location only while debugging
 # NOTE: It safest to be called before Log location is changed to detect location change and prompt for restart
-if ($Develop)
+# TODO: Granting logs remotely not implemented, also using custom log location outside repository not implemented
+if ($Develop -and ($Domain -eq [System.Environment]::MachineName))
 {
 	# Verify permissions to write firewall logs if needed
 	& "$ProjectRoot\Scripts\Grant-Logs.ps1" @GrantLogsParams
 }
 
-# Set up global firewall setting, network and firewall profile and apply GPO changes
-& "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force
-
+# Signal GPO update and disconnect to be done in Complete-Firewall.ps1
 Set-Variable -Name UpdateGPO -Scope Global -Value $PreviousUpdateGPO
-Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-Disconnect-Computer -Domain $PolicyStore
 
-# Remove shortcut from previous versions
-$PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
-Get-ChildItem -Path $PublicDesktop -File | Where-Object {
-	$_.Name -match "^Firewall\s?((\d+|\.){2,3})?\.lnk$"
-} | Remove-Item
+# Set up global firewall setting, network and firewall profile and apply GPO changes
+& "$ProjectRoot\Scripts\Complete-Firewall.ps1" -Force:$Force -Domain $Domain
 
-# Set new desktop shortcut to custom management console
-Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
-	-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
-	-Description "View and modify GPO firewall" -IconIndex -19 `
-	-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
+# HACK: Is it possible to have remote management console? and if so set shortcut locally to remote console
+# TODO: Setting shortcut remotely not implemented
+if ($Domain -eq [System.Environment]::MachineName)
+{
+	# Remove shortcut from previous versions
+	$PublicDesktop = [System.Environment]::ExpandEnvironmentVariables("%Public%\Desktop")
+	Get-ChildItem -Path $PublicDesktop -File | Where-Object {
+		$_.Name -match "^Firewall\s?((\d+|\.){2,3})?\.lnk$"
+	} | Remove-Item
+
+	# Set new desktop shortcut to custom management console
+	Set-Shortcut -Name "Firewall $ProjectVersion.lnk" -Path "AllUsersDesktop" -Admin `
+		-TargetPath "$ProjectRoot\Config\System\Firewall.msc" `
+		-Description "View and modify GPO firewall" -IconIndex -19 `
+		-IconLocation "$env:SystemDrive\Windows\System32\Shell32.dll" @SetShortCutParams
+}
 
 # Show execution status
 if ($ErrorStatus)

@@ -108,7 +108,7 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-$BroadcastAddress = Get-InterfaceBroadcast
+$BroadcastAddress = Get-InterfaceBroadcast -Session $SessionInstance
 
 #
 # Steam installation directories

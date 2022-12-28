@@ -640,7 +640,7 @@ if ($Develop -or !(Get-Variable -Name CheckReadOnlyVariables2 -Scope Global -Err
 		# To force loading rules regardless of presence of an executable or service set to true
 		# The purpose of this is to test loading rules that would otherwise be skipped
 		# TODO: Some rules are not affected by this setting and will be skipped
-		Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $true
+		Set-Variable -Name ForceLoad -Scope Global -Option ReadOnly -Force -Value $false
 
 		if ($PSVersionTable.PSEdition -eq "Core")
 		{
@@ -866,6 +866,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 	{
 		# Firewall logs folder
 		# NOTE: System default is %SystemRoot%\System32\LogFiles\Firewall
+		# TODO: Modifying this variable is currently not implemented, for custom log location use Develop version above
 		New-Variable -Name FirewallLogsFolder -Scope Global -Option Constant -Value "%SystemRoot%\System32\LogFiles\Firewall"
 	}
 

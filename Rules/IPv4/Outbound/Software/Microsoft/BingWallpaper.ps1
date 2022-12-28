@@ -90,6 +90,7 @@ param (
 Initialize-Project
 . $PSScriptRoot\..\..\DirectionSetup.ps1
 
+Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
 $Group = "Microsoft - Bing wallpaper"

@@ -520,11 +520,11 @@ The following functions support remoting
 - Get-SystemSKU
 - Test-Computer
 - Select-IPInterface
+- Get-InterfaceBroadcast
 
 The following functions lack remoting implementation
 
 - Get-InterfaceAlias
-- Get-InterfaceBroadcast
 
 All other public functions do not support remoting by design
 
@@ -602,12 +602,12 @@ The following scripts support remoting
 - Deploy-ASR (Windows PS only)
 - Show-ASR (Windows PS only)
 - Confirm-Firewall (experimental)
+- Complete-Firewall
+- Deploy-Firewall
 
 The following scripts lack remoting implementation
 
 - Backup-Firewall
-- Complete-Firewall
-- Deploy-Firewall
 - Grant-Logs
 - Reset-Firewall
 - Restore-Firewall

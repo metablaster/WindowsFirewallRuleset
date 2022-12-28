@@ -48,6 +48,9 @@ Conclude firewall deployment by setting private, domain and public firewall prof
 default network adapter profile and global firewall behavior settings.
 Also update target GPO for changes to take effect.
 
+.PARAMETER Domain
+Computer name on which to conclude deployment
+
 .PARAMETER Force
 If specified, no prompt for confirmation is shown to perform actions
 
@@ -77,11 +80,15 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 [OutputType([void])]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project
 
@@ -160,13 +167,13 @@ Set-NetFirewallSetting -PolicyStore $PolicyStore `
 	-RemoteUserTransportAuthorizationList None -RemoteUserTunnelAuthorizationList None `
 	-RemoteMachineTransportAuthorizationList None -RemoteMachineTunnelAuthorizationList None `
 
-# Set default firewall profile for network adapter
+# Set network profile for adapters of choice
 Set-NetworkProfile
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer"
-	Disconnect-Computer -Domain $PolicyStore
+	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+	Disconnect-Computer -Domain $Domain
 }
 
 Update-Log

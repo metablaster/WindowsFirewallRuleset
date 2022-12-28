@@ -192,6 +192,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		# This may take several seconds, tell user what is going on
 		Write-Information -Tags $ThisScript -MessageData "INFO: Querying driver store for NVDisplay Container..."
 
+		# TODO: This will fail for remote deployment due to lack of filesystem permissions for C:\Windows\Temp
 		[string] $Driver = Invoke-Command -Session $SessionInstance -ScriptBlock {
 			# TODO: we need to query drivers for all such programs in DriverStore, ex Get-DriverPath function
 			Get-WindowsDriver -Online -All | Where-Object {

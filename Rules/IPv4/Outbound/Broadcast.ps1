@@ -84,7 +84,7 @@ if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Fo
 #endregion
 
 # NOTE: Don't run if execute not approved
-$BroadcastAddress = Get-InterfaceBroadcast
+$BroadcastAddress = Get-InterfaceBroadcast -Session $SessionInstance
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore

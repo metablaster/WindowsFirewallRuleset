@@ -79,7 +79,7 @@
 					"label": ""
 				},
 				{
-					"line": 613,
+					"line": 612,
 					"column": 1,
 					"label": ""
 				},
@@ -121,71 +121,11 @@
 			]
 		},
 		{
-			"path": "Rules/IPv4/Outbound/Software/Nvidia.ps1",
+			"path": "Scripts/Complete-Firewall.ps1",
 			"bookmarks": [
 				{
-					"line": 194,
-					"column": 2,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Software/Microsoft/OneDrive.ps1",
-			"bookmarks": [
-				{
-					"line": 172,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Development/Microsoft/VisualStudio.ps1",
-			"bookmarks": [
-				{
-					"line": 130,
-					"column": 0,
-					"label": ""
-				},
-				{
-					"line": 162,
-					"column": 1,
-					"label": ""
-				},
-				{
-					"line": 411,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Development/Microsoft/VSCode.ps1",
-			"bookmarks": [
-				{
-					"line": 142,
-					"column": 32,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/StoreApps.ps1",
-			"bookmarks": [
-				{
-					"line": 433,
-					"column": 1,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Rules/IPv4/Outbound/Development/GitHub.ps1",
-			"bookmarks": [
-				{
-					"line": 194,
-					"column": 1,
+					"line": 170,
+					"column": 18,
 					"label": ""
 				}
 			]
