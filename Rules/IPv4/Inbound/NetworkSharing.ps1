@@ -99,7 +99,7 @@ Copy-NetFirewallRule -PolicyStore SystemDefaults -Group $Group -Direction $Direc
 
 # Enable\disable rules depending on network profiles currently used on target computer
 $CurrentProfile = Invoke-Command -Session $SessionInstance -ScriptBlock {
-	@(Get-NetConnectionProfile | Select-Object -ExpandProperty NetworkCategory)
+	@(Get-NetConnectionProfile | Select-Object -ExpandProperty NetworkCategory) -replace "DomainAuthenticated", "Domain"
 }
 
 Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction | ForEach-Object {
@@ -113,6 +113,7 @@ Get-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Directio
 	}
 
 	# If profile defined in rule matches currently used profiles used enable rule
+	# [Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Profile]
 	foreach ($RuleProfile in $_.Profile.ToString().Split(", "))
 	{
 		if ($RuleProfile -in $CurrentProfile)

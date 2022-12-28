@@ -140,28 +140,31 @@ if ((Confirm-Installation "VSCode" ([ref] $VSCodeRoot)) -or $ForceLoad)
 	foreach ($Principal in (Get-GroupPrincipal -Group $DefaultGroup))
 	{
 		$User = $Principal.User
-		$ExtensionDirectory = Invoke-Command -Session $SessionInstance -ArgumentList $User -ScriptBlock {
-			param ($User)
-
-			Get-ChildItem -Path "C:\Users\$User\.vscode\extensions\redhat.vscode-xml-*" |
-			Select-Object -ExpandProperty Name
+		$ExtensionDirectory = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			# NOTE: Test-Path because it's very likely extension isn't installed by every user
+			if (Test-Path -Path "C:\Users\$using:User\.vscode\extensions\redhat.vscode-xml-*")
+			{
+				Get-ChildItem -Path "C:\Users\$using:User\.vscode\extensions\redhat.vscode-xml-*" |
+				Select-Object -ExpandProperty Name
+			}
 		}
 
-		$Program = "%SystemDrive%\Users\$User\.vscode\extensions\$ExtensionDirectory\server\lemminx-win32.exe"
-
-		# NOTE: Test-Path because it's very likely extension isn't installed by every user
-		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		if (![string]::IsNullOrEmpty($ExtensionDirectory) -or $ForceLoad)
 		{
-			New-NetFirewallRule -DisplayName "Red Hat XML extension" `
-				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-				-Service Any -Program $Program -Group $ExtensionsGroup `
-				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
-				-LocalUser (Get-SDDL -User $User) `
-				-InterfaceType $DefaultInterface `
-				-Description "Visual Studio Code rule for $ExtensionDirectory extension" |
-			Format-RuleOutput
+			$Program = "%SystemDrive%\Users\$User\.vscode\extensions\$ExtensionDirectory\server\lemminx-win32.exe"
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Red Hat XML extension" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $ExtensionsGroup `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443 `
+					-LocalUser (Get-SDDL -User $User) `
+					-InterfaceType $DefaultInterface `
+					-Description "Visual Studio Code rule for $ExtensionDirectory extension" |
+				Format-RuleOutput
+			}
 		}
 	}
 }

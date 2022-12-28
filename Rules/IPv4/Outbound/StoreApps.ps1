@@ -144,14 +144,6 @@ if ("Administrators" -notin $DefaultGroup)
 
 	foreach ($Principal in $Administrators)
 	{
-		foreach ($Entry in $Users)
-		{
-			if ($Entry.User -eq $Principal.User)
-			{
-				Write-Warning -Message "[$ThisScript] $($Principal.User) is both Administrator and standard user, this will result in surplus rules for store apps"
-			}
-		}
-
 		# TODO: Somehow Admin will be able to create MS accounts when this rule is disabled,
 		# expected behavior is that default outbound should block (wwahost.exe)
 		New-NetFirewallRule -DisplayName "Store apps for $($Principal.User)" `
@@ -432,21 +424,20 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 #
 # A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
 # TODO: This is a hackery, a better design or function is needed to detect programs within apps
+# TODO: Not affected by $ForceLoad
 #
 $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
 if ($TerminalApp)
 {
 	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
 
-	Invoke-Command -Session $SessionInstance -ArgumentList $ParentPath -ScriptBlock {
-		param ($ParentPath)
-
-		Get-ChildItem -Path "$ParentPath\Microsoft.WindowsTerminal*"
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		Get-ChildItem -Path "$using:ParentPath\Microsoft.WindowsTerminal*"
 	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
 		$Program = "$_\TerminalAzBridge.exe"
 
 		# NOTE: There are 2 paths one of which is invalid and should be ignored
-		if (Test-ExecutableFile $Program)
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
 			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
 			Merge-SDDL -SDDL ([ref] $AzureShellUsers) -From $AdminGroupSDDL

@@ -69,6 +69,7 @@ PS> Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)
 .NOTES
 TODO: should we handle NT AUTHORITY, BUILTIN and similar?
 See also (according to docs but doesn't work): Get-LocalUser -Name "MicrosoftAccount\username@outlook.com"
+TODO: -Unique switch required for cases where there are same users in multiple groups
 #>
 function Get-GroupPrincipal
 {

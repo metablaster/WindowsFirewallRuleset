@@ -211,6 +211,7 @@ if ([System.Environment]::Is64BitOperatingSystem)
 		}
 		else
 		{
+			# TODO: Not affected by $ForceLoad
 			$Program = Split-Path -Path $Driver -Parent | Format-Path
 			$Program += "\Display.NvContainer\NVDisplay.Container.exe"
 

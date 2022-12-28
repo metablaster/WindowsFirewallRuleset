@@ -79,7 +79,7 @@
 					"label": ""
 				},
 				{
-					"line": 658,
+					"line": 659,
 					"column": 3,
 					"label": ""
 				}
@@ -144,12 +144,12 @@
 					"label": ""
 				},
 				{
-					"line": 166,
+					"line": 162,
 					"column": 1,
 					"label": ""
 				},
 				{
-					"line": 406,
+					"line": 411,
 					"column": 1,
 					"label": ""
 				}
@@ -169,7 +169,7 @@
 			"path": "Rules/IPv4/Outbound/StoreApps.ps1",
 			"bookmarks": [
 				{
-					"line": 440,
+					"line": 433,
 					"column": 1,
 					"label": ""
 				}
@@ -179,8 +179,18 @@
 			"path": "Rules/IPv4/Outbound/Development/GitHub.ps1",
 			"bookmarks": [
 				{
-					"line": 191,
+					"line": 194,
 					"column": 1,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "Modules/Ruleset.UserInfo/Public/Get-GroupPrincipal.ps1",
+			"bookmarks": [
+				{
+					"line": 71,
+					"column": 4,
 					"label": ""
 				}
 			]

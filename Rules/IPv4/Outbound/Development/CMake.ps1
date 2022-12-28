@@ -69,6 +69,9 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Trusted,
 

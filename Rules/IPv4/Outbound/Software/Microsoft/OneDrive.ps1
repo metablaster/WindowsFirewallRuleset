@@ -170,18 +170,17 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 			-Description "One drive for syncing user data" | Format-RuleOutput
 	}
 
-	$VersionFolder = Invoke-Command -Session $SessionInstance -ArgumentList $OneDriveRoot -ScriptBlock {
-		param ($OneDriveRoot)
+	$VersionFolder = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($using:OneDriveRoot)
 
-		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($OneDriveRoot)
-		Get-ChildItem -Directory -Path $ExpandedPath -Name | Where-Object {
+		Get-ChildItem -Directory -Path $ExpandedPath -Name -ErrorAction SilentlyContinue | Where-Object {
 			$_ -match "\d+"
 		}
 	}
 
-	if ([string]::IsNullOrEmpty($VersionFolder))
+	if (!$ForceLoad -and [string]::IsNullOrEmpty($VersionFolder))
 	{
-		Write-Warning -Message "[$ThisScript] Unable to find OneDrive version folder"
+		Write-Warning -Message "[$ThisScript] Unable to find OneDrive version folder in '$OneDriveRoot'"
 	}
 	else
 	{

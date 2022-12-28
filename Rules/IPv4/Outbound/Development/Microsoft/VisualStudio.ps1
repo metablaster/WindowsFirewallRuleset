@@ -163,6 +163,7 @@ foreach ($Instance in $VSInstances)
 	$mingwDirectory = Invoke-Command -Session $SessionInstance -ArgumentList $Instance.InstallationPath -ScriptBlock {
 		param ($InstallationPath)
 
+		# TODO: Not ignoring "not found" error because Test-ExecutableFile may not be reached
 		Get-ChildItem -Path "$InstallationPath\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git" -Directory |
 		Where-Object {
 			# This might be mingw32 or mingw64
@@ -170,6 +171,7 @@ foreach ($Instance in $VSInstances)
 		} | Select-Object -ExpandProperty Name
 	}
 
+	# TODO: Will not force load if directory not found
 	foreach ($mingw in $mingwDirectory)
 	{
 		$Program = "$VSRoot\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer\Git\$mingw\bin\git-remote-https.exe"
@@ -246,8 +248,12 @@ foreach ($Instance in $VSInstances)
 these delays with the user's consent." | Format-RuleOutput
 	}
 
-	# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
-	if (Test-Path -Path "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86")
+	$PathStatus = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
+		Test-Path -Path "$([System.Environment]::ExpandEnvironmentVariables($using:VSRoot))\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86"
+	}
+
+	if ($PathStatus -or $ForceLoad)
 	{
 		# TODO: same comment in 4 rules
 		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.Host.CLR.x86.exe"
@@ -402,12 +408,11 @@ These are not optional and are designed to be running side-by-side with devenv.e
 		Format-RuleOutput
 	}
 
-	# NOTE: subdirectory name consists of version number so let's get that:
-	# NOTE: Get-ChildItem doesn't recognize environment variables
+	# Subdirectory name consists of version number so let's get that:
 	$MSVCVersion = Invoke-Command -Session $SessionInstance -ArgumentList $Instance.InstallationPath -ScriptBlock {
 		param ($InstallationPath)
 
-		Get-ChildItem -Directory -Name -Path "$InstallationPath\VC\Tools\MSVC" -ErrorAction Ignore
+		Get-ChildItem -Directory -Name -Path "$InstallationPath\VC\Tools\MSVC" -ErrorAction SilentlyContinue
 	}
 
 	# There should be only one directory, but just in case let's select highest version
@@ -453,8 +458,12 @@ if ((Confirm-Installation "VisualStudioInstaller" ([ref] $VSInstallerRoot)) -or 
 			-Description "Installer feedback" | Format-RuleOutput
 	}
 
-	# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
-	if (Test-Path -Path "$([System.Environment]::ExpandEnvironmentVariables($VSInstallerRoot))\resources\app\ServiceHub\Hosts")
+	$PathStatus = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
+		Test-Path -Path "$([System.Environment]::ExpandEnvironmentVariables($using:VSInstallerRoot))\resources\app\ServiceHub\Hosts"
+	}
+
+	if ($PathStatus -or $ForceLoad)
 	{
 		$Program = "$VSInstallerRoot\resources\app\ServiceHub\Hosts\Microsoft.ServiceHub.Host.CLR\vs_installerservice.exe"
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)

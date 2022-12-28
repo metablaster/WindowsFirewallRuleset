@@ -218,11 +218,8 @@ function Initialize-Service
 				$Choices += $Accept
 				$Choices += $Deny
 
-				if ($Host.UI.PromptForChoice($Title, $Question, $Choices, $Default) -ne $Default)
-				{
-					Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting service has been canceled by the user"
-				}
-				else
+				# Don't prompt to restart service
+				if ($RestartFdp -or ($Host.UI.PromptForChoice($Title, $Question, $Choices, $Default) -eq $Default))
 				{
 					# Configure dependent services first
 					foreach ($Required in $Service.ServicesDependedOn)
@@ -236,13 +233,13 @@ function Initialize-Service
 							($PreviousDependentStartType -eq [ServiceStartMode]::System))
 						{
 							# These startup types must not be modified
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because startup type is '$PreviousDependentStartType'"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because startup type is '$PreviousDependentStartType'"
 							continue
 						}
 						elseif (!(($ServiceType -band [ServiceType]::Win32OwnProcess) -or ($ServiceType -band [ServiceType]::Win32ShareProcess)))
 						{
 							# Neither clever nor required to modify these services
-							Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because service type is '$ServiceType'"
+							Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring dependent service '$($Required.Name)' skipped because service type is '$ServiceType'"
 							continue
 						}
 
@@ -281,6 +278,7 @@ function Initialize-Service
 							if ((Get-Service -Name $Required.Name | Select-Object -ExpandProperty Status) -ne [ServiceControllerStatus]::Running)
 							{
 								Write-Warning -Message "[$($MyInvocation.InvocationName)] Starting dependent service '$($Required.Name)' failed, please start manually and try again"
+								$Required.Close()
 								$Service.Close()
 
 								Write-Error -Category OperationStopped -TargetObject $Required `
@@ -307,13 +305,13 @@ function Initialize-Service
 						($PreviousStartType -eq [ServiceStartMode]::System))
 					{
 						# These startup types must not be modified
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because startup type is '$PreviousStartType'"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because startup type is '$PreviousStartType'"
 						continue
 					}
 					elseif (!(($ServiceType -band [ServiceType]::Win32OwnProcess) -or ($ServiceType -band [ServiceType]::Win32ShareProcess)))
 					{
 						# Neither clever nor required to modify these services
-						Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because service type is '$ServiceType'"
+						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring service '$ServiceName' skipped because service type is '$ServiceType'"
 						continue
 					}
 
@@ -340,11 +338,8 @@ function Initialize-Service
 					{
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Restarting '$ServiceName' to rule out known issue resolving host"
 
-						$Service.Stop()
-						$Service.WaitForStatus([ServiceControllerStatus]::Stopped, $ServiceTimeout)
-
-						$Service.Start()
-						$Service.WaitForStatus([ServiceControllerStatus]::Running, $ServiceTimeout)
+						# Using Stop() Start() would stop dependent services
+						Restart-Service -Name $ServiceName -Force
 					}
 					elseif ($PreviousStatus -ne $Status)
 					{
@@ -380,6 +375,12 @@ function Initialize-Service
 					if ((Get-Service -Name $ServiceName | Select-Object -ExpandProperty Status) -ne $Status)
 					{
 						Write-Warning -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status failed, please set service status manually to '$Status' status and try again"
+
+						$Service.Close()
+						Write-Error -Category OperationStopped -TargetObject $Service `
+							-Message "Unable to proceed, '$ServiceName' service was not set to requested state"
+
+						return $false
 					}
 					else
 					{
@@ -388,35 +389,18 @@ function Initialize-Service
 						Write-Verbose -Message "[$($MyInvocation.InvocationName)] Setting '$ServiceName' service to '$Status' status succeeded"
 					}
 				}
-
-				# Get a fresh copy of a service to check
-				$NewService = Get-Service -Name $ServiceName
-
-				if ($NewService.StartType -ne $StartupType)
-				{
-					$Service.Close()
-					$NewService.Close()
-
-					Write-Error -Category OperationStopped -TargetObject $Service `
-						-Message "Unable to proceed, '$ServiceName' service was not set to requested state"
-
-					return $false
-				}
 				else
 				{
-					Write-Information -Tags $MyInvocation.InvocationName `
-						-MessageData "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service succeeded"
+					Write-Warning -Message "[$($MyInvocation.InvocationName)] Configuring service '$($Service.DisplayName)' has been canceled by the user"
 				}
-
-				$NewService.Close()
 			}
 			else
 			{
-				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service was skipped, service already configured"
+				Write-Verbose -Message "[$($MyInvocation.InvocationName)] Configuring '$($Service.DisplayName)' service was skipped, service already in desired state"
 			}
 
 			$Service.Close()
-		} # foreach InputService
+		} # foreach ServiceName
 
 		return $true
 	}

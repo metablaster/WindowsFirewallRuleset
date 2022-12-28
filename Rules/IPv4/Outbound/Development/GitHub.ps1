@@ -69,6 +69,9 @@ None.
 
 [CmdletBinding()]
 param (
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
 	[Parameter()]
 	[switch] $Trusted,
 
@@ -189,19 +192,10 @@ RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET and TFTP)" |
 # Test if installation exists on system
 if ((Confirm-Installation "GitHubDesktop" ([ref] $GitHubRoot)) -or $ForceLoad)
 {
-	$VersionFolders = Invoke-Command -Session $SessionInstance -ArgumentList $GitHubRoot -ScriptBlock {
-		param ($GitHubRoot)
+	$VersionFolders = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($using:GitHubRoot)
 
-		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($GitHubRoot)
-
-		if ($ForceLoad -and !(Test-Path -Path $ExpandedPath -PathType Container))
-		{
-			$null
-		}
-		else
-		{
-			Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name
-		}
+		Get-ChildItem -Directory -Path $ExpandedPath -Filter app-* -Name -ErrorAction SilentlyContinue
 	}
 
 	$VersionFoldersCount = ($VersionFolders | Measure-Object).Count
