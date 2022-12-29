@@ -48,6 +48,9 @@ Restore-Firewall script imports all firewall rules and configuration which was p
 with Backup-Firewall.ps1
 It is recommended to reset firewall prior to restore which will make import process much faster.
 
+.PARAMETER Domain
+Computer name on which to restore firewall from file
+
 .PARAMETER Path
 Path to directory where the exported settings file is located.
 By default this is Exports directory in repository.
@@ -87,6 +90,10 @@ https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Scripts/README
 [OutputType([void])]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[SupportsWildcards()]
 	[System.IO.DirectoryInfo] $Path,
 
@@ -95,7 +102,7 @@ param (
 )
 
 #region Initialization
-. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 Write-Debug -Message "[$ThisScript] ParameterSet = $($PSCmdlet.ParameterSetName):$($PSBoundParameters | Out-String)"
 Initialize-Project
 
@@ -141,8 +148,8 @@ $StopWatch = [System.Diagnostics.Stopwatch]::new()
 $StopWatch.Start()
 
 # Import all firewall rules to GPO
-Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -Force:$Force
-Import-FirewallSetting -Path $Path -FileName "FirewallSettings.json"
+Import-FirewallRule -Path $Path -FileName "FirewallRules.csv" -Domain $Domain -Force:$Force
+Import-FirewallSetting -Path $Path -FileName "FirewallSettings.json" -Domain $Domain
 
 $StopWatch.Stop()
 

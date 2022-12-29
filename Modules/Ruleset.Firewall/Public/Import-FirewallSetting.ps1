@@ -34,6 +34,9 @@ Import firewall settings and profile setup to file
 Import-FirewallSetting imports all firewall settings from file previously exported by
 Export-FirewallSetting
 
+.PARAMETER Domain
+Computer name onto which to import firewall settings, default is local GPO.
+
 .PARAMETER Path
 Path to directory where the exported settings file is located.
 Wildcard characters are supported.
@@ -65,6 +68,10 @@ function Import-FirewallSetting
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Import-FirewallSetting.md")]
 	[OutputType([void])]
 	param (
+		[Parameter()]
+		[Alias("ComputerName", "CN")]
+		[string] $Domain = [System.Environment]::MachineName,
+
 		[Parameter(Mandatory = $true)]
 		[SupportsWildcards()]
 		[System.IO.DirectoryInfo] $Path,
@@ -117,7 +124,7 @@ function Import-FirewallSetting
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to restore LogMaxSizeKilobytes to NotConfigured, setting to $LogSize"
 			}
 
-			Set-NetFirewallProfile -Profile $Data.Name -PolicyStore $PolicyStore `
+			Set-NetFirewallProfile -Profile $Data.Name -PolicyStore $Domain `
 				-Enabled $Data.Enabled -DefaultInboundAction $Data.DefaultInboundAction `
 				-DefaultOutboundAction $Data.DefaultOutboundAction -AllowInboundRules $Data.AllowInboundRules `
 				-AllowLocalFirewallRules $Data.AllowLocalFirewallRules -AllowLocalIPsecRules $Data.AllowLocalIPsecRules `
@@ -143,7 +150,7 @@ function Import-FirewallSetting
 		Write-Warning -Message "[$($MyInvocation.InvocationName)] Unable to restore MaxSAIdleTimeSeconds to NotConfigured, setting to 300"
 	}
 
-	Set-NetFirewallSetting -PolicyStore $PolicyStore `
+	Set-NetFirewallSetting -PolicyStore $Domain `
 		-EnableStatefulFtp $Data.EnableStatefulFtp -EnableStatefulPptp $Data.EnableStatefulPptp `
 		-EnablePacketQueuing $Data.EnablePacketQueuing `
 		-Exemptions $Data.Exemptions -CertValidationLevel $Data.CertValidationLevel `

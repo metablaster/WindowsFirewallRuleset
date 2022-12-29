@@ -91,7 +91,6 @@ January 2022:
 2. Added progress bar
 
 TODO: implement removing rules not according to file
-TODO: Remoting not finished
 
 .LINK
 https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Firewall/Help/en-US/Remove-FirewallRule.md

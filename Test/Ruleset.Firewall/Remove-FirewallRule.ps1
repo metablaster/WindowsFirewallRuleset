@@ -33,6 +33,9 @@ Unit test for Remove-FirewallRule
 .DESCRIPTION
 Test correctness of Remove-FirewallRule function
 
+.PARAMETER Domain
+If specified, only remoting tests against specified computer name are performed
+
 .PARAMETER Force
 If specified, no prompt to run script is shown
 
@@ -55,11 +58,15 @@ None.
 [CmdletBinding()]
 param (
 	[Parameter()]
+	[Alias("ComputerName", "CN")]
+	[string] $Domain = [System.Environment]::MachineName,
+
+	[Parameter()]
 	[switch] $Force
 )
 
 #region Initialization
-. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet
+. $PSScriptRoot\..\..\Config\ProjectSettings.ps1 $PSCmdlet -Domain $Domain
 . $PSScriptRoot\..\ContextSetup.ps1
 
 Initialize-Project
@@ -73,11 +80,13 @@ if ($Force -or $PSCmdlet.ShouldContinue("Remove firewall rules according to file
 	$Exports = "$ProjectRoot\Exports"
 
 	# TODO: need to test failure cases, see also module todo's for more info
-	if ($false)
+	if ($true)
 	{
 		Start-Test "custom test"
-		Remove-FirewallRule -Path $Exports -FileName "InboundGPO.csv" -Confirm:$false
-		Remove-FirewallRule -Path $Exports -FileName "OutboundGPO.csv" -Confirm:$false
+		Remove-FirewallRule -Path $Exports -FileName "FirewallRules.csv" -Domain $Domain
+
+		# Remove-FirewallRule -Path $Exports -FileName "InboundGPO.csv" -Confirm:$false
+		# Remove-FirewallRule -Path $Exports -FileName "OutboundGPO.csv" -Confirm:$false
 	}
 	else
 	{
