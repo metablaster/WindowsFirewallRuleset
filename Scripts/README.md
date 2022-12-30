@@ -27,6 +27,7 @@ Contains scripts which are not part of modules as follows:
 | Restart-Network.ps1         | Restart or reset network without the need for reboot                 |
 | Select-HiddenProperty.ps1   | Get a list of hidden properties for specified firewall rule group    |
 | Update-HelpContent.ps1      | Generate new or update existing help files for all project modules   |
+| Write-RepoStats.ps1         | Calculates repository stats such as count of files or LOC            |
 
 ---
 
