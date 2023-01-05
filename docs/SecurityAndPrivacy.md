@@ -460,9 +460,11 @@ won't detect FUD malware.
 Changing your passwords on an untrusted computer is worse than not changing them at all, since if
 your computer isn't trusted then how do you know your input isn't intercepted?
 
-Switching from Admin account to standard account if you were Admin is [beating a dead horse][dead horse]
+Switching from Administrator account to standard account if you were Admin is [beating a dead horse][dead horse]
 since if you were Admin then your system already was online in elevated mode and is thus impossible
-to be sure nothing bad happened so far.
+to be sure nothing bad happened so far.\
+This applies to built-in Administrator account which by default on Windows server and perhaps other
+editions is not subject to UAC.
 
 Clean reload isn't 100% certainty though, for neither security nor privacy, security wise
 clean reload won't get rid or hardware based malware if there is one, and privacy wise your computer
