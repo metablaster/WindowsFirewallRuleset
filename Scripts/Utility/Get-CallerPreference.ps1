@@ -3,7 +3,7 @@
 Microsoft Limited Public License (Ms-LPL)
 
 Copyright (C) 2010 Microsoft Corporation. All rights reserved.
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2023 metablaster zebal@protonmail.ch
 
 This license governs use of the accompanying software.
 If you use the software, you accept this license.

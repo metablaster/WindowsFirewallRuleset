@@ -27,7 +27,7 @@ $Params = @{
 	# CompanyName = ""
 
 	# Specifies a copyright statement for the script
-	Copyright = "Copyright (C) 2022 metablaster zebal@protonmail.ch"
+	Copyright = "Copyright (C) 2022, 2023 metablaster zebal@protonmail.ch"
 
 	# Specifies an array of external module dependencies
 	# ExternalModuleDependencies = @()

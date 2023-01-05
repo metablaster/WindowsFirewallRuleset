@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2020-2022 metablaster zebal@protonmail.ch
+Copyright (C) 2020-2023 metablaster zebal@protonmail.ch
 Copyright (C) 2018, 2019 Microsoft Corporation. All rights reserved
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
