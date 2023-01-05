@@ -550,6 +550,10 @@ function Search-Installation
 			Update-Table -Search "Microsoft Edge" -Executable "msedge.exe"
 			break
 		}
+		"Brave"
+		{
+			Update-Table -Search "Brave"
+		}
 		"Chrome"
 		{
 			Update-Table -Search "Google Chrome" -UserProfile

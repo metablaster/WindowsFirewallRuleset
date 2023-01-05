@@ -120,6 +120,10 @@ $ChromeRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Google"
 $FirefoxRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Mozilla Firefox"
 $YandexRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Yandex"
 $TorRoot = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Tor Browser"
+$BraveRoot = "C:\Program Files\BraveSoftware\Brave-Browser\Application"
+# TODO: we should probably have a function for this and similar cases?
+# Same problem is there for MS Edge
+$BraveUpdateRoot = "C:\Program Files (x86)\BraveSoftware\Update"
 
 #
 # Internet browser rules
@@ -485,6 +489,65 @@ if ((Confirm-Installation "Tor" ([ref] $TorRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "" | Format-RuleOutput
+	}
+}
+
+#
+# Brave
+#
+
+# Test if installation exists on system
+if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
+{
+	$Program = "$BraveRoot\brave.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Brave HTTP" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Hyper text transfer protocol." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Brave HTTPS" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Hyper text transfer protocol over SSL." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Brave FTP" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 21 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "File transfer protocol." | Format-RuleOutput
+	}
+
+	$Program = "$(Format-Path $BraveUpdateRoot)\BraveUpdate.exe"
+
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+
+		New-NetFirewallRule -DisplayName "Brave Update" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UpdateAccounts `
+			-InterfaceType $DefaultInterface `
+			-Description "Update Brave browser" | Format-RuleOutput
 	}
 }
 

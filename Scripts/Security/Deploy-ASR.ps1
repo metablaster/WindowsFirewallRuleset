@@ -175,6 +175,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		"Enabled "
 		"Enabled "
 		"Enabled "
+		# Disable for programs such as b2 from boost
 		"Enabled "
 		"Enabled "
 		"Enabled "
@@ -185,6 +186,7 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 		"Enabled "
 		"Enabled "
 		"Enabled "
+		# Disable for PS remoting
 		"Disabled "
 	)
 
