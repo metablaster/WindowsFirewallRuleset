@@ -174,7 +174,7 @@ if ((Confirm-Installation "OneDrive" ([ref] $OneDriveRoot)) -or $ForceLoad)
 		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($using:OneDriveRoot)
 
 		Get-ChildItem -Directory -Path $ExpandedPath -Name -ErrorAction SilentlyContinue | Where-Object {
-			$_ -match "\d+"
+			$_ -match "(\d+\.?){1,4}"
 		}
 	}
 

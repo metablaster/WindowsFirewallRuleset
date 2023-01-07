@@ -124,6 +124,8 @@ $BraveRoot = "C:\Program Files\BraveSoftware\Brave-Browser\Application"
 # TODO: we should probably have a function for this and similar cases?
 # Same problem is there for MS Edge
 $BraveUpdateRoot = "C:\Program Files (x86)\BraveSoftware\Update"
+# TODO: Seemingly impossible to auto detect this one, it won't work anyway, see todo on rule creation below
+$BraveTorRoot = "C:\Users\$DefaultUser\AppData\Local\BraveSoftware\Brave-Browser\User Data\cpoalefficncklhjfpglfiplenlpccdb"
 
 #
 # Internet browser rules
@@ -548,6 +550,52 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 			-LocalUser $UpdateAccounts `
 			-InterfaceType $DefaultInterface `
 			-Description "Update Brave browser" | Format-RuleOutput
+	}
+
+	# TODO: What follows is not subject to ForceLoad
+	$VersionFolder = Invoke-Command -Session $SessionInstance -ScriptBlock {
+		$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables($using:BraveTorRoot)
+
+		Get-ChildItem -Directory -Path $ExpandedPath -Name -ErrorAction SilentlyContinue | Where-Object {
+			$_ -match "(\d+\.){1,4}"
+		}
+	}
+
+	if ([string]::IsNullOrEmpty($VersionFolder))
+	{
+		Write-Warning -Message "[$ThisScript] Unable to find version folder in '$BraveTorRoot'"
+	}
+	else
+	{
+		$FileName = Invoke-Command -Session $SessionInstance -ScriptBlock {
+			$ExpandedPath = [System.Environment]::ExpandEnvironmentVariables("$($using:BraveTorRoot)\$($using:VersionFolder)")
+
+			Get-ChildItem -File -Path $ExpandedPath -Name -ErrorAction SilentlyContinue | Where-Object {
+				$_ -match "tor-(\d+\.?){1,4}-win32"
+			}
+		}
+
+		if ([string]::IsNullOrEmpty($FileName))
+		{
+			Write-Warning -Message "[$ThisScript] Unable to find tor file in brave browser version folder '$BraveTorRoot\$VersionFolder'"
+		}
+		else
+		{
+			$Program = "$BraveTorRoot\$VersionFolder\$FileName"
+			# TODO: This will fail because file has no extension, needed to manually create rule
+			if ((Test-ExecutableFile $Program) -or $ForceLoad)
+			{
+				New-NetFirewallRule -DisplayName "Brave Tor" `
+					-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+					-Service Any -Program $Program -Group $Group `
+					-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+					-LocalAddress Any -RemoteAddress Internet4 `
+					-LocalPort Any -RemotePort 443, 8080, 9000-9003, 9090 `
+					-LocalUser $UsersGroupSDDL `
+					-InterfaceType $DefaultInterface `
+					-Description "Brave browser over Tor" | Format-RuleOutput
+			}
+		}
 	}
 }
 
