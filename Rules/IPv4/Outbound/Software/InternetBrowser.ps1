@@ -539,7 +539,9 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
+		# NOTE: Current user is needed but not reported in process monitor
 		$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
+		Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL
 
 		New-NetFirewallRule -DisplayName "Brave Update" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
@@ -581,7 +583,7 @@ if ((Confirm-Installation "Brave" ([ref] $BraveRoot)) -or $ForceLoad)
 		}
 		else
 		{
-			$Program = "$BraveTorRoot\$VersionFolder\$FileName"
+			$Program = Format-Path "$BraveTorRoot\$VersionFolder\$FileName"
 			# TODO: This will fail because file has no extension, needed to manually create rule
 			if ((Test-ExecutableFile $Program) -or $ForceLoad)
 			{

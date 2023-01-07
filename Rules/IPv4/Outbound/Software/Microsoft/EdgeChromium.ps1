@@ -220,6 +220,7 @@ Experimental transport layer network protocol developed by Google and implemente
 
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
+		# NOTE: Current user is needed but not reported in process monitor
 		$UpdateAccounts = Get-SDDL -Domain "NT AUTHORITY" -User "SYSTEM"
 		Merge-SDDL ([ref] $UpdateAccounts) -From $UsersGroupSDDL
 

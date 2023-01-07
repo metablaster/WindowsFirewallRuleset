@@ -78,7 +78,7 @@ The following site explains [How to verify Digital Signatures of programs in Win
 
 To enforce digital signature requirement for all software on your system follow steps below:
 
-1. Press start button
+1. Click start button
 2. Type: `secpol.msc`
 3. Right click on secpol.msc and click `Run as administrator`
 4. Expand node: `Security settings`
@@ -233,9 +233,9 @@ Suggested software for disk encryption is subjective.
 ### Backup
 
 Always keep a backup of everything on at least one drive that is offline and away from online machine.\
-If you have to bring it online, take down the rest of network.
+If you have to bring it online, bring down the rest of network.
 
-Suggestion of backup software is subjective, most secure method is external hard drive or separate
+Suggested backup software is subjective, most secure method is external hard drive or separate
 computer.
 
 [Table of Contents](#table-of-contents)
@@ -257,7 +257,7 @@ As already said good news is that you need none of these expensive software, in 
 1. `Deploy-ASR` is used to deploy attack surface reduction rules on your system
 2. `Set-ATP` is programatic way to configure Windows defender and enforce restrictive settings
 3. `Show-ASR` is used to show settings applied by `Deploy-ASR`
-4. `Find-UnsignedFile` is used to detect unsigned software on your system and perform automatic
+4. `Find-UnsignedFile` is used to detect unsigned software on your system and to perform automatic
 online malware analysis with [VirusTotal][virustotal] for any unsigned file that is found,
 so that you don't have to upload each file manually.
 
@@ -292,7 +292,7 @@ well as scan their IP for vulnerabilities which can help to gain access to victi
 
 One method how this is done is by using software such as [nmap][nmap]
 
-VPN or proxy is used to hide your real IP from the endpoint to which you connect, such as a web
+VPN or proxy is used to hide your real IP from an endpoint to which you connect, such as a web
 server or game server.\
 If somehow you end up on malicious server an attacker behind such a server might scan your IP to see
 possibilities to compromise your system or privacy
