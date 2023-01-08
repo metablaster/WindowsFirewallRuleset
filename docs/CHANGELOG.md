@@ -36,6 +36,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Updated rules for network discovery and network sharing so that only those are enabled for which
   network profile is currently active.
   - Added rules for Brave browser
+  - Added rule for WinDbg preview UWP app
 
 - Modules
 

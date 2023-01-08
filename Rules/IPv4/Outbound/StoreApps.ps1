@@ -434,9 +434,10 @@ if ($TerminalApp)
 	Invoke-Command -Session $SessionInstance -ScriptBlock {
 		Get-ChildItem -Path "$using:ParentPath\Microsoft.WindowsTerminal*"
 	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
-		$Program = "$_\TerminalAzBridge.exe"
 
 		# NOTE: There are 2 paths one of which is invalid and should be ignored
+		$Program = Format-Path "$_\TerminalAzBridge.exe"
+
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
 			$AzureShellUsers = Get-SDDL -Group $DefaultGroup -Merge
@@ -451,6 +452,43 @@ if ($TerminalApp)
 				-LocalUser $AzureShellUsers `
 				-InterfaceType $DefaultInterface `
 				-Description "Rule for Azure Cloud Shell in Windows Terminal" |
+			Format-RuleOutput
+		}
+	}
+}
+
+#
+# Same as with Azure Cloud Shell above here this is a case with EngHost.exe
+#
+$WinDbgApp = Get-UserApp -User $Principal.User -Name "*WinDbg*" -Session $SessionInstance
+if ($WinDbgApp)
+{
+	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
+
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		Get-ChildItem -Path "$using:ParentPath\Microsoft.WinDbg_*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+		# NOTE: There are 2 paths one of which is invalid and should be ignored
+		$Program = Format-Path "$_\amd64\EngHost.exe"
+
+		# MSDN: WinDBG Preview is a UWP application that has very limited access to the system, certainly not enough to debug a process.
+		# Hence the WinDBG UI and the WinDBG debugger workhorse are in separate processes that communicate
+		# using the named pipe inter-process communication (IPC) mechanism.
+		# The WinDBG Preview UI process is DBG.X.Shell.exe which connects over a named pipe to EngHost.exe which is the process
+		# responsible for attaching or launching the process being debugged.
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "WinDbg engine host" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
+Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
 			Format-RuleOutput
 		}
 	}
