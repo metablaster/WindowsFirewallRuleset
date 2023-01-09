@@ -37,6 +37,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   network profile is currently active.
   - Added rules for Brave browser
   - Added rule for WinDbg preview UWP app
+  - Added rule for Windows Subsystem for Linux
+  - Added rules for nmap
 
 - Modules
 
@@ -45,6 +47,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Initialize-Service` now handles paused services
     - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
     - `Get-GroupPrincipal` added `-Unique` switch to get unique principals
+    - `Get-SystemSoftware` improved program search
 
   - Implemented remoting for the following functions and scripts
 

@@ -146,6 +146,9 @@ function Get-SystemSoftware
 
 					# regex to remove: \whatever.exe at the end
 					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+exe$", ""
+					# regex to remove \iconname.ico
+					# This was the case with nmap program
+					$InstallLocation = $InstallLocation -Replace "\\(?:.(?!\\))+ico$", ""
 					# once exe is removed, remove uninstall folder too if needed
 					#$InstallLocation = $InstallLocation -Replace "\\uninstall$", ""
 

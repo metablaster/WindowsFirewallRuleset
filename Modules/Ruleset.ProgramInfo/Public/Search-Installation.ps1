@@ -554,6 +554,10 @@ function Search-Installation
 		{
 			Update-Table -Search "Brave"
 		}
+		"nmap"
+		{
+			Update-Table -Search "Nmap"
+		}
 		"Chrome"
 		{
 			Update-Table -Search "Google Chrome" -UserProfile

@@ -869,6 +869,22 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	Format-RuleOutput
 }
 
+$Program = "%SystemRoot%\System32\wsl.exe"
+if ((Test-ExecutableFile $Program) -or $ForceLoad)
+{
+	New-NetFirewallRule -DisplayName "Windows Subsystem for Linux" `
+		-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+		-Service Any -Program $Program -Group $Group `
+		-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+		-LocalAddress Any -RemoteAddress Internet4 `
+		-LocalPort Any -RemotePort 80, 443 `
+		-LocalUser $AdminGroupSDDL `
+		-InterfaceType $DefaultInterface `
+		-Description "The Windows Subsystem for Linux (WSL) lets developers install a Linux
+distribution and use Linux applications, utilities, and Bash command-line tools directly on Windows" |
+	Format-RuleOutput
+}
+
 # NOTE: Was active while setting up MS account
 # NOTE: description from: https://www.tenforums.com/tutorials/110230-enable-disable-windows-security-windows-10-a.html
 $Program = "%SystemRoot%\System32\SecurityHealthService.exe"
