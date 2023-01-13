@@ -61,7 +61,9 @@ None. You cannot pipe objects to VisualStudio.ps1
 None. VisualStudio.ps1 does not generate any output
 
 .NOTES
-None.
+HACK: When using VS Installer sometimes it will be launched from random path such as:
+C:\Program Files (x86)\Microsoft Visual Studio\Installer.c53c0c51976f44c89b66777087090821\setup.exe
+A workaround is to enable temporary rule called "Installer"
 #>
 
 #Requires -Version 5.1
