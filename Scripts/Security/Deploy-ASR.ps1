@@ -170,26 +170,26 @@ if ($PSCmdlet.ShouldProcess("Microsoft Defender Antivirus", "Deploy attack surfa
 
 	# Enabled, Disabled or AuditMode
 	$Actions = @(
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
 		# Disable for programs such as b2 from boost
 		# This will also block programs that you develop
-		"Disabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
-		"Enabled "
+		"Disabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
+		"Enabled"
 		# BUG: https://www.bleepingcomputer.com/news/microsoft/buggy-microsoft-defender-asr-rule-deletes-windows-app-shortcuts
-		"Disabled "
-		"Enabled "
+		"Disabled"
+		"Enabled"
 		# Disable for PS remoting
-		"Disabled "
+		"Disabled"
 	)
 
 	try
