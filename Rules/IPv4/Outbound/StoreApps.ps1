@@ -479,12 +479,13 @@ if ($WinDbgApp)
 		# responsible for attaching or launching the process being debugged.
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
+			# Port 80 is needed for CRL (Certificate Revocation List), for MS symbol server
 			New-NetFirewallRule -DisplayName "WinDbg engine host" `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program $Program -Group $AppSubGroup `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 				-LocalAddress Any -RemoteAddress Internet4 `
-				-LocalPort Any -RemotePort 443 `
+				-LocalPort Any -RemotePort 80, 443 `
 				-LocalUser $UsersGroupSDDL `
 				-InterfaceType $DefaultInterface `
 				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.

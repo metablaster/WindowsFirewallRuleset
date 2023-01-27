@@ -814,8 +814,11 @@
 			// https://www.google.com/schemas/sitemap/0.84/
 			"systemId": "https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd",
 			"pattern": "**/*sitemap.xml"
-		}
-		// HACK: PlatyPS schema needed
+		},
+		// NOTE: Not possible to use PlatyPS schema because:
+		// The schema files are stored in $PSHOME/Schemas/PSMaml.
+		// The MAML format is made up of multiple schemas.
+		// https://github.com/PowerShell/platyPS/issues/590
 		// {
 		// 	// https://github.com/PowerShell/PowerShell/blob/master/src/Schemas/PSMaml/Maml.xsd
 		// 	"systemId": "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/PSMaml/Maml.xsd",
