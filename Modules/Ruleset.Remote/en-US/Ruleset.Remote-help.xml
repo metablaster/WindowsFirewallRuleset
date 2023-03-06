@@ -392,6 +392,22 @@
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$ConnectParams = @{
+	SessionOption = $PSSessionOption
+	ErrorAction = "Stop"
+	Domain = "Server01"
+	Protocol = "HTTP"
+	ConfigurationName = $PSSessionConfigurationName
+	ApplicationName = $PSSessionApplicationName
+	CimOptions = New-CimSessionOption -Protocol Wsman -UICulture "en-US" -Culture "en-US"
+}
+PS&gt; Connect-Computer @ConnectParams</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -782,6 +798,13 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Disconnect-Computer</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Disconnect-Computer Server01</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1220,7 +1243,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges TODO: Implement parameter -SessionConfiguration with default to be built in session configuration See also output of: winrm get winrm/config</maml:para>
+        <maml:para>NOTE: Set-WSManQuickConfig -UseSSL will not work if certificate is self signed TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) TODO: Configure server remotely either with WSMan or trough SSH, to test and configure server remotely use Connect-WSMan and New-WSManSessionOption HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected TODO: Implement specifying listening addresses and address ranges TODO: Implement parameter -SessionConfiguration with default to be built in session configuration See also output of: winrm get winrm/config TODO: Somewhere it errors with "WinRM firewall exception will not work since one of the network connection types on this machine is set to Public. Change the network connection type to either Domain or Private and try again." It seems to reproduce after Reset-Firewall -Remoting -Service, also in Set-WinRMClient</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2422,7 +2445,7 @@
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected See also output of: winrm get winrm/config</maml:para>
+        <maml:para>TODO: How to control language? in WSMan:\COMPUTER\Service\DefaultPorts and WSMan:\COMPUTERService\Auth\lang (-Culture and -UICulture?) TODO: Optionally authenticate users using certificates in addition to credentials TODO: Parameter to apply only additional config as needed instead of hard reset all options (-Strict) HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected See also output of: winrm get winrm/config TODO: Somewhere it errors with "WinRM firewall exception will not work since one of the network connection types on this machine is set to Public. Change the network connection type to either Domain or Private and try again." It seems to reproduce after Reset-Firewall -Remoting -Service, also in Enable-WinRMServer</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2785,6 +2808,13 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Test-RemoteRegistry -Domain Server01</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Test-RemoteRegistry -Domain Server01 -Quiet</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -3547,6 +3577,16 @@ PS&gt; Test-WinRM HTTP -Quiet -Status $RemoteStatus</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Unregister-SslCertificate</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
+	$_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
+}
+PS&gt; Unregister-SslCertificate $Cert.Thumbprint</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

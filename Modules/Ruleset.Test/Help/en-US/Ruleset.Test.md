@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.Test
 Module Guid: e40d3133-e3f2-47f3-9f81-572732cc7c91
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.14.0
-Help Version: 0.14.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.15.0
+Help Version: 0.15.0
 Locale: en-US
 ---
 
@@ -32,11 +32,11 @@ Remove all items from test drive
 
 ### [Restore-Test](Restore-Test.md)
 
-Restore disabled error reporting, called only after Start-Test -Force
+Stop test case
 
 ### [Start-Test](Start-Test.md)
 
-Starts test case which prints formatted header
+Start test case
 
 ### [Test-MarkdownLink](Test-MarkdownLink.md)
 

@@ -32,7 +32,11 @@ This behavior can be overridden using the additional parameters on the command.
 ### EXAMPLE 1
 
 ```powershell
-Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey
+Invoke-WinCommand {
+  param ($name)
+  "Hello $name, how are you?"
+  $PSVersionTable.PSVersion
+} Jeffrey
 ```
 
 Hello Jeffrey, how are you?

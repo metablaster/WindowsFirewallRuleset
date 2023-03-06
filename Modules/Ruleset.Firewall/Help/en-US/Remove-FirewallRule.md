@@ -33,7 +33,7 @@ Only the field Name is used (or if Name is missing, DisplayName is used), all ot
 Remove-FirewallRule
 ```
 
-Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.
+Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory
 
 ### EXAMPLE 2
 
@@ -41,7 +41,7 @@ Removes all firewall rules according to a list in the CSV file FirewallRules.csv
 Remove-FirewallRule WmiRules.json -JSON
 ```
 
-Removes all firewall rules according to the list in the JSON file WmiRules.json.
+Removes all firewall rules according to the list in the JSON file WmiRules.json
 
 ## PARAMETERS
 
@@ -181,7 +181,6 @@ January 2022:
 2. Added progress bar
 
 TODO: implement removing rules not according to file
-TODO: Remoting not finished
 
 ## RELATED LINKS
 

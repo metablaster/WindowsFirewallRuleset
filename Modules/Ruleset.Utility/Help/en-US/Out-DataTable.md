@@ -37,7 +37,7 @@ Creates a DataTable from the properties of Get-PSDrive
 Get-Process | Select-Object Name, CPU | Out-DataTable
 ```
 
-Get a list of processes and their CPU and create a datatable
+Get a list of processes and CPU load and create a datatable
 
 ## PARAMETERS
 

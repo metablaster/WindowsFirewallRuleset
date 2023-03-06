@@ -32,14 +32,24 @@ without essential services running code may result in errors hard to debug
 Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")
 ```
 
-Returns True if all requested services are started successfully False otherwise
+Returns $true if all requested services were started successfully and set to
+Automatic startup $false otherwise
 
 ### EXAMPLE 2
 
 ```powershell
 Initialize-Service "WinRM"
-$true if WinRM service was started $false otherwise
 ```
+
+$true if WinRM service was started and set to automatic startup $false otherwise
+
+### EXAMPLE 3
+
+```powershell
+Initialize-Service RemoteRegistry -Status Stopped -StartupType Manual
+```
+
+$true if RemoteRegistry was set to either stopped or started and set to Manual startup type
 
 ## PARAMETERS
 
@@ -111,10 +121,10 @@ setup on multiple computers and virtual operating systems, in cases such as freq
 for the purpose of testing project code for many environment scenarios that end users may have.
 It should be used in conjunction with the rest of a module "Ruleset.Initialize"
 
-TODO: Optionally set services to automatic startup, most of services are needed only to run code.
-\[System.ServiceProcess.ServiceController\[\]\]
-TODO: RemoteRegistry starts on demand and stops on it's own when not used, no need to start it,
-only manual trigger start is needed
+TODO: Some services are logged as change from ex.
+from Manual to Manual, but that's not change,
+this will happen ie.
+if restarting service.
 
 ## RELATED LINKS
 
@@ -123,3 +133,5 @@ only manual trigger start is needed
 [https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicecontrollerstatus)
 
 [https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode)
+
+[https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype](https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype)

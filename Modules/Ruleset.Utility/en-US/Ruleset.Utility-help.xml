@@ -365,7 +365,7 @@ PS&gt; Approve-Execute -YesToAll ([ref] $YesToAll) -NoToAll ([ref] $NoToAll)</de
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Compare-Path depending on parameters either checks if two paths lead to same location taking into account environment variables, relative path locations and wildcards or it checks if two paths are similar which depends on wildcards contained in the input</maml:para>
+      <maml:para>Compare-Path depending on parameters either checks if two paths lead to same location taking into account environment variables, relative path locations and wildcards. Or it checks if two paths are similar which depends on wildcards contained in the input</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1087,12 +1087,12 @@ False</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/ConvertFrom-Wildcard.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards?view=powershell-7.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards?view=powershell-7.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_wildcards</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions?view=net-5.0</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions?view=net-5.0</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regexoptions</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1169,7 +1169,14 @@ False</dev:code>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Format-ComputerName localhost</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>NETBIOSNAME</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Format-ComputerName server01</dev:code>
+        <dev:remarks>
+          <maml:para>SERVER01</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1312,12 +1319,12 @@ binary</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Get-FileEncoding.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?view=netcore-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding?view=powershellsdk-1.1.0</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.filesystemcmdletproviderencoding</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2153,7 +2160,7 @@ binary</dev:code>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Get-Process | Select-Object Name, CPU | Out-DataTable</dev:code>
         <dev:remarks>
-          <maml:para>Get a list of processes and their CPU and create a datatable</maml:para>
+          <maml:para>Get a list of processes and CPU load and create a datatable</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2892,7 +2899,7 @@ binary</dev:code>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Set-NetworkProfile</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NetworkCategory</maml:name>
           <maml:description>
             <maml:para>Specify network category which to apply to all NIC's. If not specified, you're prompted for each NIC individually</maml:para>
@@ -2900,6 +2907,79 @@ binary</dev:code>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
             <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name on which to set network profile</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Specify Credential used for authentication to Domain.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-NetworkProfile</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NetworkCategory</maml:name>
+          <maml:description>
+            <maml:para>Specify network category which to apply to all NIC's. If not specified, you're prompted for each NIC individually</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Session</maml:name>
+          <maml:description>
+            <maml:para>Specifies the PS session to use</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+          <dev:type>
+            <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -2929,7 +3009,7 @@ binary</dev:code>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NetworkCategory</maml:name>
         <maml:description>
           <maml:para>Specify network category which to apply to all NIC's. If not specified, you're prompted for each NIC individually</maml:para>
@@ -2937,6 +3017,42 @@ binary</dev:code>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
           <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name on which to set network profile</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Specify Credential used for authentication to Domain.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Session</maml:name>
+        <maml:description>
+          <maml:para>Specifies the PS session to use</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.Runspaces.PSSession</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.Runspaces.PSSession</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -2988,13 +3104,20 @@ binary</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>HACK: It looks like option to change network profile in settings app will be gone after using this function in an elevated prompt</maml:para>
+        <maml:para>None.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Set-NetworkProfile</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Set-NetworkProfile Public</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -3871,32 +3994,32 @@ binary</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-Permission.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.accesscontroltype</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.filesystemrights</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registryrights</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.inheritanceflags</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.propagationflags</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.objectsecurity.setaccessruleprotection</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity?view=dotnet-plat-ext-3.1</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.security.accesscontrol.registrysecurity</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4018,6 +4141,13 @@ binary</dev:code>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Set-ScreenBuffer</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Set-ScreenBuffer 1000</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>

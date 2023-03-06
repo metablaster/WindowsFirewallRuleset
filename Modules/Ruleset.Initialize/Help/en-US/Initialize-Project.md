@@ -32,19 +32,6 @@ If not the function may exit and stop executing scripts.
 Initialize-Project
 ```
 
-Performs default requirements and recommendations checks managed by global settings.
-Error or warning message is shown if check failed, environment info otherwise.
-
-### EXAMPLE 2
-
-```powershell
-Initialize-Project
-```
-
-Performs default requirements and recommendations checks managed by global settings.
-Error or warning message is shown if check failed and all subsequent operations are halted.
-If successful environment info is shown.
-
 ## PARAMETERS
 
 ### -WhatIf

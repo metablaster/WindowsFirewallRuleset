@@ -95,13 +95,13 @@ PS> Connect-Computer COMPUTERNAME
 
 .EXAMPLE
 PS> $ConnectParams = @{
-	SessionOption = $PSSessionOption
-	ErrorAction = "Stop"
-	Domain = "Server01"
-	Protocol = "HTTP"
-	ConfigurationName = $PSSessionConfigurationName
-	ApplicationName = $PSSessionApplicationName
-	CimOptions = New-CimSessionOption -Protocol Wsman -UICulture "en-US" -Culture "en-US"
+  SessionOption = $PSSessionOption
+  ErrorAction = "Stop"
+  Domain = "Server01"
+  Protocol = "HTTP"
+  ConfigurationName = $PSSessionConfigurationName
+  ApplicationName = $PSSessionApplicationName
+  CimOptions = New-CimSessionOption -Protocol Wsman -UICulture "en-US" -Culture "en-US"
 }
 PS> Connect-Computer @ConnectParams
 

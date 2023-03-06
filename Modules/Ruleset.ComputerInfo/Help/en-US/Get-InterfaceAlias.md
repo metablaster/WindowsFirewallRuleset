@@ -39,19 +39,19 @@ escape codes which is required to create valid fiewall rule based on interface a
 ### EXAMPLE 1
 
 ```powershell
-Get-InterfaceAlias "IPv4"
+Get-InterfaceAlias -AddressFamily IPv4
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-Get-InterfaceAlias "IPv4" -Physical
+Get-InterfaceAlias -AddressFamily IPv4 -Physical
 ```
 
 ### EXAMPLE 3
 
 ```powershell
-Get-InterfaceAlias "IPv6" -WildcardOption "IgnoreCase"
+Get-InterfaceAlias -AddressFamily IPv6 -WildcardOption "IgnoreCase"
 ```
 
 ## PARAMETERS

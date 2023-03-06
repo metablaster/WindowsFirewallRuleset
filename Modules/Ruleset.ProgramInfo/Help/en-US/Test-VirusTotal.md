@@ -17,14 +17,14 @@ Analyze file trough VirusTotal API
 
 ```powershell
 Test-VirusTotal -LiteralPath <String> [-Domain <String>] [-Credential <PSCredential>]
- -SigcheckLocation <String> [-TimeOut <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-SigcheckLocation <String>] [-TimeOut <Int32>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Session
 
 ```powershell
-Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] -SigcheckLocation <String> [-TimeOut <Int32>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Test-VirusTotal -LiteralPath <String> [-Session <PSSession>] [-SigcheckLocation <String>] [-TimeOut <Int32>]
+ [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -119,7 +119,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -140,6 +140,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: 300
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+
+If specified, sigcheck is downloaded if it's not found and is used without user prompt
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -196,3 +212,9 @@ None.
 ## RELATED LINKS
 
 [https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md)
+
+[https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck](https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck)
+
+[https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service](https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service)
+
+[https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy](https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy)

@@ -14,9 +14,9 @@ Exports firewall rules to a CSV or JSON file from registry
 ## SYNTAX
 
 ```powershell
-Export-RegistryRule -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>] [-DisplayGroup <String>]
- [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append] [-Force]
- [<CommonParameters>]
+Export-RegistryRule [-Domain <String>] -Path <DirectoryInfo> [-FileName <String>] [-DisplayName <String>]
+ [-DisplayGroup <String>] [-JSON] [-Inbound] [-Outbound] [-Enabled] [-Disabled] [-Allow] [-Block] [-Append]
+ [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,9 +56,25 @@ Exports all ICMP firewall rules to the JSON file ICMPRules.json.
 
 ## PARAMETERS
 
+### -Domain
+
+Computer name from which rules are to be exported
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Path
 
-Path into which to save file.
+Directory location into which to save file.
 Wildcard characters are supported.
 
 ```yaml

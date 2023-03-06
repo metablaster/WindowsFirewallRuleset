@@ -21,9 +21,12 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -174,9 +177,12 @@
             <maml:para>Predefined program name for which to search</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -2331,8 +2337,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Get-UserApp.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage?view=win10-ps</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/powershell/module/appx/get-appxpackage</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2832,9 +2838,12 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -2973,9 +2982,12 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:para>Predefined program name</maml:para>
           </maml:description>
           <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">nmap</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Brave</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Psiphon</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">MSI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">EdgeWebView</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SteamCMD</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">dotnet</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">CMake</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">SqlPath</command:parameterValue>
@@ -3330,7 +3342,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is $false unless SkipVirusTotalCheck global variable is set.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3403,7 +3415,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Force</maml:name>
           <maml:description>
-            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
+            <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is $false unless SkipVirusTotalCheck global variable is set.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -3501,7 +3513,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Force</maml:name>
         <maml:description>
-          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.</maml:para>
+          <maml:para>If specified, lack of digital signature or signature mismatch produces a warning instead of an error resulting in bypassed signature test. This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is $false unless SkipVirusTotalCheck global variable is set.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
         <dev:type>
@@ -3541,42 +3553,32 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Test-ExecutableFile "C:\Windows\UnsignedFile.exe"</dev:code>
         <dev:remarks>
-          <maml:para>ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe</maml:para>
+          <maml:para>ERROR: Digital signature verification failed for 'C:\Windows\UnsignedFile.exe' INFO: If you trust this executable run 'CallerScript.ps1' with -Trusted switch</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\chrome.exe"</dev:code>
+        <dev:code>Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\file.paf"</dev:code>
         <dev:remarks>
-          <maml:para>WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe INFO: To fix this problem find 'chrome.exe' and update installation directory in Test-ExecutableFile.ps1 script</maml:para>
+          <maml:para>ERROR: File extension 'PAF' is blacklisted executable file 'C:\Users\USERNAME\AppData\Application\file.paf' INFO: Blocked file 'file.paf' is Portable Application Installer File</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Test-ExecutableFile "\\COMPUTERNAME\Directory\file.exe"</dev:code>
+        <dev:code>Test-ExecutableFile ".\directory\..\file.exe"</dev:code>
         <dev:remarks>
-          <maml:para>ERROR: Specified file path is missing a file system qualifier: \\COMPUTERNAME\Directory\file.exe</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Test-ExecutableFile ".\..\file.exe"</dev:code>
-        <dev:remarks>
-          <maml:para>ERROR: Specified file path is relative: .\..\file.exe</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>Test-ExecutableFile "C:\Bad\&lt;Path&gt;\Loca'tion"</dev:code>
-        <dev:remarks>
-          <maml:para>ERROR: Specified file path contains invalid characters: C:\Bad\&lt;Path&gt;\Loca'tion</maml:para>
+          <maml:para>WARNING: Specified file path contains parent directory notation '$ExpandedPath'</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3635,7 +3637,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
           <maml:name>PathType</maml:name>
           <maml:description>
-            <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
+            <maml:para>The type of path to test, can be one of the following:</maml:para>
+            <maml:para>1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3707,7 +3710,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
           <maml:name>PathType</maml:name>
           <maml:description>
-            <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
+            <maml:para>The type of path to test, can be one of the following:</maml:para>
+            <maml:para>1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
@@ -3803,7 +3807,8 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Type">
         <maml:name>PathType</maml:name>
         <maml:description>
-          <maml:para>The type of path to test, can be one of the following: 1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
+          <maml:para>The type of path to test, can be one of the following:</maml:para>
+          <maml:para>1. File - The path is path to file 2. Directory - The path is path to directory 3. Any - The path is either path to file or directory, this is default</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
@@ -4238,8 +4243,12 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Online Version:</maml:linkText>
+        <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -4294,7 +4303,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
             <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
@@ -4317,6 +4326,17 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, sigcheck is downloaded if it's not found and is used without user prompt</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
@@ -4367,7 +4387,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SigcheckLocation</maml:name>
           <maml:description>
             <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
@@ -4390,6 +4410,17 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>300</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Force</maml:name>
+          <maml:description>
+            <maml:para>If specified, sigcheck is downloaded if it's not found and is used without user prompt</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
@@ -4464,7 +4495,7 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SigcheckLocation</maml:name>
         <maml:description>
           <maml:para>Specify path to sigcheck executable program. Do not specify sigcheck file, only path to where sigcheck is located. By default working directory and PATH is searched for sigcheck64.exe. On 32 bit operating system sigcheck.exe is searched instead. If location to sigcheck executable is not found then no VirusTotal scan and report is done.</maml:para>
@@ -4487,6 +4518,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>300</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Force</maml:name>
+        <maml:description>
+          <maml:para>If specified, sigcheck is downloaded if it's not found and is used without user prompt</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
@@ -4551,6 +4594,18 @@ PS&gt; Confirm-Installation "Office" ([ref] $ProgramInstallPath)</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md</maml:linkText>
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-VirusTotal.md</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/sysinternals/downloads/sigcheck</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service</maml:linkText>
+        <maml:uri>https://support.virustotal.com/hc/en-us/articles/115002145529-Terms-of-Service</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy</maml:linkText>
+        <maml:uri>https://support.virustotal.com/hc/en-us/articles/115002168385-Privacy-Policy</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

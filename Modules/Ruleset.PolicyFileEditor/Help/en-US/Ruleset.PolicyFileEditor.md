@@ -1,8 +1,8 @@
 ---
 Module Name: Ruleset.PolicyFileEditor
 Module Guid: c321c0fc-a6d8-4251-8f71-c69d8a57ce8f
-Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.14.0
-Help Version: 0.14.0
+Download Help Link: https://github.com/metablaster/WindowsFirewallRuleset/tree/master/Config/HelpContent/0.15.0
+Help Version: 0.15.0
 Locale: en-US
 ---
 

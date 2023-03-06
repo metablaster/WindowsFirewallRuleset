@@ -208,3 +208,7 @@ TODO: Implement accept ServiceController object, should be called InputObject, a
 however it doesn't make much sense since the function is to test existence of a service too.
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-Service.md)
+
+[https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature)

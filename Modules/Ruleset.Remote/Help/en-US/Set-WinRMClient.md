@@ -234,6 +234,9 @@ TODO: Parameter to apply only additional config as needed instead of hard reset 
 HACK: Set-WSManInstance fails in PS Core with "Invalid ResourceURI format" error
 TODO: Implement -NoServiceRestart parameter if applicable so that only configuration is affected
 See also output of: winrm get winrm/config
+TODO: Somewhere it errors with "WinRM firewall exception will not work since one of the network connection types on this machine is set to Public.
+Change the network connection type to either Domain or Private and try again."
+It seems to reproduce after Reset-Firewall -Remoting -Service, also in Enable-WinRMServer
 
 ## RELATED LINKS
 

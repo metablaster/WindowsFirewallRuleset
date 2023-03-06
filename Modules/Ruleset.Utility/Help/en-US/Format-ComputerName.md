@@ -29,6 +29,16 @@ Format-ComputerName formats computer name string to NETBIOS format
 Format-ComputerName localhost
 ```
 
+NETBIOSNAME
+
+### EXAMPLE 2
+
+```powershell
+Format-ComputerName server01
+```
+
+SERVER01
+
 ## PARAMETERS
 
 ### -Domain

@@ -13,8 +13,23 @@ Set network profile on connected network interfaces
 
 ## SYNTAX
 
+### None (Default)
+
 ```powershell
-Set-NetworkProfile [[-NetworkCategory] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-NetworkProfile [-NetworkCategory <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Domain
+
+```powershell
+Set-NetworkProfile [-NetworkCategory <String>] [-Domain <String>] [-Credential <PSCredential>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
+```
+
+### Session
+
+```powershell
+Set-NetworkProfile [-NetworkCategory <String>] [-Session <PSSession>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,6 +45,12 @@ Recommended is "Public" profile for maximum security, unless "Private" is needed
 Set-NetworkProfile
 ```
 
+### EXAMPLE 2
+
+```powershell
+Set-NetworkProfile Public
+```
+
 ## PARAMETERS
 
 ### -NetworkCategory
@@ -43,7 +64,55 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Domain
+
+Computer name on which to set network profile
+
+```yaml
+Type: System.String
+Parameter Sets: Domain
+Aliases: ComputerName, CN
+
+Required: False
+Position: Named
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+
+Specify Credential used for authentication to Domain.
+
+```yaml
+Type: System.Management.Automation.PSCredential
+Parameter Sets: Domain
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Session
+
+Specifies the PS session to use
+
+```yaml
+Type: System.Management.Automation.Runspaces.PSSession
+Parameter Sets: Session
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -96,7 +165,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-HACK: It looks like option to change network profile in settings app will be gone after using this
-function in an elevated prompt
+None.
 
 ## RELATED LINKS

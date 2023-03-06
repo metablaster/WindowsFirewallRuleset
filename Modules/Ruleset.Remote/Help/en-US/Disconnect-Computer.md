@@ -31,6 +31,12 @@ removes resources created during a session.
 Disconnect-Computer
 ```
 
+### EXAMPLE 2
+
+```powershell
+Disconnect-Computer Server01
+```
+
 ## PARAMETERS
 
 ### -Domain

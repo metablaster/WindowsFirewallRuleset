@@ -435,15 +435,15 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Initialize-ModulesRequirement @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }</dev:code>
+        <dev:code>Initialize-Module @{ ModuleName = "PSScriptAnalyzer"; ModuleVersion = "1.19.1" }</dev:code>
         <dev:remarks>
           <maml:para>Checks if PSScriptAnalyzer is up to date, if not user is prompted to update, and if repository specified by default is not registered user is prompted to do that too.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-ModulesRequirement @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } -Repository `
-&gt; "PSGallery" -URL "https://www.powershellgallery.com/api/v2"</dev:code>
+        <dev:code>Initialize-Module @{ ModuleName = "PackageManagement"; ModuleVersion = "1.4.7" } `
+-Repository "PSGallery" -URL "https://www.powershellgallery.com/api/v2"</dev:code>
         <dev:remarks>
           <maml:para>Checks if PackageManagement is up to date, if not user is prompted to update, and if repository is not registered user is prompted to do that too.</maml:para>
         </dev:remarks>
@@ -552,14 +552,7 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Initialize-Project</dev:code>
         <dev:remarks>
-          <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed, environment info otherwise.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-Project</dev:code>
-        <dev:remarks>
-          <maml:para>Performs default requirements and recommendations checks managed by global settings. Error or warning message is shown if check failed and all subsequent operations are halted. If successful environment info is shown.</maml:para>
+          <maml:para></maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -967,7 +960,7 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>This function main purpose is automated development environment setup to be able to perform quick setup on multiple computers and virtual operating systems, in cases such as frequent system restores for the purpose of testing project code for many environment scenarios that end users may have. It should be used in conjunction with the rest of a module "Ruleset.Initialize"</maml:para>
-        <maml:para>TODO: Optionally set services to automatic startup, most of services are needed only to run code. [System.ServiceProcess.ServiceController[]] TODO: RemoteRegistry starts on demand and stops on it's own when not used, no need to start it, only manual trigger start is needed</maml:para>
+        <maml:para>TODO: Some services are logged as change from ex. from Manual to Manual, but that's not change, this will happen ie. if restarting service.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -975,15 +968,21 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Initialize-Service @("lmhosts", "LanmanWorkstation", "LanmanServer")</dev:code>
         <dev:remarks>
-          <maml:para>Returns True if all requested services are started successfully False otherwise</maml:para>
+          <maml:para>Returns $true if all requested services were started successfully and set to Automatic startup $false otherwise</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-Service "WinRM"
-$true if WinRM service was started $false otherwise</dev:code>
+        <dev:code>Initialize-Service "WinRM"</dev:code>
         <dev:remarks>
-          <maml:para></maml:para>
+          <maml:para>$true if WinRM service was started and set to automatic startup $false otherwise</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Initialize-Service RemoteRegistry -Status Stopped -StartupType Manual</dev:code>
+        <dev:remarks>
+          <maml:para>$true if RemoteRegistry was set to either stopped or started and set to Manual startup type</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -999,6 +998,10 @@ $true if WinRM service was started $false otherwise</dev:code>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:linkText>
         <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicestartmode</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype</maml:linkText>
+        <maml:uri>https://learn.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicetype</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1138,7 +1141,7 @@ $true if WinRM service was started $false otherwise</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
+        <dev:code>Get-Module -FullyQualifiedName @{ ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
 Uninstall-DuplicateModule</dev:code>
         <dev:remarks>
           <maml:para>First get module you know should be removed and pass it to pipeline</maml:para>

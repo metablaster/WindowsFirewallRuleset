@@ -34,7 +34,7 @@ Net-NewFirewallRule ... | Format-RuleOutput
 ### EXAMPLE 2
 
 ```powershell
-Net-NewFirewallRule ... | Format-RuleOutput
+Net-NewFirewallRule ... | Format-RuleOutput -ForegroundColor Red -Label Modify
 ```
 
 ## PARAMETERS

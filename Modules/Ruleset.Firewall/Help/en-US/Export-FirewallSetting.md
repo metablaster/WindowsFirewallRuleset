@@ -14,7 +14,8 @@ Export firewall settings and profile setup to file
 ## SYNTAX
 
 ```powershell
-Export-FirewallSetting [-Path] <DirectoryInfo> [[-FileName] <String>] [-Force] [<CommonParameters>]
+Export-FirewallSetting [[-Domain] <String>] [-Path] <DirectoryInfo> [[-FileName] <String>] [-Force]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,7 +30,29 @@ Export-FirewallSetting exports all firewall settings to file excluding firewall 
 Export-FirewallSetting
 ```
 
+### EXAMPLE 2
+
+```powershell
+Export-FirewallSetting -Path "C:\DirectoryName\filename.json" -Force
+```
+
 ## PARAMETERS
+
+### -Domain
+
+Computer name from which firewall settings are to be exported
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: ComputerName, CN
+
+Required: False
+Position: 1
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Path
 
@@ -42,7 +65,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: True
@@ -58,7 +81,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
 Default value: FirewallSettings.json
 Accept pipeline input: False
 Accept wildcard characters: False

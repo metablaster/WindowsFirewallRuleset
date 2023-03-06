@@ -45,7 +45,7 @@ PS> Unregister-SslCertificate
 
 .EXAMPLE
 PS> $Cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {
-	$_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
+  $_.Thumbprint -eq "d3157992adf6ef8d74861cb40ab9085e37ef2573"
 }
 PS> Unregister-SslCertificate $Cert.Thumbprint
 

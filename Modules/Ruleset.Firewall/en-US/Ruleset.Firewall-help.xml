@@ -346,7 +346,12 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>The Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern January 2022: 1. Implemented appending to json</maml:para>
+        <maml:para>The Following modifications by metablaster August 2020:</maml:para>
+        <maml:para>1. Applied formatting and code style according to project rules 2. Added switch to optionally append instead of replacing output file 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to target specific policy store 6. Added parameter to specify directory, and crate it if it doesn't exist 7. Added more output streams for debug, verbose and info 8. Added parameter to export according to rule group 9. Changed minor flow and logic of execution 10. Make output formatted and colored 11. Added progress bar</maml:para>
+        <maml:para>December 2020:</maml:para>
+        <maml:para>1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern</maml:para>
+        <maml:para>January 2022:</maml:para>
+        <maml:para>1. Implemented appending to json</maml:para>
         <maml:para>TODO: Export to excel TODO: Remoting not finished</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -399,7 +404,19 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-FirewallSetting</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name from which firewall settings are to be exported</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
             <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
@@ -411,7 +428,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:description>
             <maml:para>Output file name, json format</maml:para>
@@ -437,7 +454,19 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name from which firewall settings are to be exported</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
           <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
@@ -449,7 +478,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:description>
           <maml:para>Output file name, json format</maml:para>
@@ -507,6 +536,13 @@
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Export-FirewallSetting -Path "C:\DirectoryName\filename.json" -Force</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -530,10 +566,22 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-RegistryRule</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name from which rules are to be exported</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
-            <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+            <maml:para>Directory location into which to save file. Wildcard characters are supported.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
           <dev:type>
@@ -680,10 +728,22 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name from which rules are to be exported</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
-          <maml:para>Path into which to save file. Wildcard characters are supported.</maml:para>
+          <maml:para>Directory location into which to save file. Wildcard characters are supported.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">System.IO.DirectoryInfo</command:parameterValue>
         <dev:type>
@@ -1417,7 +1477,7 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Net-NewFirewallRule ... | Format-RuleOutput</dev:code>
+        <dev:code>Net-NewFirewallRule ... | Format-RuleOutput -ForegroundColor Red -Label Modify</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -1870,8 +1930,10 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>The Following modifications by metablaster August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern</maml:para>
-        <maml:para>TODO: Remoting not finished</maml:para>
+        <maml:para>The Following modifications by metablaster August 2020:</maml:para>
+        <maml:para>1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Separated functions into their own scope 4. Added function to decode string into multi line 5. Added parameter to let specify directory 6. Added more output streams for debug, verbose and info 7. Changed minor flow and logic of execution 8. Make output formatted and colored 9. Added progress bar</maml:para>
+        <maml:para>December 2020:</maml:para>
+        <maml:para>1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1916,7 +1978,19 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Import-FirewallSetting</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+          <maml:name>Domain</maml:name>
+          <maml:description>
+            <maml:para>Computer name onto which to import firewall settings, default is local GPO.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+          <dev:type>
+            <maml:name>System.String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
             <maml:para>Path to directory where the exported settings file is located. Wildcard characters are supported.</maml:para>
@@ -1928,7 +2002,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:description>
             <maml:para>Input file</maml:para>
@@ -1943,7 +2017,19 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="ComputerName, CN">
+        <maml:name>Domain</maml:name>
+        <maml:description>
+          <maml:para>Computer name onto which to import firewall settings, default is local GPO.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="true" pipelineInput="False" position="2" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
           <maml:para>Path to directory where the exported settings file is located. Wildcard characters are supported.</maml:para>
@@ -1955,7 +2041,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:description>
           <maml:para>Input file</maml:para>
@@ -1997,6 +2083,13 @@
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Import-FirewallSetting</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Import-FirewallSetting -Path "C:\DirectoryName" -FileName Settings</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2192,8 +2285,13 @@
     <maml:alertSet>
       <maml:alert>
         <maml:para>Author: Markus Scholtes Version: 1.02 Build date: 2020/02/15</maml:para>
-        <maml:para>Changes by metablaster - August 2020: 1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution December 2020: 1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern January 2022: 1. Added time measurement code 2. Added progress bar</maml:para>
-        <maml:para>TODO: implement removing rules not according to file TODO: Remoting not finished</maml:para>
+        <maml:para>Changes by metablaster - August 2020:</maml:para>
+        <maml:para>1. Applied formatting and code style according to project rules 2. Added parameter to target specific policy store 3. Added parameter to let specify directory 4. Added more output streams for debug, verbose and info 5. Make output formatted and colored 6. Changed minor flow of execution</maml:para>
+        <maml:para>December 2020:</maml:para>
+        <maml:para>1. Rename parameters according to standard name convention 2. Support resolving path wildcard pattern</maml:para>
+        <maml:para>January 2022:</maml:para>
+        <maml:para>1. Added time measurement code 2. Added progress bar</maml:para>
+        <maml:para>TODO: implement removing rules not according to file</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2201,14 +2299,14 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Remove-FirewallRule</dev:code>
         <dev:remarks>
-          <maml:para>Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory.</maml:para>
+          <maml:para>Removes all firewall rules according to a list in the CSV file FirewallRules.csv in the current directory</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
         <dev:code>Remove-FirewallRule WmiRules.json -JSON</dev:code>
         <dev:remarks>
-          <maml:para>Removes all firewall rules according to the list in the JSON file WmiRules.json.</maml:para>
+          <maml:para>Removes all firewall rules according to the list in the JSON file WmiRules.json</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

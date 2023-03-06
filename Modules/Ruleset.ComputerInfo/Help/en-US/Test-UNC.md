@@ -40,21 +40,21 @@ False
 ### EXAMPLE 3
 
 ```powershell
-Test-UNC \\DESKTOP-PC\ShareName$
+Test-UNC \\DESKTOP-PC\ShareName$ -Strict
 True
 ```
 
 ### EXAMPLE 4
 
 ```powershell
-Test-UNC \\SERVER-01\Share\Directory DIR\file.exe
+Test-UNC "\\SERVER-01\Share\Directory DIR\file.exe"
 True
 ```
 
 ### EXAMPLE 5
 
 ```powershell
-Test-UNC \SERVER-01\Share\Directory DIR
+Test-UNC "\SERVER-01\Share\Directory DIR"
 False
 ```
 

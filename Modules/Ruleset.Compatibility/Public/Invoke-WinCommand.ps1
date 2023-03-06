@@ -59,9 +59,9 @@ Arguments to pass to the scriptblock
 
 .EXAMPLE
 PS> Invoke-WinCommand {
-	param ($name)
-	"Hello $name, how are you?"
-	$PSVersionTable.PSVersion
+  param ($name)
+  "Hello $name, how are you?"
+  $PSVersionTable.PSVersion
 } Jeffrey
 
 Hello Jeffrey, how are you?

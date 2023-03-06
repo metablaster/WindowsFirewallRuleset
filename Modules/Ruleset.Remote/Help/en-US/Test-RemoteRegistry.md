@@ -29,6 +29,12 @@ Test-RemoteRegistry tests for functioning remote registry
 Test-RemoteRegistry -Domain Server01
 ```
 
+### EXAMPLE 2
+
+```powershell
+Test-RemoteRegistry -Domain Server01 -Quiet
+```
+
 ## PARAMETERS
 
 ### -Domain

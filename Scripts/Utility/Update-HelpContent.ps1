@@ -86,13 +86,13 @@ For best results run first time with -Force switch and second time without -Forc
 Recommended to generate help files with Core edition because of file encoding.
 If using -Module parameter specify correct name casing of a module.
 
-TODO: some markdown files will end up with additional blank line at the end of document for each
+TODO: Some markdown files will end up with additional blank line at the end of document for each
 update of help files.
 TODO: Online hosting of help content is needed, for now the only purpose is to generate markdown
 help files
 TODO: about_ topic needs to be manually edited, currently we get template only
-To document private functions they must be exported first
-TODO: the "Module Name:" entry in help files (and maybe even "external help file:" entry),
+to document private functions they must be exported first
+TODO: The "Module Name:" entry in help files (and maybe even "external help file:" entry),
 if not set to correct module name the command will fail
 TODO: Log header is not inserted into logs
 TODO: OutputType attribute

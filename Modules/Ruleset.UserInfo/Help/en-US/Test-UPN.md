@@ -50,32 +50,25 @@ True or False
 ### EXAMPLE 2
 
 ```powershell
-Get-GroupPrincipal -Group "Users" | Test-UPN
-True or False
-```
-
-### EXAMPLE 3
-
-```powershell
 Test-UPN "Use!r" -Prefix
 False
 ```
 
-### EXAMPLE 4
+### EXAMPLE 3
 
 ```powershell
 Test-UPN "user@192.8.1.1"
 False
 ```
 
-### EXAMPLE 5
+### EXAMPLE 4
 
 ```powershell
 Test-UPN "user@[192.8.1.1]"
 True
 ```
 
-### EXAMPLE 6
+### EXAMPLE 5
 
 ```powershell
 Test-UPN "User@site.domain.-com" -Suffix

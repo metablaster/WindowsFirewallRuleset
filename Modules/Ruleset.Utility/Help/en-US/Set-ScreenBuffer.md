@@ -31,6 +31,12 @@ to preserve all the output in the console for review and scroll back.
 Set-ScreenBuffer
 ```
 
+### EXAMPLE 2
+
+```powershell
+Set-ScreenBuffer 1000
+```
+
 ## PARAMETERS
 
 ### -Height

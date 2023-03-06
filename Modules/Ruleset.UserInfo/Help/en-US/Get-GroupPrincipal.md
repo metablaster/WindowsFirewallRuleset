@@ -16,15 +16,15 @@ Get principals of specified groups on target computers
 ### Domain (Default)
 
 ```powershell
-Get-GroupPrincipal [-Group] <String[]> [-Domain <String[]>] [-Include <String>] [-Exclude <String>] [-Disabled]
- [<CommonParameters>]
+Get-GroupPrincipal [-Group] <String[]> [-Domain <String>] [-Include <String>] [-Exclude <String>] [-Disabled]
+ [-Unique] [<CommonParameters>]
 ```
 
 ### CimSession
 
 ```powershell
 Get-GroupPrincipal [-Group] <String[]> -CimSession <CimSession> [-Include <String>] [-Exclude <String>]
- [-Disabled] [<CommonParameters>]
+ [-Disabled] [-Unique] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,10 +42,18 @@ Get-GroupPrincipal "Users", "Administrators"
 ### EXAMPLE 2
 
 ```powershell
+Get-GroupPrincipal "Administrators", "Users" -Unique
+```
+
+If some user belongs to both groups, the one from Administrators group will be returned.
+
+### EXAMPLE 3
+
+```powershell
 Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)
 ```
 
-### EXAMPLE 3
+### EXAMPLE 4
 
 ```powershell
 Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)
@@ -71,10 +79,10 @@ Accept wildcard characters: False
 
 ### -Domain
 
-One or more computers which to query for group users
+Computer name which to query for group users
 
 ```yaml
-Type: System.String[]
+Type: System.String
 Parameter Sets: Domain
 Aliases: ComputerName, CN
 
@@ -136,6 +144,26 @@ Accept wildcard characters: True
 ### -Disabled
 
 If specified, result is disabled accounts instead
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Unique
+
+If specified, only unique principals based on username are returned.
+This switch is useful if same user belongs to multiple groups specified by -Group parameter.
+A principal included in results will be the first one matched and all others ignored thus
+Group property of the returned result might not be desired one, you can prefer which group is
+included by prioritizing groups specified in -Group parameter.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

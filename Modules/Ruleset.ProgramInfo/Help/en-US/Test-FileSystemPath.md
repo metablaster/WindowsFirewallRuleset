@@ -148,12 +148,10 @@ Accept wildcard characters: False
 ### -PathType
 
 The type of path to test, can be one of the following:
-1.
-File - The path is path to file
-2.
-Directory - The path is path to directory
-3.
-Any - The path is either path to file or directory, this is default
+
+1. File - The path is path to file
+2. Directory - The path is path to directory
+3. Any - The path is either path to file or directory, this is default
 
 ```yaml
 Type: System.String

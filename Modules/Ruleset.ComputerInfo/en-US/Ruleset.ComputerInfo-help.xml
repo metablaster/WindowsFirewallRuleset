@@ -468,21 +468,21 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-InterfaceAlias "IPv4"</dev:code>
+        <dev:code>Get-InterfaceAlias -AddressFamily IPv4</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-InterfaceAlias "IPv4" -Physical</dev:code>
+        <dev:code>Get-InterfaceAlias -AddressFamily IPv4 -Physical</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Get-InterfaceAlias "IPv6" -WildcardOption "IgnoreCase"</dev:code>
+        <dev:code>Get-InterfaceAlias -AddressFamily IPv6 -WildcardOption "IgnoreCase"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -924,8 +924,8 @@
         <maml:uri>https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ComputerInfo/Help/en-US/Get-SystemSKU.md</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
-        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0</maml:linkText>
-        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku?view=powershellsdk-1.1.0</maml:uri>
+        <maml:linkText>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku</maml:linkText>
+        <maml:uri>https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.commands.operatingsystemsku</maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>https://docs.microsoft.com/en-us/surface/surface-system-sku-reference</maml:linkText>
@@ -2606,7 +2606,7 @@ False</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
-        <dev:code>Test-UNC \\DESKTOP-PC\ShareName$
+        <dev:code>Test-UNC \\DESKTOP-PC\ShareName$ -Strict
 True</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -2614,7 +2614,7 @@ True</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
-        <dev:code>Test-UNC \\SERVER-01\Share\Directory DIR\file.exe
+        <dev:code>Test-UNC "\\SERVER-01\Share\Directory DIR\file.exe"
 True</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -2622,7 +2622,7 @@ True</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
-        <dev:code>Test-UNC \SERVER-01\Share\Directory DIR
+        <dev:code>Test-UNC "\SERVER-01\Share\Directory DIR"
 False</dev:code>
         <dev:remarks>
           <maml:para></maml:para>

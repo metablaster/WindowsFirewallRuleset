@@ -464,7 +464,8 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
-        <maml:para>December 2022: - Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
+        <maml:para>December 2022:</maml:para>
+        <maml:para>- Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -859,7 +860,8 @@ PS&gt; myFunction Bill</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
-        <maml:para>December 2022: - Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
+        <maml:para>December 2022:</maml:para>
+        <maml:para>- Change OutputType to System.Management.Automation.PSCustomObject from PSObject</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1356,7 +1358,8 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
         <maml:para></maml:para>
         <maml:para>January 2021:</maml:para>
         <maml:para>- Added parameter debugging stream</maml:para>
-        <maml:para>February 2022: Added check to confirm session configuration is present and enabled Added logic to convert local computer name to localhost</maml:para>
+        <maml:para>February 2022:</maml:para>
+        <maml:para>Added check to confirm session configuration is present and enabled Added logic to convert local computer name to localhost</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -1562,7 +1565,11 @@ PS&gt; Get-Command -Module PnpDevice</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Invoke-WinCommand { param ($name) "Hello $name, how are you?"; $PSVersionTable.PSVersion } Jeffrey</dev:code>
+        <dev:code>Invoke-WinCommand {
+	param ($name)
+	"Hello $name, how are you?"
+	$PSVersionTable.PSVersion
+} Jeffrey</dev:code>
         <dev:remarks>
           <maml:para>Hello Jeffrey, how are you? Major  Minor  Build  Revision PSComputerName -----  -----  -----  -------- -------------- 5      1      17134  1        localhost</maml:para>
           <maml:para>In this example, we're invoking a ScriptBlock with 1 parameter in the compatibility session. This ScriptBlock will simply print a message and then return the version number of the compatibility session.</maml:para>

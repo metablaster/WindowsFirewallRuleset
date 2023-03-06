@@ -49,7 +49,7 @@ Removes outdated PowerShellGet and PackageManagement modules excluding those ins
 ### EXAMPLE 2
 
 ```powershell
-Get-Module -FullyQualifiedName @{ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
+Get-Module -FullyQualifiedName @{ ModuleName = "PackageManagement"; RequiredVersion = "1.0.0.1" } |
 Uninstall-DuplicateModule
 ```
 

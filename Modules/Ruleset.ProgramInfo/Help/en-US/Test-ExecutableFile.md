@@ -48,41 +48,25 @@ is producing this issue.
 Test-ExecutableFile "C:\Windows\UnsignedFile.exe"
 ```
 
-ERROR: Digital signature verification failed for: C:\Windows\UnsignedFile.exe
+ERROR: Digital signature verification failed for 'C:\Windows\UnsignedFile.exe'
+INFO: If you trust this executable run 'CallerScript.ps1' with -Trusted switch
 
 ### EXAMPLE 2
 
 ```powershell
-Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\chrome.exe"
+Test-ExecutableFile "C:\Users\USERNAME\AppData\Application\file.paf"
 ```
 
-WARNING: Executable 'chrome.exe' was not found, firewall rule not loaded
-INFO: Searched path was: C:\Users\USERNAME\AppData\Application\chrome.exe
-INFO: To fix this problem find 'chrome.exe' and update installation directory in Test-ExecutableFile.ps1 script
+ERROR: File extension 'PAF' is blacklisted executable file 'C:\Users\USERNAME\AppData\Application\file.paf'
+INFO: Blocked file 'file.paf' is Portable Application Installer File
 
 ### EXAMPLE 3
 
 ```powershell
-Test-ExecutableFile "\\COMPUTERNAME\Directory\file.exe"
+Test-ExecutableFile ".\directory\..\file.exe"
 ```
 
-ERROR: Specified file path is missing a file system qualifier: \\\\COMPUTERNAME\Directory\file.exe
-
-### EXAMPLE 4
-
-```powershell
-Test-ExecutableFile ".\..\file.exe"
-```
-
-ERROR: Specified file path is relative: .\..\file.exe
-
-### EXAMPLE 5
-
-```powershell
-Test-ExecutableFile "C:\Bad\<Path>\Loca'tion"
-```
-
-ERROR: Specified file path contains invalid characters: C:\Bad\\\<Path\>\Loca'tion
+WARNING: Specified file path contains parent directory notation '$ExpandedPath'
 
 ## PARAMETERS
 
@@ -208,7 +192,8 @@ Accept wildcard characters: False
 
 If specified, lack of digital signature or signature mismatch produces a warning
 instead of an error resulting in bypassed signature test.
-This parameter has no effect on VirusTotal check, if the file is reported as malware the return value is False.
+This parameter has no effect on VirusTotal check, if the file is reported as malware the return
+value is $false unless SkipVirusTotalCheck global variable is set.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -242,3 +227,7 @@ TODO: We should return true or false and conditionally load rule
 TODO: Verify file is executable file (and path formatted?)
 
 ## RELATED LINKS
+
+[https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md](https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.ProgramInfo/Help/en-US/Test-ExecutableFile.md)
+
+[https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.signature)

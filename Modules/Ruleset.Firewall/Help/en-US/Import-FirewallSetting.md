@@ -14,7 +14,7 @@ Import firewall settings and profile setup to file
 ## SYNTAX
 
 ```powershell
-Import-FirewallSetting [-Path] <DirectoryInfo> [[-FileName] <String>] [<CommonParameters>]
+Import-FirewallSetting [[-Domain] <String>] [-Path] <DirectoryInfo> [[-FileName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,7 +30,29 @@ Export-FirewallSetting
 Import-FirewallSetting
 ```
 
+### EXAMPLE 2
+
+```powershell
+Import-FirewallSetting -Path "C:\DirectoryName" -FileName Settings
+```
+
 ## PARAMETERS
+
+### -Domain
+
+Computer name onto which to import firewall settings, default is local GPO.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases: ComputerName, CN
+
+Required: False
+Position: 1
+Default value: [System.Environment]::MachineName
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Path
 
@@ -43,7 +65,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: True
@@ -59,7 +81,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
 Default value: FirewallSettings
 Accept pipeline input: False
 Accept wildcard characters: False

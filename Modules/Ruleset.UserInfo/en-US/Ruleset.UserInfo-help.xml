@@ -467,11 +467,11 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
           <maml:name>Domain</maml:name>
           <maml:description>
-            <maml:para>One or more computers which to query for group users</maml:para>
+            <maml:para>Computer name which to query for group users</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
           <dev:type>
-            <maml:name>System.String[]</maml:name>
+            <maml:name>System.String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
@@ -504,6 +504,17 @@
           <maml:name>Disabled</maml:name>
           <maml:description>
             <maml:para>If specified, result is disabled accounts instead</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Unique</maml:name>
+          <maml:description>
+            <maml:para>If specified, only unique principals based on username are returned. This switch is useful if same user belongs to multiple groups specified by -Group parameter. A principal included in results will be the first one matched and all others ignored thus Group property of the returned result might not be desired one, you can prefer which group is included by prioritizing groups specified in -Group parameter.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>System.Management.Automation.SwitchParameter</maml:name>
@@ -573,6 +584,17 @@
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Unique</maml:name>
+          <maml:description>
+            <maml:para>If specified, only unique principals based on username are returned. This switch is useful if same user belongs to multiple groups specified by -Group parameter. A principal included in results will be the first one matched and all others ignored thus Group property of the returned result might not be desired one, you can prefer which group is included by prioritizing groups specified in -Group parameter.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -591,11 +613,11 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="ComputerName, CN">
         <maml:name>Domain</maml:name>
         <maml:description>
-          <maml:para>One or more computers which to query for group users</maml:para>
+          <maml:para>Computer name which to query for group users</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">System.String[]</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">System.String</command:parameterValue>
         <dev:type>
-          <maml:name>System.String[]</maml:name>
+          <maml:name>System.String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>[System.Environment]::MachineName</dev:defaultValue>
@@ -648,6 +670,18 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Unique</maml:name>
+        <maml:description>
+          <maml:para>If specified, only unique principals based on username are returned. This switch is useful if same user belongs to multiple groups specified by -Group parameter. A principal included in results will be the first one matched and all others ignored thus Group property of the returned result might not be desired one, you can prefer which group is included by prioritizing groups specified in -Group parameter.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">System.Management.Automation.SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -684,13 +718,20 @@
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-GroupPrincipal "Administrators", "Users" -Unique</dev:code>
+        <dev:remarks>
+          <maml:para>If some user belongs to both groups, the one from Administrators group will be returned.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Get-GroupPrincipal "Users" -Domain @(DESKTOP, LAPTOP)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
         <dev:code>Get-GroupPrincipal "Users", "Administrators" -CimSession (New-CimSession)</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
@@ -1984,7 +2025,11 @@ PS&gt; Merge-SDDL ([ref] $SDDL) -From $RefSDDL</dev:code>
     <maml:alertSet>
       <maml:alert>
         <maml:para>Gratefully adapted from: https://gallery.technet.microsoft.com/scriptcenter/Test-Credential-dda902c6, via https://stackoverflow.com/q/10802850/45375 WinAPI solution for local-account validation inspired by: https://stackoverflow.com/a/15644447/45375</maml:para>
-        <maml:para>Modifications by metablaster: February 2022: Added SuppressMessageAttribute to suppress PSUseCompatibleType warning Adapted code and comment formating and variable casing to be in line with the rest of code in repository Added OutputType attribute and additional links</maml:para>
+        <maml:para>Modifications by metablaster:</maml:para>
+        <maml:para>- February 2022:</maml:para>
+        <maml:para>  - Added SuppressMessageAttribute to suppress PSUseCompatibleType warning   - Adapted code and comment formating and variable casing to be in line with the rest of code in repository   - Added OutputType attribute and additional links   - Renamed function from Test-WindowsCredential to Test-Credential   - Removed code for script invocation</maml:para>
+        <maml:para>- December 2022:</maml:para>
+        <maml:para>  - Made boolean logic more explicit</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2131,7 +2176,7 @@ True</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Test-SDDL D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;;S-1-5-21-2050798540-3232341180-3229034493-1001)</dev:code>
+        <dev:code>Test-SDDL "D:(A;;CC;;;S-1-5-21-2050798540-3232431180-3229034493-1002)(A;;CC;;;S-1-5-21-2050798540-3232341180-3229034493-1001)"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -2318,14 +2363,6 @@ True or False</dev:code>
       </command:example>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Get-GroupPrincipal -Group "Users" | Test-UPN
-True or False</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Test-UPN "Use!r" -Prefix
 False</dev:code>
         <dev:remarks>
@@ -2333,7 +2370,7 @@ False</dev:code>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
         <dev:code>Test-UPN "user@192.8.1.1"
 False</dev:code>
         <dev:remarks>
@@ -2341,7 +2378,7 @@ False</dev:code>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
         <dev:code>Test-UPN "user@[192.8.1.1]"
 True</dev:code>
         <dev:remarks>
@@ -2349,7 +2386,7 @@ True</dev:code>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 6 --------------------------</maml:title>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
         <dev:code>Test-UPN "User@site.domain.-com" -Suffix
 False</dev:code>
         <dev:remarks>
