@@ -66,7 +66,7 @@ None.
 #>
 function Set-NetworkProfile
 {
-	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High",
+	[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = "High", DefaultParameterSetName = "None",
 		HelpURI = "https://github.com/metablaster/WindowsFirewallRuleset/blob/master/Modules/Ruleset.Utility/Help/en-US/Set-NetworkProfile.md")]
 	[OutputType([void])]
 	param (

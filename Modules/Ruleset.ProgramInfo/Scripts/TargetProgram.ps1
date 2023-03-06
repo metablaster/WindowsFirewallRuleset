@@ -35,6 +35,7 @@ enum TargetProgram
 	Psiphon
 	MSI
 	EdgeWebView
+	SteamCMD
 	dotnet
 	CMake
 	SqlPath

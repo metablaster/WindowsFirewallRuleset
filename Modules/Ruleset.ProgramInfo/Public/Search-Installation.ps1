@@ -558,6 +558,11 @@ function Search-Installation
 		{
 			Update-Table -Search "Nmap"
 		}
+		"SteamCMD"
+		{
+			# NOTE: ask user for standalone installation directory of SteamCMD
+			break
+		}
 		"Chrome"
 		{
 			Update-Table -Search "Google Chrome" -UserProfile

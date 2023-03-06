@@ -108,7 +108,7 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 # OpenSpace installation directories
-$OpenSpaceRoot = "%SystemDrive%\tools\OpenSpace-0.18.0"
+$OpenSpaceRoot = "%SystemDrive%\tools\OpenSpace-0.18.2"
 
 #
 # Rules for OpenSpace

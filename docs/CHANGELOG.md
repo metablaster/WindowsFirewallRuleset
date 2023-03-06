@@ -39,6 +39,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rule for WinDbg preview UWP app
   - Added rule for Windows Subsystem for Linux
   - Added rules for nmap
+  - Added rules for SteamCMD
 
 - Modules
 
@@ -48,6 +49,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Test-VirusTotal` now offers to download sigcheck if it doesn't exist on target computer
     - `Get-GroupPrincipal` added `-Unique` switch to get unique principals
     - `Get-SystemSoftware` improved program search
+    - `Set-NetworkProfile` added missing default parameter set name
 
   - Implemented remoting for the following functions and scripts
 

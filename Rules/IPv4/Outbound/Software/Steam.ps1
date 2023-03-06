@@ -115,6 +115,7 @@ $BroadcastAddress = Get-InterfaceBroadcast -Session $SessionInstance
 #
 $SteamRoot = "%ProgramFiles(x86)%\Steam"
 $SteamCommon = "%ProgramFiles(x86)%\Common Files\Steam"
+$SteamCMD = "%SystemDrive%\tools\steamcmd"
 
 #
 # Rules for Steam client
@@ -251,6 +252,36 @@ another PC on the same local network." | Format-RuleOutput
 				-InterfaceType $DefaultInterface `
 				-Description "" | Format-RuleOutput
 		}
+	}
+}
+
+if ((Confirm-Installation "SteamCMD" ([ref] $SteamCMD)) -or $ForceLoad)
+{
+	$Program = "$SteamCMD\steamcmd.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Steam CMD" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80, 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "The Steam Console Client or SteamCMD is a command-line version of the
+Steam client." | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Steam CMD" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 27017-27035 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "The Steam Console Client or SteamCMD is a command-line version of the
+Steam client." | Format-RuleOutput
 	}
 }
 
