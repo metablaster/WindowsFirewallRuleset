@@ -40,6 +40,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rule for Windows Subsystem for Linux
   - Added rules for nmap
   - Added rules for SteamCMD
+  - Added rules for Audacity
+  - Updated rules for Epic Games
 
 - Modules
 

@@ -147,8 +147,8 @@ if ((Confirm-Installation "UnrealEngine" ([ref] $EngineRoot)) -or $ForceLoad)
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
+			-Description "This address is reserved, UE doesn't respect IANA rules,
+for more info see 'docs\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 	}
 
 	# TODO: this executable exists only if the engine was built from source
@@ -180,7 +180,7 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 			-Description "Swarm agent is used for build farm." | Format-RuleOutput
 	}
 
-	$Program = "$EngineRoot\Binaries\Win64\UE4Editor.exe"
+	$Program = "$EngineRoot\Binaries\Win64\UnrealEditor.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Unreal Engine - Editor x64" `
@@ -204,8 +204,8 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
+			-Description "This address is reserved, UE doesn't respect IANA rules,
+for more info see 'docs\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Unreal Engine - Editor x64" `
 		 -Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
@@ -218,10 +218,26 @@ For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 			-Description "" | Format-RuleOutput
 	}
 
-	$Program = "$EngineRoot\Binaries\DotNET\UnrealBuildTool.exe"
+	$Program = "$EngineRoot\Binaries\DotNET\AutomationTool\AutomationUtils\UnrealBuildTool.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
 		New-NetFirewallRule -DisplayName "Unreal Engine - UnrealBuildTool" `
+		 -Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 80 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "UnrealBuildTool (UBT) is a custom tool that manages the process of
+building Unreal Engine (UE) source code across a variety of build configurations" | Format-RuleOutput
+	}
+
+	# Runs on first time editor launch
+	$Program = "$EngineRoot\Extras\Redist\en-us\UEPrereqSetup_x64.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "Unreal Engine - Prerequisites" `
 		 -Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -288,8 +304,8 @@ can install and keep their games up to date" |
 			-LocalUser Any `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "This address is reserved, Epic Games company doesn't respect IANA rules,
-For more info see 'Readme\ProblematicTraffic.md' Case 9" | Format-RuleOutput
+			-Description "This address is reserved, epic launcher doesn't respect IANA rules,
+for more info see 'docs\ProblematicTraffic.md' Case 9" | Format-RuleOutput
 
 		New-NetFirewallRule -DisplayName "Epic Games - Launcher x64" `
 		 -Platform $Platform -PolicyStore $PolicyStore -Profile $LocalProfile `

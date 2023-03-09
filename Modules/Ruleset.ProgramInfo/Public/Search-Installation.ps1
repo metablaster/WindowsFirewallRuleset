@@ -345,6 +345,11 @@ function Search-Installation
 			Update-Table -Search "Demise of Nations - Rome"
 			break
 		}
+		"Audacity"
+		{
+			Update-Table -Search "Audacity"
+			break
+		}
 		"CounterStrikeGO"
 		{
 			Update-Table -Search "Counter-Strike Global Offensive"

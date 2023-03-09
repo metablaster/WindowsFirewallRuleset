@@ -215,7 +215,7 @@ code bloat.
 At a minimum you should handle `OpenRemoteBaseKey` and opening root key (but not subsequent subkeys)
 with `OpenSubkey` exceptions.
 
-The following is an example that you can copy\paste to problem script to get detailed problem description.
+The following is an example which you can copy\paste to problem script to get detailed problem description.
 
 ```powershell
 try

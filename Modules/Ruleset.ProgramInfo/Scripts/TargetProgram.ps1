@@ -36,6 +36,7 @@ enum TargetProgram
 	MSI
 	EdgeWebView
 	SteamCMD
+	Audacity
 	dotnet
 	CMake
 	SqlPath
