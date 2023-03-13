@@ -250,6 +250,48 @@ foreach ($Instance in $VSInstances)
 these delays with the user's consent." | Format-RuleOutput
 	}
 
+	#
+	# ServiceHub.Host.AnyCPU
+	#
+
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.AnyCPU\ServiceHub.SettingsHost.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub SettingsHost (AnyCPU)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443, 9354 `
+			-LocalUser $ExtensionAccounts `
+			-InterfaceType $DefaultInterface `
+			-Description "ServiceHub programs provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
+	}
+
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.AnyCPU\ServiceHub.VSDetouredHost.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub VSDetouredHost" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "ServiceHub services provide identity (sign-in for VS),
+	and support for internal services (like extension management, compiler support, etc).
+	These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
+	}
+
+	#
+	# ServiceHub.CLR.x86
+	#
+
 	$PathStatus = Invoke-Command -Session $SessionInstance -ScriptBlock {
 		# NOTE: This path doesn't seem to exist in recent versions of VS, testing path to avoid generating warnings
 		Test-Path -Path "$([System.Environment]::ExpandEnvironmentVariables($using:VSRoot))\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86"
@@ -279,7 +321,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.SettingsHost.exe"
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
-			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub SettingsHost" `
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub SettingsHost (CRL x86)" `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program $Program -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -296,7 +338,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 		$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.CLR.x86\ServiceHub.IdentityHost.exe"
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		{
-			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
+			New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost (CLR x86)" `
 				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 				-Service Any -Program $Program -Group $Group `
 				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -340,7 +382,66 @@ These are not optional and are designed to be running side-by-side with devenv.e
 	These are not optional and are designed to be running side-by-side with devenv.exe." |
 			Format-RuleOutput
 		}
+	} # if $PathStatus
+
+	#
+	# ServiceHub.Dotnet.x64
+	#
+
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.Dotnet.x64\ServiceHub.IdentityHost.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost (Dotnet x64)" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "ServiceHub services provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
 	}
+
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.Dotnet.x64\ServiceHub.Host.dotnet.x64.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub dotnet x64" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "ServiceHub services provide identity (sign-in for VS),
+and support for internal services (like extension management, compiler support, etc).
+These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
+	}
+
+	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.Dotnet.x64\ServiceHub.IndexingService.exe"
+	if ((Test-ExecutableFile $Program) -or $ForceLoad)
+	{
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IndexingService" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 443 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "ServiceHub services provide identity (sign-in for VS),
+	and support for internal services (like extension management, compiler support, etc).
+	These are not optional and are designed to be running side-by-side with devenv.exe." |
+		Format-RuleOutput
+	}
+
+	#
+	# ServiceHub ...
+	#
 
 	$Program = "$VSRoot\Common7\ServiceHub\controller\Microsoft.ServiceHub.Controller.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -362,7 +463,7 @@ These are not optional and are designed to be running side-by-side with devenv.e
 	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.netfx.x86\ServiceHub.IdentityHost.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
+		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost (netfx x86)" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -373,40 +474,6 @@ These are not optional and are designed to be running side-by-side with devenv.e
 			-Description "ServiceHub services provide identity (sign-in for VS),
 and support for internal services (like extension management, compiler support, etc).
 These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-RuleOutput
-	}
-
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.Dotnet.x64\ServiceHub.IdentityHost.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub IdentityHost" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "ServiceHub services provide identity (sign-in for VS),
-and support for internal services (like extension management, compiler support, etc).
-These are not optional and are designed to be running side-by-side with devenv.exe." |
-		Format-RuleOutput
-	}
-
-	$Program = "$VSRoot\Common7\ServiceHub\Hosts\ServiceHub.Host.AnyCPU\ServiceHub.VSDetouredHost.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "$($DisplayName) ServiceHub VSDetouredHost" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "ServiceHub services provide identity (sign-in for VS),
-	and support for internal services (like extension management, compiler support, etc).
-	These are not optional and are designed to be running side-by-side with devenv.exe." |
 		Format-RuleOutput
 	}
 
