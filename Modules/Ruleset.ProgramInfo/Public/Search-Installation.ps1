@@ -662,6 +662,11 @@ function Search-Installation
 			Update-Table -Search "Git"
 			break
 		}
+		"LGHUB"
+		{
+			Update-Table -Search "Logitech G HUB"
+			break
+		}
 		"GitHubDesktop"
 		{
 			Update-Table -Search "GitHub Desktop" -UserProfile

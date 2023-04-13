@@ -42,6 +42,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rules for SteamCMD
   - Added rules for Audacity
   - Updated rules for Epic Games
+  - Added rules for logitech software
 
 - Modules
 

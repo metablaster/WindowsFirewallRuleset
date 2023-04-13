@@ -1,31 +1,6 @@
 {
 	"files": [
 		{
-			"path": "Modules/Ruleset.Remote/Public/Connect-Computer.ps1",
-			"bookmarks": [
-				{
-					"line": 351,
-					"column": 3,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "Modules/Ruleset.Remote/Public/Test-WinRM.ps1",
-			"bookmarks": [
-				{
-					"line": 411,
-					"column": 3,
-					"label": ""
-				},
-				{
-					"line": 496,
-					"column": 3,
-					"label": ""
-				}
-			]
-		},
-		{
 			"path": "Modules/Ruleset.ProgramInfo/Private/Show-Table.ps1",
 			"bookmarks": [
 				{

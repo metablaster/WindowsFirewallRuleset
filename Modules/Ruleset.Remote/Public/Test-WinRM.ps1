@@ -405,13 +405,6 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			# Will create a new blank console windows in PS Core, see also Connect-Computer
-			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession might create a ghost window, minimize it but do not close it" -Debug
-		}
-
 		$PSSessionResult = New-PSSession @PSSessionParams
 
 		if (!$Quiet)
@@ -490,13 +483,6 @@ function Test-WinRM
 		Write-Debug -Message "[$($MyInvocation.InvocationName)] PSSessionParams: $($PSSessionParams | Out-String)"
 
 		# [System.String], [System.URI] or [System.Management.Automation.Runspaces.PSSession]
-		if ($PSVersionTable.PSEdition -eq "Core")
-		{
-			# Will create a new blank console windows in PS Core, see also Connect-Computer
-			# ISSUE: https://github.com/PowerShell/PowerShell/issues/16763
-			Write-Debug -Message "[$($MyInvocation.InvocationName)] New-PSSession might create a ghost window, minimize it but do not close it" -Debug
-		}
-
 		$PSSessionResult = New-PSSession @PSSessionParams
 
 		if (!$Quiet)

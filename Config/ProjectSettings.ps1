@@ -816,7 +816,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		# Recommended minimum Pester version for code testing
 		# NOTE: PScriptAnalyzer 1.19.1 requires pester v5
 		# TODO: we need pester v4 for tests, but why does analyzer require pester?
-		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 4, 0))
+		New-Variable -Name RequirePesterVersion -Scope Global -Option Constant -Value ([version]::new(5, 4, 1))
 
 		# Required minimum PackageManagement version prior to installing other modules, do not decrement!
 		New-Variable -Name RequirePackageManagementVersion -Scope Global -Option Constant -Value ([version]::new(1, 4, 7))
@@ -837,7 +837,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 39, 2))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 40, 0))
 	}
 
 	if ($Develop)
@@ -854,7 +854,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 76, 1))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 77, 3))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting
