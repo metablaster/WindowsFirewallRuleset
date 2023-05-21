@@ -837,7 +837,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 	{
 		# Recommended minimum Git version needed for contributing and required by posh-git
 		# https://github.com/dahlbyk/posh-git#prerequisites
-		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 40, 0))
+		New-Variable -Name RequireGitVersion -Scope Global -Option Constant -Value ([version]::new(2, 40, 1))
 	}
 
 	if ($Develop)
@@ -854,7 +854,7 @@ if (!(Get-Variable -Name CheckConstantVariables -Scope Global -ErrorAction Ignor
 		New-Variable -Name RequireNETVersion -Scope Global -Option Constant -Value ([version]::new(4, 5, 0))
 
 		# Recommended minimum VSCode version, do not decrement!
-		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 77, 3))
+		New-Variable -Name RequireVSCodeVersion -Scope Global -Option Constant -Value ([version]::new(1, 78, 2))
 
 		# Firewall logs folder
 		# NOTE: Set this value to $LogsFolder\Firewall to enable reading logs in VSCode with syntax highlighting

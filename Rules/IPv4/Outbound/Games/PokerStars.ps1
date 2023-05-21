@@ -161,20 +161,6 @@ if ((Confirm-Installation "PokerStars" ([ref] $PokerStarsRoot)) -or $ForceLoad)
 			-Description "In game HTML browser" | Format-RuleOutput
 	}
 
-	$Program = "$PokerStarsRoot\PokerStarsOnlineUpdate.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "PokerStars - Online update" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "" | Format-RuleOutput
-	}
-
 	$Program = "$PokerStarsRoot\PokerStarsUpdate.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
