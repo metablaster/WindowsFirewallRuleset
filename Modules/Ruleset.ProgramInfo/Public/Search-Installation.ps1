@@ -717,6 +717,11 @@ function Search-Installation
 			# NOTE: ask user for standalone installation directory of SteamCMD
 			break
 		}
+		"calibre"
+		{
+			Update-Table -Search "calibre"
+			break
+		}
 		default
 		{
 			if (!$Quiet)
