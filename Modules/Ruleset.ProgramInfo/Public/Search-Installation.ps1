@@ -707,11 +707,21 @@ function Search-Installation
 			Edit-Table "%SystemDrive%\Users\$DefaultUser\AppData\Local\Microsoft\BingWallpaperApp"
 			break
 		}
+		"Motrix"
+		{
+			# NOTE: ask user for standalone installation directory of SteamCMD
+			break
+		}
+		"ytdlp"
+		{
+			# NOTE: ask user for standalone installation directory of SteamCMD
+			break
+		}
 		default
 		{
 			if (!$Quiet)
 			{
-				Write-Error -Category ObjectNotFound -TargetObject $Application -Message "Parameter '$Application' not implemented"
+				Write-Error -Category ObjectNotFound -TargetObject $Application -Message "Search for '$Application' not implemented"
 			}
 		}
 	}

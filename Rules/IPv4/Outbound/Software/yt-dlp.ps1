@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Outbound rule for logitech software
+Outbound firewall rules for yt-dlp download manager
 
 .DESCRIPTION
-Outbound rule for logitech software
+Outbound firewall rules for yt-dlp download manager
 
 .PARAMETER Domain
 Computer name onto which to deploy rules
@@ -52,16 +52,16 @@ program path does not exist or if it's of an invalid syntax needed for firewall.
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\Logitech.ps1
+PS> .\yt-dlp.ps1
 
 .INPUTS
-None. You cannot pipe objects to Logitech.ps1
+None. You cannot pipe objects to yt-dlp.ps1
 
 .OUTPUTS
-None. Logitech.ps1 does not generate any output
+None. yt-dlp.ps1 does not generate any output
 
 .NOTES
-TODO: Rules for logitech options program
+None.
 #>
 
 #Requires -Version 5.1
@@ -93,9 +93,9 @@ Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Software - Logitech"
-$Accept = "Outbound rules for Logitech software will be loaded, recommended if Logitech software is installed to let it access to network"
-$Deny = "Skip operation, outbound rules for Logitech software will not be loaded into firewall"
+$Group = "Software - yt-dlp"
+$Accept = "Outbound rules for yt-dlp youtube download manager will be loaded, recommended if yt-dlp youtube download manager is installed to let it access to network"
+$Deny = "Skip operation, outbound rules for yt-dlp youtube download manager will not be loaded into firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
@@ -107,20 +107,22 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
-# Logitech installation directories
-$LogitechProgramRoot = "%ProgramFiles%\LGHUB"
+#
+# yt-dlp installation directories
+#
+$ytdlpRoot = "%SystemDrive%\tools\yt-dlp"
 
 #
-# Rules for TargetProgram
+# Rules for yt-dlp
 #
 
 # Test if installation exists on system
-if ((Confirm-Installation "LGHUB" ([ref] $LogitechProgramRoot)) -or $ForceLoad)
+if ((Confirm-Installation "ytdlp" ([ref] $ytdlpRoot)) -or $ForceLoad)
 {
-	$Program = "$LogitechProgramRoot\lghub.exe"
+	$Program = "$ytdlpRoot\yt-dlp.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
+		New-NetFirewallRule -DisplayName "yt-dlp HTTPS" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -128,38 +130,7 @@ if ((Confirm-Installation "LGHUB" ([ref] $LogitechProgramRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Logitech G HUB online access, login, updates and data usage" |
-		Format-RuleOutput
-	}
-
-	$Program = "$LogitechProgramRoot\lghub_agent.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "Logitech G HUB online access, login and data usage" |
-		Format-RuleOutput
-	}
-
-	$Program = "$LogitechProgramRoot\lghub_updater.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "Logitech G HUB" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $LocalSystem `
-			-InterfaceType $DefaultInterface `
-			-Description "Logitech G HUB updater" |
-		Format-RuleOutput
+			-Description "yt-dlp youtube download manager" | Format-RuleOutput
 	}
 }
 
