@@ -329,7 +329,7 @@ function Test-FileSystemPath
 					return $true
 				}
 
-				$Status = "Specified file does not exist"
+				$Status = "The specified file does not exist"
 			}
 
 			[ScriptBlock]::Create($WriteConditional).Invoke($Status, $Quiet, $LiteralPath, $InvocationName)

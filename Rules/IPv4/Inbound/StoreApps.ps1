@@ -49,7 +49,7 @@ None. You cannot pipe objects to StoreApps.ps1
 None. StoreApps.ps1 does not generate any output
 
 .NOTES
-TODO: Test-ExecutableFile
+TODO: Test-ExecutableFile for store apps
 #>
 
 #Requires -Version 5.1

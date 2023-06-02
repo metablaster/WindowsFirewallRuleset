@@ -86,6 +86,8 @@ We can learn app display name from manifest
 TODO: OfficeHub app contains sub app "LocalBridge" which is blocked
 
 NOTE: If OneNote app fails to install, start "Print Spooler" service and try again
+
+TODO: Test-ExecutableFile for store apps
 #>
 
 #Requires -Version 5.1
@@ -423,7 +425,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 
 #
 # A special rule for TerminalAzBridge.exe (Azure Cloud Shell) which is part of Windows Terminal
-# TODO: This is a hackery, a better design or function is needed to detect programs within apps
+# TODO: This is a hackery, a better design or function is needed to detect programs within app folders
 # TODO: Not affected by $ForceLoad
 #
 $TerminalApp = Get-UserApp -User $Principal.User -Name "*WindowsTerminal*" -Session $SessionInstance
@@ -432,10 +434,10 @@ if ($TerminalApp)
 	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
 
 	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		Get-ChildItem -Path "$using:ParentPath\Microsoft.WindowsTerminal*"
+		# There are 2 paths one of which is invalid and should be ignored
+		Get-Item -Path "$using:ParentPath\Microsoft.WindowsTerminal*" -Exclude "*_~_*"
 	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
 
-		# NOTE: There are 2 paths one of which is invalid and should be ignored
 		$Program = Format-Path "$_\TerminalAzBridge.exe"
 
 		if ((Test-ExecutableFile $Program) -or $ForceLoad)
@@ -463,13 +465,13 @@ if ($TerminalApp)
 $WinDbgApp = Get-UserApp -User $Principal.User -Name "*WinDbg*" -Session $SessionInstance
 if ($WinDbgApp)
 {
-	$ParentPath = Split-Path -Path $TerminalApp.InstallLocation
+	$ParentPath = Split-Path -Path $WinDbgApp.InstallLocation
 
 	Invoke-Command -Session $SessionInstance -ScriptBlock {
-		Get-ChildItem -Path "$using:ParentPath\Microsoft.WinDbg_*"
+		# There are 2 paths one of which is invalid and should be ignored
+		Get-Item -Path "$using:ParentPath\Microsoft.WinDbg_*" -Exclude "*_~_*"
 	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
 
-		# NOTE: There are 2 paths one of which is invalid and should be ignored
 		$Program = Format-Path "$_\amd64\EngHost.exe"
 
 		# MSDN: WinDBG Preview is a UWP application that has very limited access to the system, certainly not enough to debug a process.
@@ -490,6 +492,37 @@ if ($WinDbgApp)
 				-InterfaceType $DefaultInterface `
 				-Description "EngHost.exe is the process responsible for attaching or launching the process being debugged.
 Because WinDbg UWP app has limited system access this process is used via the IPC mechanism" |
+			Format-RuleOutput
+		}
+	}
+}
+
+#
+# Same as with Azure Cloud Shell above here this is a case with Microsoft.Desktopappinstaller app
+#
+$DesktopappInstallerApp = Get-UserApp -User $Principal.User -Name "Microsoft.Desktopappinstaller" -Session $SessionInstance
+if ($DesktopappInstallerApp)
+{
+	$ParentPath = Split-Path -Path $DesktopappInstallerApp.InstallLocation
+
+	Invoke-Command -Session $SessionInstance -ScriptBlock {
+		# There are multiple paths but only one is correct
+		Get-Item -Path "$using:ParentPath\Microsoft.Desktopappinstaller*" -Exclude "*neutral*"
+	} |	Select-Object PSPath | Convert-Path | ForEach-Object {
+
+		$Program = Format-Path "$_\WindowsPackageManagerServer.exe"
+
+		if ((Test-ExecutableFile $Program) -or $ForceLoad)
+		{
+			New-NetFirewallRule -DisplayName "Windows PackageManager Server" `
+				-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+				-Service Any -Program $Program -Group $AppSubGroup `
+				-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
+				-LocalAddress Any -RemoteAddress Internet4 `
+				-LocalPort Any -RemotePort 443 `
+				-LocalUser $UsersGroupSDDL `
+				-InterfaceType $DefaultInterface `
+				-Description "WindowsPackageManagerServer.exe is used to download apps" |
 			Format-RuleOutput
 		}
 	}
