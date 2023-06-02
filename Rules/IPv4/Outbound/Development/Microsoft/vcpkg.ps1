@@ -61,7 +61,8 @@ None. You cannot pipe objects to vcpkg.ps1
 None. vcpkg.ps1 does not generate any output
 
 .NOTES
-TODO: There are many potential executables that may be downloaded by vcpkg and that may need firewall rules
+HACK: There are many potential executables that may be downloaded by vcpkg and that may need firewall rules
+this ruleset handles only built-in executables
 #>
 
 #Requires -Version 5.1
@@ -146,68 +147,6 @@ if ((Confirm-Installation "vcpkg" ([ref] $vcpkgRoot)) -or $ForceLoad)
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
 			-Description "install package source code" |
-		Format-RuleOutput
-	}
-
-	# TODO: need to update for all users
-	# TODO: this bad path somehow gets into rule
-	$Program = "%SystemDrive%\Users\$DefaultUser\AppData\Local\Temp\vcpkg\vcpkgmetricsuploader-2020.02.04.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "vcpkg (telemetry)" `
-		 -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "vcpkg sends usage data to Microsoft" |
-		Format-RuleOutput
-	}
-
-	$Program = "$vcpkgRoot\downloads\tools\powershell-core-6.2.1-windows\powershell.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "vcpkg (powershell)" `
-		 -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "vcpkg has it's own powershell" |
-		Format-RuleOutput
-	}
-
-	# TODO: if cmake in root and of required version it's used, needs conditional rule
-	# $Program = "$vcpkgRoot\downloads\tools\cmake-3.14.0-windows\cmake-3.14.0-win32-x86\bin\cmake.exe"
-	# Test-ExecutableFile $Program
-	# New-NetFirewallRule -DisplayName "vcpkg (cmake)" `
-	# -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-	# 	-Service Any -Program $Program -Group $Group `
-	# 	-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-	# 	-LocalAddress Any -RemoteAddress Internet4 `
-	# -LocalPort Any -RemotePort 443 `
-	# 	-LocalUser $UsersGroupSDDL `
-	# -InterfaceType $DefaultInterface `
-	# 	-Description "vcpkg has it's own cmake" | Format-RuleOutput
-
-	# TODO: Why cmd needs network to download packages, is it just temporary?
-	$Program = Format-Path "C:\Windows\SysWOW64"
-	$Program += "\cmd.exe"
-	if ((Test-ExecutableFile $Program) -or $ForceLoad)
-	{
-		New-NetFirewallRule -DisplayName "cmd" `
-		 -Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
-			-LocalUser $UsersGroupSDDL `
-			-InterfaceType $DefaultInterface `
-			-Description "" |
 		Format-RuleOutput
 	}
 }

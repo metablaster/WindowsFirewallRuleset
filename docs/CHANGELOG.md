@@ -45,6 +45,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rules for logitech software
   - Updated rules for store apps and pokerstars
   - Added rules for Motrix, yt-dlp and calibre
+  - Removed invalid rules for vcpkg
 
 - Modules
 

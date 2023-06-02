@@ -232,6 +232,7 @@ function Get-UserSoftware
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry entry $HKUSubKey\InstallLocation"
 
 				# In some instances if key name is GUID, InstallLocation might exist in HKEY_CURRENT_USER\Software\GUID
+				# This worked for Motrix program
 				$KeyGUID = Split-Path $SubKey.Name -Leaf
 				$Match = [regex]::Match($KeyGUID, "[({]?(^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$)[})]?")
 				if ($Match.Success)
