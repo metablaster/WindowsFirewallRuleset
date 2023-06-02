@@ -382,7 +382,8 @@ function Test-VirusTotal
 									if ([int32] $TotalDetections.Value -gt 0)
 									{
 										$FileIsMalware = $true
-										Write-Warning -Message "[$InvocationName] '$Executable' is infected with malware"
+										# TODO: Write-ColorMessage does not work here, should be red text
+										Write-Warning -Message "[$InvocationName] '$Executable' was reported as malware"
 									}
 								}
 								# May happen if ie there is no firewall rule for sigcheck.exe, we ignore

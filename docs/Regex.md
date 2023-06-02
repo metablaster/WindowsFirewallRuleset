@@ -52,6 +52,7 @@ Reserved regex characters that must be escaped: `[ ] ( ) . \ ^ $ | ? * + { }`
     - [IPv4 validation](#ipv4-validation)
     - [Match comment block in script](#match-comment-block-in-script)
     - [SHA1 thumbprint validation](#sha1-thumbprint-validation)
+    - [GUID validation](#guid-validation)
 
 ## Filterline
 
@@ -502,6 +503,14 @@ Match in string:
 \b[0-9a-f]{40}\b
 ```
 
+### GUID validation
+
+For regex below all credits to [Regex for Guid][GUID regex]
+
+```regex
+[({]?(^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$)[})]?
+```
+
 [Table of Contents](#table-of-contents)
 
 [multicursor]: https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_multi-cursor-selection "Visit VSCode docs"
@@ -509,3 +518,4 @@ Match in string:
 [stackemail]: https://stackoverflow.com/questions/5342375/regex-email-validation "Visit stackoverflow"
 [ipv4 regex]: https://stackoverflow.com/questions/5284147/validating-ipv4-addresses-with-regexp "Visit stackoverflow"
 [ipv6 regex]: https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses "Visit stackoverflow"
+[GUID regex]: https://stackoverflow.com/a/35648213/12091999 "Visit stackoverflow"

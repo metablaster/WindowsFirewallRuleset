@@ -243,9 +243,12 @@ function Test-ExecutableFile
 				# NOTE: StatusMessage seems to be unrelated to problem
 				# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: $($Signature.StatusMessage)"
 
-				if (!$SkipVirusTotalCheck -and (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams))
+				if (!$SkipVirusTotalCheck)
 				{
-					return $false
+					if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
+					{
+						return $false
+					}
 				}
 			}
 			else

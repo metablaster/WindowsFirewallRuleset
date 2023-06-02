@@ -709,12 +709,12 @@ function Search-Installation
 		}
 		"Motrix"
 		{
-			# NOTE: ask user for standalone installation directory of SteamCMD
+			Update-Table -Search "Motrix" -UserProfile
 			break
 		}
 		"ytdlp"
 		{
-			# NOTE: ask user for standalone installation directory of SteamCMD
+			# NOTE: ask user for standalone installation directory of yt-dlp
 			break
 		}
 		"calibre"

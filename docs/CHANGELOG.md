@@ -43,6 +43,8 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
   - Added rules for Audacity
   - Updated rules for Epic Games
   - Added rules for logitech software
+  - Updated rules for store apps and pokerstars
+  - Added rules for Motrix, yt-dlp and calibre
 
 - Modules
 
@@ -53,6 +55,7 @@ To see unreleased changes please do so on `develop` branch [HERE][changelog]\
     - `Get-GroupPrincipal` added `-Unique` switch to get unique principals
     - `Get-SystemSoftware` improved program search
     - `Set-NetworkProfile` added missing default parameter set name
+    - `Get-UserSoftware` improved search algorithm
 
   - Implemented remoting for the following functions and scripts
 

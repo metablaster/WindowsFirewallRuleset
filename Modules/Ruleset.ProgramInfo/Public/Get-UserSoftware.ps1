@@ -231,10 +231,26 @@ function Get-UserSoftware
 			{
 				Write-Warning -Message "[$($MyInvocation.InvocationName)] Failed to read registry entry $HKUSubKey\InstallLocation"
 
-				# NOTE: each key accessed after 'reg load' has to be closed to release handle, if not 'reg unload' fails with "Access is denied"
-				# TODO: Other functions in ProgramInfo module should implement closing keys to release handles.
-				$SubKey.Close()
-				continue
+				# In some instances if key name is GUID, InstallLocation might exist in HKEY_CURRENT_USER\Software\GUID
+				$KeyGUID = Split-Path $SubKey.Name -Leaf
+				$Match = [regex]::Match($KeyGUID, "[({]?(^([0-9A-Fa-f]{8}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{4}[-]?[0-9A-Fa-f]{12})$)[})]?")
+				if ($Match.Success)
+				{
+					$SoftwareKey = $RemoteKey.OpenSubkey("$UserSID\Software\$KeyGUID", $RegistryPermission, $RegistryRights)
+					if ($SoftwareKey)
+					{
+						$InstallLocation = $SoftwareKey.GetValue("InstallLocation")
+						$SoftwareKey.Close()
+					}
+				}
+
+				if ([string]::IsNullOrEmpty($InstallLocation))
+				{
+					# NOTE: each key accessed after 'reg load' has to be closed to release handle, if not 'reg unload' fails with "Access is denied"
+					# TODO: Other functions in ProgramInfo module should implement closing keys to release handles.
+					$SubKey.Close()
+					continue
+				}
 			}
 
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Processing key '$HKUSubKey'"
