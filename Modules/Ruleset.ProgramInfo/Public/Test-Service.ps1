@@ -223,7 +223,7 @@ function Test-Service
 						if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
 						{
 							# TODO: Since we're not testing services per rule we might load services that are reported as malware
-							# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Loading rule for '$($Service.Name)' will be skipped due to VirusTotal report"
+							# Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Loading rule for '$($Service.Name)' will be skipped due to positive VirusTotal report"
 							Write-Output $false
 							continue
 						}

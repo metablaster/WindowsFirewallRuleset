@@ -504,7 +504,7 @@ if ((Test-ExecutableFile $Program) -or $ForceLoad)
 		-LocalPort Any -RemotePort 21 `
 		-LocalUser $UsersGroupSDDL `
 		-InterfaceType $DefaultInterface `
-		-Description "File transfer protocol client." |
+		-Description "File Transfer Protocol client." |
 	Format-RuleOutput
 }
 

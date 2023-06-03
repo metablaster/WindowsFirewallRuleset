@@ -122,21 +122,21 @@ if ((Confirm-Installation "Motrix" ([ref] $MotrixRoot)) -or $ForceLoad)
 	$Program = "$MotrixRoot\Motrix.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Motrix HTTP\S" `
+		New-NetFirewallRule -DisplayName "Motrix" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Internet4 `
-			-LocalPort Any -RemotePort 80, 443 `
+			-LocalPort Any -RemotePort 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Motrix download manager" | Format-RuleOutput
+			-Description "Motrix updates and tracker updates" | Format-RuleOutput
 	}
 
 	$Program = "$MotrixRoot\resources\engine\aria2c.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		New-NetFirewallRule -DisplayName "Motrix HTTP\S" `
+		New-NetFirewallRule -DisplayName "Motrix - HTTP\S downloader" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -144,7 +144,61 @@ if ((Confirm-Installation "Motrix" ([ref] $MotrixRoot)) -or $ForceLoad)
 			-LocalPort Any -RemotePort 80, 443 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Motrix download manager" | Format-RuleOutput
+			-Description "Motrix HTTP\S download manager" | Format-RuleOutput
+
+		New-NetFirewallRule -DisplayName "Motrix - FTP downloader" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4, LocalSubnet4 `
+			-LocalPort Any -RemotePort 21 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Motrix FTP download manager" | Format-RuleOutput
+
+		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
+		New-NetFirewallRule -DisplayName "Motrix - DHT" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort 1162 -RemotePort 1024-65535 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "DHT (Distributed Hash Table, technical explanation) is a decentralized network
+that qbittorrent can use to find more peers without a tracker.
+What this means is that your client will be able to find peers even when the tracker is down,
+or doesn't even exist anymore.
+You can also download .torrent files through DHT if you have a magnet link, which can be obtained
+from various sources." |
+		Format-RuleOutput
+
+		# NOTE: We use any local port instead of LocalPort 1161,
+		# but otherwise the rule overlaps with DHT rule
+		New-NetFirewallRule -DisplayName "Motrix - part of full range of ports used most often" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 6881-6968, 6970-6999 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-LocalOnlyMapping $false -LooseSourceMapping $false `
+			-Description "BitTorrent part of full range of ports used most often (Trackers)	" |
+		Format-RuleOutput
+
+		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
+		New-NetFirewallRule -DisplayName "Motrix - BitTorrent" `
+			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
+			-Service Any -Program $Program -Group $Group `
+			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
+			-LocalAddress Any -RemoteAddress Internet4 `
+			-LocalPort Any -RemotePort 1024-65535 `
+			-LocalUser $UsersGroupSDDL `
+			-InterfaceType $DefaultInterface `
+			-Description "Motrix torrent client, BitTorrent protocol" |
+		Format-RuleOutput
 	}
 }
 

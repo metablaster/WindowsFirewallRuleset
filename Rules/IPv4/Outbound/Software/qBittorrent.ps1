@@ -211,7 +211,7 @@ user effort." |
 		Format-RuleOutput
 
 		# NOTE: We start from port 1024 which is most widely used, but some peers may set it to lower
-		New-NetFirewallRule -DisplayName "qBittorrent - Client to peers" `
+		New-NetFirewallRule -DisplayName "qBittorrent - BitTorrent" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
@@ -219,7 +219,7 @@ user effort." |
 			-LocalPort Any -RemotePort 1024-65535 `
 			-LocalUser $UsersGroupSDDL `
 			-InterfaceType $DefaultInterface `
-			-Description "Torrent client" |
+			-Description "Torrent client, BitTorrent protocol" |
 		Format-RuleOutput
 	}
 }

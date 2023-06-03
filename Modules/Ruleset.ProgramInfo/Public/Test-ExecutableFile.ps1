@@ -247,7 +247,7 @@ function Test-ExecutableFile
 				{
 					if (Test-VirusTotal -LiteralPath $LiteralPath -SigcheckLocation $SigcheckLocation -TimeOut $TimeOut @SessionParams)
 					{
-						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Loading rule for '$(Split-Path $ExpandedPath -Leaf)' skipped due to VirusTotal report"
+						Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Loading rule for '$(Split-Path $ExpandedPath -Leaf)' skipped due to positive VirusTotal report"
 						return $false
 					}
 				}

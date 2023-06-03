@@ -5,7 +5,7 @@ MIT License
 This file is part of "Windows Firewall Ruleset" project
 Homepage: https://github.com/metablaster/WindowsFirewallRuleset
 
-Copyright (C) 2019-2023 metablaster zebal@protonmail.ch
+Copyright (C) 2023 metablaster zebal@protonmail.ch
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@ SOFTWARE.
 
 <#
 .SYNOPSIS
-Inbound firewall rules for qBittorrent
+Inbound firewall rules for Motrix
 
 .DESCRIPTION
-Inbound firewall rules for qBitTorrent torrent client
+Inbound firewall rules for Motrix download manager
 
 .PARAMETER Domain
 Computer name onto which to deploy rules
@@ -52,13 +52,13 @@ program path does not exist or if it's of an invalid syntax needed for firewall.
 If specified, no prompt to run script is shown
 
 .EXAMPLE
-PS> .\qBittorrent.ps1
+PS> .\Motrix.ps1
 
 .INPUTS
-None. You cannot pipe objects to qBittorrent.ps1
+None. You cannot pipe objects to Motrix.ps1
 
 .OUTPUTS
-None. qBittorrent.ps1 does not generate any output
+None. Motrix.ps1 does not generate any output
 
 .NOTES
 None.
@@ -93,9 +93,9 @@ Initialize-Project
 Import-Module -Name Ruleset.UserInfo
 
 # Setup local variables
-$Group = "Software - qBittorrent"
-$Accept = "Inbound rules for qBittorrent software will be loaded, recommended if qBittorrent software is installed to let it access to network"
-$Deny = "Skip operation, inbound rules for qBittorrent software will not be loaded into firewall"
+$Group = "Software - Motrix"
+$Accept = "Inbound rules for Motrix download manager will be loaded, recommended if Motrix download manager is installed to let it access to network"
+$Deny = "Skip operation, inbound rules for Motrix download manager will not be loaded into firewall"
 if (!(Approve-Execute -Accept $Accept -Deny $Deny -ContextLeaf $Group -Force:$Force)) { exit }
 
 $PSDefaultParameterValues["Confirm-Installation:Quiet"] = $Quiet
@@ -105,82 +105,56 @@ $PSDefaultParameterValues["Test-ExecutableFile:Force"] = $Trusted -or $SkipSigna
 #endregion
 
 #
-# qBittorrent installation directories
+# Motrix installation directories
 #
-$qBittorrentRoot = "%ProgramFiles%\qBittorrent"
+$MotrixRoot = "%ProgramFiles%\Motrix"
 
 # First remove all existing rules matching group
 Remove-NetFirewallRule -PolicyStore $PolicyStore -Group $Group -Direction $Direction -ErrorAction Ignore
 
 #
-# Rules for qBittorrent
+# Rules for Motrix
 # TODO: ports need to be updated
 #
 
 # Test if installation exists on system
-if ((Confirm-Installation "qBittorrent" ([ref] $qBittorrentRoot)) -or $ForceLoad)
+if ((Confirm-Installation "Motrix" ([ref] $MotrixRoot)) -or $ForceLoad)
 {
-	$Program = "$qBittorrentRoot\qbittorrent.exe"
+	$Program = "$MotrixRoot\resources\engine\aria2c.exe"
 	if ((Test-ExecutableFile $Program) -or $ForceLoad)
 	{
-		# TODO: requires uTP protocol?
-		New-NetFirewallRule -DisplayName "qBittorrent - DHT" `
+		New-NetFirewallRule -DisplayName "Motrix - DHT" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
+			-Enabled False -Action Allow -Direction $Direction -Protocol UDP `
 			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort 1161 -RemotePort 1024-65535 `
+			-LocalPort 1162 -RemotePort 1024-65535 `
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 			-InterfaceType $DefaultInterface `
 			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "qBittorrent UDP listener, usually for DHT." |
+			-Description "Motrix UDP listener, usually for DHT." |
 		Format-RuleOutput
 
-		New-NetFirewallRule -DisplayName "qBittorrent - BitTorrent" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol TCP `
-			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort 1161 -RemotePort 1024-65535 `
-			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-			-InterfaceType $DefaultInterface `
-			-Description "qBittorrent TCP listener, BitTorrent protocol." |
-		Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "qBittorrent - Embedded tracker port" `
+		New-NetFirewallRule -DisplayName "Motrix - BitTorrent" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort 9000 -RemotePort 1024-65535 `
+			-LocalPort 1163 -RemotePort 1024-65535 `
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
 			-InterfaceType $DefaultInterface `
-			-Description "qBittorrent Embedded tracker port." |
+			-Description "Motrix TCP listener, BitTorrent protocol." |
 		Format-RuleOutput
 
-		# NOTE: remote port can be other than 6771, remote client will fall back to 6771
-		New-NetFirewallRule -DisplayName "qBittorrent - Local Peer discovery" `
-			-Platform $Platform -PolicyStore $PolicyStore -Profile Private `
-			-Service Any -Program $Program -Group $Group `
-			-Enabled True -Action Allow -Direction $Direction -Protocol UDP `
-			-LocalAddress 224.0.0.0-239.255.255.255 -RemoteAddress LocalSubnet4 `
-			-LocalPort 6771 -RemotePort 6771 `
-			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy DeferToApp `
-			-InterfaceType $DefaultInterface `
-			-LocalOnlyMapping $false -LooseSourceMapping $false `
-			-Description "UDP multicast search to identify other peers in your subnet that are also on
-torrents you are on." |
-		Format-RuleOutput
-
-		New-NetFirewallRule -DisplayName "qBittorrent - Web UI" `
+		New-NetFirewallRule -DisplayName "Motrix - RPC" `
 			-Platform $Platform -PolicyStore $PolicyStore -Profile $DefaultProfile `
 			-Service Any -Program $Program -Group $Group `
 			-Enabled False -Action Allow -Direction $Direction -Protocol TCP `
 			-LocalAddress Any -RemoteAddress Any `
-			-LocalPort 8080 -RemotePort Any `
+			-LocalPort 16800 -RemotePort Any `
 			-LocalUser $UsersGroupSDDL -EdgeTraversalPolicy Allow `
 			-InterfaceType $DefaultInterface `
-			-Description "qBittorrent Remote control from browser." |
+			-Description "Motrix RPC interface." |
 		Format-RuleOutput
 	}
 }
