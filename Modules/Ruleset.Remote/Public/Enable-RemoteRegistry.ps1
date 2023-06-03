@@ -94,9 +94,9 @@ function Enable-RemoteRegistry
 		foreach ($RuleGroup in $AllRuleGroups)
 		{
 			# Remove rules before copying over fresh ones
-			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound |
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Inbound -ErrorAction Ignore |
 			Where-Object { $_.Profile -like $RuleProfile } | Remove-NetFirewallRule
-			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound |
+			Get-NetFirewallRule -Group $RuleGroup -PolicyStore $Store -Direction Outbound -ErrorAction Ignore |
 			Where-Object { $_.Profile -like $RuleProfile } | Remove-NetFirewallRule
 
 			# Copy only rules which were removed, ignore the rest

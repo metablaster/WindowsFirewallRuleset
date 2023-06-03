@@ -142,7 +142,7 @@ function Set-WinRMClient
 
 	$MachineName = Format-ComputerName $Domain
 	. $PSScriptRoot\..\Scripts\WinRMSettings.ps1 -IncludeClient -AllowUnencrypted:($Protocol -ne "HTTPS")
-	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client..."
+	Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Configuring WinRM client for '$($Protocol)' protocol ..."
 
 	# TODO: Initialize-WinRM and Unblock-NetProfile are called multiple times since multiple functions are needed for configuration
 	Initialize-WinRM

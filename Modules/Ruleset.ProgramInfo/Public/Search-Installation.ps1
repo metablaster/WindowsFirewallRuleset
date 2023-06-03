@@ -686,7 +686,7 @@ function Search-Installation
 				[System.Environment]::ExpandEnvironmentVariables($Path)
 			}
 
-			if (Test-Path $ExpandedPath)
+			if (Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock { Test-Path $ExpandedPath })
 			{
 				$VersionFolders = Invoke-Command @SessionParams -ArgumentList $ExpandedPath -ScriptBlock {
 					param ($ExpandedPath)

@@ -166,11 +166,11 @@ function Enable-WinRMServer
 
 	if ($Loopback)
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM loopback server..."
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM loopback server  for '$($Protocol)' protocol ..."
 	}
 	else
 	{
-		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM remoting server..."
+		Write-Information -Tags $MyInvocation.InvocationName -MessageData "INFO: Enabling WinRM remoting server for '$($Protocol)' protocol ..."
 	}
 
 	<# MSDN: The Enable-PSRemoting cmdlet performs the following operations:

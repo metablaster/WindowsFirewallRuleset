@@ -587,15 +587,6 @@ one is called management computer (client) and all others are called managed com
 Scripts are executed by administrator on management computer, and firewall is then deployed to or
 configured on multiple server computers simultaneously.
 
-At the moment the following remoting capabilities are implemented:
-
-1. Automatic creation of PS and CIM sessions
-2. Drilling registry remotely
-3. Configuring WinRM service
-4. Establishing encrypted session to remote host
-5. Gethering information about remote computers
-6. Deploying firewall to single remote computer on same subnet that is not part of domain
-
 For implementation details see `Modules\Ruleset.Remote` module
 
 **NOTE:** Remoting functionality is not exclusive to remote firewall deployment, deployment to
@@ -639,7 +630,6 @@ configured in PowerShell Core then client computer also needs PowerShell core fo
 If either the server or management computer is a workstation (ex. not Windows server or part of domain)
 then it's network profile must be set to private profile.
 
-This is how remote deployment is going to work once this functionality gets fully implemented.\
 Remote deployment can be customized in a great detail in the following locations:
 
 - To customize WinRM service see: `Modules\Ruleset.Remote\Scripts\WinRMSettings.ps1`
