@@ -160,6 +160,10 @@ function Initialize-Connection
 
 		$ConnectionStatus = $false
 
+		$WinRMClientParams = @{
+			Confirm = $false
+		}
+
 		if ($PolicyStore -notin $LocalStore)
 		{
 			Write-Debug -Message "[$($MyInvocation.InvocationName)] Establishing session to remote computer"
@@ -183,16 +187,12 @@ function Initialize-Connection
 				# TODO: fallback to HTTP not implemented
 				$PSSessionOption.NoEncryption = $false
 				# TODO: Encoding, the acceptable values for this parameter are: Default, Utf8, or Utf16
-				# There is global variable that controls encoding, see if it can be used here
+				# There is global variable which controls encoding, see if it can be used here
 				$ConnectParams["CimOptions"] = New-CimSessionOption -UseSsl -Encoding "Default" -UICulture $DefaultUICulture -Culture $DefaultCulture
 			}
 
 			# If Set-WinRMClient is run during loopback testing then it doesn't need to run during remote testing
 			$WinRMClientSet = $false
-
-			$WinRMClientParams = @{
-				Confirm = $false
-			}
 
 			if (![string]::IsNullOrEmpty($SslThumbprint))
 			{
@@ -216,7 +216,7 @@ function Initialize-Connection
 					# this is also needed to be able to Test-WinRM on loopback
 					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore @WinRMClientParams
 					}
 					else
 					{
@@ -250,7 +250,7 @@ function Initialize-Connection
 					# Configure this machine for remote session over SSL
 					if ($RemotingProtocol -eq "HTTP")
 					{
-						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore
+						Set-WinRMClient -Domain $PolicyStore -TrustedHosts $PolicyStore @WinRMClientParams
 					}
 					else
 					{
@@ -292,7 +292,7 @@ function Initialize-Connection
 			if (!$ConnectionStatus)
 			{
 				# Enable loopback only HTTP
-				Set-WinRMClient -Protocol HTTP
+				Set-WinRMClient -Protocol HTTP @WinRMClientParams
 				Enable-WinRMServer -Protocol HTTP -KeepDefault -Loopback -Confirm:$false
 				Test-WinRM -Protocol HTTP @TestParams -ErrorAction Stop
 			}

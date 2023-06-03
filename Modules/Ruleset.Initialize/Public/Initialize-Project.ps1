@@ -378,7 +378,7 @@ function Initialize-Project
 		}
 		else
 		{
-			Write-Warning -Message "[$($MyInvocation.InvocationName)] 3rd party modules may be missing or outdated which some non essential scripts require"
+			Write-Warning -Message "[$($MyInvocation.InvocationName)] 3rd party modules might be missing or outdated which some non essential scripts require"
 			Write-Information -Tags $MyInvocation.InvocationName `
 				-MessageData "INFO: This can be resolved by enabling 'ModulesCheck' variable in Config\ProjectSettings.ps1"
 		}

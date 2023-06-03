@@ -288,7 +288,7 @@ function Search-Installation
 		}
 		"AzureDataStudio"
 		{
-			Edit-Table -Search "Azure Data Studio"
+			Update-Table -Search "Azure Data Studio"
 			break
 		}
 		"ArenaChess"

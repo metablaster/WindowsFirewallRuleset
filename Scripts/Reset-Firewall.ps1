@@ -295,12 +295,23 @@ if ($Service)
 				Stop-Service -Name ssh-agent -Confirm
 			}
 		}
+
+		Write-Information -Tags $ThisScript -MessageData "INFO: Resetting windows services completed"
 	}
 }
 
 if ($UpdateGPO)
 {
-	Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+	if ($Remoting)
+	{
+		# Cannot use Invoke-Process here because session might be removed by Reset-WinRM
+		gpupdate.exe "/target:computer"
+	}
+	else
+	{
+		Invoke-Process gpupdate.exe -NoNewWindow -ArgumentList "/target:computer" -Session $SessionInstance
+	}
+
 	Disconnect-Computer -Domain $Domain
 }
 

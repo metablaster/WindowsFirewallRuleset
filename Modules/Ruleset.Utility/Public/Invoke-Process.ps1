@@ -57,7 +57,7 @@ Whether to use the operating system shell to start the process
 .PARAMETER Timeout
 The amount of time, in milliseconds, to wait for the associated process to exit.
 Value 0 means an immediate return, and a value of -1 specifies an infinite wait.
-The default wait time is 10000 (10 seconds).
+The default wait time is 15000 (15 seconds).
 
 .PARAMETER Async
 If specified, reading process output is asynchronous.
@@ -140,7 +140,7 @@ function Invoke-Process
 
 		[Parameter()]
 		[ValidateRange(-1, [int32]::MaxValue)]
-		[int32] $Timeout = 10000,
+		[int32] $Timeout = 15000,
 
 		[Parameter()]
 		[switch] $Async,
